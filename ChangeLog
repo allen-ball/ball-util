@@ -4,6 +4,11 @@
 
 	* src/main/java/iprotium/util/Factory.java: Initial writing.
 
+	* src/main/java/iprotium/util/Order.java,
+	src/main/java/iprotium/util/ArrayOrder.java,
+	src/main/java/iprotium/util/ClassOrder.java:
+	Initial writing.
+
 	* src/main/java/iprotium/util/Property.java,
 	src/main/java/iprotium/util/StringProperty.java:
 	Initial writing.
