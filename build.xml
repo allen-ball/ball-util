@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="iprotium-util" basedir="." default="jar"
+         xmlns:artifact="antlib:org.apache.maven.artifact.ant">
+
+  <!-- =============================================================== -->
+  <!-- Package Name, Version, and, Description                         -->
+  <!-- =============================================================== -->
+  <description>
+    iprotium-util.jar
+    -----------------
+    Java Utilities
+
+    $Id: build.xml,v 1.1 2008-10-26 20:47:48 ball Exp $
+  </description>
+
+
+  <!-- =============================================================== -->
+  <!-- Mechanism to Override Build Properties                          -->
+  <!-- =============================================================== -->
+  <property name="build.properties.file" location="build.properties"/>
+  <property file="${build.properties.file}"/>
+
+
+  <!-- =============================================================== -->
+  <!-- Standard Source, Build, and Distribution Files and Directories  -->
+  <!-- =============================================================== -->
+  <property name="src.dir"              location="src"/>
+
+  <property name="build.dir"            location="build"/>
+  <property name="build.class.dir"      location="${build.dir}/class"/>
+  <property name="build.h.dir"          location="${build.dir}/h"/>
+
+  <property name="j2se.docs.url"
+            value="http://java.sun.com/j2se/${ant.java.version}/docs"/>
+  <property name="j2se.api.javadoc.url" value="${j2se.docs.url}/api"/>
+  <property name="ant.javadoc.url"
+            value="http://nagoya.apache.org/gump/javadoc/ant/build/javadocs"/>
+
+  <property name="vendor"               value="iprotium.com"/>
+
+  <path id="build.classpath">
+    <pathelement location="${build.class.dir}"/>
+    <fileset dir="${build.dir}">
+      <include name="**/*.jar"/>
+    </fileset>
+    <path refid="dependency.classpath"/>
+  </path>
+
+  <target name="jar"
+          description="--> Construct iprotium-util.jar."
+          depends="compile,buildnumber">
+    <jar destfile="${build.dir}/${artifact}">
+      <fileset dir="${build.class.dir}"/>
+      <manifest>
+        <attribute name="Built-By" value="${user.name}"/>
+        <section name="iprotium/util/">
+          <attribute name="Extension-Name" value="iprotium.util"/>
+          <attribute name="Specification-Title" value="${pom.artifactId}"/>
+          <attribute name="Specification-Version" value="${pom.version}"/>
+          <attribute name="Specification-Vendor" value="${vendor}"/>
+          <attribute name="Implementation-Title" value="iprotium.util"/>
+          <attribute name="Implementation-Version"
+                     value="${pom.version}.${buildnumber.date}"/>
+          <attribute name="Implementation-Vendor" value="${vendor}"/>
+          <attribute name="Sealed" value="true"/>
+        </section>
+        <section name="iprotium/util/ant/taskdefs/">
+          <attribute name="Sealed" value="true"/>
+        </section>
+      </manifest>
+    </jar>
+    <jarlib-display file="${build.dir}/${artifact}"/>
+  </target>
+
+  <target name="compile"
+          description="--> Compile Java source."
+          depends="depend">
+    <copy preservelastmodified="true" todir="${build.class.dir}">
+      <fileset dir="${src.dir}/main/resources">
+        <include name="**/*"/>
+      </fileset>
+    </copy>
+    <javac debug="${compile.debug}" deprecation="${compile.deprecation}"
+           optimize="${compile.optimize}" destdir="${build.class.dir}">
+      <compilerarg compiler="modern" value="-Xlint:all"/>
+      <classpath>
+        <path refid="build.classpath"/>
+      </classpath>
+      <src path="${src.dir}/main/java"/>
+    </javac>
+  </target>
+
+  <target name="depend"
+          description="--> Set-up dependencies."
+          depends="prepare">
+    <artifact:pom id="pom" file="pom.xml"/>
+    <artifact:dependencies
+       pomRefId="pom" useScope="compile" verbose="true"
+       pathId="dependency.classpath"/>
+    <artifact:dependencies
+       pomRefId="pom" useScope="runtime" verbose="false"
+       filesetId="dependency.fileset" versionsId="dependency.versions"/>
+    <property name="artifact"
+              value="${pom.artifactId}-${pom.version}.jar"/>
+  </target>
+
+  <target name="prepare">
+    <mkdir dir="${build.dir}"/>
+    <mkdir dir="${build.class.dir}"/>
+    <mkdir dir="${build.h.dir}"/>
+  </target>
+
+  <target name="install"
+          description="--> Installs pom.xml and artifacts to local repository."
+          depends="jar">
+    <artifact:install file="${build.dir}/${artifact}">
+      <pom refid="pom"/>
+    </artifact:install>
+  </target>
+
+  <target name="buildnumber" unless="buildnumber">
+    <tstamp>
+      <format property="buildnumber.date" pattern="yyyyMMdd"/>
+      <format property="buildnumber.time" pattern="HHmm"/>
+    </tstamp>
+    <property name="buildnumber"
+              value="${buildnumber.date}${buildnumber.time}"/>
+    <echo>${buildnumber}</echo>
+  </target>
+
+  <target name="clean"
+          description="--> Removes compilation files and directories."
+          depends="">
+    <delete dir="${build.dir}"/>
+  </target>
+
+</project>
+<!--
+    $Log: not supported by cvs2svn $
+  -->
