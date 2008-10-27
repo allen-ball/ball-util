@@ -1,3 +1,7 @@
+2008-10-27  Allen D. Ball  <ball@10-0-1-4.lan>
+
+	* src/main/java/iprotium/util/SuperclassSet.java: Initial writing.
+
 2008-10-26  Allen D. Ball  <ball@10-0-1-4.lan>
 
 	* Added <jni-classes/>, <members-of/>, <serialVersionUID/>,
