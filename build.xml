@@ -10,7 +10,7 @@
     -----------------
     Java Utilities
 
-    $Id: build.xml,v 1.2 2008-10-27 00:10:03 ball Exp $
+    $Id: build.xml,v 1.3 2008-10-27 05:51:21 ball Exp $
   </description>
 
 
@@ -53,6 +53,17 @@
       <fileset dir="${build.class.dir}"/>
       <manifest>
         <attribute name="Built-By" value="${user.name}"/>
+        <section name="iprotium/io/">
+          <attribute name="Extension-Name" value="iprotium.io"/>
+          <attribute name="Specification-Title" value="${pom.artifactId}"/>
+          <attribute name="Specification-Version" value="${pom.version}"/>
+          <attribute name="Specification-Vendor" value="${vendor}"/>
+          <attribute name="Implementation-Title" value="iprotium.io"/>
+          <attribute name="Implementation-Version"
+                     value="${pom.version}.${buildnumber.date}"/>
+          <attribute name="Implementation-Vendor" value="${vendor}"/>
+          <attribute name="Sealed" value="true"/>
+        </section>
         <section name="iprotium/util/">
           <attribute name="Extension-Name" value="iprotium.util"/>
           <attribute name="Specification-Title" value="${pom.artifactId}"/>
@@ -129,6 +140,10 @@
           depends="jar">
     <artifact:install file="${build.dir}/${artifact}">
       <pom refid="pom"/>
+<!--
+      <attach file="${build.dir}/libposix.so"
+              classifier="${os.arch}-${os.name}" type="libposix.so"/>
+  -->
     </artifact:install>
   </target>
 
@@ -216,4 +231,8 @@
 </project>
 <!--
     $Log: not supported by cvs2svn $
+    Revision 1.2  2008/10/27 00:10:03  ball
+    Added <jni-classes/>, <members-of/>, <serialVersionUID/>,
+    <show-properties/>, and <superclasses-of> targets and Ant Tasks.
+
   -->
