@@ -1,0 +1,19 @@
+$Id: ToDo.txt,v 1.1 2008-10-27 00:12:26 ball Exp $
+
+* Compile JNI shared libraries.
+
+* Add JNI interface to libedit/libreadline.
+
+* Create LintTask (based on SerialVersionUIDTask).  Check:
+
+        ** Require explicitly declared constuctors
+        ** Serializable.serialVersionUID (SerialVersionUIDTask)
+        ** Suggest (! Collection.isEmpty()) for (Collection.size() > 0).
+
+* Create SSU package.
+
+
+Local Variables:
+mode: auto-fill
+fill-column: 76
+End:
