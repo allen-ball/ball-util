@@ -1,21 +1,20 @@
 /*
- * $Id: SuperclassesOfTask.java,v 1.1 2008-10-27 00:10:03 ball Exp $
+ * $Id: SuperclassesOfTask.java,v 1.2 2008-10-27 22:04:26 ball Exp $
  *
  * Copyright 2008 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
-import java.util.TreeSet;
+import iprotium.util.SuperclassSet;
 import org.apache.tools.ant.BuildException;
 
 import static iprotium.util.ClassOrder.INHERITANCE;
-import static iprotium.util.ClassOrder.NAME;
 
 /**
  * Ant Task to display superclasses of a specified Class.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class SuperclassesOfTask extends AbstractClasspathTask {
     private String name = null;
@@ -35,7 +34,7 @@ public class SuperclassesOfTask extends AbstractClasspathTask {
                 throw new BuildException("`name' attribute must be specified");
             }
 
-            Class<?> type =
+            Class type =
                 Class.forName(getName(), false, delegate.getClassLoader());
 
             for (Object object : INHERITANCE.asList(new SuperclassSet(type))) {
@@ -51,33 +50,6 @@ public class SuperclassesOfTask extends AbstractClasspathTask {
             exception.printStackTrace();
 
             throw new BuildException(exception);
-        }
-    }
-
-    private class SuperclassSet extends TreeSet<Class<?>> {
-        private static final long serialVersionUID = -4406313542581593672L;
-
-        public SuperclassSet(Class<?> type) {
-            super(NAME);
-
-            addSuperclassesOf(type);
-        }
-
-        private void addSuperclassesOf(Class<?> type) {
-            if (type != null) {
-                if (! contains(type)) {
-                    add(type);
-
-                    addSuperclassesOf(type.getSuperclass());
-                    addSuperclassesOf(type.getInterfaces());
-                }
-            }
-        }
-
-        private void addSuperclassesOf(Class<?>[] types) {
-            for (Class<?> type : types) {
-                addSuperclassesOf(type);
-            }
         }
     }
 }
