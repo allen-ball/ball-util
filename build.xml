@@ -10,7 +10,7 @@
     -----------------
     Java Utilities
 
-    $Id: build.xml,v 1.1 2008-10-26 20:47:48 ball Exp $
+    $Id: build.xml,v 1.2 2008-10-27 00:10:03 ball Exp $
   </description>
 
 
@@ -88,6 +88,20 @@
       </classpath>
       <src path="${src.dir}/main/java"/>
     </javac>
+    <taskdef classpathref="build.classpath"
+             resource="iprotium/util/ant/defaults.properties"/>
+    <jni-classes basedir="${build.class.dir}" property="jni.classes">
+      <classpath>
+        <pathelement location="${build.class.dir}"/>
+        <path refid="build.classpath"/>
+      </classpath>
+    </jni-classes>
+    <javah destdir="${build.h.dir}">
+      <classpath>
+        <pathelement location="${build.class.dir}"/>
+      </classpath>
+      <class name="${jni.classes}"/>
+    </javah>
   </target>
 
   <target name="depend"
@@ -132,6 +146,71 @@
           description="--> Removes compilation files and directories."
           depends="">
     <delete dir="${build.dir}"/>
+  </target>
+
+  <target name="jni-classes"
+          description="--> Invokes &lt;jni-classes/&gt; task."
+          depends="compile">
+    <taskdef classpathref="build.classpath"
+             resource="iprotium/util/ant/defaults.properties"/>
+    <jni-classes basedir="${build.class.dir}">
+      <classpath>
+        <pathelement location="${build.class.dir}"/>
+        <path refid="build.classpath"/>
+      </classpath>
+    </jni-classes>
+  </target>
+
+  <target name="members-of"
+          description="--> Invokes &lt;members-of/&gt; task."
+          depends="compile">
+    <taskdef classpathref="build.classpath"
+             resource="iprotium/util/ant/defaults.properties"/>
+    <members-of name="${name}">
+      <classpath>
+        <pathelement location="${build.class.dir}"/>
+        <path refid="build.classpath"/>
+      </classpath>
+    </members-of>
+  </target>
+
+  <target name="serialVersionUID"
+          description="--> Invokes &lt;serialVersionUID/&gt; task."
+          depends="compile">
+    <taskdef classpathref="build.classpath"
+             resource="iprotium/util/ant/defaults.properties"/>
+    <serialVersionUID basedir="${build.class.dir}">
+      <classpath>
+        <pathelement location="${build.class.dir}"/>
+        <path refid="build.classpath"/>
+      </classpath>
+    </serialVersionUID>
+  </target>
+
+  <target name="show-properties"
+          description="--> Invokes &lt;show-properties/&gt; task."
+          depends="compile">
+    <taskdef classpathref="build.classpath"
+             resource="iprotium/util/ant/defaults.properties"/>
+    <show-properties basedir="${build.class.dir}">
+      <classpath>
+        <pathelement location="${build.class.dir}"/>
+        <path refid="build.classpath"/>
+      </classpath>
+    </show-properties>
+  </target>
+
+  <target name="superclasses-of"
+          description="--> Invokes &lt;superclasses-of/&gt; task."
+          depends="compile">
+    <taskdef classpathref="build.classpath"
+             resource="iprotium/util/ant/defaults.properties"/>
+    <superclasses-of name="${name}">
+      <classpath>
+        <pathelement location="${build.class.dir}"/>
+        <path refid="build.classpath"/>
+      </classpath>
+    </superclasses-of>
   </target>
 
 </project>
