@@ -1,5 +1,8 @@
 2008-10-26  Allen D. Ball  <ball@10-0-1-4.lan>
 
+	* Added <jni-classes/>, <members-of/>, <serialVersionUID/>,
+	<show-properties/>, and <superclasses-of> targets and Ant Tasks.
+
 	* build.xml, pom.xml: Initial writing.
 
 	* src/main/java/iprotium/util/Factory.java: Initial writing.
