@@ -1,5 +1,5 @@
 /*
- * $Id: AbstractClassFileTask.java,v 1.1 2008-10-26 23:59:22 ball Exp $
+ * $Id: AbstractClassFileTask.java,v 1.2 2008-10-28 09:19:31 ball Exp $
  *
  * Copyright 2008 Allen D. Ball.  All rights reserved.
  */
@@ -22,12 +22,12 @@ import org.apache.tools.ant.util.ClasspathUtils;
  * files.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public abstract class AbstractClassFileTask extends AbstractMatchingTask {
     private static final String DOT_CLASS = ".class";
 
-    protected ClasspathUtils.Delegate delegate = null;
+    private ClasspathUtils.Delegate delegate = null;
 
     /**
      * Sole constructor.
@@ -63,15 +63,17 @@ public abstract class AbstractClassFileTask extends AbstractMatchingTask {
             string = string.replaceAll("[/]", ".");
 
             try {
-                map.put(file,
-                        Class.forName(string,
-                                      false, delegate.getClassLoader()));
+                map.put(file, getClass(string));
             } catch (ClassNotFoundException exception) {
                 throw new BuildException(exception);
             }
         }
 
         return map;
+    }
+
+    protected Class getClass(String name) throws ClassNotFoundException {
+        return Class.forName(name, false, delegate.getClassLoader());
     }
 
     protected static boolean isPublic(Member member) {
