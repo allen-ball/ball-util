@@ -1,3 +1,10 @@
+2008-10-28  Allen D. Ball  <ball@10-0-1-4.lan>
+
+	* src/main/java/iprotium/util/ant/taskdefs/AbstractClassFileTask.java,
+	src/main/java/iprotium/util/ant/taskdefs/AbstractClasspathTask.java:
+	Made ClasspathUtils.Delegate member private.
+	Added protected getClass(String) method.
+
 2008-10-27  Allen D. Ball  <ball@10-0-1-4.lan>
 
 	* src/main/java/iprotium/util/SuperclassSet.java: Initial writing.
