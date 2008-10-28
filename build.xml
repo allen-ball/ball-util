@@ -10,7 +10,7 @@
     -----------------
     Java Utilities
 
-    $Id: build.xml,v 1.3 2008-10-27 05:51:21 ball Exp $
+    $Id: build.xml,v 1.4 2008-10-28 09:24:21 ball Exp $
   </description>
 
 
@@ -19,6 +19,10 @@
   <!-- =============================================================== -->
   <property name="build.properties.file" location="build.properties"/>
   <property file="${build.properties.file}"/>
+  <property name="build.compiler"       value="modern"/>
+  <property name="compile.debug"        value="true"/>
+  <property name="compile.deprecation"  value="true"/>
+  <property name="compile.optimize"     value="true"/>
 
 
   <!-- =============================================================== -->
@@ -163,6 +167,19 @@
     <delete dir="${build.dir}"/>
   </target>
 
+  <target name="is-assignable-from"
+          description="--> Invokes &lt;is-assignable-from/&gt; task."
+          depends="compile">
+    <taskdef classpathref="build.classpath"
+             resource="iprotium/util/ant/defaults.properties"/>
+    <is-assignable-from type="${type}" subtype="${subtype}">
+      <classpath>
+        <pathelement location="${build.class.dir}"/>
+        <path refid="build.classpath"/>
+      </classpath>
+    </is-assignable-from>
+  </target>
+
   <target name="jni-classes"
           description="--> Invokes &lt;jni-classes/&gt; task."
           depends="compile">
@@ -181,7 +198,7 @@
           depends="compile">
     <taskdef classpathref="build.classpath"
              resource="iprotium/util/ant/defaults.properties"/>
-    <members-of name="${name}">
+    <members-of type="${type}">
       <classpath>
         <pathelement location="${build.class.dir}"/>
         <path refid="build.classpath"/>
@@ -220,7 +237,7 @@
           depends="compile">
     <taskdef classpathref="build.classpath"
              resource="iprotium/util/ant/defaults.properties"/>
-    <superclasses-of name="${name}">
+    <superclasses-of type="${type}">
       <classpath>
         <pathelement location="${build.class.dir}"/>
         <path refid="build.classpath"/>
@@ -231,6 +248,9 @@
 </project>
 <!--
     $Log: not supported by cvs2svn $
+    Revision 1.3  2008/10/27 05:51:21  ball
+    Added iprotium.io package.
+
     Revision 1.2  2008/10/27 00:10:03  ball
     Added <jni-classes/>, <members-of/>, <serialVersionUID/>,
     <show-properties/>, and <superclasses-of> targets and Ant Tasks.
