@@ -1,5 +1,5 @@
 /*
- * $Id: AbstractMatchingTask.java,v 1.1 2008-10-26 23:59:22 ball Exp $
+ * $Id: AbstractMatchingTask.java,v 1.2 2008-10-30 07:40:17 ball Exp $
  *
  * Copyright 2008 Allen D. Ball.  All rights reserved.
  */
@@ -15,7 +15,7 @@ import org.apache.tools.ant.taskdefs.MatchingTask;
  * Abstract base class for Ant MatchingTask implementations.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public abstract class AbstractMatchingTask extends MatchingTask {
     private File basedir = null;
@@ -29,7 +29,11 @@ public abstract class AbstractMatchingTask extends MatchingTask {
     public void setBasedir(File basedir) { this.basedir = basedir; }
 
     @Override
-    public abstract void execute() throws BuildException;
+    public void execute() throws BuildException {
+        if (getBasedir() == null) {
+            setBasedir(getProject().resolveFile("."));
+        }
+    }
 
     protected Set<File> getMatchingFileSet() {
         Set<File> set = new TreeSet<File>();
