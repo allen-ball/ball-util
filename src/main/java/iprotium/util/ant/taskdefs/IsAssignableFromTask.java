@@ -1,5 +1,5 @@
 /*
- * $Id: IsAssignableFromTask.java,v 1.1 2008-10-28 09:24:21 ball Exp $
+ * $Id: IsAssignableFromTask.java,v 1.2 2008-10-30 07:50:34 ball Exp $
  *
  * Copyright 2008 Allen D. Ball.  All rights reserved.
  */
@@ -14,7 +14,7 @@ import static iprotium.util.ClassOrder.INHERITANCE;
  * Ant Task to display superclasses of a specified Class.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class IsAssignableFromTask extends AbstractClasspathTask {
     private String type = null;
@@ -33,6 +33,8 @@ public class IsAssignableFromTask extends AbstractClasspathTask {
 
     @Override
     public void execute() throws BuildException {
+        super.execute();
+
         if (getType() == null) {
             throw new BuildException("`type' attribute must be specified");
         }
@@ -42,11 +44,11 @@ public class IsAssignableFromTask extends AbstractClasspathTask {
         }
 
         try {
-            Class<?> superclass = getClass(getType());
+            Class<?> supertype = getClass(getType());
             Class<?> subtype = getClass(getSubtype());
 
-            log(superclass.getName() + " is "
-                + (superclass.isAssignableFrom(subtype) ? "" : "not ")
+            log(supertype.getName() + " is "
+                + (supertype.isAssignableFrom(subtype) ? "" : "not ")
                 + "assignable from " + subtype.getName());
         } catch (BuildException exception) {
             throw exception;

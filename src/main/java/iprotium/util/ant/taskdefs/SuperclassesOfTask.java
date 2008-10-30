@@ -1,5 +1,5 @@
 /*
- * $Id: SuperclassesOfTask.java,v 1.2 2008-10-27 22:04:26 ball Exp $
+ * $Id: SuperclassesOfTask.java,v 1.3 2008-10-30 07:54:18 ball Exp $
  *
  * Copyright 2008 Allen D. Ball.  All rights reserved.
  */
@@ -14,28 +14,29 @@ import static iprotium.util.ClassOrder.INHERITANCE;
  * Ant Task to display superclasses of a specified Class.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class SuperclassesOfTask extends AbstractClasspathTask {
-    private String name = null;
+    private String type = null;
 
     /**
      * Sole constructor.
      */
     public SuperclassesOfTask() { super(); }
 
-    protected String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    protected String getType() { return type; }
+    public void setType(String type) { this.type = type; }
 
     @Override
     public void execute() throws BuildException {
-        try {
-            if (getName() == null) {
-                throw new BuildException("`name' attribute must be specified");
-            }
+        super.execute();
 
-            Class type =
-                Class.forName(getName(), false, delegate.getClassLoader());
+        if (getType() == null) {
+            throw new BuildException("`type' attribute must be specified");
+        }
+
+        try {
+            Class type = getClass(getType());
 
             for (Object object : INHERITANCE.asList(new SuperclassSet(type))) {
                 log(String.valueOf(object));

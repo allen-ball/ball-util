@@ -1,5 +1,5 @@
 /*
- * $Id: SerialVersionUIDTask.java,v 1.1 2008-10-27 00:10:03 ball Exp $
+ * $Id: SerialVersionUIDTask.java,v 1.2 2008-10-30 07:52:14 ball Exp $
  *
  * Copyright 2008 Allen D. Ball.  All rights reserved.
  */
@@ -16,7 +16,7 @@ import org.apache.tools.ant.BuildException;
  * Serializable but do not explicitly define serialVersionUID.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class SerialVersionUIDTask extends AbstractClassFileTask {
     private static final int MODIFIERS =
@@ -31,9 +31,7 @@ public class SerialVersionUIDTask extends AbstractClassFileTask {
 
     @Override
     public void execute() throws BuildException {
-        if (getBasedir() == null) {
-            setBasedir(getProject().resolveFile("."));
-        }
+        super.execute();
 
         for (Class<?> type : getMatchingClassFileMap().values()) {
             if (Serializable.class.isAssignableFrom(type)

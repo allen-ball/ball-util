@@ -1,5 +1,5 @@
 /*
- * $Id: JNIClassesTask.java,v 1.1 2008-10-27 00:10:03 ball Exp $
+ * $Id: JNIClassesTask.java,v 1.2 2008-10-30 07:50:49 ball Exp $
  *
  * Copyright 2008 Allen D. Ball.  All rights reserved.
  */
@@ -16,7 +16,7 @@ import static iprotium.util.ClassOrder.NAME;
  * Ant Task to determine the classes that have native members.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class JNIClassesTask extends AbstractClassFileTask {
     private String property = null;
@@ -31,9 +31,7 @@ public class JNIClassesTask extends AbstractClassFileTask {
 
     @Override
     public void execute() throws BuildException {
-        if (getBasedir() == null) {
-            setBasedir(getProject().resolveFile("."));
-        }
+        super.execute();
 
         Set<Class<?>> set = new TreeSet<Class<?>>(NAME);
 
@@ -53,7 +51,7 @@ public class JNIClassesTask extends AbstractClassFileTask {
             log (name + ": " + getProject().getProperty(name));
         } else {
             for (Class<?> type : set) {
-                log(String.valueOf(type));
+                log(type.getName());
             }
         }
     }
