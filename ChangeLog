@@ -1,5 +1,10 @@
 2008-10-30  Allen D. Ball  <ball@10-0-1-4.lan>
 
+	* src/main/java/iprotium/util/ant/taskdefs/AbstractClassFileTask.java,
+	src/main/java/iprotium/util/ant/taskdefs/AbstractClasspathTask.java:
+	Added `initialize' Task attribute.
+	Set the parent of the ClassLoader to the Task's ClassLoader.
+
 	* src/main/java/iprotium/util/ant/taskdefs/AbstractMatchingTask.java:
 	Added concrete execute() implementation to set the Task basedir
 	attribute (if not explicitly set).
