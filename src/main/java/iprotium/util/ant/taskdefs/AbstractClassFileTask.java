@@ -1,5 +1,5 @@
 /*
- * $Id: AbstractClassFileTask.java,v 1.2 2008-10-28 09:19:31 ball Exp $
+ * $Id: AbstractClassFileTask.java,v 1.3 2008-10-30 07:46:38 ball Exp $
  *
  * Copyright 2008 Allen D. Ball.  All rights reserved.
  */
@@ -8,9 +8,9 @@ package iprotium.util.ant.taskdefs;
 import java.io.File;
 import java.lang.reflect.Member;
 import java.lang.reflect.Modifier;
-import java.net.URI;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import org.apache.tools.ant.AntClassLoader;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.types.Path;
 import org.apache.tools.ant.types.Reference;
@@ -22,48 +22,77 @@ import org.apache.tools.ant.util.ClasspathUtils;
  * files.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public abstract class AbstractClassFileTask extends AbstractMatchingTask {
     private static final String DOT_CLASS = ".class";
 
+    private boolean initialize = false;
     private ClasspathUtils.Delegate delegate = null;
+    private AntClassLoader loader = null;
 
     /**
      * Sole constructor.
      */
     protected AbstractClassFileTask() { super(); }
 
-    public Path createClasspath() { return delegate.createClasspath(); }
+    protected boolean getInitialize() { return initialize; }
+    public void setInitialize(boolean initialize) {
+        this.initialize = initialize;
+    }
+
     public void setClasspathRef(Reference reference) {
         delegate.setClasspathref(reference);
     }
 
+    public Path createClasspath() { return delegate.createClasspath(); }
+
+    protected AntClassLoader getClassLoader() {
+        if (loader == null) {
+            loader = (AntClassLoader) delegate.getClassLoader();
+            loader.setParent(getClass().getClassLoader());
+        }
+
+        return loader;
+    }
+
     @Override
     public void init() throws BuildException {
-        delegate = ClasspathUtils.getDelegate(this);
+        super.init();
+
+        if (delegate == null) {
+            delegate = ClasspathUtils.getDelegate(this);
+        }
 
         add(new ClassFileSelector());
+    }
 
-        super.init();
+    @Override
+    public void execute() throws BuildException {
+        super.execute();
+
+        if (delegate.getClasspath() == null) {
+            delegate.createClasspath();
+        }
+
+        delegate.getClasspath().setLocation(getBasedir());
     }
 
     protected Map<File,Class> getMatchingClassFileMap() throws BuildException {
         Map<File,Class> map = new LinkedHashMap<File,Class>();
 
         for (File file : getMatchingFileSet()) {
-            URI uri = getBasedir().toURI().relativize(file.toURI());
-            String string = uri.toString();
+            String name =
+                getBasedir().toURI().relativize(file.toURI()).toString();
 
-            if (string.toLowerCase().endsWith(DOT_CLASS)) {
-                string =
-                    string.substring(0, string.length() - DOT_CLASS.length());
+            if (name.toLowerCase().endsWith(DOT_CLASS)) {
+                name = name.substring(0, name.length() - DOT_CLASS.length());
             }
 
-            string = string.replaceAll("[/]", ".");
+            name = name.replaceAll("[/]", ".");
 
             try {
-                map.put(file, getClass(string));
+                map.put(file, getClass(name));
             } catch (ClassNotFoundException exception) {
                 throw new BuildException(exception);
             }
@@ -73,7 +102,7 @@ public abstract class AbstractClassFileTask extends AbstractMatchingTask {
     }
 
     protected Class getClass(String name) throws ClassNotFoundException {
-        return Class.forName(name, false, delegate.getClassLoader());
+        return Class.forName(name, getInitialize(), getClassLoader());
     }
 
     protected static boolean isPublic(Member member) {
