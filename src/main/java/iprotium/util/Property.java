@@ -1,18 +1,24 @@
 /*
- * $Id: Property.java,v 1.1 2008-10-26 20:54:48 ball Exp $
+ * $Id: Property.java,v 1.2 2008-11-01 19:50:59 ball Exp $
  *
  * Copyright 2008 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Member;
+import java.lang.reflect.Modifier;
+import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.MissingResourceException;
 import java.util.Properties;
+import java.util.Set;
 
 /**
  * Abstract Property base class.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public abstract class Property<T> implements Comparable<Property<?>> {
     private final String name;
@@ -28,7 +34,7 @@ public abstract class Property<T> implements Comparable<Property<?>> {
      * @param   value           The default value of the Property.
      *
      * @throws  NullPointerException
-     *                          If the name or type parameter is null.
+     *                          If the name parameter is null.
      */
     protected Property(String name, boolean required, T value) {
         if (name != null) {
@@ -61,6 +67,15 @@ public abstract class Property<T> implements Comparable<Property<?>> {
      * @return  The default value of the Property.
      */
     public T getDefaultValue() { return value; }
+
+    /**
+     * Method to get the default value for the property as a String.
+     *
+     * @return  The default value of the property.
+     */
+    public String getDefaultValueAsString() {
+        return toString(getDefaultValue());
+    }
 
     /**
      * Method to determine if the Property is set.
@@ -234,29 +249,47 @@ public abstract class Property<T> implements Comparable<Property<?>> {
     public int hashCode() { return getName().hashCode(); }
 
     /**
-     * Convenience method to construct a qualified name based on a Class.
+     * Static method to return all static Property fields defined within a
+     * Class.
      *
-     * @param   cls             The Class whose name should be used as a a
-     *                          prefix.
-     * @param   name            The name of the Property.
+     * @param   types           The Class instances to analyze.
      *
-     * @return  The qualified name of the Property.
+     * @return  The Set of Property objects defined in Property and
+     *          Iterable<Property> fields.
      */
-    protected static String getName(Class<? extends Object> cls, String name) {
-        return getName((cls != null) ? cls.getName() : null, name);
+    public static Set<Property> getStaticPropertyFields(Class<?>... types) {
+        LinkedHashSet<Property> set = new LinkedHashSet<Property>();
+
+        for (Class type : types) {
+            for (Field field : type.getDeclaredFields()) {
+                try {
+                    if (isPublic(field) && isStatic(field)) {
+                        Object object = field.get(null);
+
+                        if (object instanceof Property) {
+                            set.add((Property) object);
+                        } else if (object instanceof Iterable) {
+                            for (Object element : (Iterable) object) {
+                                if (element instanceof Property) {
+                                    set.add((Property) element);
+                                }
+                            }
+                        }
+                    }
+                } catch (IllegalAccessException exception) {
+                }
+            }
+        }
+
+        return Collections.unmodifiableSet(set);
     }
 
-    /**
-     * Convenience method to construct a qualified name based on a Package.
-     *
-     * @param   pkg             The Package whose name should be used as a a
-     *                          prefix.
-     * @param   name            The name of the Property.
-     *
-     * @return  The qualified name of the Property.
-     */
-    protected static String getName(Package pkg, String name) {
-        return getName((pkg != null) ? pkg.getName() : null, name);
+    private static boolean isPublic(Member member) {
+        return Modifier.isPublic(member.getModifiers());
+    }
+
+    private static boolean isStatic(Member member) {
+        return Modifier.isStatic(member.getModifiers());
     }
 
     /**
@@ -267,8 +300,30 @@ public abstract class Property<T> implements Comparable<Property<?>> {
      *
      * @return  The qualified name of the Property.
      */
-    protected static String getName(String prefix, String name) {
-        return (prefix != null) ? (prefix + "." + name) : name;
+    protected static String getName(Object object, String name) {
+        return getPrefix(object) + name;
+    }
+
+    private static String getPrefix(Object object) {
+        String prefix = null;
+
+        if (object instanceof Class) {
+            prefix = ((Class) object).getName();
+        } else if (object instanceof Package) {
+            prefix = ((Package) object).getName();
+        } else if (object instanceof CharSequence) {
+            prefix = object.toString();
+        } else if (object != null) {
+            throw new ClassCastException(object.getClass().getName());
+        }
+
+        if (prefix != null && prefix.length() > 0) {
+            if (! prefix.endsWith(".")) {
+                prefix += ".";
+            }
+        }
+
+        return (prefix != null) ? prefix : "";
     }
 
     /**
