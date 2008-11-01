@@ -1,5 +1,5 @@
 /*
- * $Id: SerialVersionUIDTask.java,v 1.2 2008-10-30 07:52:14 ball Exp $
+ * $Id: SerialVersionUIDTask.java,v 1.3 2008-11-01 19:58:55 ball Exp $
  *
  * Copyright 2008 Allen D. Ball.  All rights reserved.
  */
@@ -16,7 +16,7 @@ import org.apache.tools.ant.BuildException;
  * Serializable but do not explicitly define serialVersionUID.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class SerialVersionUIDTask extends AbstractClassFileTask {
     private static final int MODIFIERS =
@@ -35,19 +35,18 @@ public class SerialVersionUIDTask extends AbstractClassFileTask {
 
         for (Class<?> type : getMatchingClassFileMap().values()) {
             if (Serializable.class.isAssignableFrom(type)
-                && (! Modifier.isAbstract(type.getModifiers()))) {
-                if (! Enum.class.isAssignableFrom(type)) {
-                    try {
-                        Field field = type.getDeclaredField(SERIALVERSIONUID);
+                && (! isAbstract(type))
+                && (! Enum.class.isAssignableFrom(type))) {
+                try {
+                    Field field = type.getDeclaredField(SERIALVERSIONUID);
 
-                        if (! (isStatic(field)
-                               && TYPE.equals(field.getType()))) {
-                            throw new NoSuchFieldException(SERIALVERSIONUID);
-                        }
-                    } catch (NoSuchFieldException exception) {
-                        log(type.getName() + ":");
-                        log(getSerialVersionUIDDeclaration(type));
+                    if (! (isStatic(field)
+                           && TYPE.equals(field.getType()))) {
+                        throw new NoSuchFieldException(SERIALVERSIONUID);
                     }
+                } catch (NoSuchFieldException exception) {
+                    log(type.getName() + ":");
+                    log(getSerialVersionUIDDeclaration(type));
                 }
             }
         }
