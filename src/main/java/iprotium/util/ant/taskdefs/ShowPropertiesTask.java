@@ -1,5 +1,5 @@
 /*
- * $Id: ShowPropertiesTask.java,v 1.2 2008-10-30 07:53:48 ball Exp $
+ * $Id: ShowPropertiesTask.java,v 1.3 2008-11-01 19:56:03 ball Exp $
  *
  * Copyright 2008 Allen D. Ball.  All rights reserved.
  */
@@ -7,16 +7,18 @@ package iprotium.util.ant.taskdefs;
 
 import iprotium.util.Property;
 import iprotium.util.StringProperty;
-import java.lang.reflect.Field;
+import java.util.Collection;
 import org.apache.tools.ant.BuildException;
 
 /**
  * Ant Task to find and display static Property members.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class ShowPropertiesTask extends AbstractClassFileTask {
+    private static final String TAB = "\t";
+
     public static final Property PROPERTY =
         new StringProperty("PROPERTY-NAME", "DEFAULT-VALUE");
 
@@ -30,20 +32,18 @@ public class ShowPropertiesTask extends AbstractClassFileTask {
         super.execute();
 
         try {
-            for (Class<?> type : getMatchingClassFileMap().values()) {
-                for (Field field : type.getDeclaredFields()) {
-                    try {
-                        if (isPublic(field) && isStatic(field)) {
-                            Object object = field.get(null);
+            for (Class type : getMatchingClassFileMap().values()) {
+                Collection<Property> collection =
+                    Property.getStaticPropertyFields(type);
 
-                            if (object instanceof Property) {
-                                Property property = (Property) object;
+                if (! collection.isEmpty()) {
+                    log("");
+                    log(type.getName());
 
-                                log(property.getName()
-                                    + ": " + property.getDefaultValue());
-                            }
-                        }
-                    } catch (IllegalAccessException exception) {
+                    for (Property property : collection) {
+                        log(property.getName()
+                            + TAB + property.isRequired()
+                            + TAB + property.getDefaultValueAsString());
                     }
                 }
             }
