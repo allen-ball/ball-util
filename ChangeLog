@@ -1,3 +1,9 @@
+2008-11-01  Allen D. Ball  <ball@10-0-1-4.lan>
+
+	* src/main/java/iprotium/util/Property.java:
+	Added getDefaultValueAsString() method.
+	Added static getStaticPropertyFields(Class<?>... types) method.
+
 2008-10-30  Allen D. Ball  <ball@10-0-1-4.lan>
 
 	* src/main/java/iprotium/util/ant/taskdefs/AbstractClassFileTask.java,
