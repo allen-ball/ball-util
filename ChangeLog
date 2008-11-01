@@ -4,6 +4,10 @@
 	Added getDefaultValueAsString() method.
 	Added static getStaticPropertyFields(Class<?>... types) method.
 
+	* src/main/java/iprotium/util/ant/taskdefs/ShowPropertiesTask.java:
+	Use Property.getStaticPropertyFields(Class<?>... types) to get
+	Class Property objects.
+
 2008-10-30  Allen D. Ball  <ball@10-0-1-4.lan>
 
 	* src/main/java/iprotium/util/ant/taskdefs/AbstractClassFileTask.java,
