@@ -1,5 +1,5 @@
 /*
- * $Id: StringProperty.java,v 1.1 2008-10-26 20:54:48 ball Exp $
+ * $Id: StringProperty.java,v 1.2 2008-11-01 19:52:07 ball Exp $
  *
  * Copyright 2008 Allen D. Ball.  All rights reserved.
  */
@@ -11,7 +11,7 @@ package iprotium.util;
  * @see String
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class StringProperty extends Property<String> {
 
@@ -30,15 +30,15 @@ public class StringProperty extends Property<String> {
      * Construct a Property with the argument name qualified by the Class
      * name.  The Property is not required and has no default value.
      *
-     * @param   cls             The Class whose name should be used as the
+     * @param   type            The Class whose name should be used as the
      *                          prefix for the name of the Property.
      * @param   name            The name of the Property.
      *
      * @throws  NullPointerException
      *                          If the name parameter is null.
      */
-    public StringProperty(Class<? extends Object> cls, String name) {
-        this(getName(cls, name));
+    public StringProperty(Class<? extends Object> type, String name) {
+        this(getName(type, name));
     }
 
     /**
@@ -74,7 +74,7 @@ public class StringProperty extends Property<String> {
      * Construct a Property with the argument name qualified by the Class
      * name with a default value.  The Property is not required.
      *
-     * @param   cls             The Class whose name should be used as the
+     * @param   type            The Class whose name should be used as the
      *                          prefix for the name of the Property.
      * @param   name            The name of the Property.
      * @param   value           The default value of the Property.
@@ -82,9 +82,9 @@ public class StringProperty extends Property<String> {
      * @throws  NullPointerException
      *                          If the name parameter is null.
      */
-    public StringProperty(Class<? extends Object> cls, String name,
+    public StringProperty(Class<? extends Object> type, String name,
                           String value) {
-        this(getName(cls, name), value);
+        this(getName(type, name), value);
     }
 
     /**
@@ -122,7 +122,7 @@ public class StringProperty extends Property<String> {
      * Construct a Property with the argument name qualified by the Class
      * name that may require a value.  The Property has no default value.
      *
-     * @param   cls             The Class whose name should be used as the
+     * @param   type            The Class whose name should be used as the
      *                          prefix for the name of the Property.
      * @param   name            The name of the Property.
      * @param   required        true if the Property is required; false
@@ -131,9 +131,9 @@ public class StringProperty extends Property<String> {
      * @throws  NullPointerException
      *                          If the name parameter is null.
      */
-    public StringProperty(Class<? extends Object> cls, String name,
+    public StringProperty(Class<? extends Object> type, String name,
                           boolean required) {
-        this(getName(cls, name), required);
+        this(getName(type, name), required);
     }
 
     /**
