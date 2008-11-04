@@ -1,5 +1,5 @@
 /*
- * $Id: Property.java,v 1.2 2008-11-01 19:50:59 ball Exp $
+ * $Id: Property.java,v 1.3 2008-11-04 04:09:42 ball Exp $
  *
  * Copyright 2008 Allen D. Ball.  All rights reserved.
  */
@@ -18,7 +18,7 @@ import java.util.Set;
  * Abstract Property base class.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public abstract class Property<T> implements Comparable<Property<?>> {
     private final String name;
@@ -192,7 +192,7 @@ public abstract class Property<T> implements Comparable<Property<?>> {
         String property = properties.getProperty(getName());
 
         if (required && property == null) {
-            throw new MissingPropertyException();
+            throw new MissingPropertyException(this);
         }
 
         return (property != null) ? fromString(property) : value;
@@ -325,22 +325,11 @@ public abstract class Property<T> implements Comparable<Property<?>> {
 
         return (prefix != null) ? prefix : "";
     }
-
-    /**
-     * Exception thrown to indicate a required Property is not set.
-     */
-    public class MissingPropertyException extends MissingResourceException {
-        private static final long serialVersionUID = 6351016292213085011L;
-
-        /**
-         * Sole constructor.
-         */
-        public MissingPropertyException() {
-            super("Undefined property `" + getName() + "'",
-                  Property.this.getClass().getName(), getName());
-        }
-    }
 }
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.2  2008/11/01 19:50:59  ball
+ * Added getDefaultValueAsString() method.
+ * Added static getStaticPropertyFields(Class<?>... types) method.
+ *
  */
