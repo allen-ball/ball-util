@@ -10,7 +10,7 @@
     -----------------
     Java Utilities
 
-    $Id: build.xml,v 1.5 2008-10-30 07:55:42 ball Exp $
+    $Id: build.xml,v 1.6 2008-11-04 04:27:01 ball Exp $
   </description>
 
 
@@ -90,7 +90,9 @@
   <target name="compile"
           description="--> Compile Java source."
           depends="depend">
-    <copy preservelastmodified="true" todir="${build.class.dir}">
+    <filter token="POM.ARTIFACTID" value="${pom.artifactId}"/>
+    <copy filtering="true" preservelastmodified="true"
+          todir="${build.class.dir}">
       <fileset dir="${src.dir}/main/resources">
         <include name="**/*"/>
       </fileset>
@@ -133,10 +135,6 @@
           depends="jar">
     <artifact:install file="${build.dir}/${artifact}">
       <pom refid="pom"/>
-<!--
-      <attach file="${build.dir}/libposix.so"
-              classifier="${os.arch}-${os.name}" type="libposix.so"/>
-  -->
     </artifact:install>
   </target>
 
@@ -171,6 +169,14 @@
     <taskdef classpathref="build.classpath"
              resource="iprotium/util/ant/defaults.properties"/>
     <jni-classes basedir="${build.class.dir}"/>
+  </target>
+
+  <target name="list-resources"
+          description="--> Invokes &lt;list-resources/&gt; task."
+          depends="compile">
+    <taskdef classpathref="build.classpath"
+             resource="iprotium/util/ant/defaults.properties"/>
+    <list-resources name="${name}"/>
   </target>
 
   <target name="members-of"
