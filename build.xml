@@ -10,7 +10,7 @@
     -----------------
     Java Utilities
 
-    $Id: build.xml,v 1.6 2008-11-04 04:27:01 ball Exp $
+    $Id: build.xml,v 1.7 2008-11-04 04:36:09 ball Exp $
   </description>
 
 
@@ -80,6 +80,9 @@
           <attribute name="Sealed" value="true"/>
         </section>
         <section name="iprotium/util/ant/taskdefs/">
+          <attribute name="Sealed" value="true"/>
+        </section>
+        <section name="iprotium/util/jni/">
           <attribute name="Sealed" value="true"/>
         </section>
       </manifest>
@@ -214,11 +217,4 @@
 </project>
 <!--
     $Log: not supported by cvs2svn $
-    Revision 1.4  2008/10/28 09:24:21  ball
-    Added <is-assignable-from/> target and Ant Task.
-
-    Revision 1.2  2008/10/27 00:10:03  ball
-    Added <jni-classes/>, <members-of/>, <serialVersionUID/>,
-    <show-properties/>, and <superclasses-of> targets and Ant Tasks.
-
   -->
