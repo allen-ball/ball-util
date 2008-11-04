@@ -1,12 +1,11 @@
 /*
- * $Id: ShowPropertiesTask.java,v 1.3 2008-11-01 19:56:03 ball Exp $
+ * $Id: ShowPropertiesTask.java,v 1.4 2008-11-04 04:12:36 ball Exp $
  *
  * Copyright 2008 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
 import iprotium.util.Property;
-import iprotium.util.StringProperty;
 import java.util.Collection;
 import org.apache.tools.ant.BuildException;
 
@@ -14,13 +13,10 @@ import org.apache.tools.ant.BuildException;
  * Ant Task to find and display static Property members.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class ShowPropertiesTask extends AbstractClassFileTask {
     private static final String TAB = "\t";
-
-    public static final Property PROPERTY =
-        new StringProperty("PROPERTY-NAME", "DEFAULT-VALUE");
 
     /**
      * Sole constructor.
