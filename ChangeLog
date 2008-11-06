@@ -1,3 +1,7 @@
+2008-11-05  Allen D. Ball  <ball@photon.local>
+
+	* src/main/java/iprotium/util/TimeUnitEnum.java: Initial writing.
+
 2008-11-03  Allen D. Ball  <ball@10-0-1-4.lan>
 
 	* Added iprotium.util.jni package.
