@@ -7,7 +7,7 @@
     -----------------
     Java Utilities
 
-    $Id: build.xml,v 1.8 2008-11-18 07:04:12 ball Exp $
+    $Id: build.xml,v 1.9 2008-11-18 07:36:44 ball Exp $
   </description>
 
   <property name="build.properties.file" location="build.properties"/>
@@ -21,6 +21,8 @@
 
   <property name="build.dir"            location="build"/>
   <property name="build.class.dir"      location="${build.dir}/class"/>
+  <property name="build.header.dir"     location="${build.dir}/header"/>
+  <property name="build.object.dir"     location="${build.dir}/object"/>
 
   <property name="j2se.docs.url"
             value="http://java.sun.com/j2se/${ant.java.version}/docs"/>
@@ -80,6 +82,9 @@
       <compilerarg compiler="modern" value="-Xlint:all"/>
       <src path="${src.dir}/main/java"/>
     </javac>
+    <taskdef classpathref="build.classpath"
+             resource="iprotium/util/ant/defaults.properties"/>
+    <jni-classes basedir="${build.class.dir}" property="jni.classes"/>
   </target>
 
   <target name="jar"
@@ -122,11 +127,42 @@
     <jarlib-display file="${build.dir}/${artifact}"/>
   </target>
 
+  <target name="headers"
+          description="--> Compile JNI headers."
+          depends="classes" if="jni.classes">
+    <mkdir dir="${build.header.dir}"/>
+    <javah classpathref="build.classpath" class="${jni.classes}"
+           destdir="${build.header.dir}"/>
+  </target>
+
+  <target name="objects"
+          description="--> Compile JNI objects."
+          depends="headers" if="jni.classes">
+    <mkdir dir="${build.object.dir}"/>
+    <taskdef classpathref="build.classpath"
+             resource="iprotium/util/ant/defaults.properties"/>
+    <jni-cc include="${build.header.dir}" dest="${build.object.dir}">
+      <fileset dir="${src.dir}/main/c" includes="*.c"/>
+      <mapper type="glob" from="*.c" to="*.o"/>
+    </jni-cc>
+  </target>
+
+  <target name="library"
+          description="--> Compile JNI library."
+          depends="objects">
+    <taskdef classpathref="build.classpath"
+             resource="iprotium/util/ant/defaults.properties"/>
+    <jni-ld>
+      <fileset dir="${build.object.dir}" includes="**/*.o"/>
+    </jni-ld>
+  </target>
+
   <target name="install"
           description="--> Installs pom.xml and artifacts to local repository."
           depends="jar">
     <artifact:install file="${build.dir}/${artifact}">
       <pom refid="pom"/>
+      <!-- <attach file="${build.dir}/lib${pom.artifactId}.so" type="so"/> -->
     </artifact:install>
   </target>
 
