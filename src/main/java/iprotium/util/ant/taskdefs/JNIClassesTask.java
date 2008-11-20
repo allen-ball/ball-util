@@ -1,5 +1,5 @@
 /*
- * $Id: JNIClassesTask.java,v 1.3 2008-11-18 06:56:59 ball Exp $
+ * $Id: JNIClassesTask.java,v 1.4 2008-11-20 03:05:32 ball Exp $
  *
  * Copyright 2008 Allen D. Ball.  All rights reserved.
  */
@@ -16,7 +16,7 @@ import static iprotium.util.ClassOrder.NAME;
  * Ant Task to determine the classes that have native members.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class JNIClassesTask extends AbstractClassFileTask {
     private String property = null;
@@ -45,11 +45,7 @@ public class JNIClassesTask extends AbstractClassFileTask {
 
         if (! set.isEmpty()) {
             if (getProperty() != null) {
-                String name = getProperty();
-
-                getProject().setProperty(name, toString(set));
-
-                log(name + ": " + getProject().getProperty(name));
+                getProject().setProperty(getProperty(), toString(set));
             } else {
                 for (Class<?> type : set) {
                     log(type.getName());
@@ -88,4 +84,8 @@ public class JNIClassesTask extends AbstractClassFileTask {
 }
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.3  2008/11/18 06:56:59  ball
+ * Do not set the specified property if none of the classes have
+ * native members.
+ *
  */
