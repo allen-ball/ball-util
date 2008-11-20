@@ -1,5 +1,5 @@
 /*
- * $Id: AbstractClasspathTask.java,v 1.4 2008-11-01 19:57:16 ball Exp $
+ * $Id: AbstractClasspathTask.java,v 1.5 2008-11-20 03:01:12 ball Exp $
  *
  * Copyright 2008 Allen D. Ball.  All rights reserved.
  */
@@ -18,7 +18,7 @@ import org.apache.tools.ant.util.ClasspathUtils;
  * Abstract base class for Ant Task implementations that require a classpath.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public abstract class AbstractClasspathTask extends Task {
     private boolean initialize = false;
@@ -72,6 +72,10 @@ public abstract class AbstractClasspathTask extends Task {
         return Class.forName(name, getInitialize(), getClassLoader());
     }
 
+    protected static String getName(Class<?> type) {
+        return (type != null) ? type.getName() : null;
+    }
+
     protected static boolean isAbstract(Class type) {
         return Modifier.isAbstract(type.getModifiers());
     }
@@ -106,6 +110,9 @@ public abstract class AbstractClasspathTask extends Task {
 }
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.4  2008/11/01 19:57:16  ball
+ * Added isModifier(Class) and isModifier(Member) methods.
+ *
  * Revision 1.3  2008/10/30 07:46:38  ball
  * Added `initialize' Task attribute.
  * Set the parent of the ClassLoader to the Task's ClassLoader.
