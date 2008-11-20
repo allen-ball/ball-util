@@ -7,7 +7,7 @@
     -----------------
     Java Utilities
 
-    $Id: build.xml,v 1.9 2008-11-18 07:36:44 ball Exp $
+    $Id: build.xml,v 1.10 2008-11-20 06:36:30 ball Exp $
   </description>
 
   <property name="build.properties.file" location="build.properties"/>
@@ -166,6 +166,14 @@
     </artifact:install>
   </target>
 
+  <target name="bean-info-for"
+          description="--> Invokes &lt;bean-info-for/&gt; task."
+          depends="classes">
+    <taskdef classpathref="build.classpath"
+             resource="iprotium/util/ant/defaults.properties"/>
+    <bean-info-for classpathref="build.classpath" type="${type}"/>
+  </target>
+
   <target name="is-assignable-from"
           description="--> Invokes &lt;is-assignable-from/&gt; task."
           depends="classes">
@@ -226,4 +234,7 @@
 </project>
 <!--
     $Log: not supported by cvs2svn $
+    Revision 1.9  2008/11/18 07:36:44  ball
+    Interim check-in.
+
   -->
