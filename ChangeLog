@@ -1,5 +1,7 @@
 2008-11-19  Allen D. Ball  <ball@10-0-1-4.lan>
 
+	* Added <bean-info-for/> build target and Ant Task.
+
 	* src/main/java/iprotium/util/ant/taskdefs/AbstractClassFileTask.java,
 	src/main/java/iprotium/util/ant/taskdefs/AbstractClasspathTask.java:
 	Added static getName(Class<?>) method.
