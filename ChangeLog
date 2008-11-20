@@ -1,3 +1,9 @@
+2008-11-19  Allen D. Ball  <ball@10-0-1-4.lan>
+
+	* src/main/java/iprotium/util/ant/taskdefs/AbstractClassFileTask.java,
+	src/main/java/iprotium/util/ant/taskdefs/AbstractClasspathTask.java:
+	Added static getName(Class<?>) method.
+
 2008-11-17  Allen D. Ball  <ball@10-0-1-245.lan>
 
 	* src/main/java/iprotium/util/ant/taskdefs/JNIClassesTask.java:
