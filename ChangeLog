@@ -1,5 +1,7 @@
 2008-11-26  Allen D. Ball  <ball@10-0-1-4.lan>
 
+	* Added <instance-of/> build target and Ant Task.
+
 	* src/main/java/iprotium/util/Factory.java: Initial writing.
 
 2008-11-19  Allen D. Ball  <ball@10-0-1-4.lan>
