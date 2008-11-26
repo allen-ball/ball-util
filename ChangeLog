@@ -1,3 +1,7 @@
+2008-11-26  Allen D. Ball  <ball@10-0-1-4.lan>
+
+	* src/main/java/iprotium/util/Factory.java: Initial writing.
+
 2008-11-19  Allen D. Ball  <ball@10-0-1-4.lan>
 
 	* Added <bean-info-for/> build target and Ant Task.
@@ -78,8 +82,6 @@
 	* build.xml, pom.xml: Initial writing.
 
 	* src/main/java/iprotium/io/IOUtil.java: Initial writing.
-
-	* src/main/java/iprotium/util/Factory.java: Initial writing.
 
 	* src/main/java/iprotium/util/Order.java,
 	src/main/java/iprotium/util/ArrayOrder.java,
