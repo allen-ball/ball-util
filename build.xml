@@ -7,7 +7,7 @@
     -----------------
     Java Utilities
 
-    $Id: build.xml,v 1.10 2008-11-20 06:36:30 ball Exp $
+    $Id: build.xml,v 1.11 2008-11-26 08:22:02 ball Exp $
   </description>
 
   <property name="build.properties.file" location="build.properties"/>
@@ -119,6 +119,9 @@
         <section name="iprotium/util/ant/taskdefs/">
           <attribute name="Sealed" value="true"/>
         </section>
+        <section name="iprotium/util/ant/types/">
+          <attribute name="Sealed" value="true"/>
+        </section>
         <section name="iprotium/util/jni/">
           <attribute name="Sealed" value="true"/>
         </section>
@@ -172,6 +175,15 @@
     <taskdef classpathref="build.classpath"
              resource="iprotium/util/ant/defaults.properties"/>
     <bean-info-for classpathref="build.classpath" type="${type}"/>
+  </target>
+
+  <target name="instance-of"
+          description="--> Invokes &lt;instance-of/&gt; task."
+          depends="classes">
+    <taskdef classpathref="build.classpath"
+             resource="iprotium/util/ant/defaults.properties"/>
+    <instance-of classpathref="build.classpath"
+                 type="${type}" argument="${argument}"/>
   </target>
 
   <target name="is-assignable-from"
@@ -234,6 +246,9 @@
 </project>
 <!--
     $Log: not supported by cvs2svn $
+    Revision 1.10  2008/11/20 06:36:30  ball
+    Added <bean-info-for/> build target and Ant Task.
+
     Revision 1.9  2008/11/18 07:36:44  ball
     Interim check-in.
 
