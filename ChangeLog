@@ -2,6 +2,10 @@
 
 	* src/main/java/iprotium/util/BeanMap.java: Initial writing.
 
+	* src/main/java/iprotium/util/ant/taskdefs/AbstractClassFileTask.java,
+	src/main/java/iprotium/util/ant/taskdefs/AbstractClasspathTask.java:
+	Added log(Object...) method.
+
 2008-11-26  Allen D. Ball  <ball@10-0-1-4.lan>
 
 	* Added <instance-of/> build target and Ant Task.
