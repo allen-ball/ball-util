@@ -1,5 +1,5 @@
 /*
- * $Id: AbstractClassFileTask.java,v 1.5 2008-11-20 03:01:12 ball Exp $
+ * $Id: AbstractClassFileTask.java,v 1.6 2008-11-29 06:12:49 ball Exp $
  *
  * Copyright 2008 Allen D. Ball.  All rights reserved.
  */
@@ -22,7 +22,7 @@ import org.apache.tools.ant.util.ClasspathUtils;
  * files.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public abstract class AbstractClassFileTask extends AbstractMatchingTask {
     private static final String DOT_CLASS = ".class";
@@ -105,6 +105,24 @@ public abstract class AbstractClassFileTask extends AbstractMatchingTask {
         return Class.forName(name, getInitialize(), getClassLoader());
     }
 
+    protected void log(Object... objects) {
+        String string = null;
+
+        for (Object object : objects) {
+            if (string == null) {
+                string = "";
+            } else {
+                string += AbstractClasspathTask.TAB;
+            }
+
+            string += String.valueOf(object);
+        }
+
+        if (string != null) {
+            super.log(string);
+        }
+    }
+
     protected static String getName(Class<?> type) {
         return AbstractClasspathTask.getName(type);
     }
@@ -151,11 +169,4 @@ public abstract class AbstractClassFileTask extends AbstractMatchingTask {
 }
 /*
  * $Log: not supported by cvs2svn $
- * Revision 1.4  2008/11/01 19:57:16  ball
- * Added isModifier(Class) and isModifier(Member) methods.
- *
- * Revision 1.3  2008/10/30 07:46:38  ball
- * Added `initialize' Task attribute.
- * Set the parent of the ClassLoader to the Task's ClassLoader.
- *
  */
