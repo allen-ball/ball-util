@@ -6,6 +6,9 @@
 	src/main/java/iprotium/util/ant/taskdefs/AbstractClasspathTask.java:
 	Added log(Object...) method.
 
+	* src/main/java/iprotium/util/ant/taskdefs/BeanInfoForTask.java:
+	Moved log(Object...) method to AbstractClasspathTask.
+
 2008-11-26  Allen D. Ball  <ball@10-0-1-4.lan>
 
 	* Added <instance-of/> build target and Ant Task.
