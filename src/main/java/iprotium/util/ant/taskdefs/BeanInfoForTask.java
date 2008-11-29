@@ -1,5 +1,5 @@
 /*
- * $Id: BeanInfoForTask.java,v 1.1 2008-11-20 06:36:30 ball Exp $
+ * $Id: BeanInfoForTask.java,v 1.2 2008-11-29 06:14:49 ball Exp $
  *
  * Copyright 2008 Allen D. Ball.  All rights reserved.
  */
@@ -15,11 +15,9 @@ import org.apache.tools.ant.BuildException;
  * Ant Task to display BeanInfo for a specified Class.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class BeanInfoForTask extends AbstractClasspathTask {
-    private static final String TAB = "\t";
-
     private String type = null;
 
     /**
@@ -82,25 +80,10 @@ public class BeanInfoForTask extends AbstractClasspathTask {
             }
         }
     }
-
-    private void log(Object... objects) {
-        String string = null;
-
-        for (Object object : objects) {
-            if (string == null) {
-                string = "";
-            } else {
-                string += TAB;
-            }
-
-            string += String.valueOf(object);
-        }
-
-        if (string != null) {
-            super.log(string);
-        }
-    }
 }
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2008/11/20 06:36:30  ball
+ * Added <bean-info-for/> build target and Ant Task.
+ *
  */
