@@ -1,15 +1,17 @@
 /*
- * $Id: InstanceOfTask.java,v 1.1 2008-11-26 08:22:02 ball Exp $
+ * $Id: InstanceOfTask.java,v 1.2 2008-11-29 06:16:48 ball Exp $
  *
  * Copyright 2008 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
+import iprotium.util.BeanMap;
 import iprotium.util.Factory;
 import java.lang.reflect.Member;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import org.apache.tools.ant.BuildException;
 
 /**
@@ -18,7 +20,7 @@ import org.apache.tools.ant.BuildException;
  * @see Factory
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class InstanceOfTask extends AbstractClasspathTask {
     private String type = String.class.getName();
@@ -63,7 +65,21 @@ public class InstanceOfTask extends AbstractClasspathTask {
             Member member = factory.getFactoryMember(toArray(parameters));
 
             log(String.valueOf(member));
-            log(String.valueOf(factory.apply(member, toArray(arguments))));
+
+            Object instance = factory.apply(member, toArray(arguments));
+
+            log(String.valueOf(instance));
+
+            BeanMap map = new BeanMap(instance);
+
+            if (! map.isEmpty()) {
+                log("");
+                log("Property Name", "Value");
+
+                for (Map.Entry<String,Object> entry : map.entrySet()) {
+                    log(entry.getKey(), entry.getValue());
+                }
+            }
         } catch (BuildException exception) {
             throw exception;
         } catch (RuntimeException exception) {
