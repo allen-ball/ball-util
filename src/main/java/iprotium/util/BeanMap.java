@@ -1,5 +1,5 @@
 /*
- * $Id: BeanMap.java,v 1.1 2008-11-29 06:10:43 ball Exp $
+ * $Id: BeanMap.java,v 1.3 2008-12-01 01:43:55 ball Exp $
  *
  * Copyright 2008 Allen D. Ball.  All rights reserved.
  */
@@ -22,11 +22,11 @@ import java.util.Set;
  * bean properties.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.3 $
  */
 public class BeanMap extends AbstractMap<String,Object>
                              implements Serializable {
-    private static final long serialVersionUID = 8293124389284660381L;
+    private static final long serialVersionUID = 7892236967861768264L;
 
     private final Object bean;
     private final Set<EntryImpl> entrySet0;
@@ -106,6 +106,31 @@ public class BeanMap extends AbstractMap<String,Object>
             new LinkedHashSet<Map.Entry<String,Object>>(entrySet0);
 
         return Collections.unmodifiableSet(entrySet);
+    }
+
+    /**
+     * Static method to wrap a Java bean in a BeanMap.
+     *
+     * @param   bean            The Java bean to wrap.
+     *
+     * @return  The argument bean if it is an instance of BeanMap; an new
+     *          BeanMap wrapping the argument bean otherwise.
+     *
+     * @throw   NullPointerException
+     *                          If bean argument is null.
+     * @throw   IntrospectionException
+     *                          If bean introspection fails.
+     */
+    public static BeanMap asBeanMap(Object bean) throws IntrospectionException {
+        BeanMap map = null;
+
+        if (bean instanceof BeanMap) {
+            map = (BeanMap) bean;
+        } else {
+            map = new BeanMap(bean);
+        }
+
+        return map;
     }
 
     private class EntryImpl implements Entry<String,Object>, Serializable {
