@@ -1,5 +1,5 @@
 /*
- * $Id: InstanceOfTask.java,v 1.2 2008-11-29 06:16:48 ball Exp $
+ * $Id: InstanceOfTask.java,v 1.4 2008-12-01 01:49:50 ball Exp $
  *
  * Copyright 2008 Allen D. Ball.  All rights reserved.
  */
@@ -20,7 +20,7 @@ import org.apache.tools.ant.BuildException;
  * @see Factory
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.4 $
  */
 public class InstanceOfTask extends AbstractClasspathTask {
     private String type = String.class.getName();
@@ -58,19 +58,19 @@ public class InstanceOfTask extends AbstractClasspathTask {
                 arguments.add(factory.getInstance(argument.getValue()));
             }
 
-            log(String.valueOf(parameters));
-            log(String.valueOf(arguments));
+            log(parameters);
+            log(arguments);
 
             Factory<Object> factory = new Factory<Object>(type);
             Member member = factory.getFactoryMember(toArray(parameters));
 
-            log(String.valueOf(member));
+            log(member);
 
             Object instance = factory.apply(member, toArray(arguments));
 
-            log(String.valueOf(instance));
+            log(instance);
 
-            BeanMap map = new BeanMap(instance);
+            BeanMap map = BeanMap.asBeanMap(instance);
 
             if (! map.isEmpty()) {
                 log("");
@@ -121,4 +121,7 @@ public class InstanceOfTask extends AbstractClasspathTask {
 }
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.2  2008/11/29 06:16:48  ball
+ * Display instance bean property names and values.
+ *
  */
