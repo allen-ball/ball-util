@@ -1,3 +1,8 @@
+2008-12-05  Allen D. Ball  <ball@10-0-1-4.lan>
+
+	* src/main/java/iprotium/util/Factory.java:
+	Added "create" factory method pattern.
+
 2008-11-30  Allen D. Ball  <ball@10-0-1-4.lan>
 
 	* src/main/java/iprotium/util/BeanMap.java:
