@@ -1,5 +1,5 @@
 /*
- * $Id: Factory.java,v 1.2 2008-11-26 08:17:59 ball Exp $
+ * $Id: Factory.java,v 1.3 2008-12-06 01:18:01 ball Exp $
  *
  * Copyright 2008 Allen D. Ball.  All rights reserved.
  */
@@ -22,7 +22,7 @@ import java.util.TreeSet;
  * Factory base class.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class Factory<T> {
     private final Class<? extends T> type;
@@ -234,6 +234,7 @@ public class Factory<T> {
             Set<String> set = new TreeSet<String>();
 
             set.add("compile");
+            set.add("create");
             set.add("forName");
             set.add("get" + type.getSimpleName());
             set.add("getDefault");
