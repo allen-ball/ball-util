@@ -1,5 +1,5 @@
 /*
- * $Id: Factory.java,v 1.3 2008-12-06 01:18:01 ball Exp $
+ * $Id: Factory.java,v 1.4 2008-12-12 00:06:52 ball Exp $
  *
  * Copyright 2008 Allen D. Ball.  All rights reserved.
  */
@@ -22,7 +22,7 @@ import java.util.TreeSet;
  * Factory base class.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class Factory<T> {
     private final Class<? extends T> type;
@@ -238,6 +238,7 @@ public class Factory<T> {
             set.add("forName");
             set.add("get" + type.getSimpleName());
             set.add("getDefault");
+            set.add("getDefaultInstance");
             set.add("getInstance");
             set.add("valueOf");
 
@@ -277,4 +278,7 @@ public class Factory<T> {
 }
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.3  2008/12/06 01:18:01  ball
+ * Added "create" factory method pattern.
+ *
  */
