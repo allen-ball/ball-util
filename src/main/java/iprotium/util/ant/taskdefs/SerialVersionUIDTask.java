@@ -1,7 +1,7 @@
 /*
- * $Id: SerialVersionUIDTask.java,v 1.3 2008-11-01 19:58:55 ball Exp $
+ * $Id: SerialVersionUIDTask.java,v 1.4 2009-01-27 22:00:19 ball Exp $
  *
- * Copyright 2008 Allen D. Ball.  All rights reserved.
+ * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -16,7 +16,7 @@ import org.apache.tools.ant.BuildException;
  * Serializable but do not explicitly define serialVersionUID.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class SerialVersionUIDTask extends AbstractClassFileTask {
     private static final int MODIFIERS =
@@ -63,4 +63,7 @@ public class SerialVersionUIDTask extends AbstractClassFileTask {
 }
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.3  2008/11/01 19:58:55  ball
+ * Use superclass isAbstract() and isStatic() methods.
+ *
  */

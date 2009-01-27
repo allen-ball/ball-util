@@ -1,7 +1,7 @@
 /*
- * $Id: ShowPropertiesTask.java,v 1.4 2008-11-04 04:12:36 ball Exp $
+ * $Id: ShowPropertiesTask.java,v 1.5 2009-01-27 22:00:19 ball Exp $
  *
- * Copyright 2008 Allen D. Ball.  All rights reserved.
+ * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -13,7 +13,7 @@ import org.apache.tools.ant.BuildException;
  * Ant Task to find and display static Property members.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class ShowPropertiesTask extends AbstractClassFileTask {
     private static final String TAB = "\t";
@@ -58,4 +58,7 @@ public class ShowPropertiesTask extends AbstractClassFileTask {
 }
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.4  2008/11/04 04:12:36  ball
+ * Removed test instrumentation.
+ *
  */

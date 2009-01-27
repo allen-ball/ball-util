@@ -1,7 +1,7 @@
 /*
- * $Id: Property.java,v 1.3 2008-11-04 04:09:42 ball Exp $
+ * $Id: Property.java,v 1.4 2009-01-27 22:00:19 ball Exp $
  *
- * Copyright 2008 Allen D. Ball.  All rights reserved.
+ * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
@@ -18,7 +18,7 @@ import java.util.Set;
  * Abstract Property base class.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public abstract class Property<T> implements Comparable<Property<?>> {
     private final String name;
@@ -328,6 +328,9 @@ public abstract class Property<T> implements Comparable<Property<?>> {
 }
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.3  2008/11/04 04:09:42  ball
+ * Moved MissingResourceException to external class.
+ *
  * Revision 1.2  2008/11/01 19:50:59  ball
  * Added getDefaultValueAsString() method.
  * Added static getStaticPropertyFields(Class<?>... types) method.

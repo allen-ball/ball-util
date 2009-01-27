@@ -1,7 +1,7 @@
 /*
- * $Id: POSIX.java,v 1.2 2008-11-04 07:42:13 ball Exp $
+ * $Id: POSIX.java,v 1.3 2009-01-27 22:00:19 ball Exp $
  *
- * Copyright 2008 Allen D. Ball.  All rights reserved.
+ * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.jni;
 
@@ -12,7 +12,7 @@ import java.util.ResourceBundle;
  * Class whose static methods provide wrappers to native POSIX interfaces.
  *
  * @@author <a href="mailto:ball@@iprotium.com">Allen D. Ball</a>
- * @@version $Revision: 1.2 $
+ * @@version $Revision: 1.3 $
  */
 public class POSIX {
     private static final ResourceBundle BUNDLE =
@@ -54,4 +54,7 @@ public class POSIX {
 }
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.2  2008/11/04 07:42:13  ball
+ * Initial writing.
+ *
  */

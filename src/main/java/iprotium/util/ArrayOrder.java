@@ -1,7 +1,7 @@
 /*
- * $Id: ArrayOrder.java,v 1.1 2008-10-26 23:55:24 ball Exp $
+ * $Id: ArrayOrder.java,v 1.2 2009-01-27 22:00:19 ball Exp $
  *
- * Copyright 2008 Allen D. Ball.  All rights reserved.
+ * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
@@ -9,7 +9,7 @@ package iprotium.util;
  * Order implementation to order arrays.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class ArrayOrder<T> extends Order<T[]> {
     private static final long serialVersionUID = 4969844544789108256L;
@@ -47,4 +47,7 @@ public class ArrayOrder<T> extends Order<T[]> {
 }
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2008/10/26 23:55:24  ball
+ * Initial writing.
+ *
  */

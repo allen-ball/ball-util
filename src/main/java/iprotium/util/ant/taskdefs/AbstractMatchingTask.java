@@ -1,7 +1,7 @@
 /*
- * $Id: AbstractMatchingTask.java,v 1.2 2008-10-30 07:40:17 ball Exp $
+ * $Id: AbstractMatchingTask.java,v 1.3 2009-01-27 22:00:19 ball Exp $
  *
- * Copyright 2008 Allen D. Ball.  All rights reserved.
+ * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -15,7 +15,7 @@ import org.apache.tools.ant.taskdefs.MatchingTask;
  * Abstract base class for Ant MatchingTask implementations.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public abstract class AbstractMatchingTask extends MatchingTask {
     private File basedir = null;
@@ -50,4 +50,8 @@ public abstract class AbstractMatchingTask extends MatchingTask {
 }
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.2  2008/10/30 07:40:17  ball
+ * Added concrete execute() implementation to set the basedir attribute
+ * (if not explicitly set).
+ *
  */

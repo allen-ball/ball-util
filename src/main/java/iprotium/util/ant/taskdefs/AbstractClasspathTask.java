@@ -1,7 +1,7 @@
 /*
- * $Id: AbstractClasspathTask.java,v 1.6 2008-11-29 06:12:49 ball Exp $
+ * $Id: AbstractClasspathTask.java,v 1.7 2009-01-27 22:00:19 ball Exp $
  *
- * Copyright 2008 Allen D. Ball.  All rights reserved.
+ * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -18,7 +18,7 @@ import org.apache.tools.ant.util.ClasspathUtils;
  * Abstract base class for Ant Task implementations that require a classpath.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 public abstract class AbstractClasspathTask extends Task {
     protected static final String TAB = "\t";
@@ -130,4 +130,7 @@ public abstract class AbstractClasspathTask extends Task {
 }
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.6  2008/11/29 06:12:49  ball
+ * Added log(Object...) method.
+ *
  */

@@ -1,7 +1,7 @@
 /*
- * $Id: IOUtil.java,v 1.1 2008-10-27 05:47:15 ball Exp $
+ * $Id: IOUtil.java,v 1.2 2009-01-27 22:00:19 ball Exp $
  *
- * Copyright 2008 Allen D. Ball.  All rights reserved.
+ * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
  */
 package iprotium.io;
 
@@ -23,7 +23,7 @@ import java.nio.channels.WritableByteChannel;
  * Common I/O utilities implemented as static methods.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class IOUtil {
     private IOUtil() { }
@@ -264,4 +264,7 @@ public class IOUtil {
 }
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2008/10/27 05:47:15  ball
+ * Initial writing.
+ *
  */
