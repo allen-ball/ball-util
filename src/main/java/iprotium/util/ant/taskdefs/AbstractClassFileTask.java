@@ -1,5 +1,5 @@
 /*
- * $Id: AbstractClassFileTask.java,v 1.7 2009-01-27 22:00:19 ball Exp $
+ * $Id: AbstractClassFileTask.java,v 1.8 2009-01-29 05:36:30 ball Exp $
  *
  * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
  */
@@ -17,19 +17,23 @@ import org.apache.tools.ant.types.Reference;
 import org.apache.tools.ant.types.selectors.FileSelector;
 import org.apache.tools.ant.util.ClasspathUtils;
 
+import static iprotium.util.ant.taskdefs.AbstractClasspathTask.TAB;
+
 /**
  * Abstract base class for Ant Task implementations that select *.CLASS
  * files.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 public abstract class AbstractClassFileTask extends AbstractMatchingTask {
     private static final String DOT_CLASS = ".class";
+    private static final String DOT_JAVA = ".java";
 
     private boolean initialize = false;
     private ClasspathUtils.Delegate delegate = null;
     private AntClassLoader loader = null;
+    private Path srcPath = null;
 
     /**
      * Sole constructor.
@@ -39,6 +43,15 @@ public abstract class AbstractClassFileTask extends AbstractMatchingTask {
     protected boolean getInitialize() { return initialize; }
     public void setInitialize(boolean initialize) {
         this.initialize = initialize;
+    }
+
+    protected Path getSrcdir() { return srcPath; }
+    public void setSrcdir(Path srcdir) {
+        if (srcPath == null) {
+            srcPath = srcdir;
+        } else {
+            srcPath.append(srcdir);
+        }
     }
 
     public void setClasspathRef(Reference reference) {
@@ -54,6 +67,14 @@ public abstract class AbstractClassFileTask extends AbstractMatchingTask {
         }
 
         return loader;
+    }
+
+    public Path createSrc() {
+        if (srcPath == null) {
+            srcPath = new Path(getProject());
+        }
+
+        return srcPath.createPath();
     }
 
     @Override
@@ -105,6 +126,42 @@ public abstract class AbstractClassFileTask extends AbstractMatchingTask {
         return Class.forName(name, getInitialize(), getClassLoader());
     }
 
+    protected File getJavaFile(Map<File,Class> map, File file) {
+        File javaFile = null;
+        Class<?> type = map.get(file);
+
+        if (srcPath != null && type != null) {
+            while (type.getDeclaringClass() != null) {
+                type = type.getDeclaringClass();
+            }
+
+            while (type.getEnclosingClass() != null) {
+                type = type.getEnclosingClass();
+            }
+
+            String child =
+                type.getCanonicalName().replaceAll("[.]", File.separator)
+                + DOT_JAVA;
+
+            for (String parent : srcPath.list()) {
+                javaFile = new File(parent, child);
+
+                if (javaFile.isFile()) {
+                    break;
+                } else {
+                    javaFile = null;
+                }
+            }
+        }
+
+        return (javaFile != null) ? javaFile : file;
+    }
+
+    protected void log(File file, int lineno, String message) {
+        super.log(String.valueOf(file) + ":" + String.valueOf(lineno)
+                  + ": " + message);
+    }
+
     protected void log(Object... objects) {
         String string = null;
 
@@ -112,7 +169,7 @@ public abstract class AbstractClassFileTask extends AbstractMatchingTask {
             if (string == null) {
                 string = "";
             } else {
-                string += AbstractClasspathTask.TAB;
+                string += TAB;
             }
 
             string += String.valueOf(object);
@@ -169,7 +226,4 @@ public abstract class AbstractClassFileTask extends AbstractMatchingTask {
 }
 /*
  * $Log: not supported by cvs2svn $
- * Revision 1.6  2008/11/29 06:12:49  ball
- * Added log(Object...) method.
- *
  */
