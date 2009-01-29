@@ -5,6 +5,9 @@
 	Added getJavaFile(Map<File,Class>,File) and log(File,int,String)
 	methods.
 
+	* src/main/java/iprotium/util/ant/taskdefs/SerialVersionUIDTask.java:
+	Include source file in log message.
+
 2009-01-27  Allen D. Ball  <ball@10-0-1-4.lan>
 
 	* Updated copyright notices.
