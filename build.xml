@@ -7,7 +7,7 @@
     -----------------
     Java Utilities
 
-    $Id: build.xml,v 1.11 2008-11-26 08:22:02 ball Exp $
+    $Id: build.xml,v 1.12 2009-01-29 05:40:42 ball Exp $
   </description>
 
   <property name="build.properties.file" location="build.properties"/>
@@ -84,7 +84,9 @@
     </javac>
     <taskdef classpathref="build.classpath"
              resource="iprotium/util/ant/defaults.properties"/>
-    <jni-classes basedir="${build.class.dir}" property="jni.classes"/>
+    <jni-classes basedir="${build.class.dir}" property="jni.classes">
+      <src path="${src.dir}/main/java"/>
+    </jni-classes>
   </target>
 
   <target name="jar"
@@ -200,7 +202,9 @@
           depends="classes">
     <taskdef classpathref="build.classpath"
              resource="iprotium/util/ant/defaults.properties"/>
-    <jni-classes basedir="${build.class.dir}"/>
+    <jni-classes basedir="${build.class.dir}">
+      <src path="${src.dir}/main/java"/>
+    </jni-classes>
   </target>
 
   <target name="list-resources"
@@ -224,7 +228,9 @@
           depends="classes">
     <taskdef classpathref="build.classpath"
              resource="iprotium/util/ant/defaults.properties"/>
-    <serialVersionUID basedir="${build.class.dir}"/>
+    <serialVersionUID basedir="${build.class.dir}">
+      <src path="${src.dir}/main/java"/>
+    </serialVersionUID>
   </target>
 
   <target name="show-properties"
@@ -232,7 +238,9 @@
           depends="classes">
     <taskdef classpathref="build.classpath"
              resource="iprotium/util/ant/defaults.properties"/>
-    <show-properties basedir="${build.class.dir}"/>
+    <show-properties basedir="${build.class.dir}">
+      <src path="${src.dir}/main/java"/>
+    </show-properties>
   </target>
 
   <target name="superclasses-of"
@@ -246,6 +254,9 @@
 </project>
 <!--
     $Log: not supported by cvs2svn $
+    Revision 1.11  2008/11/26 08:22:02  ball
+    Added <instance-of/> build target and Ant Task.
+
     Revision 1.10  2008/11/20 06:36:30  ball
     Added <bean-info-for/> build target and Ant Task.
 
