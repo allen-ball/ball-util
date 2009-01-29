@@ -1,3 +1,10 @@
+2009-01-28  Allen D. Ball  <ball@10-0-1-4.lan>
+
+	* src/main/java/iprotium/util/ant/taskdefs/AbstractClassFileTask.java:
+	Added support for source ("src") path.
+	Added getJavaFile(Map<File,Class>,File) and log(File,int,String)
+	methods.
+
 2009-01-27  Allen D. Ball  <ball@10-0-1-4.lan>
 
 	* Updated copyright notices.
