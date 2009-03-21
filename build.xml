@@ -7,7 +7,7 @@
     -----------------
     Java Utilities
 
-    $Id: build.xml,v 1.12 2009-01-29 05:40:42 ball Exp $
+    $Id: build.xml,v 1.13 2009-03-21 21:48:44 ball Exp $
   </description>
 
   <property name="build.properties.file" location="build.properties"/>
@@ -102,6 +102,17 @@
           <attribute name="Specification-Version" value="${pom.version}"/>
           <attribute name="Specification-Vendor" value="${vendor}"/>
           <attribute name="Implementation-Title" value="iprotium.io"/>
+          <attribute name="Implementation-Version"
+                     value="${pom.version}.${buildnumber.date}"/>
+          <attribute name="Implementation-Vendor" value="${vendor}"/>
+          <attribute name="Sealed" value="true"/>
+        </section>
+        <section name="iprotium/text/">
+          <attribute name="Extension-Name" value="iprotium.text"/>
+          <attribute name="Specification-Title" value="${pom.artifactId}"/>
+          <attribute name="Specification-Version" value="${pom.version}"/>
+          <attribute name="Specification-Vendor" value="${vendor}"/>
+          <attribute name="Implementation-Title" value="iprotium.text"/>
           <attribute name="Implementation-Version"
                      value="${pom.version}.${buildnumber.date}"/>
           <attribute name="Implementation-Vendor" value="${vendor}"/>
@@ -254,12 +265,6 @@
 </project>
 <!--
     $Log: not supported by cvs2svn $
-    Revision 1.11  2008/11/26 08:22:02  ball
-    Added <instance-of/> build target and Ant Task.
-
-    Revision 1.10  2008/11/20 06:36:30  ball
-    Added <bean-info-for/> build target and Ant Task.
-
     Revision 1.9  2008/11/18 07:36:44  ball
     Interim check-in.
 
