@@ -1,3 +1,7 @@
+2009-03-23  Allen D. Ball  <ball@10-0-1-4.lan>
+
+	* iprotium.util.ant.taskdefs.JNIResourceBundle: Initial writing.
+
 2009-03-21  Allen D. Ball  <ball@10-0-1-4.lan>
 
 	* Added iprotium.text package.
