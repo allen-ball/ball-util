@@ -1,5 +1,5 @@
 /*
- * $Id: POSIX.java,v 1.3 2009-01-27 22:00:19 ball Exp $
+ * $Id: POSIX.java,v 1.4 2009-03-24 05:57:41 ball Exp $
  *
  * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
  */
@@ -11,8 +11,8 @@ import java.util.ResourceBundle;
 /**
  * Class whose static methods provide wrappers to native POSIX interfaces.
  *
- * @@author <a href="mailto:ball@@iprotium.com">Allen D. Ball</a>
- * @@version $Revision: 1.3 $
+ * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
+ * @version $Revision: 1.4 $
  */
 public class POSIX {
     private static final ResourceBundle BUNDLE =
@@ -25,36 +25,33 @@ public class POSIX {
     /**
      * Wrapper to the POSIX link(2) call.
      *
-     * @@param   source          The File to be linked.
-     * @@param   target          The link target File.
+     * @param   from            The source File.
+     * @param   to              The target File.
      *
-     * @@return  <code>true</code> if successful;
+     * @return  <code>true</code> if successful;
      *          <code>false</code> otherwise.
      */
-    public static boolean link(File source, File target) {
-        return link(source.getPath(), target.getPath());
+    public static boolean link(File from, File to) {
+        return link(from.getPath(), to.getPath());
     }
 
-    private static native boolean link(String source, String target);
+    private static native boolean link(String from, String to);
 
     /**
      * Wrapper to the POSIX symlink(2) call.
      *
-     * @@param   source          The File to be linked.
-     * @@param   target          The link target File.
+     * @param   from            The source File.
+     * @param   to              The target File.
      *
-     * @@return  <code>true</code> if successful;
+     * @return  <code>true</code> if successful;
      *          <code>false</code> otherwise.
      */
-    public static boolean symlink(File source, File target) {
-        return symlink(source.getPath(), target.getPath());
+    public static boolean symlink(File from, File to) {
+        return symlink(from.getPath(), to.getPath());
     }
 
-    private static native boolean symlink(String source, String target);
+    private static native boolean symlink(String from, String to);
 }
 /*
  * $Log: not supported by cvs2svn $
- * Revision 1.2  2008/11/04 07:42:13  ball
- * Initial writing.
- *
  */

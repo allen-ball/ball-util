@@ -1,4 +1,4 @@
-/* $Id: iprotium_util_jni_POSIX.c,v 1.2 2008-11-10 01:01:58 ball Exp $ */
+/* $Id: iprotium_util_jni_POSIX.c,v 1.3 2009-03-24 05:57:41 ball Exp $ */
 
 #include "iprotium_util_jni_POSIX.h"
 
@@ -13,27 +13,27 @@ JNIEXPORT void JNICALL JNI_OnUnload(JavaVM *jvm, void *reserved) {
 }
 
 JNIEXPORT jboolean JNICALL
-Java_iprotium_util_jni_POSIX_link(JNIEnv *env,
-                                  jclass class, jstring s, jstring t) {
-    const char *source = (*env)->GetStringUTFChars(env, s, 0);
-    const char *target = (*env)->GetStringUTFChars(env, t, 0);
-    int status = link(source, target);
+Java_iprotium_util_jni_POSIX_link(JNIEnv *env, jclass class,
+                                  jstring from, jstring to) {
+    const char *path1 = (*env)->GetStringUTFChars(env, from, 0);
+    const char *path2 = (*env)->GetStringUTFChars(env, to, 0);
+    int status = link(path1, path2);
 
-    (*env)->ReleaseStringUTFChars(env, s, source);
-    (*env)->ReleaseStringUTFChars(env, t, target);
+    (*env)->ReleaseStringUTFChars(env, from, path1);
+    (*env)->ReleaseStringUTFChars(env, to, path2);
 
     return (jboolean) (status == 0);
 }
 
 JNIEXPORT jboolean JNICALL
-Java_iprotium_util_jni_POSIX_symlink(JNIEnv *env,
-                                     jclass class, jstring s, jstring t) {
-    const char *source = (*env)->GetStringUTFChars(env, s, 0);
-    const char *target = (*env)->GetStringUTFChars(env, t, 0);
-    int status = symlink(source, target);
+Java_iprotium_util_jni_POSIX_symlink(JNIEnv *env, jclass class,
+                                     jstring from, jstring to) {
+    const char *path1 = (*env)->GetStringUTFChars(env, from, 0);
+    const char *path2 = (*env)->GetStringUTFChars(env, to, 0);
+    int status = symlink(path1, path2);
 
-    (*env)->ReleaseStringUTFChars(env, s, source);
-    (*env)->ReleaseStringUTFChars(env, t, target);
+    (*env)->ReleaseStringUTFChars(env, from, path1);
+    (*env)->ReleaseStringUTFChars(env, to, path2);
 
     return (jboolean) (status == 0);
 }
