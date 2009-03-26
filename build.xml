@@ -7,7 +7,7 @@
     -----------------
     Java Utilities
 
-    $Id: build.xml,v 1.14 2009-03-24 05:56:11 ball Exp $
+    $Id: build.xml,v 1.15 2009-03-26 01:08:21 ball Exp $
   </description>
 
   <property name="build.properties.file" location="build.properties"/>
@@ -177,9 +177,10 @@
   <target name="install"
           description="--> Installs pom.xml and artifacts to local repository."
           depends="jar,jnilib">
+    <jnilib-suffix property="jnilib.suffix"/>
     <artifact:install file="${build.dir}/${artifact}">
       <pom refid="pom"/>
-      <attach file="${build.dir}/${jnilib}" type="${jnilib}"/>
+      <attach file="${build.dir}/${jnilib}" type="${jnilib.suffix}"/>
     </artifact:install>
   </target>
 
@@ -217,6 +218,22 @@
     <jni-classes basedir="${build.class.dir}">
       <src path="${src.dir}/main/java"/>
     </jni-classes>
+  </target>
+
+  <target name="jnilib-prefix"
+          description="--> Invokes &lt;jnilib-prefix/&gt; task."
+          depends="classes">
+    <taskdef classpathref="build.classpath"
+             resource="iprotium/util/ant/defaults.properties"/>
+    <jnilib-prefix/>
+  </target>
+
+  <target name="jnilib-suffix"
+          description="--> Invokes &lt;jnilib-suffix/&gt; task."
+          depends="classes">
+    <taskdef classpathref="build.classpath"
+             resource="iprotium/util/ant/defaults.properties"/>
+    <jnilib-suffix/>
   </target>
 
   <target name="list-resources"
@@ -266,7 +283,4 @@
 </project>
 <!--
     $Log: not supported by cvs2svn $
-    Revision 1.13  2009/03/21 21:48:44  ball
-    Added iprotium.text package.
-
   -->
