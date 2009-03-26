@@ -1,5 +1,5 @@
 /*
- * $Id: TimeUnitEnum.java,v 1.2 2009-01-27 22:00:19 ball Exp $
+ * $Id: TimeUnitEnum.java,v 1.3 2009-03-26 01:01:48 ball Exp $
  *
  * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
  */
@@ -11,7 +11,7 @@ package iprotium.util;
  * @see java.util.concurrent.TimeUnit
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public enum TimeUnitEnum {
     MILLISECOND(1), MILLISECONDS(MILLISECOND),
@@ -25,15 +25,15 @@ public enum TimeUnitEnum {
 
     private final long milliseconds;
 
-    private TimeUnitEnum(long milliseconds) {
-        if (milliseconds > 0) {
-            this.milliseconds = milliseconds;
+    private TimeUnitEnum(Number milliseconds) {
+        if (milliseconds.longValue() > 0) {
+            this.milliseconds = milliseconds.longValue();
         } else {
             throw new IllegalArgumentException("milliseconds=" + milliseconds);
         }
     }
 
-    private TimeUnitEnum(long duration, TimeUnitEnum unit) {
+    private TimeUnitEnum(Number duration, TimeUnitEnum unit) {
         this(unit.toMilliseconds(duration));
     }
 
@@ -48,19 +48,7 @@ public enum TimeUnitEnum {
      * @return  The duration in milliseconds.
      */
     public long fromMilliseconds(Number duration) {
-        return fromMilliseconds(duration.longValue());
-    }
-
-    /**
-     * Method to convert the specified duration in milliseconds to
-     * TimeUnitEnum.
-     *
-     * @param   duration        The duration in TimeUnitEnum.
-     *
-     * @return  The duration in milliseconds.
-     */
-    public long fromMilliseconds(long duration) {
-        return duration / milliseconds;
+        return duration.longValue() / milliseconds;
     }
 
     /**
@@ -72,19 +60,7 @@ public enum TimeUnitEnum {
      * @return  The duration in milliseconds.
      */
     public long toMilliseconds(Number duration) {
-        return toMilliseconds(duration.longValue());
-    }
-
-    /**
-     * Method to convert the specified duration in TimeUnitEnum to
-     * milliseconds.
-     *
-     * @param   duration        The duration in TimeUnitEnum.
-     *
-     * @return  The duration in milliseconds.
-     */
-    public long toMilliseconds(long duration) {
-        return duration * milliseconds;
+        return duration.longValue() * milliseconds;
     }
 
     /**
@@ -96,7 +72,4 @@ public enum TimeUnitEnum {
 }
 /*
  * $Log: not supported by cvs2svn $
- * Revision 1.1  2008/11/06 06:04:29  ball
- * Initial writing.
- *
  */
