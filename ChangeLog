@@ -3,6 +3,8 @@
 	* Added <jnilib-prefix/> and <jnilib-suffix/> build targets and
 	Ant Tasks.
 
+	* Added <link/> build target and Ant Task.
+
 2009-03-23  Allen D. Ball  <ball@10-0-1-4.lan>
 
 	* iprotium.util.ant.taskdefs.JNIResourceBundle: Initial writing.
