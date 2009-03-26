@@ -1,3 +1,8 @@
+2009-03-25  Allen D. Ball  <ball@10-0-1-4.lan>
+
+	* Added <jnilib-prefix/> and <jnilib-suffix/> build targets and
+	Ant Tasks.
+
 2009-03-23  Allen D. Ball  <ball@10-0-1-4.lan>
 
 	* iprotium.util.ant.taskdefs.JNIResourceBundle: Initial writing.
