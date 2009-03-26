@@ -1,5 +1,5 @@
 /*
- * $Id: LinkTask.java,v 1.2 2009-01-27 22:00:19 ball Exp $
+ * $Id: LinkTask.java,v 1.3 2009-03-26 05:40:20 ball Exp $
  *
  * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
  */
@@ -9,6 +9,8 @@ import iprotium.io.IOUtil;
 import iprotium.util.jni.POSIX;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.taskdefs.Copy;
@@ -17,7 +19,7 @@ import org.apache.tools.ant.taskdefs.Copy;
  * Ant Task of link a file to a new target.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class LinkTask extends Copy {
     private boolean symbolic = false;
@@ -37,10 +39,10 @@ public class LinkTask extends Copy {
         }
     }
 
-    protected boolean getRelative() { return relative; }
+    protected boolean isRelative() { return relative; }
     public void setRelative(boolean relative) { this.relative = relative; }
 
-    protected boolean getSymbolic() { return symbolic; }
+    protected boolean isSymbolic() { return symbolic; }
     public void setSymbolic(boolean symbolic) { this.symbolic = symbolic; }
 
     @Override
@@ -82,37 +84,78 @@ public class LinkTask extends Copy {
     }
 
     private void link(File from, File to) throws IOException {
-        from = from.getAbsoluteFile();
-        to = to.getAbsoluteFile();
+        if (! from.equals(to)) {
+            IOUtil.mkdirs(to.getParentFile());
 
-        IOUtil.mkdirs(to.getParentFile());
+            if (isSymbolic()) {
+                if (isRelative()) {
+                    from = new Path(from).relativizeTo(to).toFile();
+                }
 
-        if (! getSymbolic()) {
-            if (! POSIX.link(from, to)) {
-                throw new IOException("link");
+                if (! POSIX.symlink(from, to)) {
+                    throw new IOException("symlink");
+                }
+            } else {
+                if (! POSIX.link(from, to)) {
+                    throw new IOException("link");
+                }
             }
         } else {
-            symlink(from, to);
+            throw new IllegalStateException();
         }
     }
 
-    private void symlink(File from, File to) throws IOException {
-        if (getRelative()) {
-log(from.toURI().toString());
-log(to.getParentFile().toURI().toString());
-log(to.getParentFile().toURI().relativize(from.toURI()).toString());
-            from =
-                new File(to.getParentFile().toURI().relativize(from.toURI()));
+    private class Path extends ArrayList<String> {
+        private static final long serialVersionUID = 1240653866390577062L;
+
+        private final String name;
+
+        public Path(File file) {
+            file = file.getAbsoluteFile();
+
+            while (file != null) {
+                add(0, file.getName());
+
+                file = file.getParentFile();
+            }
+
+            this.name = remove(size() - 1);
         }
 
-        if (! POSIX.symlink(from, to)) {
-            throw new IOException("symlink");
+        public String getName() { return name; }
+
+        public Path relativizeTo(File that) {
+            return relativizeTo(new Path(that));
+        }
+
+        private Path relativizeTo(List<String> that) {
+            while ((! this.isEmpty()) && (! that.isEmpty())) {
+                if (this.get(0).equals(that.get(0))) {
+                    this.remove(0);
+                    that.remove(0);
+                } else {
+                    break;
+                }
+            }
+
+            for (String string : that) {
+                this.add(0, "..");
+            }
+
+            return this;
+        }
+
+        public File toFile() {
+            File parent = null;
+
+            for (String string : this) {
+                parent = new File(parent, string);
+            }
+
+            return new File(parent, getName());
         }
     }
 }
 /*
  * $Log: not supported by cvs2svn $
- * Revision 1.1  2008/11/18 07:36:44  ball
- * Interim check-in.
- *
  */
