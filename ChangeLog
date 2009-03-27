@@ -1,3 +1,7 @@
+2009-03-27  Allen D. Ball  <ball@10-0-1-4.lan>
+
+	* Added iprotium.activation package.
+
 2009-03-25  Allen D. Ball  <ball@10-0-1-4.lan>
 
 	* Added <jnilib-prefix/> and <jnilib-suffix/> build targets and
