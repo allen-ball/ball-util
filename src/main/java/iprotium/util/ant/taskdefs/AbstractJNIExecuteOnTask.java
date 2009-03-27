@@ -1,5 +1,5 @@
 /*
- * $Id: AbstractJNIExecuteOnTask.java,v 1.4 2009-03-26 01:36:21 ball Exp $
+ * $Id: AbstractJNIExecuteOnTask.java,v 1.5 2009-03-27 13:49:07 ball Exp $
  *
  * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
  */
@@ -16,7 +16,7 @@ import static iprotium.util.ant.taskdefs.JNILibPropertyTask.BUNDLE;
  * Ant Task to compile JNI shared objects.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public abstract class AbstractJNIExecuteOnTask extends ExecuteOn {
     private static final FileDirBoth FILE = new FileDirBoth();
@@ -39,6 +39,7 @@ public abstract class AbstractJNIExecuteOnTask extends ExecuteOn {
 
         setFailonerror(true);
         setType(FILE);
+        setVerbose(true);
     }
 
     protected String getArch() { return arch; }
