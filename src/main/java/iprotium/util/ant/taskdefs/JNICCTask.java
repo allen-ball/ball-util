@@ -1,5 +1,5 @@
 /*
- * $Id: JNICCTask.java,v 1.3 2009-03-24 05:53:08 ball Exp $
+ * $Id: JNICCTask.java,v 1.4 2009-03-27 13:49:37 ball Exp $
  *
  * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
  */
@@ -15,7 +15,7 @@ import org.apache.tools.ant.types.DirSet;
  * Ant Task to compile JNI shared objects.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class JNICCTask extends AbstractJNIExecuteOnTask {
     private File include = null;
@@ -24,7 +24,11 @@ public class JNICCTask extends AbstractJNIExecuteOnTask {
     /**
      * Sole constructor.
      */
-    public JNICCTask() { super(); }
+    public JNICCTask() {
+        super();
+
+        setParallel(false);
+    }
 
     protected File getInclude() { return include; }
     public void setInclude(File include) { this.include = include; }
