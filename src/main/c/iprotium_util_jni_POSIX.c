@@ -1,16 +1,8 @@
-/* $Id: iprotium_util_jni_POSIX.c,v 1.3 2009-03-24 05:57:41 ball Exp $ */
+/* $Id: iprotium_util_jni_POSIX.c,v 1.4 2009-03-27 13:51:36 ball Exp $ */
 
 #include "iprotium_util_jni_POSIX.h"
 
 #include <unistd.h>
-
-JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *jvm, void *reserved) {
-    return JNI_VERSION_1_4;
-}
-
-JNIEXPORT void JNICALL JNI_OnUnload(JavaVM *jvm, void *reserved) {
-    return;
-}
 
 JNIEXPORT jboolean JNICALL
 Java_iprotium_util_jni_POSIX_link(JNIEnv *env, jclass class,
