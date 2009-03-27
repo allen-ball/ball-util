@@ -7,7 +7,7 @@
     -----------------
     Java Utilities
 
-    $Id: build.xml,v 1.16 2009-03-26 05:40:20 ball Exp $
+    $Id: build.xml,v 1.17 2009-03-27 22:23:35 ball Exp $
   </description>
 
   <property name="build.properties.file" location="build.properties"/>
@@ -96,6 +96,17 @@
       <fileset dir="${build.class.dir}"/>
       <manifest>
         <attribute name="Built-By" value="${user.name}"/>
+        <section name="iprotium/activation/">
+          <attribute name="Extension-Name" value="iprotium.activation"/>
+          <attribute name="Specification-Title" value="${pom.artifactId}"/>
+          <attribute name="Specification-Version" value="${pom.version}"/>
+          <attribute name="Specification-Vendor" value="${vendor}"/>
+          <attribute name="Implementation-Title" value="iprotium.io"/>
+          <attribute name="Implementation-Version"
+                     value="${pom.version}.${buildnumber.date}"/>
+          <attribute name="Implementation-Vendor" value="${vendor}"/>
+          <attribute name="Sealed" value="true"/>
+        </section>
         <section name="iprotium/io/">
           <attribute name="Extension-Name" value="iprotium.io"/>
           <attribute name="Specification-Title" value="${pom.artifactId}"/>
@@ -294,6 +305,9 @@
 </project>
 <!--
     $Log: not supported by cvs2svn $
+    Revision 1.16  2009/03/26 05:40:20  ball
+    Added <link/> build target and Ant Task.
+
     Revision 1.15  2009/03/26 01:08:21  ball
     Added <jnilib-prefix/> and <jnilib-suffix/> build targets and Ant Tasks.
 
