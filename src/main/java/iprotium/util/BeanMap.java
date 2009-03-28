@@ -1,5 +1,5 @@
 /*
- * $Id: BeanMap.java,v 1.4 2009-01-27 22:00:19 ball Exp $
+ * $Id: BeanMap.java,v 1.5 2009-03-28 13:31:16 ball Exp $
  *
  * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
  */
@@ -22,7 +22,7 @@ import java.util.Set;
  * bean properties.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class BeanMap extends AbstractMap<String,Object>
                              implements Serializable {
@@ -36,9 +36,9 @@ public class BeanMap extends AbstractMap<String,Object>
      *
      * @param   bean            The Java bean to wrap.
      *
-     * @throw   NullPointerException
+     * @throws  NullPointerException
      *                          If bean argument is null.
-     * @throw   IntrospectionException
+     * @throws  IntrospectionException
      *                          If bean introspection fails.
      */
     public BeanMap(Object bean) throws IntrospectionException {
@@ -51,7 +51,7 @@ public class BeanMap extends AbstractMap<String,Object>
      * @param   bean            The Java bean to wrap.
      * @param   info            The BeanInfo that describes the bean.
      *
-     * @throw   NullPointerException
+     * @throws  NullPointerException
      *                          If bean argument is null.
      */
     protected BeanMap(Object bean, BeanInfo info) {
@@ -116,9 +116,9 @@ public class BeanMap extends AbstractMap<String,Object>
      * @return  The argument bean if it is an instance of BeanMap; an new
      *          BeanMap wrapping the argument bean otherwise.
      *
-     * @throw   NullPointerException
+     * @throws  NullPointerException
      *                          If bean argument is null.
-     * @throw   IntrospectionException
+     * @throws  IntrospectionException
      *                          If bean introspection fails.
      */
     public static BeanMap asBeanMap(Object bean) throws IntrospectionException {
@@ -190,7 +190,4 @@ public class BeanMap extends AbstractMap<String,Object>
 }
 /*
  * $Log: not supported by cvs2svn $
- * Revision 1.3  2008/12/01 01:43:55  ball
- * Added static asBeanMap(Object) method.
- *
  */

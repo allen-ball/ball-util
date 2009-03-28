@@ -1,5 +1,5 @@
 /*
- * $Id: Property.java,v 1.4 2009-01-27 22:00:19 ball Exp $
+ * $Id: Property.java,v 1.5 2009-03-28 13:31:16 ball Exp $
  *
  * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
  */
@@ -18,7 +18,7 @@ import java.util.Set;
  * Abstract Property base class.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public abstract class Property<T> implements Comparable<Property<?>> {
     private final String name;
@@ -295,7 +295,9 @@ public abstract class Property<T> implements Comparable<Property<?>> {
     /**
      * Convenience method to construct a qualified name based on a prefix.
      *
-     * @param   prefix          The prefix of the Property name.
+     * @param   object          The Object (Class, Package, or CharSequence)
+     *                          that represents the prefix of the Property
+     *                          name.
      * @param   name            The name of the Property.
      *
      * @return  The qualified name of the Property.
@@ -328,9 +330,6 @@ public abstract class Property<T> implements Comparable<Property<?>> {
 }
 /*
  * $Log: not supported by cvs2svn $
- * Revision 1.3  2008/11/04 04:09:42  ball
- * Moved MissingResourceException to external class.
- *
  * Revision 1.2  2008/11/01 19:50:59  ball
  * Added getDefaultValueAsString() method.
  * Added static getStaticPropertyFields(Class<?>... types) method.
