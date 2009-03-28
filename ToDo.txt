@@ -1,10 +1,4 @@
-$Id: ToDo.txt,v 1.2 2008-11-18 07:49:45 ball Exp $
-
-* Finish JNICCTask and JNILDTask implementations.
-
-* Compile JNI shared libraries.
-
-* Finish LinkTask implementation.
+$Id: ToDo.txt,v 1.3 2009-03-28 11:04:51 ball Exp $
 
 * Add JNI interface to libedit/libreadline.
 
