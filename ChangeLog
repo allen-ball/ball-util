@@ -3,6 +3,11 @@
 	* src/main/java/iprotium/activation/AbstractDataSource.java:
 	Added writeTo(OutputStream) method.
 
+	* src/main/java/iprotium/text/FillStringFormat.java,
+	NoFillStringFormat.java, LeftFillStringFormat.java,
+	RightFillStringFormat.java:
+	Initial writing.
+
 2009-03-27  Allen D. Ball  <ball@10-0-1-4.lan>
 
 	* Added iprotium.activation package.
