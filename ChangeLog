@@ -1,5 +1,8 @@
 2009-03-29  Allen D. Ball  <ball@10-0-1-4.lan>
 
+	* src/main/java/iprotium/activation/ByteArrayDataSource.java:
+	Do not rely on toString(Charset) to calculate hashCode().
+
 	* src/main/java/iprotium/activation/ReaderWriterDataSource.java:
 	Initial writing (renamed from PrintWriterDataSource).
 	Added getBufferedReader() and writeTo(PrintWriter) methods.
