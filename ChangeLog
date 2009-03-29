@@ -1,5 +1,9 @@
 2009-03-29  Allen D. Ball  <ball@10-0-1-4.lan>
 
+	* src/main/java/iprotium/activation/ReaderWriterDataSource.java:
+	Initial writing (renamed from PrintWriterDataSource).
+	Added getBufferedReader() and writeTo(PrintWriter) methods.
+
 	* src/main/java/iprotium/io/IOUtil.java:
 	Added static copy(BufferedReader,PrintWriter) method.
 
