@@ -1,10 +1,11 @@
 /*
- * $Id: IOUtil.java,v 1.2 2009-01-27 22:00:19 ball Exp $
+ * $Id: IOUtil.java,v 1.4 2009-03-29 12:56:03 ball Exp $
  *
  * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
  */
 package iprotium.io;
 
+import java.io.BufferedReader;
 import java.io.Closeable;
 import java.io.EOFException;
 import java.io.File;
@@ -13,6 +14,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.nio.ByteBuffer;
 import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
@@ -23,7 +25,7 @@ import java.nio.channels.WritableByteChannel;
  * Common I/O utilities implemented as static methods.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.4 $
  */
 public class IOUtil {
     private IOUtil() { }
@@ -141,6 +143,34 @@ public class IOUtil {
 
         if (out.transferFrom(in, 0, count) != count) {
             throw new EOFException();
+        }
+    }
+
+    /**
+     * Method to copy the contents of a BufferedReader to PrintWriter.
+     *
+     * @see BufferedReader#readLine()
+     * @see PrintWriter#println(String)
+     *
+     * @param   reader          The input BufferedReader.
+     * @param   writer          The output PrintWriter.
+     *
+     * @throws  IOException     If an I/O error occurs.
+     */
+    public static void copy(BufferedReader reader,
+                            PrintWriter writer) throws IOException {
+        for (;;) {
+            String line = reader.readLine();
+
+            if (line != null) {
+                writer.println(line);
+
+                if (writer.checkError()) {
+                    throw new IOException();
+                }
+            } else {
+                break;
+            }
         }
     }
 
@@ -264,7 +294,4 @@ public class IOUtil {
 }
 /*
  * $Log: not supported by cvs2svn $
- * Revision 1.1  2008/10/27 05:47:15  ball
- * Initial writing.
- *
  */
