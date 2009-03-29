@@ -1,5 +1,5 @@
 /*
- * $Id: ByteArrayDataSource.java,v 1.1 2009-03-27 22:22:49 ball Exp $
+ * $Id: ByteArrayDataSource.java,v 1.2 2009-03-29 13:48:46 ball Exp $
  *
  * Copyright 2009 Allen D. Ball.  All rights reserved.
  */
@@ -9,6 +9,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 
 /**
@@ -19,19 +20,15 @@ import java.nio.charset.Charset;
  * @see ByteArrayOutputStream
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class ByteArrayDataSource extends AbstractDataSource {
-    protected static final Charset CHARSET = Charset.forName("UTF-8");
-
     private ByteArrayOutputStream out = new ByteArrayOutputStream();
 
     /**
      * @see AbstractDataSource#AbstractDataSource(String,String)
      */
-    public ByteArrayDataSource(String name, String type) {
-        super(name, type);
-    }
+    public ByteArrayDataSource(String name, String type) { super(name, type); }
 
     /**
      * @see ByteArrayOutputStream#reset()
@@ -72,10 +69,7 @@ public class ByteArrayDataSource extends AbstractDataSource {
             hash ^= getContentType().hashCode();
         }
 
-        try {
-            hash ^= toString(CHARSET.name()).hashCode();
-        } catch (UnsupportedEncodingException exception) {
-        }
+        hash ^= ByteBuffer.wrap(toByteArray()).hashCode();
 
         return hash;
     }
