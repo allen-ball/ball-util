@@ -1,5 +1,5 @@
 /*
- * $Id: FillEnum.java,v 1.1 2009-03-28 17:50:50 ball Exp $
+ * $Id: FillEnum.java,v 1.2 2009-03-29 12:59:31 ball Exp $
  *
  * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
  */
@@ -13,7 +13,7 @@ import static iprotium.text.FillStringFormat.SPACE;
  * @see FillStringFormat#fill(String,int,char)
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public enum FillEnum {
     NONE(new NoFillStringFormat()),
@@ -42,6 +42,18 @@ public enum FillEnum {
      */
     public String fill(String string, int width, char filler) {
         return format.fill(string, width, filler);
+    }
+
+    /**
+     * Convenience method to fill a String with spaces.
+     *
+     * @param   string          The String to fill.
+     * @param   width           The fill-to width.
+     *
+     * @return  The filled String.
+     */
+    public String fill(String string, int width) {
+        return fill(string, width, SPACE);
     }
 }
 /*
