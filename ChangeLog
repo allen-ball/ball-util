@@ -11,6 +11,10 @@
 	src/main/java/iprotium/text/MultipartReport.java:
 	Initial writing.
 
+	* src/main/java/iprotium/text/Table.java (and subclasses),
+	src/main/java/iprotium/text/TableModel.java (and subclasses):
+	Initial writing.
+
 2009-03-28  Allen D. Ball  <ball@10-0-1-4.lan>
 
 	* src/main/java/iprotium/activation/AbstractDataSource.java:
