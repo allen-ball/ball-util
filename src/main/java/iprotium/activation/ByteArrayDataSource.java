@@ -1,5 +1,5 @@
 /*
- * $Id: ByteArrayDataSource.java,v 1.2 2009-03-29 13:48:46 ball Exp $
+ * $Id: ByteArrayDataSource.java,v 1.3 2009-03-30 05:21:49 ball Exp $
  *
  * Copyright 2009 Allen D. Ball.  All rights reserved.
  */
@@ -8,9 +8,7 @@ package iprotium.activation;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
-import java.nio.charset.Charset;
 
 /**
  * DataSource implementation based on ByteArrayInputStream and
@@ -20,7 +18,7 @@ import java.nio.charset.Charset;
  * @see ByteArrayOutputStream
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class ByteArrayDataSource extends AbstractDataSource {
     private ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -39,13 +37,6 @@ public class ByteArrayDataSource extends AbstractDataSource {
      * @see ByteArrayOutputStream#toByteArray()
      */
     public byte[] toByteArray() { return out.toByteArray(); }
-
-    /**
-     * @see ByteArrayOutputStream#toString(String)
-     */
-    public String toString(String name) throws UnsupportedEncodingException {
-        return out.toString(name);
-    }
 
     @Override
     public ByteArrayInputStream getInputStream() throws IOException {
