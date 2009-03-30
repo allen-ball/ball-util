@@ -1,5 +1,5 @@
 /*
- * $Id: LeftFillStringFormat.java,v 1.1 2009-03-28 17:17:36 ball Exp $
+ * $Id: LeftFillStringFormat.java,v 1.2 2009-03-30 06:25:12 ball Exp $
  *
  * Copyright 2009 Allen D. Ball.  All rights reserved.
  */
@@ -9,10 +9,10 @@ package iprotium.text;
  * "Left fill" StringFormat implementation.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class LeftFillStringFormat extends FillStringFormat {
-    private static final long serialVersionUID = -4099739026210843792L;
+    private static final long serialVersionUID = -277702478645461943L;
 
     /**
      * @see FillStringFormat#FillStringFormat(int,char)
@@ -27,7 +27,7 @@ public class LeftFillStringFormat extends FillStringFormat {
     public LeftFillStringFormat(int width) { this(width, SPACE); }
 
     @Override
-    protected String fill(String string, int width, char filler) {
+    protected String fill(int width, char filler, String string) {
         StringBuilder buffer = new StringBuilder(string);
 
         for (;;) {

@@ -1,5 +1,5 @@
 /*
- * $Id: FillStringFormat.java,v 1.1 2009-03-28 17:17:36 ball Exp $
+ * $Id: FillStringFormat.java,v 1.2 2009-03-30 06:25:12 ball Exp $
  *
  * Copyright 2009 Allen D. Ball.  All rights reserved.
  */
@@ -11,10 +11,10 @@ import java.text.FieldPosition;
  * "Fill" StringFormat implementation.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class FillStringFormat extends StringFormat {
-    private static final long serialVersionUID = 8060701985755238515L;
+    private static final long serialVersionUID = 2590787583727880296L;
 
     protected static final char SPACE = ' ';
 
@@ -42,7 +42,7 @@ public class FillStringFormat extends StringFormat {
                                StringBuffer out, FieldPosition pos) {
         int begin = out.length();
 
-        out.append(fill(string, width, filler));
+        out.append(fill(width, filler, string));
 
         pos.setBeginIndex(begin);
         pos.setEndIndex(out.length());
@@ -50,7 +50,7 @@ public class FillStringFormat extends StringFormat {
         return out;
     }
 
-    protected String fill(String string, int width, char filler) {
+    protected String fill(int width, char filler, String string) {
         StringBuilder buffer = new StringBuilder(string);
 
         for (;;) {
