@@ -1,5 +1,5 @@
 /*
- * $Id: AbstractClassFileTask.java,v 1.8 2009-01-29 05:36:30 ball Exp $
+ * $Id: AbstractClassFileTask.java,v 1.9 2009-03-31 03:02:51 ball Exp $
  *
  * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
  */
@@ -17,14 +17,12 @@ import org.apache.tools.ant.types.Reference;
 import org.apache.tools.ant.types.selectors.FileSelector;
 import org.apache.tools.ant.util.ClasspathUtils;
 
-import static iprotium.util.ant.taskdefs.AbstractClasspathTask.TAB;
-
 /**
  * Abstract base class for Ant Task implementations that select *.CLASS
  * files.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 public abstract class AbstractClassFileTask extends AbstractMatchingTask {
     private static final String DOT_CLASS = ".class";
@@ -160,28 +158,6 @@ public abstract class AbstractClassFileTask extends AbstractMatchingTask {
     protected void log(File file, int lineno, String message) {
         super.log(String.valueOf(file) + ":" + String.valueOf(lineno)
                   + ": " + message);
-    }
-
-    protected void log(Object... objects) {
-        String string = null;
-
-        for (Object object : objects) {
-            if (string == null) {
-                string = "";
-            } else {
-                string += TAB;
-            }
-
-            string += String.valueOf(object);
-        }
-
-        if (string != null) {
-            super.log(string);
-        }
-    }
-
-    protected static String getName(Class<?> type) {
-        return AbstractClasspathTask.getName(type);
     }
 
     protected static boolean isAbstract(Class type) {

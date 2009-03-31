@@ -1,5 +1,5 @@
 /*
- * $Id: AbstractClasspathTask.java,v 1.7 2009-01-27 22:00:19 ball Exp $
+ * $Id: AbstractClasspathTask.java,v 1.8 2009-03-31 03:02:51 ball Exp $
  *
  * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
  */
@@ -18,11 +18,9 @@ import org.apache.tools.ant.util.ClasspathUtils;
  * Abstract base class for Ant Task implementations that require a classpath.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 public abstract class AbstractClasspathTask extends Task {
-    protected static final String TAB = "\t";
-
     private boolean initialize = false;
     private ClasspathUtils.Delegate delegate = null;
     private AntClassLoader loader = null;
@@ -74,28 +72,6 @@ public abstract class AbstractClasspathTask extends Task {
         return Class.forName(name, getInitialize(), getClassLoader());
     }
 
-    protected void log(Object... objects) {
-        String string = null;
-
-        for (Object object : objects) {
-            if (string == null) {
-                string = "";
-            } else {
-                string += TAB;
-            }
-
-            string += String.valueOf(object);
-        }
-
-        if (string != null) {
-            super.log(string);
-        }
-    }
-
-    protected static String getName(Class<?> type) {
-        return (type != null) ? type.getName() : null;
-    }
-
     protected static boolean isAbstract(Class type) {
         return Modifier.isAbstract(type.getModifiers());
     }
@@ -130,7 +106,4 @@ public abstract class AbstractClasspathTask extends Task {
 }
 /*
  * $Log: not supported by cvs2svn $
- * Revision 1.6  2008/11/29 06:12:49  ball
- * Added log(Object...) method.
- *
  */
