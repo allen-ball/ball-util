@@ -1,5 +1,5 @@
 /*
- * $Id: SimpleTableModel.java,v 1.1 2009-03-30 06:35:16 ball Exp $
+ * $Id: SimpleTableModel.java,v 1.2 2009-03-31 02:49:20 ball Exp $
  *
  * Copyright 2009 Allen D. Ball.  All rights reserved.
  */
@@ -12,7 +12,7 @@ import java.util.Collection;
  * Simple TableModel implementation.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class SimpleTableModel extends ArrayListTableModel<Object[]> {
     private static final long serialVersionUID = 5405482298661568L;
@@ -23,7 +23,7 @@ public class SimpleTableModel extends ArrayListTableModel<Object[]> {
      * @param   rows            The TableModel's rows.
      */
     public SimpleTableModel(Object[][] rows, Object... columns) {
-        super(Arrays.asList(rows), columns);
+        super((rows != null) ? Arrays.asList(rows) : null, columns);
     }
 
     /**
@@ -36,16 +36,16 @@ public class SimpleTableModel extends ArrayListTableModel<Object[]> {
     }
 
     /**
-     * @see ArrayListTableModel#ArrayListTableModel(Object...)
+     * @see ArrayListTableModel#ArrayListTableModel(Collection,Object...)
      */
     public SimpleTableModel(Object... columns) {
-        this(new Object[][] { }, columns);
+        this(null, columns);
     }
 
     /**
-     * @see ArrayListTableModel#ArrayListTableModel(int)
+     * @see ArrayListTableModel#ArrayListTableModel(Collection,int)
      */
-    public SimpleTableModel(int columns) { this(new Object[columns]); }
+    public SimpleTableModel(int columns) { this(null, new Object[columns]); }
 
     /**
      * Convenience method to add a new row.
