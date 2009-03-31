@@ -1,5 +1,5 @@
 /*
- * $Id: ArrayListTableModel.java,v 1.1 2009-03-30 06:35:16 ball Exp $
+ * $Id: ArrayListTableModel.java,v 1.2 2009-03-31 02:33:19 ball Exp $
  *
  * Copyright 2009 Allen D. Ball.  All rights reserved.
  */
@@ -12,7 +12,7 @@ import java.util.Collection;
  * Abstract base class for TableModel implementations based on an ArrayList.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public abstract class ArrayListTableModel<R> extends TableModel {
     private final ArrayList<R> list = new ArrayList<R>();
@@ -23,9 +23,11 @@ public abstract class ArrayListTableModel<R> extends TableModel {
      * @param   collection      The Collection of row values.
      */
     public ArrayListTableModel(Collection<R> collection, Object... columns) {
-        this(columns);
+        super(columns);
 
-        list.addAll(collection);
+        if (collection != null) {
+            list.addAll(collection);
+        }
     }
 
     /**
@@ -36,16 +38,6 @@ public abstract class ArrayListTableModel<R> extends TableModel {
     public ArrayListTableModel(Collection<R> collection, int columns) {
         this(collection, new Object[columns]);
     }
-
-    /**
-     * @see TableModel#TableModel(Object...)
-     */
-    public ArrayListTableModel(Object... columns) { super(columns); }
-
-    /**
-     * @see TableModel#TableModel(int)
-     */
-    public ArrayListTableModel(int columns) { this(new Object[columns]); }
 
     /**
      * Method to access the underlying row List.
