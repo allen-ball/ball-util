@@ -1,5 +1,5 @@
 /*
- * $Id: ReaderWriterDataSource.java,v 1.3 2009-03-30 05:21:49 ball Exp $
+ * $Id: ReaderWriterDataSource.java,v 1.4 2009-03-31 02:31:12 ball Exp $
  *
  * Copyright 2009 Allen D. Ball.  All rights reserved.
  */
@@ -15,6 +15,8 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /**
  * DataSource implementation that provides a BufferedReader wrapping the
@@ -24,9 +26,10 @@ import java.nio.charset.Charset;
  * @see PrintWriter
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
-public class ReaderWriterDataSource extends ByteArrayDataSource {
+public class ReaderWriterDataSource extends ByteArrayDataSource
+                                    implements Iterable<String> {
     protected static final Charset CHARSET = Charset.forName("UTF-8");
 
     private final Charset charset;
@@ -113,6 +116,15 @@ public class ReaderWriterDataSource extends ByteArrayDataSource {
         }
     }
 
+    /**
+     * Method to return an Iterator to access the lines of this DataSource.
+     *
+     * @see #getBufferedReader()
+     *
+     * @return  An Iterator to access the lines of the Report.
+     */
+    public Iterator<String> iterator() { return new IteratorImpl(); }
+
     @Override
     public String toString() {
         String string = null;
@@ -140,6 +152,49 @@ public class ReaderWriterDataSource extends ByteArrayDataSource {
         public PrintWriterImpl() throws IOException {
             super(new OutputStreamWriter(getOutputStream(), getCharset()),
                   true);
+        }
+    }
+
+    private class IteratorImpl implements Iterator<String> {
+        private final BufferedReader reader;
+        private transient String line = null;
+
+        public IteratorImpl() {
+            try {
+                reader = getBufferedReader();
+            } catch (IOException exception) {
+                throw new ExceptionInInitializerError(exception);
+            }
+        }
+
+        public boolean hasNext() {
+            if (line == null) {
+                try {
+                    line = reader.readLine();
+                } catch (IOException exception) {
+                    throw new RuntimeException(exception);
+                }
+            }
+
+            return (line != null);
+        }
+
+        public String next() {
+            hasNext();
+
+            String line = this.line;
+
+            this.line = null;
+
+            if (line == null) {
+                throw new NoSuchElementException();
+            }
+
+            return line;
+        }
+
+        public void remove() {
+            throw new UnsupportedOperationException("remove()");
         }
     }
 }
