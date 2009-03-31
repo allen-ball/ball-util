@@ -1,21 +1,25 @@
 /*
- * $Id: BeanInfoForTask.java,v 1.3 2009-01-27 22:00:19 ball Exp $
+ * $Id: BeanInfoForTask.java,v 1.4 2009-03-31 03:11:31 ball Exp $
  *
  * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
+import iprotium.text.ArrayListTableModel;
+import iprotium.text.SimpleTable;
+import iprotium.text.Table;
 import java.beans.BeanDescriptor;
 import java.beans.BeanInfo;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
+import java.util.Arrays;
 import org.apache.tools.ant.BuildException;
 
 /**
  * Ant Task to display BeanInfo for a specified Class.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class BeanInfoForTask extends AbstractClasspathTask {
     private String type = null;
@@ -52,21 +56,17 @@ public class BeanInfoForTask extends AbstractClasspathTask {
     }
 
     private void log(BeanInfo bean) {
-        BeanDescriptor descriptor = bean.getBeanDescriptor();
+        Table header = new BeanHeaderTable(bean.getBeanDescriptor());
+        Table table = new BeanPropertyTable(bean.getPropertyDescriptors());
 
-        log("Bean Class:", getName(descriptor.getBeanClass()));
-        log("Customizer Class:", getName(descriptor.getCustomizerClass()));
+        for (String line : header) {
+            log(line);
+        }
 
         log("");
-        log("Property Name", "Mode", "Type", "isBound", "isConstrained");
 
-        for (PropertyDescriptor property : bean.getPropertyDescriptors()) {
-            log(property.getName(),
-                (((property.getReadMethod() != null) ? "R" : "")
-                 + ((property.getWriteMethod() != null) ? "W" : "")),
-                getName(property.getPropertyType()),
-                property.isBound(),
-                property.isConstrained());
+        for (String line : table) {
+            log(line);
         }
 
         log(bean.getAdditionalBeanInfo());
@@ -80,13 +80,75 @@ public class BeanInfoForTask extends AbstractClasspathTask {
             }
         }
     }
+
+    private class BeanHeaderTable extends SimpleTable {
+        public BeanHeaderTable(BeanDescriptor descriptor) {
+            super(2);
+
+            row("Bean Class:",
+                descriptor.getBeanClass().getName());
+
+            if (descriptor.getCustomizerClass() != null) {
+                row("Customizer Class:",
+                    descriptor.getCustomizerClass().getName());
+            }
+        }
+    }
+
+    private class BeanPropertyTable extends Table {
+        public BeanPropertyTable(PropertyDescriptor[] rows) {
+            super(new BeanPropertyTableModel(rows));
+        }
+    }
+
+    private class BeanPropertyTableModel
+                  extends ArrayListTableModel<PropertyDescriptor> {
+        private static final long serialVersionUID = 4092624978038121007L;
+
+        public BeanPropertyTableModel(PropertyDescriptor[] rows) {
+            super(Arrays.asList(rows),
+                  "Property Name", "Mode", "Type", "isBound", "isConstrained");
+        }
+
+        @Override
+        protected Object getValueAt(PropertyDescriptor row, int x) {
+            Object value = null;
+
+            switch (x) {
+            case 0:
+                value = row.getName();
+                break;
+
+            case 1:
+                value =
+                    ((row.getReadMethod() != null) ? "R" : "")
+                    + ((row.getWriteMethod() != null) ? "W" : "");
+                break;
+
+            case 2:
+                value =
+                    (row.getPropertyType() != null)
+                        ? row.getPropertyType().getName() : "";
+                break;
+
+            case 3:
+                value = row.isBound();
+                break;
+
+            case 4:
+                value = row.isConstrained();
+                break;
+
+            default:
+                value = null;
+                break;
+            }
+
+            return value;
+        }
+    }
+
 }
 /*
  * $Log: not supported by cvs2svn $
- * Revision 1.2  2008/11/29 06:14:49  ball
- * Moved log(Object...) method to AbstractClasspathTask.
- *
- * Revision 1.1  2008/11/20 06:36:30  ball
- * Added <bean-info-for/> build target and Ant Task.
- *
  */

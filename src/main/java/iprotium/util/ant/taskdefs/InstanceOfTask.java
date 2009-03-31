@@ -1,17 +1,18 @@
 /*
- * $Id: InstanceOfTask.java,v 1.5 2009-01-27 22:00:19 ball Exp $
+ * $Id: InstanceOfTask.java,v 1.6 2009-03-31 03:11:31 ball Exp $
  *
  * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
+import iprotium.text.MapTable;
 import iprotium.util.BeanMap;
 import iprotium.util.Factory;
 import java.lang.reflect.Member;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import org.apache.tools.ant.BuildException;
 
 /**
@@ -20,7 +21,7 @@ import org.apache.tools.ant.BuildException;
  * @see Factory
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public class InstanceOfTask extends AbstractClasspathTask {
     private String type = String.class.getName();
@@ -34,8 +35,12 @@ public class InstanceOfTask extends AbstractClasspathTask {
     protected String getType() { return type; }
     public void setType(String type) { this.type = type; }
 
-    public void addConfiguredArgument(Argument argument) { list.add(argument); }
+    public void addConfiguredArgument(Argument argument) {
+        list.add(argument);
+    }
+
     protected List<Argument> getArgumentList() { return list; }
+
     public void setArgument(String string) { list.add(new Argument(string)); }
 
     @Override
@@ -58,26 +63,28 @@ public class InstanceOfTask extends AbstractClasspathTask {
                 arguments.add(factory.getInstance(argument.getValue()));
             }
 
-            log(parameters);
-            log(arguments);
+            log(String.valueOf(parameters));
+            log(String.valueOf(arguments));
 
             Factory<Object> factory = new Factory<Object>(type);
             Member member = factory.getFactoryMember(toArray(parameters));
 
-            log(member);
+            log(String.valueOf(member));
 
             Object instance = factory.apply(member, toArray(arguments));
 
-            log(instance);
+            log(String.valueOf(instance));
 
             BeanMap map = BeanMap.asBeanMap(instance);
 
             if (! map.isEmpty()) {
-                log("");
-                log("Property Name", "Value");
+                MapTable table =
+                    new MapTable<String,Object>(map, "Property Name", "Value");
 
-                for (Map.Entry<String,Object> entry : map.entrySet()) {
-                    log(entry.getKey(), entry.getValue());
+                log("");
+
+                for (String line : table) {
+                    log(line);
                 }
             }
         } catch (BuildException exception) {
@@ -121,10 +128,4 @@ public class InstanceOfTask extends AbstractClasspathTask {
 }
 /*
  * $Log: not supported by cvs2svn $
- * Revision 1.4  2008/12/01 01:49:50  ball
- * Use BeanMap.asBeanMap(Object) API.
- *
- * Revision 1.2  2008/11/29 06:16:48  ball
- * Display instance bean property names and values.
- *
  */

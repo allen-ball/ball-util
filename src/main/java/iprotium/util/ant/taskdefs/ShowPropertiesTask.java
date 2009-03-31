@@ -1,10 +1,12 @@
 /*
- * $Id: ShowPropertiesTask.java,v 1.5 2009-01-27 22:00:19 ball Exp $
+ * $Id: ShowPropertiesTask.java,v 1.6 2009-03-31 03:11:31 ball Exp $
  *
  * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
+import iprotium.text.ArrayListTableModel;
+import iprotium.text.Table;
 import iprotium.util.Property;
 import java.util.Collection;
 import org.apache.tools.ant.BuildException;
@@ -13,10 +15,9 @@ import org.apache.tools.ant.BuildException;
  * Ant Task to find and display static Property members.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public class ShowPropertiesTask extends AbstractClassFileTask {
-    private static final String TAB = "\t";
 
     /**
      * Sole constructor.
@@ -33,13 +34,13 @@ public class ShowPropertiesTask extends AbstractClassFileTask {
                     Property.getStaticPropertyFields(type);
 
                 if (! collection.isEmpty()) {
+                    Table table = new PropertyTable(collection);
+
                     log("");
                     log(type.getName());
 
-                    for (Property property : collection) {
-                        log(property.getName()
-                            + TAB + property.isRequired()
-                            + TAB + property.getDefaultValueAsString());
+                    for (String line : table) {
+                        log(line);
                     }
                 }
             }
@@ -55,10 +56,46 @@ public class ShowPropertiesTask extends AbstractClassFileTask {
             throw new BuildException(exception);
         }
     }
+
+    private class PropertyTable extends Table {
+        public PropertyTable(Collection<Property> collection) {
+            super(new PropertyTableModel(collection));
+        }
+    }
+
+    private class PropertyTableModel extends ArrayListTableModel<Property> {
+        private static final long serialVersionUID = -5904606396606185528L;
+
+        public PropertyTableModel(Collection<Property> collection) {
+            super(collection, 3);
+        }
+
+        @Override
+        protected Object getValueAt(Property row, int x) {
+            Object value = null;
+
+            switch (x) {
+            case 0:
+                value = row.getName();
+                break;
+
+            case 1:
+                value = row.isRequired();
+                break;
+
+            case 2:
+                value = row.getDefaultValueAsString();
+                break;
+
+            default:
+                value = null;
+                break;
+            }
+
+            return value;
+        }
+    }
 }
 /*
  * $Log: not supported by cvs2svn $
- * Revision 1.4  2008/11/04 04:12:36  ball
- * Removed test instrumentation.
- *
  */
