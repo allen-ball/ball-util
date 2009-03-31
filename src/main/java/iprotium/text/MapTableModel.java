@@ -1,5 +1,5 @@
 /*
- * $Id: MapTableModel.java,v 1.2 2009-03-31 02:34:16 ball Exp $
+ * $Id: MapTableModel.java,v 1.3 2009-03-31 03:09:50 ball Exp $
  *
  * Copyright 2009 Allen D. Ball.  All rights reserved.
  */
@@ -12,7 +12,7 @@ import javax.swing.event.TableModelEvent;
  * Map TableModel implementation.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class MapTableModel<K,V> extends ArrayListTableModel<Map.Entry<K,V>> {
     private static final long serialVersionUID = -8443672322792101653L;
@@ -39,12 +39,15 @@ public class MapTableModel<K,V> extends ArrayListTableModel<Map.Entry<K,V>> {
 
         switch (x) {
         case 0:
-        default:
             value = row.getKey();
             break;
 
         case 1:
             value = row.getValue();
+            break;
+
+        default:
+            value = null;
             break;
         }
 
