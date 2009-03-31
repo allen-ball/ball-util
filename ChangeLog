@@ -3,6 +3,10 @@
 	* src/main/java/iprotium/activation/ReaderWriterDataSource.java:
 	Implement Iterable<String>.
 
+	* src/main/java/iprotium/text/ArrayListTableModel.java:
+	Reduce number of constructors by allowing Collection method to be
+	null.
+
 2009-03-29  Allen D. Ball  <ball@10-0-1-4.lan>
 
 	* src/main/java/iprotium/activation/ReaderWriterDataSource.java:
