@@ -1,6 +1,6 @@
-$Id: ToDo.txt,v 1.5 2009-03-29 14:01:48 ball Exp $
+$Id: ToDo.txt,v 1.6 2009-04-03 12:13:32 ball Exp $
 
-* Add JNI interface to libedit/libreadline.
+* Add JNI interface to editline(libedit)/readline.
 
 * Create LintTask (based on SerialVersionUIDTask).  Check:
 
