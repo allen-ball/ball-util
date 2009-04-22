@@ -1,5 +1,5 @@
 /*
- * $Id: AbstractJNIExecuteOnTask.java,v 1.5 2009-03-27 13:49:07 ball Exp $
+ * $Id: AbstractJNIExecuteOnTask.java,v 1.6 2009-04-22 04:30:48 ball Exp $
  *
  * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
  */
@@ -16,7 +16,7 @@ import static iprotium.util.ant.taskdefs.JNILibPropertyTask.BUNDLE;
  * Ant Task to compile JNI shared objects.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public abstract class AbstractJNIExecuteOnTask extends ExecuteOn {
     private static final FileDirBoth FILE = new FileDirBoth();
@@ -72,22 +72,20 @@ public abstract class AbstractJNIExecuteOnTask extends ExecuteOn {
             setDestdir(getProject().resolveFile("."));
         }
 
-        if (cmdl.size() == 0) {
-            String command = getProject().replaceProperties(command());
+        String command = getProject().replaceProperties(command());
 
-            log(command);
+        log(command);
 
-            for (String argument : Commandline.translateCommandline(command)) {
-                if (argument.equals("SRCFILE")) {
-                    createSrcfile();
-                } else if (argument.equals("TARGETFILE")) {
-                    createTargetfile();
+        for (String argument : Commandline.translateCommandline(command)) {
+            if (argument.equals("SRCFILE")) {
+                createSrcfile();
+            } else if (argument.equals("TARGETFILE")) {
+                createTargetfile();
+            } else {
+                if (cmdl.getExecutable() == null) {
+                    setExecutable(argument);
                 } else {
-                    if (cmdl.getExecutable() == null) {
-                        setExecutable(argument);
-                    } else {
-                        createArg().setValue(argument);
-                    }
+                    createArg().setValue(argument);
                 }
             }
         }
