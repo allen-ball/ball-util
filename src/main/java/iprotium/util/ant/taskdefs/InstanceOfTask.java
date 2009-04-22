@@ -1,5 +1,5 @@
 /*
- * $Id: InstanceOfTask.java,v 1.6 2009-03-31 03:11:31 ball Exp $
+ * $Id: InstanceOfTask.java,v 1.7 2009-04-22 04:29:19 ball Exp $
  *
  * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
  */
@@ -11,7 +11,6 @@ import iprotium.util.Factory;
 import java.lang.reflect.Member;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import org.apache.tools.ant.BuildException;
 
@@ -21,7 +20,7 @@ import org.apache.tools.ant.BuildException;
  * @see Factory
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 public class InstanceOfTask extends AbstractClasspathTask {
     private String type = String.class.getName();
@@ -67,11 +66,13 @@ public class InstanceOfTask extends AbstractClasspathTask {
             log(String.valueOf(arguments));
 
             Factory<Object> factory = new Factory<Object>(type);
-            Member member = factory.getFactoryMember(toArray(parameters));
+            Member member =
+                factory.getFactoryMember(parameters.toArray(new Class[] { }));
 
             log(String.valueOf(member));
 
-            Object instance = factory.apply(member, toArray(arguments));
+            Object instance =
+                factory.apply(member, arguments.toArray(new Object[] { }));
 
             log(String.valueOf(instance));
 
@@ -98,14 +99,6 @@ public class InstanceOfTask extends AbstractClasspathTask {
 
             throw new BuildException(exception);
         }
-    }
-
-    private Class[] toArray(Collection<Class> collection) {
-        return collection.toArray(new Class[] { });
-    }
-
-    private Object[] toArray(Collection<Object> collection) {
-        return collection.toArray(new Object[] { });
     }
 
     public static class Argument {
