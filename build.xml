@@ -7,7 +7,7 @@
     -----------------
     Java Utilities
 
-    $Id: build.xml,v 1.18 2009-03-28 13:30:51 ball Exp $
+    $Id: build.xml,v 1.19 2009-04-29 04:43:45 ball Exp $
   </description>
 
   <property name="build.properties.file" location="build.properties"/>
@@ -296,6 +296,14 @@
     <members-of classpathref="build.classpath" type="${type}"/>
   </target>
 
+  <target name="readlink"
+          description="--> Invokes &lt;readlink/&gt; task."
+          depends="classes">
+    <taskdef classpathref="build.classpath"
+             resource="iprotium/util/ant/defaults.properties"/>
+    <readlink basedir="${build.dir}"/>
+  </target>
+
   <target name="serialVersionUID"
           description="--> Invokes &lt;serialVersionUID/&gt; task."
           depends="classes">
@@ -327,6 +335,9 @@
 </project>
 <!--
     $Log: not supported by cvs2svn $
+    Revision 1.18  2009/03/28 13:30:51  ball
+    Added javadoc build target.
+
     Revision 1.16  2009/03/26 05:40:20  ball
     Added <link/> build target and Ant Task.
 
