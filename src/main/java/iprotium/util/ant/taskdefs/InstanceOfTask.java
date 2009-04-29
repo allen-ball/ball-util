@@ -1,5 +1,5 @@
 /*
- * $Id: InstanceOfTask.java,v 1.7 2009-04-22 04:29:19 ball Exp $
+ * $Id: InstanceOfTask.java,v 1.8 2009-04-29 04:35:41 ball Exp $
  *
  * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
  */
@@ -20,7 +20,7 @@ import org.apache.tools.ant.BuildException;
  * @see Factory
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 public class InstanceOfTask extends AbstractClasspathTask {
     private String type = String.class.getName();
@@ -79,7 +79,7 @@ public class InstanceOfTask extends AbstractClasspathTask {
             BeanMap map = BeanMap.asBeanMap(instance);
 
             if (! map.isEmpty()) {
-                MapTable table =
+                MapTable<String,Object> table =
                     new MapTable<String,Object>(map, "Property Name", "Value");
 
                 log("");
