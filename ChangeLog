@@ -1,5 +1,7 @@
 2009-04-28  Allen D. Ball  <ball@10-0-1-4.lan>
 
+	* Added <readlink/> build target and Ant Task.
+
 	* src/main/java/iprotium/util/jni/POSIX.java,
 	src/main/c/iprotium_util_jni_POSIX.c:
 	Added readlink(File) method.
