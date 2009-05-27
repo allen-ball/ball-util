@@ -1,13 +1,12 @@
-$Id: ToDo.txt,v 1.6 2009-04-03 12:13:32 ball Exp $
+$Id: ToDo.txt,v 1.7 2009-05-27 04:50:29 ball Exp $
 
 * Add JNI interface to editline(libedit)/readline.
 
-* Create LintTask (based on SerialVersionUIDTask).  Check:
+* Add checks to LintTask:
 
         ** Require explicitly declared constructors
         ** Require non-public constructors for abstract classes
         ** Require @Override annotations on overridden methods
-        ** Serializable.serialVersionUID (SerialVersionUIDTask)
         ** Suggest (! Collection.isEmpty()) for (Collection.size() > 0)
 
 * Create SSU package.
