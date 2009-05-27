@@ -7,7 +7,7 @@
     -----------------
     Java Utilities
 
-    $Id: build.xml,v 1.19 2009-04-29 04:43:45 ball Exp $
+    $Id: build.xml,v 1.20 2009-05-27 04:50:45 ball Exp $
   </description>
 
   <property name="build.properties.file" location="build.properties"/>
@@ -280,6 +280,16 @@
     </link>
   </target>
 
+  <target name="lint"
+          description="--> Invokes &lt;lint/&gt; task."
+          depends="classes">
+    <taskdef classpathref="build.classpath"
+             resource="iprotium/util/ant/defaults.properties"/>
+    <lint basedir="${build.class.dir}">
+      <src path="${src.dir}/main/java"/>
+    </lint>
+  </target>
+
   <target name="list-resources"
           description="--> Invokes &lt;list-resources/&gt; task."
           depends="classes">
@@ -304,16 +314,6 @@
     <readlink basedir="${build.dir}"/>
   </target>
 
-  <target name="serialVersionUID"
-          description="--> Invokes &lt;serialVersionUID/&gt; task."
-          depends="classes">
-    <taskdef classpathref="build.classpath"
-             resource="iprotium/util/ant/defaults.properties"/>
-    <serialVersionUID basedir="${build.class.dir}">
-      <src path="${src.dir}/main/java"/>
-    </serialVersionUID>
-  </target>
-
   <target name="show-properties"
           description="--> Invokes &lt;show-properties/&gt; task."
           depends="classes">
@@ -335,6 +335,9 @@
 </project>
 <!--
     $Log: not supported by cvs2svn $
+    Revision 1.19  2009/04/29 04:43:45  ball
+    Added <readlink/> build target and Ant Task.
+
     Revision 1.18  2009/03/28 13:30:51  ball
     Added javadoc build target.
 
