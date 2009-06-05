@@ -1,6 +1,8 @@
 2009-06-04  Allen D. Ball  <ball@10-0-1-4.lan>
 
-	* src/main/java/iprotium/util/TypedList.java: Initial writing.
+	* src/main/java/iprotium/util/TypedCollection.java,
+	src/main/java/iprotium/util/TypedList.java:
+	Initial writing.
 
 2009-05-26  Allen D. Ball  <ball@10-0-1-4.lan>
 
