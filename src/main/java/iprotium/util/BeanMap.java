@@ -1,5 +1,5 @@
 /*
- * $Id: BeanMap.java,v 1.5 2009-03-28 13:31:16 ball Exp $
+ * $Id: BeanMap.java,v 1.6 2009-06-17 05:47:44 ball Exp $
  *
  * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
  */
@@ -22,11 +22,11 @@ import java.util.Set;
  * bean properties.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public class BeanMap extends AbstractMap<String,Object>
                              implements Serializable {
-    private static final long serialVersionUID = 7892236967861768264L;
+    private static final long serialVersionUID = -7056120117701081116L;
 
     private final Object bean;
     private final Set<EntryImpl> entrySet0;
@@ -40,6 +40,8 @@ public class BeanMap extends AbstractMap<String,Object>
      *                          If bean argument is null.
      * @throws  IntrospectionException
      *                          If bean introspection fails.
+     * @throws  NullPointerException
+     *                          If bean argument is null.
      */
     public BeanMap(Object bean) throws IntrospectionException {
         this(bean, Introspector.getBeanInfo(bean.getClass()));
@@ -48,26 +50,27 @@ public class BeanMap extends AbstractMap<String,Object>
     /**
      * Construct a BeanMap from a bean.
      *
-     * @param   bean            The Java bean to wrap.
+     * @param   bean            The Java bean to wrap (if <code>null</code>
+     *                          then <code>this</code> will be used).
      * @param   info            The BeanInfo that describes the bean.
      *
      * @throws  NullPointerException
-     *                          If bean argument is null.
+     *                          If info argument is null.
      */
-    protected BeanMap(Object bean, BeanInfo info) {
-        if (bean != null) {
-            this.bean = bean;
+    public BeanMap(Object bean, BeanInfo info) {
+        this.bean = (bean != null) ? bean : this;
+
+        if (info != null) {
+            Set<EntryImpl> entrySet = new LinkedHashSet<EntryImpl>();
+
+            for (PropertyDescriptor property : info.getPropertyDescriptors()) {
+                entrySet.add(new EntryImpl(property));
+            }
+
+            this.entrySet0 = Collections.unmodifiableSet(entrySet);
         } else {
-            throw new NullPointerException("bean");
+            throw new NullPointerException("info");
         }
-
-        Set<EntryImpl> entrySet = new LinkedHashSet<EntryImpl>();
-
-        for (PropertyDescriptor property : info.getPropertyDescriptors()) {
-            entrySet.add(new EntryImpl(property));
-        }
-
-        this.entrySet0 = Collections.unmodifiableSet(entrySet);
     }
 
     /**
@@ -172,7 +175,8 @@ public class BeanMap extends AbstractMap<String,Object>
                 try {
                     write.invoke(getBean(), value);
                 } catch (Exception exception) {
-                    throw new RuntimeException("key=" + String.valueOf(getKey())
+                    throw new RuntimeException("key="
+                                               + String.valueOf(getKey())
                                                + ",value="
                                                + String.valueOf(value),
                                                exception);
