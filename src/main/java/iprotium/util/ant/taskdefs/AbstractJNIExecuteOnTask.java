@@ -1,27 +1,33 @@
 /*
- * $Id: AbstractJNIExecuteOnTask.java,v 1.6 2009-04-22 04:30:48 ball Exp $
+ * $Id: AbstractJNIExecuteOnTask.java,v 1.7 2009-06-17 05:35:55 ball Exp $
  *
  * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
 import java.io.File;
+import java.io.IOException;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.taskdefs.ExecuteOn;
 import org.apache.tools.ant.types.Commandline;
-
-import static iprotium.util.ant.taskdefs.JNILibPropertyTask.BUNDLE;
 
 /**
  * Ant Task to compile JNI shared objects.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 public abstract class AbstractJNIExecuteOnTask extends ExecuteOn {
+    protected static final JNIResourceBundle BUNDLE;
     private static final FileDirBoth FILE = new FileDirBoth();
 
     static {
+        try {
+            BUNDLE = new JNIResourceBundle();
+        } catch (IOException exception) {
+            throw new ExceptionInInitializerError(exception);
+        }
+
         FILE.setValue(FileDirBoth.FILE);
     }
 
