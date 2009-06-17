@@ -1,11 +1,10 @@
 /*
- * $Id: JNILibPropertyTask.java,v 1.1 2009-03-26 01:08:21 ball Exp $
+ * $Id: JNILibPropertyTask.java,v 1.2 2009-06-17 05:34:38 ball Exp $
  *
  * Copyright 2009 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
-import java.io.IOException;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 
@@ -16,21 +15,30 @@ import org.apache.tools.ant.Task;
  * @see Suffix
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public abstract class JNILibPropertyTask extends Task {
-    public static final JNIResourceBundle BUNDLE;
+    private static final String PREFIX;
+    private static final String SUFFIX;
 
     static {
-        try {
-            BUNDLE = new JNIResourceBundle();
-        } catch (IOException exception) {
-            throw new ExceptionInInitializerError(exception);
+        String name = "LIBNAME";
+        String[] tokens = System.mapLibraryName(name).split(name, 2);
+        String prefix = (tokens.length > 0) ? tokens[0] : null;
+        String suffix = (tokens.length > 1) ? tokens[1] : null;
+
+        if (suffix != null) {
+            String dot = ".";
+
+            while (suffix.startsWith(dot)) {
+                suffix = suffix.substring(dot.length());
+            }
         }
+
+        PREFIX = prefix;
+        SUFFIX = suffix;
     }
 
-    private String arch = null;
-    private String os = null;
     private String property = null;
 
     /**
@@ -38,29 +46,10 @@ public abstract class JNILibPropertyTask extends Task {
      */
     protected JNILibPropertyTask() { super(); }
 
-    protected String getArch() { return arch; }
-    public void setArch(String arch) { this.arch = arch; }
-
-    protected String getOS() { return os; }
-    public void setOS(String os) { this.os = os; }
-
     protected String getProperty() { return property; }
     public void setProperty(String property) { this.property = property; }
 
     protected abstract String getPropertyValue();
-
-    @Override
-    public void init() throws BuildException {
-        super.init();
-
-        if (getOS() == null) {
-            setOS(getProject().getProperty("os.name"));
-        }
-
-        if (getArch() == null) {
-            setArch(getProject().getProperty("os.arch"));
-        }
-    }
 
     @Override
     public void execute() throws BuildException {
@@ -71,10 +60,6 @@ public abstract class JNILibPropertyTask extends Task {
         } else {
             log(getPropertyValue());
         }
-    }
-
-    protected String getBundleString(String name) {
-        return BUNDLE.getString(getOS(), getArch(), name);
     }
 
     /**
@@ -88,9 +73,7 @@ public abstract class JNILibPropertyTask extends Task {
         public Prefix() { super(); }
 
         @Override
-        protected String getPropertyValue() {
-            return getBundleString("jnilib-prefix");
-        }
+        protected String getPropertyValue() { return PREFIX; }
     }
 
     /**
@@ -104,11 +87,12 @@ public abstract class JNILibPropertyTask extends Task {
         public Suffix() { super(); }
 
         @Override
-        protected String getPropertyValue() {
-            return getBundleString("jnilib-suffix");
-        }
+        protected String getPropertyValue() { return SUFFIX; }
     }
 }
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2009/03/26 01:08:21  ball
+ * Added <jnilib-prefix/> and <jnilib-suffix/> build targets and Ant Tasks.
+ *
  */
