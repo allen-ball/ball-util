@@ -7,7 +7,7 @@
     -----------------
     Java Utilities
 
-    $Id: build.xml,v 1.20 2009-05-27 04:50:45 ball Exp $
+    $Id: build.xml,v 1.21 2009-06-18 06:34:41 ball Exp $
   </description>
 
   <property name="build.properties.file" location="build.properties"/>
@@ -243,6 +243,14 @@
                         type="${type}" subtype="${subtype}"/>
   </target>
 
+  <target name="jndi-list"
+          description="--> Invokes &lt;jndi-list/&gt; task."
+          depends="classes">
+    <taskdef classpathref="build.classpath"
+             resource="iprotium/util/ant/defaults.properties"/>
+    <jndi-list/>
+  </target>
+
   <target name="jni-classes"
           description="--> Invokes &lt;jni-classes/&gt; task."
           depends="classes">
@@ -335,6 +343,9 @@
 </project>
 <!--
     $Log: not supported by cvs2svn $
+    Revision 1.20  2009/05/27 04:50:45  ball
+    Added <lint/> target and Ant Task.
+
     Revision 1.19  2009/04/29 04:43:45  ball
     Added <readlink/> build target and Ant Task.
 
