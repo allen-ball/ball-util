@@ -1,5 +1,5 @@
 /*
- * $Id: SuperclassesOfTask.java,v 1.4 2009-01-27 22:00:19 ball Exp $
+ * $Id: SuperclassesOfTask.java,v 1.5 2009-06-18 06:35:17 ball Exp $
  *
  * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
  */
@@ -14,7 +14,7 @@ import static iprotium.util.ClassOrder.INHERITANCE;
  * Ant Task to display superclasses of a specified Class.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class SuperclassesOfTask extends AbstractClasspathTask {
     private String type = null;
@@ -45,18 +45,13 @@ public class SuperclassesOfTask extends AbstractClasspathTask {
             throw exception;
         } catch (RuntimeException exception) {
             exception.printStackTrace();
-
             throw exception;
         } catch (Exception exception) {
             exception.printStackTrace();
-
             throw new BuildException(exception);
         }
     }
 }
 /*
  * $Log: not supported by cvs2svn $
- * Revision 1.3  2008/10/30 07:54:18  ball
- * Chain to super.execute() method.
- *
  */

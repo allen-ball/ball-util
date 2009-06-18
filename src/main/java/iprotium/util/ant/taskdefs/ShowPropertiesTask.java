@@ -1,5 +1,5 @@
 /*
- * $Id: ShowPropertiesTask.java,v 1.6 2009-03-31 03:11:31 ball Exp $
+ * $Id: ShowPropertiesTask.java,v 1.7 2009-06-18 06:35:17 ball Exp $
  *
  * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
  */
@@ -15,7 +15,7 @@ import org.apache.tools.ant.BuildException;
  * Ant Task to find and display static Property members.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 public class ShowPropertiesTask extends AbstractClassFileTask {
 
@@ -48,11 +48,9 @@ public class ShowPropertiesTask extends AbstractClassFileTask {
             throw exception;
         } catch (RuntimeException exception) {
             exception.printStackTrace();
-
             throw exception;
         } catch (Exception exception) {
             exception.printStackTrace();
-
             throw new BuildException(exception);
         }
     }

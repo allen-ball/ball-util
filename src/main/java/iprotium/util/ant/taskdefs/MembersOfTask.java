@@ -1,5 +1,5 @@
 /*
- * $Id: MembersOfTask.java,v 1.3 2009-01-27 22:00:19 ball Exp $
+ * $Id: MembersOfTask.java,v 1.4 2009-06-18 06:35:17 ball Exp $
  *
  * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
  */
@@ -13,7 +13,7 @@ import org.apache.tools.ant.Task;
  * Ant Task to display members of a specified Class.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class MembersOfTask extends AbstractClasspathTask {
     private String type = null;
@@ -54,18 +54,13 @@ public class MembersOfTask extends AbstractClasspathTask {
             throw exception;
         } catch (RuntimeException exception) {
             exception.printStackTrace();
-
             throw exception;
         } catch (Exception exception) {
             exception.printStackTrace();
-
             throw new BuildException(exception);
         }
     }
 }
 /*
  * $Log: not supported by cvs2svn $
- * Revision 1.2  2008/10/30 07:51:51  ball
- * Chain to super.execute() method.
- *
  */
