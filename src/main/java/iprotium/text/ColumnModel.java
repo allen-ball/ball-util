@@ -1,5 +1,5 @@
 /*
- * $Id: ColumnModel.java,v 1.1 2009-03-30 06:35:16 ball Exp $
+ * $Id: ColumnModel.java,v 1.2 2009-06-21 00:12:57 ball Exp $
  *
  * Copyright 2009 Allen D. Ball.  All rights reserved.
  */
@@ -18,7 +18,7 @@ import static iprotium.text.FillEnum.RIGHT;
  * @see TableModel
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class ColumnModel {
     private final String name;
@@ -34,7 +34,7 @@ public class ColumnModel {
     public ColumnModel(String name) { this(name, RIGHT); }
 
     /**
-     * Constructor to create a column and spcify its fill-type.
+     * Constructor to create a column and specify its fill-type.
      *
      * @param   name            The name of the column.
      * @param   fill            The FillEnum type to apply to column values.
