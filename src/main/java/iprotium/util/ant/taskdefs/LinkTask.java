@@ -1,5 +1,5 @@
 /*
- * $Id: LinkTask.java,v 1.3 2009-03-26 05:40:20 ball Exp $
+ * $Id: LinkTask.java,v 1.4 2009-06-21 03:17:56 ball Exp $
  *
  * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
  */
@@ -16,10 +16,10 @@ import org.apache.tools.ant.Project;
 import org.apache.tools.ant.taskdefs.Copy;
 
 /**
- * Ant Task of link a file to a new target.
+ * Ant Task to link a file to a new target.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class LinkTask extends Copy {
     private boolean symbolic = false;
@@ -158,4 +158,7 @@ public class LinkTask extends Copy {
 }
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.3  2009/03/26 05:40:20  ball
+ * Added <link/> build target and Ant Task.
+ *
  */
