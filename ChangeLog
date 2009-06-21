@@ -4,6 +4,9 @@
 	Changed the sort(T[]) and sort(List<? extends T>) methods to test
 	their argument for null and also return their argument.
 
+	* src/main/java/iprotium/util/ant/taskdefs/ListResourcesTask.java:
+	Use a Table to format output.
+
 2009-06-17  Allen D. Ball  <ball@10-0-1-4.lan>
 
 	* Added <jndi-list/> build target and Ant Task.
