@@ -1,20 +1,24 @@
 /*
- * $Id: ListResourcesTask.java,v 1.3 2009-06-18 06:35:17 ball Exp $
+ * $Id: ListResourcesTask.java,v 1.4 2009-06-21 03:22:08 ball Exp $
  *
  * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
+import iprotium.text.ArrayListTableModel;
+import iprotium.text.Table;
+import java.io.IOException;
 import java.net.URL;
+import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
+import java.util.LinkedHashSet;
 import org.apache.tools.ant.BuildException;
 
 /**
  * Ant Task to list the resources that match a specific name.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class ListResourcesTask extends AbstractClasspathTask {
     private String name = null;
@@ -36,13 +40,10 @@ public class ListResourcesTask extends AbstractClasspathTask {
         }
 
         try {
-            log(getName());
+            log("");
 
-            List<URL> list =
-                Collections.list(getClassLoader().getResources(getName()));
-
-            for (URL url : list) {
-                log(String.valueOf(url));
+            for (String line : new Table(new TableModelImpl(getName()))) {
+                log(line);
             }
         } catch (BuildException exception) {
             throw exception;
@@ -53,6 +54,21 @@ public class ListResourcesTask extends AbstractClasspathTask {
             exception.printStackTrace();
             throw new BuildException(exception);
         }
+    }
+
+    private class TableModelImpl extends ArrayListTableModel<URL> {
+        private static final long serialVersionUID = 5257580672656495451L;
+
+        public TableModelImpl(String name) throws IOException {
+            this(Collections.list(getClassLoader().getResources(name)), name);
+        }
+
+        private TableModelImpl(Collection<URL> collection, String name) {
+            super(new LinkedHashSet<URL>(collection), name);
+        }
+
+        @Override
+        protected URL getValueAt(URL row, int x) { return row; }
     }
 }
 /*
