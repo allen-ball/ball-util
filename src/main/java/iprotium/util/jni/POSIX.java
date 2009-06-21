@@ -1,5 +1,5 @@
 /*
- * $Id: POSIX.java,v 1.5 2009-04-29 04:40:27 ball Exp $
+ * $Id: POSIX.java,v 1.6 2009-06-21 03:46:45 ball Exp $
  *
  * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
  */
@@ -9,10 +9,10 @@ import java.io.File;
 import java.util.ResourceBundle;
 
 /**
- * Class whose static methods provide wrappers to native POSIX interfaces.
+ * Class whose static methods provide wrappers to native POSIX functions.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public class POSIX {
     private static final ResourceBundle BUNDLE =
@@ -23,9 +23,9 @@ public class POSIX {
     private POSIX() { }
 
     /**
-     * Wrapper to the POSIX link(2) call.
-     *
-     * http://www.opengroup.org/onlinepubs/000095399/functions/link.html
+     * Wrapper to POSIX
+     * <a href="http://www.opengroup.org/onlinepubs/000095399/functions/link.html">link(2)</a>
+     * function.
      *
      * @param   from            The source File.
      * @param   to              The target File.
@@ -40,14 +40,14 @@ public class POSIX {
     private static native boolean link(String from, String to);
 
     /**
-     * Wrapper to the POSIX readlink(2) call.
-     *
-     * http://www.opengroup.org/onlinepubs/000095399/functions/readlink.html
+     * Wrapper to POSIX
+     * <a href="http://www.opengroup.org/onlinepubs/000095399/functions/readlink.html">readlink(2)</a>
+     * function.
      *
      * @param   from            The source File.
      *
-     * @return  A File representing the link target if from is a symlink;
-     *          <code>null</code> otherwise.
+     * @return  A File representing the link target if <code>from</code> is
+     *          a symlink; <code>null</code> otherwise.
      */
     public static File readlink(File from) {
         String to = readlink(from.getPath());
@@ -58,9 +58,9 @@ public class POSIX {
     private static native String readlink(String from);
 
     /**
-     * Wrapper to the POSIX symlink(2) call.
-     *
-     * http://www.opengroup.org/onlinepubs/000095399/functions/symlink.html
+     * Wrapper to POSIX
+     * <a href="http://www.opengroup.org/onlinepubs/000095399/functions/symlink.html">symlink(2)</a>
+     * function.
      *
      * @param   from            The source File.
      * @param   to              The target File.
