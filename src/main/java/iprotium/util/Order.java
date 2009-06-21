@@ -1,5 +1,5 @@
 /*
- * $Id: Order.java,v 1.2 2009-01-27 22:00:19 ball Exp $
+ * $Id: Order.java,v 1.3 2009-06-21 01:25:03 ball Exp $
  *
  * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
  */
@@ -19,7 +19,7 @@ import java.util.List;
  * @see Comparator
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public abstract class Order<T> implements Comparator<T>, Serializable {
 
@@ -49,19 +49,32 @@ public abstract class Order<T> implements Comparator<T>, Serializable {
      * Method to sort an array in this Order.
      *
      * @param   array           The array to be sorted.
+     *
+     * @return  The array after sorting.
      */
-    public void sort(T[] array) { Arrays.sort(array, this); }
+    public T[] sort(T[] array) {
+        if (array != null) {
+            Arrays.sort(array, this);
+        }
+
+        return array;
+    }
 
     /**
      * Method to sort a List in this Order.
      *
      * @param   list            The List to be sorted.
+     *
+     * @return  The List after sorting.
      */
-    public void sort(List<? extends T> list) { Collections.sort(list, this); }
+    public List<? extends T> sort(List<? extends T> list) {
+        if (list != null) {
+            Collections.sort(list, this);
+        }
+
+        return list;
+    }
 }
 /*
  * $Log: not supported by cvs2svn $
- * Revision 1.1  2008/10/26 23:55:24  ball
- * Initial writing.
- *
  */
