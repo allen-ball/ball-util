@@ -1,5 +1,5 @@
 /*
- * $Id: JNDIListTask.java,v 1.1 2009-06-18 06:33:01 ball Exp $
+ * $Id: JNDIListTask.java,v 1.2 2009-06-23 04:33:03 ball Exp $
  *
  * Copyright 2009 Allen D. Ball.  All rights reserved.
  */
@@ -19,7 +19,7 @@ import org.apache.tools.ant.Task;
  * Ant Task to list JNDI Context.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class JNDIListTask extends Task {
 
@@ -46,7 +46,7 @@ public class JNDIListTask extends Task {
         }
     }
 
-    private void log(Context context) throws NamingException {
+    protected void log(Context context) throws NamingException {
         log("");
 
         for (String line : new ContextTable(context)) {
