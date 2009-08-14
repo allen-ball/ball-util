@@ -1,5 +1,5 @@
 /*
- * $Id: JNDIListTask.java,v 1.2 2009-06-23 04:33:03 ball Exp $
+ * $Id: JNDIListTask.java,v 1.3 2009-08-14 22:54:28 ball Exp $
  *
  * Copyright 2009 Allen D. Ball.  All rights reserved.
  */
@@ -8,20 +8,22 @@ package iprotium.util.ant.taskdefs;
 import iprotium.text.ArrayListTableModel;
 import iprotium.text.Table;
 import java.util.Collections;
+import java.util.Hashtable;
 import javax.naming.Binding;
 import javax.naming.Context;
 import javax.naming.NamingException;
 import javax.naming.spi.NamingManager;
 import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Task;
 
 /**
- * Ant Task to list JNDI Context.
+ * Ant Task to list JNDI Initial Context.
+ *
+ * @see NamingManager#getInitialContext(Hashtable)
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
-public class JNDIListTask extends Task {
+public class JNDIListTask extends AbstractClasspathTask {
 
     /**
      * Sole constructor.
@@ -30,11 +32,12 @@ public class JNDIListTask extends Task {
 
     @Override
     public void execute() throws BuildException {
-        try {
-            Context context =
-                NamingManager.getInitialContext(getProject().getProperties());
+        ClassLoader loader = Thread.currentThread().getContextClassLoader();
 
-            log(context);
+        try {
+            Thread.currentThread().setContextClassLoader(getClassLoader());
+
+            log(getContext(null));
         } catch (BuildException exception) {
             throw exception;
         } catch (RuntimeException exception) {
@@ -43,7 +46,22 @@ public class JNDIListTask extends Task {
         } catch (Exception exception) {
             exception.printStackTrace();
             throw new BuildException(exception);
+        } finally {
+            Thread.currentThread().setContextClassLoader(loader);
         }
+    }
+
+    protected Context getContext(String scheme) throws NamingException {
+        Context context = null;
+        Hashtable<?,?> env = getProject().getProperties();
+
+        if (scheme != null) {
+            context = NamingManager.getURLContext(scheme, env);
+        } else {
+            context = NamingManager.getInitialContext(env);
+        }
+
+        return context;
     }
 
     protected void log(Context context) throws NamingException {
@@ -88,4 +106,7 @@ public class JNDIListTask extends Task {
 }
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.2  2009/06/23 04:33:03  ball
+ * Made log(Context) method protected.
+ *
  */
