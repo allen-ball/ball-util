@@ -1,5 +1,7 @@
 2009-08-14  Allen D. Ball  <ball@10-0-1-2.lan>
 
+	* Added <jndi-lookup/> build target and Ant Task.
+
 	* src/main/java/iprotium/util/ant/taskdefs/AbstractClassFileTask.java,
 	src/main/java/iprotium/util/ant/taskdefs/AbstractClasspathTask.java:
 	Removed execute() method implementation.
