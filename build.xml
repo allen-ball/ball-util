@@ -7,7 +7,7 @@
     -----------------
     Java Utilities
 
-    $Id: build.xml,v 1.21 2009-06-18 06:34:41 ball Exp $
+    $Id: build.xml,v 1.22 2009-08-14 22:53:21 ball Exp $
   </description>
 
   <property name="build.properties.file" location="build.properties"/>
@@ -87,7 +87,8 @@
     </javac>
     <taskdef classpathref="build.classpath"
              resource="iprotium/util/ant/defaults.properties"/>
-    <jni-classes basedir="${build.class.dir}" property="jni.classes">
+    <jni-classes basedir="${build.class.dir}" classpathref="build.classpath"
+                 property="jni.classes">
       <src path="${src.dir}/main/java"/>
     </jni-classes>
   </target>
@@ -248,7 +249,15 @@
           depends="classes">
     <taskdef classpathref="build.classpath"
              resource="iprotium/util/ant/defaults.properties"/>
-    <jndi-list/>
+    <jndi-list classpathref="build.classpath"/>
+  </target>
+
+  <target name="jndi-lookup"
+          description="--> Invokes &lt;jndi-lookup/&gt; task."
+          depends="classes">
+    <taskdef classpathref="build.classpath"
+             resource="iprotium/util/ant/defaults.properties"/>
+    <jndi-lookup classpathref="build.classpath" name="${name}"/>
   </target>
 
   <target name="jni-classes"
@@ -256,7 +265,7 @@
           depends="classes">
     <taskdef classpathref="build.classpath"
              resource="iprotium/util/ant/defaults.properties"/>
-    <jni-classes basedir="${build.class.dir}">
+    <jni-classes classpathref="build.classpath" basedir="${build.class.dir}">
       <src path="${src.dir}/main/java"/>
     </jni-classes>
   </target>
@@ -293,7 +302,7 @@
           depends="classes">
     <taskdef classpathref="build.classpath"
              resource="iprotium/util/ant/defaults.properties"/>
-    <lint basedir="${build.class.dir}">
+    <lint classpathref="build.classpath" basedir="${build.class.dir}">
       <src path="${src.dir}/main/java"/>
     </lint>
   </target>
@@ -303,7 +312,7 @@
           depends="classes">
     <taskdef classpathref="build.classpath"
              resource="iprotium/util/ant/defaults.properties"/>
-    <list-resources name="${name}"/>
+    <list-resources classpathref="build.classpath" name="${name}"/>
   </target>
 
   <target name="members-of"
@@ -327,7 +336,8 @@
           depends="classes">
     <taskdef classpathref="build.classpath"
              resource="iprotium/util/ant/defaults.properties"/>
-    <show-properties basedir="${build.class.dir}">
+    <show-properties classpathref="build.classpath"
+                     basedir="${build.class.dir}">
       <src path="${src.dir}/main/java"/>
     </show-properties>
   </target>
@@ -343,14 +353,14 @@
 </project>
 <!--
     $Log: not supported by cvs2svn $
+    Revision 1.21  2009/06/18 06:34:41  ball
+    Added <jndi-list/> build target and Ant Task.
+
     Revision 1.20  2009/05/27 04:50:45  ball
     Added <lint/> target and Ant Task.
 
     Revision 1.19  2009/04/29 04:43:45  ball
     Added <readlink/> build target and Ant Task.
-
-    Revision 1.18  2009/03/28 13:30:51  ball
-    Added javadoc build target.
 
     Revision 1.16  2009/03/26 05:40:20  ball
     Added <link/> build target and Ant Task.
