@@ -1,5 +1,5 @@
 /*
- * $Id: InstanceOfTask.java,v 1.9 2009-06-18 06:35:17 ball Exp $
+ * $Id: InstanceOfTask.java,v 1.10 2009-08-14 22:55:25 ball Exp $
  *
  * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
  */
@@ -20,7 +20,7 @@ import org.apache.tools.ant.BuildException;
  * @see Factory
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 public class InstanceOfTask extends AbstractClasspathTask {
     private String type = String.class.getName();
@@ -44,8 +44,6 @@ public class InstanceOfTask extends AbstractClasspathTask {
 
     @Override
     public void execute() throws BuildException {
-        super.execute();
-
         try {
             Class<?> type = getClass(getType());
 

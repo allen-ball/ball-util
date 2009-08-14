@@ -1,5 +1,5 @@
 /*
- * $Id: ListResourcesTask.java,v 1.4 2009-06-21 03:22:08 ball Exp $
+ * $Id: ListResourcesTask.java,v 1.5 2009-08-14 22:55:25 ball Exp $
  *
  * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
  */
@@ -18,7 +18,7 @@ import org.apache.tools.ant.BuildException;
  * Ant Task to list the resources that match a specific name.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class ListResourcesTask extends AbstractClasspathTask {
     private String name = null;
@@ -33,8 +33,6 @@ public class ListResourcesTask extends AbstractClasspathTask {
 
     @Override
     public void execute() throws BuildException {
-        super.execute();
-
         if (getName() == null) {
             throw new BuildException("`name' attribute must be specified");
         }
@@ -73,4 +71,7 @@ public class ListResourcesTask extends AbstractClasspathTask {
 }
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.4  2009/06/21 03:22:08  ball
+ * Use a Table to format output.
+ *
  */
