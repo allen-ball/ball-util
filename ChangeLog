@@ -1,3 +1,12 @@
+2009-08-14  Allen D. Ball  <ball@10-0-1-2.lan>
+
+	* src/main/java/iprotium/util/ant/taskdefs/AbstractClassFileTask.java,
+	src/main/java/iprotium/util/ant/taskdefs/AbstractClasspathTask.java:
+	Removed execute() method implementation.
+	Changed getClassLoader() to set the parent ClassLoader
+	of the returned ClassLoader to
+	Thread.currentThread().getContextClassLoader().
+
 2009-06-20  Allen D. Ball  <ball@10-0-1-4.lan>
 
 	* src/main/java/iprotium/util/Order.java:
