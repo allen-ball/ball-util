@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- $Id: pom.xml,v 1.4 2009-06-17 05:57:15 ball Exp $ -->
+<!-- $Id: pom.xml,v 1.5 2009-08-14 22:17:38 ball Exp $ -->
 <project>
   <modelVersion>4.0.0</modelVersion>
   <groupId>iprotium.util</groupId>
   <artifactId>iprotium-util</artifactId>
-  <name>iProtium Utilities</name>
+  <name>Utilities</name>
   <version>1.0</version>
   <packaging>jar</packaging>
   <profiles>
@@ -41,4 +41,7 @@
 </project>
 <!--
     $Log: not supported by cvs2svn $
+    Revision 1.4  2009/06/17 05:57:15  ball
+    Added javax.activation dependency.
+
   -->
