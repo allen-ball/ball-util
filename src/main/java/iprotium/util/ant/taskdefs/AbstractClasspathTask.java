@@ -1,5 +1,5 @@
 /*
- * $Id: AbstractClasspathTask.java,v 1.8 2009-03-31 03:02:51 ball Exp $
+ * $Id: AbstractClasspathTask.java,v 1.9 2009-08-14 22:47:08 ball Exp $
  *
  * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
  */
@@ -18,12 +18,11 @@ import org.apache.tools.ant.util.ClasspathUtils;
  * Abstract base class for Ant Task implementations that require a classpath.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 public abstract class AbstractClasspathTask extends Task {
     private boolean initialize = false;
     private ClasspathUtils.Delegate delegate = null;
-    private AntClassLoader loader = null;
 
     /**
      * Sole constructor.
@@ -41,15 +40,6 @@ public abstract class AbstractClasspathTask extends Task {
 
     public Path createClasspath() { return delegate.createClasspath(); }
 
-    protected AntClassLoader getClassLoader() {
-        if (loader == null) {
-            loader = (AntClassLoader) delegate.getClassLoader();
-            loader.setParent(getClass().getClassLoader());
-        }
-
-        return loader;
-    }
-
     @Override
     public void init() throws BuildException {
         super.init();
@@ -60,12 +50,18 @@ public abstract class AbstractClasspathTask extends Task {
     }
 
     @Override
-    public void execute() throws BuildException {
-        super.execute();
+    public abstract void execute() throws BuildException;
 
+    protected AntClassLoader getClassLoader() {
         if (delegate.getClasspath() == null) {
             delegate.createClasspath();
         }
+
+        AntClassLoader loader = (AntClassLoader) delegate.getClassLoader();
+
+        loader.setParent(Thread.currentThread().getContextClassLoader());
+
+        return loader;
     }
 
     protected Class<?> getClass(String name) throws ClassNotFoundException {

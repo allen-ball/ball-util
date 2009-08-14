@@ -1,5 +1,5 @@
 /*
- * $Id: AbstractClassFileTask.java,v 1.9 2009-03-31 03:02:51 ball Exp $
+ * $Id: AbstractClassFileTask.java,v 1.10 2009-08-14 22:47:08 ball Exp $
  *
  * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
  */
@@ -22,7 +22,7 @@ import org.apache.tools.ant.util.ClasspathUtils;
  * files.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 public abstract class AbstractClassFileTask extends AbstractMatchingTask {
     private static final String DOT_CLASS = ".class";
@@ -30,7 +30,6 @@ public abstract class AbstractClassFileTask extends AbstractMatchingTask {
 
     private boolean initialize = false;
     private ClasspathUtils.Delegate delegate = null;
-    private AntClassLoader loader = null;
     private Path srcPath = null;
 
     /**
@@ -58,15 +57,6 @@ public abstract class AbstractClassFileTask extends AbstractMatchingTask {
 
     public Path createClasspath() { return delegate.createClasspath(); }
 
-    protected AntClassLoader getClassLoader() {
-        if (loader == null) {
-            loader = (AntClassLoader) delegate.getClassLoader();
-            loader.setParent(getClass().getClassLoader());
-        }
-
-        return loader;
-    }
-
     public Path createSrc() {
         if (srcPath == null) {
             srcPath = new Path(getProject());
@@ -84,17 +74,6 @@ public abstract class AbstractClassFileTask extends AbstractMatchingTask {
         }
 
         add(new ClassFileSelector());
-    }
-
-    @Override
-    public void execute() throws BuildException {
-        super.execute();
-
-        if (delegate.getClasspath() == null) {
-            delegate.createClasspath();
-        }
-
-        delegate.getClasspath().setLocation(getBasedir());
     }
 
     protected Map<File,Class> getMatchingClassFileMap() throws BuildException {
@@ -118,6 +97,20 @@ public abstract class AbstractClassFileTask extends AbstractMatchingTask {
         }
 
         return map;
+    }
+
+    protected AntClassLoader getClassLoader() {
+        if (delegate.getClasspath() == null) {
+            delegate.createClasspath();
+        }
+
+        delegate.getClasspath().setLocation(getBasedir());
+
+        AntClassLoader loader = (AntClassLoader) delegate.getClassLoader();
+
+        loader.setParent(Thread.currentThread().getContextClassLoader());
+
+        return loader;
     }
 
     protected Class<?> getClass(String name) throws ClassNotFoundException {
@@ -202,4 +195,7 @@ public abstract class AbstractClassFileTask extends AbstractMatchingTask {
 }
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.9  2009/03/31 03:02:51  ball
+ * Removed unused members and methods.
+ *
  */
