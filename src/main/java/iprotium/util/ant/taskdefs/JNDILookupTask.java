@@ -1,13 +1,15 @@
 /*
- * $Id: JNDILookupTask.java,v 1.1 2009-08-14 22:52:54 ball Exp $
+ * $Id: JNDILookupTask.java,v 1.2 2009-08-15 04:02:06 ball Exp $
  *
  * Copyright 2009 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
+import java.util.Hashtable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.naming.Context;
+import javax.naming.spi.NamingManager;
 import org.apache.tools.ant.BuildException;
 
 /**
@@ -17,7 +19,7 @@ import org.apache.tools.ant.BuildException;
  * @see NamingManager#getInitialContext(Hashtable)
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class JNDILookupTask extends JNDIListTask {
     private static final Pattern PATTERN =
