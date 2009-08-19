@@ -1,3 +1,7 @@
+2009-08-18  Allen D. Ball  <ball@10-0-1-2.lan>
+
+	* Added iprotium.naming and iprotium.naming.env packages.
+
 2009-08-14  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* Added <jndi-lookup/> build target and Ant Task.
