@@ -7,7 +7,7 @@
     -----------------
     Java Utilities
 
-    $Id: build.xml,v 1.22 2009-08-14 22:53:21 ball Exp $
+    $Id: build.xml,v 1.23 2009-08-19 04:16:11 ball Exp $
   </description>
 
   <property name="build.properties.file" location="build.properties"/>
@@ -22,12 +22,14 @@
   <property name="build.dir"            location="build"/>
   <property name="build.class.dir"      location="${build.dir}/class"/>
   <property name="build.include.dir"    location="${build.dir}/include"/>
-  <property name="build.javadoc.dir"    location="${build.dir}/javadoc"/>
   <property name="build.object.dir"     location="${build.dir}/object"/>
+  <property name="build.javadoc.dir"    location="${build.dir}/javadoc"/>
 
   <property name="j2se.docs.url"
             value="http://java.sun.com/j2se/${ant.java.version}/docs"/>
   <property name="j2se.api.javadoc.url" value="${j2se.docs.url}/api"/>
+  <property name="javax.activation.javadoc.url"
+            value="http://java.sun.com/javase/technologies/desktop/javabeans/glasgow/javadocs"/>
   <property name="ant.javadoc.url"
             value="file://${ant.home}/docs/javadocs"/>
 
@@ -122,6 +124,20 @@
           <attribute name="Implementation-Vendor" value="${vendor}"/>
           <attribute name="Sealed" value="true"/>
         </section>
+        <section name="iprotium/naming/">
+          <attribute name="Extension-Name" value="iprotium.naming"/>
+          <attribute name="Specification-Title" value="${pom.artifactId}"/>
+          <attribute name="Specification-Version" value="${pom.version}"/>
+          <attribute name="Specification-Vendor" value="${vendor}"/>
+          <attribute name="Implementation-Title" value="iprotium.naming"/>
+          <attribute name="Implementation-Version"
+                     value="${pom.version}.${buildnumber.date}"/>
+          <attribute name="Implementation-Vendor" value="${vendor}"/>
+          <attribute name="Sealed" value="true"/>
+        </section>
+        <section name="iprotium/naming/env/">
+          <attribute name="Sealed" value="true"/>
+        </section>
         <section name="iprotium/text/">
           <attribute name="Extension-Name" value="iprotium.text"/>
           <attribute name="Specification-Title" value="${pom.artifactId}"/>
@@ -173,6 +189,7 @@
         <![CDATA[Copyright &#169; 2009 Allen D. Ball.  All rights reserved.]]>
       </bottom>
       <link href="${j2se.api.javadoc.url}"/>
+      <link href="${javax.activation.javadoc.url}"/>
       <link href="${ant.javadoc.url}"/>
     </javadoc>
   </target>
@@ -353,19 +370,4 @@
 </project>
 <!--
     $Log: not supported by cvs2svn $
-    Revision 1.21  2009/06/18 06:34:41  ball
-    Added <jndi-list/> build target and Ant Task.
-
-    Revision 1.20  2009/05/27 04:50:45  ball
-    Added <lint/> target and Ant Task.
-
-    Revision 1.19  2009/04/29 04:43:45  ball
-    Added <readlink/> build target and Ant Task.
-
-    Revision 1.16  2009/03/26 05:40:20  ball
-    Added <link/> build target and Ant Task.
-
-    Revision 1.15  2009/03/26 01:08:21  ball
-    Added <jnilib-prefix/> and <jnilib-suffix/> build targets and Ant Tasks.
-
   -->
