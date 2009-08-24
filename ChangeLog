@@ -1,3 +1,8 @@
+2009-08-23  Allen D. Ball  <ball@10-0-1-2.lan>
+
+	* src/main/java/iprotium/util/ISO8601DateFormat.java:
+	Initial writing.
+
 2009-08-18  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* Added iprotium.naming and iprotium.naming.env packages.
