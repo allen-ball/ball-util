@@ -1,3 +1,8 @@
+2009-09-04  Allen D. Ball  <ball@10-0-1-2.lan>
+
+	* Renamed <list-resources/> Ant Task and build target to
+	<resource-list/>.
+
 2009-08-23  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* src/main/java/iprotium/util/ISO8601DateFormat.java:
