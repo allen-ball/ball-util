@@ -1,5 +1,5 @@
 /*
- * $Id: InstanceOfTask.java,v 1.10 2009-08-14 22:55:25 ball Exp $
+ * $Id: InstanceOfTask.java,v 1.11 2009-09-04 17:13:43 ball Exp $
  *
  * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
  */
@@ -15,12 +15,13 @@ import java.util.List;
 import org.apache.tools.ant.BuildException;
 
 /**
- * Ant Task to get an instance of a specified Class.
+ * Ant {@link org.apache.tools.ant.Task} to get an instance of a specified
+ * {@link Class}.
  *
  * @see Factory
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 public class InstanceOfTask extends AbstractClasspathTask {
     private String type = String.class.getName();
@@ -97,10 +98,16 @@ public class InstanceOfTask extends AbstractClasspathTask {
         }
     }
 
+    /**
+     * {@link InstanceOfTask} argument.
+     */
     public static class Argument {
         private String type = String.class.getName();
         private String value = null;
 
+        /**
+         * Sole constructor.
+         */
         public Argument(String value) { this.value = value; }
 
         public Argument() { this(null); }

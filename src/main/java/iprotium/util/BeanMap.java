@@ -1,5 +1,5 @@
 /*
- * $Id: BeanMap.java,v 1.6 2009-06-17 05:47:44 ball Exp $
+ * $Id: BeanMap.java,v 1.7 2009-09-04 17:13:43 ball Exp $
  *
  * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
  */
@@ -18,11 +18,11 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Map implementation that wraps a Java bean and provides entries for the
- * bean properties.
+ * {@link Map} implementation that wraps a Java bean and provides entries
+ * for the bean properties.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 public class BeanMap extends AbstractMap<String,Object>
                              implements Serializable {
@@ -52,7 +52,7 @@ public class BeanMap extends AbstractMap<String,Object>
      *
      * @param   bean            The Java bean to wrap (if <code>null</code>
      *                          then <code>this</code> will be used).
-     * @param   info            The BeanInfo that describes the bean.
+     * @param   info            The {@link BeanInfo} that describes the bean.
      *
      * @throws  NullPointerException
      *                          If info argument is null.
@@ -76,7 +76,7 @@ public class BeanMap extends AbstractMap<String,Object>
     /**
      * Method to get the wrapped bean.
      *
-     * @return  The bean Object.
+     * @return  The bean {@link Object}.
      */
     protected Object getBean() { return bean; }
 
@@ -112,12 +112,12 @@ public class BeanMap extends AbstractMap<String,Object>
     }
 
     /**
-     * Static method to wrap a Java bean in a BeanMap.
+     * Static method to wrap a Java bean in a {@link BeanMap}.
      *
      * @param   bean            The Java bean to wrap.
      *
-     * @return  The argument bean if it is an instance of BeanMap; an new
-     *          BeanMap wrapping the argument bean otherwise.
+     * @return  The argument bean if it is an instance of {@link BeanMap}; a
+     *          new {@link BeanMap} wrapping the argument bean otherwise.
      *
      * @throws  NullPointerException
      *                          If bean argument is null.

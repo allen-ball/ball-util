@@ -1,5 +1,5 @@
 /*
- * $Id: ReaderWriterDataSource.java,v 1.4 2009-03-31 02:31:12 ball Exp $
+ * $Id: ReaderWriterDataSource.java,v 1.5 2009-09-04 17:13:43 ball Exp $
  *
  * Copyright 2009 Allen D. Ball.  All rights reserved.
  */
@@ -19,14 +19,12 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /**
- * DataSource implementation that provides a BufferedReader wrapping the
- * InputStream and a PrintWriter wrapping the OutputStream.
- *
- * @see BufferedReader
- * @see PrintWriter
+ * {@link javax.activation.DataSource} implementation that provides a
+ * {@link BufferedReader} wrapping the {@link InputStream} and a
+ * {@link PrintWriter} wrapping the {@link OutputStream}.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class ReaderWriterDataSource extends ByteArrayDataSource
                                     implements Iterable<String> {
@@ -36,6 +34,9 @@ public class ReaderWriterDataSource extends ByteArrayDataSource
 
     /**
      * @see ByteArrayDataSource#ByteArrayDataSource(String,String)
+     *
+     * @param   name            Initial "Name" attribute value.
+     * @param   type            Initial "ContentType" attribute value.
      */
     public ReaderWriterDataSource(String name, String type) {
         this(name, type, CHARSET);
@@ -44,8 +45,10 @@ public class ReaderWriterDataSource extends ByteArrayDataSource
     /**
      * @see ByteArrayDataSource#ByteArrayDataSource(String,String)
      *
-     * @param   charset         The Charset used to encode the
-     *                          OutputStream.
+     * @param   name            Initial "Name" attribute value.
+     * @param   type            Initial "ContentType" attribute value.
+     * @param   charset         The {@link Charset} used to encode the
+     *                          {@link OutputStream}.
      */
     public ReaderWriterDataSource(String name, String type, Charset charset) {
         super(name, type);
@@ -58,47 +61,50 @@ public class ReaderWriterDataSource extends ByteArrayDataSource
     }
 
     /**
-     * Method to get the Charset used to create the BufferedReader and
-     * PrintWriter.
+     * Method to get the {@link Charset} used to create the
+     * {@link BufferedReader} and {@link PrintWriter}.
      *
      * @return  The Charset.
      */
     public Charset getCharset() { return charset; }
 
     /**
-     * Method to return a new BufferedReader to read the underlying
-     * InputStream.
+     * Method to return a new {@link BufferedReader} to read the underlying
+     * {@link InputStream}.
      *
      * @see #getInputStream()
      *
-     * @return  A BufferedReader wrapping the DataSource InputStream.
+     * @return  A {@link BufferedReader} wrapping the
+     *          {@link javax.activation.DataSource} {@link InputStream}.
      */
     public BufferedReader getBufferedReader() throws IOException {
         return new BufferedReaderImpl();
     }
 
     /**
-     * Method to return a new PrintWriter to write to the underlying
-     * OutputStream.
+     * Method to return a new {@link PrintWriter} to write to the underlying
+     * {@link OutputStream}.
      *
      * @see #getOutputStream()
      *
-     * @return  A PrintWriter wrapping the DataSource OutputStream.
+     * @return  A {@link PrintWriter} wrapping the
+     *          {@link javax.activation.DataSource} {@link OutputStream}.
      */
     public PrintWriter getPrintWriter() throws IOException {
         return new PrintWriterImpl();
     }
 
     /**
-     * Method to write the contents of this DataSource to a PrintWriter.
+     * Method to write the contents of this
+     * {@link javax.activation.DataSource} to a {@link PrintWriter}.
      *
      * @see #getBufferedReader()
      *
-     * @param   writer          The target PrintWriter.
+     * @param   writer          The target {@link PrintWriter}.
      *
      * @throws  IOException     If a problem is encountered opening or
-     *                          reading the BufferedReader or writing to the
-     *                          PrintWriter.
+     *                          reading the {@link BufferedReader} or
+     *                          writing to the {@link PrintWriter}.
      */
     public void writeTo(PrintWriter writer) throws IOException {
         BufferedReader reader = null;
@@ -117,11 +123,12 @@ public class ReaderWriterDataSource extends ByteArrayDataSource
     }
 
     /**
-     * Method to return an Iterator to access the lines of this DataSource.
+     * Method to return an {@link Iterator} to access the lines of this
+     * {@link javax.activation.DataSource}.
      *
      * @see #getBufferedReader()
      *
-     * @return  An Iterator to access the lines of the Report.
+     * @return  An {@link Iterator} to access the lines of the report.
      */
     public Iterator<String> iterator() { return new IteratorImpl(); }
 
@@ -138,6 +145,16 @@ public class ReaderWriterDataSource extends ByteArrayDataSource
         return string;
     }
 
+    /**
+     * Convenience method to get the name of a {@link Charset}.
+     *
+     * @param   charset         The {@link Charset}.
+     *
+     * @return  The name of the {@link Charset} if non-<code>null</code>;
+     *          <code>null</code> otherwise.
+     *
+     * @see Charset#name()
+     */
     protected static String nameOf(Charset charset) {
         return (charset != null) ? charset.name() : null;
     }

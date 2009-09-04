@@ -1,5 +1,5 @@
 /*
- * $Id: ENVContext.java,v 1.1 2009-08-19 04:16:32 ball Exp $
+ * $Id: ENVContext.java,v 1.2 2009-09-04 17:13:43 ball Exp $
  *
  * Copyright 2009 Allen D. Ball.  All rights reserved.
  */
@@ -18,12 +18,12 @@ import javax.naming.NamingException;
 import javax.naming.OperationNotSupportedException;
 
 /**
- * JNDI Context implementation for environment variables.
+ * JNDI {@link Context} implementation for environment variables.
  *
  * @see System#getenv()
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class ENVContext implements Context {
     private final Hashtable env;

@@ -1,15 +1,15 @@
 /*
- * $Id: RightFillStringFormat.java,v 1.2 2009-03-30 06:25:12 ball Exp $
+ * $Id: RightFillStringFormat.java,v 1.3 2009-09-04 17:13:43 ball Exp $
  *
  * Copyright 2009 Allen D. Ball.  All rights reserved.
  */
 package iprotium.text;
 
 /**
- * "Right fill" StringFormat implementation.
+ * "Right fill" {@link StringFormat} implementation.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class RightFillStringFormat extends FillStringFormat {
     private static final long serialVersionUID = 761597411095416242L;

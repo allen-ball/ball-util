@@ -1,5 +1,5 @@
 /*
- * $Id: AbstractClassFileTask.java,v 1.10 2009-08-14 22:47:08 ball Exp $
+ * $Id: AbstractClassFileTask.java,v 1.11 2009-09-04 17:13:43 ball Exp $
  *
  * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
  */
@@ -18,11 +18,11 @@ import org.apache.tools.ant.types.selectors.FileSelector;
 import org.apache.tools.ant.util.ClasspathUtils;
 
 /**
- * Abstract base class for Ant Task implementations that select *.CLASS
- * files.
+ * Abstract base class for Ant {@link org.apache.tools.ant.Task}
+ * implementations that select *.CLASS files.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 public abstract class AbstractClassFileTask extends AbstractMatchingTask {
     private static final String DOT_CLASS = ".class";
@@ -195,7 +195,4 @@ public abstract class AbstractClassFileTask extends AbstractMatchingTask {
 }
 /*
  * $Log: not supported by cvs2svn $
- * Revision 1.9  2009/03/31 03:02:51  ball
- * Removed unused members and methods.
- *
  */

@@ -1,5 +1,5 @@
 /*
- * $Id: Table.java,v 1.1 2009-03-30 06:35:16 ball Exp $
+ * $Id: Table.java,v 1.2 2009-09-04 17:13:43 ball Exp $
  *
  * Copyright 2009 Allen D. Ball.  All rights reserved.
  */
@@ -12,10 +12,10 @@ import static iprotium.text.FillEnum.CENTER;
 import static iprotium.text.FillStringFormat.SPACE;
 
 /**
- * Text-based Table implementation.
+ * Text-based {@link Table} implementation.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class Table extends Report implements TableModelListener {
     private final TableModel model;
@@ -24,7 +24,7 @@ public class Table extends Report implements TableModelListener {
     /**
      * Sole constructor.
      *
-     * @param   model           The Table's TableModel.
+     * @param   model           The {@link Table}'s {@link TableModel}.
      * @param   tabs            The preferred tab stops.
      */
     public Table(TableModel model, int... tabs) {
@@ -40,9 +40,9 @@ public class Table extends Report implements TableModelListener {
     }
 
     /**
-     * Method to get this Table's TableModel.
+     * Method to get this {@link Table}'s {@link TableModel}.
      *
-     * @return  The TableModel.
+     * @return  The {@link TableModel}.
      */
     public TableModel getModel() { return model; }
 
@@ -90,15 +90,10 @@ public class Table extends Report implements TableModelListener {
     }
 
     /**
-     * Method to render the table.
-     *
-     * @see #reset()
-     * @see #toByteArray()
-     * @see #tableChanged(TableModelEvent)
-     *
-     * This implementation overrides the toByteArray() method.  If
-     * super.toByteArray() returns a zero-length byte array, it then calls
-     * render() to update the table.  The tableChanged(TableModelEvent)
+     * Method to render the {@link Table}.  This implementation overrides
+     * the {@link #toByteArray()} method.  If super.{@link #toByteArray()}
+     * returns a zero-length byte array, it then calls {@link #render()} to
+     * update the {@link Table}.  The {@link #tableChanged(TableModelEvent)}
      * method may zero the byte array.
      */
     protected void render() {

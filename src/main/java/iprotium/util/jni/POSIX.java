@@ -1,5 +1,5 @@
 /*
- * $Id: POSIX.java,v 1.6 2009-06-21 03:46:45 ball Exp $
+ * $Id: POSIX.java,v 1.7 2009-09-04 17:13:43 ball Exp $
  *
  * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
  */
@@ -9,10 +9,13 @@ import java.io.File;
 import java.util.ResourceBundle;
 
 /**
- * Class whose static methods provide wrappers to native POSIX functions.
+ * Provides wrappers to native
+ * <a href="http://www.opengroup.org/onlinepubs/000095399/idx/functions.html">
+ *   POSIX
+ * </a> functions.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 public class POSIX {
     private static final ResourceBundle BUNDLE =
@@ -23,9 +26,7 @@ public class POSIX {
     private POSIX() { }
 
     /**
-     * Wrapper to POSIX
-     * <a href="http://www.opengroup.org/onlinepubs/000095399/functions/link.html">link(2)</a>
-     * function.
+     * <a href="http://www.opengroup.org/onlinepubs/000095399/functions/link.html">link</a>
      *
      * @param   from            The source File.
      * @param   to              The target File.
@@ -40,9 +41,7 @@ public class POSIX {
     private static native boolean link(String from, String to);
 
     /**
-     * Wrapper to POSIX
-     * <a href="http://www.opengroup.org/onlinepubs/000095399/functions/readlink.html">readlink(2)</a>
-     * function.
+     * <a href="http://www.opengroup.org/onlinepubs/000095399/functions/readlink.html">readlink</a>
      *
      * @param   from            The source File.
      *
@@ -58,9 +57,7 @@ public class POSIX {
     private static native String readlink(String from);
 
     /**
-     * Wrapper to POSIX
-     * <a href="http://www.opengroup.org/onlinepubs/000095399/functions/symlink.html">symlink(2)</a>
-     * function.
+     * <a href="http://www.opengroup.org/onlinepubs/000095399/functions/symlink.html">symlink</a>
      *
      * @param   from            The source File.
      * @param   to              The target File.

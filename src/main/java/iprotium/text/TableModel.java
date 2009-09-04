@@ -1,5 +1,5 @@
 /*
- * $Id: TableModel.java,v 1.2 2009-03-31 02:41:10 ball Exp $
+ * $Id: TableModel.java,v 1.3 2009-09-04 17:13:43 ball Exp $
  *
  * Copyright 2009 Allen D. Ball.  All rights reserved.
  */
@@ -12,10 +12,10 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 
 /**
- * Abstract text table base class.
+ * Abstract text table model base class.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public abstract class TableModel extends AbstractTableModel
                                  implements TableModelListener {
@@ -23,18 +23,19 @@ public abstract class TableModel extends AbstractTableModel
     private transient int[] widths = null;
 
     /**
-     * Construct a new TableModel with the specified columns.
+     * Construct a {@link TableModel} with the specified columns.
      *
      * @see ColumnModel
      *
-     * @param   columns         The column specifiers.
+     * @param   columns         The column specifiers.  A column specifier
+     *                          can be a {@link ColumnModel},
+     *                          {@link CharSequence} (name), or
+     *                          {@link DateFormat} or {@link NumberFormat}
+     *                          (format).
      *
      * @throws  ClassCastException
      *                          If a column object cannot be translated to a
-     *                          ColumnModel.
-     *
-     * A column specifier can be a ColumnModel, CharSequence (name),
-     * or DateFormat or NumberFormat (format).
+     *                          {@link ColumnModel}.
      */
     protected TableModel(Object... columns) {
         super();
@@ -70,7 +71,7 @@ public abstract class TableModel extends AbstractTableModel
     }
 
     /**
-     * Construct a TableModel with the specified number of columns.
+     * Construct a {@link TableModel} with the specified number of columns.
      *
      * @param   columns         The number of columns.
      */
@@ -78,8 +79,10 @@ public abstract class TableModel extends AbstractTableModel
 
     public int getColumnCount() { return columns.length; }
 
+    public abstract int getRowCount();
+
     /**
-     * Method to get the ColumnModel for a specified column.
+     * Method to get the {@link ColumnModel} for a specified column.
      *
      * @param   x               The column index.
      *
@@ -124,12 +127,10 @@ public abstract class TableModel extends AbstractTableModel
         return widths;
     }
 
-    private static int length(CharSequence sequence) {
-        return (sequence != null) ? sequence.length() : 0;
-    }
-
     @Override
     public boolean isCellEditable(int y, int x) { return false; }
+
+    public abstract Object getValueAt(int y, int x);
 
     @Override
     public void setValueAt(Object value, int y, int x) {
@@ -189,6 +190,10 @@ public abstract class TableModel extends AbstractTableModel
      * @see TableModelListener#tableChanged(TableModelEvent)
      */
     public void tableChanged(TableModelEvent event) { this.widths = null; }
+
+    private static int length(CharSequence sequence) {
+        return (sequence != null) ? sequence.length() : 0;
+    }
 }
 /*
  * $Log: not supported by cvs2svn $

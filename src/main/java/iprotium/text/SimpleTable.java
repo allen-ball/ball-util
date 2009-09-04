@@ -1,15 +1,15 @@
 /*
- * $Id: SimpleTable.java,v 1.1 2009-03-30 06:35:16 ball Exp $
+ * $Id: SimpleTable.java,v 1.2 2009-09-04 17:13:43 ball Exp $
  *
  * Copyright 2009 Allen D. Ball.  All rights reserved.
  */
 package iprotium.text;
 
 /**
- * Simple Table implementation.
+ * Simple {@link Table} implementation.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class SimpleTable extends Table {
 

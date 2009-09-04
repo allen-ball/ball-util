@@ -1,5 +1,5 @@
 /*
- * $Id: AbstractDataSource.java,v 1.2 2009-03-28 13:45:43 ball Exp $
+ * $Id: AbstractDataSource.java,v 1.3 2009-09-04 17:13:43 ball Exp $
  *
  * Copyright 2009 Allen D. Ball.  All rights reserved.
  */
@@ -12,10 +12,10 @@ import java.io.OutputStream;
 import javax.activation.DataSource;
 
 /**
- * Abstract base class for DataSource implementations.
+ * Abstract base class for {@link DataSource} implementations.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class AbstractDataSource implements DataSource {
     private String name = null;
@@ -24,8 +24,8 @@ public class AbstractDataSource implements DataSource {
     /**
      * Sole constructor.
      *
-     * @param   name            Initial "Name" Bean attribute value.
-     * @param   type            Initial "ContentType" Bean attribute value.
+     * @param   name            Initial "Name" attribute value.
+     * @param   type            Initial "ContentType" attribute value.
      */
     protected AbstractDataSource(String name, String type) {
         setName(name);
@@ -38,24 +38,33 @@ public class AbstractDataSource implements DataSource {
     public String getContentType() { return type; }
     protected void setContentType(String type) { this.type = type; }
 
+    /**
+     * @throws  UnsupportedOperationException
+     *                          Always.
+     */
     public InputStream getInputStream() throws IOException {
         throw new UnsupportedOperationException("getInputStream()");
     }
 
+    /**
+     * @throws  UnsupportedOperationException
+     *                          Always.
+     */
     public OutputStream getOutputStream() throws IOException {
         throw new UnsupportedOperationException("getOutputStream()");
     }
 
     /**
-     * Method to write the contents of this DataSource to an OutputStream.
+     * Method to write the contents of this {@link DataSource} to an
+     * {@link OutputStream}.
      *
      * @see #getInputStream()
      *
-     * @param   out             The target OutputStream.
+     * @param   out             The target {@link OutputStream}.
      *
      * @throws  IOException     If a problem is encountered opening or
-     *                          reading the InputStream or writing to the
-     *                          OutputStream.
+     *                          reading the {@link InputStream} or writing
+     *                          to the {@link OutputStream}.
      */
     public void writeTo(OutputStream out) throws IOException {
         InputStream in = null;

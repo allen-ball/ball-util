@@ -1,5 +1,5 @@
 /*
- * $Id: FillStringFormat.java,v 1.2 2009-03-30 06:25:12 ball Exp $
+ * $Id: FillStringFormat.java,v 1.3 2009-09-04 17:13:43 ball Exp $
  *
  * Copyright 2009 Allen D. Ball.  All rights reserved.
  */
@@ -8,14 +8,17 @@ package iprotium.text;
 import java.text.FieldPosition;
 
 /**
- * "Fill" StringFormat implementation.
+ * "Fill" {@link StringFormat} implementation.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class FillStringFormat extends StringFormat {
     private static final long serialVersionUID = 2590787583727880296L;
 
+    /**
+     * {@link #SPACE} = {@value #SPACE}
+     */
     protected static final char SPACE = ' ';
 
     private final int width;
@@ -23,7 +26,7 @@ public class FillStringFormat extends StringFormat {
 
     /**
      * @param   width           The fill-to width.
-     * @param   filler          The filler character.
+     * @param   filler          The filler <code>char</code>.
      */
     public FillStringFormat(int width, char filler) {
         super();

@@ -1,5 +1,5 @@
 /*
- * $Id: envURLContextFactory.java,v 1.1 2009-08-19 04:16:32 ball Exp $
+ * $Id: envURLContextFactory.java,v 1.2 2009-09-04 17:13:43 ball Exp $
  *
  * Copyright 2009 Allen D. Ball.  All rights reserved.
  */
@@ -15,10 +15,11 @@ import javax.naming.spi.InitialContextFactory;
 import javax.naming.spi.ObjectFactory;
 
 /**
- * ENVContext InitialContextFactory and ObjectFactory implementation.
+ * {@link ENVContext} JNDI {@link InitialContextFactory} and
+ * {@link ObjectFactory} implementation.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class envURLContextFactory extends Factory<ENVContext>
                                   implements InitialContextFactory,

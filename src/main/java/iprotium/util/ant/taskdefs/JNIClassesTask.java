@@ -1,5 +1,5 @@
 /*
- * $Id: JNIClassesTask.java,v 1.5 2009-01-27 22:00:19 ball Exp $
+ * $Id: JNIClassesTask.java,v 1.6 2009-09-04 17:13:43 ball Exp $
  *
  * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
  */
@@ -13,10 +13,11 @@ import org.apache.tools.ant.BuildException;
 import static iprotium.util.ClassOrder.NAME;
 
 /**
- * Ant Task to determine the classes that have native members.
+ * Ant {@link org.apache.tools.ant.Task} to determine the classes that have
+ * native members.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public class JNIClassesTask extends AbstractClassFileTask {
     private String property = null;
@@ -84,11 +85,4 @@ public class JNIClassesTask extends AbstractClassFileTask {
 }
 /*
  * $Log: not supported by cvs2svn $
- * Revision 1.4  2008/11/20 03:05:32  ball
- * Do not call log() if the `property' attribute is set.
- *
- * Revision 1.3  2008/11/18 06:56:59  ball
- * Do not set the specified property if none of the classes have
- * native members.
- *
  */

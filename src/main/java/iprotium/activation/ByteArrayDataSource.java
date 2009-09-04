@@ -1,5 +1,5 @@
 /*
- * $Id: ByteArrayDataSource.java,v 1.3 2009-03-30 05:21:49 ball Exp $
+ * $Id: ByteArrayDataSource.java,v 1.4 2009-09-04 17:13:43 ball Exp $
  *
  * Copyright 2009 Allen D. Ball.  All rights reserved.
  */
@@ -11,30 +11,30 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 
 /**
- * DataSource implementation based on ByteArrayInputStream and
- * ByteArrayInputStream.
- *
- * @see ByteArrayInputStream
- * @see ByteArrayOutputStream
+ * {@link javax.activation.DataSource} implementation based on
+ * {@link ByteArrayInputStream} and {@link ByteArrayInputStream}.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class ByteArrayDataSource extends AbstractDataSource {
     private ByteArrayOutputStream out = new ByteArrayOutputStream();
 
     /**
      * @see AbstractDataSource#AbstractDataSource(String,String)
+     *
+     * @param   name            Initial "Name" attribute value.
+     * @param   type            Initial "ContentType" attribute value.
      */
     public ByteArrayDataSource(String name, String type) { super(name, type); }
 
     /**
-     * @see ByteArrayOutputStream#reset()
+     * See {@link ByteArrayOutputStream#reset()}.
      */
     public void reset() { out.reset(); }
 
     /**
-     * @see ByteArrayOutputStream#toByteArray()
+     * See {@link ByteArrayOutputStream#toByteArray()}.
      */
     public byte[] toByteArray() { return out.toByteArray(); }
 

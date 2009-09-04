@@ -1,5 +1,5 @@
 /*
- * $Id: JNDIListTask.java,v 1.3 2009-08-14 22:54:28 ball Exp $
+ * $Id: JNDIListTask.java,v 1.4 2009-09-04 17:13:43 ball Exp $
  *
  * Copyright 2009 Allen D. Ball.  All rights reserved.
  */
@@ -16,12 +16,13 @@ import javax.naming.spi.NamingManager;
 import org.apache.tools.ant.BuildException;
 
 /**
- * Ant Task to list JNDI Initial Context.
+ * Ant {@link org.apache.tools.ant.Task} to list JNDI Initial
+ * {@link Context}.
  *
  * @see NamingManager#getInitialContext(Hashtable)
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class JNDIListTask extends AbstractClasspathTask {
 
@@ -106,7 +107,4 @@ public class JNDIListTask extends AbstractClasspathTask {
 }
 /*
  * $Log: not supported by cvs2svn $
- * Revision 1.2  2009/06/23 04:33:03  ball
- * Made log(Context) method protected.
- *
  */

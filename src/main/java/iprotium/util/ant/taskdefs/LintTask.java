@@ -1,5 +1,5 @@
 /*
- * $Id: LintTask.java,v 1.1 2009-05-27 04:50:45 ball Exp $
+ * $Id: LintTask.java,v 1.2 2009-09-04 17:13:43 ball Exp $
  *
  * Copyright 2009 Allen D. Ball.  All rights reserved.
  */
@@ -18,10 +18,11 @@ import java.util.Map;
 import org.apache.tools.ant.BuildException;
 
 /**
- * Ant Task to provide additional compile-time ("lint") checks.
+ * Ant {@link org.apache.tools.ant.Task} to provide additional compile-time
+ * ("lint") checks.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class LintTask extends AbstractClassFileTask {
     private List<Check> list =

@@ -1,5 +1,5 @@
 /*
- * $Id: JNILibPropertyTask.java,v 1.2 2009-06-17 05:34:38 ball Exp $
+ * $Id: JNILibPropertyTask.java,v 1.3 2009-09-04 17:13:43 ball Exp $
  *
  * Copyright 2009 Allen D. Ball.  All rights reserved.
  */
@@ -9,13 +9,13 @@ import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 
 /**
- * Abstract Ant Task to get platform-specific JNI values.
+ * Abstract Ant {@link Task} to get platform-specific JNI values.
  *
  * @see Prefix
  * @see Suffix
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public abstract class JNILibPropertyTask extends Task {
     private static final String PREFIX;
@@ -49,6 +49,11 @@ public abstract class JNILibPropertyTask extends Task {
     protected String getProperty() { return property; }
     public void setProperty(String property) { this.property = property; }
 
+    /**
+     * Method to get the value to assign to the property.
+     *
+     * @return  The property value.
+     */
     protected abstract String getPropertyValue();
 
     @Override
@@ -63,7 +68,7 @@ public abstract class JNILibPropertyTask extends Task {
     }
 
     /**
-     * Ant Task to get platform-specific JNI library prefix.
+     * Ant {@link Task} to get platform-specific JNI library prefix.
      */
     public static class Prefix extends JNILibPropertyTask {
 
@@ -77,7 +82,7 @@ public abstract class JNILibPropertyTask extends Task {
     }
 
     /**
-     * Ant Task to get platform-specific JNI library suffix.
+     * Ant {@link Task} to get platform-specific JNI library suffix.
      */
     public static class Suffix extends JNILibPropertyTask {
 
@@ -92,7 +97,4 @@ public abstract class JNILibPropertyTask extends Task {
 }
 /*
  * $Log: not supported by cvs2svn $
- * Revision 1.1  2009/03/26 01:08:21  ball
- * Added <jnilib-prefix/> and <jnilib-suffix/> build targets and Ant Tasks.
- *
  */

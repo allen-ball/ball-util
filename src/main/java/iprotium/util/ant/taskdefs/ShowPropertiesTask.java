@@ -1,5 +1,5 @@
 /*
- * $Id: ShowPropertiesTask.java,v 1.7 2009-06-18 06:35:17 ball Exp $
+ * $Id: ShowPropertiesTask.java,v 1.8 2009-09-04 17:13:43 ball Exp $
  *
  * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
  */
@@ -12,10 +12,11 @@ import java.util.Collection;
 import org.apache.tools.ant.BuildException;
 
 /**
- * Ant Task to find and display static Property members.
+ * Ant {@link org.apache.tools.ant.Task} to find and display static {@link
+ * Property} members.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 public class ShowPropertiesTask extends AbstractClassFileTask {
 
@@ -74,6 +75,7 @@ public class ShowPropertiesTask extends AbstractClassFileTask {
 
             switch (x) {
             case 0:
+            default:
                 value = row.getName();
                 break;
 
@@ -83,10 +85,6 @@ public class ShowPropertiesTask extends AbstractClassFileTask {
 
             case 2:
                 value = row.getDefaultValueAsString();
-                break;
-
-            default:
-                value = null;
                 break;
             }
 

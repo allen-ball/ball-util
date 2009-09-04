@@ -1,5 +1,5 @@
 /*
- * $Id: BeanInfoForTask.java,v 1.7 2009-08-14 22:55:25 ball Exp $
+ * $Id: BeanInfoForTask.java,v 1.8 2009-09-04 17:13:43 ball Exp $
  *
  * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
  */
@@ -16,10 +16,11 @@ import java.util.Arrays;
 import org.apache.tools.ant.BuildException;
 
 /**
- * Ant Task to display BeanInfo for a specified Class.
+ * Ant {@link org.apache.tools.ant.Task} to display {@link BeanInfo} for a
+ * specified {@link Class}.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 public class BeanInfoForTask extends AbstractClasspathTask {
     private String type = null;

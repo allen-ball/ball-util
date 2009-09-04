@@ -1,5 +1,5 @@
 /*
- * $Id: IOUtil.java,v 1.4 2009-03-29 12:56:03 ball Exp $
+ * $Id: IOUtil.java,v 1.5 2009-09-04 17:13:43 ball Exp $
  *
  * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
  */
@@ -22,19 +22,19 @@ import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.WritableByteChannel;
 
 /**
- * Common I/O utilities implemented as static methods.
+ * Provides common I/O utilities implemented as static methods.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class IOUtil {
     private IOUtil() { }
 
     /**
-     * Method to copy a File to another File.
+     * Method to copy a {@link File} to another {@link File}.
      *
-     * @param   from            The File to copy from.
-     * @param   to              The File to copy to.
+     * @param   from            The {@link File} to copy from.
+     * @param   to              The {@link File} to copy to.
      *
      * @throws  IOException     If an I/O error occurs.
      */
@@ -55,10 +55,10 @@ public class IOUtil {
     }
 
     /**
-     * Method to copy af InputStream to File.
+     * Method to copy an {@link InputStream} to a {@link File}.
      *
-     * @param   in              The InputStream.
-     * @param   to              The File to copy to.
+     * @param   in              The {@link InputStream}.
+     * @param   to              The {@link File} to copy to.
      *
      * @throws  IOException     If an I/O error occurs.
      */
@@ -79,10 +79,11 @@ public class IOUtil {
     }
 
     /**
-     * Method to copy the contents of an InputStream to an OutputStream.
+     * Method to copy the contents of an {@link InputStream} to an
+     * {@link OutputStream}.
      *
-     * @param   in              The InputStream.
-     * @param   out             The OutputStream.
+     * @param   in              The {@link InputStream}.
+     * @param   out             The {@link OutputStream}.
      *
      * @throws  IOException     If an I/O error occurs.
      */
@@ -92,11 +93,11 @@ public class IOUtil {
     }
 
     /**
-     * Method to copy the contents of a ReadableByteChannel to a
-     * WritableByteChannel.
+     * Method to copy the contents of a {@link ReadableByteChannel} to a
+     * {@link WritableByteChannel}.
      *
-     * @param   in              The ReadableByteChannel.
-     * @param   out             The WritableByteChannel.
+     * @param   in              The {@link ReadableByteChannel}.
+     * @param   out             The {@link WritableByteChannel}.
      *
      * @throws  IOException     If an I/O error occurs.
      */
@@ -130,10 +131,11 @@ public class IOUtil {
     }
 
     /**
-     * Method to copy the contents of a FileChannel to another FileChannel.
+     * Method to copy the contents of a {@link FileChannel} to another
+     * {@link FileChannel}.
      *
-     * @param   in              The input FileChannel.
-     * @param   out             The output FileChannel.
+     * @param   in              The input {@link FileChannel}.
+     * @param   out             The output {@link FileChannel}.
      *
      * @throws  IOException     If an I/O error occurs.
      */
@@ -147,15 +149,16 @@ public class IOUtil {
     }
 
     /**
-     * Method to copy the contents of a BufferedReader to PrintWriter.
+     * Method to copy the contents of a {@link BufferedReader} to a
+     * {@link PrintWriter}.
+     *
+     * @param   reader          The input {@link BufferedReader}.
+     * @param   writer          The output {@link PrintWriter}.
+     *
+     * @throws  IOException     If an I/O error occurs.
      *
      * @see BufferedReader#readLine()
      * @see PrintWriter#println(String)
-     *
-     * @param   reader          The input BufferedReader.
-     * @param   writer          The output PrintWriter.
-     *
-     * @throws  IOException     If an I/O error occurs.
      */
     public static void copy(BufferedReader reader,
                             PrintWriter writer) throws IOException {
@@ -175,8 +178,8 @@ public class IOUtil {
     }
 
     /**
-     * Static method to delete a File.  Throws an IOException if the File
-     * cannot be deleted.
+     * Static method to delete a {@link File}.  Throws an
+     * {@link IOException} if the {@link File} cannot be deleted.
      *
      * @param   file            The file to be deleted.
      *
@@ -195,13 +198,14 @@ public class IOUtil {
     }
 
     /**
-     * Static method to delete a file and all its containing directories
-     * back to a specified directory if those directories are empty.  Throws
-     * an IOException if the File cannot be deleted.
+     * Static method to delete a file and all its containing ancestor
+     * directories back to a specified directory if those directories are
+     * empty.  Throws an {@link IOException} if the {@link File} cannot be
+     * deleted.
      *
-     * @param   directory       The containing directory (not normally
-     *                          deleted).
-     * @param   file            The file to be deleted.
+     * @param   directory       The containing directory ({@link File}); not
+     *                          normally deleted.
+     * @param   file            The {@link File} to be deleted.
      *
      * @throws  IOException     If the file cannot be deleted.
      * @throws  NullPointerException
@@ -221,10 +225,10 @@ public class IOUtil {
     }
 
     /**
-     * Static method to create directory (and containing parent directories)
-     * specified by the argument.
+     * Static method to create a directory (and containing ancestor
+     * directories) specified by the argument.
      *
-     * @param   directory       The directory to be created.
+     * @param   directory       The directory ({@link File}) to be created.
      *
      * @throws  IOException     If the directory cannot be created for any
      *                          reason.
@@ -248,10 +252,10 @@ public class IOUtil {
     }
 
     /**
-     * Static method to "touch" a File.  Creates the file and any containing
-     * directories if they do not exist.
+     * Static method to "touch" a {@link File}.  Creates the file and any
+     * containing ancestor directories if they do not exist.
      *
-     * @param   file            The file to be "touched."
+     * @param   file            The {@link File} to be "touched."
      *
      * @throws  IOException     If the file cannot be created.
      * @throws  NullPointerException
@@ -262,10 +266,10 @@ public class IOUtil {
     }
 
     /**
-     * Static method to "touch" a File.  Creates the file and any containing
-     * directories if they do not exist.
+     * Static method to "touch" a {@link File}.  Creates the file and any
+     * containing ancestor directories if they do not exist.
      *
-     * @param   file            The file to be "touched."
+     * @param   file            The {@link File} to be "touched."
      * @param   dtcm            The DTCM for the file.
      *
      * @throws  IOException     If the file cannot be created.
@@ -279,9 +283,9 @@ public class IOUtil {
     }
 
     /**
-     * Method to quietly close a Closeable.
+     * Method to quietly close a {@link Closeable}.
      *
-     * @param   closeable       The Closeable to be closed.
+     * @param   closeable       The {@link Closeable} to be closed.
      */
     public static void close(Closeable closeable) {
         try {

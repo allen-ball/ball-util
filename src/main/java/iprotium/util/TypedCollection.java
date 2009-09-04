@@ -1,5 +1,5 @@
 /*
- * $Id: TypedCollection.java,v 1.1 2009-06-05 06:31:40 ball Exp $
+ * $Id: TypedCollection.java,v 1.2 2009-09-04 17:13:43 ball Exp $
  *
  * Copyright 2009 Allen D. Ball.  All rights reserved.
  */
@@ -10,11 +10,14 @@ import java.util.Collection;
 import java.util.Iterator;
 
 /**
- * Collection implementation that wraps and provides a "generic typed" view
- * to an underlying Collection.
+ * {@link Collection} implementation that wraps and provides a "generic
+ * typed" view to an underlying {@link Collection}.
+ *
+ * @param       <E>             The type of {@link Object} this
+ *                              {@link Collection} contains.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class TypedCollection<E> extends AbstractCollection<E> {
     private final Class<? extends E> type;
@@ -23,9 +26,9 @@ public class TypedCollection<E> extends AbstractCollection<E> {
     /**
      * Sole constructor.
      *
-     * @param   type            The underlying type of the Collection
-     *                          elements.
-     * @param   collection      The Collection to wrap.
+     * @param   type            The underlying type of the
+     *                          {@link Collection} elements.
+     * @param   collection      The {@link Collection} to wrap.
      */
     public TypedCollection(Class<? extends E> type, Collection<?> collection) {
         super();

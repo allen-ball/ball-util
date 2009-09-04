@@ -1,5 +1,5 @@
 /*
- * $Id: AbstractClasspathTask.java,v 1.9 2009-08-14 22:47:08 ball Exp $
+ * $Id: AbstractClasspathTask.java,v 1.10 2009-09-04 17:13:43 ball Exp $
  *
  * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
  */
@@ -15,10 +15,11 @@ import org.apache.tools.ant.types.Reference;
 import org.apache.tools.ant.util.ClasspathUtils;
 
 /**
- * Abstract base class for Ant Task implementations that require a classpath.
+ * Abstract base class for Ant {@link Task} implementations that require a
+ * classpath.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 public abstract class AbstractClasspathTask extends Task {
     private boolean initialize = false;

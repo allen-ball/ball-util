@@ -1,5 +1,5 @@
 /*
- * $Id: IsAssignableFromTask.java,v 1.5 2009-08-14 22:55:25 ball Exp $
+ * $Id: IsAssignableFromTask.java,v 1.6 2009-09-04 17:13:43 ball Exp $
  *
  * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
  */
@@ -11,10 +11,11 @@ import org.apache.tools.ant.BuildException;
 import static iprotium.util.ClassOrder.INHERITANCE;
 
 /**
- * Ant Task to display superclasses of a specified Class.
+ * Ant {@link org.apache.tools.ant.Task} to display superclasses of a
+ * specified {@link Class}.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public class IsAssignableFromTask extends AbstractClasspathTask {
     private String type = null;

@@ -1,17 +1,18 @@
 /*
- * $Id: TimeUnitEnum.java,v 1.3 2009-03-26 01:01:48 ball Exp $
+ * $Id: TimeUnitEnum.java,v 1.4 2009-09-04 17:13:43 ball Exp $
  *
  * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
 /**
- * Time unit Enum type.  Inspired by java.util.concurrent.TimeUnit.
+ * Time unit {@link Enum} type.  Inspired by
+ * {@link java.util.concurrent.TimeUnit}.
  *
  * @see java.util.concurrent.TimeUnit
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public enum TimeUnitEnum {
     MILLISECOND(1), MILLISECONDS(MILLISECOND),
@@ -40,22 +41,22 @@ public enum TimeUnitEnum {
     private TimeUnitEnum(TimeUnitEnum unit) { this(1, unit); }
 
     /**
-     * Method to convert the specified duration in milliseconds to
-     * TimeUnitEnum.
+     * Method to convert the specified duration from milliseconds to
+     * {@link TimeUnitEnum}.
      *
-     * @param   duration        The duration in TimeUnitEnum.
+     * @param   duration        The duration in milliseconds.
      *
-     * @return  The duration in milliseconds.
+     * @return  The duration in {@link TimeUnitEnum}.
      */
     public long fromMilliseconds(Number duration) {
         return duration.longValue() / milliseconds;
     }
 
     /**
-     * Method to convert the specified duration in TimeUnitEnum to
+     * Method to convert the specified duration from {@link TimeUnitEnum} to
      * milliseconds.
      *
-     * @param   duration        The duration in TimeUnitEnum.
+     * @param   duration        The duration in {@link TimeUnitEnum}.
      *
      * @return  The duration in milliseconds.
      */
@@ -64,7 +65,7 @@ public enum TimeUnitEnum {
     }
 
     /**
-     * Method to convert duration of one in TimeUnitEnum to milliseconds.
+     * Method to convert duration of one {@link TimeUnitEnum} to milliseconds.
      *
      * @return  The duration in milliseconds.
      */

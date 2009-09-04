@@ -1,5 +1,5 @@
 /*
- * $Id: JNIResourceBundle.java,v 1.1 2009-03-24 05:41:51 ball Exp $
+ * $Id: JNIResourceBundle.java,v 1.2 2009-09-04 17:13:43 ball Exp $
  *
  * Copyright 2009 Allen D. Ball.  All rights reserved.
  */
@@ -14,7 +14,7 @@ import java.util.MissingResourceException;
 import java.util.PropertyResourceBundle;
 
 /**
- * ResourceBundle implementation for JNI Ant tasks.
+ * {@link java.util.ResourceBundle} implementation for JNI Ant tasks.
  *
  * @see AbstractJNIExecuteOnTask
  * @see JNICCTask
@@ -22,7 +22,7 @@ import java.util.PropertyResourceBundle;
  * @see JNILDTask
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class JNIResourceBundle extends PropertyResourceBundle {
 

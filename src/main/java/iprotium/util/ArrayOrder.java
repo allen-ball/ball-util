@@ -1,15 +1,15 @@
 /*
- * $Id: ArrayOrder.java,v 1.2 2009-01-27 22:00:19 ball Exp $
+ * $Id: ArrayOrder.java,v 1.3 2009-09-04 17:13:43 ball Exp $
  *
  * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
 /**
- * Order implementation to order arrays.
+ * {@link Order} implementation to order arrays.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class ArrayOrder<T> extends Order<T[]> {
     private static final long serialVersionUID = 4969844544789108256L;
@@ -19,7 +19,8 @@ public class ArrayOrder<T> extends Order<T[]> {
     /**
      * Sole constructor.
      *
-     * @param   order           The Order to use to compare array elements.
+     * @param   order           The {@link Order} to use to compare array
+     *                          elements.
      *
      * @throws  NullPointerException
      *                          If the order parameter is null.
@@ -47,7 +48,4 @@ public class ArrayOrder<T> extends Order<T[]> {
 }
 /*
  * $Log: not supported by cvs2svn $
- * Revision 1.1  2008/10/26 23:55:24  ball
- * Initial writing.
- *
  */

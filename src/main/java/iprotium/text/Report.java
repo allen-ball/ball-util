@@ -1,5 +1,5 @@
 /*
- * $Id: Report.java,v 1.1 2009-03-30 06:28:12 ball Exp $
+ * $Id: Report.java,v 1.2 2009-09-04 17:13:43 ball Exp $
  *
  * Copyright 2009 Allen D. Ball.  All rights reserved.
  */
@@ -17,7 +17,7 @@ import static java.lang.Character.isWhitespace;
  * Text Report base class.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class Report extends ReaderWriterDataSource implements Flushable {
     private final PrintWriter writer;
@@ -106,10 +106,10 @@ public class Report extends ReaderWriterDataSource implements Flushable {
 
     /**
      * Protected method for subclass implementations to print a
-     * StringBuilder.  The argument StringBuilder is "right trimmed" before
-     * printing.
+     * {@link StringBuilder}.  The argument {@link StringBuilder} is "right
+     * trimmed" before printing.
      *
-     * @param   buffer          The StringBuilder to print.
+     * @param   buffer          The {@link StringBuilder} to print.
      *
      * @see #rtrim(StringBuilder)
      */
@@ -118,11 +118,11 @@ public class Report extends ReaderWriterDataSource implements Flushable {
     }
 
     /**
-     * Method to right trim a StringBuilder.
+     * Method to right trim a {@link StringBuilder}.
      *
-     * @param   buffer          The StringBuilder to trim.
+     * @param   buffer          The {@link StringBuilder} to trim.
      *
-     * @return  The argument StringBuilder.
+     * @return  The argument {@link StringBuilder}.
      */
     protected StringBuilder rtrim(StringBuilder buffer) {
         if (buffer != null) {

@@ -1,5 +1,5 @@
 /*
- * $Id: Property.java,v 1.5 2009-03-28 13:31:16 ball Exp $
+ * $Id: Property.java,v 1.6 2009-09-04 17:13:43 ball Exp $
  *
  * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
  */
@@ -17,8 +17,11 @@ import java.util.Set;
 /**
  * Abstract Property base class.
  *
+ * @param       <T>             The underlying type of this
+ *                              {@link Property}.
+ *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public abstract class Property<T> implements Comparable<Property<?>> {
     private final String name;
@@ -29,12 +32,12 @@ public abstract class Property<T> implements Comparable<Property<?>> {
      * Sole constructor.
      *
      * @param   name            The name of the property.
-     * @param   required        true if the Property is required; false
-     *                          otherwise.
+     * @param   required        <code>true</code> if the {@link Property} is
+     *                          required; <code>false</code> otherwise.
      * @param   value           The default value of the Property.
      *
      * @throws  NullPointerException
-     *                          If the name parameter is null.
+     *                          If the name parameter is <code>null</code>.
      */
     protected Property(String name, boolean required, T value) {
         if (name != null) {
@@ -48,53 +51,59 @@ public abstract class Property<T> implements Comparable<Property<?>> {
     }
 
     /**
-     * Method to get the name of the Property.
+     * Method to get the name of this {@link Property}.
      *
-     * @return  The name of the Property.
+     * @return  The name of the {@link Property}.
      */
     public String getName() { return name; }
 
     /**
-     * Method to determine if the Property is required (should be set).
+     * Method to determine if the {@link Property} is required (should be
+     * set).
      *
-     * @return  true if the Property is required; false otherwise.
+     * @return  <code>true</code> if the {@link Property} is required;
+     *          <code>false</code> otherwise.
      */
     public boolean isRequired() { return required; }
 
     /**
-     * Method to get the default value for the Property.
+     * Method to get the default value of this {@link Property}.
      *
-     * @return  The default value of the Property.
+     * @return  The default value of this {@link Property}.
      */
     public T getDefaultValue() { return value; }
 
     /**
-     * Method to get the default value for the property as a String.
+     * Method to get the default value for this {@link Property} as a
+     * {@link String}.
      *
-     * @return  The default value of the property.
+     * @return  The default value of this {@link Property} as a
+     *          {@link String}.
      */
     public String getDefaultValueAsString() {
         return toString(getDefaultValue());
     }
 
     /**
-     * Method to determine if the Property is set.
+     * Method to determine if this {@link Property} is set.
      *
-     * @param   properties      The Properties to be searched.
+     * @param   properties      The {@link Properties} to be searched.
      *
-     * @return  true if the Property is set; false otherwise.
+     * @return  <code>true</code> if this {@link Property} is set;
+     *          <code>false</code> otherwise.
      */
     public boolean isSet(Properties properties) {
         return properties.getProperty(getName()) != null;
     }
 
     /**
-     * Method to get the Property string value.
+     * Method to get the {@link Property} {@link String} value.
      *
-     * @param   properties      The Properties to be searched for the
-     *                          value.
+     * @param   properties      The {@link Properties} to be searched for
+     *                          the value.
      *
-     * @return  The value of the Property (may be null).
+     * @return  The value of the {@link Property} (may be
+     *          <code>null</code>).
      *
      * @throws  MissingResourceException
      *                          If the property is required and the property
@@ -105,18 +114,19 @@ public abstract class Property<T> implements Comparable<Property<?>> {
     }
 
     /**
-     * Method to get the Property string value.
+     * Method to get the {@link Property} {@link String} value.
      *
-     * @param   properties      The Properties to be searched for the
-     *                          value.
-     * @param   required        true if the Property is required; false
-     *                          otherwise.
+     * @param   properties      The {@link Properties} to be searched for
+     *                          the value.
+     * @param   required        <code>true</code> if the {@link Property} is
+     *                          required; <code>false</code> otherwise.
      *
-     * @return  The value of the Property (may be null).
+     * @return  The value of the {@link Property} (may be
+     *          <code>null</code>).
      *
      * @throws  MissingResourceException
-     *                          If the Property is required and the Property
-     *                          is not set.
+     *                          If the {@link Property} is required and the
+     *                          {@link Property} is not set.
      */
     public String getProperty(Properties properties, boolean required) {
         T value = getValue(properties, required);
@@ -125,11 +135,11 @@ public abstract class Property<T> implements Comparable<Property<?>> {
     }
 
     /**
-     * Method to set the Property string value.
+     * Method to set the {@link Property} {@link String} value.
      *
-     * @param   properties      The Properties where the Property is to be
-     *                          set.
-     * @param   value           The value to set the Property to.
+     * @param   properties      The {@link Properties} where the
+     *                          {@link Property} is to be set.
+     * @param   value           The value to set the {@link Property} to.
      *
      */
     public void setProperty(Properties properties, String value) {
@@ -137,52 +147,55 @@ public abstract class Property<T> implements Comparable<Property<?>> {
     }
 
     /**
-     * Method to get the Property value.
+     * Method to get the {@link Property} value.
      *
-     * @param   properties      The Properties to be searched for the
-     *                          value.
+     * @param   properties      The {@link Properties} to be searched for
+     *                          the value.
      *
-     * @return  The value of the Property (may be null).
+     * @return  The value of the {@link Property} (may be
+     *          <code>null</code>).
      *
      * @throws  MissingResourceException
-     *                          If the Property is required and the Property
-     *                          is not set.
+     *                          If the {@link Property} is required and the
+     *                          {@link Property} is not set.
      */
     public T getValue(Properties properties) {
         return getValue(properties, isRequired());
     }
 
     /**
-     * Method to get the Property value.
+     * Method to get the {@link Property} value.
      *
-     * @param   properties      The Properties to be searched for the
-     *                          value.
-     * @param   required        true if the Property is required; false
-     *                          otherwise.
+     * @param   properties      The {@link Properties} to be searched for
+     *                          the value.
+     * @param   required        <code>true</code> if the {@link Property} is
+     *                          required; <code>false</code> otherwise.
      *
-     * @return  The value of the Property (may be null).
+     * @return  The value of the {@link Property} (may be
+     *          <code>null</code>).
      *
      * @throws  MissingResourceException
-     *                          If the Property is required and the Property
-     *                          is not set.
+     *                          If the {@link Property} is required and the
+     *                          {@link Property} is not set.
      */
     public T getValue(Properties properties, boolean required) {
         return getValue(properties, required, getDefaultValue());
     }
 
     /**
-     * Method to get the Property value.
+     * Method to get the {@link Property} value.
      *
-     * @param   properties      The Properties to be searched for the
-     *                          value.
-     * @param   value           The value returned if the Property is not
-     *                          set.
+     * @param   properties      The {@link Properties} to be searched for
+     *                          the value.
+     * @param   value           The value returned if the {@link Property}
+     *                          is not set.
      *
-     * @return  The value of the Property (may be null).
+     * @return  The value of the {@link Property} (may be
+     *          <code>null</code>).
      *
      * @throws  MissingResourceException
-     *                          If the property is required and the property
-     *                          is not set.
+     *                          If the {@link Property} is required and the
+     *                          {@link Property} is not set.
      */
     public T getValue(Properties properties, T value) {
         return getValue(properties, isRequired(), value);
@@ -199,33 +212,36 @@ public abstract class Property<T> implements Comparable<Property<?>> {
     }
 
     /**
-     * Method to set the Property value.
+     * Method to set the {@link Property} value.
      *
-     * @param   properties      The Properties to be searched for the
-     *                          value.
-     * @param   value           The new value of the Property.
+     * @param   properties      The {@link Properties} to be searched for
+     *                          the value.
+     * @param   value           The new value of the {@link Property}.
      */
     public void setValue(Properties properties, T value) {
         setProperty(properties, toString(value));
     }
 
     /**
-     * Abstract method to convert a string representation to the Property's
-     * underlying object.  This method must be overridden by subclasses.
+     * Method to convert a {@link String} representation to the
+     * {@link Property}'s underlying {@link Object}.
      *
-     * @param   string          The String representation of the Object.
+     * @param   string          The {@link String} representation of the
+     *                          {@link Object}.
      *
-     * @return  The Object cconverted from its String representation.
+     * @return  The {@link Object} cconverted from its {@link String}
+     *          representation.
      */
     protected abstract T fromString(String string);
 
     /**
-     * Method to convert the Property's underlying object to its String
-     * representation.  This method should be overridden by subclasses.
+     * Method to convert the {@link Property}'s underlying {@link Object} to
+     * its {@link String} representation.  This method should be overridden
+     * by subclasses.
      *
-     * @param   value           The Object to be converted.
+     * @param   value           The {@link Object} to be converted.
      *
-     * @return  The String representation.
+     * @return  The {@link String} representation.
      */
     protected String toString(T value) {
         return (value != null) ? value.toString() : null;
@@ -249,13 +265,13 @@ public abstract class Property<T> implements Comparable<Property<?>> {
     public int hashCode() { return getName().hashCode(); }
 
     /**
-     * Static method to return all static Property fields defined within a
-     * Class.
+     * Static method to return all static public {@link Property} fields
+     * defined within a {@link Class}.
      *
-     * @param   types           The Class instances to analyze.
+     * @param   types           The {@link Class} instances to analyze.
      *
-     * @return  The Set of Property objects defined in Property and
-     *          Iterable<Property> fields.
+     * @return  The {@link Set} of {@link Property} objects defined in
+     *          {@link Property} and {@link Iterable} fields.
      */
     public static Set<Property> getStaticPropertyFields(Class<?>... types) {
         LinkedHashSet<Property> set = new LinkedHashSet<Property>();
@@ -295,12 +311,13 @@ public abstract class Property<T> implements Comparable<Property<?>> {
     /**
      * Convenience method to construct a qualified name based on a prefix.
      *
-     * @param   object          The Object (Class, Package, or CharSequence)
-     *                          that represents the prefix of the Property
-     *                          name.
-     * @param   name            The name of the Property.
+     * @param   object          The {@link Object} ({@link Class},
+     *                          {@link Package}, or {@link CharSequence})
+     *                          that represents the prefix of the
+     *                          {@link Property} name.
+     * @param   name            The name of the {@link Property}.
      *
-     * @return  The qualified name of the Property.
+     * @return  The qualified name of the {@link Property}.
      */
     protected static String getName(Object object, String name) {
         return getPrefix(object) + name;
@@ -330,8 +347,4 @@ public abstract class Property<T> implements Comparable<Property<?>> {
 }
 /*
  * $Log: not supported by cvs2svn $
- * Revision 1.2  2008/11/01 19:50:59  ball
- * Added getDefaultValueAsString() method.
- * Added static getStaticPropertyFields(Class<?>... types) method.
- *
  */

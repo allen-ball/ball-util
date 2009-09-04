@@ -1,5 +1,5 @@
 /*
- * $Id: NamingEnumerationImpl.java,v 1.2 2009-08-19 04:20:38 ball Exp $
+ * $Id: NamingEnumerationImpl.java,v 1.3 2009-09-04 17:13:43 ball Exp $
  *
  * Copyright 2009 Allen D. Ball.  All rights reserved.
  */
@@ -11,12 +11,13 @@ import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
 
 /**
- * NamingEnumeration implementation.
+ * {@link NamingEnumeration} implementation.
  *
- * @param       <T>     Type of element stored in this NamingEnumeration.
+ * @param       <T>     Type of element stored in this
+ *                      {@link NamingEnumeration}.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class NamingEnumerationImpl<T extends NameClassPair>
              extends ArrayList<T> implements NamingEnumeration<T> {
@@ -27,11 +28,13 @@ public class NamingEnumerationImpl<T extends NameClassPair>
     /**
      * Sole constructor.
      *
-     * @param   exception       If non-null, the NamingException instance
-     *                          thrown by hasMore() when the enumeration is
+     * @param   exception       If non-<code>null</code>, the
+     *                          {@link NamingException} instance thrown by
+     *                          {@link #hasMore()} when the enumeration is
      *                          exhausted.
      *
      * @see #hasMore()
+     * @see #setNamingException(NamingException)
      */
     public NamingEnumerationImpl(NamingException exception) {
         super();
@@ -40,16 +43,18 @@ public class NamingEnumerationImpl<T extends NameClassPair>
     }
 
     /**
-     * NamingException getter method.
+     * {@link NamingException} getter method.  Thrown by {@link #hasMore()}
+     * (if non-<code>null</code>) when the enumeration is exhausted.
      *
-     * @return  The NamingException instance.
+     * @return  The {@link NamingException} instance.
      */
     protected NamingException getNamingException() { return exception; }
 
     /**
-     * NamingException setter method.
+     * {@link NamingException} setter method.  Thrown by {@link #hasMore()}
+     * (if non-<code>null</code>) when the enumeration is exhausted.
      *
-     * @param   exception       The NamingException instance.
+     * @param   exception       The {@link NamingException} instance.
      */
     protected void setNamingException(NamingException exception) {
         this.exception = exception;

@@ -1,5 +1,5 @@
 /*
- * $Id: MapTable.java,v 1.1 2009-03-30 06:35:16 ball Exp $
+ * $Id: MapTable.java,v 1.2 2009-09-04 17:13:43 ball Exp $
  *
  * Copyright 2009 Allen D. Ball.  All rights reserved.
  */
@@ -8,26 +8,37 @@ package iprotium.text;
 import java.util.Map;
 
 /**
- * Map Table implementation.
+ * {@link Map} {@link Table} implementation.
+ *
+ * @param       <K>     The type of the underlying {@link Map} key.
+ * @param       <V>     The type of the underlying {@link Map} value.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class MapTable<K,V> extends Table {
 
     /**
-     * Sole constructor.
-     *
-     * @param   map             The underlying Map.
-     * @param   key             The Object describing the key ColumnModel.
-     * @param   value           The Object describing the value
-     *                          ColumnModel.
+     * @param   model           The {@link MapTableModel} describing the
+     *                          {@link Map}.
+     * @param   tabs            The preferred tab stops.
+     */
+    public MapTable(MapTableModel<K,V> model, int... tabs) {
+        super(model, tabs);
+    }
+
+    /**
+     * @param   map             The underlying {@link Map}.
+     * @param   key             The {@link Object} describing the key
+     *                          {@link ColumnModel}.
+     * @param   value           The {@link Object} describing the value
+     *                          {@link ColumnModel}.
      * @param   tabs            The preferred tab stops.
      *
      * @see MapTableModel
      */
     public MapTable(Map<K,V> map, Object key, Object value, int... tabs) {
-        super(new MapTableModel<K,V>(map, key, value), tabs);
+        this(new MapTableModel<K,V>(map, key, value), tabs);
     }
 
     @Override

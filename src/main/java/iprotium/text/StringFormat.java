@@ -1,5 +1,5 @@
 /*
- * $Id: StringFormat.java,v 1.1 2009-03-21 21:47:06 ball Exp $
+ * $Id: StringFormat.java,v 1.2 2009-09-04 17:13:43 ball Exp $
  *
  * Copyright 2009 Allen D. Ball.  All rights reserved.
  */
@@ -14,7 +14,7 @@ import java.text.ParsePosition;
  * StringFormat base class.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public abstract class StringFormat extends Format {
 
@@ -32,6 +32,21 @@ public abstract class StringFormat extends Format {
         return format(object.toString(), out, pos);
     }
 
+    /**
+     * Parses text from the beginning of the given {@link String} to produce
+     * a {@link String}.  The method may not use the entire text of the
+     * given string.
+     *
+     * @see #parse(String,ParsePosition)
+     *
+     * @param   source          A {@link String} whose beginning should be
+     *                          parsed.
+     *
+     * @return  A {@link String} parsed from the input {@link String}.
+     *
+     * @throws  ParseException  If the beginning of the {@link String}
+     *                          cannot be parsed.
+     */
     public String parse(String source) throws ParseException {
         ParsePosition pos = new ParsePosition(0);
         String result = parse(source, pos);
@@ -44,6 +59,16 @@ public abstract class StringFormat extends Format {
         return result;
     }
 
+    /**
+     * Parses a {@link String} starting at the argument {@link ParsePosition}
+     * to produce a {@link String}.
+     *
+     * @param   source          A {@link String} to be parsed.
+     * @param   pos             The starting {@link ParsePosition}.
+     *
+     * @return  A {@link String} parsed from the input {@link String} or
+     *          <code>null</code> if input could not be parsed.
+     */
     public String parse(String source, ParsePosition pos) {
         String string = source.substring(pos.getIndex());
 

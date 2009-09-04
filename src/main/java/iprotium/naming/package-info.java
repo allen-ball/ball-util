@@ -1,5 +1,5 @@
 /**
- * Provides naming service implementation and auxiliary classes.
+ * Provides JNDI naming service implementation and auxiliary classes.
  *
  * @see javax.naming
  *

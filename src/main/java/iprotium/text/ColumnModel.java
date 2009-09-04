@@ -1,5 +1,5 @@
 /*
- * $Id: ColumnModel.java,v 1.2 2009-06-21 00:12:57 ball Exp $
+ * $Id: ColumnModel.java,v 1.3 2009-09-04 17:13:43 ball Exp $
  *
  * Copyright 2009 Allen D. Ball.  All rights reserved.
  */
@@ -13,12 +13,12 @@ import static iprotium.text.FillEnum.LEFT;
 import static iprotium.text.FillEnum.RIGHT;
 
 /**
- * Table column model implementation.
+ * {@link Table} column model implementation.
  *
  * @see TableModel
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class ColumnModel {
     private final String name;
@@ -34,32 +34,33 @@ public class ColumnModel {
     public ColumnModel(String name) { this(name, RIGHT); }
 
     /**
-     * Constructor to create a column and specify its fill-type.
+     * Constructor to create a column and specify its {@link FillEnum}-type.
      *
      * @param   name            The name of the column.
-     * @param   fill            The FillEnum type to apply to column values.
+     * @param   fill            The {@link FillEnum}-type to apply to column
+     *                          values.
      */
     public ColumnModel(String name, FillEnum fill) {
         this(name, fill, null, null);
     }
 
     /**
-     * Constructor to create a right-filled "Date" column.
+     * Constructor to create a right-filled {@link Date} column.
      *
      * @param   name            The name of the column.
-     * @param   date            The DateFormat to apply to column Date
-     *                          values.
+     * @param   date            The {@link DateFormat} to apply to column
+     *                          {@link Date} values.
      */
     public ColumnModel(String name, DateFormat date) {
         this(name, RIGHT, date, null);
     }
 
     /**
-     * Constructor to create a left-filled "Number" column.
+     * Constructor to create a left-filled {@link Number} column.
      *
      * @param   name            The name of the column.
-     * @param   number          The NumberFormat to apply to column Number
-     *                          values.
+     * @param   number          The {@link NumberFormat} to apply to column
+     *                          {@link Number} values.
      */
     public ColumnModel(String name, NumberFormat number) {
         this(name, LEFT, null, number);
@@ -69,11 +70,12 @@ public class ColumnModel {
      * Constructor to fully specify column formatting characteristics.
      *
      * @param   name            The name of the column.
-     * @param   fill            The FillEnum type to apply to column values.
-     * @param   date            The DateFormat to apply to column Date
+     * @param   fill            The {@link FillEnum} type to apply to column
      *                          values.
-     * @param   number          The NumberFormat to apply to column Number
-     *                          values.
+     * @param   date            The {@link DateFormat} to apply to column
+     *                          {@link Date} values.
+     * @param   number          The {@link NumberFormat} to apply to column
+     *                          {@link Number} values.
      */
     public ColumnModel(String name, FillEnum fill,
                        DateFormat date, NumberFormat number) {
@@ -83,18 +85,49 @@ public class ColumnModel {
         this.number = number;
     }
 
+    /**
+     * @return  The column name.
+     */
     public String getName() { return name; }
 
+    /**
+     * @return  The {@link FillEnum} type to apply to column values.
+     */
     public FillEnum getFillEnum() { return fill; }
 
+    /**
+     * @return  The {@link DateFormat} to apply to column {@link Date}
+     *          values.
+     */
     public DateFormat getDateFormat() { return date; }
 
+    /**
+     * @return  The {@link NumberFormat} to apply to column {@link Number}
+     *          values.
+     */
     public NumberFormat getNumberFormat() { return number; }
 
+    /**
+     * Method to fill a {@link String} with spaces.
+     *
+     * @param   width           The fill-to width.
+     * @param   string          The {@link String} to fill.
+     *
+     * @return  The filled {@link String}.
+     *
+     * @see #getFillEnum()
+     */
     public String fill(int width, String string) {
         return getFillEnum().fill(width, string);
     }
 
+    /**
+     * Method to format a column value to a {@link String}.
+     *
+     * @param   object          The column value ({@link Object}).
+     *
+     * @return  The formatted {@link String}.
+     */
     public String format(Object object) {
         String string = null;
 
@@ -117,7 +150,9 @@ public class ColumnModel {
         }
 
         if (string == null) {
-            string = (object != null) ? object.toString() : null;
+            if (object != null) {
+                string = object.toString();
+            }
         }
 
         return string;

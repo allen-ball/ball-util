@@ -1,5 +1,5 @@
 /*
- * $Id: FillEnum.java,v 1.3 2009-03-30 06:25:12 ball Exp $
+ * $Id: FillEnum.java,v 1.4 2009-09-04 17:13:43 ball Exp $
  *
  * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
  */
@@ -8,12 +8,12 @@ package iprotium.text;
 import static iprotium.text.FillStringFormat.SPACE;
 
 /**
- * Text (column) fill Enum type.
+ * Text (column) fill {@link Enum} type.
  *
  * @see FillStringFormat#fill(int,char,String)
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public enum FillEnum {
     NONE(new NoFillStringFormat()),

@@ -1,5 +1,5 @@
 /*
- * $Id: SimpleTableModel.java,v 1.2 2009-03-31 02:49:20 ball Exp $
+ * $Id: SimpleTableModel.java,v 1.3 2009-09-04 17:13:43 ball Exp $
  *
  * Copyright 2009 Allen D. Ball.  All rights reserved.
  */
@@ -9,10 +9,10 @@ import java.util.Arrays;
 import java.util.Collection;
 
 /**
- * Simple TableModel implementation.
+ * Simple {@link TableModel} implementation.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class SimpleTableModel extends ArrayListTableModel<Object[]> {
     private static final long serialVersionUID = 5405482298661568L;
@@ -20,7 +20,7 @@ public class SimpleTableModel extends ArrayListTableModel<Object[]> {
     /**
      * @see ArrayListTableModel#ArrayListTableModel(Collection,Object...)
      *
-     * @param   rows            The TableModel's rows.
+     * @param   rows            The {@link TableModel}'s rows.
      */
     public SimpleTableModel(Object[][] rows, Object... columns) {
         super((rows != null) ? Arrays.asList(rows) : null, columns);
@@ -50,8 +50,8 @@ public class SimpleTableModel extends ArrayListTableModel<Object[]> {
     /**
      * Convenience method to add a new row.
      *
-     * @param   row             The array of Objects that make up the row to
-     *                          be added.
+     * @param   row             The array of {@link Object}s that make up
+     *                          the row to be added.
      */
     public void row(Object... row) {
         list().add(row);

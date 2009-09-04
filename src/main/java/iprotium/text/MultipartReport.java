@@ -1,5 +1,5 @@
 /*
- * $Id: MultipartReport.java,v 1.1 2009-03-30 06:28:12 ball Exp $
+ * $Id: MultipartReport.java,v 1.2 2009-09-04 17:13:43 ball Exp $
  *
  * Copyright 2009 Allen D. Ball.  All rights reserved.
  */
@@ -10,10 +10,10 @@ import java.util.LinkedHashSet;
 import javax.activation.DataSource;
 
 /**
- * Multipart Report implementation.
+ * Multipart {@link Report} implementation.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class MultipartReport extends Report {
     private final LinkedHashSet<DataSource> set =
@@ -25,26 +25,28 @@ public class MultipartReport extends Report {
     public MultipartReport() { super(); }
 
     /**
-     * Method to attach a DataSource to this report.
+     * Method to attach a {@link DataSource} to this report.
      *
-     * @param   attachment      The DataSource to attach.
+     * @param   attachment      The {@link DataSource} to attach.
      */
     public void attach(DataSource attachment) { set.add(attachment); }
 
     /**
-     * Method to attach a Collection of DataSource objects to this report.
+     * Method to attach a {@link Collection} of {@link DataSource} objects
+     * to this report.
      *
-     * @param   collection      The Collection of DataSource objects to
-     *                          attach.
+     * @param   collection      The {@link Collection} of {@link DataSource}
+     *                          objects to attach.
      */
     public void attachAll(Collection<DataSource> collection) {
         set.addAll(collection);
     }
 
     /**
-     * Method to get the Set of attachment (DataSource) objects.
+     * Method to get the {@link java.util.Set} of attachment
+     * ({@link DataSource}) objects.
      *
-     * @return  The LinkedHashSet of attachments.
+     * @return  The {@link LinkedHashSet} of attachments.
      */
     public LinkedHashSet<DataSource> getAttachmentSet() { return set; }
 }

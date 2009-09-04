@@ -1,5 +1,5 @@
 /*
- * $Id: JNILDTask.java,v 1.5 2009-03-27 13:49:37 ball Exp $
+ * $Id: JNILDTask.java,v 1.6 2009-09-04 17:13:43 ball Exp $
  *
  * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
  */
@@ -9,10 +9,10 @@ import java.io.File;
 import org.apache.tools.ant.BuildException;
 
 /**
- * Ant Task to link JNI shared libraries.
+ * Ant {@link org.apache.tools.ant.Task} to link JNI shared libraries.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public class JNILDTask extends AbstractJNIExecuteOnTask {
     private String libname = null;
