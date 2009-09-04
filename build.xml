@@ -7,7 +7,7 @@
     -----------------
     Java Utilities
 
-    $Id: build.xml,v 1.23 2009-08-19 04:16:11 ball Exp $
+    $Id: build.xml,v 1.24 2009-09-04 16:51:27 ball Exp $
   </description>
 
   <property name="build.properties.file" location="build.properties"/>
@@ -25,11 +25,8 @@
   <property name="build.object.dir"     location="${build.dir}/object"/>
   <property name="build.javadoc.dir"    location="${build.dir}/javadoc"/>
 
-  <property name="j2se.docs.url"
-            value="http://java.sun.com/j2se/${ant.java.version}/docs"/>
-  <property name="j2se.api.javadoc.url" value="${j2se.docs.url}/api"/>
-  <property name="javax.activation.javadoc.url"
-            value="http://java.sun.com/javase/technologies/desktop/javabeans/glasgow/javadocs"/>
+  <property name="javase.api.javadoc.url"
+            value="http://java.sun.com/javase/6/docs/api"/>
   <property name="ant.javadoc.url"
             value="file://${ant.home}/docs/javadocs"/>
 
@@ -188,8 +185,7 @@
       <bottom>
         <![CDATA[Copyright &#169; 2009 Allen D. Ball.  All rights reserved.]]>
       </bottom>
-      <link href="${j2se.api.javadoc.url}"/>
-      <link href="${javax.activation.javadoc.url}"/>
+      <link href="${javase.api.javadoc.url}"/>
       <link href="${ant.javadoc.url}"/>
     </javadoc>
   </target>
@@ -324,14 +320,6 @@
     </lint>
   </target>
 
-  <target name="list-resources"
-          description="--> Invokes &lt;list-resources/&gt; task."
-          depends="classes">
-    <taskdef classpathref="build.classpath"
-             resource="iprotium/util/ant/defaults.properties"/>
-    <list-resources classpathref="build.classpath" name="${name}"/>
-  </target>
-
   <target name="members-of"
           description="--> Invokes &lt;members-of/&gt; task."
           depends="classes">
@@ -346,6 +334,14 @@
     <taskdef classpathref="build.classpath"
              resource="iprotium/util/ant/defaults.properties"/>
     <readlink basedir="${build.dir}"/>
+  </target>
+
+  <target name="resource-list"
+          description="--> Invokes &lt;resource-list/&gt; task."
+          depends="classes">
+    <taskdef classpathref="build.classpath"
+             resource="iprotium/util/ant/defaults.properties"/>
+    <resource-list classpathref="build.classpath" name="${name}"/>
   </target>
 
   <target name="show-properties"

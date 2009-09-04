@@ -1,5 +1,5 @@
 /*
- * $Id: ListResourcesTask.java,v 1.5 2009-08-14 22:55:25 ball Exp $
+ * $Id: ResourceListTask.java,v 1.1 2009-09-04 16:51:27 ball Exp $
  *
  * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
  */
@@ -15,18 +15,19 @@ import java.util.LinkedHashSet;
 import org.apache.tools.ant.BuildException;
 
 /**
- * Ant Task to list the resources that match a specific name.
+ * Ant {@link org.apache.tools.ant.Task} to list the resources that match a
+ * specified name.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.1 $
  */
-public class ListResourcesTask extends AbstractClasspathTask {
+public class ResourceListTask extends AbstractClasspathTask {
     private String name = null;
 
     /**
      * Sole constructor.
      */
-    public ListResourcesTask() { super(); }
+    public ResourceListTask() { super(); }
 
     protected String getName() { return name; }
     public void setName(String name) { this.name = name; }
@@ -55,7 +56,7 @@ public class ListResourcesTask extends AbstractClasspathTask {
     }
 
     private class TableModelImpl extends ArrayListTableModel<URL> {
-        private static final long serialVersionUID = 5257580672656495451L;
+        private static final long serialVersionUID = -5969955756512777492L;
 
         public TableModelImpl(String name) throws IOException {
             this(Collections.list(getClassLoader().getResources(name)), name);
@@ -71,7 +72,4 @@ public class ListResourcesTask extends AbstractClasspathTask {
 }
 /*
  * $Log: not supported by cvs2svn $
- * Revision 1.4  2009/06/21 03:22:08  ball
- * Use a Table to format output.
- *
  */
