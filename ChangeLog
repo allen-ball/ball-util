@@ -1,5 +1,7 @@
 2009-09-04  Allen D. Ball  <ball@10-0-1-2.lan>
 
+	* Improved javadoc comments.
+
 	* Added <charset-list/> and <locale-list/> Ant Tasks and build
 	targets.
 
