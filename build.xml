@@ -7,7 +7,7 @@
     -----------------
     Java Utilities
 
-    $Id: build.xml,v 1.24 2009-09-04 16:51:27 ball Exp $
+    $Id: build.xml,v 1.25 2009-09-04 16:56:31 ball Exp $
   </description>
 
   <property name="build.properties.file" location="build.properties"/>
@@ -239,6 +239,14 @@
     <bean-info-for classpathref="build.classpath" type="${type}"/>
   </target>
 
+  <target name="charset-list"
+          description="--> Invokes &lt;charset-list/&gt; task."
+          depends="classes">
+    <taskdef classpathref="build.classpath"
+             resource="iprotium/util/ant/defaults.properties"/>
+    <charset-list/>
+  </target>
+
   <target name="instance-of"
           description="--> Invokes &lt;instance-of/&gt; task."
           depends="classes">
@@ -320,6 +328,14 @@
     </lint>
   </target>
 
+  <target name="locale-list"
+          description="--> Invokes &lt;locale-list/&gt; task."
+          depends="classes">
+    <taskdef classpathref="build.classpath"
+             resource="iprotium/util/ant/defaults.properties"/>
+    <locale-list/>
+  </target>
+
   <target name="members-of"
           description="--> Invokes &lt;members-of/&gt; task."
           depends="classes">
@@ -366,4 +382,7 @@
 </project>
 <!--
     $Log: not supported by cvs2svn $
+    Revision 1.24  2009/09/04 16:51:27  ball
+    Renamed <list-resources/> Ant Task and build target to <resource-list/>.
+
   -->
