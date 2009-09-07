@@ -1,5 +1,5 @@
 /*
- * $Id: BeanInfoForTask.java,v 1.8 2009-09-04 17:13:43 ball Exp $
+ * $Id: BeanInfoForTask.java,v 1.9 2009-09-07 08:02:04 ball Exp $
  *
  * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
  */
@@ -20,7 +20,7 @@ import org.apache.tools.ant.BuildException;
  * specified {@link Class}.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 public class BeanInfoForTask extends AbstractClasspathTask {
     private String type = null;
@@ -124,9 +124,7 @@ public class BeanInfoForTask extends AbstractClasspathTask {
                 break;
 
             case 2:
-                value =
-                    (row.getPropertyType() != null)
-                        ? row.getPropertyType().getName() : "";
+                value = getCanonicalName(row.getPropertyType());
                 break;
 
             case 3:
@@ -139,6 +137,10 @@ public class BeanInfoForTask extends AbstractClasspathTask {
             }
 
             return value;
+        }
+
+        private String getCanonicalName(Class<?> type) {
+            return (type != null) ? type.getCanonicalName() : "";
         }
     }
 }
