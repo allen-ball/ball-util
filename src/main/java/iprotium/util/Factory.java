@@ -1,5 +1,5 @@
 /*
- * $Id: Factory.java,v 1.6 2009-09-04 17:13:43 ball Exp $
+ * $Id: Factory.java,v 1.7 2009-09-07 21:43:16 ball Exp $
  *
  * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
  */
@@ -12,6 +12,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.Set;
@@ -25,7 +26,7 @@ import java.util.TreeSet;
  *                              {@link Factory} will produce.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 public class Factory<T> {
     private final Class<? extends T> type;
@@ -34,8 +35,11 @@ public class Factory<T> {
     /**
      * Sole constructor.
      *
-     * @param   type            The type ({@link Class} of {@link Object}
-     *                          this {@link Factory} will produce.
+     * @param   type            The {@link Class} of {@link Object} this
+     *                          {@link Factory} will produce.
+     *
+     * @throws  NullPointerException
+     *                          If <code>type</code> is <code>null</code>.
      */
     public Factory(Class<? extends T> type) {
         this.type = type;
@@ -53,16 +57,132 @@ public class Factory<T> {
     public Class<? extends T> getType() { return type; }
 
     /**
+     * Method to get an {@link Object} instance.  This method will first
+     * attempt to find and invoke a static factory method.  If no factory
+     * method is found, it will then attempt to construct a new instance.
+     *
+     * @param   parameters      The parameter types to use to search for the
+     *                          {@link Object} static factory method or
+     *                          constructor.
+     * @param   arguments       The arguments to the {@link Object} static
+     *                          factory method or constructor.
+     *
+     * @return  The {@link Object} instance.
+     *
+     * @throws  NoSuchMethodException
+     *                          If the specified {@link Constructor} or
+     *                          {@link Method} does not exist.
+     * @throws  InstantiationException
+     *                          If the underlying {@link Constructor} or
+     *                          {@link Method} represents an abstract
+     *                          {@link Class}.
+     * @throws  IllegalAccessException
+     *                          If the specified {@link Constructor} or
+     *                          {@link Method} enforces Java language
+     *                          access control and the underlying
+     *                          {@link Constructor} or {@link Method} is
+     *                          inaccessible.
+     * @throws  IllegalArgumentException
+     *                          If the number of actual and formal parameters
+     *                          differ; if an unwrapping conversion for
+     *                          primitive arguments fails; or if, after
+     *                          possible unwrapping, a parameter value cannot
+     *                          be converted to the corresponding formal
+     *                          parameter type by a method invocation
+     *                          conversion; if this {@link Constructor} or
+     *                          {@link Method} pertains to an
+     *                          {@link Enum} type.
+     * @throws  InvocationTargetException
+     *                          If the underlying {@link Constructor} or
+     *                          {@link Method} fails for some reason.
+     */
+    public T getInstance(Class<?>[] parameters, Object[] arguments)
+            throws NoSuchMethodException,
+                   InstantiationException, IllegalAccessException,
+                   IllegalArgumentException, InvocationTargetException {
+        return apply(getFactoryMember(parameters), arguments);
+    }
+
+    /**
+     * Method to get an {@link Object} instance.  This method will first
+     * attempt to find and invoke a static factory method.  If not factory
+     * method is found, it will then attempt to construct a new instance.
+     *
+     * @param   arguments       The arguments to the {@link Object} static
+     *                          factory method or constructor.
+     *
+     * @throws  NoSuchMethodException
+     *                          If the specified {@link Constructor} or
+     *                          {@link Method} does not exist.
+     * @throws  InstantiationException
+     *                          If the underlying {@link Constructor} or
+     *                          {@link Method} represents an abstract
+     *                          {@link Class}.
+     * @throws  IllegalAccessException
+     *                          If the specified {@link Constructor} or
+     *                          {@link Method} enforces Java language
+     *                          access control and the underlying
+     *                          {@link Constructor} or {@link Method} is
+     *                          inaccessible.
+     * @throws  IllegalArgumentException
+     *                          If the number of actual and formal parameters
+     *                          differ; if an unwrapping conversion for
+     *                          primitive arguments fails; or if, after
+     *                          possible unwrapping, a parameter value cannot
+     *                          be converted to the corresponding formal
+     *                          parameter type by a method invocation
+     *                          conversion; if this {@link Constructor} or
+     *                          {@link Method} pertains to an
+     *                          {@link Enum} type.
+     * @throws  InvocationTargetException
+     *                          If the underlying {@link Constructor} or
+     *                          {@link Method} fails for some reason.
+     */
+    public T getInstance(Object... arguments)
+            throws NoSuchMethodException,
+                   InstantiationException, IllegalAccessException,
+                   IllegalArgumentException, InvocationTargetException {
+        return getInstance(typesOf(arguments), arguments);
+    }
+
+    /**
+     * Method to determine if there is a factory {@link Member}
+     * ({@link Constructor} or static {@link Method}) to manufacture or get
+     * an {@link Object}.
+     *
+     * @param   parameters      The {@link Constructor} or {@link Method}
+     *                          parameter list.
+     *
+     * @return  <code>true</code> if there is such a {@link Member};
+     *          <code>false</code> otherwise.
+     */
+    protected boolean hasFactoryMemberFor(Class<?>... parameters) {
+        boolean hasMember = false;
+
+        try {
+            getFactoryMember(parameters);
+            hasMember = map.containsKey(parameters);
+        } catch (NoSuchMethodException exception) {
+            hasMember = false;
+        }
+
+        return hasMember;
+    }
+
+    /**
      * Method to get a factory {@link Member} ({@link Constructor} or static
      * {@link Method}) to manufacture or get an {@link Object}.
+     *
+     * @param   parameters      The {@link Constructor} or {@link Method}
+     *                          parameter list.
      *
      * @return  The factory {@link Member}.
      *
      * @throws  NoSuchMethodException
-     *                          If the specified {@link Method} or
-     *                          {@link Constructor} does not exist.
+     *                          If the specified {@link Constructor} or
+     *                          {@link Method} does not exist.
      */
-    public Member getFactoryMember(Class<?>[] parameters)
+    protected Member getFactoryMember(Class<?>... parameters)
             throws NoSuchMethodException {
         if (! map.containsKey(parameters)) {
             map.put(parameters, getType().getConstructor(parameters));
@@ -82,20 +202,20 @@ public class Factory<T> {
      * @return  The {@link Object} instance.
      *
      * @throws  InstantiationException
-     *                          If the underlying {@link Method} or
-     *                          {@link Constructor} represents an abstract
+     *                          If the underlying {@link Constructor} or
+     *                          {@link Method} represents an abstract
      *                          {@link Class}.
      * @throws  IllegalAccessException
-     *                          If the specified {@link Method} or
-     *                          {@link Constructor} enforces Java language
+     *                          If the specified {@link Constructor} or
+     *                          {@link Method} enforces Java language
      *                          access control and the underlying
-     *                          {@link Method} or {@link Constructor} is
+     *                          {@link Constructor} or {@link Method} is
      *                          inaccessible.
      * @throws  InvocationTargetException
-     *                          If the underlying {@link Method} or
-     *                          {@link Constructor} fails for some reason.
+     *                          If the underlying {@link Constructor} or
+     *                          {@link Method} fails for some reason.
      */
-    public T apply(Member member, Object[] arguments)
+    protected T apply(Member member, Object[] arguments)
             throws InstantiationException, IllegalAccessException,
                    InvocationTargetException {
         Object object = null;
@@ -111,95 +231,6 @@ public class Factory<T> {
         }
 
         return getType().cast(object);
-    }
-
-    /**
-     * Method to get an {@link Object} instance.  This method will first
-     * attempt to find and invoke a static factory method.  If no factory
-     * method is found, it will then attempt to construct a new instance.
-     *
-     * @param   parameters      The parameter types to use to search for the
-     *                          {@link Object} static factory method or
-     *                          constructor.
-     * @param   arguments       The arguments to the {@link Object} static
-     *                          factory method or constructor.
-     *
-     * @return  The {@link Object} instance.
-     *
-     * @throws  NoSuchMethodException
-     *                          If the specified {@link Method} or
-     *                          {@link Constructor} does not exist.
-     * @throws  InstantiationException
-     *                          If the underlying {@link Method} or
-     *                          {@link Constructor} represents an abstract
-     *                          {@link Class}.
-     * @throws  IllegalAccessException
-     *                          If the specified {@link Method} or
-     *                          {@link Constructor} enforces Java language
-     *                          access control and the underlying
-     *                          {@link Method} or {@link Constructor} is
-     *                          inaccessible.
-     * @throws  IllegalArgumentException
-     *                          If the number of actual and formal parameters
-     *                          differ; if an unwrapping conversion for
-     *                          primitive arguments fails; or if, after
-     *                          possible unwrapping, a parameter value cannot
-     *                          be converted to the corresponding formal
-     *                          parameter type by a method invocation
-     *                          conversion; if this {@link Method} or
-     *                          {@link Constructor} pertains to an
-     *                          {@link Enum} type.
-     * @throws  InvocationTargetException
-     *                          If the underlying {@link Method} or
-     *                          {@link Constructor} fails for some reason.
-     */
-    public T getInstance(Class<?>[] parameters, Object[] arguments)
-            throws NoSuchMethodException,
-                   InstantiationException, IllegalAccessException,
-                   IllegalArgumentException, InvocationTargetException {
-        return apply(getFactoryMember(parameters), arguments);
-    }
-
-    /**
-     * Method to get an {@link Object} instance.  This method will first
-     * attempt to find and invoke a static factory method.  If not factory
-     * method is found, it will then attempt to construct a new instance.
-     *
-     * @param   arguments       The arguments to the {@link Object} static
-     *                          factory method or constructor.
-     *
-     * @throws  NoSuchMethodException
-     *                          If the specified {@link Method} or
-     *                          {@link Constructor} does not exist.
-     * @throws  InstantiationException
-     *                          If the underlying {@link Method} or
-     *                          {@link Constructor} represents an abstract
-     *                          {@link Class}.
-     * @throws  IllegalAccessException
-     *                          If the specified {@link Method} or
-     *                          {@link Constructor} enforces Java language
-     *                          access control and the underlying
-     *                          {@link Method} or {@link Constructor} is
-     *                          inaccessible.
-     * @throws  IllegalArgumentException
-     *                          If the number of actual and formal parameters
-     *                          differ; if an unwrapping conversion for
-     *                          primitive arguments fails; or if, after
-     *                          possible unwrapping, a parameter value cannot
-     *                          be converted to the corresponding formal
-     *                          parameter type by a method invocation
-     *                          conversion; if this {@link Method} or
-     *                          {@link Constructor} pertains to an
-     *                          {@link Enum} type.
-     * @throws  InvocationTargetException
-     *                          If the underlying {@link Method} or
-     *                          {@link Constructor} fails for some reason.
-     */
-    public T getInstance(Object... arguments)
-            throws NoSuchMethodException,
-                   InstantiationException, IllegalAccessException,
-                   IllegalArgumentException, InvocationTargetException {
-        return getInstance(typesOf(arguments), arguments);
     }
 
     /**
@@ -280,16 +311,15 @@ public class Factory<T> {
                 }
             }
 
-            Set<String> set = new TreeSet<String>();
-
-            set.add("compile");
-            set.add("create");
-            set.add("forName");
-            set.add("get" + type.getSimpleName());
-            set.add("getDefault");
-            set.add("getDefaultInstance");
-            set.add("getInstance");
-            set.add("valueOf");
+            Set<String> set =
+                new TreeSet<String>(Arrays.asList("compile",
+                                                  "create",
+                                                  "forName",
+                                                  "get" + type.getSimpleName(),
+                                                  "getDefault",
+                                                  "getDefaultInstance",
+                                                  "getInstance",
+                                                  "valueOf"));
 
             for (Method method : type.getMethods()) {
                 if (isPublic(method) && isStatic(method)) {
