@@ -1,5 +1,5 @@
 /*
- * $Id: InstanceOfTask.java,v 1.11 2009-09-04 17:13:43 ball Exp $
+ * $Id: InstanceOfTask.java,v 1.12 2009-09-07 21:44:28 ball Exp $
  *
  * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
  */
@@ -8,6 +8,8 @@ package iprotium.util.ant.taskdefs;
 import iprotium.text.MapTable;
 import iprotium.util.BeanMap;
 import iprotium.util.Factory;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Member;
 import java.lang.reflect.Member;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,7 +23,7 @@ import org.apache.tools.ant.BuildException;
  * @see Factory
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 public class InstanceOfTask extends AbstractClasspathTask {
     private String type = String.class.getName();
@@ -54,8 +56,8 @@ public class InstanceOfTask extends AbstractClasspathTask {
             List<Object> arguments = new ArrayList<Object>();
 
             for (Argument argument : list) {
-                Factory<Object> factory =
-                    new Factory<Object>(getClass(argument.getType()));
+                FactoryImpl factory =
+                    new FactoryImpl(getClass(argument.getType()));
 
                 parameters.add(factory.getType());
                 arguments.add(factory.getInstance(argument.getValue()));
@@ -64,7 +66,7 @@ public class InstanceOfTask extends AbstractClasspathTask {
             log(String.valueOf(parameters));
             log(String.valueOf(arguments));
 
-            Factory<Object> factory = new Factory<Object>(type);
+            FactoryImpl factory = new FactoryImpl(type);
             Member member =
                 factory.getFactoryMember(parameters.toArray(new Class[] { }));
 
@@ -95,6 +97,21 @@ public class InstanceOfTask extends AbstractClasspathTask {
         } catch (Exception exception) {
             exception.printStackTrace();
             throw new BuildException(exception);
+        }
+    }
+
+    private class FactoryImpl extends Factory<Object> {
+        public FactoryImpl(Class<?> type) { super(type); }
+
+        public Member getFactoryMember(Class<?>... parameters)
+                throws NoSuchMethodException {
+            return super.getFactoryMember(parameters);
+        }
+
+        public Object apply(Member member, Object[] arguments)
+                throws InstantiationException, IllegalAccessException,
+                       InvocationTargetException {
+            return super.apply(member, arguments);
         }
     }
 
