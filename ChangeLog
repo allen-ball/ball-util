@@ -1,5 +1,8 @@
 2009-09-07  Allen D. Ball  <ball@10-0-1-2.lan>
 
+	* src/main/java/iprotium/io/IOUtil.java:
+	Changed mkdirs(File) signature to mkdirs(File...).
+
 	* src/main/java/iprotium/util/Factory.java:
 	Added hasFactoryMemberFor(Class<?>...) method.
 
