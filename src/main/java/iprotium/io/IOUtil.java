@@ -1,5 +1,5 @@
 /*
- * $Id: IOUtil.java,v 1.5 2009-09-04 17:13:43 ball Exp $
+ * $Id: IOUtil.java,v 1.6 2009-09-08 01:50:12 ball Exp $
  *
  * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
  */
@@ -25,7 +25,7 @@ import java.nio.channels.WritableByteChannel;
  * Provides common I/O utilities implemented as static methods.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public class IOUtil {
     private IOUtil() { }
@@ -225,27 +225,31 @@ public class IOUtil {
     }
 
     /**
-     * Static method to create a directory (and containing ancestor
+     * Static method to create directories (and containing ancestor
      * directories) specified by the argument.
      *
-     * @param   directory       The directory ({@link File}) to be created.
+     * @param   directories     The directories ({@link File}s) to be
+     *                          created.
      *
      * @throws  IOException     If the directory cannot be created for any
      *                          reason.
      */
-    public static void mkdirs(File directory) throws IOException {
-        if (directory != null) {
-            if (! directory.exists()) {
-                mkdirs(directory.getParentFile());
-                directory.mkdir();
-
+    public static void mkdirs(File... directories) throws IOException {
+        for (File directory : directories) {
+            if (directory != null) {
                 if (! directory.exists()) {
-                    throw new IOException("Cannot create directory "
-                                          + directory);
-                }
-            } else {
-                if (! directory.isDirectory()) {
-                    throw new IOException(directory + " is not a directory");
+                    mkdirs(directory.getParentFile());
+                    directory.mkdir();
+
+                    if (! directory.exists()) {
+                        throw new IOException("Cannot create directory "
+                                              + directory);
+                    }
+                } else {
+                    if (! directory.isDirectory()) {
+                        throw new IOException(directory
+                                              + " is not a directory");
+                    }
                 }
             }
         }
