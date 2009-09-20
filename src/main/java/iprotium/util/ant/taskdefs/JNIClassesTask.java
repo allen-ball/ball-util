@@ -1,5 +1,5 @@
 /*
- * $Id: JNIClassesTask.java,v 1.6 2009-09-04 17:13:43 ball Exp $
+ * $Id: JNIClassesTask.java,v 1.7 2009-09-20 19:24:59 ball Exp $
  *
  * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
  */
@@ -17,18 +17,28 @@ import static iprotium.util.ClassOrder.NAME;
  * native members.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 public class JNIClassesTask extends AbstractClassFileTask {
+    private static final String COMMA = ",";
+
     private String property = null;
+    private String separator = null;
 
     /**
      * Sole constructor.
      */
-    public JNIClassesTask() { super(); }
+    public JNIClassesTask() {
+        super();
+
+        setSeparator(COMMA);
+    }
 
     protected String getProperty() { return property; }
     public void setProperty(String property) { this.property = property; }
+
+    protected String getSeparator() { return separator; }
+    public void setSeparator(String separator) { this.separator = separator; }
 
     @Override
     public void execute() throws BuildException {
@@ -69,12 +79,14 @@ public class JNIClassesTask extends AbstractClassFileTask {
         return hasNative;
     }
 
-    private static String toString(Iterable<Class<?>> iterable) {
+    private String toString(Iterable<Class<?>> iterable) {
         String string = "";
 
         for (Class<?> type : iterable) {
             if (string.length() > 0) {
-                string += ",";
+                if (getSeparator() != null) {
+                    string += getSeparator();
+                }
             }
 
             string += type.getName();
