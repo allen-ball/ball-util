@@ -1,5 +1,7 @@
 2009-09-22  Allen D. Ball  <ball@10-0-1-2.lan>
 
+	* Added <package-list/> build target and Ant Task.
+
 	* src/main/java/iprotium/util/ant/taskdefs/PackageListTask.java:
 	Initial writing.
 
