@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- $Id: pom.xml,v 1.6 2009-09-23 05:28:22 ball Exp $ -->
+<!-- $Id: pom.xml,v 1.7 2009-10-24 21:08:04 ball Exp $ -->
 <project>
   <modelVersion>4.0.0</modelVersion>
-  <groupId>iprotium.util</groupId>
+  <groupId>iprotium</groupId>
   <artifactId>iprotium-util</artifactId>
   <name>Utilities</name>
   <version>1.0</version>
@@ -53,4 +53,7 @@
 </project>
 <!--
     $Log: not supported by cvs2svn $
+    Revision 1.6  2009/09/23 05:28:22  ball
+    Added Mac OS X profile.
+
   -->
