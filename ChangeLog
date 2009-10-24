@@ -2,6 +2,9 @@
 
 	* pom.xml: Changed <groupId/> to "iprotium".
 
+	* src/main/java/iprotium/util/ant/taskdefs/BeanInfoForTask.java:
+	Changed mode to indicate if the property is an indexed property.
+
 2009-09-22  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* Added <package-list/> build target and Ant Task.
