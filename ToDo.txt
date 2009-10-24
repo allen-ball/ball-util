@@ -1,4 +1,4 @@
-$Id: ToDo.txt,v 1.7 2009-05-27 04:50:29 ball Exp $
+$Id: ToDo.txt,v 1.8 2009-10-24 21:06:11 ball Exp $
 
 * Add JNI interface to editline(libedit)/readline.
 
@@ -8,6 +8,8 @@ $Id: ToDo.txt,v 1.7 2009-05-27 04:50:29 ball Exp $
         ** Require non-public constructors for abstract classes
         ** Require @Override annotations on overridden methods
         ** Suggest (! Collection.isEmpty()) for (Collection.size() > 0)
+        ** ByteArrayOutputStream: Prefer ByteArrayOutputStream(int)
+           constructor with an argument > 32
 
 * Create SSU package.
 
