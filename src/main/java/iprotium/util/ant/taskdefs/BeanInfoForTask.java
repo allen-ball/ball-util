@@ -1,5 +1,5 @@
 /*
- * $Id: BeanInfoForTask.java,v 1.9 2009-09-07 08:02:04 ball Exp $
+ * $Id: BeanInfoForTask.java,v 1.10 2009-10-24 21:14:33 ball Exp $
  *
  * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
  */
@@ -10,8 +10,10 @@ import iprotium.text.SimpleTable;
 import iprotium.text.Table;
 import java.beans.BeanDescriptor;
 import java.beans.BeanInfo;
+import java.beans.IndexedPropertyDescriptor;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import org.apache.tools.ant.BuildException;
 
@@ -20,7 +22,7 @@ import org.apache.tools.ant.BuildException;
  * specified {@link Class}.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 public class BeanInfoForTask extends AbstractClasspathTask {
     private String type = null;
@@ -78,6 +80,28 @@ public class BeanInfoForTask extends AbstractClasspathTask {
         }
     }
 
+    private String getMode(PropertyDescriptor descriptor) {
+        String mode =
+            getMode(descriptor.getReadMethod(), descriptor.getWriteMethod());
+
+        if (descriptor instanceof IndexedPropertyDescriptor) {
+            mode += "[";
+            mode += getMode((IndexedPropertyDescriptor) descriptor);
+            mode += "]";
+        }
+
+        return mode;
+    }
+
+    private String getMode(IndexedPropertyDescriptor descriptor) {
+        return getMode(descriptor.getIndexedReadMethod(),
+                       descriptor.getIndexedWriteMethod());
+    }
+
+    private String getMode(Method read, Method write) {
+        return ((read != null) ? "R" : "") + ((write != null) ? "W" : "");
+    }
+
     private class BeanHeaderTable extends SimpleTable {
         public BeanHeaderTable(BeanDescriptor descriptor) {
             super(2);
@@ -118,9 +142,7 @@ public class BeanInfoForTask extends AbstractClasspathTask {
                 break;
 
             case 1:
-                value =
-                    ((row.getReadMethod() != null) ? "R" : "")
-                    + ((row.getWriteMethod() != null) ? "W" : "");
+                value = getMode(row);
                 break;
 
             case 2:
