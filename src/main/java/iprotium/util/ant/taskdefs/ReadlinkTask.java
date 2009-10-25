@@ -1,5 +1,5 @@
 /*
- * $Id: ReadlinkTask.java,v 1.3 2009-09-04 17:13:43 ball Exp $
+ * $Id: ReadlinkTask.java,v 1.4 2009-10-25 20:50:23 ball Exp $
  *
  * Copyright 2009 Allen D. Ball.  All rights reserved.
  */
@@ -17,7 +17,7 @@ import org.apache.tools.ant.BuildException;
  * @see POSIX#readlink(File)
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class ReadlinkTask extends AbstractMatchingTask {
 
@@ -41,7 +41,8 @@ public class ReadlinkTask extends AbstractMatchingTask {
         }
 
         if (! map.isEmpty()) {
-            for (String line : new MapTable<File,File>(map, "Link", "Target")) {
+            for (String line :
+                     new MapTable<File,File>(map, "Link", "Target")) {
                 log(line);
             }
         }
