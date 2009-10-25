@@ -1,5 +1,7 @@
 2009-10-25  Allen D. Ball  <ball@10-0-1-2.lan>
 
+	* Added <opendir/> build target and Ant Task.
+
 	* src/main/java/iprotium/util/jni/POSIX.java:
 	Added opendir(File), closedir(DIR), readdir(DIR), and
 	rewinddir(DIR) methods.
