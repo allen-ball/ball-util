@@ -7,7 +7,7 @@
     -----------------
     Java Utilities
 
-    $Id: build.xml,v 1.27 2009-09-25 03:24:57 ball Exp $
+    $Id: build.xml,v 1.28 2009-10-25 20:54:37 ball Exp $
   </description>
 
   <property name="build.properties.file" location="build.properties"/>
@@ -351,6 +351,14 @@
     <members-of classpathref="build.classpath" type="${type}"/>
   </target>
 
+  <target name="opendir"
+          description="--> Invokes &lt;opendir/&gt; task."
+          depends="classes">
+    <taskdef classpathref="build.classpath"
+             resource="iprotium/util/ant/defaults.properties"/>
+    <opendir file="."/>
+  </target>
+
   <target name="package-list"
           description="--> Invokes &lt;package-list/&gt; task."
           depends="classes">
@@ -399,6 +407,9 @@
 </project>
 <!--
     $Log: not supported by cvs2svn $
+    Revision 1.27  2009/09/25 03:24:57  ball
+    Added <package-list/> build target and Ant Task.
+
     Revision 1.25  2009/09/04 16:56:31  ball
     Added <charset-list/> and <locale-list/> Ant Tasks and build targets.
 
