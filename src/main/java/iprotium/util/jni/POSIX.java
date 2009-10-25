@@ -1,5 +1,5 @@
 /*
- * $Id: POSIX.java,v 1.7 2009-09-04 17:13:43 ball Exp $
+ * $Id: POSIX.java,v 1.8 2009-10-25 14:57:29 ball Exp $
  *
  * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
  */
@@ -15,7 +15,7 @@ import java.util.ResourceBundle;
  * </a> functions.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 public class POSIX {
     private static final ResourceBundle BUNDLE =
@@ -28,8 +28,8 @@ public class POSIX {
     /**
      * <a href="http://www.opengroup.org/onlinepubs/000095399/functions/link.html">link</a>
      *
-     * @param   from            The source File.
-     * @param   to              The target File.
+     * @param   from            The source {@link File}.
+     * @param   to              The target {@link File}.
      *
      * @return  <code>true</code> if successful;
      *          <code>false</code> otherwise.
@@ -38,15 +38,30 @@ public class POSIX {
         return link(from.getPath(), to.getPath());
     }
 
+    /**
+     * <a href="http://www.opengroup.org/onlinepubs/000095399/functions/symlink.html">symlink</a>
+     *
+     * @param   from            The source {@link File}.
+     * @param   to              The target {@link File}.
+     *
+     * @return  <code>true</code> if successful;
+     *          <code>false</code> otherwise.
+     */
+    public static boolean symlink(File from, File to) {
+        return symlink(from.getPath(), to.getPath());
+    }
+
     private static native boolean link(String from, String to);
+    private static native boolean symlink(String from, String to);
 
     /**
      * <a href="http://www.opengroup.org/onlinepubs/000095399/functions/readlink.html">readlink</a>
      *
-     * @param   from            The source File.
+     * @param   from            The source {@link File}.
      *
-     * @return  A File representing the link target if <code>from</code> is
-     *          a symlink; <code>null</code> otherwise.
+     * @return  A {@link File} representing the link target if
+     *          <code>from</code> is a symlink; <code>null</code>
+     *          otherwise.
      */
     public static File readlink(File from) {
         String to = readlink(from.getPath());
@@ -57,19 +72,68 @@ public class POSIX {
     private static native String readlink(String from);
 
     /**
-     * <a href="http://www.opengroup.org/onlinepubs/000095399/functions/symlink.html">symlink</a>
+     * <a href="http://www.opengroup.org/onlinepubs/000095399/functions/opendir.html">opendir</a>
      *
-     * @param   from            The source File.
-     * @param   to              The target File.
+     * @param   directory       The directory ({@link File}) to open.
      *
-     * @return  <code>true</code> if successful;
-     *          <code>false</code> otherwise.
+     * @return  A {@link DIR} representing the opened directory.
      */
-    public static boolean symlink(File from, File to) {
-        return symlink(from.getPath(), to.getPath());
+    public static DIR opendir(File directory) {
+        return new DIR(opendir(directory.getPath()));
     }
 
-    private static native boolean symlink(String from, String to);
+    /**
+     * <a href="http://www.opengroup.org/onlinepubs/000095399/functions/closedir.html">closedir</a>
+     *
+     * @param   dirp            The {@link DIR} to close.
+     */
+    public static void closedir(DIR dirp) {
+        synchronized (dirp) {
+            long peer = dirp.peer;
+
+            dirp.peer = 0;
+
+            if (peer != 0) {
+                closedir(peer);
+            }
+        }
+    }
+
+    /**
+     * <a href="http://www.opengroup.org/onlinepubs/000095399/functions/readdir.html">readdir</a>
+     *
+     * @param   dirp            The {@link DIR} to read an entry from.
+     *
+     * @return  The name of the next directory entry or <code>null</code> if
+     *          there are no more entries to read.
+     */
+    public static String readdir(DIR dirp) {
+        String name = null;
+
+        synchronized (dirp) {
+            name = (dirp.peer != 0) ? readdir(dirp.peer) : null;
+        }
+
+        return name;
+    }
+
+    /**
+     * <a href="http://www.opengroup.org/onlinepubs/000095399/functions/rewinddir.html">rewinddir</a>
+     *
+     * @param   dirp            The {@link DIR} to rewind.
+     */
+    public static void rewinddir(DIR dirp) {
+        synchronized (dirp) {
+            if (dirp.peer != 0) {
+                rewinddir(dirp.peer);
+            }
+        }
+    }
+
+    private static native long opendir(String path);
+    private static native void closedir(long peer);
+    private static native String readdir(long peer);
+    private static native void rewinddir(long peer);
 }
 /*
  * $Log: not supported by cvs2svn $
