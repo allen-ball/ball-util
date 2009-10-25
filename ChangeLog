@@ -1,3 +1,9 @@
+2009-10-25  Allen D. Ball  <ball@10-0-1-2.lan>
+
+	* src/main/java/iprotium/util/jni/POSIX.java:
+	Added opendir(File), closedir(DIR), readdir(DIR), and
+	rewinddir(DIR) methods.
+
 2009-10-24  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* pom.xml: Changed <groupId/> to "iprotium".
