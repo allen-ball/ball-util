@@ -1,3 +1,9 @@
+2009-11-13  Allen D. Ball  <ball@10-0-1-2.lan>
+
+	* src/main/java/iprotium/io/AbstractFileFilter.java,
+	src/main/java/iprotium/io/AbstractFilenameFilter.java:
+	Initial writing.
+
 2009-10-25  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* Added <opendir/> build target and Ant Task.
