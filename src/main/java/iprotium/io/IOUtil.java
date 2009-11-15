@@ -1,5 +1,5 @@
 /*
- * $Id: IOUtil.java,v 1.6 2009-09-08 01:50:12 ball Exp $
+ * $Id: IOUtil.java,v 1.7 2009-11-15 04:14:50 ball Exp $
  *
  * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
  */
@@ -25,7 +25,7 @@ import java.nio.channels.WritableByteChannel;
  * Provides common I/O utilities implemented as static methods.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 public class IOUtil {
     private IOUtil() { }
@@ -226,29 +226,28 @@ public class IOUtil {
 
     /**
      * Static method to create directories (and containing ancestor
-     * directories) specified by the argument.
+     * directories) specified by the arguments.
      *
-     * @param   directories     The directories ({@link File}s) to be
+     * @param   files           The directories ({@link File}s) to be
      *                          created.
      *
-     * @throws  IOException     If the directory cannot be created for any
+     * @throws  IOException     If a directory cannot be created for any
      *                          reason.
      */
-    public static void mkdirs(File... directories) throws IOException {
-        for (File directory : directories) {
-            if (directory != null) {
-                if (! directory.exists()) {
-                    mkdirs(directory.getParentFile());
-                    directory.mkdir();
+    public static void mkdirs(File... files) throws IOException {
+        for (File file : files) {
+            if (file != null) {
+                if (! file.exists()) {
+                    mkdirs(file.getParentFile());
+                    file.mkdir();
 
-                    if (! directory.exists()) {
+                    if (! file.isDirectory()) {
                         throw new IOException("Cannot create directory "
-                                              + directory);
+                                              + file);
                     }
                 } else {
-                    if (! directory.isDirectory()) {
-                        throw new IOException(directory
-                                              + " is not a directory");
+                    if (! file.isDirectory()) {
+                        throw new IOException(file + " is not a directory");
                     }
                 }
             }
@@ -256,34 +255,36 @@ public class IOUtil {
     }
 
     /**
-     * Static method to "touch" a {@link File}.  Creates the file and any
+     * Static method to "touch" {@link File}s.  Creates the files and any
      * containing ancestor directories if they do not exist.
      *
-     * @param   file            The {@link File} to be "touched."
+     * @param   dtcm            The DTCM for the files.
+     * @param   files           The {@link File}s to be "touched."
      *
-     * @throws  IOException     If the file cannot be created.
+     * @throws  IOException     If a file cannot be created.
      * @throws  NullPointerException
-     *                          If file is null.
+     *                          If any argument is null.
      */
-    public static void touch(File file) throws IOException {
-        touch(file, System.currentTimeMillis());
+    public static void touch(long dtcm, File... files) throws IOException {
+        for (File file : files) {
+            mkdirs(file.getParentFile());
+            file.createNewFile();
+            file.setLastModified(dtcm);
+        }
     }
 
     /**
-     * Static method to "touch" a {@link File}.  Creates the file and any
+     * Static method to "touch" {@link File}s.  Creates the files and any
      * containing ancestor directories if they do not exist.
      *
-     * @param   file            The {@link File} to be "touched."
-     * @param   dtcm            The DTCM for the file.
+     * @param   files           The {@link File}s to be "touched."
      *
-     * @throws  IOException     If the file cannot be created.
+     * @throws  IOException     If a file cannot be created.
      * @throws  NullPointerException
-     *                          If file is null.
+     *                          If any argument is null.
      */
-    public static void touch(File file, long dtcm) throws IOException {
-        mkdirs(file.getParentFile());
-        file.createNewFile();
-        file.setLastModified(dtcm);
+    public static void touch(File... files) throws IOException {
+        touch(System.currentTimeMillis(), files);
     }
 
     /**
