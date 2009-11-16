@@ -1,3 +1,11 @@
+2009-11-15  Allen D. Ball  <ball@10-0-1-2.lan>
+
+	* src/main/java/iprotium/io/AndFileFilter.java,
+	src/main/java/iprotium/io/AndFilenameFilter.java,
+	src/main/java/iprotium/io/OrFileFilter.java,
+	src/main/java/iprotium/io/OrFilenameFilter.java:
+	Initial writing.
+
 2009-11-14  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* src/main/java/iprotium/io/DirectoryFileFilter.java,
