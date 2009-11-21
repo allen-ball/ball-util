@@ -1,5 +1,5 @@
 /*
- * $Id: PatternFilenameFilter.java,v 1.1 2009-11-15 04:41:37 ball Exp $
+ * $Id: PatternFilenameFilter.java,v 1.2 2009-11-21 21:40:03 ball Exp $
  *
  * Copyright 2009 Allen D. Ball.  All rights reserved.
  */
@@ -12,13 +12,13 @@ import java.util.regex.Pattern;
  * {@link Pattern} {@link java.io.FilenameFilter} implementation.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class PatternFilenameFilter extends AbstractFilenameFilter {
     private final Pattern pattern;
 
     /**
-     * Sole constructor.
+     * Construct a {@link java.io.FilenameFilter} from a {@link Pattern}.
      *
      * @param   pattern         The {@link Pattern} specifying the
      *                          {@link File} names to match.
@@ -31,6 +31,18 @@ public class PatternFilenameFilter extends AbstractFilenameFilter {
         } else {
             throw new NullPointerException("pattern");
         }
+    }
+
+    /**
+     * Construct a {@link java.io.FilenameFilter} from a regular expression
+     * ({@link String}).
+     *
+     * @param   string          The {@link String} specifying the regular
+     *                          expression that {@link File} names should
+     *                          match.
+     */
+    public PatternFilenameFilter(String string) {
+        this(Pattern.compile(string));
     }
 
     @Override
