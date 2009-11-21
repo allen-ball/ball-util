@@ -1,5 +1,9 @@
 2009-11-21  Allen D. Ball  <ball@10-0-1-2.lan>
 
+	* src/main/java/iprotium/io/AbstractFileFilter.java,
+	src/main/java/iprotium/io/AbstractFilenameFilter.java:
+	Added list(File...) method.
+
 	* src/main/java/iprotium/io/PatternFilenameFilter.java:
 	Added PatternFilenameFilter(String) constructor.
 
