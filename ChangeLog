@@ -1,5 +1,8 @@
 2009-11-21  Allen D. Ball  <ball@10-0-1-2.lan>
 
+	* src/main/java/iprotium/io/PatternFilenameFilter.java:
+	Added PatternFilenameFilter(String) constructor.
+
 	* src/main/java/iprotium/util/FileOrder.java: Initial writing.
 
 2009-11-15  Allen D. Ball  <ball@10-0-1-2.lan>
