@@ -1,5 +1,5 @@
 /*
- * $Id: SimpleTableModel.java,v 1.3 2009-09-04 17:13:43 ball Exp $
+ * $Id: SimpleTableModel.java,v 1.4 2009-11-26 20:36:50 ball Exp $
  *
  * Copyright 2009 Allen D. Ball.  All rights reserved.
  */
@@ -12,13 +12,13 @@ import java.util.Collection;
  * Simple {@link TableModel} implementation.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class SimpleTableModel extends ArrayListTableModel<Object[]> {
     private static final long serialVersionUID = 5405482298661568L;
 
     /**
-     * @see ArrayListTableModel#ArrayListTableModel(Collection,Object...)
+     * @see ArrayListTableModel#ArrayListTableModel(Iterable,Object...)
      *
      * @param   rows            The {@link TableModel}'s rows.
      */
@@ -27,7 +27,7 @@ public class SimpleTableModel extends ArrayListTableModel<Object[]> {
     }
 
     /**
-     * @see ArrayListTableModel#ArrayListTableModel(Collection,int)
+     * @see ArrayListTableModel#ArrayListTableModel(Iterable,int)
      *
      * @param   rows            The TableModel's rows.
      */
@@ -36,14 +36,14 @@ public class SimpleTableModel extends ArrayListTableModel<Object[]> {
     }
 
     /**
-     * @see ArrayListTableModel#ArrayListTableModel(Collection,Object...)
+     * @see ArrayListTableModel#ArrayListTableModel(Iterable,Object...)
      */
     public SimpleTableModel(Object... columns) {
         this(null, columns);
     }
 
     /**
-     * @see ArrayListTableModel#ArrayListTableModel(Collection,int)
+     * @see ArrayListTableModel#ArrayListTableModel(Iterable,int)
      */
     public SimpleTableModel(int columns) { this(null, new Object[columns]); }
 
