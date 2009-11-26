@@ -1,5 +1,5 @@
 /*
- * $Id: BeanMap.java,v 1.7 2009-09-04 17:13:43 ball Exp $
+ * $Id: BeanMap.java,v 1.8 2009-11-26 00:09:06 ball Exp $
  *
  * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
  */
@@ -22,7 +22,7 @@ import java.util.Set;
  * for the bean properties.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 public class BeanMap extends AbstractMap<String,Object>
                              implements Serializable {
@@ -64,7 +64,9 @@ public class BeanMap extends AbstractMap<String,Object>
             Set<EntryImpl> entrySet = new LinkedHashSet<EntryImpl>();
 
             for (PropertyDescriptor property : info.getPropertyDescriptors()) {
-                entrySet.add(new EntryImpl(property));
+                if (property.getReadMethod() != null) {
+                    entrySet.add(new EntryImpl(property));
+                }
             }
 
             this.entrySet0 = Collections.unmodifiableSet(entrySet);
