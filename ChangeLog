@@ -1,3 +1,9 @@
+2009-11-26  Allen D. Ball  <ball@10-0-1-2.lan>
+
+	* src/main/java/iprotium/text/ArrayListTableModel.java:
+	Changed constructors to Iterable parameters (instead of
+	Collection).
+
 2009-11-25  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* src/main/java/iprotium/util/BeanMap.java:
