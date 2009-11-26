@@ -1,5 +1,7 @@
 2009-11-26  Allen D. Ball  <ball@10-0-1-2.lan>
 
+	* Added <service-list/> build target and Ant Task.
+
 	* src/main/java/iprotium/text/ArrayListTableModel.java:
 	Changed constructors to Iterable parameters (instead of
 	Collection).
