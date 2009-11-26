@@ -1,3 +1,8 @@
+2009-11-25  Allen D. Ball  <ball@10-0-1-2.lan>
+
+	* src/main/java/iprotium/util/BeanMap.java:
+	Only include bean properties with read methods in the keySet().
+
 2009-11-21  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* src/main/java/iprotium/io/AbstractFileFilter.java,
