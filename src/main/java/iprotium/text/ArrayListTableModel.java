@@ -1,5 +1,5 @@
 /*
- * $Id: ArrayListTableModel.java,v 1.3 2009-09-04 17:13:43 ball Exp $
+ * $Id: ArrayListTableModel.java,v 1.4 2009-11-26 20:26:01 ball Exp $
  *
  * Copyright 2009 Allen D. Ball.  All rights reserved.
  */
@@ -15,7 +15,7 @@ import java.util.Collection;
  * @param       <R>     The type of table row.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public abstract class ArrayListTableModel<R> extends TableModel {
     private final ArrayList<R> list = new ArrayList<R>();
@@ -23,23 +23,26 @@ public abstract class ArrayListTableModel<R> extends TableModel {
     /**
      * @see TableModel#TableModel(Object...)
      *
-     * @param   collection      The {@link Collection} of row values.
+     * @param   iterable        The {@link Iterable} of row values.
      */
-    public ArrayListTableModel(Collection<R> collection, Object... columns) {
+    public ArrayListTableModel(Iterable<? extends R> iterable,
+                               Object... columns) {
         super(columns);
 
-        if (collection != null) {
-            list.addAll(collection);
+        if (iterable != null) {
+            for (R element : iterable) {
+                list.add(element);
+            }
         }
     }
 
     /**
      * @see TableModel#TableModel(int)
      *
-     * @param   collection      The {@link Collection} of row values.
+     * @param   iterable        The {@link Iterable} of row values.
      */
-    public ArrayListTableModel(Collection<R> collection, int columns) {
-        this(collection, new Object[columns]);
+    public ArrayListTableModel(Iterable<? extends R> iterable, int columns) {
+        this(iterable, new Object[columns]);
     }
 
     /**
