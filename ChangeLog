@@ -1,3 +1,7 @@
+2009-11-29  Allen D. Ball  <ball@10-0-1-2.lan>
+
+	* Added <superclasses-of/> build target and Ant Task.
+
 2009-11-26  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* Added <service-list/> build target and Ant Task.
