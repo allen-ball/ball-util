@@ -7,7 +7,7 @@
     -----------------
     Java Utilities
 
-    $Id: build.xml,v 1.29 2009-11-26 20:27:53 ball Exp $
+    $Id: build.xml,v 1.30 2009-11-30 05:56:21 ball Exp $
   </description>
 
   <property name="build.properties.file" location="build.properties"/>
@@ -85,8 +85,8 @@
     </javac>
     <taskdef classpathref="build.classpath"
              resource="iprotium/util/ant/defaults.properties"/>
-    <jni-classes basedir="${build.class.dir}" classpathref="build.classpath"
-                 property="jni.classes">
+    <jni-classes classpathref="build.classpath"
+                 basedir="${build.class.dir}" property="jni.classes">
       <src path="${src.dir}/main/java"/>
     </jni-classes>
   </target>
@@ -175,8 +175,8 @@
           depends="classes">
     <taskdef classpathref="build.classpath"
              resource="iprotium/util/ant/defaults.properties"/>
-    <package-list basedir="${build.class.dir}" classpathref="build.classpath"
-                  property="packagenames">
+    <package-list classpathref="build.classpath"
+                  basedir="${build.class.dir}" property="packagenames">
       <src path="${src.dir}/main/java"/>
     </package-list>
     <mkdir dir="${build.javadoc.dir}"/>
@@ -404,6 +404,17 @@
     </show-properties>
   </target>
 
+  <target name="subclasses-of"
+          description="--> Invokes &lt;subclasses-of/&gt; task."
+          depends="classes">
+    <taskdef classpathref="build.classpath"
+             resource="iprotium/util/ant/defaults.properties"/>
+    <subclasses-of classpathref="build.classpath"
+                   basedir="${build.class.dir}" type="${type}">
+      <src path="${src.dir}/main/java"/>
+    </subclasses-of>
+  </target>
+
   <target name="superclasses-of"
           description="--> Invokes &lt;superclasses-of/&gt; task."
           depends="classes">
@@ -415,6 +426,9 @@
 </project>
 <!--
     $Log: not supported by cvs2svn $
+    Revision 1.29  2009/11/26 20:27:53  ball
+    Added <service-list/> build target and Ant Task.
+
     Revision 1.28  2009/10/25 20:54:37  ball
     Added <opendir/> build target and Ant Task.
 
