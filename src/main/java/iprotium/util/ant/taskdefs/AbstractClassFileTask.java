@@ -1,5 +1,5 @@
 /*
- * $Id: AbstractClassFileTask.java,v 1.11 2009-09-04 17:13:43 ball Exp $
+ * $Id: AbstractClassFileTask.java,v 1.12 2009-11-30 05:54:13 ball Exp $
  *
  * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
  */
@@ -22,7 +22,7 @@ import org.apache.tools.ant.util.ClasspathUtils;
  * implementations that select *.CLASS files.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 public abstract class AbstractClassFileTask extends AbstractMatchingTask {
     private static final String DOT_CLASS = ".class";
@@ -153,7 +153,7 @@ public abstract class AbstractClassFileTask extends AbstractMatchingTask {
                   + ": " + message);
     }
 
-    protected static boolean isAbstract(Class type) {
+    protected static boolean isAbstract(Class<?> type) {
         return AbstractClasspathTask.isAbstract(type);
     }
 
@@ -161,7 +161,7 @@ public abstract class AbstractClassFileTask extends AbstractMatchingTask {
         return AbstractClasspathTask.isAbstract(member);
     }
 
-    protected static boolean isPublic(Class type) {
+    protected static boolean isPublic(Class<?> type) {
         return AbstractClasspathTask.isPublic(type);
     }
 
@@ -169,7 +169,7 @@ public abstract class AbstractClassFileTask extends AbstractMatchingTask {
         return AbstractClasspathTask.isPublic(member);
     }
 
-    protected static boolean isStatic(Class type) {
+    protected static boolean isStatic(Class<?> type) {
         return AbstractClasspathTask.isStatic(type);
     }
 
@@ -177,7 +177,7 @@ public abstract class AbstractClassFileTask extends AbstractMatchingTask {
         return AbstractClasspathTask.isStatic(member);
     }
 
-    protected static boolean isNative(Class type) {
+    protected static boolean isNative(Class<?> type) {
         return AbstractClasspathTask.isNative(type);
     }
 
