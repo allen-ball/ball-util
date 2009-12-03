@@ -7,7 +7,7 @@
     -----------------
     Java Utilities
 
-    $Id: build.xml,v 1.30 2009-11-30 05:56:21 ball Exp $
+    $Id: build.xml,v 1.31 2009-12-03 07:05:19 ball Exp $
   </description>
 
   <property name="build.properties.file" location="build.properties"/>
@@ -19,11 +19,11 @@
 
   <property name="src.dir"              location="src"/>
 
-  <property name="build.dir"            location="build"/>
-  <property name="build.class.dir"      location="${build.dir}/class"/>
-  <property name="build.include.dir"    location="${build.dir}/include"/>
-  <property name="build.object.dir"     location="${build.dir}/object"/>
-  <property name="build.javadoc.dir"    location="${build.dir}/javadoc"/>
+  <property name="target.dir"           location="target"/>
+  <property name="target.class.dir"     location="${target.dir}/class"/>
+  <property name="target.include.dir"   location="${target.dir}/include"/>
+  <property name="target.object.dir"    location="${target.dir}/object"/>
+  <property name="target.javadoc.dir"   location="${target.dir}/javadoc"/>
 
   <property name="ant.javadoc.url"
             value="file://${ant.home}/docs/manual/api"/>
@@ -31,15 +31,15 @@
   <property name="vendor"               value="iprotium.com"/>
 
   <path id="build.classpath">
-    <pathelement location="${build.class.dir}"/>
-    <fileset dir="${build.dir}" includes="**/*.jar"/>
+    <pathelement location="${target.class.dir}"/>
+    <fileset dir="${target.dir}" includes="**/*.jar"/>
     <path refid="dependency.classpath"/>
   </path>
 
   <target name="clean"
           description="--> Removes compilation files and directories."
           depends="">
-    <delete dir="${build.dir}"/>
+    <delete dir="${target.dir}"/>
   </target>
 
   <target name="depend"
@@ -68,15 +68,15 @@
   <target name="classes"
           description="--> Compile Java source."
           depends="depend">
-    <mkdir dir="${build.class.dir}"/>
+    <mkdir dir="${target.class.dir}"/>
     <filter token="POM.ARTIFACTID" value="${pom.artifactId}"/>
     <filter token="VENDOR" value="${vendor}"/>
     <copy filtering="true" preservelastmodified="true"
-          todir="${build.class.dir}">
+          todir="${target.class.dir}">
       <fileset dir="${src.dir}/main/resources"/>
     </copy>
     <javac debug="${compile.debug}" deprecation="${compile.deprecation}"
-           optimize="${compile.optimize}" destdir="${build.class.dir}">
+           optimize="${compile.optimize}" destdir="${target.class.dir}">
       <compilerarg compiler="modern" value="-Xlint:all"/>
       <classpath>
         <path refid="build.classpath"/>
@@ -86,7 +86,7 @@
     <taskdef classpathref="build.classpath"
              resource="iprotium/util/ant/defaults.properties"/>
     <jni-classes classpathref="build.classpath"
-                 basedir="${build.class.dir}" property="jni.classes">
+                 basedir="${target.class.dir}" property="jni.classes">
       <src path="${src.dir}/main/java"/>
     </jni-classes>
   </target>
@@ -94,8 +94,8 @@
   <target name="jar"
           description="--> Construct iprotium-util.jar."
           depends="buildnumber,classes">
-    <jar destfile="${build.dir}/${artifact}">
-      <fileset dir="${build.class.dir}"/>
+    <jar destfile="${target.dir}/${artifact}">
+      <fileset dir="${target.class.dir}"/>
       <manifest>
         <attribute name="Built-By" value="${user.name}"/>
         <section name="iprotium/activation/">
@@ -167,7 +167,7 @@
         </section>
       </manifest>
     </jar>
-    <jarlib-display file="${build.dir}/${artifact}"/>
+    <jarlib-display file="${target.dir}/${artifact}"/>
   </target>
 
   <target name="javadoc"
@@ -176,16 +176,16 @@
     <taskdef classpathref="build.classpath"
              resource="iprotium/util/ant/defaults.properties"/>
     <package-list classpathref="build.classpath"
-                  basedir="${build.class.dir}" property="packagenames">
+                  basedir="${target.class.dir}" property="packagenames">
       <src path="${src.dir}/main/java"/>
     </package-list>
-    <mkdir dir="${build.javadoc.dir}"/>
+    <mkdir dir="${target.javadoc.dir}"/>
     <property name="javadoc.maxmemory" value="1g"/>
     <javadoc linksource="${javadoc.linksource}"
              maxmemory="${javadoc.maxmemory}"
              doctitle="${pom.artifactId} ${pom.version}"
              packagenames="${packagenames}"
-             destdir="${build.javadoc.dir}">
+             destdir="${target.javadoc.dir}">
       <packageset dir="${src.dir}/main/java"/>
       <bottom>
         <![CDATA[Copyright &#169; 2009 Allen D. Ball.  All rights reserved.]]>
@@ -200,18 +200,18 @@
   <target name="headers"
           description="--> Compile JNI headers."
           depends="classes" if="jni.classes">
-    <mkdir dir="${build.include.dir}"/>
+    <mkdir dir="${target.include.dir}"/>
     <javah classpathref="build.classpath" class="${jni.classes}"
-           destdir="${build.include.dir}"/>
+           destdir="${target.include.dir}"/>
   </target>
 
   <target name="objects"
           description="--> Compile JNI objects."
           depends="headers" if="jni.classes">
-    <mkdir dir="${build.object.dir}"/>
+    <mkdir dir="${target.object.dir}"/>
     <taskdef classpathref="build.classpath"
              resource="iprotium/util/ant/defaults.properties"/>
-    <jni-cc include="${build.include.dir}" dest="${build.object.dir}">
+    <jni-cc include="${target.include.dir}" dest="${target.object.dir}">
       <fileset dir="${src.dir}/main/c" includes="*.c"/>
       <mapper type="glob" from="*.c" to="*.o"/>
     </jni-cc>
@@ -222,9 +222,9 @@
           depends="objects">
     <taskdef classpathref="build.classpath"
              resource="iprotium/util/ant/defaults.properties"/>
-    <jni-ld destdir="${build.dir}" libname="${pom.artifactId}"
+    <jni-ld destdir="${target.dir}" libname="${pom.artifactId}"
             property="jnilib">
-      <fileset dir="${build.object.dir}" includes="**/*.o"/>
+      <fileset dir="${target.object.dir}" includes="**/*.o"/>
     </jni-ld>
   </target>
 
@@ -232,9 +232,9 @@
           description="--> Installs pom.xml and artifacts to local repository."
           depends="jar,jnilib">
     <jnilib-suffix property="jnilib.suffix"/>
-    <artifact:install file="${build.dir}/${artifact}">
+    <artifact:install file="${target.dir}/${artifact}">
       <pom refid="pom"/>
-      <attach file="${build.dir}/${jnilib}" type="${jnilib.suffix}"/>
+      <attach file="${target.dir}/${jnilib}" type="${jnilib.suffix}"/>
     </artifact:install>
   </target>
 
@@ -317,11 +317,11 @@
   <target name="link"
           description="--> Invokes &lt;link/&gt; task."
           depends="classes">
-    <mkdir dir="${build.dir}/links"/>
+    <mkdir dir="${target.dir}/links"/>
     <taskdef classpathref="build.classpath"
              resource="iprotium/util/ant/defaults.properties"/>
-    <link symbolic="true" relative="true" todir="${build.dir}/links">
-      <fileset dir="${build.class.dir}"/>
+    <link symbolic="true" relative="true" todir="${target.dir}/links">
+      <fileset dir="${target.class.dir}"/>
     </link>
   </target>
 
@@ -330,7 +330,7 @@
           depends="classes">
     <taskdef classpathref="build.classpath"
              resource="iprotium/util/ant/defaults.properties"/>
-    <lint classpathref="build.classpath" basedir="${build.class.dir}">
+    <lint classpathref="build.classpath" basedir="${target.class.dir}">
       <src path="${src.dir}/main/java"/>
     </lint>
   </target>
@@ -364,7 +364,7 @@
           depends="classes">
     <taskdef classpathref="build.classpath"
              resource="iprotium/util/ant/defaults.properties"/>
-    <package-list classpathref="build.classpath" basedir="${build.class.dir}">
+    <package-list classpathref="build.classpath" basedir="${target.class.dir}">
       <src path="${src.dir}/main/java"/>
     </package-list>
   </target>
@@ -374,7 +374,7 @@
           depends="classes">
     <taskdef classpathref="build.classpath"
              resource="iprotium/util/ant/defaults.properties"/>
-    <readlink basedir="${build.dir}"/>
+    <readlink basedir="${target.dir}"/>
   </target>
 
   <target name="resource-list"
@@ -399,7 +399,7 @@
     <taskdef classpathref="build.classpath"
              resource="iprotium/util/ant/defaults.properties"/>
     <show-properties classpathref="build.classpath"
-                     basedir="${build.class.dir}">
+                     basedir="${target.class.dir}">
       <src path="${src.dir}/main/java"/>
     </show-properties>
   </target>
@@ -410,7 +410,7 @@
     <taskdef classpathref="build.classpath"
              resource="iprotium/util/ant/defaults.properties"/>
     <subclasses-of classpathref="build.classpath"
-                   basedir="${build.class.dir}" type="${type}">
+                   basedir="${target.class.dir}" type="${type}">
       <src path="${src.dir}/main/java"/>
     </subclasses-of>
   </target>
@@ -426,6 +426,9 @@
 </project>
 <!--
     $Log: not supported by cvs2svn $
+    Revision 1.30  2009/11/30 05:56:21  ball
+    Added <superclasses-of/> build target and Ant Task.
+
     Revision 1.29  2009/11/26 20:27:53  ball
     Added <service-list/> build target and Ant Task.
 
