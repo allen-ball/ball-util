@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- $Id: pom.xml,v 1.7 2009-10-24 21:08:04 ball Exp $ -->
-<project>
+<!-- $Id: pom.xml,v 1.8 2010-07-17 17:26:45 ball Exp $ -->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>iprotium</groupId>
   <artifactId>iprotium-util</artifactId>
@@ -49,11 +52,14 @@
       <artifactId>activation</artifactId>
       <version>1.1.1</version>
     </dependency>
+    <dependency>
+      <groupId>org.apache.ant</groupId>
+      <artifactId>ant</artifactId>
+      <version>1.7.1</version>
+      <scope>compile</scope>
+    </dependency>
   </dependencies>
 </project>
 <!--
     $Log: not supported by cvs2svn $
-    Revision 1.6  2009/09/23 05:28:22  ball
-    Added Mac OS X profile.
-
   -->
