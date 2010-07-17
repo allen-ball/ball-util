@@ -7,7 +7,7 @@
     -----------------
     Java Utilities
 
-    $Id: build.xml,v 1.31 2009-12-03 07:05:19 ball Exp $
+    $Id: build.xml,v 1.32 2010-07-17 17:24:48 ball Exp $
   </description>
 
   <property name="build.properties.file" location="build.properties"/>
@@ -33,7 +33,7 @@
   <path id="build.classpath">
     <pathelement location="${target.class.dir}"/>
     <fileset dir="${target.dir}" includes="**/*.jar"/>
-    <path refid="dependency.classpath"/>
+    <path refid="compile.classpath"/>
   </path>
 
   <target name="clean"
@@ -46,11 +46,14 @@
           description="--> Set-up dependencies.">
     <artifact:pom id="pom" file="pom.xml"/>
     <artifact:dependencies
-       pomRefId="pom" useScope="compile" verbose="true"
-       pathId="dependency.classpath"/>
+        pomRefId="pom" useScope="compile" type="jar"
+        pathId="compile.classpath"/>
     <artifact:dependencies
-       pomRefId="pom" useScope="runtime" verbose="false"
-       filesetId="dependency.fileset" versionsId="dependency.versions"/>
+        pomRefId="pom" useScope="runtime" type="jar"
+        pathId="runtime.classpath"/>
+    <artifact:dependencies
+        pomRefId="pom" useScope="runtime"
+        filesetId="runtime.fileset" versionsId="runtime.versions"/>
     <property name="artifact"
               value="${pom.artifactId}-${pom.version}.jar"/>
   </target>
@@ -188,7 +191,7 @@
              destdir="${target.javadoc.dir}">
       <packageset dir="${src.dir}/main/java"/>
       <bottom>
-        <![CDATA[Copyright &#169; 2009 Allen D. Ball.  All rights reserved.]]>
+<![CDATA[Copyright &#169; 2009, 2010 Allen D. Ball.  All rights reserved.]]>
       </bottom>
       <link href="${ant.javadoc.url}"/>
       <sourcepath location="${ant.home}/src"/>
@@ -234,7 +237,8 @@
     <jnilib-suffix property="jnilib.suffix"/>
     <artifact:install file="${target.dir}/${artifact}">
       <pom refid="pom"/>
-      <attach file="${target.dir}/${jnilib}" type="${jnilib.suffix}"/>
+      <attach file="${target.dir}/${jnilib}"
+              classifier="${os.name}-${os.arch}" type="${jnilib.suffix}"/>
     </artifact:install>
   </target>
 
@@ -259,8 +263,7 @@
           depends="classes">
     <taskdef classpathref="build.classpath"
              resource="iprotium/util/ant/defaults.properties"/>
-    <instance-of classpathref="build.classpath"
-                 type="${type}" argument="${argument}"/>
+    <instance-of classpathref="build.classpath" type="${type}"/>
   </target>
 
   <target name="is-assignable-from"
