@@ -1,7 +1,7 @@
 /*
- * $Id: FileOrder.java,v 1.1 2009-11-21 21:35:47 ball Exp $
+ * $Id: FileOrder.java,v 1.2 2010-07-28 04:56:50 ball Exp $
  *
- * Copyright 2009 Allen D. Ball.  All rights reserved.
+ * Copyright 2009, 2010 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
@@ -11,7 +11,7 @@ import java.io.File;
  * Abstract {@link Order} base class for ordering {@link File} objects.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public abstract class FileOrder extends Order<File> {
 
@@ -68,7 +68,11 @@ public abstract class FileOrder extends Order<File> {
 
         @Override
         public int compare(File left, File right) {
-            return left.getName().compareTo(right.getName());
+            return NATURAL.compare(getName(left), getName(right));
+        }
+
+        private String getName(File file) {
+            return (file != null) ? file.getName() : null;
         }
     }
 }
