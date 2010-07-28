@@ -1,7 +1,7 @@
 /*
- * $Id: IOUtil.java,v 1.7 2009-11-15 04:14:50 ball Exp $
+ * $Id: IOUtil.java,v 1.8 2010-07-28 04:46:42 ball Exp $
  *
- * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2010 Allen D. Ball.  All rights reserved.
  */
 package iprotium.io;
 
@@ -25,9 +25,9 @@ import java.nio.channels.WritableByteChannel;
  * Provides common I/O utilities implemented as static methods.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
-public class IOUtil {
+public abstract class IOUtil {
     private IOUtil() { }
 
     /**
