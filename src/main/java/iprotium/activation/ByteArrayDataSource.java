@@ -1,7 +1,7 @@
 /*
- * $Id: ByteArrayDataSource.java,v 1.4 2009-09-04 17:13:43 ball Exp $
+ * $Id: ByteArrayDataSource.java,v 1.5 2010-07-28 04:43:42 ball Exp $
  *
- * Copyright 2009 Allen D. Ball.  All rights reserved.
+ * Copyright 2009, 2010 Allen D. Ball.  All rights reserved.
  */
 package iprotium.activation;
 
@@ -15,18 +15,31 @@ import java.nio.ByteBuffer;
  * {@link ByteArrayInputStream} and {@link ByteArrayInputStream}.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class ByteArrayDataSource extends AbstractDataSource {
     private ByteArrayOutputStream out = new ByteArrayOutputStream();
 
     /**
-     * @see AbstractDataSource#AbstractDataSource(String,String)
+     * @see AbstractDataSource#AbstractDataSource()
      *
      * @param   name            Initial "Name" attribute value.
-     * @param   type            Initial "ContentType" attribute value.
      */
-    public ByteArrayDataSource(String name, String type) { super(name, type); }
+    public ByteArrayDataSource(String name, String type) {
+        super();
+
+        setName(name);
+
+        if (type != null) {
+            setContentType(type);
+        }
+
+        try {
+            getOutputStream().close();
+        } catch (IOException exception) {
+            throw new ExceptionInInitializerError(exception);
+        }
+    }
 
     /**
      * See {@link ByteArrayOutputStream#reset()}.
@@ -36,7 +49,9 @@ public class ByteArrayDataSource extends AbstractDataSource {
     /**
      * See {@link ByteArrayOutputStream#toByteArray()}.
      */
-    public byte[] toByteArray() { return out.toByteArray(); }
+    public byte[] toByteArray() {
+        return (out != null) ? out.toByteArray() : new byte[] { };
+    }
 
     @Override
     public ByteArrayInputStream getInputStream() throws IOException {
@@ -45,6 +60,13 @@ public class ByteArrayDataSource extends AbstractDataSource {
 
     @Override
     public ByteArrayOutputStream getOutputStream() throws IOException {
+        ByteArrayOutputStream out = null;
+
+        synchronized (this) {
+            out = new ByteArrayOutputStream(8 * 1024);
+            this.out = out;
+        }
+
         return out;
     }
 
