@@ -3,6 +3,10 @@
 	* src/main/java/iprotium/activation/AbstractDataSource.java:
 	Added APPLICATION_OCTET_STREAM member.
 
+	* src/main/java/iprotium/activation/ByteArrayDataSource.java:
+	Return new ByteArrayOutputStream with each invocation of
+	getOutputStream().
+
 2010-07-26  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* src/main/java/iprotium/util/ClassUtil.java: Initial writing.
