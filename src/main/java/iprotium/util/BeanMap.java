@@ -1,7 +1,7 @@
 /*
- * $Id: BeanMap.java,v 1.8 2009-11-26 00:09:06 ball Exp $
+ * $Id: BeanMap.java,v 1.9 2010-07-28 04:52:03 ball Exp $
  *
- * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2010 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
@@ -22,7 +22,7 @@ import java.util.Set;
  * for the bean properties.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 public class BeanMap extends AbstractMap<String,Object>
                              implements Serializable {
@@ -97,11 +97,19 @@ public class BeanMap extends AbstractMap<String,Object>
         throw new IllegalArgumentException("key=" + String.valueOf(key));
     }
 
+    /**
+     * @throws  UnsupportedOperationException
+     *                          Always.
+     */
     @Override
     public Object remove(Object key) {
         throw new UnsupportedOperationException("remove");
     }
 
+    /**
+     * @throws  UnsupportedOperationException
+     *                          Always.
+     */
     @Override
     public void clear() { throw new UnsupportedOperationException("clear"); }
 
@@ -155,8 +163,10 @@ public class BeanMap extends AbstractMap<String,Object>
             return (key != null) ? getKey().equals(key) : (getKey() == key);
         }
 
+        @Override
         public String getKey() { return key; }
 
+        @Override
         public Object getValue() {
             Object value = null;
 
@@ -170,6 +180,7 @@ public class BeanMap extends AbstractMap<String,Object>
             return value;
         }
 
+        @Override
         public Object setValue(Object value) {
             Object object = getValue();
 
@@ -196,4 +207,7 @@ public class BeanMap extends AbstractMap<String,Object>
 }
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.8  2009/11/26 00:09:06  ball
+ * Only include bean properties with read methods in the keySet().
+ *
  */
