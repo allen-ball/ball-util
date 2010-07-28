@@ -1,12 +1,14 @@
 /*
- * $Id: AbstractClasspathTask.java,v 1.11 2009-11-30 05:54:13 ball Exp $
+ * $Id: AbstractClasspathTask.java,v 1.12 2010-07-28 05:46:06 ball Exp $
  *
- * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2010 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
-import java.lang.reflect.Member;
-import java.lang.reflect.Modifier;
+import iprotium.util.PrimitiveClassMap;
+import java.util.Collections;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import org.apache.tools.ant.AntClassLoader;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
@@ -19,9 +21,12 @@ import org.apache.tools.ant.util.ClasspathUtils;
  * classpath.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 public abstract class AbstractClasspathTask extends Task {
+    private static final SortedMap<String,Class<?>> JAVA_PRIMITIVE_MAP =
+        Collections.unmodifiableSortedMap(new JavaPrimitiveMap());
+
     private boolean initialize = false;
     private ClasspathUtils.Delegate delegate = null;
 
@@ -66,39 +71,31 @@ public abstract class AbstractClasspathTask extends Task {
     }
 
     protected Class<?> getClass(String name) throws ClassNotFoundException {
-        return Class.forName(name, getInitialize(), getClassLoader());
+        return getClass(name, getInitialize(), getClassLoader());
     }
 
-    protected static boolean isAbstract(Class<?> type) {
-        return Modifier.isAbstract(type.getModifiers());
+    protected static Class<?> getClass(String name,
+                                       boolean initialize, ClassLoader loader)
+            throws ClassNotFoundException {
+        Class<?> type = JAVA_PRIMITIVE_MAP.get(name);
+
+        if (type == null) {
+            type = Class.forName(name, initialize, loader);
+        }
+
+        return type;
     }
 
-    protected static boolean isAbstract(Member member) {
-        return Modifier.isAbstract(member.getModifiers());
-    }
+    public static class JavaPrimitiveMap extends TreeMap<String,Class<?>> {
+        private static final long serialVersionUID = -4043723550289168765L;
 
-    protected static boolean isPublic(Class<?> type) {
-        return Modifier.isPublic(type.getModifiers());
-    }
+        public JavaPrimitiveMap() {
+            super();
 
-    protected static boolean isPublic(Member member) {
-        return Modifier.isPublic(member.getModifiers());
-    }
-
-    protected static boolean isStatic(Class<?> type) {
-        return Modifier.isStatic(type.getModifiers());
-    }
-
-    protected static boolean isStatic(Member member) {
-        return Modifier.isStatic(member.getModifiers());
-    }
-
-    protected static boolean isNative(Class<?> type) {
-        return Modifier.isNative(type.getModifiers());
-    }
-
-    protected static boolean isNative(Member member) {
-        return Modifier.isNative(member.getModifiers());
+            for (Class<?> type : PrimitiveClassMap.INSTANCE.keySet()) {
+                put(type.getName(), type);
+            }
+        }
     }
 }
 /*

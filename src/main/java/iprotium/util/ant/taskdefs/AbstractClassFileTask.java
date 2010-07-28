@@ -1,7 +1,7 @@
 /*
- * $Id: AbstractClassFileTask.java,v 1.12 2009-11-30 05:54:13 ball Exp $
+ * $Id: AbstractClassFileTask.java,v 1.13 2010-07-28 05:46:06 ball Exp $
  *
- * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2010 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -22,7 +22,7 @@ import org.apache.tools.ant.util.ClasspathUtils;
  * implementations that select *.CLASS files.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 public abstract class AbstractClassFileTask extends AbstractMatchingTask {
     private static final String DOT_CLASS = ".class";
@@ -114,7 +114,9 @@ public abstract class AbstractClassFileTask extends AbstractMatchingTask {
     }
 
     protected Class<?> getClass(String name) throws ClassNotFoundException {
-        return Class.forName(name, getInitialize(), getClassLoader());
+        return AbstractClasspathTask.getClass(name,
+                                              getInitialize(),
+                                              getClassLoader());
     }
 
     protected File getJavaFile(Map<File,Class> map, File file) {
@@ -151,38 +153,6 @@ public abstract class AbstractClassFileTask extends AbstractMatchingTask {
     protected void log(File file, int lineno, String message) {
         super.log(String.valueOf(file) + ":" + String.valueOf(lineno)
                   + ": " + message);
-    }
-
-    protected static boolean isAbstract(Class<?> type) {
-        return AbstractClasspathTask.isAbstract(type);
-    }
-
-    protected static boolean isAbstract(Member member) {
-        return AbstractClasspathTask.isAbstract(member);
-    }
-
-    protected static boolean isPublic(Class<?> type) {
-        return AbstractClasspathTask.isPublic(type);
-    }
-
-    protected static boolean isPublic(Member member) {
-        return AbstractClasspathTask.isPublic(member);
-    }
-
-    protected static boolean isStatic(Class<?> type) {
-        return AbstractClasspathTask.isStatic(type);
-    }
-
-    protected static boolean isStatic(Member member) {
-        return AbstractClasspathTask.isStatic(member);
-    }
-
-    protected static boolean isNative(Class<?> type) {
-        return AbstractClasspathTask.isNative(type);
-    }
-
-    protected static boolean isNative(Member member) {
-        return AbstractClasspathTask.isNative(member);
     }
 
     private static class ClassFileSelector implements FileSelector {

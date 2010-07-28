@@ -1,7 +1,7 @@
 /*
- * $Id: JNIClassesTask.java,v 1.7 2009-09-20 19:24:59 ball Exp $
+ * $Id: JNIClassesTask.java,v 1.8 2010-07-28 05:46:06 ball Exp $
  *
- * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2010 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -11,13 +11,14 @@ import java.util.TreeSet;
 import org.apache.tools.ant.BuildException;
 
 import static iprotium.util.ClassOrder.NAME;
+import static iprotium.util.ClassUtil.isNative;
 
 /**
  * Ant {@link org.apache.tools.ant.Task} to determine the classes that have
  * native members.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 public class JNIClassesTask extends AbstractClassFileTask {
     private static final String COMMA = ",";

@@ -1,7 +1,7 @@
 /*
- * $Id: LintTask.java,v 1.2 2009-09-04 17:13:43 ball Exp $
+ * $Id: LintTask.java,v 1.3 2010-07-28 05:46:06 ball Exp $
  *
- * Copyright 2009 Allen D. Ball.  All rights reserved.
+ * Copyright 2009, 2010 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -17,12 +17,15 @@ import java.util.List;
 import java.util.Map;
 import org.apache.tools.ant.BuildException;
 
+import static iprotium.util.ClassUtil.isAbstract;
+import static iprotium.util.ClassUtil.isStatic;
+
 /**
  * Ant {@link org.apache.tools.ant.Task} to provide additional compile-time
  * ("lint") checks.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class LintTask extends AbstractClassFileTask {
     private List<Check> list =
@@ -67,7 +70,7 @@ public class LintTask extends AbstractClassFileTask {
         }
     }
 
-    private abstract class Check {
+    public abstract class Check {
         protected Check() { }
 
         public void check(File file, Class<?> type) { }
@@ -81,12 +84,11 @@ public class LintTask extends AbstractClassFileTask {
         public void check(File file, Class<?> type, Class<?> member) { }
     }
 
-    private static final int MODIFIERS =
-        Modifier.PRIVATE | Modifier.STATIC | Modifier.FINAL;
-    private static final Class TYPE = Long.TYPE;
-    private static final String SERIALVERSIONUID = "serialVersionUID";
-
     public class SerialVersionUIDCheck extends Check {
+        private static final int MODIFIERS =
+            Modifier.PRIVATE | Modifier.STATIC | Modifier.FINAL;
+        private static final String SERIALVERSIONUID = "serialVersionUID";
+
         public SerialVersionUIDCheck() { super(); }
 
         @Override
@@ -98,7 +100,7 @@ public class LintTask extends AbstractClassFileTask {
                     Field field = type.getDeclaredField(SERIALVERSIONUID);
 
                     if (! (isStatic(field)
-                           && TYPE.equals(field.getType()))) {
+                           && Long.TYPE.equals(field.getType()))) {
                         throw new NoSuchFieldException(SERIALVERSIONUID);
                     }
                 } catch (NoSuchFieldException exception) {
@@ -113,9 +115,9 @@ public class LintTask extends AbstractClassFileTask {
             long serialVersionUID =
                 ObjectStreamClass.lookup(type).getSerialVersionUID();
 
-            return (Modifier.toString(MODIFIERS) + " " + TYPE.getName()
-                    + " " + SERIALVERSIONUID + " = "
-                    + String.valueOf(serialVersionUID) + "L;");
+            return (Modifier.toString(MODIFIERS)
+                    + " " + Long.TYPE.getName() + " " + SERIALVERSIONUID
+                    + " = " + String.valueOf(serialVersionUID) + "L;");
         }
     }
 }
