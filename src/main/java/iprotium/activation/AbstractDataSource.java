@@ -1,7 +1,7 @@
 /*
- * $Id: AbstractDataSource.java,v 1.3 2009-09-04 17:13:43 ball Exp $
+ * $Id: AbstractDataSource.java,v 1.4 2010-07-28 04:41:29 ball Exp $
  *
- * Copyright 2009 Allen D. Ball.  All rights reserved.
+ * Copyright 2009, 2010 Allen D. Ball.  All rights reserved.
  */
 package iprotium.activation;
 
@@ -15,21 +15,24 @@ import javax.activation.DataSource;
  * Abstract base class for {@link DataSource} implementations.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class AbstractDataSource implements DataSource {
+
+    /**
+     * {@value #APPLICATION_OCTET_STREAM}
+     */
+    public static final String APPLICATION_OCTET_STREAM =
+        "application/octet-stream";
+
     private String name = null;
     private String type = null;
 
     /**
      * Sole constructor.
-     *
-     * @param   name            Initial "Name" attribute value.
-     * @param   type            Initial "ContentType" attribute value.
      */
-    protected AbstractDataSource(String name, String type) {
-        setName(name);
-        setContentType(type);
+    protected AbstractDataSource() {
+        setContentType(APPLICATION_OCTET_STREAM);
     }
 
     public String getName() { return name; }
@@ -40,7 +43,8 @@ public class AbstractDataSource implements DataSource {
 
     /**
      * @throws  UnsupportedOperationException
-     *                          Always.
+     *                          Unless overridden by subclass
+     *                          implementation.
      */
     public InputStream getInputStream() throws IOException {
         throw new UnsupportedOperationException("getInputStream()");
@@ -48,7 +52,8 @@ public class AbstractDataSource implements DataSource {
 
     /**
      * @throws  UnsupportedOperationException
-     *                          Always.
+     *                          Unless overridden by subclass
+     *                          implementation.
      */
     public OutputStream getOutputStream() throws IOException {
         throw new UnsupportedOperationException("getOutputStream()");
@@ -71,7 +76,6 @@ public class AbstractDataSource implements DataSource {
 
         try {
             in = getInputStream();
-
             IOUtil.copy(in, out);
         } finally {
             try {
