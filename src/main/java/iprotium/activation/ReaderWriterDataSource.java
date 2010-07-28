@@ -1,7 +1,7 @@
 /*
- * $Id: ReaderWriterDataSource.java,v 1.5 2009-09-04 17:13:43 ball Exp $
+ * $Id: ReaderWriterDataSource.java,v 1.6 2010-07-28 04:34:35 ball Exp $
  *
- * Copyright 2009 Allen D. Ball.  All rights reserved.
+ * Copyright 2009, 2010 Allen D. Ball.  All rights reserved.
  */
 package iprotium.activation;
 
@@ -24,7 +24,7 @@ import java.util.NoSuchElementException;
  * {@link PrintWriter} wrapping the {@link OutputStream}.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public class ReaderWriterDataSource extends ByteArrayDataSource
                                     implements Iterable<String> {
@@ -78,7 +78,8 @@ public class ReaderWriterDataSource extends ByteArrayDataSource
      *          {@link javax.activation.DataSource} {@link InputStream}.
      */
     public BufferedReader getBufferedReader() throws IOException {
-        return new BufferedReaderImpl();
+        return new BufferedReader(new InputStreamReader(getInputStream(),
+                                                        getCharset()));
     }
 
     /**
@@ -91,7 +92,9 @@ public class ReaderWriterDataSource extends ByteArrayDataSource
      *          {@link javax.activation.DataSource} {@link OutputStream}.
      */
     public PrintWriter getPrintWriter() throws IOException {
-        return new PrintWriterImpl();
+        return new PrintWriter(new OutputStreamWriter(getOutputStream(),
+                                                      getCharset()),
+                               true);
     }
 
     /**
@@ -111,7 +114,6 @@ public class ReaderWriterDataSource extends ByteArrayDataSource
 
         try {
             reader = getBufferedReader();
-
             IOUtil.copy(reader, writer);
         } finally {
             try {
@@ -130,6 +132,7 @@ public class ReaderWriterDataSource extends ByteArrayDataSource
      *
      * @return  An {@link Iterator} to access the lines of the report.
      */
+    @Override
     public Iterator<String> iterator() { return new IteratorImpl(); }
 
     @Override
@@ -159,19 +162,6 @@ public class ReaderWriterDataSource extends ByteArrayDataSource
         return (charset != null) ? charset.name() : null;
     }
 
-    private class BufferedReaderImpl extends BufferedReader {
-        public BufferedReaderImpl() throws IOException {
-            super(new InputStreamReader(getInputStream(), getCharset()));
-        }
-    }
-
-    private class PrintWriterImpl extends PrintWriter {
-        public PrintWriterImpl() throws IOException {
-            super(new OutputStreamWriter(getOutputStream(), getCharset()),
-                  true);
-        }
-    }
-
     private class IteratorImpl implements Iterator<String> {
         private final BufferedReader reader;
         private transient String line = null;
@@ -184,6 +174,7 @@ public class ReaderWriterDataSource extends ByteArrayDataSource
             }
         }
 
+        @Override
         public boolean hasNext() {
             if (line == null) {
                 try {
@@ -196,6 +187,7 @@ public class ReaderWriterDataSource extends ByteArrayDataSource
             return (line != null);
         }
 
+        @Override
         public String next() {
             hasNext();
 
@@ -210,6 +202,7 @@ public class ReaderWriterDataSource extends ByteArrayDataSource
             return line;
         }
 
+        @Override
         public void remove() {
             throw new UnsupportedOperationException("remove()");
         }
