@@ -1,10 +1,11 @@
 /*
- * $Id: POSIX.java,v 1.8 2009-10-25 14:57:29 ball Exp $
+ * $Id: POSIX.java,v 1.9 2010-07-28 05:04:57 ball Exp $
  *
- * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2010 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.jni;
 
+import iprotium.io.FileImpl;
 import java.io.File;
 import java.util.ResourceBundle;
 
@@ -15,9 +16,9 @@ import java.util.ResourceBundle;
  * </a> functions.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
-public class POSIX {
+public abstract class POSIX {
     private static final ResourceBundle BUNDLE =
         ResourceBundle.getBundle(POSIX.class.getName());
 
@@ -59,14 +60,14 @@ public class POSIX {
      *
      * @param   from            The source {@link File}.
      *
-     * @return  A {@link File} representing the link target if
+     * @return  A {@link FileImpl} representing the link target if
      *          <code>from</code> is a symlink; <code>null</code>
      *          otherwise.
      */
-    public static File readlink(File from) {
+    public static FileImpl readlink(File from) {
         String to = readlink(from.getPath());
 
-        return (to != null) ? new File(to) : null;
+        return (to != null) ? new FileImpl(to) : null;
     }
 
     private static native String readlink(String from);
@@ -137,4 +138,8 @@ public class POSIX {
 }
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.8  2009/10/25 14:57:29  ball
+ * Added opendir(File), closedir(DIR), readdir(DIR), and
+ * rewinddir(DIR) methods.
+ *
  */
