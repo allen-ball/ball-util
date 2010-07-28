@@ -14,6 +14,10 @@
 	* src/main/java/iprotium/util/Order.java:
 	Added Natural inner class and NATURAL member.
 
+	* src/main/java/iprotium/util/PrimitiveClassMap.java,
+	src/main/java/iprotium/util/StaticFinalFieldMap.java:
+	Initial writing.
+
 2010-07-26  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* src/main/java/iprotium/util/ClassUtil.java: Initial writing.
