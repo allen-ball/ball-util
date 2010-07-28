@@ -1,7 +1,7 @@
 /*
- * $Id: Order.java,v 1.3 2009-06-21 01:25:03 ball Exp $
+ * $Id: Order.java,v 1.4 2010-07-28 04:50:44 ball Exp $
  *
- * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2010 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
@@ -14,28 +14,50 @@ import java.util.Comparator;
 import java.util.List;
 
 /**
- * Abstract base class for Comparator implementations.
- *
- * @see Comparator
+ * Abstract base class for {@link Comparator} implementations.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public abstract class Order<T> implements Comparator<T>, Serializable {
+
+    /**
+     * @see Natural
+     */
+    public static final Natural<Object> NATURAL = new Natural<Object>();
 
     /**
      * Sole constructor.
      */
     protected Order() { }
 
+    @Override
     public abstract int compare(T left, T right);
 
+    protected boolean allAreNonNull(Object... objects) {
+        boolean notNull = true;
+
+        for (Object object : objects) {
+            notNull &= (object != null);
+
+            if (! notNull) {
+                break;
+            }
+        }
+
+        return notNull;
+    }
+
+    protected int intValue(boolean bool) { return bool ? 1 : 0; }
+
     /**
-     * Method to construct a List from a Collection sorted in this Order.
+     * Method to construct a {@link List} from a {@link Collection} sorted
+     * in this {@link Order}.
      *
-     * @param   collection      The Collection to be sorted.
+     * @param   collection      The {@link Collection} to be sorted.
      *
-     * @return  A List containing the Collection sorted in this Order.
+     * @return  A {@link List} containing the {@link Collection} sorted in
+     *          this {@link Order}.
      */
     public List<T> asList(Collection<? extends T> collection) {
         List<T> list = new ArrayList<T>(collection);
@@ -46,7 +68,7 @@ public abstract class Order<T> implements Comparator<T>, Serializable {
     }
 
     /**
-     * Method to sort an array in this Order.
+     * Method to sort an array in this {@link Order}.
      *
      * @param   array           The array to be sorted.
      *
@@ -61,11 +83,11 @@ public abstract class Order<T> implements Comparator<T>, Serializable {
     }
 
     /**
-     * Method to sort a List in this Order.
+     * Method to sort a {@link List} in this {@link Order}.
      *
-     * @param   list            The List to be sorted.
+     * @param   list            The {@link List} to be sorted.
      *
-     * @return  The List after sorting.
+     * @return  The {@link List} after sorting.
      */
     public List<? extends T> sort(List<? extends T> list) {
         if (list != null) {
@@ -73,6 +95,30 @@ public abstract class Order<T> implements Comparator<T>, Serializable {
         }
 
         return list;
+    }
+
+    /**
+     * @see Comparable#compareTo(Object)
+     */
+    public static class Natural<T> extends Order<T> {
+        private static final long serialVersionUID = 3417528038704549459L;
+
+        /**
+         * Sole constructor.
+         */
+        protected Natural() { super(); }
+
+        @Override
+        public int compare(T left, T right) {
+            return compare((Comparable) left, (Comparable) right);
+        }
+
+        @SuppressWarnings("unchecked")
+        private int compare(Comparable left, Comparable right) {
+            return (allAreNonNull(left, right)
+                        ? left.compareTo(right)
+                        : (intValue(right != null) - intValue(left != null)));
+        }
     }
 }
 /*
