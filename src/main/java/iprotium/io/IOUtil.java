@@ -1,5 +1,5 @@
 /*
- * $Id: IOUtil.java,v 1.8 2010-07-28 04:46:42 ball Exp $
+ * $Id: IOUtil.java,v 1.9 2010-08-21 04:04:01 ball Exp $
  *
  * Copyright 2008 - 2010 Allen D. Ball.  All rights reserved.
  */
@@ -25,7 +25,7 @@ import java.nio.channels.WritableByteChannel;
  * Provides common I/O utilities implemented as static methods.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 public abstract class IOUtil {
     private IOUtil() { }
@@ -241,7 +241,7 @@ public abstract class IOUtil {
                     mkdirs(file.getParentFile());
                     file.mkdir();
 
-                    if (! file.isDirectory()) {
+                    if (! file.exists()) {
                         throw new IOException("Cannot create directory "
                                               + file);
                     }
@@ -303,4 +303,7 @@ public abstract class IOUtil {
 }
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.8  2010/07/28 04:46:42  ball
+ * Made class abstract (to avoid instantiation).
+ *
  */
