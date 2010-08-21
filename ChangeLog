@@ -1,3 +1,9 @@
+2010-08-20  Allen D. Ball  <ball@10-0-1-2.lan>
+
+	* src/main/java/iprotium/io/IOUtil.java:
+	In mkdirs(File...), use File.exists() to verify each directory has
+	been created.
+
 2010-07-27  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* src/main/java/iprotium/activation/AbstractDataSource.java:
