@@ -1,5 +1,7 @@
 2010-08-21  Allen D. Ball  <ball@10-0-1-2.lan>
 
+	* Added iprotium.lang and iprotium.lang.java packages.
+
 	* src/main/java/iprotium/lang/java/Keyword.java: Initial writing.
 
 2010-08-20  Allen D. Ball  <ball@10-0-1-2.lan>
