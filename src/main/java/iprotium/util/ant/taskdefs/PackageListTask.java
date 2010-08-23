@@ -1,7 +1,7 @@
 /*
- * $Id: PackageListTask.java,v 1.1 2009-09-23 05:23:24 ball Exp $
+ * $Id: PackageListTask.java,v 1.2 2010-08-23 03:43:55 ball Exp $
  *
- * Copyright 2009 Allen D. Ball.  All rights reserved.
+ * Copyright 2009, 2010 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -10,11 +10,12 @@ import java.util.TreeSet;
 import org.apache.tools.ant.BuildException;
 
 /**
- * Ant {@link org.apache.tools.ant.Task} to determine the {@link Package}s
+ * <a href="http://ant.apache.org/">Ant</a>
+ * {@link org.apache.tools.ant.Task} to determine the {@link Package}s
  * represented by the argument {@link Class} files.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class PackageListTask extends AbstractClassFileTask {
     private static final String COMMA = ",";

@@ -1,7 +1,7 @@
 /*
- * $Id: InstanceOfTask.java,v 1.12 2009-09-07 21:44:28 ball Exp $
+ * $Id: InstanceOfTask.java,v 1.13 2010-08-23 03:43:54 ball Exp $
  *
- * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2010 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -17,13 +17,14 @@ import java.util.List;
 import org.apache.tools.ant.BuildException;
 
 /**
- * Ant {@link org.apache.tools.ant.Task} to get an instance of a specified
+ * <a href="http://ant.apache.org/">Ant</a>
+ * {@link org.apache.tools.ant.Task} to get an instance of a specified
  * {@link Class}.
  *
  * @see Factory
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 public class InstanceOfTask extends AbstractClasspathTask {
     private String type = String.class.getName();
@@ -124,8 +125,12 @@ public class InstanceOfTask extends AbstractClasspathTask {
 
         /**
          * Sole constructor.
+         *
+         * @param       value   The initial value.
+         *
+         * @see #setValue(String)
          */
-        public Argument(String value) { this.value = value; }
+        public Argument(String value) { setValue(value); }
 
         public Argument() { this(null); }
 

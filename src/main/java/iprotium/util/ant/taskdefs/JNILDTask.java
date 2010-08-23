@@ -1,18 +1,19 @@
 /*
- * $Id: JNILDTask.java,v 1.6 2009-09-04 17:13:43 ball Exp $
+ * $Id: JNILDTask.java,v 1.7 2010-08-23 03:43:55 ball Exp $
  *
- * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2010 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
-import java.io.File;
+import iprotium.io.FileImpl;
 import org.apache.tools.ant.BuildException;
 
 /**
- * Ant {@link org.apache.tools.ant.Task} to link JNI shared libraries.
+ * <a href="http://ant.apache.org/">Ant</a>
+ * {@link org.apache.tools.ant.Task} to link JNI shared libraries.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 public class JNILDTask extends AbstractJNIExecuteOnTask {
     private String libname = null;
@@ -43,8 +44,8 @@ public class JNILDTask extends AbstractJNIExecuteOnTask {
 
     @Override
     protected String command() {
-        return (getBundleString("ld")
-                + SPACE + new File(getDestdir(), getName()).getAbsolutePath());
+        return (getBundleString("ld") + SPACE
+                + new FileImpl(getDestdir(), getName()).getAbsolutePath());
     }
 
     @Override

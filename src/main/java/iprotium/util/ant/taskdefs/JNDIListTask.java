@@ -1,7 +1,7 @@
 /*
- * $Id: JNDIListTask.java,v 1.4 2009-09-04 17:13:43 ball Exp $
+ * $Id: JNDIListTask.java,v 1.5 2010-08-23 03:43:55 ball Exp $
  *
- * Copyright 2009 Allen D. Ball.  All rights reserved.
+ * Copyright 2009, 2010 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -16,13 +16,13 @@ import javax.naming.spi.NamingManager;
 import org.apache.tools.ant.BuildException;
 
 /**
- * Ant {@link org.apache.tools.ant.Task} to list JNDI Initial
- * {@link Context}.
+ * <a href="http://ant.apache.org/">Ant</a>
+ * {@link org.apache.tools.ant.Task} to list JNDI Initial {@link Context}.
  *
  * @see NamingManager#getInitialContext(Hashtable)
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class JNDIListTask extends AbstractClasspathTask {
 
@@ -93,6 +93,7 @@ public class JNDIListTask extends AbstractClasspathTask {
 
             switch (x) {
             case 0:
+            default:
                 value = row.getName();
                 break;
 

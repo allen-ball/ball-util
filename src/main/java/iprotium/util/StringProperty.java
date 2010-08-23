@@ -1,5 +1,5 @@
 /*
- * $Id: StringProperty.java,v 1.4 2009-09-04 17:13:43 ball Exp $
+ * $Id: StringProperty.java,v 1.5 2010-08-23 03:43:54 ball Exp $
  *
  * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
  */
@@ -10,7 +10,7 @@ package iprotium.util;
  * {@link String}s.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class StringProperty extends Property<String> {
 
@@ -115,8 +115,8 @@ public class StringProperty extends Property<String> {
      * a value.  The {@link Property} has no default value.
      *
      * @param   name            The name of the {@link Property}.
-     * @param   required        <code>true</code> if the {@link Property} is
-     *                          required; <code>false</code> otherwise.
+     * @param   required        {@code true} if the {@link Property} is
+     *                          required; {@code false} otherwise.
      *
      * @throws  NullPointerException
      *                          If the name parameter is null.
@@ -134,8 +134,8 @@ public class StringProperty extends Property<String> {
      *                          as the prefix for the name of the
      *                          {@link Property}.
      * @param   name            The name of the {@link Property}.
-     * @param   required        <code>true</code> if the {@link Property} is
-     *                          required; <code>false</code> otherwise.
+     * @param   required        {@code true} if the {@link Property} is
+     *                          required; {@code false} otherwise.
      *
      * @throws  NullPointerException
      *                          If the name parameter is null.
@@ -154,8 +154,8 @@ public class StringProperty extends Property<String> {
      *                          used as the prefix for the name of the
      *                          {@link Property}.
      * @param   name            The name of the {@link Property}.
-     * @param   required        <code>true</code> if the {@link Property} is
-     *                          required; <code>false</code> otherwise.
+     * @param   required        {@code true} if the {@link Property} is
+     *                          required; {@code false} otherwise.
      *
      * @throws  NullPointerException
      *                          If the name parameter is null.

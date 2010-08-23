@@ -1,7 +1,7 @@
 /*
- * $Id: StringFormat.java,v 1.2 2009-09-04 17:13:43 ball Exp $
+ * $Id: StringFormat.java,v 1.3 2010-08-23 03:43:54 ball Exp $
  *
- * Copyright 2009 Allen D. Ball.  All rights reserved.
+ * Copyright 2009, 2010 Allen D. Ball.  All rights reserved.
  */
 package iprotium.text;
 
@@ -11,10 +11,10 @@ import java.text.ParseException;
 import java.text.ParsePosition;
 
 /**
- * StringFormat base class.
+ * {@link String} {@link Format} base class.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public abstract class StringFormat extends Format {
 
@@ -67,7 +67,7 @@ public abstract class StringFormat extends Format {
      * @param   pos             The starting {@link ParsePosition}.
      *
      * @return  A {@link String} parsed from the input {@link String} or
-     *          <code>null</code> if input could not be parsed.
+     *          {@code null} if input could not be parsed.
      */
     public String parse(String source, ParsePosition pos) {
         String string = source.substring(pos.getIndex());

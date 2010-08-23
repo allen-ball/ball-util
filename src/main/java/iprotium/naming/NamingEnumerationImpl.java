@@ -1,7 +1,7 @@
 /*
- * $Id: NamingEnumerationImpl.java,v 1.3 2009-09-04 17:13:43 ball Exp $
+ * $Id: NamingEnumerationImpl.java,v 1.4 2010-08-23 03:43:54 ball Exp $
  *
- * Copyright 2009 Allen D. Ball.  All rights reserved.
+ * Copyright 2009, 2010 Allen D. Ball.  All rights reserved.
  */
 package iprotium.naming;
 
@@ -17,7 +17,7 @@ import javax.naming.NamingException;
  *                      {@link NamingEnumeration}.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class NamingEnumerationImpl<T extends NameClassPair>
              extends ArrayList<T> implements NamingEnumeration<T> {
@@ -28,8 +28,8 @@ public class NamingEnumerationImpl<T extends NameClassPair>
     /**
      * Sole constructor.
      *
-     * @param   exception       If non-<code>null</code>, the
-     *                          {@link NamingException} instance thrown by
+     * @param   exception       If non-{@code null}, the {@link
+     *                          NamingException} instance thrown by
      *                          {@link #hasMore()} when the enumeration is
      *                          exhausted.
      *
@@ -44,7 +44,7 @@ public class NamingEnumerationImpl<T extends NameClassPair>
 
     /**
      * {@link NamingException} getter method.  Thrown by {@link #hasMore()}
-     * (if non-<code>null</code>) when the enumeration is exhausted.
+     * (if non-{@code null}) when the enumeration is exhausted.
      *
      * @return  The {@link NamingException} instance.
      */
@@ -52,7 +52,7 @@ public class NamingEnumerationImpl<T extends NameClassPair>
 
     /**
      * {@link NamingException} setter method.  Thrown by {@link #hasMore()}
-     * (if non-<code>null</code>) when the enumeration is exhausted.
+     * (if non-{@code null}) when the enumeration is exhausted.
      *
      * @param   exception       The {@link NamingException} instance.
      */

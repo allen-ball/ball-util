@@ -1,5 +1,5 @@
 /*
- * $Id: Order.java,v 1.4 2010-07-28 04:50:44 ball Exp $
+ * $Id: Order.java,v 1.5 2010-08-23 03:43:54 ball Exp $
  *
  * Copyright 2008 - 2010 Allen D. Ball.  All rights reserved.
  */
@@ -16,8 +16,10 @@ import java.util.List;
 /**
  * Abstract base class for {@link Comparator} implementations.
  *
+ * @param       <T>             The type to be compared.
+ *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public abstract class Order<T> implements Comparator<T>, Serializable {
 

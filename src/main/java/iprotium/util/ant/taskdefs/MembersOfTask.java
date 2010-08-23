@@ -1,19 +1,20 @@
 /*
- * $Id: MembersOfTask.java,v 1.6 2009-09-04 17:13:43 ball Exp $
+ * $Id: MembersOfTask.java,v 1.7 2010-08-23 03:43:55 ball Exp $
  *
- * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2010 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
 import java.lang.reflect.Member;
 import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Task;
 
 /**
- * Ant {@link Task} to display members of a specified {@link Class}.
+ * <a href="http://ant.apache.org/">Ant</a>
+ * {@link org.apache.tools.ant.Task} to display members of a specified
+ * {@link Class}.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 public class MembersOfTask extends AbstractClasspathTask {
     private String type = null;

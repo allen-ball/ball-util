@@ -1,5 +1,5 @@
 /*
- * $Id: POSIX.java,v 1.9 2010-07-28 05:04:57 ball Exp $
+ * $Id: POSIX.java,v 1.10 2010-08-23 03:43:55 ball Exp $
  *
  * Copyright 2008 - 2010 Allen D. Ball.  All rights reserved.
  */
@@ -16,7 +16,7 @@ import java.util.ResourceBundle;
  * </a> functions.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 public abstract class POSIX {
     private static final ResourceBundle BUNDLE =
@@ -32,8 +32,7 @@ public abstract class POSIX {
      * @param   from            The source {@link File}.
      * @param   to              The target {@link File}.
      *
-     * @return  <code>true</code> if successful;
-     *          <code>false</code> otherwise.
+     * @return  {@code true} if successful; {@code false} otherwise.
      */
     public static boolean link(File from, File to) {
         return link(from.getPath(), to.getPath());
@@ -45,8 +44,7 @@ public abstract class POSIX {
      * @param   from            The source {@link File}.
      * @param   to              The target {@link File}.
      *
-     * @return  <code>true</code> if successful;
-     *          <code>false</code> otherwise.
+     * @return  {@code true} if successful; {@code false} otherwise.
      */
     public static boolean symlink(File from, File to) {
         return symlink(from.getPath(), to.getPath());
@@ -61,8 +59,7 @@ public abstract class POSIX {
      * @param   from            The source {@link File}.
      *
      * @return  A {@link FileImpl} representing the link target if
-     *          <code>from</code> is a symlink; <code>null</code>
-     *          otherwise.
+     *          {@code from} is a symlink; {@code null} otherwise.
      */
     public static FileImpl readlink(File from) {
         String to = readlink(from.getPath());
@@ -105,7 +102,7 @@ public abstract class POSIX {
      *
      * @param   dirp            The {@link DIR} to read an entry from.
      *
-     * @return  The name of the next directory entry or <code>null</code> if
+     * @return  The name of the next directory entry or {@code null} if
      *          there are no more entries to read.
      */
     public static String readdir(DIR dirp) {
@@ -138,6 +135,9 @@ public abstract class POSIX {
 }
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.9  2010/07/28 05:04:57  ball
+ * Changed readlink(File) method to return FileImpl.
+ *
  * Revision 1.8  2009/10/25 14:57:29  ball
  * Added opendir(File), closedir(DIR), readdir(DIR), and
  * rewinddir(DIR) methods.

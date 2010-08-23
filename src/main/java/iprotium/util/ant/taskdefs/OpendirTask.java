@@ -1,7 +1,7 @@
 /*
- * $Id: OpendirTask.java,v 1.3 2009-10-25 21:47:04 ball Exp $
+ * $Id: OpendirTask.java,v 1.4 2010-08-23 03:43:55 ball Exp $
  *
- * Copyright 2009 Allen D. Ball.  All rights reserved.
+ * Copyright 2009, 2010 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -14,14 +14,14 @@ import java.io.File;
 import org.apache.tools.ant.BuildException;
 
 /**
- * Ant {@link org.apache.tools.ant.Task} to run
- * {@link POSIX#opendir(File)}.
+ * <a href="http://ant.apache.org/">Ant</a>
+ * {@link org.apache.tools.ant.Task} to run {@link POSIX#opendir(File)}.
  *
  * @see POSIX#opendir(File)
  * @see DIR
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class OpendirTask extends AbstractMatchingTask {
 

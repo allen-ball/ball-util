@@ -1,5 +1,5 @@
 /*
- * $Id: Property.java,v 1.6 2009-09-04 17:13:43 ball Exp $
+ * $Id: Property.java,v 1.7 2010-08-23 03:43:54 ball Exp $
  *
  * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
  */
@@ -21,7 +21,7 @@ import java.util.Set;
  *                              {@link Property}.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 public abstract class Property<T> implements Comparable<Property<?>> {
     private final String name;
@@ -32,12 +32,12 @@ public abstract class Property<T> implements Comparable<Property<?>> {
      * Sole constructor.
      *
      * @param   name            The name of the property.
-     * @param   required        <code>true</code> if the {@link Property} is
-     *                          required; <code>false</code> otherwise.
+     * @param   required        {@code true} if the {@link Property} is
+     *                          required; {@code false} otherwise.
      * @param   value           The default value of the Property.
      *
      * @throws  NullPointerException
-     *                          If the name parameter is <code>null</code>.
+     *                          If the name parameter is {@code null}.
      */
     protected Property(String name, boolean required, T value) {
         if (name != null) {
@@ -61,8 +61,8 @@ public abstract class Property<T> implements Comparable<Property<?>> {
      * Method to determine if the {@link Property} is required (should be
      * set).
      *
-     * @return  <code>true</code> if the {@link Property} is required;
-     *          <code>false</code> otherwise.
+     * @return  {@code true} if the {@link Property} is required;
+     *          {@code false} otherwise.
      */
     public boolean isRequired() { return required; }
 
@@ -89,8 +89,8 @@ public abstract class Property<T> implements Comparable<Property<?>> {
      *
      * @param   properties      The {@link Properties} to be searched.
      *
-     * @return  <code>true</code> if this {@link Property} is set;
-     *          <code>false</code> otherwise.
+     * @return  {@code true} if this {@link Property} is set;
+     *          {@code false} otherwise.
      */
     public boolean isSet(Properties properties) {
         return properties.getProperty(getName()) != null;
@@ -102,8 +102,7 @@ public abstract class Property<T> implements Comparable<Property<?>> {
      * @param   properties      The {@link Properties} to be searched for
      *                          the value.
      *
-     * @return  The value of the {@link Property} (may be
-     *          <code>null</code>).
+     * @return  The value of the {@link Property} (may be {@code null}).
      *
      * @throws  MissingResourceException
      *                          If the property is required and the property
@@ -118,11 +117,10 @@ public abstract class Property<T> implements Comparable<Property<?>> {
      *
      * @param   properties      The {@link Properties} to be searched for
      *                          the value.
-     * @param   required        <code>true</code> if the {@link Property} is
-     *                          required; <code>false</code> otherwise.
+     * @param   required        {@code true} if the {@link Property} is
+     *                          required; {@code false} otherwise.
      *
-     * @return  The value of the {@link Property} (may be
-     *          <code>null</code>).
+     * @return  The value of the {@link Property} (may be {@code null}).
      *
      * @throws  MissingResourceException
      *                          If the {@link Property} is required and the
@@ -152,8 +150,7 @@ public abstract class Property<T> implements Comparable<Property<?>> {
      * @param   properties      The {@link Properties} to be searched for
      *                          the value.
      *
-     * @return  The value of the {@link Property} (may be
-     *          <code>null</code>).
+     * @return  The value of the {@link Property} (may be {@code null}).
      *
      * @throws  MissingResourceException
      *                          If the {@link Property} is required and the
@@ -168,11 +165,10 @@ public abstract class Property<T> implements Comparable<Property<?>> {
      *
      * @param   properties      The {@link Properties} to be searched for
      *                          the value.
-     * @param   required        <code>true</code> if the {@link Property} is
-     *                          required; <code>false</code> otherwise.
+     * @param   required        {@code true} if the {@link Property} is
+     *                          required; {@code false} otherwise.
      *
-     * @return  The value of the {@link Property} (may be
-     *          <code>null</code>).
+     * @return  The value of the {@link Property} (may be {@code null}).
      *
      * @throws  MissingResourceException
      *                          If the {@link Property} is required and the
@@ -190,8 +186,7 @@ public abstract class Property<T> implements Comparable<Property<?>> {
      * @param   value           The value returned if the {@link Property}
      *                          is not set.
      *
-     * @return  The value of the {@link Property} (may be
-     *          <code>null</code>).
+     * @return  The value of the {@link Property} (may be {@code null}).
      *
      * @throws  MissingResourceException
      *                          If the {@link Property} is required and the

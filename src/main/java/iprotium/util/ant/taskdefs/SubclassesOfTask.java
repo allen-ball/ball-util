@@ -1,5 +1,5 @@
 /*
- * $Id: SubclassesOfTask.java,v 1.2 2010-07-28 05:46:06 ball Exp $
+ * $Id: SubclassesOfTask.java,v 1.3 2010-08-23 03:43:55 ball Exp $
  *
  * Copyright 2009, 2010 Allen D. Ball.  All rights reserved.
  */
@@ -13,11 +13,12 @@ import static iprotium.util.ClassOrder.NAME;
 import static iprotium.util.ClassUtil.isAbstract;
 
 /**
- * Ant {@link org.apache.tools.ant.Task} to determine the {@link Class}es
- * that are subclasses of the specified type..
+ * <a href="http://ant.apache.org/">Ant</a>
+ * {@link org.apache.tools.ant.Task} to determine the {@link Class}es
+ * that are subclasses of the specified type.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class SubclassesOfTask extends AbstractClassFileTask {
     private static final String COMMA = ",";

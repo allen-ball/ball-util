@@ -1,5 +1,5 @@
 /*
- * $Id: ReaderWriterDataSource.java,v 1.6 2010-07-28 04:34:35 ball Exp $
+ * $Id: ReaderWriterDataSource.java,v 1.7 2010-08-23 03:43:54 ball Exp $
  *
  * Copyright 2009, 2010 Allen D. Ball.  All rights reserved.
  */
@@ -24,7 +24,7 @@ import java.util.NoSuchElementException;
  * {@link PrintWriter} wrapping the {@link OutputStream}.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 public class ReaderWriterDataSource extends ByteArrayDataSource
                                     implements Iterable<String> {
@@ -153,8 +153,8 @@ public class ReaderWriterDataSource extends ByteArrayDataSource
      *
      * @param   charset         The {@link Charset}.
      *
-     * @return  The name of the {@link Charset} if non-<code>null</code>;
-     *          <code>null</code> otherwise.
+     * @return  The name of the {@link Charset} if non-{@code null};
+     *          {@code null} otherwise.
      *
      * @see Charset#name()
      */

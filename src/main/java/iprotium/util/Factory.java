@@ -1,7 +1,7 @@
 /*
- * $Id: Factory.java,v 1.7 2009-09-07 21:43:16 ball Exp $
+ * $Id: Factory.java,v 1.8 2010-08-23 03:43:54 ball Exp $
  *
- * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2010 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
@@ -26,7 +26,7 @@ import java.util.TreeSet;
  *                              {@link Factory} will produce.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 public class Factory<T> {
     private final Class<? extends T> type;
@@ -39,7 +39,7 @@ public class Factory<T> {
      *                          {@link Factory} will produce.
      *
      * @throws  NullPointerException
-     *                          If <code>type</code> is <code>null</code>.
+     *                          If {@code type} is {@code null}.
      */
     public Factory(Class<? extends T> type) {
         this.type = type;
@@ -153,8 +153,8 @@ public class Factory<T> {
      * @param   parameters      The {@link Constructor} or {@link Method}
      *                          parameter list.
      *
-     * @return  <code>true</code> if there is such a {@link Member};
-     *          <code>false</code> otherwise.
+     * @return  {@code true} if there is such a {@link Member};
+     *          {@code false} otherwise.
      */
     protected boolean hasFactoryMemberFor(Class<?>... parameters) {
         boolean hasMember = false;
@@ -259,10 +259,10 @@ public class Factory<T> {
      * @param   parameters      The parameter types.
      * @param   arguments       The argument types.
      *
-     * @return  <code>true</code> if the length of the argument array is the
-     *          same as the length of the parameter array and each parameter
-     *          is assignable from its corresponding argument;
-     *          <code>false</code> otherwise.
+     * @return  {@code true} if the length of the argument array is the same
+     *          as the length of the parameter array and each parameter is
+     *          assignable from its corresponding argument; {@code false}
+     *          otherwise.
      */
     protected static boolean isApplicable(Class<?>[] parameters,
                                           Class<?>[] arguments) {
@@ -280,8 +280,8 @@ public class Factory<T> {
      *
      * @param   member          The {@link Member}.
      *
-     * @return  <code>true</code> if the {@link Member} is public;
-     *          <code>false</code> otherwise.
+     * @return  {@code true} if the {@link Member} is public; {@code false}
+     *          otherwise.
      */
     protected static boolean isPublic(Member member) {
         return Modifier.isPublic(member.getModifiers());
@@ -292,8 +292,8 @@ public class Factory<T> {
      *
      * @param   member          The {@link Member}.
      *
-     * @return  <code>true</code> if the {@link Member} is static;
-     *          <code>false</code> otherwise.
+     * @return  {@code true} if the {@link Member} is static; {@code false}
+     *          otherwise.
      */
     protected static boolean isStatic(Member member) {
         return Modifier.isStatic(member.getModifiers());
@@ -357,4 +357,7 @@ public class Factory<T> {
 }
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.7  2009/09/07 21:43:16  ball
+ * Added hasFactoryMemberFor(Class<?>...) method.
+ *
  */

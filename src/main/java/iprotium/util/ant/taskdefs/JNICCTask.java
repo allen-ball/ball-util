@@ -1,7 +1,7 @@
 /*
- * $Id: JNICCTask.java,v 1.5 2009-09-04 17:13:43 ball Exp $
+ * $Id: JNICCTask.java,v 1.6 2010-08-23 03:43:55 ball Exp $
  *
- * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2010 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -12,10 +12,11 @@ import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.types.DirSet;
 
 /**
- * Ant {@link org.apache.tools.ant.Task} to compile JNI shared objects.
+ * <a href="http://ant.apache.org/">Ant</a>
+ * {@link org.apache.tools.ant.Task} to compile JNI shared objects.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public class JNICCTask extends AbstractJNIExecuteOnTask {
     private File include = null;

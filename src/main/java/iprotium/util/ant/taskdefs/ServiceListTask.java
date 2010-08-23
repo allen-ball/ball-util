@@ -1,7 +1,7 @@
 /*
- * $Id: ServiceListTask.java,v 1.1 2009-11-26 20:27:53 ball Exp $
+ * $Id: ServiceListTask.java,v 1.2 2010-08-23 03:43:55 ball Exp $
  *
- * Copyright 2009 Allen D. Ball.  All rights reserved.
+ * Copyright 2009, 2010 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -11,11 +11,12 @@ import java.util.ServiceLoader;
 import org.apache.tools.ant.BuildException;
 
 /**
- * Ant {@link org.apache.tools.ant.Task} to list the resources that match a
+ * <a href="http://ant.apache.org/">Ant</a>
+ * {@link org.apache.tools.ant.Task} to list the resources that match a
  * specified name.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class ServiceListTask extends AbstractClasspathTask {
     private String type = null;
@@ -36,7 +37,7 @@ public class ServiceListTask extends AbstractClasspathTask {
 
         try {
             Class<? extends Object> service =
-                getClass(getType()).<Object>asSubclass(Object.class);
+                getClass(getType()).asSubclass(Object.class);
             ServiceLoader<? extends Object> loader =
                 ServiceLoader.load(service, service.getClassLoader());
 

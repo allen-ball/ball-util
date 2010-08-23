@@ -1,7 +1,7 @@
 /*
- * $Id: Report.java,v 1.2 2009-09-04 17:13:43 ball Exp $
+ * $Id: Report.java,v 1.3 2010-08-23 03:43:54 ball Exp $
  *
- * Copyright 2009 Allen D. Ball.  All rights reserved.
+ * Copyright 2009, 2010 Allen D. Ball.  All rights reserved.
  */
 package iprotium.text;
 
@@ -17,7 +17,7 @@ import static java.lang.Character.isWhitespace;
  * Text Report base class.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class Report extends ReaderWriterDataSource implements Flushable {
     private final PrintWriter writer;
@@ -36,71 +36,71 @@ public class Report extends ReaderWriterDataSource implements Flushable {
     }
 
     /**
-     * @see PrintWriter#println()
+     * See {@link PrintWriter#println()}.
      */
     public void println() { writer.println(); }
 
     /**
-     * @see PrintWriter#println(boolean)
+     * See {@link PrintWriter#println(boolean)}.
      */
     public void println(boolean arg) { writer.println(arg); }
 
     /**
-     * @see PrintWriter#println(char)
+     * See {@link PrintWriter#println(char)}.
      */
     public void println(char arg) { writer.println(arg); }
 
     /**
-     * @see PrintWriter#println(int)
+     * See {@link PrintWriter#println(int)}.
      */
     public void println(int arg) { writer.println(arg); }
 
     /**
-     * @see PrintWriter#println(long)
+     * See {@link PrintWriter#println(long)}.
      */
     public void println(long arg) { writer.println(arg); }
 
     /**
-     * @see PrintWriter#println(float)
+     * See {@link PrintWriter#println(float)}.
      */
     public void println(float arg) { writer.println(arg); }
 
     /**
-     * @see PrintWriter#println(double)
+     * See {@link PrintWriter#println(double)}.
      */
     public void println(double arg) { writer.println(arg); }
 
     /**
-     * @see PrintWriter#println(char[])
+     * See {@link PrintWriter#println(char[])}.
      */
     public void println(char arg[]) { writer.println(arg); }
 
     /**
-     * @see PrintWriter#println(String)
+     * See {@link PrintWriter#println(String)}.
      */
     public void println(String arg) { writer.println(arg); }
 
     /**
-     * @see PrintWriter#println(Object)
+     * See {@link PrintWriter#println(Object)}.
      */
     public void println(Object arg) { writer.println(arg); }
 
     /**
-     * @see PrintWriter#format(String,Object...)
+     * See {@link PrintWriter#format(String,Object...)}.
      */
     public PrintWriter format(String format, Object... args) {
         return writer.format(format, args);
     }
 
     /**
-     * @see PrintWriter#format(Locale,String,Object...)
+     * See {@link PrintWriter#format(Locale,String,Object...)}.
      */
     public PrintWriter format(Locale locale, String format, Object... args) {
         return writer.format(locale, format, args);
     }
 
     /**
-     * @see PrintWriter#flush()
+     * See {@link PrintWriter#flush()}.
      */
     public void flush() { writer.flush(); }
 

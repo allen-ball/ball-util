@@ -1,7 +1,7 @@
 /*
- * $Id: JNIResourceBundle.java,v 1.2 2009-09-04 17:13:43 ball Exp $
+ * $Id: JNIResourceBundle.java,v 1.3 2010-08-23 03:43:55 ball Exp $
  *
- * Copyright 2009 Allen D. Ball.  All rights reserved.
+ * Copyright 2009, 2010 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -14,7 +14,8 @@ import java.util.MissingResourceException;
 import java.util.PropertyResourceBundle;
 
 /**
- * {@link java.util.ResourceBundle} implementation for JNI Ant tasks.
+ * {@link java.util.ResourceBundle} implementation for JNI <a
+ * href="http://ant.apache.org/">Ant</a> tasks.
  *
  * @see AbstractJNIExecuteOnTask
  * @see JNICCTask
@@ -22,7 +23,7 @@ import java.util.PropertyResourceBundle;
  * @see JNILDTask
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class JNIResourceBundle extends PropertyResourceBundle {
 

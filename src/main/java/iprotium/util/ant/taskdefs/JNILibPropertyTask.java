@@ -1,7 +1,7 @@
 /*
- * $Id: JNILibPropertyTask.java,v 1.3 2009-09-04 17:13:43 ball Exp $
+ * $Id: JNILibPropertyTask.java,v 1.4 2010-08-23 03:43:55 ball Exp $
  *
- * Copyright 2009 Allen D. Ball.  All rights reserved.
+ * Copyright 2009, 2010 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -9,15 +9,18 @@ import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 
 /**
- * Abstract Ant {@link Task} to get platform-specific JNI values.
+ * Abstract <a href="http://ant.apache.org/">Ant</a> {@link Task} to get
+ * platform-specific JNI values.
  *
  * @see Prefix
  * @see Suffix
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public abstract class JNILibPropertyTask extends Task {
+    private static final String DOT = ".";
+
     private static final String PREFIX;
     private static final String SUFFIX;
 
@@ -28,10 +31,8 @@ public abstract class JNILibPropertyTask extends Task {
         String suffix = (tokens.length > 1) ? tokens[1] : null;
 
         if (suffix != null) {
-            String dot = ".";
-
-            while (suffix.startsWith(dot)) {
-                suffix = suffix.substring(dot.length());
+            while (suffix.startsWith(DOT)) {
+                suffix = suffix.substring(DOT.length());
             }
         }
 
@@ -68,7 +69,8 @@ public abstract class JNILibPropertyTask extends Task {
     }
 
     /**
-     * Ant {@link Task} to get platform-specific JNI library prefix.
+     * <a href="http://ant.apache.org/">Ant</a> {@link Task} to get
+     * platform-specific JNI library prefix.
      */
     public static class Prefix extends JNILibPropertyTask {
 
@@ -82,7 +84,8 @@ public abstract class JNILibPropertyTask extends Task {
     }
 
     /**
-     * Ant {@link Task} to get platform-specific JNI library suffix.
+     * <a href="http://ant.apache.org/">Ant</a> {@link Task} to get
+     * platform-specific JNI library suffix.
      */
     public static class Suffix extends JNILibPropertyTask {
 

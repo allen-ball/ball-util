@@ -1,7 +1,7 @@
 /*
- * $Id: BeanInfoForTask.java,v 1.10 2009-10-24 21:14:33 ball Exp $
+ * $Id: BeanInfoForTask.java,v 1.11 2010-08-23 03:43:54 ball Exp $
  *
- * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2010 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -18,11 +18,12 @@ import java.util.Arrays;
 import org.apache.tools.ant.BuildException;
 
 /**
- * Ant {@link org.apache.tools.ant.Task} to display {@link BeanInfo} for a
+ * <a href="http://ant.apache.org/">Ant</a>
+ * {@link org.apache.tools.ant.Task} to display {@link BeanInfo} for a
  * specified {@link Class}.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 public class BeanInfoForTask extends AbstractClasspathTask {
     private String type = null;

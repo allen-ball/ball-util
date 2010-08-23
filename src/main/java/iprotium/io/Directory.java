@@ -1,5 +1,5 @@
 /*
- * $Id: Directory.java,v 1.1 2010-07-28 05:01:27 ball Exp $
+ * $Id: Directory.java,v 1.2 2010-08-23 03:43:54 ball Exp $
  *
  * Copyright 2010 Allen D. Ball.  All rights reserved.
  */
@@ -13,7 +13,7 @@ import java.net.URI;
  * Directory {@link FileImpl} implementation.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class Directory extends FileImpl {
     private static final long serialVersionUID = 1378072016766367842L;
@@ -58,7 +58,7 @@ public class Directory extends FileImpl {
     }
 
     /**
-     * @return  <code>true</code> always.
+     * @return  {@code true} always.
      */
     @Override
     public boolean isDirectory() { return true; }

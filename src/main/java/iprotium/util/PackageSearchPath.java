@@ -1,7 +1,7 @@
 /*
- * $Id: PackageSearchPath.java,v 1.2 2009-09-04 17:13:43 ball Exp $
+ * $Id: PackageSearchPath.java,v 1.3 2010-08-23 03:43:54 ball Exp $
  *
- * Copyright 2009 Allen D. Ball.  All rights reserved.
+ * Copyright 2009, 2010 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
@@ -17,7 +17,7 @@ import java.util.LinkedHashSet;
  *                              path.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class PackageSearchPath<T> extends LinkedHashSet<Package> {
     private static final long serialVersionUID = 5887744906132617085L;
@@ -59,8 +59,8 @@ public class PackageSearchPath<T> extends LinkedHashSet<Package> {
      *
      * @param   name            The simple name of the {@link Class}.
      *
-     * @return  The {@link Class} matching the name or <code>null</code> if
-     *          none is found.
+     * @return  The {@link Class} matching the name or {@code null} if none
+     *          is found.
      */
     public Class<? extends T> getClass(String name) {
         Class<? extends T> cls = null;

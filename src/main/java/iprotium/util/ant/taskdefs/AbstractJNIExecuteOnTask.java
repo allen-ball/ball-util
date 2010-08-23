@@ -1,7 +1,7 @@
 /*
- * $Id: AbstractJNIExecuteOnTask.java,v 1.8 2009-09-04 17:13:43 ball Exp $
+ * $Id: AbstractJNIExecuteOnTask.java,v 1.9 2010-08-23 03:43:54 ball Exp $
  *
- * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2010 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -12,26 +12,44 @@ import org.apache.tools.ant.taskdefs.ExecuteOn;
 import org.apache.tools.ant.types.Commandline;
 
 /**
- * Ant {@link org.apache.tools.ant.Task} to compile JNI shared objects.
+ * <a href="http://ant.apache.org/">Ant</a>
+ * {@link org.apache.tools.ant.Task} to compile JNI shared objects.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 public abstract class AbstractJNIExecuteOnTask extends ExecuteOn {
-    protected static final JNIResourceBundle BUNDLE;
     private static final FileDirBoth FILE = new FileDirBoth();
 
+    /**
+     * {@link JNIResourceBundle} available to subclass implementations.
+     */
+    protected static final JNIResourceBundle BUNDLE;
+
     static {
+        FILE.setValue(FileDirBoth.FILE);
+
         try {
             BUNDLE = new JNIResourceBundle();
         } catch (IOException exception) {
             throw new ExceptionInInitializerError(exception);
         }
-
-        FILE.setValue(FileDirBoth.FILE);
     }
 
-    protected static String SPACE = " ";
+    /**
+     * {@value #SRCFILE}
+     */
+    protected static final String SRCFILE = "SRCFILE";
+
+    /**
+     * {@value #TARGETFILE}
+     */
+    protected static final String TARGETFILE = "TARGETFILE";
+
+    /**
+     * {@value #SPACE}
+     */
+    protected static final String SPACE = " ";
 
     private String arch = null;
     private String os = null;
@@ -83,9 +101,9 @@ public abstract class AbstractJNIExecuteOnTask extends ExecuteOn {
         log(command);
 
         for (String argument : Commandline.translateCommandline(command)) {
-            if (argument.equals("SRCFILE")) {
+            if (argument.equals(SRCFILE)) {
                 createSrcfile();
-            } else if (argument.equals("TARGETFILE")) {
+            } else if (argument.equals(TARGETFILE)) {
                 createTargetfile();
             } else {
                 if (cmdl.getExecutable() == null) {

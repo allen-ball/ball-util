@@ -1,7 +1,7 @@
 /*
- * $Id: AbstractMatchingTask.java,v 1.5 2009-10-25 20:52:43 ball Exp $
+ * $Id: AbstractMatchingTask.java,v 1.6 2010-08-23 03:43:54 ball Exp $
  *
- * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2010 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -12,10 +12,11 @@ import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.taskdefs.MatchingTask;
 
 /**
- * Abstract base class for Ant {@link MatchingTask} implementations.
+ * Abstract base class for <a href="http://ant.apache.org/">Ant</a>
+ * {@link MatchingTask} implementations.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public abstract class AbstractMatchingTask extends MatchingTask {
     private File basedir = null;

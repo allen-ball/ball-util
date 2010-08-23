@@ -1,7 +1,7 @@
 /*
- * $Id: ISO8601DateFormat.java,v 1.1 2009-08-24 06:14:42 ball Exp $
+ * $Id: ISO8601DateFormat.java,v 1.2 2010-08-23 03:43:54 ball Exp $
  *
- * Copyright 2009 Allen D. Ball.  All rights reserved.
+ * Copyright 2009, 2010 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
@@ -22,7 +22,7 @@ import static iprotium.util.TimeUnitEnum.MINUTES;
  * {@link java.text.DateFormat} implementation.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class ISO8601DateFormat extends SimpleDateFormat {
     private static final long serialVersionUID = 3281262236122567400L;
@@ -58,7 +58,6 @@ public class ISO8601DateFormat extends SimpleDateFormat {
     private final SimpleDateFormat time = new SimpleDateFormat(TIME);
     private final SimpleDateFormat fraction = new SimpleDateFormat(FRACTION);
     private final NumberFormat nn = new DecimalFormat("00");
-
     private boolean isFractionFormatted = false;
 
     /**
@@ -79,8 +78,8 @@ public class ISO8601DateFormat extends SimpleDateFormat {
      * Bean attribute getter method to determine whether or not the fraction
      * of the second should be included when formatting the date-time.
      *
-     * @return  <code>true</code> if the fraction of the second should be
-     *          specified; <code>false</code> otherwise.
+     * @return  {@code true} if the fraction of the second should be
+     *          specified; {@code false} otherwise.
      */
     public boolean isFractionFormatted() { return isFractionFormatted; }
 
@@ -106,8 +105,10 @@ public class ISO8601DateFormat extends SimpleDateFormat {
     }
 
     /**
-     * {@link TimeZone} bean attribute setter method.  If <code>null</code>,
-     * the value of {@link #UTC} is used.
+     * {@link TimeZone} bean attribute setter method.
+     *
+     * @param   tz              If {@code null}, the value of {@link #UTC}
+     *                          is used.
      */
     @Override
     public void setTimeZone(TimeZone tz) {

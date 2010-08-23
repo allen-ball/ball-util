@@ -1,7 +1,7 @@
 /*
- * $Id: ReadlinkTask.java,v 1.4 2009-10-25 20:50:23 ball Exp $
+ * $Id: ReadlinkTask.java,v 1.5 2010-08-23 03:43:55 ball Exp $
  *
- * Copyright 2009 Allen D. Ball.  All rights reserved.
+ * Copyright 2009, 2010 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -12,12 +12,13 @@ import java.util.LinkedHashMap;
 import org.apache.tools.ant.BuildException;
 
 /**
- * Ant {@link org.apache.tools.ant.Task} to read symbolic link targets.
+ * <a href="http://ant.apache.org/">Ant</a>
+ * {@link org.apache.tools.ant.Task} to read symbolic link targets.
  *
  * @see POSIX#readlink(File)
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class ReadlinkTask extends AbstractMatchingTask {
 

@@ -1,5 +1,5 @@
 /*
- * $Id: StaticFinalFieldMap.java,v 1.1 2010-07-28 05:27:04 ball Exp $
+ * $Id: StaticFinalFieldMap.java,v 1.2 2010-08-23 03:43:54 ball Exp $
  *
  * Copyright 2010 Allen D. Ball.  All rights reserved.
  */
@@ -18,10 +18,10 @@ import static iprotium.util.ClassUtil.isStatic;
 
 /**
  * {@link TreeMap} implementation that maps a {@link Class}'s constant
- * ("<code>public static final</code>") fields' names to their values.
+ * ("{@code public static final}") fields' names to their values.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class StaticFinalFieldMap<T> extends TreeMap<String,T> {
     private static final long serialVersionUID = -6986552313804842052L;
@@ -33,8 +33,8 @@ public class StaticFinalFieldMap<T> extends TreeMap<String,T> {
      *                          fields.
      * @param   ofType          The type ({@link Class}) of constant fields
      *                          to include in the map.
-     * @param   pattern         If non-<code>null</code>, the
-     *                          {@link Pattern} the field name must match.
+     * @param   pattern         If non-{@code null}, the {@link Pattern} the
+     *                          field name must match.
      */
     public StaticFinalFieldMap(Class<?> type,
                                Class<T> ofType, Pattern pattern) {

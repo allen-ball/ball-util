@@ -1,5 +1,5 @@
 /*
- * $Id: BeanMap.java,v 1.9 2010-07-28 04:52:03 ball Exp $
+ * $Id: BeanMap.java,v 1.10 2010-08-23 03:43:54 ball Exp $
  *
  * Copyright 2008 - 2010 Allen D. Ball.  All rights reserved.
  */
@@ -22,7 +22,7 @@ import java.util.Set;
  * for the bean properties.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 public class BeanMap extends AbstractMap<String,Object>
                              implements Serializable {
@@ -50,8 +50,8 @@ public class BeanMap extends AbstractMap<String,Object>
     /**
      * Construct a BeanMap from a bean.
      *
-     * @param   bean            The Java bean to wrap (if <code>null</code>
-     *                          then <code>this</code> will be used).
+     * @param   bean            The Java bean to wrap (if {@code null} then
+     *                          {@code this} will be used).
      * @param   info            The {@link BeanInfo} that describes the bean.
      *
      * @throws  NullPointerException

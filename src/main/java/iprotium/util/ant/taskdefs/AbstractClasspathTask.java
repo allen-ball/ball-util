@@ -1,5 +1,5 @@
 /*
- * $Id: AbstractClasspathTask.java,v 1.12 2010-07-28 05:46:06 ball Exp $
+ * $Id: AbstractClasspathTask.java,v 1.13 2010-08-23 03:43:54 ball Exp $
  *
  * Copyright 2008 - 2010 Allen D. Ball.  All rights reserved.
  */
@@ -17,11 +17,11 @@ import org.apache.tools.ant.types.Reference;
 import org.apache.tools.ant.util.ClasspathUtils;
 
 /**
- * Abstract base class for Ant {@link Task} implementations that require a
- * classpath.
+ * Abstract base class for <a href="http://ant.apache.org/">Ant</a>
+ * {@link Task} implementations that require a classpath.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 public abstract class AbstractClasspathTask extends Task {
     private static final SortedMap<String,Class<?>> JAVA_PRIMITIVE_MAP =

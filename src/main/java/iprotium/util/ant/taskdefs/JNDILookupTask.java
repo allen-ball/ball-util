@@ -1,7 +1,7 @@
 /*
- * $Id: JNDILookupTask.java,v 1.3 2009-09-04 17:13:43 ball Exp $
+ * $Id: JNDILookupTask.java,v 1.4 2010-08-23 03:43:55 ball Exp $
  *
- * Copyright 2009 Allen D. Ball.  All rights reserved.
+ * Copyright 2009, 2010 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -13,13 +13,14 @@ import javax.naming.spi.NamingManager;
 import org.apache.tools.ant.BuildException;
 
 /**
- * Ant {@link org.apache.tools.ant.Task} to perform JNDI look-up.
+ * <a href="http://ant.apache.org/">Ant</a>
+ * {@link org.apache.tools.ant.Task} to perform JNDI look-up.
  *
  * @see NamingManager#getURLContext(String,Hashtable)
  * @see NamingManager#getInitialContext(Hashtable)
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class JNDILookupTask extends JNDIListTask {
     private static final Pattern PATTERN =
