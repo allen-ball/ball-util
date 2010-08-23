@@ -1,4 +1,4 @@
-$Id: ToDo.txt,v 1.10 2010-08-21 04:14:50 ball Exp $
+$Id: ToDo.txt,v 1.11 2010-08-23 03:27:05 ball Exp $
 
 * Add JNI interface to editline(libedit)/readline.
 
@@ -10,8 +10,6 @@ $Id: ToDo.txt,v 1.10 2010-08-21 04:14:50 ball Exp $
         ** Suggest (! Collection.isEmpty()) for (Collection.size() > 0)
         ** ByteArrayOutputStream: Prefer ByteArrayOutputStream(int)
            constructor with an argument > 32
-        ** Require Cloneable implementations override clone() to return the
-           implementing type
 
 * Create SSU package.
 
