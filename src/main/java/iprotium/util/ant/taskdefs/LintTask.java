@@ -1,35 +1,33 @@
 /*
- * $Id: LintTask.java,v 1.3 2010-07-28 05:46:06 ball Exp $
+ * $Id: LintTask.java,v 1.4 2010-08-23 03:27:24 ball Exp $
  *
  * Copyright 2009, 2010 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
+import iprotium.util.ant.taskdefs.lint.CloneableCheck;
+import iprotium.util.ant.taskdefs.lint.SerializableCheck;
 import java.io.File;
-import java.io.ObjectStreamClass;
-import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.util.Arrays;
-import java.util.List;
+import java.util.Collection;
 import java.util.Map;
 import org.apache.tools.ant.BuildException;
 
-import static iprotium.util.ClassUtil.isAbstract;
-import static iprotium.util.ClassUtil.isStatic;
-
 /**
- * Ant {@link org.apache.tools.ant.Task} to provide additional compile-time
+ * <a href="http://ant.apache.org/">Ant</a>
+ * {@link org.apache.tools.ant.Task} to provide additional compile-time
  * ("lint") checks.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class LintTask extends AbstractClassFileTask {
-    private List<Check> list =
-        Arrays.<Check>asList(new SerialVersionUIDCheck());
+    private final Collection<Check> checks =
+        Arrays.<Check>asList(new CloneableCheck(this),
+                             new SerializableCheck(this));
     private transient Map<File,Class> map = null;
 
     /**
@@ -44,7 +42,7 @@ public class LintTask extends AbstractClassFileTask {
         map = getMatchingClassFileMap();
 
         for (Map.Entry<File,Class> entry : map.entrySet()) {
-            for (Check check : list) {
+            for (Check check : checks) {
                 run(check, entry.getKey(), entry.getValue());
             }
         }
@@ -70,55 +68,130 @@ public class LintTask extends AbstractClassFileTask {
         }
     }
 
-    public abstract class Check {
-        protected Check() { }
+    /**
+     * Abstract base class for {@link LintTask} checks.
+     *
+     * @see iprotium.util.ant.taskdefs.lint
+     */
+    public static abstract class Check {
 
-        public void check(File file, Class<?> type) { }
+        /**
+         * {@value #EQUALS}
+         */
+        protected static final String EQUALS = "=";
 
-        public void check(File file, Class<?> type, Field member) { }
+        /**
+         * {@value #SEMICOLON}
+         */
+        protected static final String SEMICOLON = ";";
 
-        public void check(File file, Class<?> type, Constructor member) { }
+        /**
+         * {@value #SPACE}
+         */
+        protected static final String SPACE = " ";
 
-        public void check(File file, Class<?> type, Method member) { }
+        /**
+         * {@value #LB}
+         */
+        protected static final String LB = "{";
 
-        public void check(File file, Class<?> type, Class<?> member) { }
-    }
+        /**
+         * {@value #RB}
+         */
+        protected static final String RB = "}";
 
-    public class SerialVersionUIDCheck extends Check {
-        private static final int MODIFIERS =
-            Modifier.PRIVATE | Modifier.STATIC | Modifier.FINAL;
-        private static final String SERIALVERSIONUID = "serialVersionUID";
+        /**
+         * {@value #LP}
+         */
+        protected static final String LP = "(";
 
-        public SerialVersionUIDCheck() { super(); }
+        /**
+         * {@value #RP}
+         */
+        protected static final String RP = ")";
 
-        @Override
-        public void check(File file, Class<?> type) {
-            if (Serializable.class.isAssignableFrom(type)
-                && (! isAbstract(type))
-                && (! Enum.class.isAssignableFrom(type))) {
-                try {
-                    Field field = type.getDeclaredField(SERIALVERSIONUID);
+        private final LintTask task;
 
-                    if (! (isStatic(field)
-                           && Long.TYPE.equals(field.getType()))) {
-                        throw new NoSuchFieldException(SERIALVERSIONUID);
-                    }
-                } catch (NoSuchFieldException exception) {
-                    log("");
-                    log(getJavaFile(map, file), 1, type.getName());
-                    log(getSerialVersionUIDDeclaration(type));
-                }
+        /**
+         * Sole constructor.
+         *
+         * @param task          The {@link LintTask} instance.
+         */
+        protected Check(LintTask task) {
+            if (task != null) {
+                this.task = task;
+            } else {
+                throw new NullPointerException("task");
             }
         }
 
-        private String getSerialVersionUIDDeclaration(Class<?> type) {
-            long serialVersionUID =
-                ObjectStreamClass.lookup(type).getSerialVersionUID();
+        /**
+         * Callback to check a {@link Class}.
+         *
+         * @param file          The {@link Class} {@link File}.
+         * @param type          The {@link Class}.
+         */
+        public void check(File file, Class<?> type) { }
 
-            return (Modifier.toString(MODIFIERS)
-                    + " " + Long.TYPE.getName() + " " + SERIALVERSIONUID
-                    + " = " + String.valueOf(serialVersionUID) + "L;");
+        /**
+         * Callback to check a {@link Field}.
+         *
+         * @param file          The {@link Class} {@link File}.
+         * @param type          The containing {@link Class}.
+         * @param member        The {@link Field} member.
+         */
+        public void check(File file, Class<?> type, Field member) { }
+
+        /**
+         * Callback to check a {@link Constructor}.
+         *
+         * @param file          The {@link Class} {@link File}.
+         * @param type          The containing {@link Class}.
+         * @param member        The {@link Constructor} member.
+         */
+        public void check(File file, Class<?> type, Constructor member) { }
+
+        /**
+         * Callback to check a {@link Method}.
+         *
+         * @param file          The {@link Class} {@link File}.
+         * @param type          The containing {@link Class}.
+         * @param member        The {@link Method} member.
+         */
+        public void check(File file, Class<?> type, Method member) { }
+
+        /**
+         * Callback to check an inner {@link Class}.
+         *
+         * @param file          The {@link Class} {@link File}.
+         * @param type          The containing {@link Class}.
+         * @param member        The inner {@link Class} member.
+         */
+        public void check(File file, Class<?> type, Class<?> member) { }
+
+        /**
+         * Method to get the source Java {@link File} given a {@link Class}
+         * {@link File}.
+         *
+         * @param file          The {@link Class} {@link File}.
+         *
+         * @return The corresponding source {@link File}.
+         */
+        protected File getJavaFile(File file) {
+            return task.getJavaFile(task.map, file);
         }
+
+        /**
+         * See {@link LintTask#log(File,int,String)}.
+         */
+        protected void log(File file, int lineno, String message) {
+            task.log(file, lineno, message);
+        }
+
+        /**
+         * See {@link LintTask#log(String)}.
+         */
+        protected void log(String message) { task.log(message); }
     }
 }
 /*
