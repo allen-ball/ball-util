@@ -1,3 +1,9 @@
+2010-08-25  Allen D. Ball  <ball@10-0-1-2.lan>
+
+	* src/main/java/iprotium/util/ThreadImpl.java,
+	src/main/java/iprotium/util/PollingThread.java:
+	Initial writing.
+
 2010-08-22  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* src/main/java/iprotium/util/ant/taskdefs/LintTask.java:
