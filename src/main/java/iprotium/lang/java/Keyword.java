@@ -1,5 +1,5 @@
 /*
- * $Id: Keyword.java,v 1.2 2010-08-21 07:36:39 ball Exp $
+ * $Id: Keyword.java,v 1.3 2010-09-08 06:20:11 ball Exp $
  *
  * Copyright 2010 Allen D. Ball.  All rights reserved.
  */
@@ -7,7 +7,7 @@ package iprotium.lang.java;
 
 import java.lang.reflect.Field;
 import java.util.Collections;
-import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
 
 import static iprotium.util.ClassUtil.isFinal;
@@ -18,15 +18,15 @@ import static iprotium.util.ClassUtil.isStatic;
  * Provides Java keywords as named constants.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public abstract class Keyword {
     private Keyword() { }
 
     /**
-     * The {@link Set} of Java keywords.
+     * The {@link SortedSet} of Java keywords.
      */
-    public static final Set<String> SET;
+    public static final SortedSet<String> SET;
 
     static {
         try {
@@ -39,7 +39,7 @@ public abstract class Keyword {
                 }
             }
 
-            SET = Collections.unmodifiableSet(set);
+            SET = Collections.unmodifiableSortedSet(set);
         } catch (Exception exception) {
             throw new ExceptionInInitializerError(exception);
         }
