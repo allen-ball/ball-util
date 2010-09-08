@@ -1,5 +1,8 @@
 2010-09-07  Allen D. Ball  <ball@10-0-1-2.lan>
 
+	* src/main/java/iprotium/activation/ByteArrayDataSource.java:
+	Added size() method.
+
 	* src/main/java/iprotium/lang/java/Keyword.java:
 	Changed SET member to SortedSet.
 
