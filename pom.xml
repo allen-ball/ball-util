@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- $Id: pom.xml,v 1.9 2010-08-21 03:58:04 ball Exp $ -->
+<!-- $Id: pom.xml,v 1.10 2010-09-08 07:14:28 ball Exp $ -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
@@ -70,6 +70,8 @@
         <artifactId>maven-javadoc-plugin</artifactId>
         <version>2.7</version>
         <configuration>
+          <reportOutputDirectory>${user.home}/Public</reportOutputDirectory>
+          <destDir>${artifactId}</destDir>
           <bottom>
 <![CDATA[Copyright &#169; 2009, 2010 Allen D. Ball.  All rights reserved.]]>
           </bottom>
@@ -87,4 +89,7 @@
 </project>
 <!--
     $Log: not supported by cvs2svn $
+    Revision 1.9  2010/08/21 03:58:04  ball
+    Moved javadoc generation from build.xml to pom.xml.
+
   -->
