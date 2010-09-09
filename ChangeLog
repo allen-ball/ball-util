@@ -1,5 +1,8 @@
 2010-09-08  Allen D. Ball  <ball@10-0-1-2.lan>
 
+	* src/main/java/iprotium/util/ArrayOrder.java:
+	Avoid IndexOutOfBoundsException in compare(T[],T[]).
+
 	* src/main/java/iprotium/activation/ByteArrayDataSource.java:
 	Changed reset() implementation to call getOutputStream().close().
 
