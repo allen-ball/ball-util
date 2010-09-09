@@ -1,5 +1,5 @@
 /*
- * $Id: ArrayOrder.java,v 1.5 2010-08-23 03:39:24 ball Exp $
+ * $Id: ArrayOrder.java,v 1.6 2010-09-09 03:17:40 ball Exp $
  *
  * Copyright 2008 - 2010 Allen D. Ball.  All rights reserved.
  */
@@ -13,7 +13,7 @@ import java.util.Comparator;
  * @param       <T>             The array element type to be compared.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public class ArrayOrder<T> extends Order<T[]> {
     private static final long serialVersionUID = 69419214559265223L;
@@ -43,7 +43,7 @@ public class ArrayOrder<T> extends Order<T[]> {
     public int compare(T[] left, T[] right) {
         int difference = left.length - right.length;
 
-        for (int i = left.length - 1; i >= 0; i -= 1) {
+        for (int i = left.length - 1; difference == 0 && i >= 0; i -= 1) {
             difference = comparator.compare(left[i], right[i]);
 
             if (difference != 0) {
@@ -56,4 +56,7 @@ public class ArrayOrder<T> extends Order<T[]> {
 }
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.5  2010/08/23 03:39:24  ball
+ * Element [n] is more significant than element [n - 1].
+ *
  */
