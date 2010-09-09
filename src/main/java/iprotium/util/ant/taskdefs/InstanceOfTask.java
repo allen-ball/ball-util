@@ -1,15 +1,17 @@
 /*
- * $Id: InstanceOfTask.java,v 1.13 2010-08-23 03:43:54 ball Exp $
+ * $Id: InstanceOfTask.java,v 1.15 2010-09-09 03:19:37 ball Exp $
  *
  * Copyright 2008 - 2010 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
+import iprotium.activation.ReaderWriterDataSource;
 import iprotium.text.MapTable;
 import iprotium.util.BeanMap;
 import iprotium.util.Factory;
+import java.beans.ExceptionListener;
+import java.beans.XMLEncoder;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Member;
 import java.lang.reflect.Member;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,7 +26,7 @@ import org.apache.tools.ant.BuildException;
  * @see Factory
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.13 $
+ * @version $Revision: 1.15 $
  */
 public class InstanceOfTask extends AbstractClasspathTask {
     private String type = String.class.getName();
@@ -48,7 +50,11 @@ public class InstanceOfTask extends AbstractClasspathTask {
 
     @Override
     public void execute() throws BuildException {
+        ClassLoader loader = Thread.currentThread().getContextClassLoader();
+
         try {
+            Thread.currentThread().setContextClassLoader(getClassLoader());
+
             Class<?> type = getClass(getType());
 
             log(type.getName());
@@ -85,9 +91,25 @@ public class InstanceOfTask extends AbstractClasspathTask {
                     new MapTable<String,Object>(map, "Property Name", "Value");
 
                 log("");
+                log(table);
+            }
 
-                for (String line : table) {
-                    log(line);
+            ReaderWriterDataSourceImpl ds = new ReaderWriterDataSourceImpl();
+            XMLEncoder encoder = null;
+
+            try {
+                encoder = new XMLEncoder(ds.getOutputStream());
+                encoder.setExceptionListener(ds);
+                encoder.writeObject(instance);
+                encoder.close();
+
+                if (ds.size() > 0) {
+                    log("");
+                    log(ds);
+                }
+            } finally {
+                if (encoder != null) {
+                    encoder.close();
                 }
             }
         } catch (BuildException exception) {
@@ -98,21 +120,14 @@ public class InstanceOfTask extends AbstractClasspathTask {
         } catch (Exception exception) {
             exception.printStackTrace();
             throw new BuildException(exception);
+        } finally {
+            Thread.currentThread().setContextClassLoader(loader);
         }
     }
 
-    private class FactoryImpl extends Factory<Object> {
-        public FactoryImpl(Class<?> type) { super(type); }
-
-        public Member getFactoryMember(Class<?>... parameters)
-                throws NoSuchMethodException {
-            return super.getFactoryMember(parameters);
-        }
-
-        public Object apply(Member member, Object[] arguments)
-                throws InstantiationException, IllegalAccessException,
-                       InvocationTargetException {
-            return super.apply(member, arguments);
+    private void log(Iterable<String> iterable) {
+        for (String line : iterable) {
+            log(line);
         }
     }
 
@@ -142,6 +157,29 @@ public class InstanceOfTask extends AbstractClasspathTask {
 
         @Override
         public String toString() { return getValue(); }
+    }
+
+    private class FactoryImpl extends Factory<Object> {
+        public FactoryImpl(Class<?> type) { super(type); }
+
+        public Member getFactoryMember(Class<?>... parameters)
+                throws NoSuchMethodException {
+            return super.getFactoryMember(parameters);
+        }
+
+        public Object apply(Member member, Object[] arguments)
+                throws InstantiationException, IllegalAccessException,
+                       InvocationTargetException {
+            return super.apply(member, arguments);
+        }
+    }
+
+    private class ReaderWriterDataSourceImpl extends ReaderWriterDataSource
+                                             implements ExceptionListener {
+        public ReaderWriterDataSourceImpl() { super(null, null); }
+
+        @Override
+        public void exceptionThrown(Exception exception) { reset(); }
     }
 }
 /*
