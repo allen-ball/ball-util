@@ -1,5 +1,5 @@
 /*
- * $Id: ByteArrayDataSource.java,v 1.6 2010-09-08 06:41:08 ball Exp $
+ * $Id: ByteArrayDataSource.java,v 1.7 2010-09-09 03:10:44 ball Exp $
  *
  * Copyright 2009, 2010 Allen D. Ball.  All rights reserved.
  */
@@ -14,7 +14,7 @@ import java.io.IOException;
  * {@link ByteArrayInputStream} and {@link ByteArrayInputStream}.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 public class ByteArrayDataSource extends AbstractDataSource {
     private ByteArrayOutputStream out = null;
@@ -37,16 +37,23 @@ public class ByteArrayDataSource extends AbstractDataSource {
 
     {
         try {
-            getOutputStream().close();
-        } catch (IOException exception) {
+            reset();
+        } catch (Exception exception) {
             throw new ExceptionInInitializerError(exception);
         }
     }
 
     /**
-     * See {@link ByteArrayOutputStream#reset()}.
+     * Method to reset the internal byte array and discard any input on any
+     * open {@link #getOutputStream()}.
      */
-    public void reset() { out.reset(); }
+    public void reset() {
+        try {
+            getOutputStream().close();
+        } catch (IOException exception) {
+            throw new IllegalStateException(exception);
+        }
+    }
 
     /**
      * See {@link ByteArrayOutputStream#size()}.
@@ -77,4 +84,7 @@ public class ByteArrayDataSource extends AbstractDataSource {
 }
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.6  2010/09/08 06:41:08  ball
+ * Added size() method.
+ *
  */
