@@ -1,23 +1,30 @@
 /*
- * $Id: Table.java,v 1.3 2010-09-08 06:42:49 ball Exp $
+ * $Id: Table.java,v 1.4 2010-09-11 22:32:54 ball Exp $
  *
  * Copyright 2009, 2010 Allen D. Ball.  All rights reserved.
  */
 package iprotium.text;
 
+import iprotium.activation.ReaderWriterDataSource;
+import iprotium.io.IOUtil;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 
 import static iprotium.text.FillEnum.CENTER;
 import static iprotium.text.FillStringFormat.SPACE;
+import static java.lang.Character.isWhitespace;
 
 /**
  * Text-based {@link Table} implementation.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
-public class Table extends Report implements TableModelListener {
+public class Table extends ReaderWriterDataSource
+                   implements TableModelListener {
     private final TableModel model;
     private final int[] tabs;
 
@@ -28,7 +35,7 @@ public class Table extends Report implements TableModelListener {
      * @param   tabs            The preferred tab stops.
      */
     public Table(TableModel model, int... tabs) {
-        super();
+        super(null, TEXT_PLAIN);
 
         this.model = model;
         this.tabs = new int[getModel().getColumnCount()];
@@ -80,33 +87,38 @@ public class Table extends Report implements TableModelListener {
         }
     }
 
-    @Override
-    public byte[] toByteArray() {
-        if (size() == 0) {
-            render();
-        }
-
-        return super.toByteArray();
-    }
-
     /**
      * Method to render the {@link Table}.  This implementation overrides
-     * the {@link #toByteArray()} method.  If super.{@link #toByteArray()}
-     * returns a zero-length byte array, it then calls {@link #render()} to
-     * update the {@link Table}.  The {@link #tableChanged(TableModelEvent)}
-     * method may zero the byte array.
+     * the {@link #getInputStream()} method.  If super.{@link #size()}
+     * returns {@code 0}, it then calls {@link #render()} to update the
+     * {@link Table}.  The {@link #tableChanged(TableModelEvent)} method may
+     * zero the byte array.
      */
     protected void render() {
-        StringBuilder header = line(fill(getModel().header()));
-        String boundary = CENTER.fill(header.length(), '-', "");
+        PrintWriter out = null;
 
-        if (rtrim(header).length() > 0) {
-            println(header);
-            println(boundary);
-        }
+        try {
+            out = getPrintWriter();
 
-        for (int y = 0, count = getModel().getRowCount(); y < count; y += 1) {
-            println(line(fill(format(getModel().row(y)))));
+            StringBuilder header = line(fill(getModel().header()));
+            String boundary = CENTER.fill(header.length(), '-', "");
+
+            if (rtrim(header).length() > 0) {
+                out.println(rtrim(header));
+                out.println(boundary);
+            }
+
+            for (int y = 0, n = getModel().getRowCount(); y < n; y += 1) {
+                out.println(rtrim(line(fill(format(getModel().row(y))))));
+            }
+        } catch (IOException exception) {
+            throw new IllegalStateException(exception);
+        } finally {
+            try {
+                IOUtil.close(out);
+            } finally {
+                out = null;
+            }
         }
     }
 
@@ -150,9 +162,30 @@ public class Table extends Report implements TableModelListener {
         return line;
     }
 
-    /**
-     * @see TableModelListener#tableChanged(TableModelEvent)
-     */
+    private StringBuilder rtrim(StringBuilder buffer) {
+        if (buffer != null) {
+            while (buffer.length() > 0) {
+                if (isWhitespace(buffer.charAt(buffer.length() - 1))) {
+                    buffer.setLength(buffer.length() - 1);
+                } else {
+                    break;
+                }
+            }
+        }
+
+        return buffer;
+    }
+
+    @Override
+    public ByteArrayInputStream getInputStream() throws IOException {
+        if (! (size() > 0)) {
+            render();
+        }
+
+        return super.getInputStream();
+    }
+
+    @Override
     public void tableChanged(TableModelEvent event) { reset(); }
 }
 /*
