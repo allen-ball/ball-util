@@ -1,3 +1,8 @@
+2010-09-11  Allen D. Ball  <ball@10-0-1-2.lan>
+
+	* src/main/java/iprotium/activation/AbstractDataSource.java:
+	Added CONTENT_TYPE, TEXT_PLAIN, and TEXT_HTML members.
+
 2010-09-08  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* src/main/java/iprotium/util/ArrayOrder.java:
