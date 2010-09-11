@@ -247,10 +247,6 @@
 	* src/main/java/iprotium/io/IOUtil.java:
 	Added static copy(BufferedReader,PrintWriter) method.
 
-	* src/main/java/iprotium/text/Report.java,
-	src/main/java/iprotium/text/MultipartReport.java:
-	Initial writing.
-
 	* src/main/java/iprotium/text/Table.java (and subclasses),
 	src/main/java/iprotium/text/TableModel.java (and subclasses):
 	Initial writing.
