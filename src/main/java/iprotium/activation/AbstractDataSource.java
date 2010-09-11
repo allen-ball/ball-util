@@ -1,5 +1,5 @@
 /*
- * $Id: AbstractDataSource.java,v 1.4 2010-07-28 04:41:29 ball Exp $
+ * $Id: AbstractDataSource.java,v 1.5 2010-09-11 22:31:01 ball Exp $
  *
  * Copyright 2009, 2010 Allen D. Ball.  All rights reserved.
  */
@@ -15,15 +15,34 @@ import javax.activation.DataSource;
  * Abstract base class for {@link DataSource} implementations.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class AbstractDataSource implements DataSource {
 
     /**
+     * <a href="http://www.ietf.org/rfc/rfc2045.txt">RFC 2045</a>
+     * {@value #CONTENT_TYPE}
+     */
+    public static final String CONTENT_TYPE = "Content-Type";
+
+    /**
+     * <a href="http://www.ietf.org/rfc/rfc2045.txt">RFC 2045</a>
      * {@value #APPLICATION_OCTET_STREAM}
      */
     public static final String APPLICATION_OCTET_STREAM =
         "application/octet-stream";
+
+    /**
+     * <a href="http://www.ietf.org/rfc/rfc2045.txt">RFC 2045</a>
+     * {@value #TEXT_PLAIN}
+     */
+    public static final String TEXT_PLAIN = "text/plain";
+
+    /**
+     * <a href="http://www.ietf.org/rfc/rfc2045.txt">RFC 2045</a>
+     * {@value #TEXT_HTML}
+     */
+    public static final String TEXT_HTML = "text/html";
 
     private String name = null;
     private String type = null;
@@ -88,4 +107,7 @@ public class AbstractDataSource implements DataSource {
 }
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.4  2010/07/28 04:41:29  ball
+ * Added APPLICATION_OCTET_STREAM member.
+ *
  */
