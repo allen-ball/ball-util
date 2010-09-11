@@ -1,7 +1,7 @@
 /*
- * $Id: TableModel.java,v 1.3 2009-09-04 17:13:43 ball Exp $
+ * $Id: TableModel.java,v 1.4 2010-09-11 22:11:34 ball Exp $
  *
- * Copyright 2009 Allen D. Ball.  All rights reserved.
+ * Copyright 2009, 2010 Allen D. Ball.  All rights reserved.
  */
 package iprotium.text;
 
@@ -15,7 +15,7 @@ import javax.swing.table.AbstractTableModel;
  * Abstract text table model base class.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public abstract class TableModel extends AbstractTableModel
                                  implements TableModelListener {
@@ -170,7 +170,7 @@ public abstract class TableModel extends AbstractTableModel
     }
 
     /**
-     * Convenience method to get a rows's values as an array.
+     * Convenience method to get a row's values as an array.
      *
      * @param   y               The row index.
      *
