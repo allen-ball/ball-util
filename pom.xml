@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- $Id: pom.xml,v 1.10 2010-09-08 07:14:28 ball Exp $ -->
+<!-- $Id: pom.xml,v 1.11 2010-09-12 23:55:41 ball Exp $ -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
@@ -50,7 +50,7 @@
     <dependency>
       <groupId>org.apache.ant</groupId>
       <artifactId>ant</artifactId>
-      <version>1.7.1</version>
+      <version>1.8.1</version>
       <scope>compile</scope>
     </dependency>
   </dependencies>
@@ -89,7 +89,4 @@
 </project>
 <!--
     $Log: not supported by cvs2svn $
-    Revision 1.9  2010/08/21 03:58:04  ball
-    Moved javadoc generation from build.xml to pom.xml.
-
   -->
