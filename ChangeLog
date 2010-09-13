@@ -1,3 +1,8 @@
+2010-09-12  Allen D. Ball  <ball@10-0-1-2.lan>
+
+	* src/main/java/iprotium/activation/TempFileDataSource.java:
+	Initial writing.
+
 2010-09-11  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* src/main/java/iprotium/activation/AbstractDataSource.java:
