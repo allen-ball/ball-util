@@ -1,5 +1,5 @@
 /**
- * See {@link org.apache.tools.ant.taskdefs.LintTask}.
+ * See {@link iprotium.util.ant.taskdefs.LintTask}.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
  */
