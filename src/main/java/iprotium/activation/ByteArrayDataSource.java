@@ -1,5 +1,5 @@
 /*
- * $Id: ByteArrayDataSource.java,v 1.7 2010-09-09 03:10:44 ball Exp $
+ * $Id: ByteArrayDataSource.java,v 1.8 2010-09-13 04:30:22 ball Exp $
  *
  * Copyright 2009, 2010 Allen D. Ball.  All rights reserved.
  */
@@ -14,16 +14,15 @@ import java.io.IOException;
  * {@link ByteArrayInputStream} and {@link ByteArrayInputStream}.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 public class ByteArrayDataSource extends AbstractDataSource {
     private ByteArrayOutputStream out = null;
 
     /**
-     * @see AbstractDataSource#AbstractDataSource()
-     *
-     * @param   name            Initial "Name" attribute value.
-     * @param   type            Initial "ContentType" attribute value.
+     * @param   name            Initial {@code "Name"} attribute value.
+     * @param   type            Initial {@code "ContentType"} attribute
+     *                          value.
      */
     public ByteArrayDataSource(String name, String type) {
         super();
@@ -84,6 +83,9 @@ public class ByteArrayDataSource extends AbstractDataSource {
 }
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.7  2010/09/09 03:10:44  ball
+ * Changed reset() implementation to call getOutputStream().close().
+ *
  * Revision 1.6  2010/09/08 06:41:08  ball
  * Added size() method.
  *

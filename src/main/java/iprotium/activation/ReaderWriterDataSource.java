@@ -1,5 +1,5 @@
 /*
- * $Id: ReaderWriterDataSource.java,v 1.7 2010-08-23 03:43:54 ball Exp $
+ * $Id: ReaderWriterDataSource.java,v 1.8 2010-09-13 04:30:22 ball Exp $
  *
  * Copyright 2009, 2010 Allen D. Ball.  All rights reserved.
  */
@@ -20,11 +20,12 @@ import java.util.NoSuchElementException;
 
 /**
  * {@link javax.activation.DataSource} implementation that provides a
- * {@link BufferedReader} wrapping the {@link InputStream} and a
- * {@link PrintWriter} wrapping the {@link OutputStream}.
+ * {@link BufferedReader} wrapping the {@link javax.activation.DataSource}
+ * {@link InputStream} and a {@link PrintWriter} wrapping the
+ * {@link javax.activation.DataSource} {@link OutputStream}.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 public class ReaderWriterDataSource extends ByteArrayDataSource
                                     implements Iterable<String> {
@@ -33,20 +34,18 @@ public class ReaderWriterDataSource extends ByteArrayDataSource
     private final Charset charset;
 
     /**
-     * @see ByteArrayDataSource#ByteArrayDataSource(String,String)
-     *
-     * @param   name            Initial "Name" attribute value.
-     * @param   type            Initial "ContentType" attribute value.
+     * @param   name            Initial {@code "Name"} attribute value.
+     * @param   type            Initial {@code "ContentType"} attribute
+     *                          value.
      */
     public ReaderWriterDataSource(String name, String type) {
         this(name, type, CHARSET);
     }
 
     /**
-     * @see ByteArrayDataSource#ByteArrayDataSource(String,String)
-     *
-     * @param   name            Initial "Name" attribute value.
-     * @param   type            Initial "ContentType" attribute value.
+     * @param   name            Initial {@code "Name"} attribute value.
+     * @param   type            Initial {@code "ContentType"} attribute
+     *                          value.
      * @param   charset         The {@link Charset} used to encode the
      *                          {@link OutputStream}.
      */
