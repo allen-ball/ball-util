@@ -1,3 +1,8 @@
+2010-10-17  Allen D. Ball  <ball@10-0-1-2.lan>
+
+	* src/main/java/iprotium/util/StringUtil.java:
+	Added fill and trim methods.
+
 2010-09-23  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* src/main/java/iprotium/util/StringUtil.java: Initial writing.
