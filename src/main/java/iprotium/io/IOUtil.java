@@ -1,5 +1,5 @@
 /*
- * $Id: IOUtil.java,v 1.9 2010-08-21 04:04:01 ball Exp $
+ * $Id: IOUtil.java,v 1.10 2010-10-18 05:12:51 ball Exp $
  *
  * Copyright 2008 - 2010 Allen D. Ball.  All rights reserved.
  */
@@ -11,11 +11,13 @@ import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.Flushable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
 import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
 import java.nio.channels.ReadableByteChannel;
@@ -25,7 +27,7 @@ import java.nio.channels.WritableByteChannel;
  * Provides common I/O utilities implemented as static methods.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 public abstract class IOUtil {
     private IOUtil() { }
@@ -90,6 +92,7 @@ public abstract class IOUtil {
     public static void copy(InputStream in,
                             OutputStream out) throws IOException {
         copy(Channels.newChannel(in), Channels.newChannel(out));
+        flush(out);
     }
 
     /**
@@ -149,6 +152,37 @@ public abstract class IOUtil {
     }
 
     /**
+     * Method to copy the contents of a {@link Readable} to an
+     * {@link Appendable}.
+     *
+     * @param   in              The input {@link Readable}.
+     * @param   out             The output {@link Appendable}.
+     *
+     * @throws  IOException     If an I/O error occurs.
+     */
+    public static void copy(Readable in, Appendable out) throws IOException {
+        copy(in, ByteBuffer.allocate(32 * 1024).asCharBuffer(), out);
+    }
+
+    private static void copy(Readable in,
+                             CharBuffer buffer,
+                             Appendable out) throws IOException {
+        for (;;) {
+            buffer.clear();
+
+            if (in.read(buffer) > 0) {
+                buffer.flip();
+
+                out.append(buffer);
+            } else {
+                break;
+            }
+        }
+
+        flush(out);
+    }
+
+    /**
      * Method to copy the contents of a {@link BufferedReader} to a
      * {@link PrintWriter}.
      *
@@ -175,6 +209,8 @@ public abstract class IOUtil {
                 break;
             }
         }
+
+        flush(writer);
     }
 
     /**
@@ -288,14 +324,32 @@ public abstract class IOUtil {
     }
 
     /**
-     * Method to quietly close a {@link Closeable}.
+     * Method to quietly close an {@link Object} if it is an instance of
+     * {@link Closeable}.
      *
-     * @param   closeable       The {@link Closeable} to be closed.
+     * @param   object          The {@link Object} to close if it is an
+     *                          instance of {@link Closeable}.
      */
-    public static void close(Closeable closeable) {
+    public static void close(Object object) {
         try {
-            if (closeable != null) {
-                closeable.close();
+            if (object instanceof Closeable) {
+                ((Closeable) object).close();
+            }
+        } catch (IOException exception) {
+        }
+    }
+
+    /**
+     * Method to quietly flush an {@link Object} if it is an instance of
+     * {@link Flushable}.
+     *
+     * @param   object          The {@link Object} to flush if it is an
+     *                          instance of {@link Flushable}.
+     */
+    public static void flush(Object object) {
+        try {
+            if (object instanceof Flushable) {
+                ((Flushable) object).flush();
             }
         } catch (IOException exception) {
         }
@@ -303,7 +357,8 @@ public abstract class IOUtil {
 }
 /*
  * $Log: not supported by cvs2svn $
- * Revision 1.8  2010/07/28 04:46:42  ball
- * Made class abstract (to avoid instantiation).
+ * Revision 1.9  2010/08/21 04:04:01  ball
+ * In mkdirs(File...), use File.exists() to verify each directory has
+ * been created.
  *
  */
