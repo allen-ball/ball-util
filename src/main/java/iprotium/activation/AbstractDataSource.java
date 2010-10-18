@@ -1,5 +1,5 @@
 /*
- * $Id: AbstractDataSource.java,v 1.5 2010-09-11 22:31:01 ball Exp $
+ * $Id: AbstractDataSource.java,v 1.6 2010-10-18 05:28:03 ball Exp $
  *
  * Copyright 2009, 2010 Allen D. Ball.  All rights reserved.
  */
@@ -15,7 +15,7 @@ import javax.activation.DataSource;
  * Abstract base class for {@link DataSource} implementations.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public class AbstractDataSource implements DataSource {
 
@@ -45,38 +45,42 @@ public class AbstractDataSource implements DataSource {
     public static final String TEXT_HTML = "text/html";
 
     private String name = null;
-    private String type = null;
+    private String type = APPLICATION_OCTET_STREAM;
 
     /**
      * Sole constructor.
      */
-    protected AbstractDataSource() {
-        setContentType(APPLICATION_OCTET_STREAM);
-    }
-
-    public String getName() { return name; }
-    protected void setName(String name) { this.name = name; }
-
-    public String getContentType() { return type; }
-    protected void setContentType(String type) { this.type = type; }
+    protected AbstractDataSource() { }
 
     /**
+     * Method to clear the {@link DataSource} and discard any input on any
+     * open {@link #getOutputStream()}.
+     *
      * @throws  UnsupportedOperationException
-     *                          Unless overridden by subclass
-     *                          implementation.
+     *                          If {@link #getOutputStream()} throws
+     *                          {@link UnsupportedOperationException}.
      */
-    public InputStream getInputStream() throws IOException {
-        throw new UnsupportedOperationException("getInputStream()");
+    public void clear() {
+        OutputStream out = null;
+
+        try {
+            out = getOutputStream();
+            out.close();
+        } catch (IOException exception) {
+            throw new IllegalStateException(exception);
+        } finally {
+            IOUtil.close(out);
+        }
     }
 
     /**
-     * @throws  UnsupportedOperationException
-     *                          Unless overridden by subclass
-     *                          implementation.
+     * Method to get the number of bytes stored in {@code this}
+     * {@link DataSource}.  Default implementation returns {@code -1}.
+     *
+     * @return  The number of bytes stored in {@code this}
+     *          {@link DataSource}; {@code -1} if the count is unknown.
      */
-    public OutputStream getOutputStream() throws IOException {
-        throw new UnsupportedOperationException("getOutputStream()");
-    }
+    public long length() { return -1; }
 
     /**
      * Method to write the contents of this {@link DataSource} to an
@@ -104,10 +108,35 @@ public class AbstractDataSource implements DataSource {
             }
         }
     }
+
+    @Override
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+
+    @Override
+    public String getContentType() { return type; }
+    public void setContentType(String type) { this.type = type; }
+
+    /**
+     * @throws  UnsupportedOperationException
+     *                          Unless overridden by subclass
+     *                          implementation.
+     */
+    @Override
+    public InputStream getInputStream() throws IOException {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * @throws  UnsupportedOperationException
+     *                          Unless overridden by subclass
+     *                          implementation.
+     */
+    @Override
+    public OutputStream getOutputStream() throws IOException {
+        throw new UnsupportedOperationException();
+    }
 }
 /*
  * $Log: not supported by cvs2svn $
- * Revision 1.4  2010/07/28 04:41:29  ball
- * Added APPLICATION_OCTET_STREAM member.
- *
  */
