@@ -3,6 +3,12 @@
 	* src/main/java/iprotium/util/StringUtil.java:
 	Added fill and trim methods.
 
+	* src/main/java/iprotium/io/IOUtil.java:
+	Added copy(Readable,Appendable) method.
+	Changed close(Closeable) method to close(Object) and added
+	flush(Object) method.
+	In copy() methods, flush output after completing the copy.
+
 2010-09-23  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* src/main/java/iprotium/util/StringUtil.java: Initial writing.
