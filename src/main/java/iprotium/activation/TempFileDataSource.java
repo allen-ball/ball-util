@@ -1,5 +1,5 @@
 /*
- * $Id: TempFileDataSource.java,v 1.1 2010-09-13 04:27:47 ball Exp $
+ * $Id: TempFileDataSource.java,v 1.2 2010-10-23 21:58:18 ball Exp $
  *
  * Copyright 2010 Allen D. Ball.  All rights reserved.
  */
@@ -15,7 +15,7 @@ import java.io.IOException;
  * and based on {@link FileInputStream} and {@link FileInputStream}.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class TempFileDataSource extends AbstractDataSource {
     private final String prefix;
@@ -55,23 +55,14 @@ public class TempFileDataSource extends AbstractDataSource {
 
     {
         try {
-            reset();
+            clear();
         } catch (Exception exception) {
             throw new ExceptionInInitializerError(exception);
         }
     }
 
-    /**
-     * Method to reset the temporary {@link File} and discard any input on
-     * any open {@link #getOutputStream()}.
-     */
-    public void reset() {
-        try {
-            getOutputStream().close();
-        } catch (IOException exception) {
-            throw new IllegalStateException(exception);
-        }
-    }
+    @Override
+    public long length() { return file.length(); }
 
     @Override
     public FileInputStream getInputStream() throws IOException {
@@ -94,7 +85,6 @@ public class TempFileDataSource extends AbstractDataSource {
             }
 
             file = File.createTempFile(prefix, suffix, parent);
-
             out = new FileOutputStream(file);
         }
 
