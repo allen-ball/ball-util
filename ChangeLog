@@ -1,5 +1,7 @@
 2010-10-23  Allen D. Ball  <ball@10-0-1-2.lan>
 
+	* src/main/java/iprotium/util/BeanUtil.java: Initial writing.
+
 	* src/main/java/iprotium/beans/PropertyDescriptorMap.java:
 	Initial writing.
 
