@@ -7,7 +7,7 @@
     -----------------
     Java Utilities
 
-    $Id: build.xml,v 1.35 2010-09-12 23:35:00 ball Exp $
+    $Id: build.xml,v 1.36 2010-10-23 21:11:59 ball Exp $
   </description>
 
   <property name="build.properties.file" location="build.properties"/>
@@ -103,7 +103,18 @@
           <attribute name="Specification-Title" value="${pom.artifactId}"/>
           <attribute name="Specification-Version" value="${pom.version}"/>
           <attribute name="Specification-Vendor" value="${vendor}"/>
-          <attribute name="Implementation-Title" value="iprotium.io"/>
+          <attribute name="Implementation-Title" value="iprotium.activation"/>
+          <attribute name="Implementation-Version"
+                     value="${pom.version}.${buildnumber.date}"/>
+          <attribute name="Implementation-Vendor" value="${vendor}"/>
+          <attribute name="Sealed" value="true"/>
+        </section>
+        <section name="iprotium/beans/">
+          <attribute name="Extension-Name" value="iprotium.beans"/>
+          <attribute name="Specification-Title" value="${pom.artifactId}"/>
+          <attribute name="Specification-Version" value="${pom.version}"/>
+          <attribute name="Specification-Vendor" value="${vendor}"/>
+          <attribute name="Implementation-Title" value="iprotium.beans"/>
           <attribute name="Implementation-Version"
                      value="${pom.version}.${buildnumber.date}"/>
           <attribute name="Implementation-Vendor" value="${vendor}"/>
@@ -146,6 +157,17 @@
           <attribute name="Sealed" value="true"/>
         </section>
         <section name="iprotium/naming/env/">
+          <attribute name="Sealed" value="true"/>
+        </section>
+        <section name="iprotium/swing/">
+          <attribute name="Extension-Name" value="iprotium.swing"/>
+          <attribute name="Specification-Title" value="${pom.artifactId}"/>
+          <attribute name="Specification-Version" value="${pom.version}"/>
+          <attribute name="Specification-Vendor" value="${vendor}"/>
+          <attribute name="Implementation-Title" value="iprotium.swing"/>
+          <attribute name="Implementation-Version"
+                     value="${pom.version}.${buildnumber.date}"/>
+          <attribute name="Implementation-Vendor" value="${vendor}"/>
           <attribute name="Sealed" value="true"/>
         </section>
         <section name="iprotium/text/">
