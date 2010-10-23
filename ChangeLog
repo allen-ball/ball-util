@@ -9,6 +9,9 @@
 	* src/main/java/iprotium/activation/FilterDataSource.java:
 	Initial writing.
 
+	* src/main/java/iprotium/activation/ReaderWriterDataSource.java:
+	Re-factored as subclass of FilterDataSource.
+
 	* src/main/java/iprotium/beans/PropertyDescriptorMap.java:
 	Initial writing.
 
