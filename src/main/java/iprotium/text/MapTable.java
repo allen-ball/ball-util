@@ -1,22 +1,22 @@
 /*
- * $Id: MapTable.java,v 1.2 2009-09-04 17:13:43 ball Exp $
+ * $Id: MapTable.java,v 1.3 2010-10-23 21:51:32 ball Exp $
  *
- * Copyright 2009 Allen D. Ball.  All rights reserved.
+ * Copyright 2009, 2010 Allen D. Ball.  All rights reserved.
  */
 package iprotium.text;
 
 import java.util.Map;
 
 /**
- * {@link Map} {@link Table} implementation.
+ * {@link Map} {@link TextTable} implementation.
  *
  * @param       <K>     The type of the underlying {@link Map} key.
  * @param       <V>     The type of the underlying {@link Map} value.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
-public class MapTable<K,V> extends Table {
+public class MapTable<K,V> extends TextTable {
 
     /**
      * @param   model           The {@link MapTableModel} describing the
