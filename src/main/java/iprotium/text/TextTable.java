@@ -1,5 +1,5 @@
 /*
- * $Id: Table.java,v 1.4 2010-09-11 22:32:54 ball Exp $
+ * $Id: TextTable.java,v 1.1 2010-10-23 21:48:00 ball Exp $
  *
  * Copyright 2009, 2010 Allen D. Ball.  All rights reserved.
  */
@@ -7,34 +7,34 @@ package iprotium.text;
 
 import iprotium.activation.ReaderWriterDataSource;
 import iprotium.io.IOUtil;
-import java.io.ByteArrayInputStream;
+import iprotium.util.StringUtil;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 
-import static iprotium.text.FillEnum.CENTER;
-import static iprotium.text.FillStringFormat.SPACE;
-import static java.lang.Character.isWhitespace;
+import static iprotium.util.StringUtil.SPACE;
+import static iprotium.util.StringUtil.rtrim;
 
 /**
- * Text-based {@link Table} implementation.
+ * Text-based {@link javax.swing.JTable} implementation.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.1 $
  */
-public class Table extends ReaderWriterDataSource
-                   implements TableModelListener {
+public class TextTable extends ReaderWriterDataSource
+                       implements TableModelListener {
     private final TableModel model;
     private final int[] tabs;
 
     /**
      * Sole constructor.
      *
-     * @param   model           The {@link Table}'s {@link TableModel}.
+     * @param   model           The {@link TextTable}'s {@link TableModel}.
      * @param   tabs            The preferred tab stops.
      */
-    public Table(TableModel model, int... tabs) {
+    public TextTable(TableModel model, int... tabs) {
         super(null, TEXT_PLAIN);
 
         this.model = model;
@@ -47,7 +47,7 @@ public class Table extends ReaderWriterDataSource
     }
 
     /**
-     * Method to get this {@link Table}'s {@link TableModel}.
+     * Method to get {@code this} {@link TextTable}'s {@link TableModel}.
      *
      * @return  The {@link TableModel}.
      */
@@ -88,11 +88,12 @@ public class Table extends ReaderWriterDataSource
     }
 
     /**
-     * Method to render the {@link Table}.  This implementation overrides
-     * the {@link #getInputStream()} method.  If super.{@link #size()}
-     * returns {@code 0}, it then calls {@link #render()} to update the
-     * {@link Table}.  The {@link #tableChanged(TableModelEvent)} method may
-     * zero the byte array.
+     * Method to render the {@link TextTable}.  This implementation
+     * overrides the {@link #getInputStream()} method.  If
+     * {@code super}.{@link #length()} returns less than {@code 0}, it then
+     * calls {@link #render()} to update the {@link TextTable}.  The
+     * {@link #tableChanged(TableModelEvent)} method may clear the
+     * {@link TextTable}.
      */
     protected void render() {
         PrintWriter out = null;
@@ -101,7 +102,8 @@ public class Table extends ReaderWriterDataSource
             out = getPrintWriter();
 
             StringBuilder header = line(fill(getModel().header()));
-            String boundary = CENTER.fill(header.length(), '-', "");
+            StringBuilder boundary =
+                StringUtil.fill(new StringBuilder(), header.length(), '-');
 
             if (rtrim(header).length() > 0) {
                 out.println(rtrim(header));
@@ -138,7 +140,7 @@ public class Table extends ReaderWriterDataSource
         for (int x = 0; x < strings.length; x += 1) {
             int width = getModel().getColumnWidth(x);
 
-            strings[x] = getModel().getColumnModel(x).fill(width, row[x]);
+            strings[x] = getModel().getColumnModel(x).fill(row[x], width);
         }
 
         return strings;
@@ -162,23 +164,9 @@ public class Table extends ReaderWriterDataSource
         return line;
     }
 
-    private StringBuilder rtrim(StringBuilder buffer) {
-        if (buffer != null) {
-            while (buffer.length() > 0) {
-                if (isWhitespace(buffer.charAt(buffer.length() - 1))) {
-                    buffer.setLength(buffer.length() - 1);
-                } else {
-                    break;
-                }
-            }
-        }
-
-        return buffer;
-    }
-
     @Override
-    public ByteArrayInputStream getInputStream() throws IOException {
-        if (! (size() > 0)) {
+    public InputStream getInputStream() throws IOException {
+        if (! (length() > 0)) {
             render();
         }
 
@@ -186,7 +174,7 @@ public class Table extends ReaderWriterDataSource
     }
 
     @Override
-    public void tableChanged(TableModelEvent event) { reset(); }
+    public void tableChanged(TableModelEvent event) { clear(); }
 }
 /*
  * $Log: not supported by cvs2svn $
