@@ -1,5 +1,5 @@
 /*
- * $Id: ReaderWriterDataSource.java,v 1.8 2010-09-13 04:30:22 ball Exp $
+ * $Id: ReaderWriterDataSource.java,v 1.9 2010-10-23 22:02:55 ball Exp $
  *
  * Copyright 2009, 2010 Allen D. Ball.  All rights reserved.
  */
@@ -13,7 +13,9 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
+import java.io.Reader;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.nio.charset.Charset;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -25,9 +27,9 @@ import java.util.NoSuchElementException;
  * {@link javax.activation.DataSource} {@link OutputStream}.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
-public class ReaderWriterDataSource extends ByteArrayDataSource
+public class ReaderWriterDataSource extends FilterDataSource
                                     implements Iterable<String> {
     protected static final Charset CHARSET = Charset.forName("UTF-8");
 
@@ -50,7 +52,7 @@ public class ReaderWriterDataSource extends ByteArrayDataSource
      *                          {@link OutputStream}.
      */
     public ReaderWriterDataSource(String name, String type, Charset charset) {
-        super(name, type);
+        super(new ByteArrayDataSource(name, type));
 
         if (charset != null) {
             this.charset = charset;
@@ -68,6 +70,32 @@ public class ReaderWriterDataSource extends ByteArrayDataSource
     public Charset getCharset() { return charset; }
 
     /**
+     * Method to return a new {@link Reader} to read the underlying
+     * {@link InputStream}.
+     *
+     * @see #getInputStream()
+     *
+     * @return  A {@link Reader} wrapping the
+     *          {@link javax.activation.DataSource} {@link InputStream}.
+     */
+    public Reader getReader() throws IOException {
+        return new InputStreamReader(getInputStream(), getCharset());
+    }
+
+    /**
+     * Method to return a new {@link Writer} to write to the underlying
+     * {@link OutputStream}.
+     *
+     * @see #getOutputStream()
+     *
+     * @return  A {@link Writer} wrapping the
+     *          {@link javax.activation.DataSource} {@link OutputStream}.
+     */
+    public Writer getWriter() throws IOException {
+        return new OutputStreamWriter(getOutputStream(), getCharset());
+    }
+
+    /**
      * Method to return a new {@link BufferedReader} to read the underlying
      * {@link InputStream}.
      *
@@ -77,8 +105,7 @@ public class ReaderWriterDataSource extends ByteArrayDataSource
      *          {@link javax.activation.DataSource} {@link InputStream}.
      */
     public BufferedReader getBufferedReader() throws IOException {
-        return new BufferedReader(new InputStreamReader(getInputStream(),
-                                                        getCharset()));
+        return new BufferedReader(getReader());
     }
 
     /**
@@ -91,9 +118,7 @@ public class ReaderWriterDataSource extends ByteArrayDataSource
      *          {@link javax.activation.DataSource} {@link OutputStream}.
      */
     public PrintWriter getPrintWriter() throws IOException {
-        return new PrintWriter(new OutputStreamWriter(getOutputStream(),
-                                                      getCharset()),
-                               true);
+        return new PrintWriter(getWriter(), true);
     }
 
     /**
@@ -137,11 +162,19 @@ public class ReaderWriterDataSource extends ByteArrayDataSource
     @Override
     public String toString() {
         String string = null;
+        Reader reader = null;
+        StringWriter writer = null;
 
         try {
-            string = new String(toByteArray(), nameOf(getCharset()));
-        } catch (UnsupportedEncodingException exception) {
+            reader = getReader();
+            writer = new StringWriter();
+            IOUtil.copy(reader, writer);
+            string = writer.toString();
+        } catch (IOException exception) {
             string = super.toString();
+        } finally {
+            IOUtil.close(reader);
+            IOUtil.close(writer);
         }
 
         return string;
@@ -202,9 +235,7 @@ public class ReaderWriterDataSource extends ByteArrayDataSource
         }
 
         @Override
-        public void remove() {
-            throw new UnsupportedOperationException("remove()");
-        }
+        public void remove() { throw new UnsupportedOperationException(); }
     }
 }
 /*
