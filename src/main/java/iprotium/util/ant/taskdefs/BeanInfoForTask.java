@@ -1,5 +1,5 @@
 /*
- * $Id: BeanInfoForTask.java,v 1.11 2010-08-23 03:43:54 ball Exp $
+ * $Id: BeanInfoForTask.java,v 1.12 2010-10-23 22:13:00 ball Exp $
  *
  * Copyright 2008 - 2010 Allen D. Ball.  All rights reserved.
  */
@@ -7,7 +7,7 @@ package iprotium.util.ant.taskdefs;
 
 import iprotium.text.ArrayListTableModel;
 import iprotium.text.SimpleTable;
-import iprotium.text.Table;
+import iprotium.text.TextTable;
 import java.beans.BeanDescriptor;
 import java.beans.BeanInfo;
 import java.beans.IndexedPropertyDescriptor;
@@ -23,7 +23,7 @@ import org.apache.tools.ant.BuildException;
  * specified {@link Class}.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 public class BeanInfoForTask extends AbstractClasspathTask {
     private String type = null;
@@ -56,8 +56,8 @@ public class BeanInfoForTask extends AbstractClasspathTask {
     }
 
     private void log(BeanInfo bean) {
-        Table header = new BeanHeaderTable(bean.getBeanDescriptor());
-        Table table = new BeanPropertyTable(bean.getPropertyDescriptors());
+        TextTable header = new BeanHeaderTable(bean.getBeanDescriptor());
+        TextTable table = new BeanPropertyTable(bean.getPropertyDescriptors());
 
         for (String line : header) {
             log(line);
@@ -117,7 +117,7 @@ public class BeanInfoForTask extends AbstractClasspathTask {
         }
     }
 
-    private class BeanPropertyTable extends Table {
+    private class BeanPropertyTable extends TextTable {
         public BeanPropertyTable(PropertyDescriptor[] rows) {
             super(new BeanPropertyTableModel(rows));
         }

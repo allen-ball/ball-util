@@ -1,12 +1,12 @@
 /*
- * $Id: JNDIListTask.java,v 1.5 2010-08-23 03:43:55 ball Exp $
+ * $Id: JNDIListTask.java,v 1.6 2010-10-23 22:13:00 ball Exp $
  *
  * Copyright 2009, 2010 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
 import iprotium.text.ArrayListTableModel;
-import iprotium.text.Table;
+import iprotium.text.TextTable;
 import java.util.Collections;
 import java.util.Hashtable;
 import javax.naming.Binding;
@@ -22,7 +22,7 @@ import org.apache.tools.ant.BuildException;
  * @see NamingManager#getInitialContext(Hashtable)
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public class JNDIListTask extends AbstractClasspathTask {
 
@@ -73,7 +73,7 @@ public class JNDIListTask extends AbstractClasspathTask {
         }
     }
 
-    private class ContextTable extends Table {
+    private class ContextTable extends TextTable {
         public ContextTable(Context context) throws NamingException {
             super(new ContextTableModel(context));
         }

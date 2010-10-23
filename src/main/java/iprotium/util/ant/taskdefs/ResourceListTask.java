@@ -1,12 +1,12 @@
 /*
- * $Id: ResourceListTask.java,v 1.2 2010-08-23 03:43:55 ball Exp $
+ * $Id: ResourceListTask.java,v 1.3 2010-10-23 22:13:00 ball Exp $
  *
  * Copyright 2008 - 2010 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
 import iprotium.text.ArrayListTableModel;
-import iprotium.text.Table;
+import iprotium.text.TextTable;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Collection;
@@ -20,7 +20,7 @@ import org.apache.tools.ant.BuildException;
  * specified name.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class ResourceListTask extends AbstractClasspathTask {
     private String name = null;
@@ -42,7 +42,7 @@ public class ResourceListTask extends AbstractClasspathTask {
         try {
             log("");
 
-            for (String line : new Table(new TableModelImpl(getName()))) {
+            for (String line : new TextTable(new TableModelImpl(getName()))) {
                 log(line);
             }
         } catch (BuildException exception) {

@@ -1,12 +1,12 @@
 /*
- * $Id: ShowPropertiesTask.java,v 1.9 2010-08-23 03:43:55 ball Exp $
+ * $Id: ShowPropertiesTask.java,v 1.10 2010-10-23 22:13:00 ball Exp $
  *
  * Copyright 2008 - 2010 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
 import iprotium.text.ArrayListTableModel;
-import iprotium.text.Table;
+import iprotium.text.TextTable;
 import iprotium.util.Property;
 import java.util.Collection;
 import org.apache.tools.ant.BuildException;
@@ -17,7 +17,7 @@ import org.apache.tools.ant.BuildException;
  * {@link Property} members.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 public class ShowPropertiesTask extends AbstractClassFileTask {
 
@@ -36,7 +36,7 @@ public class ShowPropertiesTask extends AbstractClassFileTask {
                     Property.getStaticPropertyFields(type);
 
                 if (! collection.isEmpty()) {
-                    Table table = new PropertyTable(collection);
+                    TextTable table = new PropertyTable(collection);
 
                     log("");
                     log(type.getName());
@@ -57,7 +57,7 @@ public class ShowPropertiesTask extends AbstractClassFileTask {
         }
     }
 
-    private class PropertyTable extends Table {
+    private class PropertyTable extends TextTable {
         public PropertyTable(Collection<Property> collection) {
             super(new PropertyTableModel(collection));
         }

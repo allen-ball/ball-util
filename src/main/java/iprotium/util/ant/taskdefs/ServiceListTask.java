@@ -1,12 +1,12 @@
 /*
- * $Id: ServiceListTask.java,v 1.2 2010-08-23 03:43:55 ball Exp $
+ * $Id: ServiceListTask.java,v 1.3 2010-10-23 22:13:00 ball Exp $
  *
  * Copyright 2009, 2010 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
 import iprotium.text.ArrayListTableModel;
-import iprotium.text.Table;
+import iprotium.text.TextTable;
 import java.util.ServiceLoader;
 import org.apache.tools.ant.BuildException;
 
@@ -16,7 +16,7 @@ import org.apache.tools.ant.BuildException;
  * specified name.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class ServiceListTask extends AbstractClasspathTask {
     private String type = null;
@@ -44,7 +44,7 @@ public class ServiceListTask extends AbstractClasspathTask {
             log("");
 
             for (String line :
-                     new Table(new ServiceTableModel<Object>(loader))) {
+                     new TextTable(new ServiceTableModel<Object>(loader))) {
                 log(line);
             }
         } catch (BuildException exception) {

@@ -1,5 +1,5 @@
 /*
- * $Id: OpendirTask.java,v 1.4 2010-08-23 03:43:55 ball Exp $
+ * $Id: OpendirTask.java,v 1.5 2010-10-23 22:13:00 ball Exp $
  *
  * Copyright 2009, 2010 Allen D. Ball.  All rights reserved.
  */
@@ -7,7 +7,7 @@ package iprotium.util.ant.taskdefs;
 
 import iprotium.io.IOUtil;
 import iprotium.text.ArrayListTableModel;
-import iprotium.text.Table;
+import iprotium.text.TextTable;
 import iprotium.util.jni.DIR;
 import iprotium.util.jni.POSIX;
 import java.io.File;
@@ -21,7 +21,7 @@ import org.apache.tools.ant.BuildException;
  * @see DIR
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class OpendirTask extends AbstractMatchingTask {
 
@@ -42,7 +42,8 @@ public class OpendirTask extends AbstractMatchingTask {
 
                 log("");
 
-                for (String line : new Table(new TableModelImpl(dirp, file))) {
+                for (String line :
+                         new TextTable(new TableModelImpl(dirp, file))) {
                     log(line);
                 }
             } finally {
