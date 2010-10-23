@@ -1,7 +1,7 @@
 /*
- * $Id: ColumnModel.java,v 1.3 2009-09-04 17:13:43 ball Exp $
+ * $Id: ColumnModel.java,v 1.4 2010-10-23 22:10:52 ball Exp $
  *
- * Copyright 2009 Allen D. Ball.  All rights reserved.
+ * Copyright 2009, 2010 Allen D. Ball.  All rights reserved.
  */
 package iprotium.text;
 
@@ -13,12 +13,12 @@ import static iprotium.text.FillEnum.LEFT;
 import static iprotium.text.FillEnum.RIGHT;
 
 /**
- * {@link Table} column model implementation.
+ * {@link TextTable} column model implementation.
  *
  * @see TableModel
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class ColumnModel {
     private final String name;
@@ -110,15 +110,15 @@ public class ColumnModel {
     /**
      * Method to fill a {@link String} with spaces.
      *
-     * @param   width           The fill-to width.
      * @param   string          The {@link String} to fill.
+     * @param   width           The fill-to width.
      *
      * @return  The filled {@link String}.
      *
      * @see #getFillEnum()
      */
-    public String fill(int width, String string) {
-        return getFillEnum().fill(width, string);
+    public String fill(String string, int width) {
+        return getFillEnum().fill(string, width);
     }
 
     /**

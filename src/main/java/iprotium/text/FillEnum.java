@@ -1,25 +1,25 @@
 /*
- * $Id: FillEnum.java,v 1.4 2009-09-04 17:13:43 ball Exp $
+ * $Id: FillEnum.java,v 1.5 2010-10-23 22:10:52 ball Exp $
  *
- * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2010 Allen D. Ball.  All rights reserved.
  */
 package iprotium.text;
 
-import static iprotium.text.FillStringFormat.SPACE;
+import iprotium.util.StringUtil;
 
 /**
  * Text (column) fill {@link Enum} type.
  *
- * @see FillStringFormat#fill(int,char,String)
+ * @see FillStringFormat#fill(CharSequence,int,char)
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public enum FillEnum {
     NONE(new NoFillStringFormat()),
-        CENTER(new FillStringFormat(0, SPACE)),
-        LEFT(new LeftFillStringFormat(0, SPACE)),
-        RIGHT(new RightFillStringFormat(0, SPACE));
+        CENTER(new FillStringFormat(0, StringUtil.SPACE)),
+        LEFT(new LeftFillStringFormat(0, StringUtil.SPACE)),
+        RIGHT(new RightFillStringFormat(0, StringUtil.SPACE));
 
     private final FillStringFormat format;
 
@@ -32,28 +32,31 @@ public enum FillEnum {
     }
 
     /**
-     * Convenience method to fill a String.
+     * Convenience method to fill a {@link CharSequence}.
      *
-     * @param   width           The fill-to width.
-     * @param   filler          The filler character.
-     * @param   string          The String to fill.
+     * @param   sequence        The {@link CharSequence} to fill.
+     * @param   length          The minimum length to fill to.
+     * @param   character       The fill {@code char}.
      *
-     * @return  The filled String.
+     * @return  A {@link String} representing the filled
+     *          {@link CharSequence}.
      */
-    public String fill(int width, char filler, String string) {
-        return format.fill(width, filler, (string != null) ? string : "");
+    public String fill(CharSequence sequence, int length, char character) {
+        return format.fill((sequence != null) ? sequence : StringUtil.NIL,
+                           length, character);
     }
 
     /**
-     * Convenience method to fill a String with spaces.
+     * Convenience method to fill a {@link CharSequence} with spaces.
      *
-     * @param   width           The fill-to width.
-     * @param   string          The String to fill.
+     * @param   sequence        The {@link CharSequence} to fill.
+     * @param   length          The minimum length to fill to.
      *
-     * @return  The filled String.
+     * @return  A {@link String} representing the filled
+     *          {@link CharSequence}.
      */
-    public String fill(int width, String string) {
-        return fill(width, SPACE, string);
+    public String fill(CharSequence sequence, int length) {
+        return fill(sequence, length, StringUtil.SPACE);
     }
 }
 /*

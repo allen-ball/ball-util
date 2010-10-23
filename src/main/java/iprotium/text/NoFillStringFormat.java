@@ -1,27 +1,32 @@
 /*
- * $Id: NoFillStringFormat.java,v 1.3 2009-09-04 17:13:43 ball Exp $
+ * $Id: NoFillStringFormat.java,v 1.4 2010-10-23 22:10:52 ball Exp $
  *
- * Copyright 2009 Allen D. Ball.  All rights reserved.
+ * Copyright 2009, 2010 Allen D. Ball.  All rights reserved.
  */
 package iprotium.text;
+
+import iprotium.util.StringUtil;
 
 /**
  * "No fill" {@link StringFormat} implementation.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class NoFillStringFormat extends FillStringFormat {
-    private static final long serialVersionUID = 4776469457570314700L;
+    private static final long serialVersionUID = -7219855768510535981L;
 
     /**
      * No-argument constructor.
      */
-    public NoFillStringFormat() { super(0, SPACE); }
+    public NoFillStringFormat() { super(0, StringUtil.SPACE); }
 
     @Override
-    protected String fill(int width, char filler, String string) {
-        return string;
+    protected String fill(CharSequence sequence, int length, char character) {
+        return (new StringBuilder((sequence != null)
+                                      ? sequence
+                                      : StringUtil.NIL)
+                .toString());
     }
 }
 /*

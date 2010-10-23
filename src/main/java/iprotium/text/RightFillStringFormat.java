@@ -1,18 +1,20 @@
 /*
- * $Id: RightFillStringFormat.java,v 1.3 2009-09-04 17:13:43 ball Exp $
+ * $Id: RightFillStringFormat.java,v 1.4 2010-10-23 22:10:52 ball Exp $
  *
- * Copyright 2009 Allen D. Ball.  All rights reserved.
+ * Copyright 2009, 2010 Allen D. Ball.  All rights reserved.
  */
 package iprotium.text;
+
+import iprotium.util.StringUtil;
 
 /**
  * "Right fill" {@link StringFormat} implementation.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class RightFillStringFormat extends FillStringFormat {
-    private static final long serialVersionUID = 761597411095416242L;
+    private static final long serialVersionUID = -6899289721657071954L;
 
     /**
      * @see FillStringFormat#FillStringFormat(int,char)
@@ -24,21 +26,11 @@ public class RightFillStringFormat extends FillStringFormat {
     /**
      * @see FillStringFormat#FillStringFormat(int)
      */
-    public RightFillStringFormat(int width) { this(width, SPACE); }
+    public RightFillStringFormat(int width) { this(width, StringUtil.SPACE); }
 
     @Override
-    protected String fill(int width, char filler, String string) {
-        StringBuilder buffer = new StringBuilder(string);
-
-        for (;;) {
-            if (buffer.length() < width) {
-                buffer.append(filler);
-            } else {
-                break;
-            }
-        }
-
-        return buffer.toString();
+    protected String fill(CharSequence sequence, int length, char character) {
+        return StringUtil.rfill(sequence, length, character);
     }
 }
 /*
