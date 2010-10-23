@@ -1,5 +1,5 @@
 /*
- * $Id: InstanceOfTask.java,v 1.15 2010-09-09 03:19:37 ball Exp $
+ * $Id: InstanceOfTask.java,v 1.16 2010-10-23 22:12:09 ball Exp $
  *
  * Copyright 2008 - 2010 Allen D. Ball.  All rights reserved.
  */
@@ -26,7 +26,7 @@ import org.apache.tools.ant.BuildException;
  * @see Factory
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.15 $
+ * @version $Revision: 1.16 $
  */
 public class InstanceOfTask extends AbstractClasspathTask {
     private String type = String.class.getName();
@@ -103,7 +103,7 @@ public class InstanceOfTask extends AbstractClasspathTask {
                 encoder.writeObject(instance);
                 encoder.close();
 
-                if (ds.size() > 0) {
+                if (ds.length() > 0) {
                     log("");
                     log(ds);
                 }
@@ -179,9 +179,12 @@ public class InstanceOfTask extends AbstractClasspathTask {
         public ReaderWriterDataSourceImpl() { super(null, null); }
 
         @Override
-        public void exceptionThrown(Exception exception) { reset(); }
+        public void exceptionThrown(Exception exception) { clear(); }
     }
 }
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.15  2010/09/09 03:19:37  ball
+ * Provide XMLEncoder output.
+ *
  */
