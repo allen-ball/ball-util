@@ -1,13 +1,12 @@
 /*
- * $Id: BeanMap.java,v 1.10 2010-08-23 03:43:54 ball Exp $
+ * $Id: BeanMap.java,v 1.11 2010-10-23 22:00:15 ball Exp $
  *
  * Copyright 2008 - 2010 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
+import iprotium.beans.PropertyDescriptorMap;
 import java.beans.BeanInfo;
-import java.beans.IntrospectionException;
-import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.io.Serializable;
 import java.lang.reflect.Method;
@@ -18,123 +17,92 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * {@link Map} implementation that wraps a Java bean and provides entries
- * for the bean properties.
+ * {@link Map} implementation that wraps a Java {@code bean} and provides
+ * entries for the {@code bean} properties.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 public class BeanMap extends AbstractMap<String,Object>
                              implements Serializable {
-    private static final long serialVersionUID = -7056120117701081116L;
+    private static final long serialVersionUID = 5515441455110146154L;
 
     private final Object bean;
-    private final Set<EntryImpl> entrySet0;
+    private final Set<Map.Entry<String,Object>> entrySet0;
 
     /**
-     * Construct a BeanMap from a bean.
+     * Construct a {@link BeanMap} from a {@code bean}.
      *
-     * @param   bean            The Java bean to wrap.
+     * @param   bean            The {@code bean} {@link Object} to wrap.
      *
      * @throws  NullPointerException
-     *                          If bean argument is null.
-     * @throws  IntrospectionException
-     *                          If bean introspection fails.
-     * @throws  NullPointerException
-     *                          If bean argument is null.
+     *                          If the argument is null.
      */
-    public BeanMap(Object bean) throws IntrospectionException {
-        this(bean, Introspector.getBeanInfo(bean.getClass()));
-    }
+    public BeanMap(Object bean) { this(bean, bean.getClass()); }
 
     /**
-     * Construct a BeanMap from a bean.
+     * Construct a {@link BeanMap} from a {@code bean}.
      *
-     * @param   bean            The Java bean to wrap (if {@code null} then
-     *                          {@code this} will be used).
-     * @param   info            The {@link BeanInfo} that describes the bean.
+     * @param   bean            The Java {@code bean} to wrap (if {@code
+     *                          null} then {@code this} will be used).
+     * @param   type            The {@link Class} describing the
+     *                          {@code bean}.
      *
      * @throws  NullPointerException
-     *                          If info argument is null.
+     *                          If the type argument is null.
      */
-    public BeanMap(Object bean, BeanInfo info) {
+    public BeanMap(Object bean, Class<?> type) {
+        super();
+
         this.bean = (bean != null) ? bean : this;
 
-        if (info != null) {
-            Set<EntryImpl> entrySet = new LinkedHashSet<EntryImpl>();
+        LinkedHashSet<Map.Entry<String,Object>> entrySet =
+            new LinkedHashSet<Map.Entry<String,Object>>();
 
-            for (PropertyDescriptor property : info.getPropertyDescriptors()) {
-                if (property.getReadMethod() != null) {
-                    entrySet.add(new EntryImpl(property));
-                }
+        for (PropertyDescriptor descriptor :
+                 PropertyDescriptorMap.forClass(type).values()) {
+            if (descriptor.getReadMethod() != null) {
+                entrySet.add(new EntryImpl(descriptor));
             }
-
-            this.entrySet0 = Collections.unmodifiableSet(entrySet);
-        } else {
-            throw new NullPointerException("info");
         }
+
+        this.entrySet0 = Collections.unmodifiableSet(entrySet);
     }
 
     /**
-     * Method to get the wrapped bean.
+     * Method to get the wrapped {@code bean}.
      *
-     * @return  The bean {@link Object}.
+     * @return  The {@code bean} {@link Object}.
      */
     protected Object getBean() { return bean; }
 
     @Override
     public Object put(String key, Object value) {
-        for (EntryImpl entry : entrySet0) {
-            if (entry.isMatch(key)) {
-                Object object = entry.getValue();
-
-                entry.setValue(value);
-
-                return object;
+        for (Map.Entry<String,Object> entry : entrySet0) {
+            if (((EntryImpl) entry).isMatch(key)) {
+                return entry.setValue(value);
             }
         }
 
         throw new IllegalArgumentException("key=" + String.valueOf(key));
     }
 
-    /**
-     * @throws  UnsupportedOperationException
-     *                          Always.
-     */
     @Override
-    public Object remove(Object key) {
-        throw new UnsupportedOperationException("remove");
-    }
+    public Set<Map.Entry<String,Object>> entrySet() { return entrySet0; }
 
     /**
-     * @throws  UnsupportedOperationException
-     *                          Always.
-     */
-    @Override
-    public void clear() { throw new UnsupportedOperationException("clear"); }
-
-    @Override
-    public Set<Map.Entry<String,Object>> entrySet() {
-        Set<Map.Entry<String,Object>> entrySet =
-            new LinkedHashSet<Map.Entry<String,Object>>(entrySet0);
-
-        return Collections.unmodifiableSet(entrySet);
-    }
-
-    /**
-     * Static method to wrap a Java bean in a {@link BeanMap}.
+     * Static method to wrap a Java {@code bean} in a {@link BeanMap}.
      *
-     * @param   bean            The Java bean to wrap.
+     * @param   bean            The Java {@code bean} to wrap.
      *
-     * @return  The argument bean if it is an instance of {@link BeanMap}; a
-     *          new {@link BeanMap} wrapping the argument bean otherwise.
+     * @return  The argument {@code bean} if it is an instance of
+     *          {@link BeanMap}; a new {@link BeanMap} wrapping the argument
+     *          {@code bean} otherwise.
      *
      * @throws  NullPointerException
-     *                          If bean argument is null.
-     * @throws  IntrospectionException
-     *                          If bean introspection fails.
+     *                          If {@code bean} argument is null.
      */
-    public static BeanMap asBeanMap(Object bean) throws IntrospectionException {
+    public static BeanMap asBeanMap(Object bean) {
         BeanMap map = null;
 
         if (bean instanceof BeanMap) {
@@ -207,7 +175,4 @@ public class BeanMap extends AbstractMap<String,Object>
 }
 /*
  * $Log: not supported by cvs2svn $
- * Revision 1.8  2009/11/26 00:09:06  ball
- * Only include bean properties with read methods in the keySet().
- *
  */
