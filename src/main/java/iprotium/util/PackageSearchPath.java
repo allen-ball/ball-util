@@ -1,5 +1,5 @@
 /*
- * $Id: PackageSearchPath.java,v 1.3 2010-08-23 03:43:54 ball Exp $
+ * $Id: PackageSearchPath.java,v 1.4 2010-10-24 20:52:39 ball Exp $
  *
  * Copyright 2009, 2010 Allen D. Ball.  All rights reserved.
  */
@@ -17,10 +17,15 @@ import java.util.LinkedHashSet;
  *                              path.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class PackageSearchPath<T> extends LinkedHashSet<Package> {
-    private static final long serialVersionUID = 5887744906132617085L;
+    private static final long serialVersionUID = 637689197393497033L;
+
+    /**
+     * {@link #DOT} = {@value #DOT}
+     */
+    protected static final String DOT = ".";
 
     private final Class<? extends T> superclass;
 
@@ -84,7 +89,7 @@ public class PackageSearchPath<T> extends LinkedHashSet<Package> {
 
     private Class<? extends T> getClass(Package pkg, String name) {
         if (pkg != null) {
-            name = pkg.getName() + "." + name;
+            name = pkg.getName() + DOT + name;
         }
 
         Class<? extends T> cls = null;
