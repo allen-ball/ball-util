@@ -1,5 +1,9 @@
 2010-10-28  Allen D. Ball  <ball@10-0-1-2.lan>
 
+	* src/main/java/iprotium/io/IOUtil.java:
+	Expose copy(ReadableByteChannel,ByteBuffer,WritableByteChannel)
+	and copy(Readable,CharBuffer,Appendable).
+
 	* JNIResourceBundle.properties:
 	Added -I/System/Library/Frameworks/JavaVM.framework/Headers for
 	Mac OS X.
