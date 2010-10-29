@@ -1,5 +1,5 @@
 /*
- * $Id: IOUtil.java,v 1.10 2010-10-18 05:12:51 ball Exp $
+ * $Id: IOUtil.java,v 1.11 2010-10-29 05:00:53 ball Exp $
  *
  * Copyright 2008 - 2010 Allen D. Ball.  All rights reserved.
  */
@@ -27,7 +27,7 @@ import java.nio.channels.WritableByteChannel;
  * Provides common I/O utilities implemented as static methods.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 public abstract class IOUtil {
     private IOUtil() { }
@@ -113,9 +113,19 @@ public abstract class IOUtil {
         }
     }
 
-    private static void copy(ReadableByteChannel in,
-                             ByteBuffer buffer,
-                             WritableByteChannel out) throws IOException {
+    /**
+     * Method to copy the contents of a {@link ReadableByteChannel} to a
+     * {@link WritableByteChannel}.
+     *
+     * @param   in              The {@link ReadableByteChannel}.
+     * @param   buffer          The {@link ByteBuffer} to use for the copy.
+     * @param   out             The {@link WritableByteChannel}.
+     *
+     * @throws  IOException     If an I/O error occurs.
+     */
+    public static void copy(ReadableByteChannel in,
+                            ByteBuffer buffer,
+                            WritableByteChannel out) throws IOException {
         for (;;) {
             buffer.clear();
 
@@ -164,9 +174,19 @@ public abstract class IOUtil {
         copy(in, ByteBuffer.allocate(32 * 1024).asCharBuffer(), out);
     }
 
-    private static void copy(Readable in,
-                             CharBuffer buffer,
-                             Appendable out) throws IOException {
+    /**
+     * Method to copy the contents of a {@link Readable} to an
+     * {@link Appendable}.
+     *
+     * @param   in              The input {@link Readable}.
+     * @param   buffer          The {@link CharBuffer} to use for the copy.
+     * @param   out             The output {@link Appendable}.
+     *
+     * @throws  IOException     If an I/O error occurs.
+     */
+    public static void copy(Readable in,
+                            CharBuffer buffer,
+                            Appendable out) throws IOException {
         for (;;) {
             buffer.clear();
 
@@ -357,6 +377,12 @@ public abstract class IOUtil {
 }
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.10  2010/10/18 05:12:51  ball
+ * Added copy(Readable,Appendable) method.
+ * Changed close(Closeable) method to close(Object) and added
+ * flush(Object) method.
+ * In copy() methods, flush output after completing the copy.
+ *
  * Revision 1.9  2010/08/21 04:04:01  ball
  * In mkdirs(File...), use File.exists() to verify each directory has
  * been created.
