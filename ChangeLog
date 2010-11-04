@@ -1,3 +1,9 @@
+2010-11-03  Allen D. Ball  <ball@10-0-1-2.lan>
+
+	* src/main/java/iprotium/beans/PropertyDescriptorMap.java:
+	Added the getIndexedReadMethod(String) and
+	getIndexedWriteMethod(String) methods.
+
 2010-10-28  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* src/main/java/iprotium/io/IOUtil.java:
