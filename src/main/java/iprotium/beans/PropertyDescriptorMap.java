@@ -1,10 +1,11 @@
 /*
- * $Id: PropertyDescriptorMap.java,v 1.1 2010-10-23 21:09:21 ball Exp $
+ * $Id: PropertyDescriptorMap.java,v 1.2 2010-11-04 02:20:21 ball Exp $
  *
  * Copyright 2010 Allen D. Ball.  All rights reserved.
  */
 package iprotium.beans;
 
+import java.beans.IndexedPropertyDescriptor;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
@@ -19,11 +20,11 @@ import java.util.LinkedHashMap;
  * {@link java.beans.BeanInfo#getPropertyDescriptors()}.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class PropertyDescriptorMap
              extends LinkedHashMap<String,PropertyDescriptor> {
-    private static final long serialVersionUID = -6625757279553634813L;
+    private static final long serialVersionUID = 2484525059603563351L;
 
     private static final Map MAP = new Map();
 
@@ -83,6 +84,46 @@ public class PropertyDescriptorMap
         PropertyDescriptor value = get(key);
 
         return (value != null) ? value.getWriteMethod() : null;
+    }
+
+    /**
+     * See {@link IndexedPropertyDescriptor#getIndexedReadMethod()}.
+     *
+     * @param   key             The property name.
+     *
+     * @return  The indexed read {@link Method} or {@code null} if there is
+     *          none.
+     */
+    public Method getIndexedReadMethod(String key) {
+        Method method = null;
+        PropertyDescriptor value = get(key);
+
+        if (value instanceof IndexedPropertyDescriptor) {
+            method =
+                ((IndexedPropertyDescriptor) value).getIndexedReadMethod();
+        }
+
+        return method;
+    }
+
+    /**
+     * See {@link IndexedPropertyDescriptor#getIndexedWriteMethod()}.
+     *
+     * @param   key             The property name.
+     *
+     * @return  The indexed write {@link Method} or {@code null} if there is
+     *          none.
+     */
+    public Method getIndexedWriteMethod(String key) {
+        Method method = null;
+        PropertyDescriptor value = get(key);
+
+        if (value instanceof IndexedPropertyDescriptor) {
+            method =
+                ((IndexedPropertyDescriptor) value).getIndexedWriteMethod();
+        }
+
+        return method;
     }
 
     @Override
