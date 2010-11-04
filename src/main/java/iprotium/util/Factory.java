@@ -1,10 +1,12 @@
 /*
- * $Id: Factory.java,v 1.8 2010-08-23 03:43:54 ball Exp $
+ * $Id: Factory.java,v 1.9 2010-11-04 02:36:59 ball Exp $
  *
  * Copyright 2008 - 2010 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
+import iprotium.beans.Converter;
+import java.beans.ConstructorProperties;
 import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -20,15 +22,15 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 /**
- * Factory base class.
+ * {@link Factory} base class.
  *
  * @param       <T>             The type of {@link Object} this
  *                              {@link Factory} will produce.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
-public class Factory<T> {
+public class Factory<T> implements Converter<T> {
     private final Class<? extends T> type;
     private final FactoryMemberMap map;
 
@@ -41,6 +43,7 @@ public class Factory<T> {
      * @throws  NullPointerException
      *                          If {@code type} is {@code null}.
      */
+    @ConstructorProperties({"type"})
     public Factory(Class<? extends T> type) {
         this.type = type;
 
@@ -69,13 +72,6 @@ public class Factory<T> {
      *
      * @return  The {@link Object} instance.
      *
-     * @throws  NoSuchMethodException
-     *                          If the specified {@link Constructor} or
-     *                          {@link Method} does not exist.
-     * @throws  InstantiationException
-     *                          If the underlying {@link Constructor} or
-     *                          {@link Method} represents an abstract
-     *                          {@link Class}.
      * @throws  IllegalAccessException
      *                          If the specified {@link Constructor} or
      *                          {@link Method} enforces Java language
@@ -92,32 +88,34 @@ public class Factory<T> {
      *                          conversion; if this {@link Constructor} or
      *                          {@link Method} pertains to an
      *                          {@link Enum} type.
+     * @throws  InstantiationException
+     *                          If the underlying {@link Constructor} or
+     *                          {@link Method} represents an abstract
+     *                          {@link Class}.
      * @throws  InvocationTargetException
      *                          If the underlying {@link Constructor} or
      *                          {@link Method} fails for some reason.
+     * @throws  NoSuchMethodException
+     *                          If the specified {@link Constructor} or
+     *                          {@link Method} does not exist.
      */
     public T getInstance(Class<?>[] parameters, Object[] arguments)
-            throws NoSuchMethodException,
-                   InstantiationException, IllegalAccessException,
-                   IllegalArgumentException, InvocationTargetException {
+                                        throws IllegalAccessException,
+                                               IllegalArgumentException,
+                                               InstantiationException,
+                                               InvocationTargetException,
+                                               NoSuchMethodException {
         return apply(getFactoryMember(parameters), arguments);
     }
 
     /**
      * Method to get an {@link Object} instance.  This method will first
-     * attempt to find and invoke a static factory method.  If not factory
+     * attempt to find and invoke a static factory method.  If no factory
      * method is found, it will then attempt to construct a new instance.
      *
      * @param   arguments       The arguments to the {@link Object} static
      *                          factory method or constructor.
      *
-     * @throws  NoSuchMethodException
-     *                          If the specified {@link Constructor} or
-     *                          {@link Method} does not exist.
-     * @throws  InstantiationException
-     *                          If the underlying {@link Constructor} or
-     *                          {@link Method} represents an abstract
-     *                          {@link Class}.
      * @throws  IllegalAccessException
      *                          If the specified {@link Constructor} or
      *                          {@link Method} enforces Java language
@@ -134,14 +132,22 @@ public class Factory<T> {
      *                          conversion; if this {@link Constructor} or
      *                          {@link Method} pertains to an
      *                          {@link Enum} type.
+     * @throws  InstantiationException
+     *                          If the underlying {@link Constructor} or
+     *                          {@link Method} represents an abstract
+     *                          {@link Class}.
      * @throws  InvocationTargetException
      *                          If the underlying {@link Constructor} or
      *                          {@link Method} fails for some reason.
+     * @throws  NoSuchMethodException
+     *                          If the specified {@link Constructor} or
+     *                          {@link Method} does not exist.
      */
-    public T getInstance(Object... arguments)
-            throws NoSuchMethodException,
-                   InstantiationException, IllegalAccessException,
-                   IllegalArgumentException, InvocationTargetException {
+    public T getInstance(Object... arguments) throws IllegalAccessException,
+                                                     IllegalArgumentException,
+                                                     InstantiationException,
+                                                     InvocationTargetException,
+                                                     NoSuchMethodException {
         return getInstance(typesOf(arguments), arguments);
     }
 
@@ -183,7 +189,7 @@ public class Factory<T> {
      *                          {@link Method} does not exist.
      */
     protected Member getFactoryMember(Class<?>... parameters)
-            throws NoSuchMethodException {
+                                        throws NoSuchMethodException {
         if (! map.containsKey(parameters)) {
             map.put(parameters, getType().getConstructor(parameters));
         }
@@ -201,23 +207,24 @@ public class Factory<T> {
      *
      * @return  The {@link Object} instance.
      *
-     * @throws  InstantiationException
-     *                          If the underlying {@link Constructor} or
-     *                          {@link Method} represents an abstract
-     *                          {@link Class}.
      * @throws  IllegalAccessException
      *                          If the specified {@link Constructor} or
      *                          {@link Method} enforces Java language
      *                          access control and the underlying
      *                          {@link Constructor} or {@link Method} is
      *                          inaccessible.
+     * @throws  InstantiationException
+     *                          If the underlying {@link Constructor} or
+     *                          {@link Method} represents an abstract
+     *                          {@link Class}.
      * @throws  InvocationTargetException
      *                          If the underlying {@link Constructor} or
      *                          {@link Method} fails for some reason.
      */
-    protected T apply(Member member, Object[] arguments)
-            throws InstantiationException, IllegalAccessException,
-                   InvocationTargetException {
+    protected T apply(Member member,
+                      Object[] arguments) throws IllegalAccessException,
+                                                 InstantiationException,
+                                                 InvocationTargetException {
         Object object = null;
 
         if (member instanceof Constructor) {
@@ -299,6 +306,22 @@ public class Factory<T> {
         return Modifier.isStatic(member.getModifiers());
     }
 
+    @Override
+    public T convert(Object in) throws IllegalAccessException,
+                                       InstantiationException,
+                                       InvocationTargetException,
+                                       NoSuchMethodException {
+        T out = null;
+
+        if (in == null || getType().isAssignableFrom(in.getClass())) {
+            out = getType().cast(in);
+        } else {
+            out = getInstance(in);
+        }
+
+        return out;
+    }
+
     private class FactoryMemberMap extends TreeMap<Class<?>[],Member> {
         private static final long serialVersionUID = 3396324212973830506L;
 
@@ -357,7 +380,4 @@ public class Factory<T> {
 }
 /*
  * $Log: not supported by cvs2svn $
- * Revision 1.7  2009/09/07 21:43:16  ball
- * Added hasFactoryMemberFor(Class<?>...) method.
- *
  */
