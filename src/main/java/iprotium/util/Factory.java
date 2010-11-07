@@ -1,5 +1,5 @@
 /*
- * $Id: Factory.java,v 1.9 2010-11-04 02:36:59 ball Exp $
+ * $Id: Factory.java,v 1.10 2010-11-07 21:59:35 ball Exp $
  *
  * Copyright 2008 - 2010 Allen D. Ball.  All rights reserved.
  */
@@ -28,7 +28,7 @@ import java.util.TreeSet;
  *                              {@link Factory} will produce.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 public class Factory<T> implements Converter<T> {
     private final Class<? extends T> type;
@@ -162,7 +162,7 @@ public class Factory<T> implements Converter<T> {
      * @return  {@code true} if there is such a {@link Member};
      *          {@code false} otherwise.
      */
-    protected boolean hasFactoryMemberFor(Class<?>... parameters) {
+    public boolean hasFactoryMemberFor(Class<?>... parameters) {
         boolean hasMember = false;
 
         try {
@@ -188,7 +188,7 @@ public class Factory<T> implements Converter<T> {
      *                          If the specified {@link Constructor} or
      *                          {@link Method} does not exist.
      */
-    protected Member getFactoryMember(Class<?>... parameters)
+    public Member getFactoryMember(Class<?>... parameters)
                                         throws NoSuchMethodException {
         if (! map.containsKey(parameters)) {
             map.put(parameters, getType().getConstructor(parameters));
@@ -221,10 +221,10 @@ public class Factory<T> implements Converter<T> {
      *                          If the underlying {@link Constructor} or
      *                          {@link Method} fails for some reason.
      */
-    protected T apply(Member member,
-                      Object[] arguments) throws IllegalAccessException,
-                                                 InstantiationException,
-                                                 InvocationTargetException {
+    public T apply(Member member,
+                   Object[] arguments) throws IllegalAccessException,
+                                              InstantiationException,
+                                              InvocationTargetException {
         Object object = null;
 
         if (member instanceof Constructor) {
@@ -380,4 +380,7 @@ public class Factory<T> implements Converter<T> {
 }
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.9  2010/11/04 02:36:59  ball
+ * Implement Converter.
+ *
  */
