@@ -1,3 +1,10 @@
+2010-11-07  Allen D. Ball  <ball@10-0-1-2.lan>
+
+	* src/main/java/iprotium/util/Factory.java:
+	Made hasFactoryMemberFor(Class<?>...),
+	getFactoryMember(Class<?>...), and apply(Member,Object[]) members
+	public.
+
 2010-11-03  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* src/main/java/iprotium/util/Factory.java: Implement Converter.
