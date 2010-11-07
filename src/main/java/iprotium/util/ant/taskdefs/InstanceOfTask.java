@@ -1,5 +1,5 @@
 /*
- * $Id: InstanceOfTask.java,v 1.16 2010-10-23 22:12:09 ball Exp $
+ * $Id: InstanceOfTask.java,v 1.17 2010-11-07 22:18:16 ball Exp $
  *
  * Copyright 2008 - 2010 Allen D. Ball.  All rights reserved.
  */
@@ -26,7 +26,7 @@ import org.apache.tools.ant.BuildException;
  * @see Factory
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.16 $
+ * @version $Revision: 1.17 $
  */
 public class InstanceOfTask extends AbstractClasspathTask {
     private String type = String.class.getName();
@@ -63,8 +63,8 @@ public class InstanceOfTask extends AbstractClasspathTask {
             List<Object> arguments = new ArrayList<Object>();
 
             for (Argument argument : list) {
-                FactoryImpl factory =
-                    new FactoryImpl(getClass(argument.getType()));
+                Factory<?> factory =
+                    new Factory<Object>(getClass(argument.getType()));
 
                 parameters.add(factory.getType());
                 arguments.add(factory.getInstance(argument.getValue()));
@@ -73,7 +73,7 @@ public class InstanceOfTask extends AbstractClasspathTask {
             log(String.valueOf(parameters));
             log(String.valueOf(arguments));
 
-            FactoryImpl factory = new FactoryImpl(type);
+            Factory<?> factory = new Factory<Object>(type);
             Member member =
                 factory.getFactoryMember(parameters.toArray(new Class[] { }));
 
@@ -101,7 +101,7 @@ public class InstanceOfTask extends AbstractClasspathTask {
                 encoder = new XMLEncoder(ds.getOutputStream());
                 encoder.setExceptionListener(ds);
                 encoder.writeObject(instance);
-                encoder.close();
+                encoder.flush();
 
                 if (ds.length() > 0) {
                     log("");
@@ -157,21 +157,6 @@ public class InstanceOfTask extends AbstractClasspathTask {
 
         @Override
         public String toString() { return getValue(); }
-    }
-
-    private class FactoryImpl extends Factory<Object> {
-        public FactoryImpl(Class<?> type) { super(type); }
-
-        public Member getFactoryMember(Class<?>... parameters)
-                throws NoSuchMethodException {
-            return super.getFactoryMember(parameters);
-        }
-
-        public Object apply(Member member, Object[] arguments)
-                throws InstantiationException, IllegalAccessException,
-                       InvocationTargetException {
-            return super.apply(member, arguments);
-        }
     }
 
     private class ReaderWriterDataSourceImpl extends ReaderWriterDataSource
