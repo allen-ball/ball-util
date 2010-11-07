@@ -5,6 +5,9 @@
 	getFactoryMember(Class<?>...), and apply(Member,Object[]) members
 	public.
 
+	* src/main/java/iprotium/util/ant/taskdefs/AbstractMatchingTask.java:
+	Added classpath support (see AbstractClasspathTask).
+
 2010-11-03  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* src/main/java/iprotium/util/Factory.java: Implement Converter.
