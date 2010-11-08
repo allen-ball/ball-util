@@ -7,6 +7,8 @@
 	Made hasFactoryMemberFor(Class<?>...),
 	getFactoryMember(Class<?>...), and apply(Member,Object[]) members
 	public.
+	Reordered discovery heuristics to perfer first-found static
+	factory methods.  Added "decode" to static factory method names.
 
 	* src/main/java/iprotium/util/ant/taskdefs/AbstractMatchingTask.java:
 	Added classpath support (see AbstractClasspathTask).
