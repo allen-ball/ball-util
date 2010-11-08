@@ -1,5 +1,5 @@
 /*
- * $Id: Factory.java,v 1.10 2010-11-07 21:59:35 ball Exp $
+ * $Id: Factory.java,v 1.11 2010-11-08 02:33:30 ball Exp $
  *
  * Copyright 2008 - 2010 Allen D. Ball.  All rights reserved.
  */
@@ -17,7 +17,6 @@ import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -28,7 +27,7 @@ import java.util.TreeSet;
  *                              {@link Factory} will produce.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 public class Factory<T> implements Converter<T> {
     private final Class<? extends T> type;
@@ -328,28 +327,28 @@ public class Factory<T> implements Converter<T> {
         public FactoryMemberMap(Class<? extends T> type) {
             super(new ArrayOrder<Class<?>>(ClassOrder.NAME));
 
-            for (Constructor<?> constructor : type.getConstructors()) {
-                if (isPublic(constructor)) {
-                    put(constructor.getParameterTypes(), constructor);
-                }
-            }
-
-            Set<String> set =
-                new TreeSet<String>(Arrays.asList("compile",
-                                                  "create",
-                                                  "forName",
-                                                  "get" + type.getSimpleName(),
-                                                  "getDefault",
-                                                  "getDefaultInstance",
-                                                  "getInstance",
-                                                  "valueOf"));
+            CandidateSet set = new CandidateSet(type);
 
             for (Method method : type.getMethods()) {
                 if (isPublic(method) && isStatic(method)) {
                     if (type.isAssignableFrom(method.getReturnType())) {
                         if (set.contains(method.getName())) {
-                            put(method.getParameterTypes(), method);
+                            Class<?>[] key = method.getParameterTypes();
+
+                            if (! containsKey(key)) {
+                                put(key, method);
+                            }
                         }
+                    }
+                }
+            }
+
+            for (Constructor<?> constructor : type.getConstructors()) {
+                if (isPublic(constructor)) {
+                    Class<?>[] key = constructor.getParameterTypes();
+
+                    if (! containsKey(key)) {
+                        put(key, constructor);
                     }
                 }
             }
@@ -376,10 +375,35 @@ public class Factory<T> implements Converter<T> {
 
             return value;
         }
+
+        private class CandidateSet extends TreeSet<String> {
+            private static final long serialVersionUID = -5065227379347591040L;
+
+            public CandidateSet(Class<? extends T> type) {
+                addAll(Arrays.asList("compile",
+                                     "create",
+                                     "decode",
+                                     "forName",
+                                     "getDefault",
+                                     "getDefaultInstance",
+                                     "getInstance",
+                                     "valueOf"));
+
+                if ((! type.isAssignableFrom(Boolean.class)
+                     || type.isAssignableFrom(Integer.class)
+                     || type.isAssignableFrom(Long.class))) {
+                    add("get" + type.getSimpleName());
+                }
+            }
+        }
     }
 }
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.10  2010/11/07 21:59:35  ball
+ * Made hasFactoryMemberFor(Class<?>...), getFactoryMember(Class<?>...), and
+ * apply(Member,Object[]) members public.
+ *
  * Revision 1.9  2010/11/04 02:36:59  ball
  * Implement Converter.
  *
