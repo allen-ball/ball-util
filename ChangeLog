@@ -10,6 +10,10 @@
 	Reordered discovery heuristics to perfer first-found static
 	factory methods.  Added "decode" to static factory method names.
 
+	* src/main/java/iprotium/util/IntegerFactory.java,
+	src/main/java/iprotium/util/LongFactory.java:
+	Override convert(Object) to use static decode(String) method.
+
 	* src/main/java/iprotium/util/ant/taskdefs/AbstractMatchingTask.java:
 	Added classpath support (see AbstractClasspathTask).
 
