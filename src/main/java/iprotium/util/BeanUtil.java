@@ -1,13 +1,15 @@
 /*
- * $Id: BeanUtil.java,v 1.2 2010-10-24 20:51:25 ball Exp $
+ * $Id: BeanUtil.java,v 1.3 2010-11-08 02:41:06 ball Exp $
  *
  * Copyright 2010 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
+import iprotium.beans.ConverterUtil;
 import iprotium.beans.PropertyDescriptorMap;
 import java.beans.BeanInfo;
 import java.beans.PropertyDescriptor;
+import java.beans.PropertyVetoException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -18,7 +20,7 @@ import java.util.Map;
  * {@code Bean} utility methods.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public abstract class BeanUtil {
     private BeanUtil() { }
@@ -31,21 +33,21 @@ public abstract class BeanUtil {
      *                          {@code null}).
      * @param   name            The name of the property to get.
      *
-     * @throws  NoSuchMethodException
-     *                          If there is no getter method for the
-     *                          specified property.
-     * @throws  InvocationTargetException
-     *                          If there is a problem invoking the getter
-     *                          method for the specified property.
      * @throws  IllegalAccessException
      *                          If this method does not have access to the
      *                          property getter method.
+     * @throws  InvocationTargetException
+     *                          If there is a problem invoking the getter
+     *                          method for the specified property.
+     * @throws  NoSuchMethodException
+     *                          If there is no getter method for the
+     *                          specified property.
      */
     public static Object get(Class<?> type,
                              Object bean,
-                             String name) throws NoSuchMethodException,
+                             String name) throws IllegalAccessException,
                                                  InvocationTargetException,
-                                                 IllegalAccessException {
+                                                 NoSuchMethodException {
         Method get =
             PropertyDescriptorMap.forClass(type).getReadMethod(name);
 
@@ -64,20 +66,22 @@ public abstract class BeanUtil {
      *
      * @throws  NullPointerException
      *                          If {@code bean} is {@code null}.
-     * @throws  NoSuchMethodException
-     *                          If there is no getter method for the
-     *                          specified property.
-     * @throws  InvocationTargetException
-     *                          If there is a problem invoking the getter
-     *                          method for the specified property.
      * @throws  IllegalAccessException
      *                          If this method does not have access to the
      *                          property getter method.
+     * @throws  InvocationTargetException
+     *                          If there is a problem invoking the getter
+     *                          method for the specified property.
+     * @throws  NoSuchMethodException
+     *                          If there is no getter method for the
+     *                          specified property.
+     * @throws  NullPointerException
+     *                          If {@code bean} is {@code null}.
      */
     public static Object get(Object bean,
-                             String name) throws NoSuchMethodException,
+                             String name) throws IllegalAccessException,
                                                  InvocationTargetException,
-                                                 IllegalAccessException {
+                                                 NoSuchMethodException {
         return get(bean.getClass(), bean, name);
     }
 
@@ -90,22 +94,26 @@ public abstract class BeanUtil {
      * @param   name            The name of the property to set.
      * @param   value           The value to assign to the property.
      *
-     * @throws  NoSuchMethodException
-     *                          If there is no setter method for the
-     *                          specified property.
-     * @throws  InvocationTargetException
-     *                          If there is a problem invoking the setter
-     *                          method for the specified property.
      * @throws  IllegalAccessException
      *                          If this method does not have access to the
      *                          property setter method.
+     * @throws  InvocationTargetException
+     *                          If there is a problem invoking the setter
+     *                          method for the specified property.
+     * @throws  NoSuchMethodException
+     *                          If there is no setter method for the
+     *                          specified property.
+     * @throws  PropertyVetoException
+     *                          If the target setter method throws
+     *                          {@link PropertyVetoException}.
      */
     public static void set(Class<?> type,
                            Object bean,
                            String name,
-                           Object value) throws NoSuchMethodException,
+                           Object value) throws IllegalAccessException,
                                                 InvocationTargetException,
-                                                IllegalAccessException {
+                                                NoSuchMethodException,
+                                                PropertyVetoException {
         Method set =
             PropertyDescriptorMap.forClass(type).getWriteMethod(name);
 
@@ -113,7 +121,17 @@ public abstract class BeanUtil {
             throw new NoSuchMethodException();
         }
 
-        set.invoke(bean, value);
+        try {
+            set.invoke(bean, ConverterUtil.convert(set, 0, value));
+        } catch (InvocationTargetException exception) {
+            Throwable cause = exception.getCause();
+
+            if (cause instanceof PropertyVetoException) {
+                throw (PropertyVetoException) cause;
+            } else {
+                throw exception;
+            }
+        }
     }
 
     /**
@@ -123,23 +141,27 @@ public abstract class BeanUtil {
      * @param   name            The name of the property to set.
      * @param   value           The value to assign to the property.
      *
-     * @throws  NullPointerException
-     *                          If {@code bean} is {@code null}.
-     * @throws  NoSuchMethodException
-     *                          If there is no setter method for the
-     *                          specified property.
-     * @throws  InvocationTargetException
-     *                          If there is a problem invoking the setter
-     *                          method for the specified property.
      * @throws  IllegalAccessException
      *                          If this method does not have access to the
      *                          property setter method.
+     * @throws  InvocationTargetException
+     *                          If there is a problem invoking the setter
+     *                          method for the specified property.
+     * @throws  NoSuchMethodException
+     *                          If there is no setter method for the
+     *                          specified property.
+     * @throws  NullPointerException
+     *                          If {@code bean} is {@code null}.
+     * @throws  PropertyVetoException
+     *                          If the target setter method throws
+     *                          {@link PropertyVetoException}.
      */
     public static void set(Object bean,
                            String name,
-                           Object value) throws NoSuchMethodException,
+                           Object value) throws IllegalAccessException,
                                                 InvocationTargetException,
-                                                IllegalAccessException {
+                                                NoSuchMethodException,
+                                                PropertyVetoException {
         set(bean.getClass(), bean, name, value);
     }
 
@@ -149,28 +171,33 @@ public abstract class BeanUtil {
      * @param   in              The source {@code bean} {@link Object}.
      * @param   out             The target {@code bean} {@link Object}.
      *
-     * @throws  InvocationTargetException
-     *                          If there is a problem invoking a getter or
-     *                          setter method for any property.
      * @throws  IllegalAccessException
      *                          If this method does not have access to a
      *                          property getter or setter method.
+     * @throws  InvocationTargetException
+     *                          If there is a problem invoking a getter or
+     *                          setter method for any property.
+     * @throws  PropertyVetoException
+     *                          If the target setter method throws
+     *                          {@link PropertyVetoException}.
      */
     public static void copy(Object in, Object out)
-            throws InvocationTargetException, IllegalAccessException {
-        PropertyDescriptorMap map =
-            PropertyDescriptorMap.forClass(out.getClass());
-
-        for (String name : map.keySet()) {
-            Method set = map.getWriteMethod(name);
-
-            if (set != null) {
+                                        throws IllegalAccessException,
+                                               InvocationTargetException,
+                                               PropertyVetoException {
+        for (PropertyDescriptor descriptor :
+                 PropertyDescriptorMap.forClass(out.getClass()).values()) {
+            if (descriptor.getWriteMethod() != null) {
                 Method get =
                     PropertyDescriptorMap.forClass(in.getClass())
-                    .getReadMethod(name);
+                    .getReadMethod(descriptor.getName());
 
                 if (get != null) {
-                    set.invoke(out, get.invoke(in));
+                    try {
+                        set(out, descriptor.getName(), get.invoke(in));
+                    } catch (NoSuchMethodException exception) {
+                        throw new IllegalStateException(exception);
+                    }
                 }
             }
         }
@@ -183,22 +210,32 @@ public abstract class BeanUtil {
      * @param   in              The source {@link Map}.
      * @param   out             The target {@code bean} {@link Object}.
      *
-     * @throws  InvocationTargetException
-     *                          If there is a problem invoking a setter
-     *                          method for any property.
      * @throws  IllegalAccessException
      *                          If this method does not have access to a
      *                          property setter method.
+     * @throws  InvocationTargetException
+     *                          If there is a problem invoking a setter
+     *                          method for any property.
+     * @throws  PropertyVetoException
+     *                          If the target setter method throws
+     *                          {@link PropertyVetoException}.
      */
     public static void copy(Map<String,?> in, Object out)
-            throws InvocationTargetException, IllegalAccessException {
+                                        throws IllegalAccessException,
+                                               InvocationTargetException,
+                                               PropertyVetoException {
         for (PropertyDescriptor descriptor :
                  PropertyDescriptorMap.forClass(out.getClass()).values()) {
+            String name = descriptor.getName();
             Method set = descriptor.getWriteMethod();
 
             if (set != null) {
-                if (in.containsKey(descriptor.getName())) {
-                    set.invoke(out, in.get(descriptor.getName()));
+                if (in.containsKey(name)) {
+                    try {
+                        set(out, name, in.get(name));
+                    } catch (NoSuchMethodException exception) {
+                        throw new IllegalStateException(exception);
+                    }
                 }
             }
         }
@@ -210,15 +247,16 @@ public abstract class BeanUtil {
      * @param   in              The source {@code bean} {@link Object}.
      * @param   out             The target {@link Map}.
      *
-     * @throws  InvocationTargetException
-     *                          If there is a problem invoking a getter
-     *                          method for any property.
      * @throws  IllegalAccessException
      *                          If this method does not have access to a
      *                          property getter method.
+     * @throws  InvocationTargetException
+     *                          If there is a problem invoking a getter
+     *                          method for any property.
      */
     public static void copy(Object in, Map<String,? super Object> out)
-            throws InvocationTargetException, IllegalAccessException {
+                                        throws IllegalAccessException,
+                                               InvocationTargetException {
         for (PropertyDescriptor descriptor :
                  PropertyDescriptorMap.forClass(in.getClass()).values()) {
             Method get = descriptor.getReadMethod();
@@ -238,23 +276,27 @@ public abstract class BeanUtil {
      *
      * @return  The cloned {@code bean}.
      *
+     * @throws  IllegalAccessException
+     *                          If this method does not have access to an
+     *                          source {@link Object} property getter method
+     *                          or a target {@link Object} property setter
+     *                          method.
      * @throws  InstantiationException
      *                          If the clone {@link Object} cannot be
      *                          instantiated for any reason.
      * @throws  InvocationTargetException
      *                          If there is a problem invoking a getter or
      *                          setter method for any property.
-     * @throws  IllegalAccessException
-     *                          If this method does not have access to an
-     *                          source {@link Object} property getter method
-     *                          or a target {@link Object} property setter
-     *                          method.
+     * @throws  PropertyVetoException
+     *                          If the target setter method throws
+     *                          {@link PropertyVetoException}.
      *
      * @see #copy(Object,Object)
      */
-    public static Object clone(Object bean) throws InstantiationException,
+    public static Object clone(Object bean) throws IllegalAccessException,
+                                                   InstantiationException,
                                                    InvocationTargetException,
-                                                   IllegalAccessException {
+                                                   PropertyVetoException {
         Object clone = bean.getClass().newInstance();
 
         copy(bean, clone);
