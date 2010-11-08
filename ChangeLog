@@ -3,6 +3,10 @@
 	* src/main/java/iprotium/beans/ConverterUtil.java:
 	Initial writing.
 
+	* src/main/java/iprotium/util/BeanUtil.java:
+	Propagate PropertyVetoException in set() methods.
+	Honor @ConvertWith annotations when invoking setter methods.
+
 	* src/main/java/iprotium/util/Factory.java:
 	Made hasFactoryMemberFor(Class<?>...),
 	getFactoryMember(Class<?>...), and apply(Member,Object[]) members
