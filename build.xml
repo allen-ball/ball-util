@@ -7,7 +7,7 @@
     -----------------
     Java Utilities
 
-    $Id: build.xml,v 1.36 2010-10-23 21:11:59 ball Exp $
+    $Id: build.xml,v 1.37 2010-11-09 05:36:13 ball Exp $
   </description>
 
   <property name="build.properties.file" location="build.properties"/>
@@ -265,6 +265,24 @@
     <taskdef classpathref="build.classpath"
              resource="iprotium/util/ant/defaults.properties"/>
     <charset-list/>
+  </target>
+
+  <target name="combinations-count"
+          description="--> Invokes &lt;combinations-count/&gt; task."
+          depends="classes">
+    <taskdef classpathref="build.classpath"
+             resource="iprotium/util/ant/defaults.properties"/>
+    <combinations-count classpathref="build.classpath"
+                        type="${type}" count="${count}"/>
+  </target>
+
+  <target name="combinations-of"
+          description="--> Invokes &lt;combinations-of/&gt; task."
+          depends="classes">
+    <taskdef classpathref="build.classpath"
+             resource="iprotium/util/ant/defaults.properties"/>
+    <combinations-of classpathref="build.classpath"
+                     type="${type}" count="${count}"/>
   </target>
 
   <target name="instance-of"
