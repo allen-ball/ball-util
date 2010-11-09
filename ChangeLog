@@ -1,5 +1,8 @@
 2010-11-08  Allen D. Ball  <ball@10-0-1-2.lan>
 
+	* Added <combinations-of/> and <combinations-count/> build targets
+	and Ant Tasks.
+
 	* src/main/java/iprotium/util/AbstractIterator.java,
 	src/main/java/iprotium/util/CombinationIterable.java,
 	src/main/java/iprotium/util/SequenceIterator.java:
