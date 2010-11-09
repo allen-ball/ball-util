@@ -1,10 +1,11 @@
 /*
- * $Id: AbstractIterator.java,v 1.1 2010-11-09 05:27:56 ball Exp $
+ * $Id: AbstractIterator.java,v 1.2 2010-11-09 05:46:28 ball Exp $
  *
  * Copyright 2010 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
+import java.util.Enumeration;
 import java.util.Iterator;
 
 /**
@@ -15,9 +16,10 @@ import java.util.Iterator;
  *                              {@link Iterator} produces.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
-public abstract class AbstractIterator<E> implements Iterator<E> {
+public abstract class AbstractIterator<E> implements Iterator<E>,
+                                                     Enumeration<E> {
 
     /**
      * Sole constructor.
@@ -32,6 +34,12 @@ public abstract class AbstractIterator<E> implements Iterator<E> {
 
     @Override
     public void remove() { throw new UnsupportedOperationException(); }
+
+    @Override
+    public final boolean hasMoreElements() { return hasNext(); }
+
+    @Override
+    public final E nextElement() { return next(); }
 }
 /*
  * $Log: not supported by cvs2svn $
