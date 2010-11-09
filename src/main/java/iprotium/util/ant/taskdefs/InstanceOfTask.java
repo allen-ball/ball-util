@@ -1,5 +1,5 @@
 /*
- * $Id: InstanceOfTask.java,v 1.17 2010-11-07 22:18:16 ball Exp $
+ * $Id: InstanceOfTask.java,v 1.18 2010-11-09 05:31:14 ball Exp $
  *
  * Copyright 2008 - 2010 Allen D. Ball.  All rights reserved.
  */
@@ -26,11 +26,12 @@ import org.apache.tools.ant.BuildException;
  * @see Factory
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.17 $
+ * @version $Revision: 1.18 $
  */
 public class InstanceOfTask extends AbstractClasspathTask {
     private String type = String.class.getName();
     private List<Argument> list = new ArrayList<Argument>();
+    protected Object instance = null;
 
     /**
      * Sole constructor.
@@ -79,7 +80,7 @@ public class InstanceOfTask extends AbstractClasspathTask {
 
             log(String.valueOf(member));
 
-            Object instance =
+            instance =
                 factory.apply(member, arguments.toArray(new Object[] { }));
 
             log(String.valueOf(instance));
@@ -125,7 +126,7 @@ public class InstanceOfTask extends AbstractClasspathTask {
         }
     }
 
-    private void log(Iterable<String> iterable) {
+    protected void log(Iterable<String> iterable) {
         for (String line : iterable) {
             log(line);
         }
@@ -169,7 +170,4 @@ public class InstanceOfTask extends AbstractClasspathTask {
 }
 /*
  * $Log: not supported by cvs2svn $
- * Revision 1.15  2010/09/09 03:19:37  ball
- * Provide XMLEncoder output.
- *
  */
