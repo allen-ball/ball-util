@@ -5,6 +5,9 @@
 	src/main/java/iprotium/util/SequenceIterator.java:
 	Initial writing.
 
+	* src/main/java/iprotium/util/ant/taskdefs/InstanceOfTask.java:
+	Made protected "instance" member available to subclasses.
+
 2010-11-07  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* src/main/java/iprotium/beans/ConverterUtil.java:
