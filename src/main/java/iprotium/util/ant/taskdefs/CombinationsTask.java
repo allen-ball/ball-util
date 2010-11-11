@@ -1,22 +1,22 @@
 /*
- * $Id: CombinationsTask.java,v 1.1 2010-11-09 05:32:45 ball Exp $
+ * $Id: CombinationsTask.java,v 1.3 2010-11-11 08:39:15 ball Exp $
  *
  * Copyright 2010 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
-import iprotium.util.CombinationIterable;
+import iprotium.util.Combinations;
 import java.util.Collection;
 import java.util.List;
 import org.apache.tools.ant.BuildException;
 
 /**
  * Abstract <a href="http://ant.apache.org/">Ant</a>
- * {@link org.apache.tools.ant.Task} to analyze combinations of a
+ * {@link org.apache.tools.ant.Task} to analyze {@link Combinations} of a
  * {@link Collection}.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.3 $
  */
 public abstract class CombinationsTask extends InstanceOfTask {
     private Integer count = null;
@@ -40,7 +40,7 @@ public abstract class CombinationsTask extends InstanceOfTask {
 
     /**
      * <a href="http://ant.apache.org/">Ant</a>
-     * {@link org.apache.tools.ant.Task} to get the count of combinations.
+     * {@link org.apache.tools.ant.Task} to count {@link Combinations}.
      */
     public static class Count extends CombinationsTask {
 
@@ -58,8 +58,7 @@ public abstract class CombinationsTask extends InstanceOfTask {
                 long count = 0;
 
                 for (List<?> list :
-                         new CombinationIterable<Object>(collection,
-                                                         getCount())) {
+                         new Combinations<Object>(collection, getCount())) {
                     count += 1;
                 }
 
@@ -79,8 +78,7 @@ public abstract class CombinationsTask extends InstanceOfTask {
 
     /**
      * <a href="http://ant.apache.org/">Ant</a>
-     * {@link org.apache.tools.ant.Task} to get the enumeration of
-     * combinations.
+     * {@link org.apache.tools.ant.Task} to show the {@link Combinations}.
      */
     public static class Of extends CombinationsTask {
 
@@ -99,8 +97,7 @@ public abstract class CombinationsTask extends InstanceOfTask {
                 log("");
 
                 for (List<?> list :
-                         new CombinationIterable<Object>(collection,
-                                                         getCount())) {
+                         new Combinations<Object>(collection, getCount())) {
                     log(String.valueOf(list));
                 }
             } catch (BuildException exception) {
