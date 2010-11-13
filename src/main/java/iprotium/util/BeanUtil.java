@@ -1,5 +1,5 @@
 /*
- * $Id: BeanUtil.java,v 1.3 2010-11-08 02:41:06 ball Exp $
+ * $Id: BeanUtil.java,v 1.4 2010-11-13 21:44:23 ball Exp $
  *
  * Copyright 2010 Allen D. Ball.  All rights reserved.
  */
@@ -20,7 +20,7 @@ import java.util.Map;
  * {@code Bean} utility methods.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public abstract class BeanUtil {
     private BeanUtil() { }
@@ -163,6 +163,154 @@ public abstract class BeanUtil {
                                                 NoSuchMethodException,
                                                 PropertyVetoException {
         set(bean.getClass(), bean, name, value);
+    }
+
+    /**
+     * Method to get a {@code bean} indexed property value.
+     *
+     * @param   type            The {@link Class} of the bean.
+     * @param   bean            The {@code bean} to interrogate (may be
+     *                          {@code null}).
+     * @param   name            The name of the property to get.
+     * @param   index           The property index.
+     *
+     * @throws  IllegalAccessException
+     *                          If this method does not have access to the
+     *                          property getter method.
+     * @throws  InvocationTargetException
+     *                          If there is a problem invoking the getter
+     *                          method for the specified property.
+     * @throws  NoSuchMethodException
+     *                          If there is no getter method for the
+     *                          specified property.
+     */
+    public static Object get(Class<?> type,
+                             Object bean,
+                             String name,
+                             int index) throws IllegalAccessException,
+                                               InvocationTargetException,
+                                               NoSuchMethodException {
+        Method get =
+            PropertyDescriptorMap.forClass(type).getIndexedReadMethod(name);
+
+        if (get == null) {
+            throw new NoSuchMethodException();
+        }
+
+        return get.invoke(bean, index);
+    }
+
+    /**
+     * Method to get a {@code bean} indexed property value.
+     *
+     * @param   bean            The {@code bean} to interrogate.
+     * @param   name            The name of the property to get.
+     * @param   index           The property index.
+     *
+     * @throws  NullPointerException
+     *                          If {@code bean} is {@code null}.
+     * @throws  IllegalAccessException
+     *                          If this method does not have access to the
+     *                          property getter method.
+     * @throws  InvocationTargetException
+     *                          If there is a problem invoking the getter
+     *                          method for the specified property.
+     * @throws  NoSuchMethodException
+     *                          If there is no getter method for the
+     *                          specified property.
+     * @throws  NullPointerException
+     *                          If {@code bean} is {@code null}.
+     */
+    public static Object get(Object bean,
+                             String name,
+                             int index) throws IllegalAccessException,
+                                               InvocationTargetException,
+                                               NoSuchMethodException {
+        return get(bean.getClass(), bean, name, index);
+    }
+
+    /**
+     * Method to set a {@code bean} indexed property value.
+     *
+     * @param   type            The {@link Class} of the bean.
+     * @param   bean            The {@code bean} to modify (may be
+     *                          {@code null}).
+     * @param   name            The name of the property to set.
+     * @param   index           The property index.
+     * @param   value           The value to assign to the property.
+     *
+     * @throws  IllegalAccessException
+     *                          If this method does not have access to the
+     *                          property setter method.
+     * @throws  InvocationTargetException
+     *                          If there is a problem invoking the setter
+     *                          method for the specified property.
+     * @throws  NoSuchMethodException
+     *                          If there is no setter method for the
+     *                          specified property.
+     * @throws  PropertyVetoException
+     *                          If the target setter method throws
+     *                          {@link PropertyVetoException}.
+     */
+    public static void set(Class<?> type,
+                           Object bean,
+                           String name,
+                           int index,
+                           Object value) throws IllegalAccessException,
+                                                InvocationTargetException,
+                                                NoSuchMethodException,
+                                                PropertyVetoException {
+        Method set =
+            PropertyDescriptorMap.forClass(type).getIndexedWriteMethod(name);
+
+        if (set == null) {
+            throw new NoSuchMethodException();
+        }
+
+        try {
+            set.invoke(bean, index, ConverterUtil.convert(set, 1, value));
+        } catch (InvocationTargetException exception) {
+            Throwable cause = exception.getCause();
+
+            if (cause instanceof PropertyVetoException) {
+                throw (PropertyVetoException) cause;
+            } else {
+                throw exception;
+            }
+        }
+    }
+
+    /**
+     * Method to set a {@code bean} indexed property value.
+     *
+     * @param   bean            The {@code bean} to interrogate.
+     * @param   name            The name of the property to set.
+     * @param   index           The property index.
+     * @param   value           The value to assign to the property.
+     *
+     * @throws  IllegalAccessException
+     *                          If this method does not have access to the
+     *                          property setter method.
+     * @throws  InvocationTargetException
+     *                          If there is a problem invoking the setter
+     *                          method for the specified property.
+     * @throws  NoSuchMethodException
+     *                          If there is no setter method for the
+     *                          specified property.
+     * @throws  NullPointerException
+     *                          If {@code bean} is {@code null}.
+     * @throws  PropertyVetoException
+     *                          If the target setter method throws
+     *                          {@link PropertyVetoException}.
+     */
+    public static void set(Object bean,
+                           String name,
+                           int index,
+                           Object value) throws IllegalAccessException,
+                                                InvocationTargetException,
+                                                NoSuchMethodException,
+                                                PropertyVetoException {
+        set(bean.getClass(), bean, name, index, value);
     }
 
     /**
@@ -344,4 +492,8 @@ public abstract class BeanUtil {
 }
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.3  2010/11/08 02:41:06  ball
+ * Propagate PropertyVetoException in set() methods.
+ * Honor @ConvertWith annotations when invoking setter methods.
+ *
  */
