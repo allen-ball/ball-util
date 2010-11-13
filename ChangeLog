@@ -1,3 +1,10 @@
+2010-11-13  Allen D. Ball  <ball@10-0-1-2.lan>
+
+	* src/main/java/iprotium/util/BeanUtil.java:
+	Added indexed-property get(Class<?>,Object,String,int),
+	get(Object,String,int), set(Class<?>,Object,String,int,Object),
+	and set(Object,String,int,Object) methods.
+
 2010-11-11  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* Replaced CombinationIterable with Combinations.
