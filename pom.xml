@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- $Id: pom.xml,v 1.12 2010-11-08 02:43:21 ball Exp $ -->
+<!-- $Id: pom.xml,v 1.13 2010-11-13 21:46:55 ball Exp $ -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
@@ -77,6 +77,12 @@
           </bottom>
           <detectJavaApiLink>true</detectJavaApiLink>
           <detectLinks>true</detectLinks>
+          <javaApiLinks>
+            <property>
+              <name>api_1.6</name>
+              <value>http://download.oracle.com/javase/6/docs/api</value>
+            </property>
+          </javaApiLinks>
           <links>
             <link>file:///opt/apache-ant-1.8.1/docs/manual/api</link>
             <link>file:///usr/share/ant/docs/javadocs</link>
@@ -90,6 +96,9 @@
 </project>
 <!--
     $Log: not supported by cvs2svn $
+    Revision 1.12  2010/11/08 02:43:21  ball
+    Added Apache Ant javadoc links.
+
     Revision 1.11  2010/09/12 23:55:41  ball
     Require Apache Ant 1.8.1.
 
