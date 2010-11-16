@@ -1,15 +1,17 @@
 /*
- * $Id: ByteFactory.java,v 1.1 2010-11-04 02:40:56 ball Exp $
+ * $Id: ByteFactory.java,v 1.2 2010-11-16 03:38:02 ball Exp $
  *
  * Copyright 2010 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
+import java.lang.reflect.InvocationTargetException;
+
 /**
  * {@link Byte} {@link Factory} implementation.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class ByteFactory extends Factory<Byte> {
     private static final ByteFactory DEFAULT = new ByteFactory();
@@ -25,6 +27,20 @@ public class ByteFactory extends Factory<Byte> {
      * @see #getDefault()
      */
     protected ByteFactory() { super(Byte.class); }
+
+    /**
+     * {@inheritDoc}
+     * @see Byte#decode(String)
+     */
+    @Override
+    public Byte convert(Object in) throws IllegalAccessException,
+                                          InstantiationException,
+                                          InvocationTargetException,
+                                          NoSuchMethodException {
+        return ((in instanceof CharSequence)
+                    ? Byte.decode(in.toString())
+                    : super.convert(in));
+    }
 }
 /*
  * $Log: not supported by cvs2svn $
