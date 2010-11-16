@@ -1,5 +1,5 @@
 /*
- * $Id: Factory.java,v 1.11 2010-11-08 02:33:30 ball Exp $
+ * $Id: Factory.java,v 1.12 2010-11-16 03:55:09 ball Exp $
  *
  * Copyright 2008 - 2010 Allen D. Ball.  All rights reserved.
  */
@@ -13,12 +13,14 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.TreeSet;
+
+import static iprotium.util.ClassUtil.isPublic;
+import static iprotium.util.ClassUtil.isStatic;
 
 /**
  * {@link Factory} base class.
@@ -27,14 +29,15 @@ import java.util.TreeSet;
  *                              {@link Factory} will produce.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 public class Factory<T> implements Converter<T> {
     private final Class<? extends T> type;
+    private final Object factory;
     private final FactoryMemberMap map;
 
     /**
-     * Sole constructor.
+     * Sole public constructor.
      *
      * @param   type            The {@link Class} of {@link Object} this
      *                          {@link Factory} will produce.
@@ -43,10 +46,25 @@ public class Factory<T> implements Converter<T> {
      *                          If {@code type} is {@code null}.
      */
     @ConstructorProperties({"type"})
-    public Factory(Class<? extends T> type) {
-        this.type = type;
+    public Factory(Class<? extends T> type) { this(type, null); }
 
-        map = new FactoryMemberMap(getType());
+    /**
+     * Construct a {@link Factory} by wrapping a factory instance.
+     *
+     * @param   type            The {@link Class} of {@link Object} this
+     *                          {@link Factory} will produce.
+     * @param   factory         An {@link Object} factory for this
+     *                          {@code type} (may be {@code null}.
+     *
+     * @throws  NullPointerException
+     *                          If {@code type} is {@code null}.
+     */
+    @ConstructorProperties({"type", "factory"})
+    protected Factory(Class<? extends T> type, Object factory) {
+        this.type = type;
+        this.factory = factory;
+
+        map = new FactoryMemberMap(type, factory);
     }
 
     /**
@@ -57,6 +75,14 @@ public class Factory<T> implements Converter<T> {
      *          {@link Factory}.
      */
     public Class<? extends T> getType() { return type; }
+
+    /**
+     * Method to get the underlying factory {@link Object}.
+     *
+     * @return  The underlying factory {@link Object} or {@code null} if
+     *          there is none.
+     */
+    public Object getFactory() { return factory; }
 
     /**
      * Method to get an {@link Object} instance.  This method will first
@@ -151,9 +177,9 @@ public class Factory<T> implements Converter<T> {
     }
 
     /**
-     * Method to determine if there is a factory {@link Member}
-     * ({@link Constructor} or static {@link Method}) to manufacture or get
-     * an {@link Object}.
+     * Method to determine if there is a factory {@link Member} (factory
+     * {@link Method}, static {@link Method}, or {@link Constructor}) to
+     * manufacture or get an {@link Object}.
      *
      * @param   parameters      The {@link Constructor} or {@link Method}
      *                          parameter list.
@@ -166,7 +192,7 @@ public class Factory<T> implements Converter<T> {
 
         try {
             getFactoryMember(parameters);
-            hasMember = map.containsKey(parameters);
+            hasMember = (map.get(parameters) != null);
         } catch (NoSuchMethodException exception) {
             hasMember = false;
         }
@@ -175,8 +201,9 @@ public class Factory<T> implements Converter<T> {
     }
 
     /**
-     * Method to get a factory {@link Member} ({@link Constructor} or static
-     * {@link Method}) to manufacture or get an {@link Object}.
+     * Method to get a factory {@link Member} (factory {@link Method},
+     * static {@link Method}, or {@link Constructor}) to manufacture or get
+     * an {@link Object}.
      *
      * @param   parameters      The {@link Constructor} or {@link Method}
      *                          parameter list.
@@ -197,8 +224,9 @@ public class Factory<T> implements Converter<T> {
     }
 
     /**
-     * Method to apply a factory {@link Member} ({@link Constructor} or
-     * static {@link Method}) to manufacture or get an {@link Object}.
+     * Method to apply a factory {@link Member} (factory {@link Method},
+     * static {@link Method}, or {@link Constructor}) to manufacture or get
+     * an {@link Object}.
      *
      * @param   member          The {@link Member} ({@link Constructor} or
      *                          static {@link Method}) to invoke.
@@ -226,10 +254,10 @@ public class Factory<T> implements Converter<T> {
                                               InvocationTargetException {
         Object object = null;
 
-        if (member instanceof Constructor) {
+        if (member instanceof Method) {
+            object = ((Method) member).invoke(factory, arguments);
+        } else if (member instanceof Constructor) {
             object = ((Constructor) member).newInstance(arguments);
-        } else if (member instanceof Method) {
-            object = ((Method) member).invoke(null, arguments);
         } else if (member instanceof Field) {
             object = ((Field) member).get(null);
         } else {
@@ -281,30 +309,6 @@ public class Factory<T> implements Converter<T> {
         return match;
     }
 
-    /**
-     * Convenience method to determine if a {@link Member} is public.
-     *
-     * @param   member          The {@link Member}.
-     *
-     * @return  {@code true} if the {@link Member} is public; {@code false}
-     *          otherwise.
-     */
-    protected static boolean isPublic(Member member) {
-        return Modifier.isPublic(member.getModifiers());
-    }
-
-    /**
-     * Convenience method to determine if a {@link Member} is static.
-     *
-     * @param   member          The {@link Member}.
-     *
-     * @return  {@code true} if the {@link Member} is static; {@code false}
-     *          otherwise.
-     */
-    protected static boolean isStatic(Member member) {
-        return Modifier.isStatic(member.getModifiers());
-    }
-
     @Override
     public T convert(Object in) throws IllegalAccessException,
                                        InstantiationException,
@@ -312,22 +316,40 @@ public class Factory<T> implements Converter<T> {
                                        NoSuchMethodException {
         T out = null;
 
-        if (in == null || getType().isAssignableFrom(in.getClass())) {
-            out = getType().cast(in);
-        } else {
-            out = getInstance(in);
+        if (in != null) {
+            if (getType().isAssignableFrom(in.getClass())) {
+                out = getType().cast(in);
+            } else {
+                out = getInstance(in);
+            }
         }
 
         return out;
     }
 
     private class FactoryMemberMap extends TreeMap<Class<?>[],Member> {
-        private static final long serialVersionUID = 3396324212973830506L;
+        private static final long serialVersionUID = -5649807100994360076L;
 
-        public FactoryMemberMap(Class<? extends T> type) {
+        public FactoryMemberMap(Class<? extends T> type, Object factory) {
             super(new ArrayOrder<Class<?>>(ClassOrder.NAME));
 
             CandidateSet set = new CandidateSet(type);
+
+            if (factory != null) {
+                for (Method method : factory.getClass().getMethods()) {
+                    if (isPublic(method)) {
+                        if (type.isAssignableFrom(method.getReturnType())) {
+                            if (set.contains(method.getName())) {
+                                Class<?>[] key = method.getParameterTypes();
+
+                                if (! containsKey(key)) {
+                                    put(key, method);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
 
             for (Method method : type.getMethods()) {
                 if (isPublic(method) && isStatic(method)) {
@@ -380,14 +402,17 @@ public class Factory<T> implements Converter<T> {
             private static final long serialVersionUID = -5065227379347591040L;
 
             public CandidateSet(Class<? extends T> type) {
-                addAll(Arrays.asList("compile",
-                                     "create",
-                                     "decode",
-                                     "forName",
-                                     "getDefault",
-                                     "getDefaultInstance",
-                                     "getInstance",
-                                     "valueOf"));
+                super(Arrays.asList("compile",
+                                    "create",
+                                    "decode",
+                                    "forName",
+                                    "getDefault",
+                                    "getDefaultInstance",
+                                    "getInstance",
+                                    "getObjectInstance",
+                                    "new" + type.getSimpleName(),
+                                    "newInstance",
+                                    "valueOf"));
 
                 if ((! type.isAssignableFrom(Boolean.class)
                      || type.isAssignableFrom(Integer.class)
