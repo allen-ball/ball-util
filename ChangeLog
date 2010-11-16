@@ -1,5 +1,9 @@
 2010-11-15  Allen D. Ball  <ball@10-0-1-2.lan>
 
+	* src/main/java/iprotium/util/Factory.java:
+	Add protected constructor which allows an actual factory (e.g.,
+	SocketFactory) to be specified.
+
 	* src/main/java/iprotium/util/ByteFactory.java,
 	src/main/java/iprotium/util/ShortFactory.java:
 	Override convert(Object) to use static decode(String) method.
