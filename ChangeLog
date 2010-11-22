@@ -3,6 +3,9 @@
 	* src/main/java/iprotium/util/AbstractIterator.java:
 	Implement Iterable<E>.
 
+	* src/main/java/iprotium/util/Combinations.java:
+	Re-factored as a subclass of Permutations.
+
 	* src/main/java/iprotium/util/Permutations.java: Initial writing.
 
 2010-11-15  Allen D. Ball  <ball@10-0-1-2.lan>
