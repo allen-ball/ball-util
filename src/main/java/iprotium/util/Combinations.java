@@ -1,17 +1,14 @@
 /*
- * $Id: Combinations.java,v 1.1 2010-11-11 08:22:38 ball Exp $
+ * $Id: Combinations.java,v 1.2 2010-11-22 01:58:26 ball Exp $
  *
  * Copyright 2010 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 /**
  * {@link Iterable} implementation provides an {@link Iterator} for all
@@ -21,10 +18,9 @@ import java.util.NoSuchElementException;
  *                              {@link Collection} contains.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
-public class Combinations<E> implements Iterable<List<E>> {
-    private final List<E> list;
+public class Combinations<E> extends Permutations<E> {
     private final int count;
 
     /**
@@ -34,7 +30,7 @@ public class Combinations<E> implements Iterable<List<E>> {
      * @param   count           The count of each combination.
      */
     public Combinations(Collection<? extends E> collection, int count) {
-        this.list = Collections.unmodifiableList(new ArrayList<E>(collection));
+        super(collection);
 
         if (count > 0) {
             this.count = count;
@@ -45,82 +41,70 @@ public class Combinations<E> implements Iterable<List<E>> {
 
     @Override
     public Iterator<List<E>> iterator() {
-        return new IterableImpl(new Combination(), list).iterator();
-    }
-
-    private class Combination extends ArrayList<E> {
-        private static final long serialVersionUID = 5029981695321289139L;
-
-        public Combination() { super(count); }
-
-        public int remaining() { return Math.max(count - size(), 0); }
-
-        public Combination combine(E element) {
-            Combination clone = clone();
-
-            clone.add(element);
-
-            return clone;
-        }
-
-        @Override
-        public Combination clone() { return (Combination) super.clone(); }
+        return new IterableImpl(new ListImpl(), list).iterator();
     }
 
     private class IterableImpl implements Iterable<List<E>> {
-        private final Combination combination;
+        private final List<E> prefix;
         private final List<E> list;
 
-        public IterableImpl(Combination combination, List<E> list) {
-            this.combination = combination;
+        public IterableImpl(List<E> prefix, List<E> list) {
+            this.prefix = prefix;
             this.list = list;
         }
 
         @Override
         public Iterator<List<E>> iterator() {
-            Iterator<List<E>> iterator = null;
+            Iterable<List<E>> iterable = null;
+            int required = count - prefix.size();
 
-            if (combination.remaining() > 0) {
-                if (combination.remaining() > 1) {
-                    iterator = new Branch(combination, list).iterator();
+            if (required > 0) {
+                if (required > 1) {
+                    iterable = new Branch(prefix, list);
                 } else {
-                    iterator = new Leaf(combination, list).iterator();
+                    iterable = new Leaf(prefix, list);
                 }
             } else {
                 throw new IllegalStateException();
             }
 
-            return iterator;
+            return iterable.iterator();
         }
-    }
 
-    private class Branch implements Iterable<List<E>> {
-        private ArrayList<Iterable<List<E>>> collection =
-            new ArrayList<Iterable<List<E>>>();
+        private class Branch implements Iterable<List<E>> {
+            private final List<E> prefix;
+            private final List<E> list;
 
-        public Branch(Combination prefix, List<E> list) {
-            for (int i = 0, n = list.size(); i < n; i += 1) {
-                Combination combination = prefix.combine(list.get(i));
-                List<E> subList = list.subList(i + 1, n);
+            public Branch(List<E> prefix, List<E> list) {
+                this.prefix = prefix;
+                this.list = list;
+            }
 
-                collection.add(new IterableImpl(combination, subList));
+            @Override
+            public Iterator<List<E>> iterator() {
+                Collection<Iterable<List<E>>> collection =
+                    new LinkedList<Iterable<List<E>>>();
+
+                for (int i = 0, n = list.size(); i < n; i += 1) {
+                    List<E> combination = new ListImpl(prefix, list.get(i));
+                    List<E> rest = list.subList(i + 1, n);
+
+                    collection.add(new IterableImpl(combination, rest));
+                }
+
+                return new SequenceIterator<List<E>>(collection);
             }
         }
 
-        @Override
-        public Iterator<List<E>> iterator() {
-            return new SequenceIterator<List<E>>(collection);
-        }
-    }
+        private class Leaf extends LinkedList<List<E>> {
+            private static final long serialVersionUID = -1915066076900671781L;
 
-    private class Leaf extends ArrayList<List<E>> {
-        private static final long serialVersionUID = 7484357465317513535L;
+            public Leaf(List<E> prefix, List<E> list) {
+                super();
 
-        public Leaf(Combination prefix, List<E> list) {
-            super();
-
-            for (E element : list) {
-                add(prefix.combine(element));
+                for (E element : list) {
+                    add(new ListImpl(prefix, element));
+                }
             }
         }
     }
