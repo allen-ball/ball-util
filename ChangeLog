@@ -1,5 +1,8 @@
 2010-11-21  Allen D. Ball  <ball@10-0-1-2.lan>
 
+	* Added <permutations-of/> and <permutations-count/> build targets
+	and Ant Tasks.
+
 	* src/main/java/iprotium/util/AbstractIterator.java:
 	Implement Iterable<E>.
 
