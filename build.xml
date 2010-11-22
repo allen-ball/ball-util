@@ -7,7 +7,7 @@
     -----------------
     Java Utilities
 
-    $Id: build.xml,v 1.37 2010-11-09 05:36:13 ball Exp $
+    $Id: build.xml,v 1.38 2010-11-22 02:05:54 ball Exp $
   </description>
 
   <property name="build.properties.file" location="build.properties"/>
@@ -273,7 +273,9 @@
     <taskdef classpathref="build.classpath"
              resource="iprotium/util/ant/defaults.properties"/>
     <combinations-count classpathref="build.classpath"
-                        type="${type}" count="${count}"/>
+                        type="${type}" count="${count}">
+      <argument type="${argument.type}" value="${argument.value}"/>
+    </combinations-count>
   </target>
 
   <target name="combinations-of"
@@ -282,7 +284,9 @@
     <taskdef classpathref="build.classpath"
              resource="iprotium/util/ant/defaults.properties"/>
     <combinations-of classpathref="build.classpath"
-                     type="${type}" count="${count}"/>
+                     type="${type}" count="${count}">
+      <argument type="${argument.type}" value="${argument.value}"/>
+    </combinations-of>
   </target>
 
   <target name="instance-of"
@@ -290,7 +294,9 @@
           depends="classes">
     <taskdef classpathref="build.classpath"
              resource="iprotium/util/ant/defaults.properties"/>
-    <instance-of classpathref="build.classpath" type="${type}"/>
+    <instance-of classpathref="build.classpath" type="${type}">
+      <argument value="${argument}"/>
+    </instance-of>
   </target>
 
   <target name="is-assignable-from"
@@ -400,6 +406,26 @@
     </package-list>
   </target>
 
+  <target name="permutations-count"
+          description="--> Invokes &lt;permutations-count/&gt; task."
+          depends="classes">
+    <taskdef classpathref="build.classpath"
+             resource="iprotium/util/ant/defaults.properties"/>
+    <permutations-count classpathref="build.classpath" type="${type}">
+      <argument type="${argument.type}" value="${argument.value}"/>
+    </permutations-count>
+  </target>
+
+  <target name="permutations-of"
+          description="--> Invokes &lt;permutations-of/&gt; task."
+          depends="classes">
+    <taskdef classpathref="build.classpath"
+             resource="iprotium/util/ant/defaults.properties"/>
+    <permutations-of classpathref="build.classpath" type="${type}">
+      <argument type="${argument.type}" value="${argument.value}"/>
+    </permutations-of>
+  </target>
+
   <target name="readlink"
           description="--> Invokes &lt;readlink/&gt; task."
           depends="classes">
@@ -457,4 +483,8 @@
 </project>
 <!--
     $Log: not supported by cvs2svn $
+    Revision 1.37  2010/11/09 05:36:13  ball
+    Added <combinations-of/> and <combinations-count/> build targets
+    and Ant Tasks.
+
   -->
