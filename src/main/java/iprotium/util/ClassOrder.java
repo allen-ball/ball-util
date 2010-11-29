@@ -1,5 +1,5 @@
 /*
- * $Id: ClassOrder.java,v 1.4 2010-07-28 04:56:50 ball Exp $
+ * $Id: ClassOrder.java,v 1.5 2010-11-29 05:20:00 ball Exp $
  *
  * Copyright 2008 - 2010 Allen D. Ball.  All rights reserved.
  */
@@ -9,7 +9,7 @@ package iprotium.util;
  * Abstract {@link Order} base class for ordering {@link Class} objects.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public abstract class ClassOrder extends Order<Class<?>> {
 
@@ -50,11 +50,11 @@ public abstract class ClassOrder extends Order<Class<?>> {
 
         @Override
         public int compare(Class<?> left, Class<?> right) {
-            int comparison =
+            int difference =
                 intValue(left.isAssignableFrom(right))
                 - intValue(right.isAssignableFrom(left));
 
-            return (comparison != 0) ? comparison : super.compare(left, right);
+            return (difference != 0) ? difference : super.compare(left, right);
         }
     }
 }
