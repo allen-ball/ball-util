@@ -1,5 +1,8 @@
 2010-12-07  Allen D. Ball  <ball@10-0-1-2.lan>
 
+	* src/main/java/iprotium/lang/java/Keyword.java:
+	Re-factored as an Enum.
+
 	* src/main/java/iprotium/lang/java/Punctuation.java:
 	Initial writing.
 
