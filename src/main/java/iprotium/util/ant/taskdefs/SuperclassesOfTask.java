@@ -1,13 +1,16 @@
 /*
- * $Id: SuperclassesOfTask.java,v 1.8 2010-08-23 03:43:55 ball Exp $
+ * $Id: SuperclassesOfTask.java,v 1.9 2010-12-08 04:48:28 ball Exp $
  *
  * Copyright 2008 - 2010 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
 import iprotium.util.SuperclassSet;
+import java.lang.reflect.TypeVariable;
 import org.apache.tools.ant.BuildException;
 
+import static iprotium.lang.java.Punctuation.GT;
+import static iprotium.lang.java.Punctuation.LT;
 import static iprotium.util.ClassOrder.INHERITANCE;
 
 /**
@@ -16,7 +19,7 @@ import static iprotium.util.ClassOrder.INHERITANCE;
  * {@link Class}.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 public class SuperclassesOfTask extends AbstractClasspathTask {
     private String type = null;
@@ -38,8 +41,9 @@ public class SuperclassesOfTask extends AbstractClasspathTask {
         try {
             Class type = getClass(getType());
 
-            for (Object object : INHERITANCE.asList(new SuperclassSet(type))) {
-                log(String.valueOf(object));
+            for (Class<?> superclass :
+                     INHERITANCE.asList(new SuperclassSet(type))) {
+                log(toString(superclass));
             }
         } catch (BuildException exception) {
             throw exception;
@@ -50,6 +54,22 @@ public class SuperclassesOfTask extends AbstractClasspathTask {
             exception.printStackTrace();
             throw new BuildException(exception);
         }
+    }
+
+    private String toString(Class<?> type) {
+        StringBuilder buffer = new StringBuilder(type.getName());
+
+        if (type.getTypeParameters().length > 0) {
+            buffer.append(LT.lexeme());
+
+            for (TypeVariable<?> parameter : type.getTypeParameters()) {
+                buffer.append(parameter);
+            }
+
+            buffer.append(GT.lexeme());
+        }
+
+        return buffer.toString();
     }
 }
 /*
