@@ -1,11 +1,10 @@
 /*
- * $Id: LintTask.java,v 1.4 2010-08-23 03:27:24 ball Exp $
+ * $Id: LintTask.java,v 1.5 2010-12-08 04:53:36 ball Exp $
  *
  * Copyright 2009, 2010 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
-import iprotium.util.ant.taskdefs.lint.CloneableCheck;
 import iprotium.util.ant.taskdefs.lint.SerializableCheck;
 import java.io.File;
 import java.lang.reflect.Constructor;
@@ -22,12 +21,11 @@ import org.apache.tools.ant.BuildException;
  * ("lint") checks.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class LintTask extends AbstractClassFileTask {
     private final Collection<Check> checks =
-        Arrays.<Check>asList(new CloneableCheck(this),
-                             new SerializableCheck(this));
+        Arrays.<Check>asList(new SerializableCheck(this));
     private transient Map<File,Class> map = null;
 
     /**
@@ -74,42 +72,6 @@ public class LintTask extends AbstractClassFileTask {
      * @see iprotium.util.ant.taskdefs.lint
      */
     public static abstract class Check {
-
-        /**
-         * {@value #EQUALS}
-         */
-        protected static final String EQUALS = "=";
-
-        /**
-         * {@value #SEMICOLON}
-         */
-        protected static final String SEMICOLON = ";";
-
-        /**
-         * {@value #SPACE}
-         */
-        protected static final String SPACE = " ";
-
-        /**
-         * {@value #LB}
-         */
-        protected static final String LB = "{";
-
-        /**
-         * {@value #RB}
-         */
-        protected static final String RB = "}";
-
-        /**
-         * {@value #LP}
-         */
-        protected static final String LP = "(";
-
-        /**
-         * {@value #RP}
-         */
-        protected static final String RP = ")";
-
         private final LintTask task;
 
         /**
