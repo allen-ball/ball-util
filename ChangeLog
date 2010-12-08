@@ -9,6 +9,9 @@
 	* src/main/java/iprotium/util/ant/taskdefs/SuperclassesOfTask.java:
 	Include type variables in output.
 
+	* src/main/java/iprotium/util/ant/taskdefs/lint/SerializableCheck.java:
+	Use iprotium.util.SuperclassSet and iprotium.lang.java.Punctuation.
+
 2010-11-26  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* src/main/java/iprotium/util/CharSequenceOrder.java:
