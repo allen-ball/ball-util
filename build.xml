@@ -7,7 +7,7 @@
     -----------------
     Java Utilities
 
-    $Id: build.xml,v 1.38 2010-11-22 02:05:54 ball Exp $
+    $Id: build.xml,v 1.39 2010-12-20 23:36:59 ball Exp $
   </description>
 
   <property name="build.properties.file" location="build.properties"/>
@@ -236,6 +236,7 @@
              resource="iprotium/util/ant/defaults.properties"/>
     <jni-ld destdir="${target.dir}" libname="${pom.artifactId}"
             property="jnilib">
+      <arg value="-ledit"/>
       <fileset dir="${target.objects.dir}" includes="**/*.o"/>
     </jni-ld>
   </target>
@@ -287,6 +288,14 @@
                      type="${type}" count="${count}">
       <argument type="${argument.type}" value="${argument.value}"/>
     </combinations-of>
+  </target>
+
+  <target name="editline-tokenize"
+          description="--> Invokes &lt;editline-tokenize/&gt; task."
+          depends="classes">
+    <taskdef classpathref="build.classpath"
+             resource="iprotium/util/ant/defaults.properties"/>
+    <editline-tokenize classpathref="build.classpath" string="${string}"/>
   </target>
 
   <target name="instance-of"
@@ -483,6 +492,10 @@
 </project>
 <!--
     $Log: not supported by cvs2svn $
+    Revision 1.38  2010/11/22 02:05:54  ball
+    Added <permutations-of/> and <permutations-count/> build targets
+    and Ant Tasks.
+
     Revision 1.37  2010/11/09 05:36:13  ball
     Added <combinations-of/> and <combinations-count/> build targets
     and Ant Tasks.
