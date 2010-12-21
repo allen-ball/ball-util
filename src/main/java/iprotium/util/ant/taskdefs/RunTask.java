@@ -1,5 +1,5 @@
 /*
- * $Id: RunTask.java,v 1.1 2010-12-21 15:33:56 ball Exp $
+ * $Id: RunTask.java,v 1.2 2010-12-21 16:24:12 ball Exp $
  *
  * Copyright 2010 Allen D. Ball.  All rights reserved.
  */
@@ -10,10 +10,10 @@ import org.apache.tools.ant.BuildException;
 /**
  * <a href="http://ant.apache.org/">Ant</a>
  * {@link org.apache.tools.ant.Task} to instantiate a {@link Runnable} and
- * then invoke its {@link Runnable.run()} method.
+ * then invoke its {@link Runnable#run()} method.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class RunTask extends InstanceOfTask {
 
