@@ -1,5 +1,5 @@
 /*
- * $Id: OpendirTask.java,v 1.5 2010-10-23 22:13:00 ball Exp $
+ * $Id: OpendirTask.java,v 1.6 2010-12-21 17:29:58 ball Exp $
  *
  * Copyright 2009, 2010 Allen D. Ball.  All rights reserved.
  */
@@ -21,7 +21,7 @@ import org.apache.tools.ant.BuildException;
  * @see DIR
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public class OpendirTask extends AbstractMatchingTask {
 
@@ -60,7 +60,7 @@ public class OpendirTask extends AbstractMatchingTask {
         private static final long serialVersionUID = -7344745156450390992L;
 
         public TableModelImpl(DIR dirp, File file) {
-            super(dirp.list(), String.valueOf(file));
+            super(dirp, String.valueOf(file));
         }
 
         @Override
