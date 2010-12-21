@@ -1,4 +1,4 @@
-/* $Id: iprotium_util_jni_EditLine.c,v 1.4 2010-12-21 15:41:56 ball Exp $ */
+/* $Id: iprotium_util_jni_EditLine.c,v 1.5 2010-12-21 16:19:32 ball Exp $ */
 
 #include "iprotium_util_jni_EditLine.h"
 
@@ -13,6 +13,7 @@ struct clientdata_t {
     jobject object;
     char prompt[256];
     char rprompt[256];
+    History *hist;
 };
 
 static const char *prompt(EditLine *el) {
@@ -84,9 +85,16 @@ Java_iprotium_util_jni_EditLine_init(JNIEnv *env, jobject this,
     clientdata->object = this;
     snprintf(clientdata->prompt, sizeof clientdata->prompt, "%s> ", prog);
     snprintf(clientdata->rprompt, sizeof clientdata->rprompt, "");
+    clientdata->hist = history_init();
+
+    HistEvent ev;
+
+    history(clientdata->hist, &ev, H_SETSIZE, 128);
+    history(clientdata->hist, &ev, H_SETUNIQUE, 1);
 
     el_set(el, EL_CLIENTDATA, (void *) clientdata);
     el_set(el, EL_EDITOR, EMACS);
+    el_set(el, EL_HIST, history, clientdata->hist);
     el_set(el, EL_PROMPT, prompt);
     el_set(el, EL_RPROMPT, rprompt);
     el_source(el, NULL);
@@ -113,6 +121,17 @@ Java_iprotium_util_jni_EditLine_gets(JNIEnv *env, jobject this) {
 
         memset(buffer, 0, sizeof buffer);
         memcpy(buffer, result, count);
+
+        struct clientdata_t *clientdata = NULL;
+
+        el_get(el, EL_CLIENTDATA, &clientdata);
+
+        if (clientdata != NULL && clientdata->hist != NULL) {
+            HistEvent ev;
+
+            history(clientdata->hist, &ev, H_ENTER, buffer);
+        }
+
         string = (*env)->NewStringUTF(env, buffer);
     }
 
@@ -189,6 +208,11 @@ Java_iprotium_util_jni_EditLine_end(JNIEnv *env, jobject this) {
         el_get(el, EL_CLIENTDATA, &clientdata);
 
         if (clientdata != NULL) {
+            if (clientdata->hist != NULL) {
+                history_end(clientdata->hist);
+                clientdata->hist = NULL;
+            }
+
             free(clientdata);
         }
 
