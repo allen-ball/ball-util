@@ -7,7 +7,7 @@
     -----------------
     Java Utilities
 
-    $Id: build.xml,v 1.39 2010-12-20 23:36:59 ball Exp $
+    $Id: build.xml,v 1.40 2010-12-21 15:35:52 ball Exp $
   </description>
 
   <property name="build.properties.file" location="build.properties"/>
@@ -451,6 +451,14 @@
     <resource-list classpathref="build.classpath" name="${name}"/>
   </target>
 
+  <target name="run"
+          description="--> Invokes &lt;run/&gt; task."
+          depends="classes">
+    <taskdef classpathref="build.classpath"
+             resource="iprotium/util/ant/defaults.properties"/>
+    <run classpathref="build.classpath" type="${type}"/>
+  </target>
+
   <target name="service-list"
           description="--> Invokes &lt;service-list/&gt; task."
           depends="classes">
@@ -492,6 +500,9 @@
 </project>
 <!--
     $Log: not supported by cvs2svn $
+    Revision 1.39  2010/12/20 23:36:59  ball
+    Added <editline-tokenize/> build target and Ant Task.
+
     Revision 1.38  2010/11/22 02:05:54  ball
     Added <permutations-of/> and <permutations-count/> build targets
     and Ant Tasks.
