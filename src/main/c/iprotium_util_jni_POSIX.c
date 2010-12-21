@@ -1,4 +1,4 @@
-/* $Id: iprotium_util_jni_POSIX.c,v 1.6 2009-10-25 14:57:29 ball Exp $ */
+/* $Id: iprotium_util_jni_POSIX.c,v 1.7 2010-12-21 17:27:58 ball Exp $ */
 
 #include "iprotium_util_jni_POSIX.h"
 
@@ -63,37 +63,6 @@ Java_iprotium_util_jni_POSIX_opendir(JNIEnv *env, jclass class, jstring from) {
     }
 
     return peer;
-}
-
-JNIEXPORT void JNICALL
-Java_iprotium_util_jni_POSIX_closedir(JNIEnv *env, jclass class, jlong peer) {
-    DIR *dirp = (DIR *) NULL;
-
-    memcpy(&dirp, &peer, sizeof (void *));
-    closedir(dirp);
-
-    return;
-}
-
-JNIEXPORT jstring JNICALL
-Java_iprotium_util_jni_POSIX_readdir(JNIEnv *env, jclass class, jlong peer) {
-    DIR *dirp = (DIR *) NULL;
-
-    memcpy(&dirp, &peer, sizeof (void *));
-
-    struct dirent *dp = readdir(dirp);
-
-    return (dp != NULL) ? (*env)->NewStringUTF(env, dp->d_name) : NULL;
-}
-
-JNIEXPORT void JNICALL
-Java_iprotium_util_jni_POSIX_rewinddir(JNIEnv *env, jclass class, jlong peer) {
-    DIR *dirp = (DIR *) NULL;
-
-    memcpy(&dirp, &peer, sizeof (void *));
-    rewinddir(dirp);
-
-    return;
 }
 /*
  * $Log: not supported by cvs2svn $
