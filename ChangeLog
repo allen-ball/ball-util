@@ -1,3 +1,7 @@
+2010-12-21  Allen D. Ball  <ball@mercury.local>
+
+	* Added <run/> build target and Ant Task.
+
 2010-12-20  Allen D. Ball  <ball@mercury.local>
 
 	* Added <editline-tokenize/> build target and Ant Task.
