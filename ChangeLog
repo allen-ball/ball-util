@@ -1,5 +1,9 @@
 2010-12-21  Allen D. Ball  <ball@mercury.local>
 
+	* src/main/java/iprotium/util/jni/POSIX.java,
+	src/main/java/iprotium/util/jni/DIR.java:
+	Moved closedir(), readdir(), and rewinddir() native methods to DIR.
+
 	* Added <run/> build target and Ant Task.
 
 2010-12-20  Allen D. Ball  <ball@mercury.local>
