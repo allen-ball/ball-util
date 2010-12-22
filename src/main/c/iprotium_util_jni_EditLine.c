@@ -1,4 +1,4 @@
-/* $Id: iprotium_util_jni_EditLine.c,v 1.5 2010-12-21 16:19:32 ball Exp $ */
+/* $Id: iprotium_util_jni_EditLine.c,v 1.6 2010-12-22 17:48:07 ball Exp $ */
 
 #include "iprotium_util_jni_EditLine.h"
 
@@ -140,11 +140,15 @@ Java_iprotium_util_jni_EditLine_gets(JNIEnv *env, jobject this) {
 
 JNIEXPORT jint JNICALL
 Java_iprotium_util_jni_EditLine_getc(JNIEnv *env, jobject this) {
-    char character = 0;
+    char character = -1;
     EditLine *el = getPointer(env, this);
     int count = el_getc(el, &character);
 
-    return (count > 0) ? ((jint) character) : -1;
+    if (! (count > 0)) {
+        character = -1;
+    }
+
+    return (jint) character;
 }
 
 JNIEXPORT void JNICALL
@@ -160,6 +164,7 @@ Java_iprotium_util_jni_EditLine_push(JNIEnv *env,
 JNIEXPORT jint JNICALL
 Java_iprotium_util_jni_EditLine_parse(JNIEnv *env,
                                       jobject this, jobjectArray array) {
+    int result = -1;
     EditLine *el = getPointer(env, this);
     int argc = (*env)->GetArrayLength(env, array);
     const char *argv[argc];
@@ -172,7 +177,7 @@ Java_iprotium_util_jni_EditLine_parse(JNIEnv *env,
         argv[i] = (*env)->GetStringUTFChars(env, string, 0);
     }
 
-    int result = el_parse(el, argc, argv);
+    result = el_parse(el, argc, argv);
 
     for (i = 0; i < argc; i += 1) {
         jstring string =
@@ -187,10 +192,11 @@ Java_iprotium_util_jni_EditLine_parse(JNIEnv *env,
 JNIEXPORT jint JNICALL
 Java_iprotium_util_jni_EditLine_source(JNIEnv *env,
                                        jobject this, jstring string) {
+    int result = -1;
     EditLine *el = getPointer(env, this);
     const char *path = (*env)->GetStringUTFChars(env, string, 0);
-    int result = el_source(el, path);
 
+    result = el_source(el, path);
     (*env)->ReleaseStringUTFChars(env, string, path);
 
     return result;
@@ -250,4 +256,7 @@ Java_iprotium_util_jni_EditLine_tokenize(JNIEnv *env, jclass class,
 }
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.5  2010/12/21 16:19:32  ball
+ * Added history support.
+ *
  */
