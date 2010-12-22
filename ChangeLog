@@ -1,3 +1,7 @@
+2010-12-22  Allen D. Ball  <ball@mercury.local>
+
+	* src/main/java/iprotium/util/jni/Readline.java: Initial writing.
+
 2010-12-21  Allen D. Ball  <ball@mercury.local>
 
 	* src/main/java/iprotium/util/jni/POSIX.java,
