@@ -1,5 +1,5 @@
 /*
- * $Id: EditLine.java,v 1.3 2010-12-26 18:51:15 ball Exp $
+ * $Id: EditLine.java,v 1.4 2010-12-26 19:04:18 ball Exp $
  *
  * Copyright 2010 Allen D. Ball.  All rights reserved.
  */
@@ -13,7 +13,7 @@ import java.util.ResourceBundle;
  * editline(3) manual page.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class EditLine {
     private static final ResourceBundle BUNDLE =
@@ -86,14 +86,10 @@ public class EditLine {
     @Override
     protected void finalize() { end(); }
     private native void end();
-
-    /**
-     * See the tok_str(3) manual page.
-     *
-     * @param   string          The {@link String} to tokenize.
-     */
-    public static native String[] tokenize(String string);
 }
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.3  2010/12/26 18:51:15  ball
+ * Added readline(String) and add_history(String) methods.
+ *
  */

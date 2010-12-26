@@ -1,4 +1,4 @@
-/* $Id: iprotium_util_jni_EditLine.c,v 1.7 2010-12-26 18:51:08 ball Exp $ */
+/* $Id: iprotium_util_jni_EditLine.c,v 1.8 2010-12-26 19:04:15 ball Exp $ */
 
 #include "iprotium_util_jni_EditLine.h"
 
@@ -277,35 +277,9 @@ Java_iprotium_util_jni_EditLine_end(JNIEnv *env, jobject this) {
         el_end(el);
     }
 }
-
-JNIEXPORT jobjectArray JNICALL
-Java_iprotium_util_jni_EditLine_tokenize(JNIEnv *env, jclass class,
-                                         jstring string) {
-    jobjectArray array = NULL;
-    Tokenizer *tok = tok_init(NULL);
-    const char *str = (*env)->GetStringUTFChars(env, string, 0);
-    int argc = 0;
-    const char **argv;
-
-    if (tok_str(tok, str, &argc, &argv) == 0) {
-        jclass type = (*env)->FindClass(env, "java/lang/String");
-
-        array = (*env)->NewObjectArray(env, argc, type, 0);
-
-        jsize i = 0;
-
-        for (i = 0; i < argc; i += 1) {
-            jstring element = (*env)->NewStringUTF(env, argv[i]);
-
-            (*env)->SetObjectArrayElement(env, array, i, element);
-        }
-    }
-
-    tok_end(tok);
-    (*env)->ReleaseStringUTFChars(env, string, str);
-
-    return array;
-}
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.7  2010/12/26 18:51:08  ball
+ * Added readline(String) and add_history(String) methods.
+ *
  */
