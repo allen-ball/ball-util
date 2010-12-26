@@ -21,8 +21,6 @@
 
 2010-12-20  Allen D. Ball  <ball@mercury.local>
 
-	* Added <editline-tokenize/> build target and Ant Task.
-
 	* src/main/java/iprotium/util/jni/EditLine.java: Initial writing.
 
 2010-12-07  Allen D. Ball  <ball@10-0-1-2.lan>
