@@ -1,4 +1,4 @@
-/* $Id: iprotium_util_jni_EditLine.c,v 1.6 2010-12-22 17:48:07 ball Exp $ */
+/* $Id: iprotium_util_jni_EditLine.c,v 1.7 2010-12-26 18:51:08 ball Exp $ */
 
 #include "iprotium_util_jni_EditLine.h"
 
@@ -102,6 +102,67 @@ Java_iprotium_util_jni_EditLine_init(JNIEnv *env, jobject this,
     setPointer(env, this, el);
 }
 
+JNIEXPORT jstring JNICALL
+Java_iprotium_util_jni_EditLine_readline(JNIEnv *env, jobject this,
+                                         jstring string) {
+    jstring line = NULL;
+    EditLine *el = getPointer(env, this);
+    struct clientdata_t *clientdata = NULL;
+
+    el_get(el, EL_CLIENTDATA, &clientdata);
+
+    if (string != NULL) {
+        const char *prompt = (*env)->GetStringUTFChars(env, string, 0);
+
+        snprintf(clientdata->prompt, sizeof clientdata->prompt, "%s", prompt);
+        (*env)->ReleaseStringUTFChars(env, string, prompt);
+    } else {
+        snprintf(clientdata->rprompt, sizeof clientdata->prompt, "");
+    }
+
+    int count = 0;
+    const char *result = el_gets(el, &count);
+
+    if (result != NULL) {
+        if (result[count - 1] == '\n') {
+            count -= 1;
+        }
+
+        if (result[count - 1] == '\r') {
+            count -= 1;
+        }
+
+        char buffer[count + 1];
+
+        memset(buffer, 0, sizeof buffer);
+        memcpy(buffer, result, count);
+
+        line = (*env)->NewStringUTF(env, buffer);
+    }
+
+    return line;
+}
+
+JNIEXPORT void JNICALL
+Java_iprotium_util_jni_EditLine_add_1history(JNIEnv *env, jobject this,
+                                             jstring string) {
+    EditLine *el = getPointer(env, this);
+
+    if (string != NULL) {
+        struct clientdata_t *clientdata = NULL;
+
+        el_get(el, EL_CLIENTDATA, &clientdata);
+
+        if (clientdata != NULL && clientdata->hist != NULL) {
+            HistEvent ev;
+            const char *line = (*env)->GetStringUTFChars(env, string, 0);
+
+            history(clientdata->hist, &ev, H_ENTER, line);
+            (*env)->ReleaseStringUTFChars(env, string, line);
+        }
+    }
+}
+
 JNIEXPORT void JNICALL
 Java_iprotium_util_jni_EditLine_reset(JNIEnv *env, jobject this) {
     EditLine *el = getPointer(env, this);
@@ -111,7 +172,7 @@ Java_iprotium_util_jni_EditLine_reset(JNIEnv *env, jobject this) {
 
 JNIEXPORT jstring JNICALL
 Java_iprotium_util_jni_EditLine_gets(JNIEnv *env, jobject this) {
-    jstring string = NULL;
+    jstring line = NULL;
     EditLine *el = getPointer(env, this);
     int count = 0;
     const char *result = el_gets(el, &count);
@@ -122,20 +183,10 @@ Java_iprotium_util_jni_EditLine_gets(JNIEnv *env, jobject this) {
         memset(buffer, 0, sizeof buffer);
         memcpy(buffer, result, count);
 
-        struct clientdata_t *clientdata = NULL;
-
-        el_get(el, EL_CLIENTDATA, &clientdata);
-
-        if (clientdata != NULL && clientdata->hist != NULL) {
-            HistEvent ev;
-
-            history(clientdata->hist, &ev, H_ENTER, buffer);
-        }
-
-        string = (*env)->NewStringUTF(env, buffer);
+        line = (*env)->NewStringUTF(env, buffer);
     }
 
-    return string;
+    return line;
 }
 
 JNIEXPORT jint JNICALL
@@ -219,6 +270,7 @@ Java_iprotium_util_jni_EditLine_end(JNIEnv *env, jobject this) {
                 clientdata->hist = NULL;
             }
 
+            memset(clientdata, 0, sizeof(*clientdata));
             free(clientdata);
         }
 
@@ -256,7 +308,4 @@ Java_iprotium_util_jni_EditLine_tokenize(JNIEnv *env, jclass class,
 }
 /*
  * $Log: not supported by cvs2svn $
- * Revision 1.5  2010/12/21 16:19:32  ball
- * Added history support.
- *
  */

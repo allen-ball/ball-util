@@ -1,5 +1,5 @@
 /*
- * $Id: EditLine.java,v 1.2 2010-12-21 15:42:00 ball Exp $
+ * $Id: EditLine.java,v 1.3 2010-12-26 18:51:15 ball Exp $
  *
  * Copyright 2010 Allen D. Ball.  All rights reserved.
  */
@@ -13,7 +13,7 @@ import java.util.ResourceBundle;
  * editline(3) manual page.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class EditLine {
     private static final ResourceBundle BUNDLE =
@@ -33,6 +33,18 @@ public class EditLine {
      */
     public EditLine(String prog) { init(prog); }
     private native void init(String prog);
+
+    /**
+     * GNU readline compatilble method.  See the {@code readline(3)} manual
+     * page.
+     */
+    public native String readline(String prompt);
+
+    /**
+     * GNU readline compatilble method.  See the {@code readline(3)} manual
+     * page.
+     */
+    public native void add_history(String line);
 
     /**
      * See the el_reset(3) manual page.
