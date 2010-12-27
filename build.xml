@@ -7,7 +7,7 @@
     -----------------
     Java Utilities
 
-    $Id: build.xml,v 1.42 2010-12-27 20:34:57 ball Exp $
+    $Id: build.xml,v 1.43 2010-12-27 21:11:20 ball Exp $
   </description>
 
   <property name="build.properties.file" location="build.properties"/>
@@ -491,9 +491,20 @@
     <superclasses-of classpathref="build.classpath" type="${type}"/>
   </target>
 
+  <target name="system-load-library"
+          description="--> Invokes &lt;system-load-library/&gt; task."
+          depends="classes">
+    <taskdef classpathref="build.classpath"
+             resource="iprotium/util/ant/defaults.properties"/>
+    <system-load-library libname="${name}"/>
+  </target>
+
 </project>
 <!--
     $Log: not supported by cvs2svn $
+    Revision 1.42  2010/12/27 20:34:57  ball
+    Use <define/> to specify CPP defines and <link/> to specify link libraries.
+
     Revision 1.40  2010/12/21 15:35:52  ball
     Added <run/> build target and Ant Task.
 
