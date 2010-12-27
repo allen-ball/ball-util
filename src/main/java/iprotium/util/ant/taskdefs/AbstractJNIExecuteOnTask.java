@@ -1,5 +1,5 @@
 /*
- * $Id: AbstractJNIExecuteOnTask.java,v 1.9 2010-08-23 03:43:54 ball Exp $
+ * $Id: AbstractJNIExecuteOnTask.java,v 1.10 2010-12-27 01:59:34 ball Exp $
  *
  * Copyright 2008 - 2010 Allen D. Ball.  All rights reserved.
  */
@@ -16,7 +16,7 @@ import org.apache.tools.ant.types.Commandline;
  * {@link org.apache.tools.ant.Task} to compile JNI shared objects.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 public abstract class AbstractJNIExecuteOnTask extends ExecuteOn {
     private static final FileDirBoth FILE = new FileDirBoth();
@@ -50,6 +50,11 @@ public abstract class AbstractJNIExecuteOnTask extends ExecuteOn {
      * {@value #SPACE}
      */
     protected static final String SPACE = " ";
+
+    /**
+     * {@value #EQUALS}
+     */
+    protected static final String EQUALS = "=";
 
     private String arch = null;
     private String os = null;
