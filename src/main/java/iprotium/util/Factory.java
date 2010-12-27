@@ -1,5 +1,5 @@
 /*
- * $Id: Factory.java,v 1.12 2010-11-16 03:55:09 ball Exp $
+ * $Id: Factory.java,v 1.13 2010-12-27 01:50:10 ball Exp $
  *
  * Copyright 2008 - 2010 Allen D. Ball.  All rights reserved.
  */
@@ -29,7 +29,7 @@ import static iprotium.util.ClassUtil.isStatic;
  *                              {@link Factory} will produce.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 public class Factory<T> implements Converter<T> {
     private final Class<? extends T> type;
@@ -45,7 +45,7 @@ public class Factory<T> implements Converter<T> {
      * @throws  NullPointerException
      *                          If {@code type} is {@code null}.
      */
-    @ConstructorProperties({"type"})
+    @ConstructorProperties({ "type" })
     public Factory(Class<? extends T> type) { this(type, null); }
 
     /**
@@ -425,6 +425,10 @@ public class Factory<T> implements Converter<T> {
 }
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.12  2010/11/16 03:55:09  ball
+ * Add protected constructor which allows an actual factory (e.g.,
+ * SocketFactory) to be specified.
+ *
  * Revision 1.10  2010/11/07 21:59:35  ball
  * Made hasFactoryMemberFor(Class<?>...), getFactoryMember(Class<?>...), and
  * apply(Member,Object[]) members public.
