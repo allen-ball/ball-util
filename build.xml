@@ -7,7 +7,7 @@
     -----------------
     Java Utilities
 
-    $Id: build.xml,v 1.41 2010-12-26 19:00:42 ball Exp $
+    $Id: build.xml,v 1.42 2010-12-27 20:34:57 ball Exp $
   </description>
 
   <property name="build.properties.file" location="build.properties"/>
@@ -221,9 +221,11 @@
           description="--> Compile JNI objects."
           depends="headers" if="jni.classes">
     <mkdir dir="${target.objects.dir}"/>
+    <available property="use.editline" file="/usr/include/histedit.h"/>
     <taskdef classpathref="build.classpath"
              resource="iprotium/util/ant/defaults.properties"/>
     <jni-cc include="${target.headers.dir}" dest="${target.objects.dir}">
+      <define name="USE_EDITLINE" if="use.editline"/>
       <fileset dir="${src.dir}/main/c" includes="*.c"/>
       <mapper type="glob" from="*.c" to="*.o"/>
     </jni-cc>
@@ -236,7 +238,7 @@
              resource="iprotium/util/ant/defaults.properties"/>
     <jni-ld destdir="${target.dir}" libname="${pom.artifactId}"
             property="jnilib">
-      <arg value="-ledit"/>
+      <link name="edit" if="use.editline"/>
       <fileset dir="${target.objects.dir}" includes="**/*.o"/>
     </jni-ld>
   </target>
