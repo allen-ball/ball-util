@@ -1,7 +1,11 @@
-2010-12-26  Allen D. Ball  <ball@mercury.local>
+2010-12-27  Allen D. Ball  <ball@mercury.local>
 
-	* src/main/java/iprotium/util/ant/taskdefs/JNICCTask.java:
-	Support <define/> to specify CPP defines.
+	* src/main/java/iprotium/util/ant/taskdefs/JNICCTask.java,
+	src/main/java/iprotium/util/ant/taskdefs/JNILDTask.java:
+	Support <define/> to specify CPP defines and <link/> to specify
+	link libraries.
+
+2010-12-26  Allen D. Ball  <ball@mercury.local>
 
 	* src/main/java/iprotium/util/jni/EditLine.java:
 	Added readline(String) and add_history(String) methods.
