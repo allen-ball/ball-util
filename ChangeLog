@@ -1,5 +1,7 @@
 2010-12-27  Allen D. Ball  <ball@mercury.local>
 
+	* Added <system-load-library/> build target and Ant Task.
+
 	* src/main/java/iprotium/util/ant/taskdefs/JNICCTask.java,
 	src/main/java/iprotium/util/ant/taskdefs/JNILDTask.java:
 	Support <define/> to specify CPP defines and <link/> to specify
