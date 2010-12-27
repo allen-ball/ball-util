@@ -1,5 +1,5 @@
 /*
- * $Id: InstanceOfTask.java,v 1.18 2010-11-09 05:31:14 ball Exp $
+ * $Id: InstanceOfTask.java,v 1.19 2010-12-27 01:58:46 ball Exp $
  *
  * Copyright 2008 - 2010 Allen D. Ball.  All rights reserved.
  */
@@ -26,7 +26,7 @@ import org.apache.tools.ant.BuildException;
  * @see Factory
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.18 $
+ * @version $Revision: 1.19 $
  */
 public class InstanceOfTask extends AbstractClasspathTask {
     private String type = String.class.getName();
@@ -140,14 +140,15 @@ public class InstanceOfTask extends AbstractClasspathTask {
         private String value = null;
 
         /**
-         * Sole constructor.
-         *
          * @param       value   The initial value.
          *
          * @see #setValue(String)
          */
         public Argument(String value) { setValue(value); }
 
+        /**
+         * No-argument constructor.
+         */
         public Argument() { this(null); }
 
         protected String getType() { return type; }
