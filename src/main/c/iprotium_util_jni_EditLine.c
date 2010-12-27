@@ -1,13 +1,23 @@
-/* $Id: iprotium_util_jni_EditLine.c,v 1.8 2010-12-26 19:04:15 ball Exp $ */
+/* $Id: iprotium_util_jni_EditLine.c,v 1.9 2010-12-27 01:57:36 ball Exp $ */
 
 #include "iprotium_util_jni_EditLine.h"
-
+#ifndef USE_EDITLINE
+#define USE_EDITLINE 0
+#endif
+#if USE_EDITLINE
 #include <histedit.h>
+#else
+#include <readline/readline.h>
+#include <readline/history.h>
+#endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 
+static const char POINTER_FIELD_NAME[] = "pointer";
+static const char LONG_SIGNATURE[] = "J";
+#if USE_EDITLINE
 struct clientdata_t {
     JNIEnv *env;
     jobject object;
@@ -38,9 +48,6 @@ static const char *rprompt(EditLine *el) {
     return clientdata->rprompt;
 }
 
-static const char POINTER_FIELD_NAME[] = "pointer";
-static const char LONG_SIGNATURE[] = "J";
-
 static jfieldID getPointerFieldID(JNIEnv *env, jobject object) {
     jclass class = (*env)->GetObjectClass(env, object);
 
@@ -64,19 +71,47 @@ static void setPointer(JNIEnv *env, jobject object, EditLine *el) {
     memcpy(&peer, &el, sizeof(EditLine *));
     (*env)->SetLongField(env, object, fieldID, peer);
 }
+#else
+struct rl_t {
+    JNIEnv *env;
+    jobject object;
+    char *rl_readline_name;
+};
 
-static const char EMACS[] = "emacs";
+static jfieldID getPointerFieldID(JNIEnv *env, jobject object) {
+    jclass class = (*env)->GetObjectClass(env, object);
+
+    return (*env)->GetFieldID(env, class, POINTER_FIELD_NAME, LONG_SIGNATURE);
+}
+
+static struct rl_t *getPointer(JNIEnv *env, jobject object) {
+    jfieldID fieldID = getPointerFieldID(env, object);
+    jlong peer = (*env)->GetLongField(env, object, fieldID);
+    struct rl_t *rl = NULL;
+
+    memcpy(&rl, &peer, sizeof(char *));
+
+    return rl;
+}
+
+static void setPointer(JNIEnv *env, jobject object, struct rl_t *rl) {
+    jfieldID fieldID = getPointerFieldID(env, object);
+    jlong peer = 0;
+
+    memcpy(&peer, &rl, sizeof(char *));
+    (*env)->SetLongField(env, object, fieldID, peer);
+}
+#endif
 
 JNIEXPORT void JNICALL
 Java_iprotium_util_jni_EditLine_init(JNIEnv *env, jobject this,
                                      jstring string) {
     const char *prog = (*env)->GetStringUTFChars(env, string, 0);
+#if USE_EDITLINE
     FILE *fin = fdopen(0, "r");
     FILE *fout = fdopen(1, "w");
     FILE *ferr = fdopen(2, "w");
     EditLine *el = el_init(prog, fin, fout, ferr);
-
-    (*env)->ReleaseStringUTFChars(env, string, prog);
 
     struct clientdata_t *clientdata =
         (struct clientdata_t *) malloc(sizeof(struct clientdata_t));
@@ -93,29 +128,39 @@ Java_iprotium_util_jni_EditLine_init(JNIEnv *env, jobject this,
     history(clientdata->hist, &ev, H_SETUNIQUE, 1);
 
     el_set(el, EL_CLIENTDATA, (void *) clientdata);
-    el_set(el, EL_EDITOR, EMACS);
+    el_set(el, EL_EDITOR, "emacs");
     el_set(el, EL_HIST, history, clientdata->hist);
     el_set(el, EL_PROMPT, prompt);
     el_set(el, EL_RPROMPT, rprompt);
     el_source(el, NULL);
 
     setPointer(env, this, el);
+#else
+    struct rl_t *rl = (struct rl_t *) malloc(sizeof(struct rl_t));
+
+    rl->env = env;
+    rl->object = this;
+    rl->rl_readline_name = strdup(prog);
+
+    setPointer(env, this, rl);
+#endif
+    (*env)->ReleaseStringUTFChars(env, string, prog);
 }
 
 JNIEXPORT jstring JNICALL
 Java_iprotium_util_jni_EditLine_readline(JNIEnv *env, jobject this,
                                          jstring string) {
     jstring line = NULL;
+    const char *prompt =
+        (string != NULL) ? (*env)->GetStringUTFChars(env, string, 0) : NULL;
+#if USE_EDITLINE
     EditLine *el = getPointer(env, this);
     struct clientdata_t *clientdata = NULL;
 
     el_get(el, EL_CLIENTDATA, &clientdata);
 
-    if (string != NULL) {
-        const char *prompt = (*env)->GetStringUTFChars(env, string, 0);
-
+    if (prompt != NULL) {
         snprintf(clientdata->prompt, sizeof clientdata->prompt, "%s", prompt);
-        (*env)->ReleaseStringUTFChars(env, string, prompt);
     } else {
         snprintf(clientdata->rprompt, sizeof clientdata->prompt, "");
     }
@@ -139,6 +184,21 @@ Java_iprotium_util_jni_EditLine_readline(JNIEnv *env, jobject this,
 
         line = (*env)->NewStringUTF(env, buffer);
     }
+#else
+    struct rl_t *rl = getPointer(env, this);
+
+    rl_readline_name = rl->rl_readline_name;
+
+    char *result = readline(prompt);
+
+    if (result != NULL) {
+        line = (*env)->NewStringUTF(env, result);
+        free(result);
+    }
+#endif
+    if (prompt != NULL) {
+        (*env)->ReleaseStringUTFChars(env, string, prompt);
+    }
 
     return line;
 }
@@ -146,33 +206,47 @@ Java_iprotium_util_jni_EditLine_readline(JNIEnv *env, jobject this,
 JNIEXPORT void JNICALL
 Java_iprotium_util_jni_EditLine_add_1history(JNIEnv *env, jobject this,
                                              jstring string) {
-    EditLine *el = getPointer(env, this);
-
     if (string != NULL) {
+        const char *line = (*env)->GetStringUTFChars(env, string, 0);
+#if USE_EDITLINE
+        EditLine *el = getPointer(env, this);
+
         struct clientdata_t *clientdata = NULL;
 
         el_get(el, EL_CLIENTDATA, &clientdata);
 
         if (clientdata != NULL && clientdata->hist != NULL) {
             HistEvent ev;
-            const char *line = (*env)->GetStringUTFChars(env, string, 0);
 
             history(clientdata->hist, &ev, H_ENTER, line);
-            (*env)->ReleaseStringUTFChars(env, string, line);
         }
+#else
+        struct rl_t *rl = getPointer(env, this);
+
+        rl_readline_name = rl->rl_readline_name;
+        add_history(strdup(line));
+#endif
+        (*env)->ReleaseStringUTFChars(env, string, line);
     }
 }
 
 JNIEXPORT void JNICALL
 Java_iprotium_util_jni_EditLine_reset(JNIEnv *env, jobject this) {
+#if USE_EDITLINE
     EditLine *el = getPointer(env, this);
 
     el_reset(el);
+#else
+    struct rl_t *rl = getPointer(env, this);
+
+    rl_readline_name = rl->rl_readline_name;
+#endif
 }
 
 JNIEXPORT jstring JNICALL
 Java_iprotium_util_jni_EditLine_gets(JNIEnv *env, jobject this) {
     jstring line = NULL;
+#if USE_EDITLINE
     EditLine *el = getPointer(env, this);
     int count = 0;
     const char *result = el_gets(el, &count);
@@ -185,30 +259,59 @@ Java_iprotium_util_jni_EditLine_gets(JNIEnv *env, jobject this) {
 
         line = (*env)->NewStringUTF(env, buffer);
     }
+#else
+    struct rl_t *rl = getPointer(env, this);
 
+    rl_readline_name = rl->rl_readline_name;
+
+    char *result = readline(NULL);
+
+    if (result != NULL) {
+        line = (*env)->NewStringUTF(env, result);
+        free(result);
+    }
+#endif
     return line;
 }
 
 JNIEXPORT jint JNICALL
 Java_iprotium_util_jni_EditLine_getc(JNIEnv *env, jobject this) {
     char character = -1;
+#if USE_EDITLINE
     EditLine *el = getPointer(env, this);
     int count = el_getc(el, &character);
 
     if (! (count > 0)) {
         character = -1;
     }
+#else
+    struct rl_t *rl = getPointer(env, this);
 
+    rl_readline_name = rl->rl_readline_name;
+    character = rl_read_key();
+#endif
     return (jint) character;
 }
 
 JNIEXPORT void JNICALL
 Java_iprotium_util_jni_EditLine_push(JNIEnv *env,
                                      jobject this, jstring string) {
-    EditLine *el = getPointer(env, this);
     const char *str = (*env)->GetStringUTFChars(env, string, 0);
+#if USE_EDITLINE
+    EditLine *el = getPointer(env, this);
 
     el_push(el, str);
+#else
+    struct rl_t *rl = getPointer(env, this);
+
+    rl_readline_name = rl->rl_readline_name;
+
+    size_t i = 0;
+
+    for (i = strlen(str) - 1; i >= 0; i -= 1) {
+        rl_stuff_char(str[i]);
+    }
+#endif
     (*env)->ReleaseStringUTFChars(env, string, str);
 }
 
@@ -216,6 +319,7 @@ JNIEXPORT jint JNICALL
 Java_iprotium_util_jni_EditLine_parse(JNIEnv *env,
                                       jobject this, jobjectArray array) {
     int result = -1;
+#if USE_EDITLINE
     EditLine *el = getPointer(env, this);
     int argc = (*env)->GetArrayLength(env, array);
     const char *argv[argc];
@@ -236,7 +340,7 @@ Java_iprotium_util_jni_EditLine_parse(JNIEnv *env,
 
         (*env)->ReleaseStringUTFChars(env, string, argv[i]);
     }
-
+#endif
     return result;
 }
 
@@ -244,17 +348,19 @@ JNIEXPORT jint JNICALL
 Java_iprotium_util_jni_EditLine_source(JNIEnv *env,
                                        jobject this, jstring string) {
     int result = -1;
+#if USE_EDITLINE
     EditLine *el = getPointer(env, this);
     const char *path = (*env)->GetStringUTFChars(env, string, 0);
 
     result = el_source(el, path);
     (*env)->ReleaseStringUTFChars(env, string, path);
-
+#endif
     return result;
 }
 
 JNIEXPORT void JNICALL
 Java_iprotium_util_jni_EditLine_end(JNIEnv *env, jobject this) {
+#if USE_EDITLINE
     EditLine *el = getPointer(env, this);
 
     setPointer(env, this, NULL);
@@ -276,10 +382,23 @@ Java_iprotium_util_jni_EditLine_end(JNIEnv *env, jobject this) {
 
         el_end(el);
     }
+#else
+    rl_readline_name = NULL;
+
+    struct rl_t *rl = getPointer(env, this);
+
+    setPointer(env, this, NULL);
+
+    if (rl != NULL) {
+        if (rl->rl_readline_name != NULL) {
+            free(rl->rl_readline_name);
+        }
+
+        memset(rl, 0, sizeof(*rl));
+        free(rl);
+    }
+#endif
 }
 /*
  * $Log: not supported by cvs2svn $
- * Revision 1.7  2010/12/26 18:51:08  ball
- * Added readline(String) and add_history(String) methods.
- *
  */

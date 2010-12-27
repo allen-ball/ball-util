@@ -1,5 +1,5 @@
 /*
- * $Id: EditLine.java,v 1.4 2010-12-26 19:04:18 ball Exp $
+ * $Id: EditLine.java,v 1.5 2010-12-27 01:57:43 ball Exp $
  *
  * Copyright 2010 Allen D. Ball.  All rights reserved.
  */
@@ -13,7 +13,7 @@ import java.util.ResourceBundle;
  * editline(3) manual page.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class EditLine {
     private static final ResourceBundle BUNDLE =
@@ -49,38 +49,38 @@ public class EditLine {
     /**
      * See the el_reset(3) manual page.
      */
-    public native void reset();
+    protected native void reset();
 
     /**
      * See the el_gets(3) manual page.
      */
-    public native String gets();
+    protected native String gets();
 
     /**
      * See the el_getc(3) manual page.
      */
-    public native int getc();
+    protected native int getc();
 
     /**
      * See the el_push(3) manual page.
      *
      * @param   string          The argument {@link String}.
      */
-    public native void push(String string);
+    protected native void push(String string);
 
     /**
      * See the el_parse(3) manual page.
      *
      * @param   argv            The argument {@code argv}.
      */
-    public native int parse(String[] argv);
+    protected native int parse(String[] argv);
 
     /**
      * See the el_source(3) manual page.
      *
      * @param   file            The {@link File} to source.
      */
-    public int source(File file) { return source(file.getAbsolutePath()); }
+    protected int source(File file) { return source(file.getAbsolutePath()); }
     private native int source(String path);
 
     @Override
@@ -89,7 +89,4 @@ public class EditLine {
 }
 /*
  * $Log: not supported by cvs2svn $
- * Revision 1.3  2010/12/26 18:51:15  ball
- * Added readline(String) and add_history(String) methods.
- *
  */
