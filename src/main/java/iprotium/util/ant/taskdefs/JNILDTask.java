@@ -1,5 +1,5 @@
 /*
- * $Id: JNILDTask.java,v 1.7 2010-08-23 03:43:55 ball Exp $
+ * $Id: JNILDTask.java,v 1.8 2010-12-27 02:41:43 ball Exp $
  *
  * Copyright 2008 - 2010 Allen D. Ball.  All rights reserved.
  */
@@ -13,7 +13,7 @@ import org.apache.tools.ant.BuildException;
  * {@link org.apache.tools.ant.Task} to link JNI shared libraries.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 public class JNILDTask extends AbstractJNIExecuteOnTask {
     private String libname = null;
@@ -59,6 +59,10 @@ public class JNILDTask extends AbstractJNIExecuteOnTask {
     @Override
     public void execute() throws BuildException {
         super.execute();
+
+        if (getLibname() == null) {
+            throw new BuildException("`libname' attribute must be specified");
+        }
 
         if (getProperty() != null) {
             getProject().setProperty(getProperty(), getName());
