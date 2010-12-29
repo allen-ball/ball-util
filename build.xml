@@ -7,7 +7,7 @@
     -----------------
     Java Utilities
 
-    $Id: build.xml,v 1.43 2010-12-27 21:11:20 ball Exp $
+    $Id: build.xml,v 1.44 2010-12-29 02:19:39 ball Exp $
   </description>
 
   <property name="build.properties.file" location="build.properties"/>
@@ -239,6 +239,8 @@
     <jni-ld destdir="${target.dir}" libname="${pom.artifactId}"
             property="jnilib">
       <link name="edit" if="use.editline"/>
+      <link name="readline" unless="use.editline"/>
+      <link name="termcap" unless="use.editline"/>
       <fileset dir="${target.objects.dir}" includes="**/*.o"/>
     </jni-ld>
   </target>
@@ -502,6 +504,9 @@
 </project>
 <!--
     $Log: not supported by cvs2svn $
+    Revision 1.43  2010/12/27 21:11:20  ball
+    Added <system-load-library/> build target and Ant Task.
+
     Revision 1.42  2010/12/27 20:34:57  ball
     Use <define/> to specify CPP defines and <link/> to specify link libraries.
 
