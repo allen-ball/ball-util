@@ -1,4 +1,4 @@
-/* $Id: iprotium_util_jni_EditLine.c,v 1.9 2010-12-27 01:57:36 ball Exp $ */
+/* $Id: iprotium_util_jni_EditLine.c,v 1.10 2011-02-10 18:16:12 ball Exp $ */
 
 #include "iprotium_util_jni_EditLine.h"
 #ifndef USE_EDITLINE
@@ -161,9 +161,9 @@ Java_iprotium_util_jni_EditLine_readline(JNIEnv *env, jobject this,
 
     if (prompt != NULL) {
         snprintf(clientdata->prompt, sizeof clientdata->prompt, "%s", prompt);
-    } else {
-        snprintf(clientdata->rprompt, sizeof clientdata->prompt, "");
     }
+
+    snprintf(clientdata->rprompt, sizeof clientdata->rprompt, "");
 
     int count = 0;
     const char *result = el_gets(el, &count);
@@ -401,4 +401,7 @@ Java_iprotium_util_jni_EditLine_end(JNIEnv *env, jobject this) {
 }
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.9  2010/12/27 01:57:36  ball
+ * Fallback to GNU Readline if EditLine is not available.
+ *
  */
