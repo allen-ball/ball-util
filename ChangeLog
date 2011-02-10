@@ -1,3 +1,7 @@
+2011-02-10  Allen D. Ball  <ball@10-0-1-2.lan>
+
+	* Added <inet-addresses-for/> build target and Ant Task.
+
 2010-12-27  Allen D. Ball  <ball@mercury.local>
 
 	* Added <system-load-library/> build target and Ant Task.
