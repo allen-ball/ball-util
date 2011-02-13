@@ -7,7 +7,7 @@
     -----------------
     Java Utilities
 
-    $Id: build.xml,v 1.45 2011-02-10 18:15:04 ball Exp $
+    $Id: build.xml,v 1.46 2011-02-13 02:47:03 ball Exp $
   </description>
 
   <property name="build.properties.file" location="build.properties"/>
@@ -400,6 +400,14 @@
     <members-of classpathref="build.classpath" type="${type}"/>
   </target>
 
+  <target name="network-interfaces"
+          description="--> Invokes &lt;network-interfaces/&gt; task."
+          depends="classes">
+    <taskdef classpathref="build.classpath"
+             resource="iprotium/util/ant/defaults.properties"/>
+    <network-interfaces/>
+  </target>
+
   <target name="opendir"
           description="--> Invokes &lt;opendir/&gt; task."
           depends="classes">
@@ -512,6 +520,9 @@
 </project>
 <!--
     $Log: not supported by cvs2svn $
+    Revision 1.45  2011/02/10 18:15:04  ball
+    Added <inet-addresses-for/> build target and Ant Task.
+
     Revision 1.44  2010/12/29 02:19:39  ball
     Specify GNU readline and termcap link libraries if needed.
 
