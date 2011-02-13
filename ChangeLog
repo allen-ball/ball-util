@@ -1,3 +1,7 @@
+2011-02-12  Allen D. Ball  <ball@10-0-1-2.lan>
+
+	* Added <network-interfaces/> build target and Ant Task.
+
 2011-02-10  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* Added <inet-addresses-for/> build target and Ant Task.
