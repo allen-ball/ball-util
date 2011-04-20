@@ -1,3 +1,8 @@
+2011-04-19  Allen D. Ball  <ball@10-0-1-2.lan>
+
+	* src/main/java/iprotium/util/Shell.java:
+	Initial (trivial) implementation.
+
 2011-02-12  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* Added <network-interfaces/> build target and Ant Task.
