@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- $Id: pom.xml,v 1.15 2011-01-03 06:09:40 ball Exp $ -->
+<!-- $Id: pom.xml,v 1.16 2011-04-22 21:23:17 ball Exp $ -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
@@ -71,7 +71,7 @@
         <version>2.7</version>
         <configuration>
           <reportOutputDirectory>${user.home}/Public</reportOutputDirectory>
-          <destDir>${artifactId}</destDir>
+          <destDir>${project.artifactId}</destDir>
           <bottom>
 <![CDATA[Copyright &#169; 2009 - 2011 Allen D. Ball.  All rights reserved.]]>
           </bottom>
@@ -97,6 +97,9 @@
 </project>
 <!--
     $Log: not supported by cvs2svn $
+    Revision 1.15  2011/01/03 06:09:40  ball
+    Require Apache Ant 1.8.2.
+
     Revision 1.14  2010/12/18 06:51:59  ball
     Added file://${java.home}/docs/api to <links/>.
 
