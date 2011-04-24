@@ -1,3 +1,7 @@
+2011-04-24  Allen D. Ball  <ball@10-0-1-2.lan>
+
+	* src/main/java/iprotium/util/UUIDFactory.java: Initial writing.
+
 2011-04-19  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* src/main/java/iprotium/util/Shell.java:
