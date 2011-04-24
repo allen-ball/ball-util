@@ -7,7 +7,7 @@
     -----------------
     Java Utilities
 
-    $Id: build.xml,v 1.46 2011-02-13 02:47:03 ball Exp $
+    $Id: build.xml,v 1.47 2011-04-24 19:37:15 ball Exp $
   </description>
 
   <property name="build.properties.file" location="build.properties"/>
@@ -234,6 +234,8 @@
   <target name="jnilib"
           description="--> Compile JNI library."
           depends="objects">
+    <available property="link.libuuid" file="/lib/libuuid.so.1"/>
+    <system-load-library property="have.libuuid" libname="uuid"/>
     <taskdef classpathref="build.classpath"
              resource="iprotium/util/ant/defaults.properties"/>
     <jni-ld destdir="${target.dir}" libname="${pom.artifactId}"
@@ -241,6 +243,7 @@
       <link name="edit" if="use.editline"/>
       <link name="readline" unless="use.editline"/>
       <link name="termcap" unless="use.editline"/>
+      <link name="uuid" if="have.libuuid"/>
       <fileset dir="${target.objects.dir}" includes="**/*.o"/>
     </jni-ld>
   </target>
@@ -517,9 +520,36 @@
     <system-load-library libname="${name}"/>
   </target>
 
+  <target name="uuid-generate"
+          description="--> Invokes &lt;uuid-generate/&gt; task."
+          depends="classes">
+    <taskdef classpathref="build.classpath"
+             resource="iprotium/util/ant/defaults.properties"/>
+    <uuid-generate/>
+  </target>
+
+  <target name="uuid-generate-random"
+          description="--> Invokes &lt;uuid-generate-random/&gt; task."
+          depends="classes">
+    <taskdef classpathref="build.classpath"
+             resource="iprotium/util/ant/defaults.properties"/>
+    <uuid-generate-random/>
+  </target>
+
+  <target name="uuid-generate-time"
+          description="--> Invokes &lt;uuid-generate-time/&gt; task."
+          depends="classes">
+    <taskdef classpathref="build.classpath"
+             resource="iprotium/util/ant/defaults.properties"/>
+    <uuid-generate-time/>
+  </target>
+
 </project>
 <!--
     $Log: not supported by cvs2svn $
+    Revision 1.46  2011/02/13 02:47:03  ball
+    Added <network-interfaces/> build target and Ant Task.
+
     Revision 1.45  2011/02/10 18:15:04  ball
     Added <inet-addresses-for/> build target and Ant Task.
 
