@@ -1,24 +1,23 @@
 /*
- * $Id: JNILibPropertyTask.java,v 1.4 2010-08-23 03:43:55 ball Exp $
+ * $Id: JNILibPropertyTask.java,v 1.6 2011-04-24 20:12:35 ball Exp $
  *
- * Copyright 2009, 2010 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
 import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Task;
 
 /**
- * Abstract <a href="http://ant.apache.org/">Ant</a> {@link Task} to get
- * platform-specific JNI values.
+ * Abstract <a href="http://ant.apache.org/">Ant</a>
+ * {@link org.apache.tools.ant.Task} to get platform-specific JNI values.
  *
  * @see Prefix
  * @see Suffix
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.6 $
  */
-public abstract class JNILibPropertyTask extends Task {
+public abstract class JNILibPropertyTask extends AbstractPropertyTask {
     private static final String DOT = ".";
 
     private static final String PREFIX;
@@ -40,15 +39,10 @@ public abstract class JNILibPropertyTask extends Task {
         SUFFIX = suffix;
     }
 
-    private String property = null;
-
     /**
      * Sole constructor.
      */
     protected JNILibPropertyTask() { super(); }
-
-    protected String getProperty() { return property; }
-    public void setProperty(String property) { this.property = property; }
 
     /**
      * Method to get the value to assign to the property.
@@ -69,8 +63,9 @@ public abstract class JNILibPropertyTask extends Task {
     }
 
     /**
-     * <a href="http://ant.apache.org/">Ant</a> {@link Task} to get
-     * platform-specific JNI library prefix.
+     * <a href="http://ant.apache.org/">Ant</a>
+     * {@link org.apache.tools.ant.Task} to get platform-specific JNI
+     * library prefix.
      */
     public static class Prefix extends JNILibPropertyTask {
 
@@ -84,8 +79,9 @@ public abstract class JNILibPropertyTask extends Task {
     }
 
     /**
-     * <a href="http://ant.apache.org/">Ant</a> {@link Task} to get
-     * platform-specific JNI library suffix.
+     * <a href="http://ant.apache.org/">Ant</a>
+     * {@link org.apache.tools.ant.Task} to get platform-specific JNI
+     * library suffix.
      */
     public static class Suffix extends JNILibPropertyTask {
 
