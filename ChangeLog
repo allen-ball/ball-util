@@ -1,3 +1,9 @@
+2011-04-25  Allen D. Ball  <ball@10-0-1-2.lan>
+
+	* src/main/java/iprotium/lang/java/Keyword.java,
+	src/main/java/iprotium/lang/java/Punctuation.java:
+	Implement Parser.Lexeme.
+
 2011-04-24  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* Added <uuid-generate/>, <uuid-generate-random/>, and
