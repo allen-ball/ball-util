@@ -1,17 +1,20 @@
 /*
- * $Id: Punctuation.java,v 1.1 2010-12-08 04:17:49 ball Exp $
+ * $Id: Punctuation.java,v 1.2 2011-04-25 15:40:41 ball Exp $
  *
- * Copyright 2010 Allen D. Ball.  All rights reserved.
+ * Copyright 2010, 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.lang.java;
+
+import iprotium.util.Parser;
+import java.util.regex.Pattern;
 
 /**
  * Provides Java punctuation as an {@link Enum} type.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
-public enum Punctuation {
+public enum Punctuation implements Parser.Lexeme {
     EXCLAMATION("!"), DOUBLE_QUOTE("\""), POUND("#"), DOLLAR("$"),
         PERCENT("%"), AMPERSAND("&"), RIGHT_QUOTE("'"), LP("("), RP(")"),
         ASTERISK("*"), PLUS("+"), COMMA(","), HYPHEN("-"), PERIOD("."),
@@ -20,8 +23,12 @@ public enum Punctuation {
         CARET("^"), LEFT_QUOTE("`"), LBC("{"), PIPE("|"), RBC("}"), TILDE("~");
 
     private final String lexeme;
+    private final Pattern pattern;
 
-    private Punctuation(String lexeme) { this.lexeme = lexeme; }
+    private Punctuation(String lexeme) {
+        this.lexeme = lexeme;
+        this.pattern = Pattern.compile(Pattern.quote(lexeme));
+    }
 
     /**
      * Method to get the lexeme associated with this {@link Punctuation}.
@@ -29,6 +36,9 @@ public enum Punctuation {
      * @return  The lexeme.
      */
     public String lexeme() { return lexeme; }
+
+    @Override
+    public Pattern pattern() { return pattern; }
 }
 /*
  * $Log: not supported by cvs2svn $

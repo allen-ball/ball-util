@@ -1,17 +1,20 @@
 /*
- * $Id: Keyword.java,v 1.4 2010-12-08 04:18:57 ball Exp $
+ * $Id: Keyword.java,v 1.5 2011-04-25 15:40:41 ball Exp $
  *
- * Copyright 2010 Allen D. Ball.  All rights reserved.
+ * Copyright 2010, 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.lang.java;
+
+import iprotium.util.Parser;
+import java.util.regex.Pattern;
 
 /**
  * Provides Java keywords as an {@link Enum} type.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
-public enum Keyword {
+public enum Keyword implements Parser.Lexeme {
     ABSTRACT, ASSERT, BOOLEAN, BREAK, BYTE, CASE, CATCH, CHAR, CLASS, CONST,
         CONTINUE, DEFAULT, DO, DOUBLE, ELSE, ENUM, EXTENDS, FALSE, FINAL,
         FINALLY, FLOAT, FOR, GOTO, IF, IMPLEMENTS, IMPORT, INSTANCEOF, INT,
@@ -19,12 +22,22 @@ public enum Keyword {
         PUBLIC, RETURN, SHORT, STATIC, STRICTFP, SUPER, SWITCH, SYNCHRONIZED,
         THIS, THROW, THROWS, TRANSIENT, TRUE, TRY, VOID, VOLATILE, WHILE;
 
+    private final Pattern pattern;
+
+    private Keyword() {
+        this.pattern =
+            Pattern.compile("\\b" + Pattern.quote(lexeme()) + "\\B");
+    }
+
     /**
      * Method to get the lexeme associated with this {@link Keyword}.
      *
      * @return  The lexeme (literal keyword).
      */
     public String lexeme() { return name().toLowerCase(); }
+
+    @Override
+    public Pattern pattern() { return pattern; }
 }
 /*
  * $Log: not supported by cvs2svn $
