@@ -1,3 +1,11 @@
+2011-05-01  Allen D. Ball  <ball@10-0-1-2.lan>
+
+	* src/main/java/iprotium/io/FileImpl.java,
+	src/main/java/iprotium/io/Directory.java:
+	Added FileImpl.getChildFile() and Directory.getChildDirectory()
+	methods.  Accept CharSequence parameters wherever the
+	corresponding File constructor accepts String parameters.
+
 2011-04-25  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* src/main/java/iprotium/lang/java/Keyword.java,
