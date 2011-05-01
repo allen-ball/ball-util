@@ -1,5 +1,5 @@
 /*
- * $Id: AbstractJNIExecuteOnTask.java,v 1.11 2010-12-27 20:34:36 ball Exp $
+ * $Id: AbstractJNIExecuteOnTask.java,v 1.12 2011-05-01 23:02:11 ball Exp $
  *
  * Copyright 2008 - 2010 Allen D. Ball.  All rights reserved.
  */
@@ -17,7 +17,7 @@ import org.apache.tools.ant.types.Commandline;
  * {@link org.apache.tools.ant.Task} to compile JNI shared objects.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 public abstract class AbstractJNIExecuteOnTask extends ExecuteOn {
     private static final FileDirBoth FILE = new FileDirBoth();
@@ -38,22 +38,22 @@ public abstract class AbstractJNIExecuteOnTask extends ExecuteOn {
     }
 
     /**
-     * {@value #SRCFILE}
+     * {@link #SRCFILE} = {@value #SRCFILE}
      */
     protected static final String SRCFILE = "SRCFILE";
 
     /**
-     * {@value #TARGETFILE}
+     * {@link #TARGETFILE} = {@value #TARGETFILE}
      */
     protected static final String TARGETFILE = "TARGETFILE";
 
     /**
-     * {@value #SPACE}
+     * {@link #SPACE} = {@value #SPACE}
      */
     protected static final String SPACE = " ";
 
     /**
-     * {@value #EQUALS}
+     * {@link #EQUALS} = {@value #EQUALS}
      */
     protected static final String EQUALS = "=";
 
@@ -209,4 +209,8 @@ public abstract class AbstractJNIExecuteOnTask extends ExecuteOn {
 }
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.11  2010/12/27 20:34:36  ball
+ * Support <define/> to specify CPP defines and <link/> to specify
+ * link libraries.
+ *
  */
