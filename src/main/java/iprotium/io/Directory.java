@@ -1,40 +1,43 @@
 /*
- * $Id: Directory.java,v 1.2 2010-08-23 03:43:54 ball Exp $
+ * $Id: Directory.java,v 1.3 2011-05-01 22:58:53 ball Exp $
  *
- * Copyright 2010 Allen D. Ball.  All rights reserved.
+ * Copyright 2010, 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.io;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.util.Arrays;
 
 /**
  * Directory {@link FileImpl} implementation.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class Directory extends FileImpl {
-    private static final long serialVersionUID = 1378072016766367842L;
+    private static final long serialVersionUID = -1519925282641191828L;
 
     /**
-     * @see FileImpl#FileImpl(String)
+     * @see File#File(String)
      */
-    public Directory(String pathname) { super(pathname); }
+    public Directory(CharSequence pathname) { super(pathname); }
 
     /**
-     * @see FileImpl#FileImpl(String,String)
+     * @see File#File(String,String)
      */
-    public Directory(String parent, String child) { super(parent, child); }
+    public Directory(CharSequence parent, CharSequence child) {
+        super(parent, child);
+    }
 
     /**
-     * @see FileImpl#FileImpl(File,String)
+     * @see File#File(File,String)
      */
-    public Directory(File parent, String child) { super(parent, child); }
+    public Directory(File parent, CharSequence child) { super(parent, child); }
 
     /**
-     * @see FileImpl#FileImpl(URI)
+     * @see File#File(URI)
      */
     public Directory(URI uri) { super(uri); }
 
@@ -47,13 +50,39 @@ public class Directory extends FileImpl {
         }
     }
 
+    /**
+     * Method to get a child {@link Directory}.
+     *
+     * @param   names           The names that make up the subpath of the
+     *                          child {@link Directory}.
+     *
+     * @return  A child {@link Directory} with a subpath represented by
+     *          {@code names}.
+     */
+    public Directory getChildDirectory(Iterable<CharSequence> names) {
+        return getChildDirectory(this, names);
+    }
+
+    /**
+     * Method to get a child {@link Directory}.
+     *
+     * @param   names           The names that make up the subpath of the
+     *                          child {@link Directory}.
+     *
+     * @return  A child {@link Directory} with a subpath represented by
+     *          {@code names}.
+     */
+    public Directory getChildDirectory(CharSequence... names) {
+        return getChildDirectory(this, names);
+    }
+
     @Override
     public Directory getAbsoluteFile() {
         return new Directory(getAbsolutePath());
     }
 
     @Override
-    public File getCanonicalFile() throws IOException {
+    public Directory getCanonicalFile() throws IOException {
         return new Directory(getCanonicalPath());
     }
 
@@ -69,6 +98,31 @@ public class Directory extends FileImpl {
     @Override
     public boolean createNewFile() throws IOException {
         throw new IOException(this + " is a directory");
+    }
+
+    /**
+     * @see #getChildDirectory(Iterable)
+     */
+    public static Directory getChildDirectory(File parent,
+                                              Iterable<CharSequence> names) {
+        Directory directory =
+            (parent instanceof Directory)
+                ? ((Directory) parent)
+                : new Directory(parent.getPath());
+
+        for (CharSequence name : names) {
+            directory = new Directory(directory, name);
+        }
+
+        return directory;
+    }
+
+    /**
+     * @see #getChildDirectory(CharSequence...)
+     */
+    public static Directory getChildDirectory(File parent,
+                                              CharSequence... names) {
+        return getChildDirectory(parent, Arrays.asList(names));
     }
 }
 /*
