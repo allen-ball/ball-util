@@ -1,5 +1,9 @@
 2011-05-27  Allen D. Ball  <ball@10-0-1-2.lan>
 
+	* src/main/java/iprotium/activation/AbstractDataSource.java:
+	Added getInputStream(Class<?>...) and getOutputStream(Class<?>...)
+	methods.
+
 	* src/main/java/iprotium/io/IOUtil.java:
 	Added wrap(InputStream,Class<?>...) and
 	wrap(OutputStream,Class<?>...) methods and added optional
