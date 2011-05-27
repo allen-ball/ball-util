@@ -1,3 +1,11 @@
+2011-05-27  Allen D. Ball  <ball@10-0-1-2.lan>
+
+	* src/main/java/iprotium/io/IOUtil.java:
+	Added wrap(InputStream,Class<?>...) and
+	wrap(OutputStream,Class<?>...) methods and added optional
+	"filters" parameter to to copy(File,File), copy(InputStream,File),
+	and copy(InputStream,OutputStream) methods.
+
 2011-05-01  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* src/main/java/iprotium/io/FileImpl.java,
