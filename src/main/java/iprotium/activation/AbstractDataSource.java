@@ -1,7 +1,7 @@
 /*
- * $Id: AbstractDataSource.java,v 1.6 2010-10-18 05:28:03 ball Exp $
+ * $Id: AbstractDataSource.java,v 1.7 2011-05-27 21:40:23 ball Exp $
  *
- * Copyright 2009, 2010 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.activation;
 
@@ -15,7 +15,7 @@ import javax.activation.DataSource;
  * Abstract base class for {@link DataSource} implementations.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 public class AbstractDataSource implements DataSource {
 
@@ -83,6 +83,32 @@ public class AbstractDataSource implements DataSource {
     public long length() { return -1; }
 
     /**
+     * Method to "wrap" the {@link InputStream} returned by
+     * {@link #getInputStream()}into {@link InputStream} instances.
+     *
+     * @param   types           The {@link InputStream} implementation
+     *                          {@link Class}es.
+     *
+     * @return  The "wrapped" {@link InputStream}.
+     */
+    public InputStream getInputStream(Class<?>... types) throws IOException {
+        return IOUtil.wrap(getInputStream(), types);
+    }
+
+    /**
+     * Method to "wrap" the {@link OutputStream} returned by
+     * {@link #getOutputStream()}into {@link OutputStream} instances.
+     *
+     * @param   types           The {@link OutputStream} implementation
+     *                          {@link Class}es.
+     *
+     * @return  The "wrapped" {@link OutputStream}.
+     */
+    public OutputStream getOutputStream(Class<?>... types) throws IOException {
+        return IOUtil.wrap(getOutputStream(), types);
+    }
+
+    /**
      * Method to write the contents of this {@link DataSource} to an
      * {@link OutputStream}.
      *
@@ -139,4 +165,8 @@ public class AbstractDataSource implements DataSource {
 }
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.6  2010/10/18 05:28:03  ball
+ * Added clear() and length() methods.
+ * Made setName(String) and setContentType(String) methods public.
+ *
  */
