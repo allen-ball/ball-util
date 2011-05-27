@@ -1,7 +1,7 @@
 /*
- * $Id: IOUtil.java,v 1.11 2010-10-29 05:00:53 ball Exp $
+ * $Id: IOUtil.java,v 1.12 2011-05-27 21:38:23 ball Exp $
  *
- * Copyright 2008 - 2010 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.io;
 
@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.channels.Channels;
@@ -27,26 +28,62 @@ import java.nio.channels.WritableByteChannel;
  * Provides common I/O utilities implemented as static methods.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 public abstract class IOUtil {
     private IOUtil() { }
+
+    /**
+     * Method to quietly close an {@link Object} if it is an instance of
+     * {@link Closeable}.
+     *
+     * @param   object          The {@link Object} to close if it is an
+     *                          instance of {@link Closeable}.
+     */
+    public static void close(Object object) {
+        try {
+            if (object instanceof Closeable) {
+                ((Closeable) object).close();
+            }
+        } catch (IOException exception) {
+        }
+    }
+
+    /**
+     * Method to quietly flush an {@link Object} if it is an instance of
+     * {@link Flushable}.
+     *
+     * @param   object          The {@link Object} to flush if it is an
+     *                          instance of {@link Flushable}.
+     */
+    public static void flush(Object object) {
+        try {
+            if (object instanceof Flushable) {
+                ((Flushable) object).flush();
+            }
+        } catch (IOException exception) {
+        }
+    }
 
     /**
      * Method to copy a {@link File} to another {@link File}.
      *
      * @param   from            The {@link File} to copy from.
      * @param   to              The {@link File} to copy to.
+     * @param   filters         {@link InputStream} and
+     *                          {@link OutputStream} implementation
+     *                          {@link Class}es used to "wrap" {@code in}
+     *                          and {@code out}, respectively.
      *
      * @throws  IOException     If an I/O error occurs.
      */
-    public static void copy(File from, File to) throws IOException {
+    public static void copy(File from, File to,
+                            Class<?>... filters) throws IOException {
         InputStream in = null;
 
         try {
             in = new FileInputStream(from);
-
-            copy(in, to);
+            copy(in, to, filters);
         } finally {
             try {
                 close(in);
@@ -61,16 +98,20 @@ public abstract class IOUtil {
      *
      * @param   in              The {@link InputStream}.
      * @param   to              The {@link File} to copy to.
+     * @param   filters         {@link InputStream} and
+     *                          {@link OutputStream} implementation
+     *                          {@link Class}es used to "wrap" {@code in}
+     *                          and {@code out}, respectively.
      *
      * @throws  IOException     If an I/O error occurs.
      */
-    public static void copy(InputStream in, File to) throws IOException {
+    public static void copy(InputStream in, File to,
+                            Class<?>... filters) throws IOException {
         OutputStream out = null;
 
         try {
             out = new FileOutputStream(to);
-
-            copy(in, out);
+            copy(in, out, filters);
         } finally {
             try {
                 close(out);
@@ -86,11 +127,27 @@ public abstract class IOUtil {
      *
      * @param   in              The {@link InputStream}.
      * @param   out             The {@link OutputStream}.
+     * @param   filters         {@link InputStream} and
+     *                          {@link OutputStream} implementation
+     *                          {@link Class}es used to "wrap" {@code in}
+     *                          and {@code out}, respectively.
      *
      * @throws  IOException     If an I/O error occurs.
+     *
+     * @see #wrap(InputStream,Class...)
+     * @see #wrap(OutputStream,Class...)
      */
     public static void copy(InputStream in,
-                            OutputStream out) throws IOException {
+                            OutputStream out,
+                            Class<?>... filters) throws IOException {
+        for (Class<?> filter : filters) {
+            if (InputStream.class.isAssignableFrom(filter)) {
+                in = wrap(in, filter.asSubclass(InputStream.class));
+            } else /*if (OutputStream.class.isAssignableFrom(filter)) */ {
+                out = wrap(out, filter.asSubclass(OutputStream.class));
+            }
+        }
+
         copy(Channels.newChannel(in), Channels.newChannel(out));
         flush(out);
     }
@@ -192,7 +249,6 @@ public abstract class IOUtil {
 
             if (in.read(buffer) > 0) {
                 buffer.flip();
-
                 out.append(buffer);
             } else {
                 break;
@@ -231,6 +287,90 @@ public abstract class IOUtil {
         }
 
         flush(writer);
+    }
+
+    /**
+     * Method to "wrap" an {@link InputStream} into {@link InputStream}
+     * instances.
+     *
+     * @param   in              The {@link InputStream}.
+     * @param   types           The {@link InputStream} implementation
+     *                          {@link Class}es.
+     *
+     * @return  The "wrapped" {@link InputStream}.
+     */
+    public static InputStream wrap(InputStream in,
+                                   Class<?>... types) throws IOException {
+        try {
+            for (Class<?> type : types) {
+                in =
+                    type.asSubclass(InputStream.class)
+                    .getConstructor(InputStream.class)
+                    .newInstance(in);
+            }
+        } catch (NoSuchMethodException exception) {
+            throw new IllegalArgumentException(exception);
+        } catch (InstantiationException exception) {
+            throw new IllegalArgumentException(exception);
+        } catch (IllegalAccessException exception) {
+            throw new IllegalArgumentException(exception);
+        } catch (InvocationTargetException exception) {
+            Throwable cause = exception.getCause();
+
+            if (cause instanceof IOException) {
+                throw (IOException) cause;
+            } else if (cause instanceof RuntimeException) {
+                throw (RuntimeException) cause;
+            } else if (cause instanceof Error) {
+                throw (Error) cause;
+            } else {
+                throw new IllegalArgumentException(exception);
+            }
+        }
+
+        return in;
+    }
+
+    /**
+     * Method to "wrap" an {@link OutputStream} into {@link OutputStream}
+     * instances.
+     *
+     * @param   out             The {@link OutputStream}.
+     * @param   types           The {@link OutputStream} implementation
+     *                          {@link Class}es.
+     *
+     * @return  The "wrapped" {@link OutputStream}.
+     */
+    public static OutputStream wrap(OutputStream out,
+                                    Class<?>... types) throws IOException {
+        try {
+            for (Class<?> type : types) {
+                out =
+                    type.asSubclass(OutputStream.class)
+                    .getConstructor(OutputStream.class)
+                    .newInstance(out);
+            }
+        } catch (NoSuchMethodException exception) {
+            throw new IllegalArgumentException(exception);
+        } catch (InstantiationException exception) {
+            throw new IllegalArgumentException(exception);
+        } catch (IllegalAccessException exception) {
+            throw new IllegalArgumentException(exception);
+        } catch (InvocationTargetException exception) {
+            Throwable cause = exception.getCause();
+
+            if (cause instanceof IOException) {
+                throw (IOException) cause;
+            } else if (cause instanceof RuntimeException) {
+                throw (RuntimeException) cause;
+            } else if (cause instanceof Error) {
+                throw (Error) cause;
+            } else {
+                throw new IllegalArgumentException(exception);
+            }
+        }
+
+        return out;
     }
 
     /**
@@ -342,41 +482,13 @@ public abstract class IOUtil {
     public static void touch(File... files) throws IOException {
         touch(System.currentTimeMillis(), files);
     }
-
-    /**
-     * Method to quietly close an {@link Object} if it is an instance of
-     * {@link Closeable}.
-     *
-     * @param   object          The {@link Object} to close if it is an
-     *                          instance of {@link Closeable}.
-     */
-    public static void close(Object object) {
-        try {
-            if (object instanceof Closeable) {
-                ((Closeable) object).close();
-            }
-        } catch (IOException exception) {
-        }
-    }
-
-    /**
-     * Method to quietly flush an {@link Object} if it is an instance of
-     * {@link Flushable}.
-     *
-     * @param   object          The {@link Object} to flush if it is an
-     *                          instance of {@link Flushable}.
-     */
-    public static void flush(Object object) {
-        try {
-            if (object instanceof Flushable) {
-                ((Flushable) object).flush();
-            }
-        } catch (IOException exception) {
-        }
-    }
 }
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.11  2010/10/29 05:00:53  ball
+ * Expose copy(ReadableByteChannel,ByteBuffer,WritableByteChannel)
+ * and copy(Readable,CharBuffer,Appendable).
+ *
  * Revision 1.10  2010/10/18 05:12:51  ball
  * Added copy(Readable,Appendable) method.
  * Changed close(Closeable) method to close(Object) and added
