@@ -1,12 +1,13 @@
 /*
- * $Id: InstanceOfTask.java,v 1.19 2010-12-27 01:58:46 ball Exp $
+ * $Id: InstanceOfTask.java,v 1.20 2011-06-04 04:01:52 ball Exp $
  *
- * Copyright 2008 - 2010 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
 import iprotium.activation.ReaderWriterDataSource;
-import iprotium.text.MapTable;
+import iprotium.text.MapTableModel;
+import iprotium.text.TextTable;
 import iprotium.util.BeanMap;
 import iprotium.util.Factory;
 import java.beans.ExceptionListener;
@@ -16,6 +17,7 @@ import java.lang.reflect.Member;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import org.apache.tools.ant.BuildException;
 
 /**
@@ -26,7 +28,7 @@ import org.apache.tools.ant.BuildException;
  * @see Factory
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.19 $
+ * @version $Revision: 1.20 $
  */
 public class InstanceOfTask extends AbstractClasspathTask {
     private String type = String.class.getName();
@@ -88,11 +90,8 @@ public class InstanceOfTask extends AbstractClasspathTask {
             BeanMap map = BeanMap.asBeanMap(instance);
 
             if (! map.isEmpty()) {
-                MapTable<String,Object> table =
-                    new MapTable<String,Object>(map, "Property Name", "Value");
-
                 log("");
-                log(table);
+                log(new TextTable(new MapTableModelImpl(map)));
             }
 
             ReaderWriterDataSourceImpl ds = new ReaderWriterDataSourceImpl();
@@ -159,6 +158,19 @@ public class InstanceOfTask extends AbstractClasspathTask {
 
         @Override
         public String toString() { return getValue(); }
+    }
+
+    private class MapTableModelImpl extends MapTableModel<String,Object> {
+        private static final long serialVersionUID = -8318399100323530367L;
+
+        public MapTableModelImpl(Map<String,Object> map) {
+            super(map, "Property Name", "Value");
+        }
+
+        @Override
+        protected Object getValueAt(Map.Entry<String,Object> row, int x) {
+            return String.valueOf(super.getValueAt(row, x));
+        }
     }
 
     private class ReaderWriterDataSourceImpl extends ReaderWriterDataSource
