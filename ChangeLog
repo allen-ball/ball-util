@@ -1,3 +1,8 @@
+2011-06-03  Allen D. Ball  <ball@10-0-1-2.lan>
+
+	* src/main/java/iprotium/util/ant/taskdefs/InstanceOfTask.java:
+	Print "null" for null values in bean attribute table.
+
 2011-05-27  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* src/main/java/iprotium/activation/AbstractDataSource.java:
