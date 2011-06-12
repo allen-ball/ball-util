@@ -1,3 +1,7 @@
+2011-06-12  Allen D. Ball  <ball@10-0-1-2.lan>
+
+	* SystemJavaCompilerAdapter.java: Initial writing.
+
 2011-06-09  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* src/main/java/iprotium/io/CharSequenceReader.java:
