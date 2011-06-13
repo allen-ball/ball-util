@@ -1,5 +1,5 @@
 /*
- * $Id: SystemLoadLibraryTask.java,v 1.2 2011-04-24 20:06:35 ball Exp $
+ * $Id: SystemLoadLibraryTask.java,v 1.3 2011-06-13 02:24:14 ball Exp $
  *
  * Copyright 2010, 2011 Allen D. Ball.  All rights reserved.
  */
@@ -14,7 +14,7 @@ import org.apache.tools.ant.BuildException;
  * @see System#loadLibrary(String)
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class SystemLoadLibraryTask extends AbstractPropertyTask {
     private String libname = null;
@@ -37,7 +37,7 @@ public class SystemLoadLibraryTask extends AbstractPropertyTask {
     }
 
     @Override
-    protected String getPropertyValue() throws Exception {
+    protected String getPropertyValue() throws Throwable {
         System.loadLibrary(getLibname());
 
         return System.mapLibraryName(getLibname());
