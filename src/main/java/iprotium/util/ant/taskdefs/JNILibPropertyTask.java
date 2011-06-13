@@ -1,5 +1,5 @@
 /*
- * $Id: JNILibPropertyTask.java,v 1.6 2011-04-24 20:12:35 ball Exp $
+ * $Id: JNILibPropertyTask.java,v 1.7 2011-06-13 02:23:17 ball Exp $
  *
  * Copyright 2009 - 2011 Allen D. Ball.  All rights reserved.
  */
@@ -15,7 +15,7 @@ import org.apache.tools.ant.BuildException;
  * @see Suffix
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 public abstract class JNILibPropertyTask extends AbstractPropertyTask {
     private static final String DOT = ".";
@@ -43,24 +43,6 @@ public abstract class JNILibPropertyTask extends AbstractPropertyTask {
      * Sole constructor.
      */
     protected JNILibPropertyTask() { super(); }
-
-    /**
-     * Method to get the value to assign to the property.
-     *
-     * @return  The property value.
-     */
-    protected abstract String getPropertyValue();
-
-    @Override
-    public void execute() throws BuildException {
-        super.execute();
-
-        if (getProperty() != null && getPropertyValue() != null) {
-            getProject().setProperty(getProperty(), getPropertyValue());
-        } else {
-            log(getPropertyValue());
-        }
-    }
 
     /**
      * <a href="http://ant.apache.org/">Ant</a>
