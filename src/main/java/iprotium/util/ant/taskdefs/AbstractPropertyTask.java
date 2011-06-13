@@ -1,5 +1,5 @@
 /*
- * $Id: AbstractPropertyTask.java,v 1.4 2011-04-24 20:18:06 ball Exp $
+ * $Id: AbstractPropertyTask.java,v 1.5 2011-06-13 02:21:30 ball Exp $
  *
  * Copyright 2011 Allen D. Ball.  All rights reserved.
  */
@@ -12,7 +12,7 @@ import org.apache.tools.ant.BuildException;
  * {@link org.apache.tools.ant.Task}s that may assign property values.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public abstract class AbstractPropertyTask extends AbstractClasspathTask {
     private String property = null;
@@ -30,7 +30,7 @@ public abstract class AbstractPropertyTask extends AbstractClasspathTask {
      *
      * @return  The property value.
      */
-    protected abstract String getPropertyValue() throws Exception;
+    protected abstract String getPropertyValue() throws Throwable;
 
     @Override
     public void execute() throws BuildException {
@@ -54,8 +54,10 @@ public abstract class AbstractPropertyTask extends AbstractClasspathTask {
             Thread.currentThread().setContextClassLoader(loader);
         }
 
-        if (key != null && value != null) {
-            getProject().setProperty(key, value);
+        if (key != null) {
+            if (value != null) {
+                getProject().setProperty(key, value);
+            }
         } else {
             log(value);
         }
