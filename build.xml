@@ -7,16 +7,17 @@
     -----------------
     Java Utilities
 
-    $Id: build.xml,v 1.47 2011-04-24 19:37:15 ball Exp $
+    $Id: build.xml,v 1.48 2011-06-13 01:59:58 ball Exp $
   </description>
 
   <property name="build.properties.file" location="build.properties"/>
   <property file="${build.properties.file}"/>
-  <property name="build.compiler"       value="modern"/>
   <property name="build.sysclasspath"   value="ignore"/>
-  <property name="compile.debug"        value="true"/>
-  <property name="compile.deprecation"  value="true"/>
-  <property name="compile.optimize"     value="true"/>
+  <property
+      name="build.compiler.adapter"
+      value="iprotium.util.ant.taskdefs.compilers.SystemJavaCompilerAdapter"/>
+  <available classname="${build.compiler.adapter}"
+             property="build.compiler" value="${build.compiler.adapter}"/>
 
   <property name="src.dir"              location="src"/>
 
@@ -75,9 +76,9 @@
           todir="${target.classes.dir}">
       <fileset dir="${src.dir}/main/resources"/>
     </copy>
-    <javac debug="${compile.debug}" deprecation="${compile.deprecation}"
-           optimize="${compile.optimize}" destdir="${target.classes.dir}">
-      <compilerarg compiler="modern" value="-Xlint:all"/>
+    <javac destdir="${target.classes.dir}">
+      <compilerarg compiler="modern" value="-Xlint"/>
+      <compilerarg compiler="modern" value="-g:source,lines,vars"/>
       <classpath>
         <path refid="build.classpath"/>
       </classpath>
@@ -193,6 +194,9 @@
           <attribute name="Sealed" value="true"/>
         </section>
         <section name="iprotium/util/ant/taskdefs/">
+          <attribute name="Sealed" value="true"/>
+        </section>
+        <section name="iprotium/util/ant/taskdefs/compilers/">
           <attribute name="Sealed" value="true"/>
         </section>
         <section name="iprotium/util/ant/taskdefs/lint/">
@@ -547,30 +551,4 @@
 </project>
 <!--
     $Log: not supported by cvs2svn $
-    Revision 1.46  2011/02/13 02:47:03  ball
-    Added <network-interfaces/> build target and Ant Task.
-
-    Revision 1.45  2011/02/10 18:15:04  ball
-    Added <inet-addresses-for/> build target and Ant Task.
-
-    Revision 1.44  2010/12/29 02:19:39  ball
-    Specify GNU readline and termcap link libraries if needed.
-
-    Revision 1.43  2010/12/27 21:11:20  ball
-    Added <system-load-library/> build target and Ant Task.
-
-    Revision 1.42  2010/12/27 20:34:57  ball
-    Use <define/> to specify CPP defines and <link/> to specify link libraries.
-
-    Revision 1.40  2010/12/21 15:35:52  ball
-    Added <run/> build target and Ant Task.
-
-    Revision 1.38  2010/11/22 02:05:54  ball
-    Added <permutations-of/> and <permutations-count/> build targets
-    and Ant Tasks.
-
-    Revision 1.37  2010/11/09 05:36:13  ball
-    Added <combinations-of/> and <combinations-count/> build targets
-    and Ant Tasks.
-
   -->
