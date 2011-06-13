@@ -1,5 +1,10 @@
 2011-06-12  Allen D. Ball  <ball@10-0-1-2.lan>
 
+	* AbstractPropertyTask.java:
+	Changed getPropertyValue() to throw Throwable.  Log property value
+	if property name is not set but do not set property if the value
+	is null.
+
 	* SystemJavaCompilerAdapter.java: Initial writing.
 
 2011-06-09  Allen D. Ball  <ball@10-0-1-2.lan>
