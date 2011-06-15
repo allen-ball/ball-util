@@ -2,6 +2,11 @@
 
 	* DiagnosticMap.java: Initial writing.
 
+	* SystemJavaCompilerAdapter.java:
+	Re-factored to provide the
+	compile(StandardJavaFileManager,DiagnosticMap) method to ease
+	design of subclass implementations.
+
 2011-06-12  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* AbstractPropertyTask.java:
