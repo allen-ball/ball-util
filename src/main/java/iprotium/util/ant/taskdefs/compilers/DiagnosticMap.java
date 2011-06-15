@@ -1,0 +1,68 @@
+/*
+ * $Id: DiagnosticMap.java,v 1.1 2011-06-15 04:37:09 ball Exp $
+ *
+ * Copyright 2011 Allen D. Ball.  All rights reserved.
+ */
+package iprotium.util.ant.taskdefs.compilers;
+
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.SortedMap;
+import java.util.TreeMap;
+import javax.tools.Diagnostic;
+import javax.tools.DiagnosticListener;
+import javax.tools.JavaFileObject;
+
+/**
+ * {@link LinkedHashMap} implementation for collecting {@link Diagnostic}s
+ * as keys and informational/remedial messages as values.
+ *
+ * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
+ * @version $Revision: 1.1 $
+ */
+public class DiagnosticMap
+             extends LinkedHashMap<Diagnostic<? extends JavaFileObject>,String>
+             implements DiagnosticListener<JavaFileObject> {
+    private static final long serialVersionUID = -2617437911573647034L;
+
+    /**
+     * Sole constructor.
+     */
+    public DiagnosticMap() { super(); }
+
+    /**
+     * Method to get a map of {@link javax.tools.Diagnostic.Kind} counts.
+     *
+     * @return  A {@link SortedMap} of {@link javax.tools.Diagnostic.Kind}
+     *          counts.
+     */
+    public SortedMap<Diagnostic.Kind,Integer> getKindCountMap() {
+        return Collections.unmodifiableSortedMap(new KindCountMap());
+    }
+
+    @Override
+    public void report(Diagnostic<? extends JavaFileObject> diagnostic) {
+        put(diagnostic, null);
+    }
+
+    private class KindCountMap extends TreeMap<Diagnostic.Kind,Integer> {
+        private static final long serialVersionUID = -3338701767348114479L;
+
+        public KindCountMap() {
+            super();
+
+            for (Diagnostic<?> diagnostic : DiagnosticMap.this.keySet()) {
+                count(diagnostic.getKind(), 1);
+            }
+        }
+
+        public void count(Diagnostic.Kind key) { count(key, 1); }
+
+        public void count(Diagnostic.Kind key, int count) {
+            put(key, count + (containsKey(key) ? get(key) : 0));
+        }
+    }
+}
+/*
+ * $Log: not supported by cvs2svn $
+ */
