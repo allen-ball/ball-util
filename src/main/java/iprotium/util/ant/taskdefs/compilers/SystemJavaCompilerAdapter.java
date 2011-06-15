@@ -1,5 +1,5 @@
 /*
- * $Id: SystemJavaCompilerAdapter.java,v 1.2 2011-06-12 21:21:58 ball Exp $
+ * $Id: SystemJavaCompilerAdapter.java,v 1.4 2011-06-15 06:28:53 ball Exp $
  *
  * Copyright 2011 Allen D. Ball.  All rights reserved.
  */
@@ -11,10 +11,10 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
-import java.util.TreeMap;
+import java.util.Map;
 import javax.tools.Diagnostic;
-import javax.tools.DiagnosticListener;
 import javax.tools.JavaCompiler;
 import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
@@ -29,40 +29,34 @@ import org.apache.tools.ant.util.FileUtils;
 
 /**
  * {@link CompilerAdapter} implementation for the system
- * {@link JavaCompiler}.
+ * {@link JavaCompiler}.  Subclass implementors will likely only need to
+ * override {@link #compile(StandardJavaFileManager,DiagnosticMap)}.
  *
  * @see ToolProvider#getSystemJavaCompiler()
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.4 $
  */
-public class SystemJavaCompilerAdapter
-             implements CompilerAdapter, CompilerAdapterExtension,
-                        DiagnosticListener<JavaFileObject> {
-    private static final String CARAT = "^";
-    private static final String SPACE = " ";
+public class SystemJavaCompilerAdapter implements CompilerAdapter,
+                                                  CompilerAdapterExtension {
+    /** {@link #CARAT} = {@value #CARAT} */
+    protected static final String CARAT = "^";
+    /** {@link #SPACE} = {@value #SPACE} */
+    protected static final String SPACE = " ";
 
     private Javac task = null;
     private JavaCompiler compiler = null;
-    private StandardJavaFileManager fm = null;
-    private DiagnosticKindCountMap map = null;
 
     /**
      * Sole constructor.
      */
     public SystemJavaCompilerAdapter() { }
 
+    protected Javac getJavac() { return task; }
+
     @Override
-    public void setJavac(Javac task) throws BuildException {
+    public void setJavac(Javac task) {
         this.task = task;
-
-        if (compiler == null) {
-            compiler = ToolProvider.getSystemJavaCompiler();
-
-            if (compiler == null) {
-                throw new BuildException("No system Java compiler");
-            }
-        }
 
         task.add(this);
         task.setCompiler("modern");
@@ -71,65 +65,98 @@ public class SystemJavaCompilerAdapter
     @Override
     public boolean execute() throws BuildException {
         boolean success = false;
+        DiagnosticMap map = new DiagnosticMap();
+        StandardJavaFileManager fm = null;
 
         try {
+            compiler = ToolProvider.getSystemJavaCompiler();
+
+            if (compiler == null) {
+                throw new NullPointerException("No system Java compiler");
+            }
+
             Locale locale = null;
             Charset charset = null;
 
-            if (task.getEncoding() != null) {
-                charset = Charset.forName(task.getEncoding());
+            if (getJavac().getEncoding() != null) {
+                charset = Charset.forName(getJavac().getEncoding());
             }
 
-            map = new DiagnosticKindCountMap();
-
-            fm = compiler.getStandardFileManager(this, locale, charset);
+            fm = compiler.getStandardFileManager(map, locale, charset);
             fm.setLocation(StandardLocation.PLATFORM_CLASS_PATH,
-                           asFileIterable(task, task.getBootclasspath()));
+                           asFileList(getJavac().getBootclasspath()));
             fm.setLocation(StandardLocation.CLASS_PATH,
-                           asFileIterable(task, task.getClasspath()));
+                           asFileList(getJavac().getClasspath()));
             fm.setLocation(StandardLocation.CLASS_OUTPUT,
-                           Arrays.asList(task.getDestdir()));
+                           asFileList(getJavac().getDestdir()));
+            fm.setLocation(StandardLocation.SOURCE_PATH,
+                           asFileList(getJavac().getSrcdir()));
 
-            Iterable<String> options =
-                Arrays.asList(task.getCurrentCompilerArgs());
-            Iterable<? extends JavaFileObject> objects =
-                fm.getJavaFileObjects(task.getFileList());
-
-            success =
-                compiler
-                .getTask(null, fm, this, options, null, objects)
-                .call();
-
-            for (Diagnostic.Kind key : map.keySet()) {
-                int count = map.get(key);
-
-                task.log(count
-                         + SPACE
-                         + key.toString().toLowerCase()
-                         + ((count == 1) ? "" : "s"));
-            }
+            success = compile(fm, map);
         } catch (BuildException exception) {
             throw exception;
         } catch (Throwable throwable) {
             throw new BuildException(throwable);
         } finally {
+            log(map);
+
             try {
                 IOUtil.close(fm);
             } finally {
                 fm = null;
             }
-
-            compiler = null;
         }
 
         return success;
     }
 
-    private Iterable<? extends File> asFileIterable(Javac task, Path path) {
+    /**
+     * Method to do the compilation work.  Subclass implementations should
+     * override this method by first chaining back to the superclass
+     * implementation.
+     * <p>
+     * The {@link StandardJavaFileManager} parameter will have its
+     * {@link StandardLocation#PLATFORM_CLASS_PATH} set to
+     * {@link Javac#getBootclasspath()},
+     * {@link StandardLocation#CLASS_PATH} set to
+     * {@link Javac#getClasspath()}, {@link StandardLocation#CLASS_OUTPUT}
+     * set to {@link Javac#getDestdir()}, and
+     * {@link StandardLocation#SOURCE_PATH} set to
+     * {@link Javac#getSrcdir()}.
+     *
+     * @param   fm              The {@link StandardJavaFileManager}.
+     * @param   map             The {@link DiagnosticMap}.
+     *
+     * @return  {@code true} if the compilation was successful;
+     *          {@code false} otherwise.
+     *
+     * @throws  Throwable       If any problems are encountered in the
+     *                          compilation.
+     */
+    protected boolean compile(StandardJavaFileManager fm,
+                              DiagnosticMap map) throws Throwable {
+        List<String> options =
+            Arrays.asList(getJavac().getCurrentCompilerArgs());
+        Iterable<? extends JavaFileObject> objects =
+            fm.getJavaFileObjects(getJavac().getFileList());
+
+        return compiler.getTask(null, fm, map, options, null, objects).call();
+    }
+
+    /**
+     * Method to convert the argument {@link Path} to a {@link File}
+     * {@link List}.
+     *
+     * @param   path            The {@link Path}.
+     *
+     * @return  The {@link Path} as a {@link File} {@link List} or
+     *          {@code null} if the argument {@link Path} is {@code null}.
+     */
+    protected List<? extends File> asFileList(Path path) {
         File[] files = null;
 
         if (path != null) {
-            File base = task.getProject().getBaseDir();
+            File base = getJavac().getProject().getBaseDir();
             String[] paths = path.list();
 
             files = new File[paths.length];
@@ -140,26 +167,56 @@ public class SystemJavaCompilerAdapter
             }
         }
 
+        return asFileList(files);
+    }
+
+    /**
+     * Method to convert the argument {@link File} array to a {@link File}
+     * {@link List}.
+     *
+     * @param   files           The {@link File} array.
+     *
+     * @return  The {@link File} array as a {@link File} {@link List} or
+     *          {@code null} if the argument {@link File} array is
+     *          {@code null}.
+     */
+    protected List<? extends File> asFileList(File... files) {
         return (files != null) ? Arrays.asList(files) : null;
     }
 
-    @Override
-    public String[] getSupportedFileExtensions() {
-        return new String[] { "java" };
-    }
+    /**
+     * See {@link Javac#log(String)}.
+     */
+    protected void log(String string) { getJavac().log(string); }
 
-    @Override
-    public void report(Diagnostic<? extends JavaFileObject> diagnostic) {
-        map.count(diagnostic.getKind());
-        task.log(String.valueOf(diagnostic));
+    private void log(DiagnosticMap map) {
+        for (Map.Entry<Diagnostic<? extends JavaFileObject>,String> entry :
+                 map.entrySet()) {
+            Diagnostic<? extends JavaFileObject> diagnostic = entry.getKey();
+            String remedy = entry.getValue();
 
-        if (diagnostic.getPosition() != Diagnostic.NOPOS) {
-            String source = source(diagnostic);
+            log(String.valueOf(diagnostic));
 
-            if (source != null) {
-                task.log(source);
-                task.log(pointer(diagnostic));
+            if (diagnostic.getPosition() != Diagnostic.NOPOS) {
+                String source = source(diagnostic);
+
+                if (source != null) {
+                    log(source);
+                    log(pointer(diagnostic));
+                }
             }
+
+            if (remedy != null) {
+                log(remedy);
+            }
+        }
+
+        for (Map.Entry<Diagnostic.Kind,Integer> entry :
+                 map.getKindCountMap().entrySet()) {
+            String kind = entry.getKey().toString().toLowerCase();
+            int count = entry.getValue();
+
+            log(count + SPACE + kind + ((count == 1) ? "" : "s"));
         }
     }
 
@@ -169,7 +226,7 @@ public class SystemJavaCompilerAdapter
 
         try {
             CharSequence sequence =
-                diagnostic.getSource().getCharContent(false);
+                diagnostic.getSource().getCharContent(true);
 
             reader = new CharSequenceReader(sequence);
 
@@ -199,17 +256,9 @@ public class SystemJavaCompilerAdapter
         return buffer.toString();
     }
 
-    private static class DiagnosticKindCountMap
-                         extends TreeMap<Diagnostic.Kind,Integer> {
-        private static final long serialVersionUID = -2282739052913017696L;
-
-        public DiagnosticKindCountMap() { super(); }
-
-        public void count(Diagnostic.Kind key) { count(key, 1); }
-
-        public void count(Diagnostic.Kind key, int count) {
-            put(key, count + (containsKey(key) ? get(key) : 0));
-        }
+    @Override
+    public String[] getSupportedFileExtensions() {
+        return new String[] { "java" };
     }
 }
 /*
