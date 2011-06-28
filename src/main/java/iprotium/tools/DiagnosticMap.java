@@ -1,9 +1,9 @@
 /*
- * $Id: DiagnosticMap.java,v 1.1 2011-06-15 04:37:09 ball Exp $
+ * $Id: DiagnosticMap.java,v 1.1 2011-06-28 04:16:35 ball Exp $
  *
  * Copyright 2011 Allen D. Ball.  All rights reserved.
  */
-package iprotium.util.ant.taskdefs.compilers;
+package iprotium.tools;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -14,8 +14,9 @@ import javax.tools.DiagnosticListener;
 import javax.tools.JavaFileObject;
 
 /**
- * {@link LinkedHashMap} implementation for collecting {@link Diagnostic}s
- * as keys and informational/remedial messages as values.
+ * {@link DiagnosticListener} and {@link LinkedHashMap} implementation for
+ * collecting {@link Diagnostic}s as keys and informational/prescriptive
+ * messages as values.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
  * @version $Revision: 1.1 $
@@ -23,7 +24,7 @@ import javax.tools.JavaFileObject;
 public class DiagnosticMap
              extends LinkedHashMap<Diagnostic<? extends JavaFileObject>,String>
              implements DiagnosticListener<JavaFileObject> {
-    private static final long serialVersionUID = -2617437911573647034L;
+    private static final long serialVersionUID = -8759618649234426395L;
 
     /**
      * Sole constructor.

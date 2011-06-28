@@ -1,5 +1,5 @@
 /*
- * $Id: SystemJavaCompilerAdapter.java,v 1.4 2011-06-15 06:28:53 ball Exp $
+ * $Id: SystemJavaCompilerAdapter.java,v 1.5 2011-06-28 04:20:18 ball Exp $
  *
  * Copyright 2011 Allen D. Ball.  All rights reserved.
  */
@@ -7,6 +7,7 @@ package iprotium.util.ant.taskdefs.compilers;
 
 import iprotium.io.CharSequenceReader;
 import iprotium.io.IOUtil;
+import iprotium.tools.DiagnosticMap;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -35,7 +36,7 @@ import org.apache.tools.ant.util.FileUtils;
  * @see ToolProvider#getSystemJavaCompiler()
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class SystemJavaCompilerAdapter implements CompilerAdapter,
                                                   CompilerAdapterExtension {
