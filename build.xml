@@ -7,15 +7,14 @@
     -----------------
     Java Utilities
 
-    $Id: build.xml,v 1.48 2011-06-13 01:59:58 ball Exp $
+    $Id: build.xml,v 1.49 2011-06-28 04:25:06 ball Exp $
   </description>
 
   <property name="build.properties.file" location="build.properties"/>
   <property file="${build.properties.file}"/>
   <property name="build.sysclasspath"   value="ignore"/>
-  <property
-      name="build.compiler.adapter"
-      value="iprotium.util.ant.taskdefs.compilers.SystemJavaCompilerAdapter"/>
+  <property name="build.compiler.adapter"
+            value="iprotium.util.ant.taskdefs.compilers.LintAdapter"/>
   <available classname="${build.compiler.adapter}"
              property="build.compiler" value="${build.compiler.adapter}"/>
 
@@ -182,6 +181,9 @@
           <attribute name="Implementation-Vendor" value="${vendor}"/>
           <attribute name="Sealed" value="true"/>
         </section>
+        <section name="iprotium/tools/">
+          <attribute name="Sealed" value="true"/>
+        </section>
         <section name="iprotium/util/">
           <attribute name="Extension-Name" value="iprotium.util"/>
           <attribute name="Specification-Title" value="${pom.artifactId}"/>
@@ -197,9 +199,6 @@
           <attribute name="Sealed" value="true"/>
         </section>
         <section name="iprotium/util/ant/taskdefs/compilers/">
-          <attribute name="Sealed" value="true"/>
-        </section>
-        <section name="iprotium/util/ant/taskdefs/lint/">
           <attribute name="Sealed" value="true"/>
         </section>
         <section name="iprotium/util/ant/types/">
@@ -379,16 +378,6 @@
     <link symbolic="true" relative="true" todir="${target.dir}/links">
       <fileset dir="${target.classes.dir}"/>
     </link>
-  </target>
-
-  <target name="lint"
-          description="--> Invokes &lt;lint/&gt; task."
-          depends="classes">
-    <taskdef classpathref="build.classpath"
-             resource="iprotium/util/ant/defaults.properties"/>
-    <lint classpathref="build.classpath" basedir="${target.classes.dir}">
-      <src path="${src.dir}/main/java"/>
-    </lint>
   </target>
 
   <target name="locale-list"
