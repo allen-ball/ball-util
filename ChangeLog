@@ -1,3 +1,8 @@
+2011-06-27  Allen D. Ball  <ball@10-0-1-2.lan>
+
+	* Moved DiagnosticMap from iprotium.util.ant.taskdefs.compilers to
+	iprotium.tools.
+
 2011-06-14  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* DiagnosticMap.java: Initial writing.
