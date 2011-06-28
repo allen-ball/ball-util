@@ -3,6 +3,9 @@
 	* Moved DiagnosticMap from iprotium.util.ant.taskdefs.compilers to
 	iprotium.tools.
 
+	* src/main/java/iprotium/util/ant/taskdefs/compilers/LintAdapter.java:
+	Initial writing.
+
 2011-06-14  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* DiagnosticMap.java: Initial writing.
