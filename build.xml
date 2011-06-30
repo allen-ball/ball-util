@@ -7,7 +7,7 @@
     -----------------
     Java Utilities
 
-    $Id: build.xml,v 1.49 2011-06-28 04:25:06 ball Exp $
+    $Id: build.xml,v 1.50 2011-06-30 03:43:04 ball Exp $
   </description>
 
   <property name="build.properties.file" location="build.properties"/>
@@ -94,6 +94,12 @@
   <target name="jar"
           description="--> Construct iprotium-util.jar."
           depends="buildnumber,classes">
+    <taskdef classpathref="build.classpath"
+             resource="iprotium/util/ant/defaults.properties"/>
+    <provider-file-for
+        classpathref="build.classpath"
+        basedir="${target.classes.dir}"
+        service="iprotium.tools.Remedy"/>
     <jar destfile="${target.dir}/${artifact}">
       <fileset dir="${target.classes.dir}"/>
       <manifest>
@@ -540,4 +546,7 @@
 </project>
 <!--
     $Log: not supported by cvs2svn $
+    Revision 1.49  2011/06/28 04:25:06  ball
+    Replaced LintTask with LintAdapter.
+
   -->
