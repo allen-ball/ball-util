@@ -1,15 +1,14 @@
 /*
- * $Id: SubclassesOfTask.java,v 1.3 2010-08-23 03:43:55 ball Exp $
+ * $Id: SubclassesOfTask.java,v 1.4 2011-06-30 03:37:42 ball Exp $
  *
- * Copyright 2009, 2010 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
-import java.util.Set;
+import iprotium.util.ClassOrder;
 import java.util.TreeSet;
 import org.apache.tools.ant.BuildException;
 
-import static iprotium.util.ClassOrder.NAME;
 import static iprotium.util.ClassUtil.isAbstract;
 
 /**
@@ -18,7 +17,7 @@ import static iprotium.util.ClassUtil.isAbstract;
  * that are subclasses of the specified type.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class SubclassesOfTask extends AbstractClassFileTask {
     private static final String COMMA = ",";
@@ -61,7 +60,7 @@ public class SubclassesOfTask extends AbstractClassFileTask {
 
         try {
             Class<?> supertype = getClass(getType());
-            Set<Class<?>> set = new TreeSet<Class<?>>(NAME);
+            TreeSet<Class<?>> set = new TreeSet<Class<?>>(ClassOrder.NAME);
 
             for (Class<?> type : getMatchingClassFileMap().values()) {
                 if ((! isAbstract(type)) || getIncludeAbstract()) {
@@ -109,4 +108,7 @@ public class SubclassesOfTask extends AbstractClassFileTask {
 }
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.3  2010/08/23 03:43:55  ball
+ * Improved javadoc comments.
+ *
  */
