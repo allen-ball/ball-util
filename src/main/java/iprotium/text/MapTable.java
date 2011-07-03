@@ -1,7 +1,7 @@
 /*
- * $Id: MapTable.java,v 1.3 2010-10-23 21:51:32 ball Exp $
+ * $Id$
  *
- * Copyright 2009, 2010 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.text;
 
@@ -14,7 +14,7 @@ import java.util.Map;
  * @param       <V>     The type of the underlying {@link Map} value.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.3 $
+ * @version $Revision$
  */
 public class MapTable<K,V> extends TextTable {
 
@@ -46,6 +46,3 @@ public class MapTable<K,V> extends TextTable {
         return (MapTableModel) super.getModel();
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

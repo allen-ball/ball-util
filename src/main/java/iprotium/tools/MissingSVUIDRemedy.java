@@ -1,5 +1,5 @@
 /*
- * $Id: MissingSVUIDRemedy.java,v 1.2 2011-06-28 04:53:13 ball Exp $
+ * $Id$
  *
  * Copyright 2011 Allen D. Ball.  All rights reserved.
  */
@@ -27,7 +27,7 @@ import static java.lang.reflect.Modifier.STATIC;
  * {@value CODE} {@link Remedy}.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.2 $
+ * @version $Revision$
  */
 public class MissingSVUIDRemedy extends Remedy {
     protected static final String CODE = "compiler.warn.missing.SVUID";
@@ -95,6 +95,3 @@ public class MissingSVUIDRemedy extends Remedy {
                 + SEMICOLON.lexeme());
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

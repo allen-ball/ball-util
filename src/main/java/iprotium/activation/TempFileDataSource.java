@@ -1,7 +1,7 @@
 /*
- * $Id: TempFileDataSource.java,v 1.2 2010-10-23 21:58:18 ball Exp $
+ * $Id$
  *
- * Copyright 2010 Allen D. Ball.  All rights reserved.
+ * Copyright 2010, 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.activation;
 
@@ -15,7 +15,7 @@ import java.io.IOException;
  * and based on {@link FileInputStream} and {@link FileInputStream}.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.2 $
+ * @version $Revision$
  */
 public class TempFileDataSource extends AbstractDataSource {
     private final String prefix;
@@ -100,6 +100,3 @@ public class TempFileDataSource extends AbstractDataSource {
         super.finalize();
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

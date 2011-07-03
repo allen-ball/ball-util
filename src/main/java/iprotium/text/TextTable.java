@@ -1,7 +1,7 @@
 /*
- * $Id: TextTable.java,v 1.1 2010-10-23 21:48:00 ball Exp $
+ * $Id$
  *
- * Copyright 2009, 2010 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.text;
 
@@ -21,7 +21,7 @@ import static iprotium.util.StringUtil.rtrim;
  * Text-based {@link javax.swing.JTable} implementation.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision$
  */
 public class TextTable extends ReaderWriterDataSource
                        implements TableModelListener {
@@ -176,6 +176,3 @@ public class TextTable extends ReaderWriterDataSource
     @Override
     public void tableChanged(TableModelEvent event) { clear(); }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

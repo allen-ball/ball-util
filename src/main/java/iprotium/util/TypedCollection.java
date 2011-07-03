@@ -1,7 +1,7 @@
 /*
- * $Id: TypedCollection.java,v 1.2 2009-09-04 17:13:43 ball Exp $
+ * $Id$
  *
- * Copyright 2009 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
@@ -17,7 +17,7 @@ import java.util.Iterator;
  *                              {@link Collection} contains.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.2 $
+ * @version $Revision$
  */
 public class TypedCollection<E> extends AbstractCollection<E> {
     private final Class<? extends E> type;
@@ -77,6 +77,3 @@ public class TypedCollection<E> extends AbstractCollection<E> {
         public void remove() { throw new UnsupportedOperationException(); }
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

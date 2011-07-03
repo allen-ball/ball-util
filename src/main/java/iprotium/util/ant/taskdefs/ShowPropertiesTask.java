@@ -1,7 +1,7 @@
 /*
- * $Id: ShowPropertiesTask.java,v 1.10 2010-10-23 22:13:00 ball Exp $
+ * $Id$
  *
- * Copyright 2008 - 2010 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -17,7 +17,7 @@ import org.apache.tools.ant.BuildException;
  * {@link Property} members.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.10 $
+ * @version $Revision$
  */
 public class ShowPropertiesTask extends AbstractClassFileTask {
 
@@ -93,6 +93,3 @@ public class ShowPropertiesTask extends AbstractClassFileTask {
         }
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

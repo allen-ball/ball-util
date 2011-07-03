@@ -1,7 +1,7 @@
 /*
- * $Id: BooleanFactory.java,v 1.1 2010-11-04 02:40:56 ball Exp $
+ * $Id$
  *
- * Copyright 2010 Allen D. Ball.  All rights reserved.
+ * Copyright 2010, 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
@@ -9,7 +9,7 @@ package iprotium.util;
  * {@link Boolean} {@link Factory} implementation.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision$
  */
 public class BooleanFactory extends Factory<Boolean> {
     private static final BooleanFactory DEFAULT = new BooleanFactory();
@@ -26,6 +26,3 @@ public class BooleanFactory extends Factory<Boolean> {
      */
     protected BooleanFactory() { super(Boolean.class); }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

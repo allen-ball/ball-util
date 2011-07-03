@@ -1,7 +1,7 @@
 /*
- * $Id: TimeUnitEnum.java,v 1.4 2009-09-04 17:13:43 ball Exp $
+ * $Id$
  *
- * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
@@ -12,7 +12,7 @@ package iprotium.util;
  * @see java.util.concurrent.TimeUnit
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.4 $
+ * @version $Revision$
  */
 public enum TimeUnitEnum {
     MILLISECOND(1), MILLISECONDS(MILLISECOND),
@@ -71,6 +71,3 @@ public enum TimeUnitEnum {
      */
     public long toMilliseconds() { return toMilliseconds(1); }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

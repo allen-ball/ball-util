@@ -1,7 +1,7 @@
 /*
- * $Id: PatternFilenameFilter.java,v 1.2 2009-11-21 21:40:03 ball Exp $
+ * $Id$
  *
- * Copyright 2009 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.io;
 
@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
  * {@link Pattern} {@link java.io.FilenameFilter} implementation.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.2 $
+ * @version $Revision$
  */
 public class PatternFilenameFilter extends AbstractFilenameFilter {
     private final Pattern pattern;
@@ -50,6 +50,3 @@ public class PatternFilenameFilter extends AbstractFilenameFilter {
         return pattern.matcher(name).matches();
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

@@ -1,7 +1,7 @@
 /*
- * $Id: ArrayOrder.java,v 1.6 2010-09-09 03:17:40 ball Exp $
+ * $Id$
  *
- * Copyright 2008 - 2010 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
@@ -13,7 +13,7 @@ import java.util.Comparator;
  * @param       <T>             The array element type to be compared.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.6 $
+ * @version $Revision$
  */
 public class ArrayOrder<T> extends Order<T[]> {
     private static final long serialVersionUID = 69419214559265223L;
@@ -54,9 +54,3 @@ public class ArrayOrder<T> extends Order<T[]> {
         return difference;
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.5  2010/08/23 03:39:24  ball
- * Element [n] is more significant than element [n - 1].
- *
- */

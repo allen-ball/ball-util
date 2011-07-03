@@ -1,7 +1,7 @@
 /*
- * $Id: FillStringFormat.java,v 1.5 2010-10-23 22:10:52 ball Exp $
+ * $Id$
  *
- * Copyright 2009, 2010 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.text;
 
@@ -12,7 +12,7 @@ import java.text.FieldPosition;
  * "Fill" {@link StringFormat} implementation.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.5 $
+ * @version $Revision$
  */
 public class FillStringFormat extends StringFormat {
     private static final long serialVersionUID = -6988667371376403207L;
@@ -53,6 +53,3 @@ public class FillStringFormat extends StringFormat {
         return StringUtil.fill(sequence, length, character);
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

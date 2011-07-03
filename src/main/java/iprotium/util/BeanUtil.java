@@ -1,7 +1,7 @@
 /*
- * $Id: BeanUtil.java,v 1.4 2010-11-13 21:44:23 ball Exp $
+ * $Id$
  *
- * Copyright 2010 Allen D. Ball.  All rights reserved.
+ * Copyright 2010, 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
@@ -20,7 +20,7 @@ import java.util.Map;
  * {@code Bean} utility methods.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.4 $
+ * @version $Revision$
  */
 public abstract class BeanUtil {
     private BeanUtil() { }
@@ -490,10 +490,3 @@ public abstract class BeanUtil {
         return buffer.toString();
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.3  2010/11/08 02:41:06  ball
- * Propagate PropertyVetoException in set() methods.
- * Honor @ConvertWith annotations when invoking setter methods.
- *
- */

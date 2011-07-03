@@ -1,7 +1,7 @@
 /*
- * $Id: StringUtil.java,v 1.2 2010-10-18 05:04:55 ball Exp $
+ * $Id$
  *
- * Copyright 2010 Allen D. Ball.  All rights reserved.
+ * Copyright 2010, 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
@@ -13,7 +13,7 @@ import static java.lang.Character.isWhitespace;
  * {@link String} utility methods.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.2 $
+ * @version $Revision$
  */
 public abstract class StringUtil {
     private StringUtil() { }
@@ -565,6 +565,3 @@ public abstract class StringUtil {
         return ltrim(rtrim(buffer));
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

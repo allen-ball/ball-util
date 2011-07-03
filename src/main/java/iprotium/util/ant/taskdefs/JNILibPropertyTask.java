@@ -1,5 +1,5 @@
 /*
- * $Id: JNILibPropertyTask.java,v 1.7 2011-06-13 02:23:17 ball Exp $
+ * $Id$
  *
  * Copyright 2009 - 2011 Allen D. Ball.  All rights reserved.
  */
@@ -15,7 +15,7 @@ import org.apache.tools.ant.BuildException;
  * @see Suffix
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.7 $
+ * @version $Revision$
  */
 public abstract class JNILibPropertyTask extends AbstractPropertyTask {
     private static final String DOT = ".";
@@ -76,6 +76,3 @@ public abstract class JNILibPropertyTask extends AbstractPropertyTask {
         protected String getPropertyValue() { return SUFFIX; }
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

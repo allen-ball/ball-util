@@ -1,5 +1,5 @@
 /*
- * $Id: FileImpl.java,v 1.2 2011-05-01 22:58:53 ball Exp $
+ * $Id$
  *
  * Copyright 2010, 2011 Allen D. Ball.  All rights reserved.
  */
@@ -17,7 +17,7 @@ import static iprotium.util.Order.NATURAL;
  * {@link File} implementation.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.2 $
+ * @version $Revision$
  */
 public class FileImpl extends File {
     private static final long serialVersionUID = 2428859525771862331L;
@@ -208,6 +208,3 @@ public class FileImpl extends File {
         return getChildFile(parent, Arrays.asList(names));
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

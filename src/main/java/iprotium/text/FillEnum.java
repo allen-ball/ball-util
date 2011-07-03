@@ -1,7 +1,7 @@
 /*
- * $Id: FillEnum.java,v 1.5 2010-10-23 22:10:52 ball Exp $
+ * $Id$
  *
- * Copyright 2008 - 2010 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.text;
 
@@ -13,7 +13,7 @@ import iprotium.util.StringUtil;
  * @see FillStringFormat#fill(CharSequence,int,char)
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.5 $
+ * @version $Revision$
  */
 public enum FillEnum {
     NONE(new NoFillStringFormat()),
@@ -59,6 +59,3 @@ public enum FillEnum {
         return fill(sequence, length, StringUtil.SPACE);
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

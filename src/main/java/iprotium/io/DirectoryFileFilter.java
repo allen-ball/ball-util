@@ -1,7 +1,7 @@
 /*
- * $Id: DirectoryFileFilter.java,v 1.1 2009-11-15 04:07:48 ball Exp $
+ * $Id$
  *
- * Copyright 2009 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.io;
 
@@ -13,7 +13,7 @@ import java.io.File;
  * @see File#isDirectory()
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision$
  */
 public class DirectoryFileFilter extends AbstractFileFilter {
 
@@ -31,6 +31,3 @@ public class DirectoryFileFilter extends AbstractFileFilter {
     @Override
     public boolean accept(File file) { return file.isDirectory(); }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

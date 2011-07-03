@@ -1,7 +1,7 @@
 /*
- * $Id: Permutations.java,v 1.1 2010-11-22 01:54:11 ball Exp $
+ * $Id$
  *
- * Copyright 2010 Allen D. Ball.  All rights reserved.
+ * Copyright 2010, 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
@@ -21,7 +21,7 @@ import java.util.List;
  *                              {@link Collection} contains.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision$
  */
 public class Permutations<E> implements Iterable<List<E>> {
     protected final List<E> list;
@@ -109,6 +109,3 @@ public class Permutations<E> implements Iterable<List<E>> {
         }
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

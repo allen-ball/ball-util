@@ -1,4 +1,4 @@
-/* $Id: iprotium_util_jni_DIR.c,v 1.1 2010-12-21 17:24:26 ball Exp $ */
+/* $Id$ */
 
 #include "iprotium_util_jni_DIR.h"
 
@@ -57,6 +57,3 @@ Java_iprotium_util_jni_DIR_rewinddir(JNIEnv *env, jobject this) {
 
     rewinddir(dirp);
 }
-/*
- * $Log: not supported by cvs2svn $
- */

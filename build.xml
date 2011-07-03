@@ -7,7 +7,7 @@
     -----------------
     Java Utilities
 
-    $Id: build.xml,v 1.50 2011-06-30 03:43:04 ball Exp $
+    $Id$
   </description>
 
   <property name="build.properties.file" location="build.properties"/>
@@ -544,9 +544,3 @@
   </target>
 
 </project>
-<!--
-    $Log: not supported by cvs2svn $
-    Revision 1.49  2011/06/28 04:25:06  ball
-    Replaced LintTask with LintAdapter.
-
-  -->

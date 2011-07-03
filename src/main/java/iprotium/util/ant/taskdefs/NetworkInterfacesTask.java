@@ -1,5 +1,5 @@
 /*
- * $Id: NetworkInterfacesTask.java,v 1.1 2011-02-13 02:44:52 ball Exp $
+ * $Id$
  *
  * Copyright 2011 Allen D. Ball.  All rights reserved.
  */
@@ -17,7 +17,7 @@ import org.apache.tools.ant.Task;
  * {@link NetworkInterface#getNetworkInterfaces()}.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision$
  */
 public class NetworkInterfacesTask extends Task {
 
@@ -44,6 +44,3 @@ public class NetworkInterfacesTask extends Task {
         }
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

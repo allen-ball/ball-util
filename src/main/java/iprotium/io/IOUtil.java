@@ -1,5 +1,5 @@
 /*
- * $Id: IOUtil.java,v 1.12 2011-05-27 21:38:23 ball Exp $
+ * $Id$
  *
  * Copyright 2008 - 2011 Allen D. Ball.  All rights reserved.
  */
@@ -28,7 +28,7 @@ import java.nio.channels.WritableByteChannel;
  * Provides common I/O utilities implemented as static methods.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.12 $
+ * @version $Revision$
  */
 public abstract class IOUtil {
     private IOUtil() { }
@@ -483,20 +483,3 @@ public abstract class IOUtil {
         touch(System.currentTimeMillis(), files);
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.11  2010/10/29 05:00:53  ball
- * Expose copy(ReadableByteChannel,ByteBuffer,WritableByteChannel)
- * and copy(Readable,CharBuffer,Appendable).
- *
- * Revision 1.10  2010/10/18 05:12:51  ball
- * Added copy(Readable,Appendable) method.
- * Changed close(Closeable) method to close(Object) and added
- * flush(Object) method.
- * In copy() methods, flush output after completing the copy.
- *
- * Revision 1.9  2010/08/21 04:04:01  ball
- * In mkdirs(File...), use File.exists() to verify each directory has
- * been created.
- *
- */

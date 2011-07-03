@@ -1,7 +1,7 @@
 /*
- * $Id: SuperclassSet.java,v 1.3 2009-09-04 17:13:43 ball Exp $
+ * $Id$
  *
- * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
@@ -12,7 +12,7 @@ import java.util.TreeSet;
  * super-interfaces of a {@link Class}.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.3 $
+ * @version $Revision$
  */
 public class SuperclassSet extends TreeSet<Class<?>> {
     private static final long serialVersionUID = -8076508406076608539L;
@@ -45,6 +45,3 @@ public class SuperclassSet extends TreeSet<Class<?>> {
         }
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

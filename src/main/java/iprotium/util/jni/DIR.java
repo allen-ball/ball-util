@@ -1,7 +1,7 @@
 /*
- * $Id: DIR.java,v 1.3 2010-12-21 17:28:02 ball Exp $
+ * $Id$
  *
- * Copyright 2009, 2010 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.jni;
 
@@ -14,7 +14,7 @@ import java.util.NoSuchElementException;
  * See {@link POSIX#opendir(File)}.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.3 $
+ * @version $Revision$
  */
 public class DIR implements Iterable<String>, Closeable {
 
@@ -88,6 +88,3 @@ public class DIR implements Iterable<String>, Closeable {
         }
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

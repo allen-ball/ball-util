@@ -1,7 +1,7 @@
 /*
- * $Id: LinkTask.java,v 1.6 2010-08-23 03:43:55 ball Exp $
+ * $Id$
  *
- * Copyright 2008 - 2010 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -20,7 +20,7 @@ import org.apache.tools.ant.taskdefs.Copy;
  * {@link org.apache.tools.ant.Task} to link a file to a new target.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.6 $
+ * @version $Revision$
  */
 public class LinkTask extends Copy {
     private boolean symbolic = false;
@@ -157,6 +157,3 @@ public class LinkTask extends Copy {
         }
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

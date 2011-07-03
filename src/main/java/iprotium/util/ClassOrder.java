@@ -1,7 +1,7 @@
 /*
- * $Id: ClassOrder.java,v 1.5 2010-11-29 05:20:00 ball Exp $
+ * $Id$
  *
- * Copyright 2008 - 2010 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
@@ -9,7 +9,7 @@ package iprotium.util;
  * Abstract {@link Order} base class for ordering {@link Class} objects.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.5 $
+ * @version $Revision$
  */
 public abstract class ClassOrder extends Order<Class<?>> {
 
@@ -58,6 +58,3 @@ public abstract class ClassOrder extends Order<Class<?>> {
         }
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

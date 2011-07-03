@@ -1,7 +1,7 @@
 /*
- * $Id: ThreadImpl.java,v 1.1 2010-08-26 05:01:37 ball Exp $
+ * $Id$
  *
- * Copyright 2010 Allen D. Ball.  All rights reserved.
+ * Copyright 2010, 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
@@ -10,7 +10,7 @@ package iprotium.util;
  * implementations.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision$
  */
 public abstract class ThreadImpl extends Thread {
     private transient volatile boolean started = false;
@@ -97,6 +97,3 @@ public abstract class ThreadImpl extends Thread {
         public void run() { shutdown(); }
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

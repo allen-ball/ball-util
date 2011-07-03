@@ -1,7 +1,7 @@
 /*
- * $Id: PrimitiveClassMap.java,v 1.1 2010-07-28 05:27:04 ball Exp $
+ * $Id$
  *
- * Copyright 2010 Allen D. Ball.  All rights reserved.
+ * Copyright 2010, 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
@@ -15,7 +15,7 @@ import java.util.TreeMap;
  * {@link Class}es mapped to their respective wrapper {@link Class}es.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision$
  */
 public class PrimitiveClassMap extends TreeMap<Class<?>,Class<?>> {
     private static final long serialVersionUID = -9112243509682936487L;
@@ -40,6 +40,3 @@ public class PrimitiveClassMap extends TreeMap<Class<?>,Class<?>> {
         put(Void.TYPE, Void.class);
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

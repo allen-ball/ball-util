@@ -1,7 +1,7 @@
 /*
- * $Id: JNILDTask.java,v 1.9 2010-12-27 20:34:36 ball Exp $
+ * $Id$
  *
- * Copyright 2008 - 2010 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -14,7 +14,7 @@ import org.apache.tools.ant.BuildException;
  * {@link org.apache.tools.ant.Task} to link JNI shared libraries.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.9 $
+ * @version $Revision$
  */
 public class JNILDTask extends AbstractJNIExecuteOnTask {
     private String libname = null;
@@ -110,6 +110,3 @@ public class JNILDTask extends AbstractJNIExecuteOnTask {
         public Library() { this(null); }
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

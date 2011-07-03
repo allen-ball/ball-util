@@ -1,7 +1,7 @@
 /*
- * $Id: AbstractMatchingTask.java,v 1.7 2010-11-07 22:01:54 ball Exp $
+ * $Id$
  *
- * Copyright 2008 - 2010 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -20,7 +20,7 @@ import org.apache.tools.ant.util.ClasspathUtils;
  * {@link MatchingTask} implementations.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.7 $
+ * @version $Revision$
  */
 public abstract class AbstractMatchingTask extends MatchingTask {
     private boolean initialize = false;
@@ -103,6 +103,3 @@ public abstract class AbstractMatchingTask extends MatchingTask {
         return set;
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

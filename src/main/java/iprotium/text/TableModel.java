@@ -1,7 +1,7 @@
 /*
- * $Id: TableModel.java,v 1.4 2010-09-11 22:11:34 ball Exp $
+ * $Id$
  *
- * Copyright 2009, 2010 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.text;
 
@@ -15,7 +15,7 @@ import javax.swing.table.AbstractTableModel;
  * Abstract text table model base class.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.4 $
+ * @version $Revision$
  */
 public abstract class TableModel extends AbstractTableModel
                                  implements TableModelListener {
@@ -195,6 +195,3 @@ public abstract class TableModel extends AbstractTableModel
         return (sequence != null) ? sequence.length() : 0;
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

@@ -1,5 +1,5 @@
 /*
- * $Id: Shell.java,v 1.1 2011-04-20 01:40:41 ball Exp $
+ * $Id$
  *
  * Copyright 2011 Allen D. Ball.  All rights reserved.
  */
@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
  * Interactive command shell implementation.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision$
  */
 public class Shell implements Runnable {
     private static final Parser PARSER =
@@ -73,6 +73,3 @@ public class Shell implements Runnable {
         public Pattern pattern() { return pattern; }
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

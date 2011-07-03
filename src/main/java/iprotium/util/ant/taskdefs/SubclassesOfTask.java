@@ -1,5 +1,5 @@
 /*
- * $Id: SubclassesOfTask.java,v 1.4 2011-06-30 03:37:42 ball Exp $
+ * $Id$
  *
  * Copyright 2009 - 2011 Allen D. Ball.  All rights reserved.
  */
@@ -17,7 +17,7 @@ import static iprotium.util.ClassUtil.isAbstract;
  * that are subclasses of the specified type.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.4 $
+ * @version $Revision$
  */
 public class SubclassesOfTask extends AbstractClassFileTask {
     private static final String COMMA = ",";
@@ -106,9 +106,3 @@ public class SubclassesOfTask extends AbstractClassFileTask {
         return string;
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.3  2010/08/23 03:43:55  ball
- * Improved javadoc comments.
- *
- */

@@ -1,5 +1,5 @@
 /*
- * $Id: InstanceOfTask.java,v 1.20 2011-06-04 04:01:52 ball Exp $
+ * $Id$
  *
  * Copyright 2008 - 2011 Allen D. Ball.  All rights reserved.
  */
@@ -28,7 +28,7 @@ import org.apache.tools.ant.BuildException;
  * @see Factory
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.20 $
+ * @version $Revision$
  */
 public class InstanceOfTask extends AbstractClasspathTask {
     private String type = String.class.getName();
@@ -181,6 +181,3 @@ public class InstanceOfTask extends AbstractClasspathTask {
         public void exceptionThrown(Exception exception) { clear(); }
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

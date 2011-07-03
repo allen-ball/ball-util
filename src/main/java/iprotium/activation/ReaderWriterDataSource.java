@@ -1,7 +1,7 @@
 /*
- * $Id: ReaderWriterDataSource.java,v 1.9 2010-10-23 22:02:55 ball Exp $
+ * $Id$
  *
- * Copyright 2009, 2010 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.activation;
 
@@ -27,7 +27,7 @@ import java.util.NoSuchElementException;
  * {@link javax.activation.DataSource} {@link OutputStream}.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.9 $
+ * @version $Revision$
  */
 public class ReaderWriterDataSource extends FilterDataSource
                                     implements Iterable<String> {
@@ -238,6 +238,3 @@ public class ReaderWriterDataSource extends FilterDataSource
         public void remove() { throw new UnsupportedOperationException(); }
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

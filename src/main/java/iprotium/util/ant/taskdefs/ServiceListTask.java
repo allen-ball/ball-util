@@ -1,7 +1,7 @@
 /*
- * $Id: ServiceListTask.java,v 1.3 2010-10-23 22:13:00 ball Exp $
+ * $Id$
  *
- * Copyright 2009, 2010 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -16,7 +16,7 @@ import org.apache.tools.ant.BuildException;
  * specified name.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.3 $
+ * @version $Revision$
  */
 public class ServiceListTask extends AbstractClasspathTask {
     private String type = null;
@@ -69,6 +69,3 @@ public class ServiceListTask extends AbstractClasspathTask {
         protected T getValueAt(T row, int x) { return row; }
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

@@ -1,5 +1,5 @@
 /*
- * $Id: Keyword.java,v 1.5 2011-04-25 15:40:41 ball Exp $
+ * $Id$
  *
  * Copyright 2010, 2011 Allen D. Ball.  All rights reserved.
  */
@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
  * Provides Java keywords as an {@link Enum} type.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.5 $
+ * @version $Revision$
  */
 public enum Keyword implements Parser.Lexeme {
     ABSTRACT, ASSERT, BOOLEAN, BREAK, BYTE, CASE, CATCH, CHAR, CLASS, CONST,
@@ -39,6 +39,3 @@ public enum Keyword implements Parser.Lexeme {
     @Override
     public Pattern pattern() { return pattern; }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

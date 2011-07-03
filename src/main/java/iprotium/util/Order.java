@@ -1,7 +1,7 @@
 /*
- * $Id: Order.java,v 1.5 2010-08-23 03:43:54 ball Exp $
+ * $Id$
  *
- * Copyright 2008 - 2010 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
@@ -19,7 +19,7 @@ import java.util.List;
  * @param       <T>             The type to be compared.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.5 $
+ * @version $Revision$
  */
 public abstract class Order<T> implements Comparator<T>, Serializable {
 
@@ -123,6 +123,3 @@ public abstract class Order<T> implements Comparator<T>, Serializable {
         }
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

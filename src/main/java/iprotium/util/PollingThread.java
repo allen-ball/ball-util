@@ -1,7 +1,7 @@
 /*
- * $Id: PollingThread.java,v 1.2 2010-08-26 05:03:14 ball Exp $
+ * $Id$
  *
- * Copyright 2010 Allen D. Ball.  All rights reserved.
+ * Copyright 2010, 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
@@ -10,7 +10,7 @@ package iprotium.util;
  * poll.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.2 $
+ * @version $Revision$
  */
 public abstract class PollingThread extends ThreadImpl {
     private long interval = 0;
@@ -180,6 +180,3 @@ public abstract class PollingThread extends ThreadImpl {
         return (! isShutdown()) && (getRemainingTime() > 0);
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

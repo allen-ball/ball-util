@@ -1,5 +1,5 @@
 /*
- * $Id: Directory.java,v 1.3 2011-05-01 22:58:53 ball Exp $
+ * $Id$
  *
  * Copyright 2010, 2011 Allen D. Ball.  All rights reserved.
  */
@@ -14,7 +14,7 @@ import java.util.Arrays;
  * Directory {@link FileImpl} implementation.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.3 $
+ * @version $Revision$
  */
 public class Directory extends FileImpl {
     private static final long serialVersionUID = -1519925282641191828L;
@@ -125,6 +125,3 @@ public class Directory extends FileImpl {
         return getChildDirectory(parent, Arrays.asList(names));
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

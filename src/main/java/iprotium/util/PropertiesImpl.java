@@ -1,7 +1,7 @@
 /*
- * $Id: PropertiesImpl.java,v 1.1 2010-12-08 07:03:33 ball Exp $
+ * $Id$
  *
- * Copyright 2010 Allen D. Ball.  All rights reserved.
+ * Copyright 2010, 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
@@ -20,7 +20,7 @@ import java.util.Properties;
  * methods to specify the {@link Charset} (as {@code UTF-8}).
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision$
  */
 public class PropertiesImpl extends Properties {
     private static final long serialVersionUID = -8648911923690345842L;
@@ -59,6 +59,3 @@ public class PropertiesImpl extends Properties {
         IOUtil.flush(writer);
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

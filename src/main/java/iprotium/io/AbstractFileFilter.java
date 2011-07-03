@@ -1,7 +1,7 @@
 /*
- * $Id: AbstractFileFilter.java,v 1.2 2009-11-21 21:42:30 ball Exp $
+ * $Id$
  *
- * Copyright 2009 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.io;
 
@@ -15,7 +15,7 @@ import java.util.HashSet;
  * Abstract {@link FileFilter} base class.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.2 $
+ * @version $Revision$
  */
 public abstract class AbstractFileFilter implements FileFilter {
 
@@ -77,6 +77,3 @@ public abstract class AbstractFileFilter implements FileFilter {
         }
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

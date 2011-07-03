@@ -1,4 +1,4 @@
-/* $Id: iprotium_util_UUIDFactory.c,v 1.1 2011-04-24 18:34:45 ball Exp $ */
+/* $Id$ */
 
 #include "iprotium_util_UUIDFactory.h"
 
@@ -31,6 +31,3 @@ Java_iprotium_util_UUIDFactory_uuid_1generate_1time(JNIEnv *env, jclass class,
     uuid_generate_time(out);
     (*env)->SetByteArrayRegion(env, bytes, 0, sizeof out, (jbyte *) out);
 }
-/*
- * $Log: not supported by cvs2svn $
- */

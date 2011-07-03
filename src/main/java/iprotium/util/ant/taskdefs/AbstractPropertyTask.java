@@ -1,5 +1,5 @@
 /*
- * $Id: AbstractPropertyTask.java,v 1.5 2011-06-13 02:21:30 ball Exp $
+ * $Id$
  *
  * Copyright 2011 Allen D. Ball.  All rights reserved.
  */
@@ -12,7 +12,7 @@ import org.apache.tools.ant.BuildException;
  * {@link org.apache.tools.ant.Task}s that may assign property values.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.5 $
+ * @version $Revision$
  */
 public abstract class AbstractPropertyTask extends AbstractClasspathTask {
     private String property = null;
@@ -63,6 +63,3 @@ public abstract class AbstractPropertyTask extends AbstractClasspathTask {
         }
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

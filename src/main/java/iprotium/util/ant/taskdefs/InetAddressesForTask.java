@@ -1,5 +1,5 @@
 /*
- * $Id: InetAddressesForTask.java,v 1.1 2011-02-10 18:12:21 ball Exp $
+ * $Id$
  *
  * Copyright 2011 Allen D. Ball.  All rights reserved.
  */
@@ -16,7 +16,7 @@ import org.apache.tools.ant.Task;
  * {@link InetAddress#getAllByName(String)}.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision$
  */
 public class InetAddressesForTask extends Task {
     private String string = null;
@@ -46,6 +46,3 @@ public class InetAddressesForTask extends Task {
         }
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

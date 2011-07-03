@@ -1,5 +1,5 @@
 /*
- * $Id: Remedy.java,v 1.1 2011-06-28 04:17:40 ball Exp $
+ * $Id$
  *
  * Copyright 2011 Allen D. Ball.  All rights reserved.
  */
@@ -23,7 +23,7 @@ import javax.tools.StandardJavaFileManager;
  * Abstract base class for {@link Diagnostic} remedies.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision$
  */
 public abstract class Remedy {
     private static class Lazy {
@@ -71,6 +71,3 @@ public abstract class Remedy {
                                  StandardJavaFileManager fm,
                                  SortedSet<Class<?>> classes);
 }
-/*
- * $Log: not supported by cvs2svn $
- */

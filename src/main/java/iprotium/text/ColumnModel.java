@@ -1,7 +1,7 @@
 /*
- * $Id: ColumnModel.java,v 1.4 2010-10-23 22:10:52 ball Exp $
+ * $Id$
  *
- * Copyright 2009, 2010 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.text;
 
@@ -18,7 +18,7 @@ import static iprotium.text.FillEnum.RIGHT;
  * @see TableModel
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.4 $
+ * @version $Revision$
  */
 public class ColumnModel {
     private final String name;
@@ -194,6 +194,3 @@ public class ColumnModel {
         return string;
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

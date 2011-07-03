@@ -1,7 +1,7 @@
 /*
- * $Id: BeanMap.java,v 1.11 2010-10-23 22:00:15 ball Exp $
+ * $Id$
  *
- * Copyright 2008 - 2010 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
@@ -21,7 +21,7 @@ import java.util.Set;
  * entries for the {@code bean} properties.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.11 $
+ * @version $Revision$
  */
 public class BeanMap extends AbstractMap<String,Object>
                              implements Serializable {
@@ -173,6 +173,3 @@ public class BeanMap extends AbstractMap<String,Object>
         public String toString() { return getKey() + "=" + getValue(); }
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

@@ -1,7 +1,7 @@
 /*
- * $Id: SimpleTable.java,v 1.3 2010-10-23 21:51:32 ball Exp $
+ * $Id$
  *
- * Copyright 2009, 2010 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.text;
 
@@ -9,7 +9,7 @@ package iprotium.text;
  * Simple {@link TextTable} implementation.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.3 $
+ * @version $Revision$
  */
 public class SimpleTable extends TextTable {
 
@@ -38,6 +38,3 @@ public class SimpleTable extends TextTable {
         return (SimpleTableModel) super.getModel();
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

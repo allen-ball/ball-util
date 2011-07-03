@@ -1,7 +1,7 @@
 /*
- * $Id: ResourceListTask.java,v 1.3 2010-10-23 22:13:00 ball Exp $
+ * $Id$
  *
- * Copyright 2008 - 2010 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -20,7 +20,7 @@ import org.apache.tools.ant.BuildException;
  * specified name.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.3 $
+ * @version $Revision$
  */
 public class ResourceListTask extends AbstractClasspathTask {
     private String name = null;
@@ -71,6 +71,3 @@ public class ResourceListTask extends AbstractClasspathTask {
         protected URL getValueAt(URL row, int x) { return row; }
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

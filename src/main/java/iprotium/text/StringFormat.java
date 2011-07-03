@@ -1,7 +1,7 @@
 /*
- * $Id: StringFormat.java,v 1.3 2010-08-23 03:43:54 ball Exp $
+ * $Id$
  *
- * Copyright 2009, 2010 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.text;
 
@@ -14,7 +14,7 @@ import java.text.ParsePosition;
  * {@link String} {@link Format} base class.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.3 $
+ * @version $Revision$
  */
 public abstract class StringFormat extends Format {
 
@@ -82,6 +82,3 @@ public abstract class StringFormat extends Format {
         return parse(source, pos);
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

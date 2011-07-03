@@ -1,4 +1,4 @@
-/* $Id: jni.c,v 1.1 2009-03-27 13:51:36 ball Exp $ */
+/* $Id$ */
 
 #include <jni.h>
 
@@ -9,6 +9,3 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *jvm, void *reserved) {
 JNIEXPORT void JNICALL JNI_OnUnload(JavaVM *jvm, void *reserved) {
     return;
 }
-/*
- * $Log: not supported by cvs2svn $
- */

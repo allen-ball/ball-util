@@ -1,7 +1,7 @@
 /*
- * $Id: BeanInfoForTask.java,v 1.12 2010-10-23 22:13:00 ball Exp $
+ * $Id$
  *
- * Copyright 2008 - 2010 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -23,7 +23,7 @@ import org.apache.tools.ant.BuildException;
  * specified {@link Class}.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.12 $
+ * @version $Revision$
  */
 public class BeanInfoForTask extends AbstractClasspathTask {
     private String type = null;
@@ -167,6 +167,3 @@ public class BeanInfoForTask extends AbstractClasspathTask {
         }
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

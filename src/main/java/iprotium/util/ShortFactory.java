@@ -1,7 +1,7 @@
 /*
- * $Id: ShortFactory.java,v 1.2 2010-11-16 03:38:02 ball Exp $
+ * $Id$
  *
- * Copyright 2010 Allen D. Ball.  All rights reserved.
+ * Copyright 2010, 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
@@ -11,7 +11,7 @@ import java.lang.reflect.InvocationTargetException;
  * {@link Short} {@link Factory} implementation.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.2 $
+ * @version $Revision$
  */
 public class ShortFactory extends Factory<Short> {
     private static final ShortFactory DEFAULT = new ShortFactory();
@@ -42,6 +42,3 @@ public class ShortFactory extends Factory<Short> {
                     : super.convert(in));
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

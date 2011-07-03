@@ -1,7 +1,7 @@
 /*
- * $Id: FilterDataSource.java,v 1.1 2010-10-23 21:55:38 ball Exp $
+ * $Id$
  *
- * Copyright 2010 Allen D. Ball.  All rights reserved.
+ * Copyright 2010, 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.activation;
 
@@ -16,7 +16,7 @@ import javax.activation.DataSource;
  * {@link DataSource}.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision$
  */
 public abstract class FilterDataSource extends AbstractDataSource {
     private final DataSource ds;
@@ -75,6 +75,3 @@ public abstract class FilterDataSource extends AbstractDataSource {
         return getDataSource().getOutputStream();
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

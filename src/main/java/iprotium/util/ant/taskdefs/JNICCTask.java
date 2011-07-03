@@ -1,7 +1,7 @@
 /*
- * $Id: JNICCTask.java,v 1.8 2010-12-27 20:34:36 ball Exp $
+ * $Id$
  *
- * Copyright 2008 - 2010 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -14,7 +14,7 @@ import org.apache.tools.ant.BuildException;
  * {@link org.apache.tools.ant.Task} to compile JNI shared objects.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.8 $
+ * @version $Revision$
  */
 public class JNICCTask extends AbstractJNIExecuteOnTask {
     private File include = null;
@@ -92,6 +92,3 @@ public class JNICCTask extends AbstractJNIExecuteOnTask {
         public String getValue() { return value; }
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

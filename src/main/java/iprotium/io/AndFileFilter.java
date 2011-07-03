@@ -1,7 +1,7 @@
 /*
- * $Id: AndFileFilter.java,v 1.1 2009-11-16 03:48:25 ball Exp $
+ * $Id$
  *
- * Copyright 2009 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.io;
 
@@ -16,7 +16,7 @@ import java.util.List;
  * Logical "and" {@link java.io.FileFilter} implementation.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision$
  */
 public class AndFileFilter extends AbstractFileFilter {
     private final List<FileFilter> list = new ArrayList<FileFilter>();
@@ -60,6 +60,3 @@ public class AndFileFilter extends AbstractFileFilter {
         return accepted;
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

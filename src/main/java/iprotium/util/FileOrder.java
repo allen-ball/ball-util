@@ -1,7 +1,7 @@
 /*
- * $Id: FileOrder.java,v 1.2 2010-07-28 04:56:50 ball Exp $
+ * $Id$
  *
- * Copyright 2009, 2010 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
@@ -11,7 +11,7 @@ import java.io.File;
  * Abstract {@link Order} base class for ordering {@link File} objects.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.2 $
+ * @version $Revision$
  */
 public abstract class FileOrder extends Order<File> {
 
@@ -76,6 +76,3 @@ public abstract class FileOrder extends Order<File> {
         }
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

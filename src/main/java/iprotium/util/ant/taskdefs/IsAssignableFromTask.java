@@ -1,7 +1,7 @@
 /*
- * $Id: IsAssignableFromTask.java,v 1.7 2010-08-23 03:43:55 ball Exp $
+ * $Id$
  *
- * Copyright 2008 - 2010 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -16,7 +16,7 @@ import static iprotium.util.ClassOrder.INHERITANCE;
  * {@link Class}.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.7 $
+ * @version $Revision$
  */
 public class IsAssignableFromTask extends AbstractClasspathTask {
     private String type = null;
@@ -61,6 +61,3 @@ public class IsAssignableFromTask extends AbstractClasspathTask {
         }
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

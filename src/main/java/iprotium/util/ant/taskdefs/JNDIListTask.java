@@ -1,7 +1,7 @@
 /*
- * $Id: JNDIListTask.java,v 1.6 2010-10-23 22:13:00 ball Exp $
+ * $Id$
  *
- * Copyright 2009, 2010 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -22,7 +22,7 @@ import org.apache.tools.ant.BuildException;
  * @see NamingManager#getInitialContext(Hashtable)
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.6 $
+ * @version $Revision$
  */
 public class JNDIListTask extends AbstractClasspathTask {
 
@@ -106,6 +106,3 @@ public class JNDIListTask extends AbstractClasspathTask {
         }
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

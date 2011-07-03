@@ -1,7 +1,7 @@
 /*
- * $Id: ConverterUtil.java,v 1.1 2010-11-08 02:28:05 ball Exp $
+ * $Id$
  *
- * Copyright 2010 Allen D. Ball.  All rights reserved.
+ * Copyright 2010, 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.beans;
 
@@ -15,7 +15,7 @@ import java.util.TreeMap;
  * {@link Converter} utility methods.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision$
  */
 public abstract class ConverterUtil {
     private static final ConverterMap MAP = new ConverterMap();
@@ -122,6 +122,3 @@ public abstract class ConverterUtil {
         public ConverterMap() { super(Converter.class); }
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

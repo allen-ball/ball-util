@@ -1,7 +1,7 @@
 /*
- * $Id: ISO8601DateFormat.java,v 1.2 2010-08-23 03:43:54 ball Exp $
+ * $Id$
  *
- * Copyright 2009, 2010 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
@@ -22,7 +22,7 @@ import static iprotium.util.TimeUnitEnum.MINUTES;
  * {@link java.text.DateFormat} implementation.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.2 $
+ * @version $Revision$
  */
 public class ISO8601DateFormat extends SimpleDateFormat {
     private static final long serialVersionUID = 3281262236122567400L;
@@ -228,6 +228,3 @@ public class ISO8601DateFormat extends SimpleDateFormat {
         pos.setIndex(pos.getIndex() + length);
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

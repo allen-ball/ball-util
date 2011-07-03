@@ -1,7 +1,7 @@
 /*
- * $Id: AbstractIterator.java,v 1.3 2010-11-22 01:52:24 ball Exp $
+ * $Id$
  *
- * Copyright 2010 Allen D. Ball.  All rights reserved.
+ * Copyright 2010, 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
@@ -16,7 +16,7 @@ import java.util.Iterator;
  *                              {@link Iterator} produces.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.3 $
+ * @version $Revision$
  */
 public abstract class AbstractIterator<E> implements Iterator<E>,
                                                      Iterable<E>,
@@ -54,9 +54,3 @@ public abstract class AbstractIterator<E> implements Iterator<E>,
     @Override
     public final E nextElement() { return next(); }
 }
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.2  2010/11/09 05:46:28  ball
- * Implement Enumeration.
- *
- */

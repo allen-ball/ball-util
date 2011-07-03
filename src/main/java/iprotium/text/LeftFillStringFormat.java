@@ -1,7 +1,7 @@
 /*
- * $Id: LeftFillStringFormat.java,v 1.4 2010-10-23 22:10:52 ball Exp $
+ * $Id$
  *
- * Copyright 2009, 2010 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.text;
 
@@ -11,7 +11,7 @@ import iprotium.util.StringUtil;
  * "Left fill" {@link StringFormat} implementation.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.4 $
+ * @version $Revision$
  */
 public class LeftFillStringFormat extends FillStringFormat {
     private static final long serialVersionUID = -2375631972336108130L;
@@ -33,6 +33,3 @@ public class LeftFillStringFormat extends FillStringFormat {
         return StringUtil.lfill(sequence, length, character);
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

@@ -1,5 +1,5 @@
 /*
- * $Id: AbstractDataSource.java,v 1.7 2011-05-27 21:40:23 ball Exp $
+ * $Id$
  *
  * Copyright 2009 - 2011 Allen D. Ball.  All rights reserved.
  */
@@ -15,7 +15,7 @@ import javax.activation.DataSource;
  * Abstract base class for {@link DataSource} implementations.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.7 $
+ * @version $Revision$
  */
 public class AbstractDataSource implements DataSource {
 
@@ -163,10 +163,3 @@ public class AbstractDataSource implements DataSource {
         throw new UnsupportedOperationException();
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.6  2010/10/18 05:28:03  ball
- * Added clear() and length() methods.
- * Made setName(String) and setContentType(String) methods public.
- *
- */

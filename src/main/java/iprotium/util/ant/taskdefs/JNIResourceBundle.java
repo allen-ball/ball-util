@@ -1,7 +1,7 @@
 /*
- * $Id: JNIResourceBundle.java,v 1.3 2010-08-23 03:43:55 ball Exp $
+ * $Id$
  *
- * Copyright 2009, 2010 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -23,7 +23,7 @@ import java.util.PropertyResourceBundle;
  * @see JNILDTask
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.3 $
+ * @version $Revision$
  */
 public class JNIResourceBundle extends PropertyResourceBundle {
 
@@ -78,6 +78,3 @@ public class JNIResourceBundle extends PropertyResourceBundle {
         return new BufferedInputStream(loader.getResourceAsStream(name));
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

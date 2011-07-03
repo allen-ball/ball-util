@@ -1,7 +1,7 @@
 /*
- * $Id: ByteArrayDataSource.java,v 1.9 2010-10-23 21:58:18 ball Exp $
+ * $Id$
  *
- * Copyright 2009, 2010 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.activation;
 
@@ -14,7 +14,7 @@ import java.io.IOException;
  * {@link ByteArrayInputStream} and {@link ByteArrayInputStream}.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.9 $
+ * @version $Revision$
  */
 public class ByteArrayDataSource extends AbstractDataSource {
     private ByteArrayOutputStream out = null;
@@ -67,6 +67,3 @@ public class ByteArrayDataSource extends AbstractDataSource {
         return out;
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

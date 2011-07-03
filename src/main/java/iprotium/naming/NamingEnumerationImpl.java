@@ -1,7 +1,7 @@
 /*
- * $Id: NamingEnumerationImpl.java,v 1.4 2010-08-23 03:43:54 ball Exp $
+ * $Id$
  *
- * Copyright 2009, 2010 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.naming;
 
@@ -17,7 +17,7 @@ import javax.naming.NamingException;
  *                      {@link NamingEnumeration}.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.4 $
+ * @version $Revision$
  */
 public class NamingEnumerationImpl<T extends NameClassPair>
              extends ArrayList<T> implements NamingEnumeration<T> {
@@ -28,8 +28,8 @@ public class NamingEnumerationImpl<T extends NameClassPair>
     /**
      * Sole constructor.
      *
-     * @param   exception       If non-{@code null}, the {@link
-     *                          NamingException} instance thrown by
+     * @param   exception       If non-{@code null}, the
+     *                          {@link NamingException} instance thrown by
      *                          {@link #hasMore()} when the enumeration is
      *                          exhausted.
      *
@@ -86,6 +86,3 @@ public class NamingEnumerationImpl<T extends NameClassPair>
 
     public T nextElement() { return remove(0); }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

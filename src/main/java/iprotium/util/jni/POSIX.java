@@ -1,7 +1,7 @@
 /*
- * $Id: POSIX.java,v 1.11 2010-12-21 17:28:02 ball Exp $
+ * $Id$
  *
- * Copyright 2008 - 2010 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.jni;
 
@@ -16,7 +16,7 @@ import java.util.ResourceBundle;
  * </a> functions.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.11 $
+ * @version $Revision$
  */
 public abstract class POSIX {
     private static final ResourceBundle BUNDLE =
@@ -83,9 +83,3 @@ public abstract class POSIX {
 
     private static native long opendir(String path);
 }
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.9  2010/07/28 05:04:57  ball
- * Changed readlink(File) method to return FileImpl.
- *
- */

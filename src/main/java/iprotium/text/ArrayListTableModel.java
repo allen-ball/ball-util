@@ -1,7 +1,7 @@
 /*
- * $Id: ArrayListTableModel.java,v 1.4 2009-11-26 20:26:01 ball Exp $
+ * $Id$
  *
- * Copyright 2009 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.text;
 
@@ -15,7 +15,7 @@ import java.util.Collection;
  * @param       <R>     The type of table row.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.4 $
+ * @version $Revision$
  */
 public abstract class ArrayListTableModel<R> extends TableModel {
     private final ArrayList<R> list = new ArrayList<R>();
@@ -70,6 +70,3 @@ public abstract class ArrayListTableModel<R> extends TableModel {
         return getColumnClass(x).cast(getValueAt(list().get(y), x));
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

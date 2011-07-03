@@ -1,7 +1,7 @@
 /*
- * $Id: EditLine.java,v 1.5 2010-12-27 01:57:43 ball Exp $
+ * $Id$
  *
- * Copyright 2010 Allen D. Ball.  All rights reserved.
+ * Copyright 2010, 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.jni;
 
@@ -13,7 +13,7 @@ import java.util.ResourceBundle;
  * editline(3) manual page.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.5 $
+ * @version $Revision$
  */
 public class EditLine {
     private static final ResourceBundle BUNDLE =
@@ -87,6 +87,3 @@ public class EditLine {
     protected void finalize() { end(); }
     private native void end();
 }
-/*
- * $Log: not supported by cvs2svn $
- */

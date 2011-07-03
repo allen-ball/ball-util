@@ -1,7 +1,7 @@
 /*
- * $Id: OpendirTask.java,v 1.6 2010-12-21 17:29:58 ball Exp $
+ * $Id$
  *
- * Copyright 2009, 2010 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -21,7 +21,7 @@ import org.apache.tools.ant.BuildException;
  * @see DIR
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.6 $
+ * @version $Revision$
  */
 public class OpendirTask extends AbstractMatchingTask {
 
@@ -67,6 +67,3 @@ public class OpendirTask extends AbstractMatchingTask {
         public String getValueAt(String row, int x) { return row; }
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

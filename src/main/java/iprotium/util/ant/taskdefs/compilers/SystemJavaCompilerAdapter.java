@@ -1,5 +1,5 @@
 /*
- * $Id: SystemJavaCompilerAdapter.java,v 1.5 2011-06-28 04:20:18 ball Exp $
+ * $Id$
  *
  * Copyright 2011 Allen D. Ball.  All rights reserved.
  */
@@ -36,7 +36,7 @@ import org.apache.tools.ant.util.FileUtils;
  * @see ToolProvider#getSystemJavaCompiler()
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.5 $
+ * @version $Revision$
  */
 public class SystemJavaCompilerAdapter implements CompilerAdapter,
                                                   CompilerAdapterExtension {
@@ -262,6 +262,3 @@ public class SystemJavaCompilerAdapter implements CompilerAdapter,
         return new String[] { "java" };
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

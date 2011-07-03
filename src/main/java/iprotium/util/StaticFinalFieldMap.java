@@ -1,7 +1,7 @@
 /*
- * $Id: StaticFinalFieldMap.java,v 1.2 2010-08-23 03:43:54 ball Exp $
+ * $Id$
  *
- * Copyright 2010 Allen D. Ball.  All rights reserved.
+ * Copyright 2010, 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
@@ -21,7 +21,7 @@ import static iprotium.util.ClassUtil.isStatic;
  * ("{@code public static final}") fields' names to their values.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.2 $
+ * @version $Revision$
  */
 public class StaticFinalFieldMap<T> extends TreeMap<String,T> {
     private static final long serialVersionUID = -6986552313804842052L;
@@ -78,6 +78,3 @@ public class StaticFinalFieldMap<T> extends TreeMap<String,T> {
         return Collections.unmodifiableSortedMap(map);
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

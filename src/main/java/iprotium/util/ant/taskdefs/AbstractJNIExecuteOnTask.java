@@ -1,7 +1,7 @@
 /*
- * $Id: AbstractJNIExecuteOnTask.java,v 1.12 2011-05-01 23:02:11 ball Exp $
+ * $Id$
  *
- * Copyright 2008 - 2010 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -17,7 +17,7 @@ import org.apache.tools.ant.types.Commandline;
  * {@link org.apache.tools.ant.Task} to compile JNI shared objects.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.12 $
+ * @version $Revision$
  */
 public abstract class AbstractJNIExecuteOnTask extends ExecuteOn {
     private static final FileDirBoth FILE = new FileDirBoth();
@@ -207,10 +207,3 @@ public abstract class AbstractJNIExecuteOnTask extends ExecuteOn {
         public int hashCode() { return System.identityHashCode(getName()); }
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.11  2010/12/27 20:34:36  ball
- * Support <define/> to specify CPP defines and <link/> to specify
- * link libraries.
- *
- */

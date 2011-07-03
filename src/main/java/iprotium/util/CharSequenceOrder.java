@@ -1,7 +1,7 @@
 /*
- * $Id: CharSequenceOrder.java,v 1.2 2010-11-27 01:52:58 ball Exp $
+ * $Id$
  *
- * Copyright 2010 Allen D. Ball.  All rights reserved.
+ * Copyright 2010, 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
@@ -16,7 +16,7 @@ package iprotium.util;
  * @see java.util.Set
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.2 $
+ * @version $Revision$
  */
 public abstract class CharSequenceOrder extends Order<CharSequence> {
 
@@ -99,6 +99,3 @@ public abstract class CharSequenceOrder extends Order<CharSequence> {
         }
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

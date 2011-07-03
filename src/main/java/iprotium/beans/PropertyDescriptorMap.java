@@ -1,7 +1,7 @@
 /*
- * $Id: PropertyDescriptorMap.java,v 1.2 2010-11-04 02:20:21 ball Exp $
+ * $Id$
  *
- * Copyright 2010 Allen D. Ball.  All rights reserved.
+ * Copyright 2010, 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.beans;
 
@@ -20,7 +20,7 @@ import java.util.LinkedHashMap;
  * {@link java.beans.BeanInfo#getPropertyDescriptors()}.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.2 $
+ * @version $Revision$
  */
 public class PropertyDescriptorMap
              extends LinkedHashMap<String,PropertyDescriptor> {
@@ -156,6 +156,3 @@ public class PropertyDescriptorMap
         }
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

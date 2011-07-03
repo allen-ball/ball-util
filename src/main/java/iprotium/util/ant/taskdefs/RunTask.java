@@ -1,7 +1,7 @@
 /*
- * $Id: RunTask.java,v 1.2 2010-12-21 16:24:12 ball Exp $
+ * $Id$
  *
- * Copyright 2010 Allen D. Ball.  All rights reserved.
+ * Copyright 2010, 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -13,7 +13,7 @@ import org.apache.tools.ant.BuildException;
  * then invoke its {@link Runnable#run()} method.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.2 $
+ * @version $Revision$
  */
 public class RunTask extends InstanceOfTask {
 
@@ -39,6 +39,3 @@ public class RunTask extends InstanceOfTask {
         }
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

@@ -1,7 +1,7 @@
 /*
- * $Id: BigIntegerFactory.java,v 1.1 2010-11-04 02:40:56 ball Exp $
+ * $Id$
  *
- * Copyright 2010 Allen D. Ball.  All rights reserved.
+ * Copyright 2010, 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
@@ -11,7 +11,7 @@ import java.math.BigInteger;
  * {@link BigInteger} {@link Factory} implementation.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision$
  */
 public class BigIntegerFactory extends Factory<BigInteger> {
     private static final BigIntegerFactory DEFAULT = new BigIntegerFactory();
@@ -28,6 +28,3 @@ public class BigIntegerFactory extends Factory<BigInteger> {
      */
     protected BigIntegerFactory() { super(BigInteger.class); }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

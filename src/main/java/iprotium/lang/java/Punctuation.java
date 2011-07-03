@@ -1,5 +1,5 @@
 /*
- * $Id: Punctuation.java,v 1.2 2011-04-25 15:40:41 ball Exp $
+ * $Id$
  *
  * Copyright 2010, 2011 Allen D. Ball.  All rights reserved.
  */
@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
  * Provides Java punctuation as an {@link Enum} type.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.2 $
+ * @version $Revision$
  */
 public enum Punctuation implements Parser.Lexeme {
     EXCLAMATION("!"), DOUBLE_QUOTE("\""), POUND("#"), DOLLAR("$"),
@@ -40,6 +40,3 @@ public enum Punctuation implements Parser.Lexeme {
     @Override
     public Pattern pattern() { return pattern; }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

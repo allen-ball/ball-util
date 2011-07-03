@@ -1,7 +1,7 @@
 /*
- * $Id: ClassUtil.java,v 1.3 2010-08-23 03:43:54 ball Exp $
+ * $Id$
  *
- * Copyright 2010 Allen D. Ball.  All rights reserved.
+ * Copyright 2010, 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
@@ -12,7 +12,7 @@ import java.lang.reflect.Modifier;
  * {@link Class} utility methods.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.3 $
+ * @version $Revision$
  */
 public abstract class ClassUtil {
     private ClassUtil() { }
@@ -87,6 +87,3 @@ public abstract class ClassUtil {
         return Modifier.isNative(member.getModifiers());
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

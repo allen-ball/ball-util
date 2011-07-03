@@ -1,7 +1,7 @@
 /*
- * $Id: Property.java,v 1.7 2010-08-23 03:43:54 ball Exp $
+ * $Id$
  *
- * Copyright 2008, 2009 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
@@ -21,7 +21,7 @@ import java.util.Set;
  *                              {@link Property}.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.7 $
+ * @version $Revision$
  */
 public abstract class Property<T> implements Comparable<Property<?>> {
     private final String name;
@@ -340,6 +340,3 @@ public abstract class Property<T> implements Comparable<Property<?>> {
         return (prefix != null) ? prefix : "";
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

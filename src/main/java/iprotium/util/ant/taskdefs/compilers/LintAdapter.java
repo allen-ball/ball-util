@@ -1,5 +1,5 @@
 /*
- * $Id: LintAdapter.java,v 1.1 2011-06-28 04:23:22 ball Exp $
+ * $Id$
  *
  * Copyright 2011 Allen D. Ball.  All rights reserved.
  */
@@ -29,7 +29,7 @@ import static javax.tools.StandardLocation.CLASS_PATH;
  * @see Remedy
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision$
  */
 public class LintAdapter extends SystemJavaCompilerAdapter {
     private static final URI FILE = URI.create("file:///");
@@ -101,6 +101,3 @@ public class LintAdapter extends SystemJavaCompilerAdapter {
         }
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

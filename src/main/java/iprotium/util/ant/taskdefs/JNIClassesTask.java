@@ -1,7 +1,7 @@
 /*
- * $Id: JNIClassesTask.java,v 1.9 2010-08-23 03:43:55 ball Exp $
+ * $Id$
  *
- * Copyright 2008 - 2010 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -19,7 +19,7 @@ import static iprotium.util.ClassUtil.isNative;
  * native members.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.9 $
+ * @version $Revision$
  */
 public class JNIClassesTask extends AbstractClassFileTask {
     private static final String COMMA = ",";
@@ -97,6 +97,3 @@ public class JNIClassesTask extends AbstractClassFileTask {
         return string;
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

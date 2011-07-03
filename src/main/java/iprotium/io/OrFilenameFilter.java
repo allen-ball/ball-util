@@ -1,7 +1,7 @@
 /*
- * $Id: OrFilenameFilter.java,v 1.1 2009-11-16 03:48:25 ball Exp $
+ * $Id$
  *
- * Copyright 2009 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.io;
 
@@ -16,7 +16,7 @@ import java.util.List;
  * Logical "or" {@link java.io.FilenameFilter} implementation.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision$
  */
 public class OrFilenameFilter extends AbstractFilenameFilter {
     private final List<FilenameFilter> list = new ArrayList<FilenameFilter>();
@@ -60,6 +60,3 @@ public class OrFilenameFilter extends AbstractFilenameFilter {
         return accepted;
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

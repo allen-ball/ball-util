@@ -1,5 +1,5 @@
 /*
- * $Id: DiagnosticMap.java,v 1.1 2011-06-28 04:16:35 ball Exp $
+ * $Id$
  *
  * Copyright 2011 Allen D. Ball.  All rights reserved.
  */
@@ -19,7 +19,7 @@ import javax.tools.JavaFileObject;
  * messages as values.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision$
  */
 public class DiagnosticMap
              extends LinkedHashMap<Diagnostic<? extends JavaFileObject>,String>
@@ -64,6 +64,3 @@ public class DiagnosticMap
         }
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

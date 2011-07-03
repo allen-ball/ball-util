@@ -1,5 +1,5 @@
 /*
- * $Id: UUIDGenerateTask.java,v 1.1 2011-04-24 19:34:43 ball Exp $
+ * $Id$
  *
  * Copyright 2011 Allen D. Ball.  All rights reserved.
  */
@@ -17,7 +17,7 @@ import org.apache.tools.ant.Task;
  * @see Time
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision$
  */
 public class UUIDGenerateTask extends AbstractPropertyTask {
 
@@ -67,6 +67,3 @@ public class UUIDGenerateTask extends AbstractPropertyTask {
         }
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

@@ -1,7 +1,7 @@
 /*
- * $Id: CombinationsTask.java,v 1.3 2010-11-11 08:39:15 ball Exp $
+ * $Id$
  *
- * Copyright 2010 Allen D. Ball.  All rights reserved.
+ * Copyright 2010, 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -16,7 +16,7 @@ import org.apache.tools.ant.BuildException;
  * {@link Collection}.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.3 $
+ * @version $Revision$
  */
 public abstract class CombinationsTask extends InstanceOfTask {
     private Integer count = null;
@@ -112,6 +112,3 @@ public abstract class CombinationsTask extends InstanceOfTask {
         }
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

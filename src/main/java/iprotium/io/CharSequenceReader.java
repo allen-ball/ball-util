@@ -1,5 +1,5 @@
 /*
- * $Id: CharSequenceReader.java,v 1.1 2011-06-10 05:15:02 ball Exp $
+ * $Id$
  *
  * Copyright 2011 Allen D. Ball.  All rights reserved.
  */
@@ -13,7 +13,7 @@ import java.io.Reader;
  * {@link CharSequence} {@link Reader} implementation.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision$
  */
 public class CharSequenceReader extends LineNumberReader {
 
@@ -117,6 +117,3 @@ public class CharSequenceReader extends LineNumberReader {
         public void close() throws IOException { sequence = null; }
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

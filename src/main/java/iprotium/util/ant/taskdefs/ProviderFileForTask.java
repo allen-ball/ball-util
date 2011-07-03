@@ -1,5 +1,5 @@
 /*
- * $Id: ProviderFileForTask.java,v 1.1 2011-06-30 03:36:44 ball Exp $
+ * $Id$
  *
  * Copyright 2011 Allen D. Ball.  All rights reserved.
  */
@@ -22,7 +22,7 @@ import static iprotium.util.ClassUtil.isAbstract;
  * configuration file.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision$
  */
 public class ProviderFileForTask extends AbstractClassFileTask {
     private static final Charset CHARSET = Charset.forName("UTF-8");
@@ -101,6 +101,3 @@ public class ProviderFileForTask extends AbstractClassFileTask {
         }
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

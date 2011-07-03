@@ -1,7 +1,7 @@
 /*
- * $Id: SequenceIterator.java,v 1.1 2010-11-09 05:27:56 ball Exp $
+ * $Id$
  *
- * Copyright 2010 Allen D. Ball.  All rights reserved.
+ * Copyright 2010, 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
@@ -17,7 +17,7 @@ import java.util.NoSuchElementException;
  *                              {@link Iterator}s produces.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision$
  */
 public class SequenceIterator<E> extends AbstractIterator<E> {
     private final Iterator<Iterable<E>> sequence;
@@ -86,6 +86,3 @@ public class SequenceIterator<E> extends AbstractIterator<E> {
         }
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

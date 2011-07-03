@@ -1,7 +1,7 @@
 /*
- * $Id: PermutationsTask.java,v 1.1 2010-11-22 02:05:54 ball Exp $
+ * $Id$
  *
- * Copyright 2010 Allen D. Ball.  All rights reserved.
+ * Copyright 2010, 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -16,7 +16,7 @@ import org.apache.tools.ant.BuildException;
  * {@link Collection}.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision$
  */
 public abstract class PermutationsTask extends InstanceOfTask {
 
@@ -97,6 +97,3 @@ public abstract class PermutationsTask extends InstanceOfTask {
         }
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

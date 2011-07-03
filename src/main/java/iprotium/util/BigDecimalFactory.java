@@ -1,7 +1,7 @@
 /*
- * $Id: BigDecimalFactory.java,v 1.1 2010-11-04 02:40:56 ball Exp $
+ * $Id$
  *
- * Copyright 2010 Allen D. Ball.  All rights reserved.
+ * Copyright 2010, 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
@@ -11,7 +11,7 @@ import java.math.BigDecimal;
  * {@link BigDecimal} {@link Factory} implementation.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision$
  */
 public class BigDecimalFactory extends Factory<BigDecimal> {
     private static final BigDecimalFactory DEFAULT = new BigDecimalFactory();
@@ -28,6 +28,3 @@ public class BigDecimalFactory extends Factory<BigDecimal> {
      */
     protected BigDecimalFactory() { super(BigDecimal.class); }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

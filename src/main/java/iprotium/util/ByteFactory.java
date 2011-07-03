@@ -1,7 +1,7 @@
 /*
- * $Id: ByteFactory.java,v 1.2 2010-11-16 03:38:02 ball Exp $
+ * $Id$
  *
- * Copyright 2010 Allen D. Ball.  All rights reserved.
+ * Copyright 2010, 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
@@ -11,7 +11,7 @@ import java.lang.reflect.InvocationTargetException;
  * {@link Byte} {@link Factory} implementation.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.2 $
+ * @version $Revision$
  */
 public class ByteFactory extends Factory<Byte> {
     private static final ByteFactory DEFAULT = new ByteFactory();
@@ -42,6 +42,3 @@ public class ByteFactory extends Factory<Byte> {
                     : super.convert(in));
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

@@ -1,4 +1,4 @@
-/* $Id: iprotium_util_jni_POSIX.c,v 1.7 2010-12-21 17:27:58 ball Exp $ */
+/* $Id$ */
 
 #include "iprotium_util_jni_POSIX.h"
 
@@ -64,6 +64,3 @@ Java_iprotium_util_jni_POSIX_opendir(JNIEnv *env, jclass class, jstring from) {
 
     return peer;
 }
-/*
- * $Log: not supported by cvs2svn $
- */

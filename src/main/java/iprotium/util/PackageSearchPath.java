@@ -1,7 +1,7 @@
 /*
- * $Id: PackageSearchPath.java,v 1.4 2010-10-24 20:52:39 ball Exp $
+ * $Id$
  *
- * Copyright 2009, 2010 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
@@ -17,7 +17,7 @@ import java.util.LinkedHashSet;
  *                              path.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.4 $
+ * @version $Revision$
  */
 public class PackageSearchPath<T> extends LinkedHashSet<Package> {
     private static final long serialVersionUID = 637689197393497033L;
@@ -103,6 +103,3 @@ public class PackageSearchPath<T> extends LinkedHashSet<Package> {
         return cls;
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

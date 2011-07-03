@@ -1,7 +1,7 @@
 /*
- * $Id: Converter.java,v 1.1 2010-11-04 02:25:43 ball Exp $
+ * $Id$
  *
- * Copyright 2010 Allen D. Ball.  All rights reserved.
+ * Copyright 2010, 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.beans;
 
@@ -14,7 +14,7 @@ import java.lang.reflect.InvocationTargetException;
  *                              {@link Converter} will target.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision$
  */
 public interface Converter<T> {
 
@@ -56,6 +56,3 @@ public interface Converter<T> {
                                        InvocationTargetException,
                                        NoSuchMethodException;
 }
-/*
- * $Log: not supported by cvs2svn $
- */

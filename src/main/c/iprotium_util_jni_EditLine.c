@@ -1,4 +1,4 @@
-/* $Id: iprotium_util_jni_EditLine.c,v 1.10 2011-02-10 18:16:12 ball Exp $ */
+/* $Id$ */
 
 #include "iprotium_util_jni_EditLine.h"
 #ifndef USE_EDITLINE
@@ -399,9 +399,3 @@ Java_iprotium_util_jni_EditLine_end(JNIEnv *env, jobject this) {
     }
 #endif
 }
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.9  2010/12/27 01:57:36  ball
- * Fallback to GNU Readline if EditLine is not available.
- *
- */

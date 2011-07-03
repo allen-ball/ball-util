@@ -1,5 +1,5 @@
 /*
- * $Id: UUIDFactory.java,v 1.1 2011-04-24 18:34:46 ball Exp $
+ * $Id$
  *
  * Copyright 2011 Allen D. Ball.  All rights reserved.
  */
@@ -15,7 +15,7 @@ import java.util.UUID;
  * of functions.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.1 $
+ * @version $Revision$
  */
 public class UUIDFactory extends Factory<UUID> {
     private static final ResourceBundle BUNDLE =
@@ -93,6 +93,3 @@ public class UUIDFactory extends Factory<UUID> {
 
     private static native void uuid_generate_time(byte[] bytes);
 }
-/*
- * $Log: not supported by cvs2svn $
- */

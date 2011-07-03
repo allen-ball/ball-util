@@ -1,5 +1,5 @@
 /*
- * $Id: SystemLoadLibraryTask.java,v 1.3 2011-06-13 02:24:14 ball Exp $
+ * $Id$
  *
  * Copyright 2010, 2011 Allen D. Ball.  All rights reserved.
  */
@@ -14,7 +14,7 @@ import org.apache.tools.ant.BuildException;
  * @see System#loadLibrary(String)
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.3 $
+ * @version $Revision$
  */
 public class SystemLoadLibraryTask extends AbstractPropertyTask {
     private String libname = null;
@@ -43,6 +43,3 @@ public class SystemLoadLibraryTask extends AbstractPropertyTask {
         return System.mapLibraryName(getLibname());
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

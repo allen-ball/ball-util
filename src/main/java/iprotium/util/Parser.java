@@ -1,7 +1,7 @@
 /*
- * $Id: Parser.java,v 1.3 2010-12-28 01:00:36 ball Exp $
+ * $Id$
  *
- * Copyright 2010 Allen D. Ball.  All rights reserved.
+ * Copyright 2010, 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
  * Parser implementation.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.3 $
+ * @version $Revision$
  */
 public class Parser extends ArrayList<Parser.Lexeme> {
     private static final long serialVersionUID = 53869258989096377L;
@@ -182,6 +182,3 @@ public class Parser extends ArrayList<Parser.Lexeme> {
         }
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */

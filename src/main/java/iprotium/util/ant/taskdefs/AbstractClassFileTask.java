@@ -1,7 +1,7 @@
 /*
- * $Id: AbstractClassFileTask.java,v 1.14 2010-08-23 03:43:54 ball Exp $
+ * $Id$
  *
- * Copyright 2008 - 2010 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2011 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -23,7 +23,7 @@ import org.apache.tools.ant.util.ClasspathUtils;
  * files.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.14 $
+ * @version $Revision$
  */
 public abstract class AbstractClassFileTask extends AbstractMatchingTask {
     private static final String DOT_CLASS = ".class";
@@ -164,6 +164,3 @@ public abstract class AbstractClassFileTask extends AbstractMatchingTask {
         }
     }
 }
-/*
- * $Log: not supported by cvs2svn $
- */
