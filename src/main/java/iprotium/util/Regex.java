@@ -1,5 +1,5 @@
 /*
- * $Id: ConvertWith.java,v 1.2 2010/11/07 21:55:56 ball Exp $
+ * $Id$
  *
  * Copyright 2011 Allen D. Ball.  All rights reserved.
  */
@@ -18,7 +18,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * @see iprotium.annotation.processing.RegexProcessor
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.2 $
+ * @version $Revision$
  */
 @Documented
 @Retention(RUNTIME)

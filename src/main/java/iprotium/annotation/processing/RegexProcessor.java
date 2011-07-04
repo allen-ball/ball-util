@@ -1,5 +1,5 @@
 /*
- * $Id: ClassOrder.java,v 1.5 2010/11/29 05:20:00 ball Exp $
+ * $Id$
  *
  * Copyright 2011 Allen D. Ball.  All rights reserved.
  */
@@ -25,7 +25,7 @@ import static javax.tools.Diagnostic.Kind.ERROR;
  * valid {@link Pattern}s.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 1.5 $
+ * @version $Revision$
  */
 public class RegexProcessor extends AbstractProcessor {
 
