@@ -1,6 +1,6 @@
 $Id$
 
-* Add checks to LintTask:
+* Add checks to iprotium.annotation.processing:
 
         ** Require explicitly declared constructors
         ** Require non-public constructors for abstract classes

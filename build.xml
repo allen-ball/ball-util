@@ -100,6 +100,10 @@
         classpathref="build.classpath"
         basedir="${target.classes.dir}"
         service="iprotium.tools.Remedy"/>
+    <provider-file-for
+        classpathref="build.classpath"
+        basedir="${target.classes.dir}"
+        service="javax.annotation.processing.Processor"/>
     <jar destfile="${target.dir}/${artifact}">
       <fileset dir="${target.classes.dir}"/>
       <manifest>
@@ -113,6 +117,9 @@
           <attribute name="Implementation-Version"
                      value="${pom.version}.${buildnumber.date}"/>
           <attribute name="Implementation-Vendor" value="${vendor}"/>
+          <attribute name="Sealed" value="true"/>
+        </section>
+        <section name="iprotium/annotation/processing/">
           <attribute name="Sealed" value="true"/>
         </section>
         <section name="iprotium/beans/">
