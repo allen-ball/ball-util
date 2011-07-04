@@ -47,7 +47,8 @@ public class RegexProcessor extends AbstractProcessor {
     @Override
     public boolean process(Set<? extends TypeElement> annotations,
                            RoundEnvironment roundEnv) {
-        for (Element element : env.getElementsAnnotatedWith(Regex.class)) {
+        for (Element element :
+                 roundEnv.getElementsAnnotatedWith(Regex.class)) {
             try {
                 Object regex = ((VariableElement) element).getConstantValue();
 
