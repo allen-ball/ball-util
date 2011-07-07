@@ -129,7 +129,8 @@ public class BeanInfoForTask extends AbstractClasspathTask {
 
         public BeanPropertyTableModel(PropertyDescriptor[] rows) {
             super(Arrays.asList(rows),
-                  "Property Name", "Mode", "Type", "isBound", "isConstrained");
+                  "Name", "Mode", "Type",
+                  "isHidden", "isBound", "isConstrained");
         }
 
         @Override
@@ -151,10 +152,14 @@ public class BeanInfoForTask extends AbstractClasspathTask {
                 break;
 
             case 3:
-                value = row.isBound();
+                value = row.isHidden();
                 break;
 
             case 4:
+                value = row.isBound();
+                break;
+
+            case 5:
                 value = row.isConstrained();
                 break;
             }
