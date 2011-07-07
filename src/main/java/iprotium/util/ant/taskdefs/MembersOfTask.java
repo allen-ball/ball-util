@@ -5,7 +5,9 @@
  */
 package iprotium.util.ant.taskdefs;
 
-import java.lang.reflect.Member;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import org.apache.tools.ant.BuildException;
 
 /**
@@ -38,16 +40,20 @@ public class MembersOfTask extends AbstractClasspathTask {
 
             log(String.valueOf(type));
 
-            for (Member member : type.getDeclaredConstructors()) {
-                log(String.valueOf(member));
+            for (Constructor constructor : type.getDeclaredConstructors()) {
+                log(constructor.toGenericString());
             }
 
-            for (Member member : type.getDeclaredFields()) {
-                log(String.valueOf(member));
+            for (Field field : type.getDeclaredFields()) {
+                log(field.toGenericString());
             }
 
-            for (Member member : type.getDeclaredMethods()) {
-                log(String.valueOf(member));
+            for (Method method : type.getDeclaredMethods()) {
+                log(method.toGenericString());
+            }
+
+            for (Class<?> cls : type.getDeclaredClasses()) {
+                log(cls.toString());
             }
         } catch (BuildException exception) {
             throw exception;

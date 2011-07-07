@@ -3,6 +3,9 @@
 	* src/main/java/iprotium/util/ant/taskdefs/BeanInfoForTask.java:
 	Added "isHidden" column to bean property table.
 
+	* src/main/java/iprotium/util/ant/taskdefs/MembersOfTask.java:
+	Use toGenericString() methods for output.
+
 2011-07-04  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* Added javax.annotation.processing.Processor implementations in
