@@ -15,19 +15,28 @@ import java.util.regex.Pattern;
  * @version $Revision$
  */
 public enum Punctuation implements Parser.Lexeme {
-    EXCLAMATION("!"), DOUBLE_QUOTE("\""), POUND("#"), DOLLAR("$"),
-        PERCENT("%"), AMPERSAND("&"), RIGHT_QUOTE("'"), LP("("), RP(")"),
-        ASTERISK("*"), PLUS("+"), COMMA(","), HYPHEN("-"), PERIOD("."),
-        SLASH("/"), COLON(":"), SEMICOLON(";"), LT("<"), EQUALS("="), GT(">"),
-        QUESTION("?"), AT("@"), LBK("["), BACKSLASH("\\"), RBK("]"),
-        CARET("^"), LEFT_QUOTE("`"), LBC("{"), PIPE("|"), RBC("}"), TILDE("~");
+    EXCLAMATION('!'), DOUBLE_QUOTE('"'), POUND('#'), DOLLAR('$'),
+        PERCENT('%'), AMPERSAND('&'), RIGHT_QUOTE('\''), LP('('), RP(')'),
+        ASTERISK('*'), PLUS('+'), COMMA(','), HYPHEN('-'), PERIOD('.'),
+        SLASH('/'), COLON(':'), SEMICOLON(';'), LT('<'), EQUALS('='), GT('>'),
+        QUESTION('?'), AT('@'), LBK('['), BACKSLASH('\\'), RBK(']'),
+        CARET('^'), LEFT_QUOTE('`'), LBC('{'), PIPE('|'), RBC('}'), TILDE('~'),
+        SPACE(' ', "[\\p{Space}]+");
 
     private final String lexeme;
     private final Pattern pattern;
 
-    private Punctuation(String lexeme) {
+    private Punctuation(char character) {
+        this(character, Pattern.quote(String.valueOf(character)));
+    }
+
+    private Punctuation(char character, String regex) {
+        this(String.valueOf(character), regex);
+    }
+
+    private Punctuation(String lexeme, String regex) {
         this.lexeme = lexeme;
-        this.pattern = Pattern.compile(Pattern.quote(lexeme));
+        this.pattern = Pattern.compile(regex);
     }
 
     /**
