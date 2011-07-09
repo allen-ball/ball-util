@@ -1,5 +1,8 @@
 2011-07-09  Allen D. Ball  <ball@10-0-1-2.lan>
 
+	* src/main/java/iprotium/lang/java/Punctuation.java:
+	Added SPACE member.
+
 	* src/main/java/iprotium/tools/CannotResolveLocationRemedy.java:
 	Initial writing.
 
