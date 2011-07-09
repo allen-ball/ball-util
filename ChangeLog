@@ -1,3 +1,9 @@
+2011-07-08  Allen D. Ball  <ball@10-0-1-2.lan>
+
+	* Renamed ConvertWithProcessor to DefaultProcessor and claim
+	annotations that would otherwise cause "warning: No processor
+	claimed any of these annotations" messages.
+
 2011-07-06  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* src/main/java/iprotium/util/ant/taskdefs/BeanInfoForTask.java:
