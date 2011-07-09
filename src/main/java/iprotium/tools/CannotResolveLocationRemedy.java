@@ -16,6 +16,7 @@ import javax.tools.StandardJavaFileManager;
 
 import static iprotium.lang.java.Keyword.IMPORT;
 import static iprotium.lang.java.Punctuation.SEMICOLON;
+import static iprotium.lang.java.Punctuation.SPACE;
 
 /**
  * {@value CODE} {@link Remedy}.
@@ -27,11 +28,9 @@ public class CannotResolveLocationRemedy extends Remedy {
     protected static final String CODE = "compiler.err.cant.resolve.location";
 
     @Regex
-    private final String REGEX =
+    private static final String REGEX =
         "(?m)^symbol[\\p{Space}]*:[\\p{Space}]*class[\\p{Space}]+([\\p{Graph}]+)$";
     private final Pattern PATTERN = Pattern.compile(REGEX);
-
-    private static final String SPACE = " ";
 
     /**
      * Sole constructor.
@@ -69,7 +68,8 @@ public class CannotResolveLocationRemedy extends Remedy {
 
         if (type != null) {
             remedy =
-                IMPORT.lexeme() + SPACE + type.getName() + SEMICOLON.lexeme();
+                IMPORT.lexeme() + SPACE.lexeme()
+                + type.getName() + SEMICOLON.lexeme();
         }
 
         return remedy;

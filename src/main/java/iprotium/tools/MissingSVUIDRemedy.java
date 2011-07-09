@@ -17,6 +17,7 @@ import javax.tools.StandardLocation;
 
 import static iprotium.lang.java.Punctuation.EQUALS;
 import static iprotium.lang.java.Punctuation.SEMICOLON;
+import static iprotium.lang.java.Punctuation.SPACE;
 import static iprotium.util.ClassUtil.isAbstract;
 import static iprotium.util.ClassUtil.isStatic;
 import static java.lang.reflect.Modifier.FINAL;
@@ -38,8 +39,6 @@ public class MissingSVUIDRemedy extends Remedy {
     private static final Class<?> TYPE = Long.TYPE;
     private static final String L = "L";
 
-    private static final String SPACE = " ";
-
     /**
      * Sole constructor.
      */
@@ -57,7 +56,9 @@ public class MissingSVUIDRemedy extends Remedy {
         String name = fm.inferBinaryName(StandardLocation.SOURCE_PATH, source);
         int start = message.lastIndexOf(name);
         int end =
-            (start >= 0) ? message.indexOf(SPACE, start) : message.length();
+            (start >= 0)
+                ? message.indexOf(SPACE.lexeme(), start)
+                : message.length();
 
         if (start >= 0 && end > start) {
             name = message.substring(start, end);
@@ -88,10 +89,11 @@ public class MissingSVUIDRemedy extends Remedy {
         return remedy;
     }
 
-    protected String getDeclaration(long serialVersionUID) {
-        return (Modifier.toString(MODIFIERS) + SPACE + TYPE.getName()
-                + SPACE + SERIALVERSIONUID + SPACE + EQUALS.lexeme()
-                + SPACE + String.valueOf(serialVersionUID) + L
+    private String getDeclaration(long serialVersionUID) {
+        return (Modifier.toString(MODIFIERS) + SPACE.lexeme() + TYPE.getName()
+                + SPACE.lexeme() + SERIALVERSIONUID
+                + SPACE.lexeme() + EQUALS.lexeme()
+                + SPACE.lexeme() + String.valueOf(serialVersionUID) + L
                 + SEMICOLON.lexeme());
     }
 }
