@@ -1,3 +1,8 @@
+2011-07-09  Allen D. Ball  <ball@10-0-1-2.lan>
+
+	* src/main/java/iprotium/tools/CannotResolveLocationRemedy.java:
+	Initial writing.
+
 2011-07-08  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* Renamed ConvertWithProcessor to DefaultProcessor and claim
