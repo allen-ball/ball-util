@@ -45,22 +45,23 @@ public class SystemJavaCompilerAdapter implements CompilerAdapter,
     /** {@link #SPACE} = {@value #SPACE} */
     protected static final String SPACE = " ";
 
-    private Javac task = null;
-    private JavaCompiler compiler = null;
+    private Javac javac = null;
+    protected JavaCompiler compiler = null;
+    protected JavaCompiler.CompilationTask task = null;
 
     /**
      * Sole constructor.
      */
     public SystemJavaCompilerAdapter() { }
 
-    protected Javac getJavac() { return task; }
+    protected Javac getJavac() { return javac; }
 
     @Override
-    public void setJavac(Javac task) {
-        this.task = task;
+    public void setJavac(Javac javac) {
+        this.javac = javac;
 
-        task.add(this);
-        task.setCompiler("modern");
+        javac.add(this);
+        javac.setCompiler("modern");
     }
 
     @Override
@@ -141,7 +142,9 @@ public class SystemJavaCompilerAdapter implements CompilerAdapter,
         Iterable<? extends JavaFileObject> objects =
             fm.getJavaFileObjects(getJavac().getFileList());
 
-        return compiler.getTask(null, fm, map, options, null, objects).call();
+        task = compiler.getTask(null, fm, map, options, null, objects);
+
+        return task.call();
     }
 
     /**
