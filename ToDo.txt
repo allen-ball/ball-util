@@ -1,5 +1,8 @@
 $Id$
 
+* Reimplement IOUtil.copy(FileChannel,FileChannel) so it respects and updates
+  the FileChannels' positions.
+
 * Add checks to iprotium.annotation.processing:
 
         ** Require explicitly declared constructors

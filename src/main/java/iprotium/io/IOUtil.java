@@ -20,7 +20,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.channels.Channels;
-import java.nio.channels.FileChannel;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.WritableByteChannel;
 
@@ -163,11 +162,7 @@ public abstract class IOUtil {
      */
     public static void copy(ReadableByteChannel in,
                             WritableByteChannel out) throws IOException {
-        if (in instanceof FileChannel && out instanceof FileChannel) {
-            copy((FileChannel) in, (FileChannel) out);
-        } else {
-            copy(in, ByteBuffer.allocate(32 * 1024), out);
-        }
+        copy(in, ByteBuffer.allocate(32 * 1024), out);
     }
 
     /**
@@ -197,24 +192,6 @@ public abstract class IOUtil {
             } else {
                 break;
             }
-        }
-    }
-
-    /**
-     * Method to copy the contents of a {@link FileChannel} to another
-     * {@link FileChannel}.
-     *
-     * @param   in              The input {@link FileChannel}.
-     * @param   out             The output {@link FileChannel}.
-     *
-     * @throws  IOException     If an I/O error occurs.
-     */
-    public static void copy(FileChannel in,
-                            FileChannel out) throws IOException {
-        long count = in.size();
-
-        if (out.transferFrom(in, 0, count) != count) {
-            throw new EOFException();
         }
     }
 
