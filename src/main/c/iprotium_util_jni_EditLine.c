@@ -17,33 +17,30 @@
 
 static const char POINTER_FIELD_NAME[] = "pointer";
 static const char LONG_SIGNATURE[] = "J";
+
+struct rl_t {
 #if USE_EDITLINE
-struct clientdata_t {
-    JNIEnv *env;
-    jobject object;
     char prompt[256];
     char rprompt[256];
     History *hist;
+#else
+    char *rl_readline_name;
+#endif
 };
 
+#if USE_EDITLINE
 static const char *prompt(EditLine *el) {
-    struct clientdata_t *clientdata = NULL;
+    struct rl_t *clientdata = NULL;
 
     el_get(el, EL_CLIENTDATA, &clientdata);
-
-    JNIEnv *env = clientdata->env;
-    jobject this = clientdata->object;
 
     return clientdata->prompt;
 }
 
 static const char *rprompt(EditLine *el) {
-    struct clientdata_t *clientdata = NULL;
+    struct rl_t *clientdata = NULL;
 
     el_get(el, EL_CLIENTDATA, &clientdata);
-
-    JNIEnv *env = clientdata->env;
-    jobject this = clientdata->object;
 
     return clientdata->rprompt;
 }
@@ -72,12 +69,6 @@ static void setPointer(JNIEnv *env, jobject object, EditLine *el) {
     (*env)->SetLongField(env, object, fieldID, peer);
 }
 #else
-struct rl_t {
-    JNIEnv *env;
-    jobject object;
-    char *rl_readline_name;
-};
-
 static jfieldID getPointerFieldID(JNIEnv *env, jobject object) {
     jclass class = (*env)->GetObjectClass(env, object);
 
@@ -89,7 +80,7 @@ static struct rl_t *getPointer(JNIEnv *env, jobject object) {
     jlong peer = (*env)->GetLongField(env, object, fieldID);
     struct rl_t *rl = NULL;
 
-    memcpy(&rl, &peer, sizeof(char *));
+    memcpy(&rl, &peer, sizeof(struct rl_t *));
 
     return rl;
 }
@@ -98,7 +89,7 @@ static void setPointer(JNIEnv *env, jobject object, struct rl_t *rl) {
     jfieldID fieldID = getPointerFieldID(env, object);
     jlong peer = 0;
 
-    memcpy(&peer, &rl, sizeof(char *));
+    memcpy(&peer, &rl, sizeof(struct rl_t *));
     (*env)->SetLongField(env, object, fieldID, peer);
 }
 #endif
@@ -113,11 +104,8 @@ Java_iprotium_util_jni_EditLine_init(JNIEnv *env, jobject this,
     FILE *ferr = fdopen(2, "w");
     EditLine *el = el_init(prog, fin, fout, ferr);
 
-    struct clientdata_t *clientdata =
-        (struct clientdata_t *) malloc(sizeof(struct clientdata_t));
+    struct rl_t *clientdata = (struct rl_t *) malloc(sizeof(struct rl_t));
 
-    clientdata->env = env;
-    clientdata->object = this;
     snprintf(clientdata->prompt, sizeof clientdata->prompt, "%s> ", prog);
     snprintf(clientdata->rprompt, sizeof clientdata->rprompt, "");
     clientdata->hist = history_init();
@@ -138,8 +126,6 @@ Java_iprotium_util_jni_EditLine_init(JNIEnv *env, jobject this,
 #else
     struct rl_t *rl = (struct rl_t *) malloc(sizeof(struct rl_t));
 
-    rl->env = env;
-    rl->object = this;
     rl->rl_readline_name = strdup(prog);
 
     setPointer(env, this, rl);
@@ -155,7 +141,7 @@ Java_iprotium_util_jni_EditLine_readline(JNIEnv *env, jobject this,
         (string != NULL) ? (*env)->GetStringUTFChars(env, string, 0) : NULL;
 #if USE_EDITLINE
     EditLine *el = getPointer(env, this);
-    struct clientdata_t *clientdata = NULL;
+    struct rl_t *clientdata = NULL;
 
     el_get(el, EL_CLIENTDATA, &clientdata);
 
@@ -211,7 +197,7 @@ Java_iprotium_util_jni_EditLine_add_1history(JNIEnv *env, jobject this,
 #if USE_EDITLINE
         EditLine *el = getPointer(env, this);
 
-        struct clientdata_t *clientdata = NULL;
+        struct rl_t *clientdata = NULL;
 
         el_get(el, EL_CLIENTDATA, &clientdata);
 
@@ -366,7 +352,7 @@ Java_iprotium_util_jni_EditLine_end(JNIEnv *env, jobject this) {
     setPointer(env, this, NULL);
 
     if (el != NULL) {
-        struct clientdata_t *clientdata = NULL;
+        struct rl_t *clientdata = NULL;
 
         el_get(el, EL_CLIENTDATA, &clientdata);
 
