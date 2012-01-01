@@ -1,3 +1,9 @@
+2012-01-01  Allen D. Ball  <ball@10-0-1-2.lan>
+
+	* src/main/c/iprotium_util_jni_EditLine.c:
+	Use common struct rl_t for both editline and readline
+	implementations.
+
 2011-07-09  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* src/main/java/iprotium/lang/java/Punctuation.java:
