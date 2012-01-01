@@ -158,6 +158,12 @@
         <section name="iprotium/lang/java/">
           <attribute name="Sealed" value="true"/>
         </section>
+        <section name="iprotium/lang/lisp/">
+          <attribute name="Sealed" value="true"/>
+        </section>
+        <section name="iprotium/lang/lisp/scheme/">
+          <attribute name="Sealed" value="true"/>
+        </section>
         <section name="iprotium/naming/">
           <attribute name="Extension-Name" value="iprotium.naming"/>
           <attribute name="Specification-Title" value="${pom.artifactId}"/>
