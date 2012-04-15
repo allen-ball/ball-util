@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2010, 2011 Allen D. Ball.  All rights reserved.
+ * Copyright 2010 - 2012 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.jni;
 
@@ -10,7 +10,7 @@ import java.util.ResourceBundle;
 
 /**
  * Provides wrappers to the native EditLine (libedit) functions.  See the
- * editline(3) manual page.
+ * {@code editline(3)} manual page.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
  * @version $Revision$
@@ -27,7 +27,7 @@ public class EditLine {
     private volatile long pointer = 0;
 
     /**
-     * See the el_init(3) manual page.
+     * See the {@code el_init(3)} manual page.
      *
      * @param   prog            The name of the invoking command.
      */
@@ -47,36 +47,36 @@ public class EditLine {
     public native void add_history(String line);
 
     /**
-     * See the el_reset(3) manual page.
+     * See the {@code el_reset(3)} manual page.
      */
     protected native void reset();
 
     /**
-     * See the el_gets(3) manual page.
+     * See the {@code el_gets(3)} manual page.
      */
     protected native String gets();
 
     /**
-     * See the el_getc(3) manual page.
+     * See the {@code el_getc(3)} manual page.
      */
     protected native int getc();
 
     /**
-     * See the el_push(3) manual page.
+     * See the {@code el_push(3)} manual page.
      *
      * @param   string          The argument {@link String}.
      */
     protected native void push(String string);
 
     /**
-     * See the el_parse(3) manual page.
+     * See the {@code el_parse(3)} manual page.
      *
      * @param   argv            The argument {@code argv}.
      */
     protected native int parse(String[] argv);
 
     /**
-     * See the el_source(3) manual page.
+     * See the {@code el_source(3)} manual page.
      *
      * @param   file            The {@link File} to source.
      */
