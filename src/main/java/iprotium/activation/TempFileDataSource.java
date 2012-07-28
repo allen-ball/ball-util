@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2010, 2011 Allen D. Ball.  All rights reserved.
+ * Copyright 2010 - 2012 Allen D. Ball.  All rights reserved.
  */
 package iprotium.activation;
 
@@ -12,7 +12,7 @@ import java.io.IOException;
 
 /**
  * {@link javax.activation.DataSource} backed by a temporary {@link File}
- * and based on {@link FileInputStream} and {@link FileInputStream}.
+ * and based on {@link FileInputStream} and {@link FileOutputStream}.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
  * @version $Revision$
