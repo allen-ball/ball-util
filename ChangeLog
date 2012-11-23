@@ -1,6 +1,7 @@
 2012-11-23  Allen D. Ball  <ball@10-0-1-2.lan>
 
-	* src/main/java/iprotium/tools/javadoc/LinkRFCTaglet.java:
+	* src/main/java/iprotium/tools/javadoc/LinkManTaglet.java,
+	src/main/java/iprotium/tools/javadoc/LinkRFCTaglet.java:
 	Initial writing.
 
 2012-01-01  Allen D. Ball  <ball@10-0-1-2.lan>
