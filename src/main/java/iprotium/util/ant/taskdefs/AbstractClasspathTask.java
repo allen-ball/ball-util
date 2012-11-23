@@ -5,7 +5,6 @@
  */
 package iprotium.util.ant.taskdefs;
 
-import iprotium.util.PrimitiveClassMap;
 import java.util.Collections;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -24,9 +23,6 @@ import org.apache.tools.ant.util.ClasspathUtils;
  * @version $Revision$
  */
 public abstract class AbstractClasspathTask extends Task {
-    private static final SortedMap<String,Class<?>> JAVA_PRIMITIVE_MAP =
-        Collections.unmodifiableSortedMap(new JavaPrimitiveMap());
-
     private boolean initialize = false;
     private ClasspathUtils.Delegate delegate = null;
 
@@ -77,24 +73,6 @@ public abstract class AbstractClasspathTask extends Task {
     protected static Class<?> getClass(String name,
                                        boolean initialize, ClassLoader loader)
             throws ClassNotFoundException {
-        Class<?> type = JAVA_PRIMITIVE_MAP.get(name);
-
-        if (type == null) {
-            type = Class.forName(name, initialize, loader);
-        }
-
-        return type;
-    }
-
-    public static class JavaPrimitiveMap extends TreeMap<String,Class<?>> {
-        private static final long serialVersionUID = -4043723550289168765L;
-
-        public JavaPrimitiveMap() {
-            super();
-
-            for (Class<?> type : PrimitiveClassMap.INSTANCE.keySet()) {
-                put(type.getName(), type);
-            }
-        }
+        return Class.forName(name, initialize, loader);
     }
 }
