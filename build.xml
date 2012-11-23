@@ -96,14 +96,10 @@
           depends="buildnumber,classes">
     <taskdef classpathref="build.classpath"
              resource="iprotium/util/ant/defaults.properties"/>
-    <provider-file-for
-        classpathref="build.classpath"
-        basedir="${target.classes.dir}"
-        service="iprotium.tools.Remedy"/>
-    <provider-file-for
-        classpathref="build.classpath"
-        basedir="${target.classes.dir}"
-        service="javax.annotation.processing.Processor"/>
+    <provider-file-for basedir="${target.classes.dir}"
+                       service="iprotium.tools.Remedy"/>
+    <provider-file-for basedir="${target.classes.dir}"
+                       service="javax.annotation.processing.Processor"/>
     <jar destfile="${target.dir}/${artifact}">
       <fileset dir="${target.classes.dir}"/>
       <manifest>
@@ -201,6 +197,9 @@
           <attribute name="Sealed" value="true"/>
         </section>
         <section name="iprotium/tools/">
+          <attribute name="Sealed" value="true"/>
+        </section>
+        <section name="iprotium/tools/javadoc/">
           <attribute name="Sealed" value="true"/>
         </section>
         <section name="iprotium/util/">
