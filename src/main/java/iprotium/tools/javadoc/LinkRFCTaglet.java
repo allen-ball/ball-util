@@ -1,5 +1,5 @@
 /*
- * $Id: Remedy.java 679 2011-07-03 06:21:47Z ball $
+ * $Id$
  *
  * Copyright 2012 Allen D. Ball.  All rights reserved.
  */
