@@ -7,15 +7,16 @@ package iprotium.tools.javadoc;
 
 import com.sun.javadoc.Tag;
 import com.sun.tools.doclets.Taglet;
+import java.net.URI;
 import java.util.Map;
 
 /**
  * Inline {@link Taglet} providing links to external RFCs.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
- * @version $Revision: 679 $
+ * @version $Revision$
  */
-public class LinkRFCTaglet implements Taglet {
+public class LinkRFCTaglet extends AbstractTaglet {
     public static void register(Map<String,Taglet> map) {
         Taglet taglet = new LinkRFCTaglet();
         String key = taglet.getName();
@@ -27,34 +28,9 @@ public class LinkRFCTaglet implements Taglet {
     /**
      * Sole constructor.
      */
-    public LinkRFCTaglet() { }
-
-    @Override
-    public String getName() { return "link.rfc"; }
-
-    @Override
-    public boolean isInlineTag() { return true; }
-
-    @Override
-    public boolean inPackage() { return true; }
-
-    @Override
-    public boolean inOverview() { return true; }
-
-    @Override
-    public boolean inField() { return true; }
-
-    @Override
-    public boolean inConstructor() { return true; }
-
-    @Override
-    public boolean inMethod() { return true; }
-
-    @Override
-    public boolean inType() { return true; }
-
-    @Override
-    public String toString(Tag[] tags) { return null; }
+    public LinkRFCTaglet() {
+        super("link.rfc", true, true, true, true, true, true, true);
+    }
 
     @Override
     public String toString(Tag tag) {
@@ -63,13 +39,11 @@ public class LinkRFCTaglet implements Taglet {
 
         try {
             int rfc = Integer.valueOf(in);
-            String link =
-                "http://www.ietf.org/rfc/rfc"
-                + String.valueOf(rfc) + ".txt";
 
-            out = "<a href=\"" + link  + "\">"
-                + "RFC " + String.valueOf(rfc)
-                + "</a>";
+            out =
+                a("RFC " + String.valueOf(rfc),
+                  new URI("http", "www.ietf.org",
+                          "/rfc/rfc" + String.valueOf(rfc) + ".txt", null));
         } catch (Exception exception) {
         }
 
