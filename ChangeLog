@@ -1,3 +1,8 @@
+2012-11-23  Allen D. Ball  <ball@10-0-1-2.lan>
+
+	* src/main/java/iprotium/tools/javadoc/LinkRFCTaglet.java:
+	Initial writing.
+
 2012-01-01  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* src/main/c/iprotium_util_jni_EditLine.c:
@@ -397,8 +402,7 @@
 	* src/main/java/iprotium/util/Order.java:
 	Added Natural inner class and NATURAL member.
 
-	* src/main/java/iprotium/util/PrimitiveClassMap.java,
-	src/main/java/iprotium/util/StaticFinalFieldMap.java:
+	* src/main/java/iprotium/util/StaticFinalFieldMap.java:
 	Initial writing.
 
 2010-07-26  Allen D. Ball  <ball@10-0-1-2.lan>
