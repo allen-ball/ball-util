@@ -6,6 +6,7 @@
 package iprotium.tools;
 
 import java.io.ObjectStreamClass;
+import java.io.Serializable;
 import java.lang.reflect.Modifier;
 import java.util.Collections;
 import java.util.Locale;
@@ -30,10 +31,12 @@ import static java.lang.reflect.Modifier.STATIC;
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
  * @version $Revision$
  */
-public class MissingSVUIDRemedy extends Remedy {
+public class MissingSVUIDRemedy extends Remedy implements Serializable {
+    private static final long serialVersionUID = -3988651530852465744L;
+
     protected static final String CODE = "compiler.warn.missing.SVUID";
 
-    private static final String SERIALVERSIONUID = "serialVersionUID";
+    private static final String SVUID = "serialVersionUID";
 
     private static final int MODIFIERS = PRIVATE | STATIC | FINAL;
     private static final Class<?> TYPE = Long.TYPE;
@@ -60,7 +63,7 @@ public class MissingSVUIDRemedy extends Remedy {
                 ? message.indexOf(SPACE.lexeme(), start)
                 : message.length();
 
-        if (start >= 0 && end > start) {
+        if (0 <= start && start < end) {
             name = message.substring(start, end);
         }
 
@@ -91,7 +94,7 @@ public class MissingSVUIDRemedy extends Remedy {
 
     private String getDeclaration(long serialVersionUID) {
         return (Modifier.toString(MODIFIERS) + SPACE.lexeme() + TYPE.getName()
-                + SPACE.lexeme() + SERIALVERSIONUID
+                + SPACE.lexeme() + SVUID
                 + SPACE.lexeme() + EQUALS.lexeme()
                 + SPACE.lexeme() + String.valueOf(serialVersionUID) + L
                 + SEMICOLON.lexeme());
