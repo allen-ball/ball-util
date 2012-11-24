@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2011 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2012 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -12,6 +12,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import org.apache.tools.ant.AntClassLoader;
 import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.taskdefs.optional.depend.ClassFileUtils;
 import org.apache.tools.ant.types.Path;
 import org.apache.tools.ant.types.Reference;
 import org.apache.tools.ant.types.selectors.FileSelector;
@@ -88,7 +89,7 @@ public abstract class AbstractClassFileTask extends AbstractMatchingTask {
                 name = name.substring(0, name.length() - DOT_CLASS.length());
             }
 
-            name = name.replaceAll("[/]", ".");
+            name = ClassFileUtils.convertSlashName(name);
 
             try {
                 map.put(file, getClass(name));
@@ -134,7 +135,7 @@ public abstract class AbstractClassFileTask extends AbstractMatchingTask {
             }
 
             String child =
-                type.getCanonicalName().replaceAll("[.]", File.separator)
+                ClassFileUtils.convertDotName(type.getCanonicalName())
                 + DOT_JAVA;
 
             for (String parent : srcPath.list()) {
@@ -156,7 +157,7 @@ public abstract class AbstractClassFileTask extends AbstractMatchingTask {
                   + ": " + message);
     }
 
-    private static class ClassFileSelector implements FileSelector {
+    protected class ClassFileSelector implements FileSelector {
         public ClassFileSelector() { }
 
         public boolean isSelected(File basedir, String name, File file) {
