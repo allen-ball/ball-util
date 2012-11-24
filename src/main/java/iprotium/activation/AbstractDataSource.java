@@ -20,27 +20,23 @@ import javax.activation.DataSource;
 public class AbstractDataSource implements DataSource {
 
     /**
-     * <a href="http://www.ietf.org/rfc/rfc2045.txt">RFC 2045</a>
-     * {@value #CONTENT_TYPE}
+     * {@link.rfc 2045} {@value #CONTENT_TYPE}
      */
     public static final String CONTENT_TYPE = "Content-Type";
 
     /**
-     * <a href="http://www.ietf.org/rfc/rfc2045.txt">RFC 2045</a>
-     * {@value #APPLICATION_OCTET_STREAM}
+     * {@link.rfc 2045} {@value #APPLICATION_OCTET_STREAM}
      */
     public static final String APPLICATION_OCTET_STREAM =
         "application/octet-stream";
 
     /**
-     * <a href="http://www.ietf.org/rfc/rfc2045.txt">RFC 2045</a>
-     * {@value #TEXT_PLAIN}
+     * {@link.rfc 2045} {@value #TEXT_PLAIN}
      */
     public static final String TEXT_PLAIN = "text/plain";
 
     /**
-     * <a href="http://www.ietf.org/rfc/rfc2045.txt">RFC 2045</a>
-     * {@value #TEXT_HTML}
+     * {@link.rfc 2045} {@value #TEXT_HTML}
      */
     public static final String TEXT_HTML = "text/html";
 
