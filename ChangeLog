@@ -1,5 +1,7 @@
 2012-11-23  Allen D. Ball  <ball@10-0-1-2.lan>
 
+	* Use link.man and link.rfc javadoc annotations.
+
 	* src/main/java/iprotium/tools/javadoc/LinkManTaglet.java,
 	src/main/java/iprotium/tools/javadoc/LinkRFCTaglet.java:
 	Initial writing.
