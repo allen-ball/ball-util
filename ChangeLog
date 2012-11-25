@@ -2,6 +2,7 @@
 
 	* src/main/java/iprotium/util/ant/taskdefs/AbstractClassFileTask.java:
 	Use org.apache.tools.ant.taskdefs.optional.depend.ClassFileUtils.
+	Re-factored as a subclass of AbstractClasspathTask.
 
 	* src/main/java/iprotium/util/ant/taskdefs/AbstractClasspathTask.java:
 	Removed support for `initialize' attribute and getClass(String)
