@@ -91,6 +91,9 @@
     </jni-classes>
     <provider-file-for classpathref="build.classpath"
                        basedir="${target.classes.dir}"
+                       service="com.sun.tools.doclets.Taglet"/>
+    <provider-file-for classpathref="build.classpath"
+                       basedir="${target.classes.dir}"
                        service="iprotium.tools.Remedy"/>
     <provider-file-for classpathref="build.classpath"
                        basedir="${target.classes.dir}"
