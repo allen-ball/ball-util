@@ -258,9 +258,6 @@
 	src/main/java/iprotium/util/LongFactory.java:
 	Override convert(Object) to use static decode(String) method.
 
-	* src/main/java/iprotium/util/ant/taskdefs/AbstractMatchingTask.java:
-	Added classpath support (see AbstractClasspathTask).
-
 	* src/main/java/iprotium/util/ant/taskdefs/InstanceOfTask.java:
 	Track changes to the Factory API.
 
