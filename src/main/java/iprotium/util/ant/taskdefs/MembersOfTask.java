@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2011 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2012 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -36,7 +36,7 @@ public class MembersOfTask extends AbstractClasspathTask {
         }
 
         try {
-            Class<?> type = getClass(getType());
+            Class<?> type = Class.forName(getType(), false, getClassLoader());
 
             log(String.valueOf(type));
 

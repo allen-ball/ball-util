@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2011 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2012 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -39,7 +39,7 @@ public class SuperclassesOfTask extends AbstractClasspathTask {
         }
 
         try {
-            Class type = getClass(getType());
+            Class<?> type = Class.forName(getType(), false, getClassLoader());
 
             for (Class<?> superclass :
                      INHERITANCE.asList(new SuperclassSet(type))) {

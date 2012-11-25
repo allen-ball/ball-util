@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2011 Allen D. Ball.  All rights reserved.
+ * Copyright 2011, 2012 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -60,10 +60,16 @@ public class ProviderFileForTask extends AbstractClassFileTask {
         PrintWriter out = null;
 
         try {
-            Class<?> service = getClass(getService());
+            Class<?> service = null;
             TreeSet<Class<?>> set = new TreeSet<Class<?>>(ClassOrder.NAME);
 
-            for (Class<?> type : getMatchingClassFileMap().values()) {
+            for (Class<?> type : getClassSet()) {
+                if (service == null) {
+                    service =
+                        Class.forName(getService(),
+                                      false, type.getClassLoader());
+                }
+
                 if (service.isAssignableFrom(type)) {
                     if (! isAbstract(type)) {
                         set.add(type);

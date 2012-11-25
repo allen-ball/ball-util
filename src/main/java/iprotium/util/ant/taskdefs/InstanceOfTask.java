@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2011 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2012 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -53,12 +53,8 @@ public class InstanceOfTask extends AbstractClasspathTask {
 
     @Override
     public void execute() throws BuildException {
-        ClassLoader loader = Thread.currentThread().getContextClassLoader();
-
         try {
-            Thread.currentThread().setContextClassLoader(getClassLoader());
-
-            Class<?> type = getClass(getType());
+            Class<?> type = Class.forName(getType(), false, getClassLoader());
 
             log(type.getName());
 
@@ -67,7 +63,9 @@ public class InstanceOfTask extends AbstractClasspathTask {
 
             for (Argument argument : list) {
                 Factory<?> factory =
-                    new Factory<Object>(getClass(argument.getType()));
+                    new Factory<Object>(Class.forName(argument.getType(),
+                                                      false,
+                                                      type.getClassLoader()));
 
                 parameters.add(factory.getType());
                 arguments.add(factory.getInstance(argument.getValue()));
@@ -120,8 +118,6 @@ public class InstanceOfTask extends AbstractClasspathTask {
         } catch (Exception exception) {
             exception.printStackTrace();
             throw new BuildException(exception);
-        } finally {
-            Thread.currentThread().setContextClassLoader(loader);
         }
     }
 

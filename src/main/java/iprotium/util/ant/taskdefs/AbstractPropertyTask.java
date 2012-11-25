@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2011 Allen D. Ball.  All rights reserved.
+ * Copyright 2011, 2012 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -36,11 +36,8 @@ public abstract class AbstractPropertyTask extends AbstractClasspathTask {
     public void execute() throws BuildException {
         String key = getProperty();
         String value = null;
-        ClassLoader loader = Thread.currentThread().getContextClassLoader();
 
         try {
-            Thread.currentThread().setContextClassLoader(getClassLoader());
-
             value = getPropertyValue();
         } catch (BuildException exception) {
             throw exception;
@@ -50,8 +47,6 @@ public abstract class AbstractPropertyTask extends AbstractClasspathTask {
             if (key == null) {
                 throw new BuildException(throwable);
             }
-        } finally {
-            Thread.currentThread().setContextClassLoader(loader);
         }
 
         if (key != null) {

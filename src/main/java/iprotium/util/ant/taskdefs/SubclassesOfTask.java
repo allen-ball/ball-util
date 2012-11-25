@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2009 - 2011 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2012 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -59,10 +59,11 @@ public class SubclassesOfTask extends AbstractClassFileTask {
         }
 
         try {
-            Class<?> supertype = getClass(getType());
+            Class<?> supertype =
+                Class.forName(getType(), false, getClassLoader());
             TreeSet<Class<?>> set = new TreeSet<Class<?>>(ClassOrder.NAME);
 
-            for (Class<?> type : getMatchingClassFileMap().values()) {
+            for (Class<?> type : getClassSet()) {
                 if ((! isAbstract(type)) || getIncludeAbstract()) {
                     if (supertype.isAssignableFrom(type)) {
                         set.add(type);
@@ -75,7 +76,7 @@ public class SubclassesOfTask extends AbstractClassFileTask {
                     getProject().setProperty(getProperty(), toString(set));
                 } else {
                     for (Class<?> subtype : set) {
-                        log(subtype.getName());
+                        log(toString(subtype));
                     }
                 }
             }
@@ -100,9 +101,13 @@ public class SubclassesOfTask extends AbstractClassFileTask {
                 }
             }
 
-            string += type.getName();
+            string += toString(type);
         }
 
         return string;
+    }
+
+    private String toString(Class<?> type) {
+        return (type != null) ? type.getCanonicalName() : null;
     }
 }

@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2009 - 2011 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2012 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -37,7 +37,8 @@ public class ServiceListTask extends AbstractClasspathTask {
 
         try {
             Class<? extends Object> service =
-                getClass(getType()).asSubclass(Object.class);
+                Class.forName(getType(), false, getClassLoader())
+                .asSubclass(Object.class);
             ServiceLoader<? extends Object> loader =
                 ServiceLoader.load(service, service.getClassLoader());
 

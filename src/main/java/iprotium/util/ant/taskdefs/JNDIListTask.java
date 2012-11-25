@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2009 - 2011 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2012 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -33,11 +33,7 @@ public class JNDIListTask extends AbstractClasspathTask {
 
     @Override
     public void execute() throws BuildException {
-        ClassLoader loader = Thread.currentThread().getContextClassLoader();
-
         try {
-            Thread.currentThread().setContextClassLoader(getClassLoader());
-
             log(getContext(null));
         } catch (BuildException exception) {
             throw exception;
@@ -47,8 +43,6 @@ public class JNDIListTask extends AbstractClasspathTask {
         } catch (Exception exception) {
             exception.printStackTrace();
             throw new BuildException(exception);
-        } finally {
-            Thread.currentThread().setContextClassLoader(loader);
         }
     }
 

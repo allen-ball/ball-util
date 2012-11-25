@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2011 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2012 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -43,7 +43,9 @@ public class BeanInfoForTask extends AbstractClasspathTask {
         }
 
         try {
-            log(Introspector.getBeanInfo(getClass(getType())));
+            log(Introspector.getBeanInfo(Class.forName(getType(),
+                                                       false,
+                                                       getClassLoader())));
         } catch (BuildException exception) {
             throw exception;
         } catch (RuntimeException exception) {

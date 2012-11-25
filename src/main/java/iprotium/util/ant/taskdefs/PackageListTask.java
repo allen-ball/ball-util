@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2009 - 2011 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2012 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -44,7 +44,7 @@ public class PackageListTask extends AbstractClassFileTask {
 
         Set<String> set = new TreeSet<String>();
 
-        for (Class<?> type : getMatchingClassFileMap().values()) {
+        for (Class<?> type : getClassSet()) {
             set.add(type.getPackage().getName());
         }
 

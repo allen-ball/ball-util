@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2011 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2012 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -48,7 +48,7 @@ public class JNIClassesTask extends AbstractClassFileTask {
 
         Set<Class<?>> set = new TreeSet<Class<?>>(NAME);
 
-        for (Class<?> type : getMatchingClassFileMap().values()) {
+        for (Class<?> type : getClassSet()) {
             if (hasNative(type.getDeclaredConstructors())
                 || hasNative(type.getDeclaredFields())
                 || hasNative(type.getDeclaredMethods())) {

@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2011 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2012 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -31,7 +31,7 @@ public class ShowPropertiesTask extends AbstractClassFileTask {
         super.execute();
 
         try {
-            for (Class type : getMatchingClassFileMap().values()) {
+            for (Class type : getClassSet()) {
                 Collection<Property> collection =
                     Property.getStaticPropertyFields(type);
 

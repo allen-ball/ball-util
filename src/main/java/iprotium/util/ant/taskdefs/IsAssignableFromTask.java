@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2011 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2012 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -44,8 +44,10 @@ public class IsAssignableFromTask extends AbstractClasspathTask {
         }
 
         try {
-            Class<?> supertype = getClass(getType());
-            Class<?> subtype = getClass(getSubtype());
+            Class<?> supertype =
+                Class.forName(getType(), false, getClassLoader());
+            Class<?> subtype =
+                Class.forName(getSubtype(), false, supertype.getClassLoader());
 
             log(supertype.getName() + " is "
                 + (supertype.isAssignableFrom(subtype) ? "" : "not ")
