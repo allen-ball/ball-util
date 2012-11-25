@@ -3,6 +3,10 @@
 	* src/main/java/iprotium/util/ant/taskdefs/AbstractClassFileTask.java:
 	Use org.apache.tools.ant.taskdefs.optional.depend.ClassFileUtils.
 
+	* src/main/java/iprotium/util/ant/taskdefs/AbstractClasspathTask.java:
+	Removed support for `initialize' attribute and getClass(String)
+	and getClass(String,boolean,ClassLoader) methods.
+
 2012-11-23  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* Use link.man and link.rfc javadoc annotations.
