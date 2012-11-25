@@ -89,17 +89,17 @@
                  basedir="${target.classes.dir}" property="jni.classes">
       <src path="${src.dir}/main/java"/>
     </jni-classes>
+    <provider-file-for classpathref="build.classpath"
+                       basedir="${target.classes.dir}"
+                       service="iprotium.tools.Remedy"/>
+    <provider-file-for classpathref="build.classpath"
+                       basedir="${target.classes.dir}"
+                       service="javax.annotation.processing.Processor"/>
   </target>
 
   <target name="jar"
           description="--> Construct iprotium-util.jar."
           depends="buildnumber,classes">
-    <taskdef classpathref="build.classpath"
-             resource="iprotium/util/ant/defaults.properties"/>
-    <provider-file-for basedir="${target.classes.dir}"
-                       service="iprotium.tools.Remedy"/>
-    <provider-file-for basedir="${target.classes.dir}"
-                       service="javax.annotation.processing.Processor"/>
     <jar destfile="${target.dir}/${artifact}">
       <fileset dir="${target.classes.dir}"/>
       <manifest>
