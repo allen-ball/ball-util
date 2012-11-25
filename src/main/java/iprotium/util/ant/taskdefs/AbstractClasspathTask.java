@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2011 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2012 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -23,18 +23,12 @@ import org.apache.tools.ant.util.ClasspathUtils;
  * @version $Revision$
  */
 public abstract class AbstractClasspathTask extends Task {
-    private boolean initialize = false;
     private ClasspathUtils.Delegate delegate = null;
 
     /**
      * Sole constructor.
      */
     protected AbstractClasspathTask() { super(); }
-
-    protected boolean getInitialize() { return initialize; }
-    public void setInitialize(boolean initialize) {
-        this.initialize = initialize;
-    }
 
     public void setClasspathRef(Reference reference) {
         delegate.setClasspathref(reference);
@@ -61,18 +55,8 @@ public abstract class AbstractClasspathTask extends Task {
 
         AntClassLoader loader = (AntClassLoader) delegate.getClassLoader();
 
-        loader.setParent(Thread.currentThread().getContextClassLoader());
+        loader.setParent(getClass().getClassLoader());
 
         return loader;
-    }
-
-    protected Class<?> getClass(String name) throws ClassNotFoundException {
-        return getClass(name, getInitialize(), getClassLoader());
-    }
-
-    protected static Class<?> getClass(String name,
-                                       boolean initialize, ClassLoader loader)
-            throws ClassNotFoundException {
-        return Class.forName(name, initialize, loader);
     }
 }
