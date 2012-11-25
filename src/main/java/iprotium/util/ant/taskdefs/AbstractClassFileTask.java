@@ -5,18 +5,15 @@
  */
 package iprotium.util.ant.taskdefs;
 
+import iprotium.util.ClassOrder;
 import java.io.File;
-import java.lang.reflect.Member;
-import java.lang.reflect.Modifier;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import org.apache.tools.ant.AntClassLoader;
+import java.util.Set;
+import java.util.TreeSet;
 import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.taskdefs.optional.depend.ClassFile;
 import org.apache.tools.ant.taskdefs.optional.depend.ClassFileUtils;
+import org.apache.tools.ant.taskdefs.optional.depend.DirectoryIterator;
 import org.apache.tools.ant.types.Path;
-import org.apache.tools.ant.types.Reference;
-import org.apache.tools.ant.types.selectors.FileSelector;
-import org.apache.tools.ant.util.ClasspathUtils;
 
 /**
  * Abstract base class for <a href="http://ant.apache.org/">Ant</a>
@@ -26,12 +23,10 @@ import org.apache.tools.ant.util.ClasspathUtils;
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
  * @version $Revision$
  */
-public abstract class AbstractClassFileTask extends AbstractMatchingTask {
-    private static final String DOT_CLASS = ".class";
+public abstract class AbstractClassFileTask extends AbstractClasspathTask {
     private static final String DOT_JAVA = ".java";
 
-    private boolean initialize = false;
-    private ClasspathUtils.Delegate delegate = null;
+    private File basedir = null;
     private Path srcPath = null;
 
     /**
@@ -39,10 +34,8 @@ public abstract class AbstractClassFileTask extends AbstractMatchingTask {
      */
     protected AbstractClassFileTask() { super(); }
 
-    protected boolean getInitialize() { return initialize; }
-    public void setInitialize(boolean initialize) {
-        this.initialize = initialize;
-    }
+    protected File getBasedir() { return basedir; }
+    public void setBasedir(File basedir) { this.basedir = basedir; }
 
     protected Path getSrcdir() { return srcPath; }
     public void setSrcdir(Path srcdir) {
@@ -53,12 +46,6 @@ public abstract class AbstractClassFileTask extends AbstractMatchingTask {
         }
     }
 
-    public void setClasspathRef(Reference reference) {
-        delegate.setClasspathref(reference);
-    }
-
-    public Path createClasspath() { return delegate.createClasspath(); }
-
     public Path createSrc() {
         if (srcPath == null) {
             srcPath = new Path(getProject());
@@ -68,62 +55,37 @@ public abstract class AbstractClassFileTask extends AbstractMatchingTask {
     }
 
     @Override
-    public void init() throws BuildException {
-        super.init();
-
-        if (delegate == null) {
-            delegate = ClasspathUtils.getDelegate(this);
+    public void execute() throws BuildException {
+        if (getBasedir() == null) {
+            setBasedir(getProject().resolveFile("."));
         }
-
-        add(new ClassFileSelector());
     }
 
-    protected Map<File,Class> getMatchingClassFileMap() throws BuildException {
-        Map<File,Class> map = new LinkedHashMap<File,Class>();
+    protected Set<Class<?>> getClassSet() throws BuildException {
+        TreeSet<Class<?>> set = new TreeSet<Class<?>>(ClassOrder.NAME);
 
-        for (File file : getMatchingFileSet()) {
-            String name =
-                getBasedir().toURI().relativize(file.toURI()).toString();
+        try {
+            DirectoryIterator iterator =
+                new DirectoryIterator(getBasedir(), true);
+            ClassLoader loader = getClassLoader();
+            ClassFile file = null;
 
-            if (name.toLowerCase().endsWith(DOT_CLASS)) {
-                name = name.substring(0, name.length() - DOT_CLASS.length());
+            while ((file = iterator.getNextClassFile()) != null) {
+                set.add(Class.forName(file.getFullClassName(), false, loader));
             }
-
-            name = ClassFileUtils.convertSlashName(name);
-
-            try {
-                map.put(file, getClass(name));
-            } catch (ClassNotFoundException exception) {
-                throw new BuildException(exception);
-            }
+        } catch (BuildException exception) {
+            throw exception;
+        } catch (RuntimeException exception) {
+            throw exception;
+        } catch (Exception exception) {
+            throw new BuildException(exception);
         }
 
-        return map;
+        return set;
     }
 
-    protected AntClassLoader getClassLoader() {
-        if (delegate.getClasspath() == null) {
-            delegate.createClasspath();
-        }
-
-        delegate.getClasspath().setLocation(getBasedir());
-
-        AntClassLoader loader = (AntClassLoader) delegate.getClassLoader();
-
-        loader.setParent(Thread.currentThread().getContextClassLoader());
-
-        return loader;
-    }
-
-    protected Class<?> getClass(String name) throws ClassNotFoundException {
-        return AbstractClasspathTask.getClass(name,
-                                              getInitialize(),
-                                              getClassLoader());
-    }
-
-    protected File getJavaFile(Map<File,Class> map, File file) {
-        File javaFile = null;
-        Class<?> type = map.get(file);
+    protected File getJavaFile(Class<?> type) {
+        File file = null;
 
         if (srcPath != null && type != null) {
             while (type.getDeclaringClass() != null) {
@@ -139,29 +101,21 @@ public abstract class AbstractClassFileTask extends AbstractMatchingTask {
                 + DOT_JAVA;
 
             for (String parent : srcPath.list()) {
-                javaFile = new File(parent, child);
+                file = new File(parent, child);
 
-                if (javaFile.isFile()) {
+                if (file.isFile()) {
                     break;
                 } else {
-                    javaFile = null;
+                    file = null;
                 }
             }
         }
 
-        return (javaFile != null) ? javaFile : file;
+        return file;
     }
 
     protected void log(File file, int lineno, String message) {
         super.log(String.valueOf(file) + ":" + String.valueOf(lineno)
                   + ": " + message);
-    }
-
-    protected class ClassFileSelector implements FileSelector {
-        public ClassFileSelector() { }
-
-        public boolean isSelected(File basedir, String name, File file) {
-            return name.toLowerCase().endsWith(DOT_CLASS);
-        }
     }
 }
