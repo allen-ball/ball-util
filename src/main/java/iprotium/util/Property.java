@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2011 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2012 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
@@ -245,7 +245,7 @@ public abstract class Property<T> implements Comparable<Property<?>> {
     @Override
     public String toString() { return getName(); }
 
-    public int compareTo(Property that) {
+    public int compareTo(Property<?> that) {
         return this.getName().compareTo(that.getName());
     }
 
@@ -268,10 +268,10 @@ public abstract class Property<T> implements Comparable<Property<?>> {
      * @return  The {@link Set} of {@link Property} objects defined in
      *          {@link Property} and {@link Iterable} fields.
      */
-    public static Set<Property> getStaticPropertyFields(Class<?>... types) {
-        LinkedHashSet<Property> set = new LinkedHashSet<Property>();
+    public static Set<Property<?>> getStaticPropertyFields(Class<?>... types) {
+        LinkedHashSet<Property<?>> set = new LinkedHashSet<Property<?>>();
 
-        for (Class type : types) {
+        for (Class<?> type : types) {
             for (Field field : type.getDeclaredFields()) {
                 try {
                     if (isPublic(field) && isStatic(field)) {

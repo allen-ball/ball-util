@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2011 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2012 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
@@ -21,7 +21,7 @@ public class MissingPropertyException extends MissingResourceException {
      *
      * @param   property        The {@link Property} whose value is not set.
      */
-    public MissingPropertyException(Property property) {
+    public MissingPropertyException(Property<?> property) {
         super("Undefined property `" + property.getName() + "'",
               property.getClass().getName(), property.getName());
     }

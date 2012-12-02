@@ -31,8 +31,8 @@ public class ShowPropertiesTask extends AbstractClassFileTask {
         super.execute();
 
         try {
-            for (Class type : getClassSet()) {
-                Collection<Property> collection =
+            for (Class<?> type : getClassSet()) {
+                Collection<Property<?>> collection =
                     Property.getStaticPropertyFields(type);
 
                 if (! collection.isEmpty()) {
@@ -58,20 +58,20 @@ public class ShowPropertiesTask extends AbstractClassFileTask {
     }
 
     private class PropertyTable extends TextTable {
-        public PropertyTable(Collection<Property> collection) {
+        public PropertyTable(Collection<Property<?>> collection) {
             super(new PropertyTableModel(collection));
         }
     }
 
-    private class PropertyTableModel extends ArrayListTableModel<Property> {
+    private class PropertyTableModel extends ArrayListTableModel<Property<?>> {
         private static final long serialVersionUID = -5904606396606185528L;
 
-        public PropertyTableModel(Collection<Property> collection) {
+        public PropertyTableModel(Collection<Property<?>> collection) {
             super(collection, 3);
         }
 
         @Override
-        protected Object getValueAt(Property row, int x) {
+        protected Object getValueAt(Property<?> row, int x) {
             Object value = null;
 
             switch (x) {

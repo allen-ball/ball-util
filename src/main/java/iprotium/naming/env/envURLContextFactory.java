@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2009 - 2011 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2012 Allen D. Ball.  All rights reserved.
  */
 package iprotium.naming.env;
 
@@ -30,12 +30,13 @@ public class envURLContextFactory extends Factory<ENVContext>
      */
     public envURLContextFactory() { super(ENVContext.class); }
 
-    public ENVContext getInitialContext(Hashtable env) throws NamingException {
+    public ENVContext getInitialContext(Hashtable<?,?> env)
+            throws NamingException {
         return new ENVContext(env);
     }
 
     public Object getObjectInstance(Object object, Name name, Context context,
-                                    Hashtable env) throws Exception {
+                                    Hashtable<?,?> env) throws Exception {
         return new ENVContext(env);
     }
 }

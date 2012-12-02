@@ -40,7 +40,7 @@ public class MembersOfTask extends AbstractClasspathTask {
 
             log(String.valueOf(type));
 
-            for (Constructor constructor : type.getDeclaredConstructors()) {
+            for (Constructor<?> constructor : type.getDeclaredConstructors()) {
                 log(constructor.toGenericString());
             }
 

@@ -58,7 +58,7 @@ public class InstanceOfTask extends AbstractClasspathTask {
 
             log(type.getName());
 
-            List<Class> parameters = new ArrayList<Class>();
+            List<Class<?>> parameters = new ArrayList<Class<?>>();
             List<Object> arguments = new ArrayList<Object>();
 
             for (Argument argument : list) {
@@ -76,7 +76,7 @@ public class InstanceOfTask extends AbstractClasspathTask {
 
             Factory<?> factory = new Factory<Object>(type);
             Member member =
-                factory.getFactoryMember(parameters.toArray(new Class[] { }));
+                factory.getFactoryMember(parameters.toArray(new Class<?>[] { }));
 
             log(String.valueOf(member));
 

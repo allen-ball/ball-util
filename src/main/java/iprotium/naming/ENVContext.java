@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2009 - 2011 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2012 Allen D. Ball.  All rights reserved.
  */
 package iprotium.naming;
 
@@ -26,12 +26,12 @@ import javax.naming.OperationNotSupportedException;
  * @version $Revision$
  */
 public class ENVContext implements Context {
-    private final Hashtable env;
+    private final Hashtable<?,?> env;
 
     /**
      * Sole constructor.
      */
-    public ENVContext(Hashtable env) { this.env = env; }
+    public ENVContext(Hashtable<?,?> env) { this.env = env; }
 
     public Object lookup(Name name) throws NamingException {
         return ((! name.toString().equals(""))
@@ -136,7 +136,9 @@ public class ENVContext implements Context {
         throw new OperationNotSupportedException();
     }
 
-    public Hashtable getEnvironment() throws NamingException { return env; }
+    public Hashtable<?,?> getEnvironment() throws NamingException {
+        return env;
+    }
 
     public Object addToEnvironment(String string,
                                    Object value) throws NamingException {
