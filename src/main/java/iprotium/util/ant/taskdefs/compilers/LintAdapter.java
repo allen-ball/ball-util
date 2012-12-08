@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2011 Allen D. Ball.  All rights reserved.
+ * Copyright 2011, 2012 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs.compilers;
 
@@ -24,7 +24,7 @@ import static javax.tools.StandardLocation.CLASS_PATH;
 
 /**
  * {@link SystemJavaCompilerAdapter} implementation that provides additional
- * {@code lint}-like analysis.
+ * {@link.man lint(1)}-like analysis.
  *
  * @see Remedy
  *
@@ -37,7 +37,7 @@ public class LintAdapter extends SystemJavaCompilerAdapter {
     /**
      * Sole constructor.
      */
-    public LintAdapter() { }
+    public LintAdapter() { super(); }
 
     @Override
     protected boolean compile(StandardJavaFileManager fm,
