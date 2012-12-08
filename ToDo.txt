@@ -3,7 +3,7 @@ $Id$
 * Reimplement IOUtil.copy(FileChannel,FileChannel) so it respects and updates
   the FileChannels' positions.
 
-* Add checks to iprotium.annotation.processing:
+* Add checks to iprotium.tools or iprotium.annotation.processing:
 
         ** Require explicitly declared constructors
         ** Require non-public constructors for abstract classes
@@ -11,8 +11,6 @@ $Id$
         ** Suggest (! Collection.isEmpty()) for (Collection.size() > 0)
         ** ByteArrayOutputStream: Prefer ByteArrayOutputStream(int)
            constructor with an argument > 32
-        ** Modify CannotResolveLocationRemedy to construct and search a class
-           path.
 
 * Create SSU package.
 
