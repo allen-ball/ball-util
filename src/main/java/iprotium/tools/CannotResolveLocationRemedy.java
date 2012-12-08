@@ -1,13 +1,14 @@
 /*
  * $Id$
  *
- * Copyright 2011 Allen D. Ball.  All rights reserved.
+ * Copyright 2011, 2012 Allen D. Ball.  All rights reserved.
  */
 package iprotium.tools;
 
 import iprotium.util.Regex;
 import java.util.Locale;
 import java.util.SortedSet;
+import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.tools.Diagnostic;
@@ -52,10 +53,27 @@ public class CannotResolveLocationRemedy extends Remedy {
         if (matcher.find()) {
             String symbol = matcher.group(1);
 
-            for (Class<?> member : classes) {
-                if (symbol.equals(member.getSimpleName())) {
-                    type = member;
-                    break;
+            if (type == null) {
+                try {
+                    type = Class.forName(symbol);
+                } catch (ClassNotFoundException exception) {
+                }
+            }
+
+            if (type == null) {
+                type = new ClassMap(classes).get(symbol);
+            }
+
+            if (type == null) {
+                for (Package pkg : Package.getPackages()) {
+                    try {
+                        type = Class.forName(pkg.getName() + "." + symbol);
+                    } catch (ClassNotFoundException exception) {
+                    }
+
+                    if (type != null) {
+                        break;
+                    }
                 }
             }
         }
@@ -73,5 +91,21 @@ public class CannotResolveLocationRemedy extends Remedy {
         }
 
         return remedy;
+    }
+
+    private class ClassMap extends TreeMap<String,Class<?>> {
+        private static final long serialVersionUID = 9110132596690976649L;
+
+        public ClassMap(Iterable<Class<?>> values) {
+            super();
+
+            for (Class<?> value : values) {
+                String key = value.getSimpleName();
+
+                if (key != null && (! containsKey(key))) {
+                    put(key, value);
+                }
+            }
+        }
     }
 }
