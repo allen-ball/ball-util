@@ -1,10 +1,11 @@
 /*
  * $Id$
  *
- * Copyright 2009 - 2011 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2012 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
+import java.beans.ConstructorProperties;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashSet;
@@ -33,6 +34,7 @@ public class PackageSearchPath<T> extends LinkedHashSet<Package> {
      * @param   superclass      The type of {@link Class} to search for.
      * @param   packages        The {@link Package}s to search.
      */
+    @ConstructorProperties({ "superclass", "" })
     public PackageSearchPath(Class<? extends T> superclass,
                              Package... packages) {
         this(superclass, Arrays.asList(packages));
@@ -43,11 +45,16 @@ public class PackageSearchPath<T> extends LinkedHashSet<Package> {
      * @param   collection      The {@link Collection} of {@link Package}s
      *                          to search.
      */
+    @ConstructorProperties({ "superclass", "" })
     public PackageSearchPath(Class<? extends T> superclass,
                              Collection<Package> collection) {
         super();
 
-        this.superclass = superclass;
+        if (superclass != null) {
+            this.superclass = superclass;
+        } else {
+            throw new NullPointerException("superclass");
+        }
 
         addAll(collection);
     }
@@ -95,7 +102,10 @@ public class PackageSearchPath<T> extends LinkedHashSet<Package> {
         Class<? extends T> cls = null;
 
         try {
-            cls = Class.forName(name).asSubclass(getSuperclass());
+            cls =
+                Class
+                .forName(name, false, getSuperclass().getClassLoader())
+                .asSubclass(getSuperclass());
         } catch (ClassNotFoundException exception) {
         } catch (ClassCastException exception) {
         }
