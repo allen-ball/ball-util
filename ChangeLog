@@ -1,5 +1,9 @@
 2012-12-08  Allen D. Ball  <ball@10-0-1-2.lan>
 
+	* src/main/java/iprotium/util/PackageSearchPath.java:
+	Use getSuperclass().getClassLoader() to load subclass
+	implementations.
+
 	* src/main/java/iprotium/tools/CannotResolveLocationRemedy.java:
 	Provide a suggested import based on Package.getPackages().
 
