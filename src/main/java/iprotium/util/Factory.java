@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2011 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2012 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
@@ -124,7 +124,7 @@ public class Factory<T> implements Converter<T> {
      *                          If the specified {@link Constructor} or
      *                          {@link Method} does not exist.
      */
-    public T getInstance(Class<?>[] parameters, Object[] arguments)
+    public T getInstance(Class<?>[] parameters, Object... arguments)
                                         throws IllegalAccessException,
                                                IllegalArgumentException,
                                                InstantiationException,
@@ -249,9 +249,9 @@ public class Factory<T> implements Converter<T> {
      *                          {@link Method} fails for some reason.
      */
     public T apply(Member member,
-                   Object[] arguments) throws IllegalAccessException,
-                                              InstantiationException,
-                                              InvocationTargetException {
+                   Object... arguments) throws IllegalAccessException,
+                                               InstantiationException,
+                                               InvocationTargetException {
         Object object = null;
 
         if (member instanceof Method) {
@@ -299,7 +299,7 @@ public class Factory<T> implements Converter<T> {
      *          otherwise.
      */
     protected static boolean isApplicable(Class<?>[] parameters,
-                                          Class<?>[] arguments) {
+                                          Class<?>... arguments) {
         boolean match = (parameters.length == arguments.length);
 
         for (int i = 0; match && i < arguments.length; i += 1) {
