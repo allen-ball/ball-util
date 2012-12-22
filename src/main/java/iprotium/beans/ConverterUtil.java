@@ -1,12 +1,11 @@
 /*
  * $Id$
  *
- * Copyright 2010, 2011 Allen D. Ball.  All rights reserved.
+ * Copyright 2010 - 2012 Allen D. Ball.  All rights reserved.
  */
 package iprotium.beans;
 
 import iprotium.util.ClassOrder;
-import iprotium.util.Factory;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.TreeMap;
@@ -99,7 +98,7 @@ public abstract class ConverterUtil {
 
                         try {
                             subtype = ((Class<?>) key).asSubclass(supertype);
-                            value = new Factory<T>(subtype).getInstance();
+                            value = new BeanFactory<T>(subtype).getInstance();
                         } catch (Exception exception) {
                         } finally {
                             if (subtype != null) {
