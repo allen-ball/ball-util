@@ -58,7 +58,7 @@ public class InstanceOfTask extends AbstractClasspathTask {
 
             log(type.getName());
 
-            List<Class<?>> parameters = new ArrayList<Class<?>>();
+            ClassList parameters = new ClassList();
             List<Object> arguments = new ArrayList<Object>();
 
             for (Argument argument : list) {
@@ -75,13 +75,11 @@ public class InstanceOfTask extends AbstractClasspathTask {
             log(String.valueOf(arguments));
 
             Factory<?> factory = new Factory<Object>(type);
-            Member member =
-                factory.getFactoryMember(parameters.toArray(new Class<?>[] { }));
+            Member member = factory.getFactoryMethod(parameters.toArray());
 
             log(String.valueOf(member));
 
-            instance =
-                factory.apply(member, arguments.toArray(new Object[] { }));
+            instance = factory.apply(member, arguments.toArray());
 
             log(String.valueOf(instance));
 
@@ -154,6 +152,15 @@ public class InstanceOfTask extends AbstractClasspathTask {
 
         @Override
         public String toString() { return getValue(); }
+    }
+
+    private class ClassList extends ArrayList<Class<?>> {
+        private static final long serialVersionUID = 2550066994634751402L;
+
+        public ClassList() { super(); }
+
+        @Override
+        public Class<?>[] toArray() { return toArray(new Class<?>[] { }); }
     }
 
     private class MapTableModelImpl extends MapTableModel<String,Object> {

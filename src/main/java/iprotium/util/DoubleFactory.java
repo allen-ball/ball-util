@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2010, 2011 Allen D. Ball.  All rights reserved.
+ * Copyright 2010 - 2012 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
@@ -12,6 +12,8 @@ package iprotium.util;
  * @version $Revision$
  */
 public class DoubleFactory extends Factory<Double> {
+    private static final long serialVersionUID = 8756382581077256526L;
+
     private static final DoubleFactory DEFAULT = new DoubleFactory();
 
     /**

@@ -24,6 +24,7 @@ import javax.naming.spi.ObjectFactory;
 public class envURLContextFactory extends Factory<ENVContext>
                                   implements InitialContextFactory,
                                              ObjectFactory {
+    private static final long serialVersionUID = -8359950560927525726L;
 
     /**
      * Sole constructor.

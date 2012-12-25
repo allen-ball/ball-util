@@ -31,10 +31,12 @@ import static iprotium.util.ClassUtil.isStatic;
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
  * @version $Revision$
  */
-public class Factory<T> implements Converter<T> {
+public class Factory<T> extends TreeMap<Class<?>[],Member>
+                        implements Converter<T> {
+    private static final long serialVersionUID = -5716276020951628937L;
+
     private final Class<? extends T> type;
     private final Object factory;
-    private final FactoryMemberMap map;
 
     /**
      * Sole public constructor.
@@ -59,12 +61,54 @@ public class Factory<T> implements Converter<T> {
      * @throws  NullPointerException
      *                          If {@code type} is {@code null}.
      */
-    @ConstructorProperties({"type", "factory"})
+    @ConstructorProperties({ "type", "factory" })
     protected Factory(Class<? extends T> type, Object factory) {
+        super(new ArrayOrder<Class<?>>(ClassOrder.NAME));
+
         this.type = type;
         this.factory = factory;
 
-        map = new FactoryMemberMap(type, factory);
+        CandidateSet set = new CandidateSet(type);
+
+        if (factory != null) {
+            for (Method method : factory.getClass().getMethods()) {
+                if (isPublic(method)) {
+                    if (type.isAssignableFrom(method.getReturnType())) {
+                        if (set.contains(method.getName())) {
+                            Class<?>[] key = method.getParameterTypes();
+
+                            if (! containsKey(key)) {
+                                put(key, method);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        for (Method method : type.getMethods()) {
+            if (isPublic(method) && isStatic(method)) {
+                if (type.isAssignableFrom(method.getReturnType())) {
+                    if (set.contains(method.getName())) {
+                        Class<?>[] key = method.getParameterTypes();
+
+                        if (! containsKey(key)) {
+                            put(key, method);
+                        }
+                    }
+                }
+            }
+        }
+
+        for (Constructor<?> constructor : type.getConstructors()) {
+            if (isPublic(constructor)) {
+                Class<?>[] key = constructor.getParameterTypes();
+
+                if (! containsKey(key)) {
+                    put(key, constructor);
+                }
+            }
+        }
     }
 
     /**
@@ -130,7 +174,7 @@ public class Factory<T> implements Converter<T> {
                                                InstantiationException,
                                                InvocationTargetException,
                                                NoSuchMethodException {
-        return apply(getFactoryMember(parameters), arguments);
+        return apply(getFactoryMethod(parameters), arguments);
     }
 
     /**
@@ -187,12 +231,12 @@ public class Factory<T> implements Converter<T> {
      * @return  {@code true} if there is such a {@link Member};
      *          {@code false} otherwise.
      */
-    public boolean hasFactoryMemberFor(Class<?>... parameters) {
+    public boolean hasFactoryMethodFor(Class<?>... parameters) {
         boolean hasMember = false;
 
         try {
-            getFactoryMember(parameters);
-            hasMember = (map.get(parameters) != null);
+            getFactoryMethod(parameters);
+            hasMember = (get(parameters) != null);
         } catch (NoSuchMethodException exception) {
             hasMember = false;
         }
@@ -214,13 +258,13 @@ public class Factory<T> implements Converter<T> {
      *                          If the specified {@link Constructor} or
      *                          {@link Method} does not exist.
      */
-    public Member getFactoryMember(Class<?>... parameters)
+    public Member getFactoryMethod(Class<?>... parameters)
                                         throws NoSuchMethodException {
-        if (! map.containsKey(parameters)) {
-            map.put(parameters, getType().getConstructor(parameters));
+        if (! containsKey(parameters)) {
+            put(parameters, getType().getConstructor(parameters));
         }
 
-        return map.get(parameters);
+        return get(parameters);
     }
 
     /**
@@ -267,6 +311,46 @@ public class Factory<T> implements Converter<T> {
         return getType().cast(object);
     }
 
+    @Override
+    public Member get(Object key) {
+        Member value = null;
+
+        if (key instanceof Class<?>[]) {
+            if (! super.containsKey(key)) {
+                for (Map.Entry<Class<?>[],Member> entry : entrySet()) {
+                    if (isApplicable(entry.getKey(), (Class<?>[]) key)) {
+                        value = entry.getValue();
+                        break;
+                    }
+                }
+
+                super.put((Class<?>[]) key, value);
+            }
+
+            value = super.get(key);
+        }
+
+        return value;
+    }
+
+    @Override
+    public T convert(Object in) throws IllegalAccessException,
+                                       InstantiationException,
+                                       InvocationTargetException,
+                                       NoSuchMethodException {
+        T out = null;
+
+        if (in != null) {
+            if (getType().isAssignableFrom(in.getClass())) {
+                out = getType().cast(in);
+            } else {
+                out = getInstance(in);
+            }
+        }
+
+        return out;
+    }
+
     /**
      * Convenience method to get the types of an argument array.
      *
@@ -309,116 +393,26 @@ public class Factory<T> implements Converter<T> {
         return match;
     }
 
-    @Override
-    public T convert(Object in) throws IllegalAccessException,
-                                       InstantiationException,
-                                       InvocationTargetException,
-                                       NoSuchMethodException {
-        T out = null;
+    private class CandidateSet extends TreeSet<String> {
+        private static final long serialVersionUID = -7078482704734989738L;
 
-        if (in != null) {
-            if (getType().isAssignableFrom(in.getClass())) {
-                out = getType().cast(in);
-            } else {
-                out = getInstance(in);
-            }
-        }
+        public CandidateSet(Class<? extends T> type) {
+            super(Arrays.asList("compile",
+                                "create",
+                                "decode",
+                                "forName",
+                                "getDefault",
+                                "getDefaultInstance",
+                                "getInstance",
+                                "getObjectInstance",
+                                "new" + type.getSimpleName(),
+                                "newInstance",
+                                "valueOf"));
 
-        return out;
-    }
-
-    private class FactoryMemberMap extends TreeMap<Class<?>[],Member> {
-        private static final long serialVersionUID = -5649807100994360076L;
-
-        public FactoryMemberMap(Class<? extends T> type, Object factory) {
-            super(new ArrayOrder<Class<?>>(ClassOrder.NAME));
-
-            CandidateSet set = new CandidateSet(type);
-
-            if (factory != null) {
-                for (Method method : factory.getClass().getMethods()) {
-                    if (isPublic(method)) {
-                        if (type.isAssignableFrom(method.getReturnType())) {
-                            if (set.contains(method.getName())) {
-                                Class<?>[] key = method.getParameterTypes();
-
-                                if (! containsKey(key)) {
-                                    put(key, method);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            for (Method method : type.getMethods()) {
-                if (isPublic(method) && isStatic(method)) {
-                    if (type.isAssignableFrom(method.getReturnType())) {
-                        if (set.contains(method.getName())) {
-                            Class<?>[] key = method.getParameterTypes();
-
-                            if (! containsKey(key)) {
-                                put(key, method);
-                            }
-                        }
-                    }
-                }
-            }
-
-            for (Constructor<?> constructor : type.getConstructors()) {
-                if (isPublic(constructor)) {
-                    Class<?>[] key = constructor.getParameterTypes();
-
-                    if (! containsKey(key)) {
-                        put(key, constructor);
-                    }
-                }
-            }
-        }
-
-        @Override
-        public Member get(Object key) {
-            Member value = null;
-
-            if (key instanceof Class<?>[]) {
-                if (! super.containsKey(key)) {
-                    for (Map.Entry<Class<?>[],Member> entry : entrySet()) {
-                        if (isApplicable(entry.getKey(), (Class<?>[]) key)) {
-                            value = entry.getValue();
-                            break;
-                        }
-                    }
-
-                    super.put((Class<?>[]) key, value);
-                }
-
-                value = super.get(key);
-            }
-
-            return value;
-        }
-
-        private class CandidateSet extends TreeSet<String> {
-            private static final long serialVersionUID = -5065227379347591040L;
-
-            public CandidateSet(Class<? extends T> type) {
-                super(Arrays.asList("compile",
-                                    "create",
-                                    "decode",
-                                    "forName",
-                                    "getDefault",
-                                    "getDefaultInstance",
-                                    "getInstance",
-                                    "getObjectInstance",
-                                    "new" + type.getSimpleName(),
-                                    "newInstance",
-                                    "valueOf"));
-
-                if ((! type.isAssignableFrom(Boolean.class)
-                     || type.isAssignableFrom(Integer.class)
-                     || type.isAssignableFrom(Long.class))) {
-                    add("get" + type.getSimpleName());
-                }
+            if (! (type.isAssignableFrom(Boolean.class)
+                   || type.isAssignableFrom(Integer.class)
+                   || type.isAssignableFrom(Long.class))) {
+                add("get" + type.getSimpleName());
             }
         }
     }

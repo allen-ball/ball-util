@@ -15,6 +15,7 @@ import java.beans.ConstructorProperties;
  * @version $Revision$
  */
 public class BeanFactory<T> extends Factory<T> {
+    private static final long serialVersionUID = 3136151663166173186L;
 
     /**
      * See {@link Factory#Factory(Class)}.

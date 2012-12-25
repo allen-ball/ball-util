@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2010, 2011 Allen D. Ball.  All rights reserved.
+ * Copyright 2010 - 2012 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
@@ -14,6 +14,8 @@ import java.math.BigInteger;
  * @version $Revision$
  */
 public class BigIntegerFactory extends Factory<BigInteger> {
+    private static final long serialVersionUID = 5840358873552369539L;
+
     private static final BigIntegerFactory DEFAULT = new BigIntegerFactory();
 
     /**

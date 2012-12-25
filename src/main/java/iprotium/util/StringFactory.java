@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2010, 2011 Allen D. Ball.  All rights reserved.
+ * Copyright 2010 - 2012 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
@@ -12,6 +12,8 @@ package iprotium.util;
  * @version $Revision$
  */
 public class StringFactory extends Factory<String> {
+    private static final long serialVersionUID = -9042453166428623758L;
+
     private static final StringFactory DEFAULT = new StringFactory();
 
     /**

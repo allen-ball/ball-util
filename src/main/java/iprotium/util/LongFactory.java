@@ -1,11 +1,12 @@
 /*
  * $Id$
  *
- * Copyright 2010, 2011 Allen D. Ball.  All rights reserved.
+ * Copyright 2010 - 2012 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
 import java.lang.reflect.InvocationTargetException;
+
 /**
  * {@link Long} {@link Factory} implementation.
  *
@@ -13,6 +14,8 @@ import java.lang.reflect.InvocationTargetException;
  * @version $Revision$
  */
 public class LongFactory extends Factory<Long> {
+    private static final long serialVersionUID = 6355068951410168110L;
+
     private static final LongFactory DEFAULT = new LongFactory();
 
     /**

@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2011 Allen D. Ball.  All rights reserved.
+ * Copyright 2011, 2012 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
@@ -18,6 +18,8 @@ import java.util.UUID;
  * @version $Revision$
  */
 public class UUIDFactory extends Factory<UUID> {
+    private static final long serialVersionUID = 4141910900990945223L;
+
     private static final ResourceBundle BUNDLE =
         ResourceBundle.getBundle(UUIDFactory.class.getName());
 

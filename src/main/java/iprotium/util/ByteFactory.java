@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2010, 2011 Allen D. Ball.  All rights reserved.
+ * Copyright 2010 - 2012 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
@@ -14,6 +14,8 @@ import java.lang.reflect.InvocationTargetException;
  * @version $Revision$
  */
 public class ByteFactory extends Factory<Byte> {
+    private static final long serialVersionUID = -3007088485403560348L;
+
     private static final ByteFactory DEFAULT = new ByteFactory();
 
     /**

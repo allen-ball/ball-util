@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2010, 2011 Allen D. Ball.  All rights reserved.
+ * Copyright 2010 - 2012 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
@@ -12,6 +12,8 @@ package iprotium.util;
  * @version $Revision$
  */
 public class FloatFactory extends Factory<Float> {
+    private static final long serialVersionUID = 7642582830863432020L;
+
     private static final FloatFactory DEFAULT = new FloatFactory();
 
     /**
