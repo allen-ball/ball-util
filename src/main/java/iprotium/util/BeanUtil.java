@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2010, 2011 Allen D. Ball.  All rights reserved.
+ * Copyright 2010 - 2012 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
@@ -368,7 +368,7 @@ public abstract class BeanUtil {
      *                          If the target setter method throws
      *                          {@link PropertyVetoException}.
      */
-    public static void copy(Map<String,?> in, Object out)
+    public static void copy(Map<?,?> in, Object out)
                                         throws IllegalAccessException,
                                                InvocationTargetException,
                                                PropertyVetoException {
@@ -402,7 +402,7 @@ public abstract class BeanUtil {
      *                          If there is a problem invoking a getter
      *                          method for any property.
      */
-    public static void copy(Object in, Map<String,? super Object> out)
+    public static void copy(Object in, Map<? super Object,? super Object> out)
                                         throws IllegalAccessException,
                                                InvocationTargetException {
         for (PropertyDescriptor descriptor :
