@@ -5,6 +5,7 @@
  */
 package iprotium.util;
 
+import iprotium.util.criteria.IsInstanceOf;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -51,8 +52,8 @@ public abstract class IterableUtil {
      *
      * @return  An {@link Iterable} that wraps the {@link Iterable}.
      */
-    public static <T> Iterable<T> ofType(Class<T> type, Iterable<?> iterable) {
-        return ofType(type, iterable.iterator());
+    public static <T> Iterable<T> filter(Class<T> type, Iterable<?> iterable) {
+        return filter(type, iterable.iterator());
     }
 
     /**
@@ -65,7 +66,7 @@ public abstract class IterableUtil {
      *
      * @return  An {@link Iterable} that wraps the {@link Iterator}.
      */
-    public static <T> Iterable<T> ofType(Class<T> type, Iterator<?> iterator) {
+    public static <T> Iterable<T> filter(Class<T> type, Iterator<?> iterator) {
         return new TypeFilter<T>(type, iterator);
     }
 
@@ -79,9 +80,54 @@ public abstract class IterableUtil {
      *
      * @return  An {@link Iterable} that wraps the {@link Enumeration}.
      */
-    public static <T> Iterable<T> ofType(Class<T> type,
+    public static <T> Iterable<T> filter(Class<T> type,
                                          Enumeration<?> enumeration) {
-        return ofType(type, asIterable(enumeration));
+        return filter(type, asIterable(enumeration));
+    }
+
+    /**
+     * Static method to wrap an {@link Iterable} to filter by a specific
+     * {@link Criteria}.  {@link Object}s that do not match the
+     * {@link Criteria} are skipped.
+     *
+     * @param   criteria        The {@link Criteria}.
+     * @param   iterable        The {@link Iterable}.
+     *
+     * @return  An {@link Iterable} that wraps the {@link Iterable}.
+     */
+    public static <T> Iterable<T> filter(Criteria criteria,
+                                         Iterable<T> iterable) {
+        return filter(criteria, iterable.iterator());
+    }
+
+    /**
+     * Static method to wrap an {@link Iterator} to filter by a specific
+     * {@link Criteria}.  {@link Object}s that do not match the
+     * {@link Criteria} are skipped.
+     *
+     * @param   criteria        The {@link Criteria}.
+     * @param   iterator        The {@link Iterator}.
+     *
+     * @return  An {@link Iterator} that wraps the {@link Iterator}.
+     */
+    public static <T> Iterable<T> filter(Criteria criteria,
+                                         Iterator<T> iterator) {
+        return new FilteredIterator<T>(criteria, iterator);
+    }
+
+    /**
+     * Static method to wrap an {@link Enumeration} to filter by a specific
+     * {@link Criteria}.  {@link Object}s that do not match the
+     * {@link Criteria} are skipped.
+     *
+     * @param   criteria        The {@link Criteria}.
+     * @param   enumeration     The {@link Enumeration}.
+     *
+     * @return  An {@link Enumeration} that wraps the {@link Enumeration}.
+     */
+    public static <T> Iterable<T> filter(Criteria criteria,
+                                         Enumeration<T> enumeration) {
+        return filter(criteria, asIterable(enumeration));
     }
 
     private static class FromEnumeration<E> extends AbstractIterator<E> {
@@ -117,52 +163,18 @@ public abstract class IterableUtil {
 
     private static class TypeFilter<T> extends AbstractIterator<T> {
         private final Class<? extends T> type;
-        private final Iterator<?> iterator;
-        private final LinkedList<T> list = new LinkedList<T>();
+        private final FilteredIterator<Object> iterator;
 
         public TypeFilter(Class<? extends T> type, Iterator<?> iterator) {
-            if (type != null) {
-                this.type = type;
-            } else {
-                throw new NullPointerException("type");
-            }
-
-            if (iterator != null) {
-                this.iterator = iterator;
-            } else {
-                throw new NullPointerException("iterator");
-            }
+            this.type = type;
+            this.iterator =
+                new FilteredIterator<Object>(new IsInstanceOf(type), iterator);
         }
 
         @Override
-        public boolean hasNext() {
-            synchronized (this) {
-                while (list.isEmpty()) {
-                    if (iterator.hasNext()) {
-                        Object next = iterator.next();
-
-                        if (next != null
-                            && type.isAssignableFrom(next.getClass())) {
-                            list.add(type.cast(next));
-                        }
-                    } else {
-                        break;
-                    }
-                }
-            }
-
-            return (! list.isEmpty());
-        }
+        public boolean hasNext() { return iterator.hasNext(); }
 
         @Override
-        public T next() {
-            T next = null;
-
-            synchronized (this) {
-                next = hasNext() ? list.remove() : type.cast(iterator.next());
-            }
-
-            return next;
-        }
+        public T next() { return type.cast(iterator.next()); }
     }
 }
