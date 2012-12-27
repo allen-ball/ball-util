@@ -225,6 +225,9 @@
         <section name="iprotium/util/ant/types/">
           <attribute name="Sealed" value="true"/>
         </section>
+        <section name="iprotium/util/criteria/">
+          <attribute name="Sealed" value="true"/>
+        </section>
         <section name="iprotium/util/jni/">
           <attribute name="Sealed" value="true"/>
         </section>

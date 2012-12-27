@@ -3,6 +3,9 @@
 	* src/main/java/iprotium/util/BeanUtil.java:
 	Do not require source or destination Map keys to be Strings.
 
+	* src/main/java/iprotium/util/Criteria.java (and subclasses):
+	Initial writing.
+
 	* src/main/java/iprotium/util/IterableUtil.java: Initial writing.
 
 2012-12-25  Allen D. Ball  <ball@mecury.local>
