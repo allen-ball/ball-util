@@ -1,5 +1,8 @@
 2012-12-28  Allen D. Ball  <ball@mecury.local>
 
+	* src/main/java/iprotium/util/Regex.java:
+	Added LOCAL_VARIABLE to @Target.
+
 	* src/main/java/iprotium/annotation/processing/
 	        AbstractAnnotationProcessor.java,
 	        ConstructorPropertiesProcessor.java,
