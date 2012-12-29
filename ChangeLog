@@ -6,6 +6,10 @@
 	        ConvertWithProcessor.java:
 	Initial writing.
 
+	* src/main/java/iprotium/annotation/processing/RegexProcessor.java:
+	Re-factored as subclass of AbstractAnnotationProcessor.
+	Verify constant value is a String.
+
 2012-12-26  Allen D. Ball  <ball@mecury.local>
 
 	* src/main/java/iprotium/util/BeanUtil.java:
