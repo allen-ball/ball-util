@@ -7,7 +7,6 @@ $Id$
 
         ** Require explicitly declared constructors
         ** Require non-public constructors for abstract classes
-        ** Require @Override annotations on overridden methods
         ** Suggest (! Collection.isEmpty()) for (Collection.size() > 0)
         ** ByteArrayOutputStream: Prefer ByteArrayOutputStream(int)
            constructor with an argument > 32
