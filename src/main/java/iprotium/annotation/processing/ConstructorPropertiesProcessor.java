@@ -18,17 +18,18 @@ import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.TypeMirror;
-import javax.lang.model.util.ElementFilter;
 
 import static java.beans.Introspector.decapitalize;
 import static javax.lang.model.element.ElementKind.CLASS;
 import static javax.lang.model.element.ElementKind.CONSTRUCTOR;
 import static javax.lang.model.element.Modifier.PRIVATE;
 import static javax.lang.model.type.TypeKind.BOOLEAN;
+import static javax.lang.model.util.ElementFilter.methodsIn;
 
 /**
  * {@link javax.annotation.processing.Processor} implementation to verify
- * {@link ConstructorProperties} annotation are actual bean properties.
+ * {@link ConstructorProperties} annotation are actual bean properties of
+ * the {@link java.lang.reflect.Constructor}'s {@link Class}.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
  * @version $Revision$
@@ -91,7 +92,7 @@ public class ConstructorPropertiesProcessor
 
     private void getPropertyNames(Set<String> set, TypeElement type) {
         for (ExecutableElement element :
-                 ElementFilter.methodsIn(type.getEnclosedElements())) {
+                 methodsIn(type.getEnclosedElements())) {
             if ((! element.getModifiers().contains(PRIVATE))
                 && element.getParameters().isEmpty()
                 && (! types.getNullType().equals(element.getReturnType()))) {
