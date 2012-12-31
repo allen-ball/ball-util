@@ -69,16 +69,21 @@ public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
                                     Element element) throws Exception;
 
     @Override
-    protected void error(Element element, String message) {
+    protected void error(Element element, CharSequence message) {
         super.error(element, format(message));
     }
 
     @Override
-    protected void warning(Element element, String message) {
+    protected void warning(Element element, CharSequence message) {
         super.warning(element, format(message));
     }
 
-    private String format(String message) {
-        return "@" + type.getCanonicalName() + ": " + message;
+    private CharSequence format(CharSequence message) {
+        CharSequence sequence =
+            new StringBuilder()
+            .append("@").append(type.getCanonicalName())
+            .append(": ").append(message);
+
+        return sequence;
     }
 }
