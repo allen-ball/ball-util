@@ -32,6 +32,11 @@ import static javax.tools.StandardLocation.CLASS_PATH;
  * @version $Revision$
  */
 public class LintAdapter extends SystemJavaCompilerAdapter {
+    /** {@link #PERIOD} = {@value #PERIOD} */
+    protected static final String PERIOD = ".";
+    /** {@link #SLASH} = {@value #SLASH} */
+    protected static final String SLASH = "/";
+
     private static final URI FILE = URI.create("file:///");
 
     /**
@@ -91,7 +96,7 @@ public class LintAdapter extends SystemJavaCompilerAdapter {
                                        - CLASS.extension.length());
                 }
 
-                name = name.replaceAll(Pattern.quote("/"), ".");
+                name = name.replaceAll(Pattern.quote(SLASH), PERIOD);
 
                 try {
                     add(Class.forName(name, false, loader));
