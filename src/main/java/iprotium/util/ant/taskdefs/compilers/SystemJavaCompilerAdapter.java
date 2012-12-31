@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2011 Allen D. Ball.  All rights reserved.
+ * Copyright 2011, 2012 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs.compilers;
 
@@ -40,8 +40,8 @@ import org.apache.tools.ant.util.FileUtils;
  */
 public class SystemJavaCompilerAdapter implements CompilerAdapter,
                                                   CompilerAdapterExtension {
-    /** {@link #CARAT} = {@value #CARAT} */
-    protected static final String CARAT = "^";
+    /** {@link #CARET} = {@value #CARET} */
+    protected static final String CARET = "^";
     /** {@link #SPACE} = {@value #SPACE} */
     protected static final String SPACE = " ";
 
@@ -251,7 +251,7 @@ public class SystemJavaCompilerAdapter implements CompilerAdapter,
     }
 
     private String pointer(Diagnostic<?> diagnostic) {
-        StringBuilder buffer = new StringBuilder(CARAT);
+        StringBuilder buffer = new StringBuilder(CARET);
 
         while (buffer.length() < diagnostic.getColumnNumber()) {
             buffer.insert(0, SPACE);
