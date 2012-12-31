@@ -1,5 +1,8 @@
 2012-12-31  Allen D. Ball  <ball@10-0-1-5.lan>
 
+	* src/main/java/iprotium/util/BeanMap.java:
+	Catch Throwables in toString() implementations.
+
 	* src/main/java/iprotium/annotation/processing/AbstractProcessor.java:
 	Added protected specifiedBy(ExecutableElement) and
 	overrides(ExecutableElement) methods.  Changed error() and
