@@ -5,13 +5,14 @@
  */
 package iprotium.annotation.processing;
 
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
+
+import static java.util.Collections.singleton;
 
 /**
  * Abstract {@link javax.annotation.processing.Processor} base class for
@@ -28,27 +29,17 @@ public abstract class AbstractNoAnnotationProcessor extends AbstractProcessor {
     protected AbstractNoAnnotationProcessor() { super(); }
 
     @Override
-    public Set<String> getSupportedAnnotationTypes() {
-        return Collections.singleton("*");
-    }
+    public Set<String> getSupportedAnnotationTypes() { return singleton("*"); }
 
+    /**
+     * @return  {@code false} always.
+     */
     @Override
     public boolean process(Set<? extends TypeElement> annotations,
                            RoundEnvironment roundEnv) {
-        LinkedList<Element> list = new LinkedList<Element>();
+        process(new IterableImpl(roundEnv.getRootElements()));
 
-        recurse(list, roundEnv.getRootElements());
-
-        return process(list);
-    }
-
-    private void recurse(List<Element> list,
-                         Iterable<? extends Element> iterable) {
-        for (Element element : iterable) {
-            list.add(element);
-
-            recurse(list, element.getEnclosedElements());
-        }
+        return false;
     }
 
     /**
@@ -58,10 +49,35 @@ public abstract class AbstractNoAnnotationProcessor extends AbstractProcessor {
      * @param   iterable        The {@link Iterable} of {@link Element}s to
      *                          process.
      *
-     * @return  {@code true} if the annotations are "consumed";
-     *          {@code false} otherwise.
-     *
      * @see RoundEnvironment#getRootElements()
      */
-    protected abstract boolean process(Iterable<? extends Element> iterable);
+    protected abstract void process(Iterable<? extends Element> iterable);
+
+    private class IterableImpl extends LinkedHashSet<Element> {
+        private static final long serialVersionUID = -877676924037023355L;
+
+        public IterableImpl(Collection<? extends Element> collection) {
+            addAll(collection);
+        }
+
+        @Override
+        public boolean add(Element element) {
+            boolean modified = super.add(element);
+
+            modified |= addAll(element.getEnclosedElements());
+
+            return modified;
+        }
+
+        @Override
+        public boolean addAll(Collection<? extends Element> collection) {
+            boolean modified = false;
+
+            for (Element element : collection) {
+                modified |= add(element);
+            }
+
+            return modified;
+        }
+    }
 }
