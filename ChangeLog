@@ -5,6 +5,11 @@
 	overrides(ExecutableElement) methods.  Changed error() and
 	warning() methods to accept CharSequence message argument.
 
+	* src/main/java/iprotium/annotation/processing/AbstractNoAnnotationProcessor.java:
+	Changed (Set<? extends TypeElement>,RoundEnvironment) to always
+	return false.  Changed process(Iterable<? extends Element>) to
+	return void.
+
 2012-12-30  Allen D. Ball  <ball@mecury.local>
 
 	* src/main/java/iprotium/annotation/processing/
