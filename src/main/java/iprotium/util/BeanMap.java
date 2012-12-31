@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2011 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2012 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
@@ -25,7 +25,7 @@ import java.util.Set;
  */
 public class BeanMap extends AbstractMap<String,Object>
                              implements Serializable {
-    private static final long serialVersionUID = 5515441455110146154L;
+    private static final long serialVersionUID = -7861142510160605496L;
 
     private final Object bean;
     private final Set<Map.Entry<String,Object>> entrySet0;
@@ -89,6 +89,21 @@ public class BeanMap extends AbstractMap<String,Object>
 
     @Override
     public Set<Map.Entry<String,Object>> entrySet() { return entrySet0; }
+
+    @Override
+    public String toString() {
+        StringBuilder buffer = new StringBuilder();
+
+        for (Map.Entry<?,?> entry : entrySet()) {
+            if (buffer.length() > 0) {
+                buffer.append(",");
+            }
+
+            buffer.append(entry);
+        }
+
+        return buffer.insert(0, "{").append("}").toString();
+    }
 
     /**
      * Static method to wrap a Java {@code bean} in a {@link BeanMap}.
@@ -170,6 +185,16 @@ public class BeanMap extends AbstractMap<String,Object>
         }
 
         @Override
-        public String toString() { return getKey() + "=" + getValue(); }
+        public String toString() {
+            String value = null;
+
+            try {
+                value = String.valueOf(getValue());
+            } catch (Throwable throwable) {
+                value = "?";
+            }
+
+            return getKey() + "=" + value;
+        }
     }
 }
