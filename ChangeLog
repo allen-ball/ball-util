@@ -1,3 +1,10 @@
+2012-12-31  Allen D. Ball  <ball@10-0-1-5.lan>
+
+	* src/main/java/iprotium/annotation/processing/AbstractProcessor.java:
+	Added protected specifiedBy(ExecutableElement) and
+	overrides(ExecutableElement) methods.  Changed error() and
+	warning() methods to accept CharSequence message argument.
+
 2012-12-30  Allen D. Ball  <ball@mecury.local>
 
 	* src/main/java/iprotium/annotation/processing/
