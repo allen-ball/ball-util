@@ -10,6 +10,9 @@
 	return false.  Changed process(Iterable<? extends Element>) to
 	return void.
 
+	* src/main/java/iprotium/annotation/processing/NoOverrideProcessor.java:
+	Use super.specifiedBy(ExecutableElement).
+
 2012-12-30  Allen D. Ball  <ball@mecury.local>
 
 	* src/main/java/iprotium/annotation/processing/
