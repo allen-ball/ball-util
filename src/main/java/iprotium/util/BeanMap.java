@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2012 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2013 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
@@ -24,7 +24,7 @@ import java.util.Set;
  * @version $Revision$
  */
 public class BeanMap extends AbstractMap<String,Object>
-                             implements Serializable {
+                     implements Serializable {
     private static final long serialVersionUID = -7861142510160605496L;
 
     private final Object bean;
@@ -99,7 +99,21 @@ public class BeanMap extends AbstractMap<String,Object>
                 buffer.append(",");
             }
 
-            buffer.append(entry);
+            buffer.append(entry.getKey()).append("=");
+
+            Object value = null;
+
+            try {
+                value = entry.getValue();
+
+                if (value == this) {
+                    value = "(this map)";
+                }
+            } catch (Throwable throwable) {
+                value = "?";
+            }
+
+            buffer.append(value);
         }
 
         return buffer.insert(0, "{").append("}").toString();
@@ -129,15 +143,15 @@ public class BeanMap extends AbstractMap<String,Object>
         return map;
     }
 
-    private class EntryImpl implements Entry<String,Object>, Serializable {
-        private static final long serialVersionUID = -3429201342528841043L;
+    private class EntryImpl extends SimpleEntry<String,Object> {
+        private static final long serialVersionUID = 6409484028086979764L;
 
-        private final String key;
         private final Method read;
         private final Method write;
 
         public EntryImpl(PropertyDescriptor descriptor) {
-            key = descriptor.getName();
+            super(descriptor.getName(), null);
+
             read = descriptor.getReadMethod();
             write = descriptor.getWriteMethod();
         }
@@ -145,9 +159,6 @@ public class BeanMap extends AbstractMap<String,Object>
         public boolean isMatch(String key) {
             return (key != null) ? getKey().equals(key) : (getKey() == key);
         }
-
-        @Override
-        public String getKey() { return key; }
 
         @Override
         public Object getValue() {
@@ -186,15 +197,19 @@ public class BeanMap extends AbstractMap<String,Object>
 
         @Override
         public String toString() {
-            String value = null;
+            StringBuilder buffer =
+                new StringBuilder().append(getKey()).append("=");
+            Object value = null;
 
             try {
-                value = String.valueOf(getValue());
+                value = getValue();
             } catch (Throwable throwable) {
                 value = "?";
             }
 
-            return getKey() + "=" + value;
+            buffer.append(value);
+
+            return buffer.toString();
         }
     }
 }
