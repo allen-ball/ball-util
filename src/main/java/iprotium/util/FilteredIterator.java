@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2012 Allen D. Ball.  All rights reserved.
+ * Copyright 2012, 2013 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
@@ -14,15 +14,15 @@ import java.util.LinkedList;
  * @param       <E>             The type of {@link Object} this
  *                              {@link Iterator} produces.
  *
- * @see IterableUtil#filter(Criteria,Iterable)
- * @see IterableUtil#filter(Criteria,Iterator)
- * @see IterableUtil#filter(Criteria,Enumeration)
+ * @see IterableUtil#filter(Predicate,Iterable)
+ * @see IterableUtil#filter(Predicate,Iterator)
+ * @see IterableUtil#filter(Predicate,Enumeration)
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
  * @version $Revision$
  */
 public class FilteredIterator<E> extends AbstractIterator<E> {
-    private final Criteria criteria;
+    private final Predicate predicate;
     private final Iterator<? extends E> iterator;
     private final LinkedList<E> list = new LinkedList<E>();
 
@@ -31,27 +31,27 @@ public class FilteredIterator<E> extends AbstractIterator<E> {
      * Construct a {@link FilteredIterator} from the argument
      * {@link Iterable}.
      *
-     * @param   criteria        The {@link Criteria}.
+     * @param   predicate       The {@link Predicate}.
      * @param   iterable        The {@link Iterable}.
      */
-    public FilteredIterator(Criteria criteria,
+    public FilteredIterator(Predicate predicate,
                             Iterable<? extends E> iterable) {
-        this(criteria, iterable.iterator());
+        this(predicate, iterable.iterator());
     }
 
     /**
      * Construct a {@link FilteredIterator} from the argument
      * {@link Iterator}.
      *
-     * @param   criteria        The {@link Criteria}.
+     * @param   predicate       The {@link Predicate}.
      * @param   iterator        The {@link Iterator}.
      */
-    public FilteredIterator(Criteria criteria,
+    public FilteredIterator(Predicate predicate,
                             Iterator<? extends E> iterator) {
-        if (criteria != null) {
-            this.criteria = criteria;
+        if (predicate != null) {
+            this.predicate = predicate;
         } else {
-            throw new NullPointerException("criteria");
+            throw new NullPointerException("predicate");
         }
 
         if (iterator != null) {
@@ -68,7 +68,7 @@ public class FilteredIterator<E> extends AbstractIterator<E> {
                 if (iterator.hasNext()) {
                     E next = iterator.next();
 
-                    if (criteria.match(next)) {
+                    if (predicate.apply(next)) {
                         list.add(next);
                     }
                 } else {

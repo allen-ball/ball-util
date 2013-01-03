@@ -1,11 +1,11 @@
 /*
  * $Id$
  *
- * Copyright 2012 Allen D. Ball.  All rights reserved.
+ * Copyright 2012, 2013 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
-import iprotium.util.criteria.IsInstanceOf;
+import iprotium.util.predicate.IsInstanceOf;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -87,47 +87,47 @@ public abstract class IterableUtil {
 
     /**
      * Static method to wrap an {@link Iterable} to filter by a specific
-     * {@link Criteria}.  {@link Object}s that do not match the
-     * {@link Criteria} are skipped.
+     * {@link Predicate}.  {@link Object}s that do not match the
+     * {@link Predicate} are skipped.
      *
-     * @param   criteria        The {@link Criteria}.
+     * @param   predicate       The {@link Predicate}.
      * @param   iterable        The {@link Iterable}.
      *
      * @return  An {@link Iterable} that wraps the {@link Iterable}.
      */
-    public static <T> Iterable<T> filter(Criteria criteria,
+    public static <T> Iterable<T> filter(Predicate predicate,
                                          Iterable<T> iterable) {
-        return filter(criteria, iterable.iterator());
+        return filter(predicate, iterable.iterator());
     }
 
     /**
      * Static method to wrap an {@link Iterator} to filter by a specific
-     * {@link Criteria}.  {@link Object}s that do not match the
-     * {@link Criteria} are skipped.
+     * {@link Predicate}.  {@link Object}s that do not match the
+     * {@link Predicate} are skipped.
      *
-     * @param   criteria        The {@link Criteria}.
+     * @param   predicate       The {@link Predicate}.
      * @param   iterator        The {@link Iterator}.
      *
      * @return  An {@link Iterator} that wraps the {@link Iterator}.
      */
-    public static <T> Iterable<T> filter(Criteria criteria,
+    public static <T> Iterable<T> filter(Predicate predicate,
                                          Iterator<T> iterator) {
-        return new FilteredIterator<T>(criteria, iterator);
+        return new FilteredIterator<T>(predicate, iterator);
     }
 
     /**
      * Static method to wrap an {@link Enumeration} to filter by a specific
-     * {@link Criteria}.  {@link Object}s that do not match the
-     * {@link Criteria} are skipped.
+     * {@link Predicate}.  {@link Object}s that do not match the
+     * {@link Predicate} are skipped.
      *
-     * @param   criteria        The {@link Criteria}.
+     * @param   predicate       The {@link Predicate}.
      * @param   enumeration     The {@link Enumeration}.
      *
      * @return  An {@link Enumeration} that wraps the {@link Enumeration}.
      */
-    public static <T> Iterable<T> filter(Criteria criteria,
+    public static <T> Iterable<T> filter(Predicate predicate,
                                          Enumeration<T> enumeration) {
-        return filter(criteria, asIterable(enumeration));
+        return filter(predicate, asIterable(enumeration));
     }
 
     private static class FromEnumeration<E> extends AbstractIterator<E> {
