@@ -1,17 +1,17 @@
 /*
  * $Id$
  *
- * Copyright 2012 Allen D. Ball.  All rights reserved.
+ * Copyright 2012, 2013 Allen D. Ball.  All rights reserved.
  */
-package iprotium.util.criteria;
+package iprotium.util.predicate;
 
-import iprotium.util.AbstractCriteria;
+import iprotium.util.AbstractPredicate;
 import iprotium.util.ClassOrder;
 import java.util.Arrays;
 import java.util.TreeSet;
 
 /**
- * {@link iprotium.util.Criteria} to specify types ({@link Class}es).
+ * {@link iprotium.util.Predicate} to specify types ({@link Class}es).
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
  * @version $Revision$
@@ -27,7 +27,7 @@ public class IsInstanceOf extends And {
         super(IsNotNull.getDefault(), new Impl(types));
     }
 
-    private static class Impl extends AbstractCriteria {
+    private static class Impl extends AbstractPredicate {
         private final TreeSet<Class<?>> set =
             new TreeSet<Class<?>>(ClassOrder.INHERITANCE);
 
@@ -38,18 +38,18 @@ public class IsInstanceOf extends And {
         }
 
         @Override
-        public boolean match(Object object) {
-            boolean match = set.isEmpty();
+        public boolean apply(Object object) {
+            boolean result = set.isEmpty();
 
             for (Class<?> type : set) {
-                match |= type.isAssignableFrom(object.getClass());
+                result |= type.isAssignableFrom(object.getClass());
 
-                if (match) {
+                if (result) {
                     break;
                 }
             }
 
-            return match;
+            return result;
         }
     }
 }
