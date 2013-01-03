@@ -118,6 +118,9 @@
           <attribute name="Implementation-Vendor" value="${vendor}"/>
           <attribute name="Sealed" value="true"/>
         </section>
+        <section name="iprotium/annotation/">
+          <attribute name="Sealed" value="true"/>
+        </section>
         <section name="iprotium/annotation/processing/">
           <attribute name="Sealed" value="true"/>
         </section>
@@ -225,7 +228,7 @@
         <section name="iprotium/util/ant/types/">
           <attribute name="Sealed" value="true"/>
         </section>
-        <section name="iprotium/util/criteria/">
+        <section name="iprotium/util/predicate/">
           <attribute name="Sealed" value="true"/>
         </section>
         <section name="iprotium/util/jni/">
