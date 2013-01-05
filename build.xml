@@ -157,9 +157,6 @@
           <attribute name="Implementation-Vendor" value="${vendor}"/>
           <attribute name="Sealed" value="true"/>
         </section>
-        <section name="iprotium/lang/java/">
-          <attribute name="Sealed" value="true"/>
-        </section>
         <section name="iprotium/lang/lisp/">
           <attribute name="Sealed" value="true"/>
         </section>
