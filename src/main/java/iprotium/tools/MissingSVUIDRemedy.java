@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2011 Allen D. Ball.  All rights reserved.
+ * Copyright 2011 - 2013 Allen D. Ball.  All rights reserved.
  */
 package iprotium.tools;
 
@@ -16,9 +16,9 @@ import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.StandardLocation;
 
-import static iprotium.lang.java.Punctuation.EQUALS;
-import static iprotium.lang.java.Punctuation.SEMICOLON;
-import static iprotium.lang.java.Punctuation.SPACE;
+import static iprotium.lang.Punctuation.EQUALS;
+import static iprotium.lang.Punctuation.SEMICOLON;
+import static iprotium.lang.Punctuation.SPACE;
 import static iprotium.util.ClassUtil.isAbstract;
 import static iprotium.util.ClassUtil.isStatic;
 import static java.lang.reflect.Modifier.FINAL;
