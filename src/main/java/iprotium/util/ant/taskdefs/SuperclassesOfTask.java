@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2012 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2013 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -9,8 +9,8 @@ import iprotium.util.SuperclassSet;
 import java.lang.reflect.TypeVariable;
 import org.apache.tools.ant.BuildException;
 
-import static iprotium.lang.java.Punctuation.GT;
-import static iprotium.lang.java.Punctuation.LT;
+import static iprotium.lang.Punctuation.GT;
+import static iprotium.lang.Punctuation.LT;
 import static iprotium.util.ClassOrder.INHERITANCE;
 
 /**
