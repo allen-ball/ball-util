@@ -1,5 +1,5 @@
 /**
- * Language support classes.
+ * See {@link java.lang}.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
  */

@@ -1,9 +1,9 @@
 /*
  * $Id$
  *
- * Copyright 2010, 2011 Allen D. Ball.  All rights reserved.
+ * Copyright 2010 - 2013 Allen D. Ball.  All rights reserved.
  */
-package iprotium.lang.java;
+package iprotium.lang;
 
 import iprotium.util.Parser;
 import java.util.regex.Pattern;
