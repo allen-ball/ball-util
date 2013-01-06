@@ -5,7 +5,6 @@
  */
 package iprotium.annotation.processing;
 
-import java.util.ArrayList;
 import java.util.Set;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
@@ -89,6 +88,17 @@ public abstract class AbstractProcessor
     }
 
     /**
+     * Method to get a {@link TypeElement} for a {@link Class}.
+     *
+     * @param   type            The {@link Class}.
+     *
+     * @return  The {@link TypeElement} for the {@link Class}.
+     */
+    protected TypeElement getTypeElement(Class<?> type) {
+        return elements.getTypeElement(type.getCanonicalName());
+    }
+
+    /**
      * Method to return the {@link ExecutableElement}
      * ({@link java.lang.reflect.Method}) the argument
      * {@link ExecutableElement} is specified by (if any).
@@ -133,12 +143,8 @@ public abstract class AbstractProcessor
     protected ExecutableElement overrides(ExecutableElement overrider) {
         ExecutableElement overridden = null;
         TypeElement type = (TypeElement) overrider.getEnclosingElement();
-        ArrayList<TypeMirror> superclasses = new ArrayList<TypeMirror>();
 
-        superclasses.add(type.getSuperclass());
-        superclasses.addAll(type.getInterfaces());
-
-        for (TypeMirror superclass : superclasses) {
+        for (TypeMirror superclass : types.directSupertypes(type.asType())) {
             overridden = overrides(overrider, types.asElement(superclass));
 
             if (overridden != null) {
@@ -192,5 +198,26 @@ public abstract class AbstractProcessor
         }
 
         return overridden;
+    }
+
+    /**
+     * Method to determine if a {@link ExecutableElement}
+     * ({@link java.lang.reflect.Method}) overrides another
+     * {@link ExecutableElement}.
+     *
+     * @param   overrider       The (possibly) overriding
+     *                          {@link ExecutableElement}.
+     * @param   overridden      The overridden {@link ExecutableElement}.
+     *
+     * @return  {@code true} if {@code overrider} overrides
+     *          {@code overridden}; {@code false} otherwise.
+     *
+     * @see Elements#overrides(ExecutableElement,ExecutableElement,TypeElement)
+     */
+    protected boolean overrides(ExecutableElement overrider,
+                                ExecutableElement overridden) {
+        TypeElement type = (TypeElement) overridden.getEnclosingElement();
+
+        return elements.overrides(overrider, overridden, type);
     }
 }
