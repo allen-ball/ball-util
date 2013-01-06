@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2010 - 2012 Allen D. Ball.  All rights reserved.
+ * Copyright 2010 - 2013 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
