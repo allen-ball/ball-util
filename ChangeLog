@@ -2,6 +2,9 @@
 
 	* Moved iprotium.lang.java to iprotium.lang.
 
+	* src/main/java/iprotium/util/StaticFinalFieldMap.java:
+	Added StaticFinalFieldMap(Class<?>,Class<T>) constructor.
+
 	* src/main/java/iprotium/annotation/processing/AbstractProcessor.java:
 	Added getTypeElement(Class<?>) and
 	overrides(ExecutableElement,ExecutableElement) methods.
