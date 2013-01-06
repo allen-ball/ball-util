@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2010, 2011 Allen D. Ball.  All rights reserved.
+ * Copyright 2010 - 2012 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
@@ -24,11 +24,19 @@ import static iprotium.util.ClassUtil.isStatic;
  * @version $Revision$
  */
 public class StaticFinalFieldMap<T> extends TreeMap<String,T> {
-    private static final long serialVersionUID = -6986552313804842052L;
+    private static final long serialVersionUID = -5349163520372970889L;
 
     /**
-     * Sole constructor.
-     *
+     * @param   type            The {@link Class} containing the constant
+     *                          fields.
+     * @param   ofType          The type ({@link Class}) of constant fields
+     *                          to include in the map.
+     */
+    public StaticFinalFieldMap(Class<?> type, Class<T> ofType) {
+        this(type, ofType, null);
+    }
+
+    /**
      * @param   type            The {@link Class} containing the constant
      *                          fields.
      * @param   ofType          The type ({@link Class}) of constant fields
@@ -51,7 +59,8 @@ public class StaticFinalFieldMap<T> extends TreeMap<String,T> {
                         if (ofType.isAssignableFrom(value.getClass())) {
                             put(key, ofType.cast(value));
                         }
-                    } catch (IllegalAccessException exception) {
+                    } catch (Exception exception) {
+                        throw new ExceptionInInitializerError(exception);
                     }
                 }
             }
