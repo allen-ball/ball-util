@@ -2,6 +2,10 @@
 
 	* Moved iprotium.lang.java to iprotium.lang.
 
+	* src/main/java/iprotium/annotation/processing/AbstractProcessor.java:
+	Added getTypeElement(Class<?>) and
+	overrides(ExecutableElement,ExecutableElement) methods.
+
 2013-01-03  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* Renamed iprotium.util.Criteria (and subclasses) to
