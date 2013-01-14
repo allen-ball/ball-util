@@ -9,6 +9,7 @@
     <groupId>iprotium</groupId>
     <artifactId>parent-pom</artifactId>
     <version>1.0</version>
+    <relativePath>../iprotium-parent/pom.xml</relativePath>
   </parent>
   <groupId>iprotium</groupId>
   <artifactId>iprotium-util</artifactId>
