@@ -1,3 +1,9 @@
+2013-01-13  Allen D. Ball  <ball@10-0-1-2.lan>
+
+	* src/main/java/iprotium/tools/Remedy.java,
+	src/main/java/iprotium/tools/CannotResolveLocationRemedy.java:
+	Re-factored ClassMap to Remedy base class.
+
 2013-01-05  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* Moved iprotium.lang.java to iprotium.lang.
