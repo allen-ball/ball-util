@@ -26,29 +26,22 @@ import static java.lang.reflect.Modifier.PRIVATE;
 import static java.lang.reflect.Modifier.STATIC;
 
 /**
- * {@value CODE} {@link Remedy}.
- *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
  * @version $Revision$
  */
+@Codes("compiler.warn.missing.SVUID")
 public class MissingSVUIDRemedy extends Remedy implements Serializable {
-    private static final long serialVersionUID = -3988651530852465744L;
-
-    protected static final String CODE = "compiler.warn.missing.SVUID";
-
-    private static final String SVUID = "serialVersionUID";
+    private static final long serialVersionUID = 2660379745550185787L;
 
     private static final int MODIFIERS = PRIVATE | STATIC | FINAL;
     private static final Class<?> TYPE = Long.TYPE;
+    private static final String SVUID = "serialVersionUID";
     private static final String L = "L";
 
     /**
      * Sole constructor.
      */
     public MissingSVUIDRemedy() { super(); }
-
-    @Override
-    public String getCode() { return CODE; }
 
     @Override
     public String getRx(Diagnostic<? extends JavaFileObject> diagnostic,

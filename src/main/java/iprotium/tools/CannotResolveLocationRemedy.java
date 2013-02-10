@@ -19,13 +19,11 @@ import static iprotium.lang.Punctuation.SEMICOLON;
 import static iprotium.lang.Punctuation.SPACE;
 
 /**
- * {@value CODE} {@link Remedy}.
- *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
  * @version $Revision$
  */
+@Codes("compiler.err.cant.resolve.location")
 public class CannotResolveLocationRemedy extends Remedy {
-    protected static final String CODE = "compiler.err.cant.resolve.location";
 
     @Regex
     private static final String REGEX =
@@ -37,9 +35,6 @@ public class CannotResolveLocationRemedy extends Remedy {
      * Sole constructor.
      */
     public CannotResolveLocationRemedy() { super(); }
-
-    @Override
-    public String getCode() { return CODE; }
 
     @Override
     public String getRx(Diagnostic<? extends JavaFileObject> diagnostic,
