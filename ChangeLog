@@ -1,3 +1,9 @@
+2013-02-09  Allen D. Ball  <ball@10-0-1-2.lan>
+
+	* src/main/java/iprotium/tools/Codes.java,
+	src/main/java/iprotium/tools/CodesProcessor.java:
+	Initial writing.
+
 2013-01-13  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* src/main/java/iprotium/tools/Remedy.java,
