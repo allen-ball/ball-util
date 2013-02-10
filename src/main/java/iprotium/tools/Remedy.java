@@ -33,7 +33,9 @@ public abstract class Remedy {
             TreeMap<String,Remedy> map = new TreeMap<String,Remedy>();
 
             for (Remedy remedy : ServiceLoader.load(Remedy.class)) {
-                map.put(remedy.getCode(), remedy);
+                for (String code : remedy.getCodes()) {
+                    map.put(code, remedy);
+                }
             }
 
             MAP = Collections.unmodifiableSortedMap(map);
@@ -54,9 +56,13 @@ public abstract class Remedy {
     protected Remedy() { }
 
     /**
-     * See {@link Diagnostic#getCode()}.
+     * See {@link Codes} and {@link Diagnostic#getCode()}.
      */
-    public abstract String getCode();
+    public String[] getCodes() {
+        Codes codes = getClass().getAnnotation(Codes.class);
+
+        return (codes != null) ? codes.value() : null;
+    }
 
     /**
      * Method to provide a prescriptive message.
