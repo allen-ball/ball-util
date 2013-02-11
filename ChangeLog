@@ -4,6 +4,9 @@
 	Provide default getCodes() implementation that returns the value
 	of any @Codes annotation.
 
+	* src/main/java/iprotium/tools/DoesNotOverrideAbstractRemedy.java:
+	Initial writing.
+
 2013-02-09  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* src/main/java/iprotium/tools/Codes.java,
