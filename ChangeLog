@@ -1,7 +1,9 @@
-2013-02-10  Allen D. Ball  <ball@10-0-1-2.lan>
+2013-02-13  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* src/main/java/iprotium/annotation/processing/ObjectCloneProcessor.java:
 	Initial writing.
+
+2013-02-10  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* src/main/java/iprotium/tools/Remedy.java:
 	Provide default getCodes() implementation that returns the value
