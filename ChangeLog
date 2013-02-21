@@ -1,5 +1,8 @@
 2013-02-20  Allen D. Ball  <ball@10-0-1-2.lan>
 
+	* src/main/java/iprotium/annotation/processing/AbstractNoAnnotationProcessor.java:
+	Added support for ForElementKinds and ForSubclassesOf annotations.
+
 	* src/main/java/iprotium/annotation/processing/ForElementKinds.java,
 	src/main/java/iprotium/annotation/processing/ForElementKindsProcessor.java:,
 	src/main/java/iprotium/annotation/processing/ForSubclassesOf.java,
