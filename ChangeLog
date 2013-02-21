@@ -1,5 +1,12 @@
 2013-02-20  Allen D. Ball  <ball@10-0-1-2.lan>
 
+	* src/main/java/iprotium/annotation/processing/AbstractProcessor.java:
+	Added isAssignable(Element,Element) method.
+	Added implementationOf(ExecutableElement,TypeElement) method.
+	Added getExecutableElementFor(Class<?>,String,Class<?>...) and
+	getExecutableElementFor(Method) methods.
+	Renamed getTypeElement(Class<?>) to getTypeElementFor(Class<?>).
+
 	* src/main/java/iprotium/annotation/processing/AbstractNoAnnotationProcessor.java:
 	Added support for ForElementKinds and ForSubclassesOf annotations.
 
