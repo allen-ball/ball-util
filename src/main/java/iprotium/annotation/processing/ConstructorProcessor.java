@@ -5,16 +5,13 @@
  */
 package iprotium.annotation.processing;
 
-import java.util.List;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
-import javax.lang.model.element.TypeElement;
-import javax.lang.model.type.TypeMirror;
 
+import static javax.lang.model.element.ElementKind.CLASS;
 import static javax.lang.model.element.Modifier.ABSTRACT;
 import static javax.lang.model.element.Modifier.PUBLIC;
 import static javax.lang.model.util.ElementFilter.constructorsIn;
-import static javax.lang.model.util.ElementFilter.typesIn;
 
 /**
  * {@link javax.annotation.processing.Processor} implementation to enforce
@@ -32,6 +29,7 @@ import static javax.lang.model.util.ElementFilter.typesIn;
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
  * @version $Revision$
  */
+@ForElementKinds({ CLASS })
 public class ConstructorProcessor extends AbstractNoAnnotationProcessor {
 
     /**
@@ -40,19 +38,15 @@ public class ConstructorProcessor extends AbstractNoAnnotationProcessor {
     public ConstructorProcessor() { super(); }
 
     @Override
-    protected void process(Iterable<? extends Element> iterable) {
-        for (TypeElement type : typesIn(iterable)) {
-            List<? extends ExecutableElement> list =
-                constructorsIn(type.getEnclosedElements());
-
-            for (ExecutableElement constructor : list) {
-                if (type.getModifiers().contains(ABSTRACT)) {
-                    if (constructor.getModifiers().contains(PUBLIC)) {
-                        warning(constructor,
-                                constructor.getKind() + " is declared "
-                                + constructor.getModifiers()
-                                + "; suggest non-" + PUBLIC);
-                    }
+    protected void process(Element element) {
+        for (ExecutableElement constructor :
+                 constructorsIn(element.getEnclosedElements())) {
+            if (element.getModifiers().contains(ABSTRACT)) {
+                if (constructor.getModifiers().contains(PUBLIC)) {
+                    warning(constructor,
+                            constructor.getKind() + " is declared "
+                            + constructor.getModifiers()
+                            + "; suggest non-" + PUBLIC);
                 }
             }
         }

@@ -6,8 +6,7 @@
 package iprotium.annotation.processing;
 
 import java.util.ArrayList;
-import java.util.Set;
-import javax.annotation.processing.RoundEnvironment;
+import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
@@ -34,10 +33,11 @@ import static javax.lang.model.util.ElementFilter.methodsIn;
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
  * @version $Revision$
  */
+@ForSubclassesOf(Object.class)
 public class ObjectCloneProcessor extends AbstractNoAnnotationProcessor {
+    private ExecutableElement CLONE = null;
     private TypeElement OBJECT = null;
     private TypeElement CLONEABLE = null;
-    private ExecutableElement CLONE = null;
 
     /**
      * Sole constructor.
@@ -45,30 +45,22 @@ public class ObjectCloneProcessor extends AbstractNoAnnotationProcessor {
     public ObjectCloneProcessor() { super(); }
 
     @Override
-    public boolean process(Set<? extends TypeElement> annotations,
-                           RoundEnvironment roundEnv) {
-        synchronized (this) {
-            if (OBJECT == null) {
-                OBJECT = getTypeElement(Object.class);
-                CLONEABLE = getTypeElement(Cloneable.class);
+    public void init(ProcessingEnvironment processingEnv) {
+        super.init(processingEnv);
 
-                for (ExecutableElement method :
-                         methodsIn(OBJECT.getEnclosedElements())) {
-                    if (method.getSimpleName().contentEquals("clone")
-                        && method.getParameters().isEmpty()) {
-                        CLONE = method;
-                        break;
-                    }
-                }
-            }
+        try {
+            CLONE = getExecutableElementFor(Object.class, "clone");
+            OBJECT = (TypeElement) CLONE.getEnclosingElement();
+            CLONEABLE = getTypeElementFor(Cloneable.class);
+        } catch (Exception exception) {
+            throw new IllegalStateException(exception);
         }
-
-        return super.process(annotations, roundEnv);
     }
 
     @Override
-    protected void process(Iterable<? extends Element> iterable) {
-        for (ExecutableElement method : methodsIn(iterable)) {
+    protected void process(Element element) {
+        for (ExecutableElement method :
+                 methodsIn(element.getEnclosedElements())) {
             if (overrides(method, CLONE)) {
                 check(method);
             }
@@ -81,15 +73,14 @@ public class ObjectCloneProcessor extends AbstractNoAnnotationProcessor {
         if (! type.getInterfaces().contains(CLONEABLE.asType())) {
             warning(type,
                     type.getKind() + " overrides "
-                    + OBJECT.getSimpleName() + "." + CLONE
-                    + " but does not implement "
-                    + CLONEABLE.getQualifiedName());
+                    + OBJECT.getSimpleName() + DOT + CLONE.toString()
+                    + " but does not implement " + CLONEABLE.getSimpleName());
         }
 
         if (! types.isAssignable(clone.getReturnType(), type.asType())) {
             warning(clone,
                     clone.getKind() + " overrides "
-                    + OBJECT.getSimpleName() + "." + CLONE
+                    + OBJECT.getSimpleName() + DOT + CLONE.toString()
                     + " but does not return a subclass of "
                     + type.getSimpleName());
         }
@@ -116,7 +107,7 @@ public class ObjectCloneProcessor extends AbstractNoAnnotationProcessor {
 
             warning(clone,
                     clone.getKind() + " overrides "
-                    + OBJECT.getSimpleName() + "." + CLONE
+                    + OBJECT.getSimpleName() + DOT + CLONE.toString()
                     + " but does not throw " + name);
         }
     }
