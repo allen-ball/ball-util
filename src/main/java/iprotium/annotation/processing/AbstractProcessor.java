@@ -1,10 +1,12 @@
 /*
  * $Id$
  *
- * Copyright 2012 Allen D. Ball.  All rights reserved.
+ * Copyright 2012, 2013 Allen D. Ball.  All rights reserved.
  */
 package iprotium.annotation.processing;
 
+import java.lang.reflect.Method;
+import java.util.List;
 import java.util.Set;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
@@ -12,12 +14,14 @@ import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.disjoint;
+import static javax.lang.model.element.ElementKind.METHOD;
 import static javax.lang.model.element.Modifier.PRIVATE;
 import static javax.lang.model.element.Modifier.STATIC;
 import static javax.lang.model.util.ElementFilter.methodsIn;
@@ -37,6 +41,15 @@ import static javax.tools.Diagnostic.Kind.WARNING;
  */
 public abstract class AbstractProcessor
                       extends javax.annotation.processing.AbstractProcessor {
+    /** {@link #AT} = {@value #AT} */
+    protected static final String AT = "@";
+    /** {@link #COLON} = {@value #COLON} */
+    protected static final String COLON = ":";
+    /** {@link #DOT} = {@value #DOT} */
+    protected static final String DOT = ".";
+    /** {@link #SPACE} = {@value #SPACE} */
+    protected static final String SPACE = " ";
+
     /** See {@link ProcessingEnvironment#getElementUtils()}. */
     protected Elements elements = null;
     /** See {@link ProcessingEnvironment#getTypeUtils()}. */
@@ -88,44 +101,11 @@ public abstract class AbstractProcessor
     }
 
     /**
-     * Method to get a {@link TypeElement} for a {@link Class}.
-     *
-     * @param   type            The {@link Class}.
-     *
-     * @return  The {@link TypeElement} for the {@link Class}.
+     * See {@link Types#isAssignable(TypeMirror,TypeMirror)}.
      */
-    protected TypeElement getTypeElement(Class<?> type) {
-        return elements.getTypeElement(type.getCanonicalName());
-    }
-
-    /**
-     * Method to return the {@link ExecutableElement}
-     * ({@link java.lang.reflect.Method}) the argument
-     * {@link ExecutableElement} is specified by (if any).
-     *
-     * @param   method          The {@link ExecutableElement}.
-     *
-     * @return  The specification {@link ExecutableElement} if any;
-     *          {@code null} otherwise.
-     *
-     * @see #overrides(ExecutableElement)
-     */
-    protected ExecutableElement specifiedBy(ExecutableElement method) {
-        ExecutableElement specification = overrides(method);
-
-        if (specification != null) {
-            for (;;) {
-                ExecutableElement overridden = overrides(specification);
-
-                if (overridden != null) {
-                    specification = overridden;
-                } else {
-                    break;
-                }
-            }
-        }
-
-        return specification;
+    protected boolean isAssignable(Element e1, Element e2) {
+        return types.isAssignable((e1 != null) ? e1.asType() : null,
+                                  (e2 != null) ? e2.asType() : null);
     }
 
     /**
@@ -219,5 +199,164 @@ public abstract class AbstractProcessor
         TypeElement type = (TypeElement) overridden.getEnclosingElement();
 
         return elements.overrides(overrider, overridden, type);
+    }
+
+    /**
+     * Method to return the {@link ExecutableElement}
+     * ({@link java.lang.reflect.Method}) the argument
+     * {@link ExecutableElement} is overriden by (if any).
+     *
+     * @param   overridden      The {@link ExecutableElement}.
+     * @param   type            The {@link TypeElement}.
+     *
+     * @return  The overriding {@link ExecutableElement} if any;
+     *          {@code null} otherwise.
+     *
+     * @see #overrides(ExecutableElement)
+     */
+    protected ExecutableElement implementationOf(ExecutableElement overridden,
+                                                 TypeElement type) {
+        ExecutableElement overrider = null;
+
+        if (type != null) {
+            for (ExecutableElement method :
+                     methodsIn(type.getEnclosedElements())) {
+                if (overrides(method, overridden)) {
+                    overrider = method;
+                    break;
+                }
+            }
+        }
+
+        if (overrider == null) {
+            if (type != null) {
+                TypeMirror mirror = type.getSuperclass();
+
+                if (mirror != null) {
+                    TypeElement supertype =
+                        (TypeElement) types.asElement(mirror);
+
+                    overrider = implementationOf(overridden, supertype);
+                }
+            }
+        }
+
+        return overrider;
+    }
+
+    /**
+     * Method to return the {@link ExecutableElement}
+     * ({@link java.lang.reflect.Method}) the argument
+     * {@link ExecutableElement} is specified by (if any).
+     *
+     * @param   method          The {@link ExecutableElement}.
+     *
+     * @return  The specification {@link ExecutableElement} if any;
+     *          {@code null} otherwise.
+     *
+     * @see #overrides(ExecutableElement)
+     */
+    protected ExecutableElement specifiedBy(ExecutableElement method) {
+        ExecutableElement specification = overrides(method);
+
+        if (specification != null) {
+            for (;;) {
+                ExecutableElement overridden = overrides(specification);
+
+                if (overridden != null) {
+                    specification = overridden;
+                } else {
+                    break;
+                }
+            }
+        }
+
+        return specification;
+    }
+
+    /**
+     * Method to get an {@link ExecutableElement} for a {@link Class}
+     * {@link Method}.
+     *
+     * @param   type            The {@link Class}.
+     * @param   name            The {@link Method} name.
+     * @param   parameters      The {@link Method} parameter types.
+     *
+     * @return  The {@link ExecutableElement} for the {@link Method}.
+     */
+    protected ExecutableElement getExecutableElementFor(Class<?> type,
+                                                        String name,
+                                                        Class<?>... parameters)
+                                        throws NoSuchMethodException {
+        return getExecutableElementFor(type.getDeclaredMethod(name,
+                                                              parameters));
+    }
+
+    /**
+     * Method to get an {@link ExecutableElement} for a {@link Method}.
+     *
+     * @param   method          The {@link Method}.
+     *
+     * @return  The {@link ExecutableElement} for the {@link Method}.
+     */
+    protected ExecutableElement getExecutableElementFor(Method method) {
+        ExecutableElement executable = null;
+        TypeElement type = getTypeElementFor(method.getDeclaringClass());
+
+        if (type != null) {
+            for (ExecutableElement element :
+                     methodsIn(type.getEnclosedElements())) {
+                if (same(element, method)) {
+                    executable = element;
+                    break;
+                }
+            }
+        }
+
+        return executable;
+    }
+
+    private boolean same(ExecutableElement element, Method method) {
+        boolean same = (element.getKind() == METHOD);
+
+        if (same) {
+            same &= element.getSimpleName().contentEquals(method.getName());
+        }
+
+        if (same) {
+            same &= (element.isVarArgs() == method.isVarArgs());
+        }
+
+        if (same) {
+            List<? extends VariableElement> list = element.getParameters();
+            Class<?>[] array = method.getParameterTypes();
+
+            if (list.size() == array.length) {
+                for (int i = 0, n = list.size(); i < n; i += 1) {
+                    same &=
+                        types.isSameType(list.get(i).asType(),
+                                         getTypeElementFor(array[i]).asType());
+
+                    if (! same) {
+                        break;
+                    }
+                }
+            } else {
+                same &= false;
+            }
+        }
+
+        return same;
+    }
+
+    /**
+     * Method to get a {@link TypeElement} for a {@link Class}.
+     *
+     * @param   type            The {@link Class}.
+     *
+     * @return  The {@link TypeElement} for the {@link Class}.
+     */
+    protected TypeElement getTypeElementFor(Class<?> type) {
+        return elements.getTypeElement(type.getCanonicalName());
     }
 }
