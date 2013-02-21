@@ -1,3 +1,11 @@
+2013-02-20  Allen D. Ball  <ball@10-0-1-2.lan>
+
+	* src/main/java/iprotium/annotation/processing/ForElementKinds.java,
+	src/main/java/iprotium/annotation/processing/ForElementKindsProcessor.java:,
+	src/main/java/iprotium/annotation/processing/ForSubclassesOf.java,
+	src/main/java/iprotium/annotation/processing/ForSubclassesOfProcessor.java:
+	Initial writing.
+
 2013-02-13  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* src/main/java/iprotium/annotation/processing/ObjectCloneProcessor.java:
