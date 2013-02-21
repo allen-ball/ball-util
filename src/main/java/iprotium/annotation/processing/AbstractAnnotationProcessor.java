@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2012 Allen D. Ball.  All rights reserved.
+ * Copyright 2012, 2013 Allen D. Ball.  All rights reserved.
  */
 package iprotium.annotation.processing;
 
@@ -81,8 +81,8 @@ public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
     private CharSequence format(CharSequence message) {
         CharSequence sequence =
             new StringBuilder()
-            .append("@").append(type.getCanonicalName())
-            .append(": ").append(message);
+            .append(AT).append(type.getCanonicalName())
+            .append(COLON).append(SPACE).append(message);
 
         return sequence;
     }
