@@ -14,6 +14,10 @@ import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
+ * {@link AbstractNoAnnotationProcessor}
+ * {@link java.lang.annotation.Annotation} to specify {@link ElementKind}
+ * criteria.
+ *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
  * @version $Revision$
  */
