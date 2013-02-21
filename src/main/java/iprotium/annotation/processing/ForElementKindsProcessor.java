@@ -5,8 +5,10 @@
  */
 package iprotium.annotation.processing;
 
+import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
+import javax.lang.model.element.TypeElement;
 
 /**
  * {@link javax.annotation.processing.Processor} implementation to check
@@ -16,6 +18,7 @@ import javax.lang.model.element.Element;
  * @version $Revision$
  */
 public class ForElementKindsProcessor extends AbstractAnnotationProcessor {
+    private TypeElement supertype = null;
 
     /**
      * Sole constructor.
@@ -23,7 +26,29 @@ public class ForElementKindsProcessor extends AbstractAnnotationProcessor {
     public ForElementKindsProcessor() { super(ForElementKinds.class); }
 
     @Override
+    public void init(ProcessingEnvironment processingEnv) {
+        super.init(processingEnv);
+
+        supertype = getTypeElementFor(AbstractNoAnnotationProcessor.class);
+    }
+
+    @Override
     public void process(RoundEnvironment roundEnv,
                         Element element) throws Exception {
+        switch (element.getKind()) {
+        case CLASS:
+            if (! isAssignable(element, supertype)) {
+                error(element,
+                      element.getKind() + " annotated with "
+                      + AT + type.getSimpleName()
+                      + " but is not a subclass of "
+                      + supertype.getQualifiedName());
+            }
+            break;
+
+        default:
+            throw new IllegalStateException();
+            /* break; */
+        }
     }
 }
