@@ -1,3 +1,8 @@
+2013-04-03  Allen D. Ball  <ball@10-0-1-2.lan>
+
+	* src/main/java/iprotium/util/ant/taskdefs/LinkTask.java:
+	Track Ant 1.9.0 interface changes.
+
 2013-02-20  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* src/main/java/iprotium/annotation/processing/AbstractProcessor.java:
