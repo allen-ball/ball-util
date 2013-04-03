@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2011 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2013 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -56,7 +56,7 @@ public class LinkTask extends Copy {
             for (Object key : fileCopyMap.keySet()) {
                 File from = new File(key.toString());
 
-                for (String value : ((String[]) fileCopyMap.get(key))) {
+                for (String value : fileCopyMap.get(key)) {
                     File to = new File(value);
 
                     if (! from.equals(to)) {
