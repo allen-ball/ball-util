@@ -1,14 +1,14 @@
 /*
  * $Id$
  *
- * Copyright 2009 - 2011 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2013 Allen D. Ball.  All rights reserved.
  */
 package iprotium.io;
 
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FilenameFilter;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 
 /**
@@ -49,7 +49,7 @@ public abstract class AbstractFilenameFilter implements FilenameFilter {
                 String[] names = parent.list(this);
 
                 if (names != null) {
-                    set.addAll(Arrays.asList(names));
+                    Collections.addAll(set, names);
                 }
             }
         }

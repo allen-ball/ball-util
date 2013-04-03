@@ -7,7 +7,7 @@ package iprotium.util.predicate;
 
 import iprotium.util.AbstractPredicate;
 import iprotium.util.ClassOrder;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.TreeSet;
 
 /**
@@ -34,7 +34,7 @@ public class IsInstanceOf extends And {
         public Impl(Class<?>... types) {
             super();
 
-            set.addAll(Arrays.asList(types));
+            Collections.addAll(set, types);
         }
 
         @Override
