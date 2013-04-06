@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2011, 2012 Allen D. Ball.  All rights reserved.
+ * Copyright 2011 - 2013 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -9,8 +9,12 @@ import iprotium.io.Directory;
 import iprotium.io.IOUtil;
 import iprotium.util.ClassOrder;
 import java.io.File;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.charset.Charset;
+import java.util.Collection;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import java.util.TreeSet;
 import org.apache.tools.ant.BuildException;
 
@@ -27,25 +31,28 @@ import static iprotium.util.ClassUtil.isAbstract;
 public class ProviderFileForTask extends AbstractClassFileTask {
     private static final Charset CHARSET = Charset.forName("UTF-8");
 
-    private String service = null;
     private File destdir = null;
+    private LinkedHashSet<String> set = new LinkedHashSet<String>();
 
     /**
      * Sole constructor.
      */
     public ProviderFileForTask() { super(); }
 
-    protected String getService() { return service; }
-    public void setService(String service) { this.service = service; }
-
     protected File getDestdir() { return destdir; }
     public void setDestdir(File destdir) { this.destdir = destdir; }
+
+    protected Set<String> getServiceSet() { return set; }
+    public void setService(String name) { set.add(name); }
+    public void addConfiguredService(Service service) {
+        set.add(service.getName());
+    }
 
     @Override
     public void execute() throws BuildException {
         super.execute();
 
-        if (getService() == null) {
+        if (getServiceSet().isEmpty()) {
             throw new BuildException("`service' attribute must be specified");
         }
 
@@ -57,38 +64,28 @@ public class ProviderFileForTask extends AbstractClassFileTask {
             setDestdir(getBasedir());
         }
 
-        PrintWriter out = null;
+        Directory parent =
+            Directory.getChildDirectory(getDestdir(), "META-INF", "services");
 
         try {
-            Class<?> service = null;
-            TreeSet<Class<?>> set = new TreeSet<Class<?>>(ClassOrder.NAME);
+            for (String name : getServiceSet()) {
+                Class<?> service = null;
+                TreeSet<Class<?>> set = new TreeSet<Class<?>>(ClassOrder.NAME);
 
-            for (Class<?> type : getClassSet()) {
-                if (service == null) {
-                    service =
-                        Class.forName(getService(),
-                                      false, type.getClassLoader());
-                }
+                for (Class<?> type : getClassSet()) {
+                    if (service == null) {
+                        service =
+                            Class.forName(name, false, type.getClassLoader());
+                    }
 
-                if (service.isAssignableFrom(type)) {
-                    if (! isAbstract(type)) {
-                        set.add(type);
+                    if (service.isAssignableFrom(type)) {
+                        if (! isAbstract(type)) {
+                            set.add(type);
+                        }
                     }
                 }
-            }
 
-            Directory parent =
-                Directory.getChildDirectory(getDestdir(),
-                                            "META-INF", "services");
-
-            IOUtil.mkdirs(parent);
-
-            out =
-                new PrintWriter(parent.getChildFile(service.getName()),
-                                CHARSET.name());
-
-            for (Class<?> provider : set) {
-                out.println(provider.getName());
+                generate(parent, service, set);
             }
         } catch (BuildException exception) {
             throw exception;
@@ -98,12 +95,61 @@ public class ProviderFileForTask extends AbstractClassFileTask {
         } catch (Exception exception) {
             exception.printStackTrace();
             throw new BuildException(exception);
-        } finally {
+        }
+    }
+
+    private void generate(Directory parent,
+                          Class<?> service,
+                          Collection<Class<?>> providers) throws IOException {
+        if (service != null && (! providers.isEmpty())) {
+            PrintWriter out = null;
+
             try {
-                IOUtil.close(out);
+                IOUtil.mkdirs(parent);
+
+                out =
+                    new PrintWriter(parent.getChildFile(service.getName()),
+                                    CHARSET.name());
+
+                for (Class<?> provider : providers) {
+                    out.println(provider.getName());
+                }
             } finally {
-                out = null;
+                try {
+                    IOUtil.close(out);
+                } finally {
+                    out = null;
+                }
             }
         }
+    }
+
+    /**
+     * {@link ProviderFileForTask} service specification.
+     */
+    public static class Service {
+        private String name = null;
+
+        /**
+         * Sole constructor.
+         */
+        public Service() { }
+
+        protected String getName() { return name; }
+        public void setName(String name) { this.name = name; }
+
+        /**
+         * See {@link #setName(String)}.
+         */
+        public void addText(String name) {
+            if (getName() != null) {
+                name = getName() + name;
+            }
+
+            setName(name.trim());
+        }
+
+        @Override
+        public String toString() { return getName(); }
     }
 }
