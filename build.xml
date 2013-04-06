@@ -10,11 +10,10 @@
     $Id$
   </description>
 
+  <property environment="env"/>
   <property name="build.properties.file" location="build.properties"/>
   <property file="${build.properties.file}"/>
   <property name="build.sysclasspath"   value="ignore"/>
-  <property name="build.compiler.adapter"
-            value="iprotium.util.ant.taskdefs.compilers.LintAdapter"/>
   <available classname="${build.compiler.adapter}"
              property="build.compiler" value="${build.compiler.adapter}"/>
 
@@ -90,14 +89,11 @@
       <src path="${src.dir}/main/java"/>
     </jni-classes>
     <provider-file-for classpathref="build.classpath"
-                       basedir="${target.classes.dir}"
-                       service="com.sun.tools.doclets.Taglet"/>
-    <provider-file-for classpathref="build.classpath"
-                       basedir="${target.classes.dir}"
-                       service="iprotium.tools.Remedy"/>
-    <provider-file-for classpathref="build.classpath"
-                       basedir="${target.classes.dir}"
-                       service="javax.annotation.processing.Processor"/>
+                       basedir="${target.classes.dir}">
+      <service>com.sun.tools.doclets.Taglet</service>
+      <service>iprotium.tools.Remedy</service>
+      <service>javax.annotation.processing.Processor</service>
+    </provider-file-for>
   </target>
 
   <target name="jar"
