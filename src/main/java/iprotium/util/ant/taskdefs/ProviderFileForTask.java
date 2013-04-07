@@ -110,6 +110,7 @@ public class ProviderFileForTask extends AbstractClassFileTask {
                 out =
                     new PrintWriter(parent.getChildFile(service.getName()),
                                     CHARSET.name());
+                out.println("# " + service.getName());
 
                 for (Class<?> provider : providers) {
                     out.println(provider.getName());
