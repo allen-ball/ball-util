@@ -1,5 +1,8 @@
 2013-05-18  Allen D. Ball  <ball@10-0-1-2.lan>
 
+	* src/main/java/iprotium/io/Directory.java:
+	Added asDirectory(File) static method.
+
 	* src/main/java/iprotium/io/FileImpl.java:
 	Added asFileImpl(File) static method.
 
