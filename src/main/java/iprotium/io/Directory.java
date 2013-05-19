@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2010, 2011 Allen D. Ball.  All rights reserved.
+ * Copyright 2010 - 2013 Allen D. Ball.  All rights reserved.
  */
 package iprotium.io;
 
@@ -17,7 +17,7 @@ import java.util.Arrays;
  * @version $Revision$
  */
 public class Directory extends FileImpl {
-    private static final long serialVersionUID = -1519925282641191828L;
+    private static final long serialVersionUID = 8506847168875186580L;
 
     /**
      * @see File#File(String)
@@ -49,6 +49,8 @@ public class Directory extends FileImpl {
             }
         }
     }
+
+    private Directory(File file) { this(file.getAbsolutePath()); }
 
     /**
      * Method to get a child {@link Directory}.
@@ -98,6 +100,29 @@ public class Directory extends FileImpl {
     @Override
     public boolean createNewFile() throws IOException {
         throw new IOException(this + " is a directory");
+    }
+
+    /**
+     * Static method to return the argument {@link File} as a
+     * {@link Directory}.  A new {@link Directory} instance is created only
+     * if the argument {@link File} is not an instance of {@link Directory}.
+     *
+     * @param   file    The {@link File}.
+     *
+     * @return  The argument {@link File} as a {@link Directory}.
+     */
+    public static Directory asDirectory(File file) {
+        Directory directory = null;
+
+        if (file != null) {
+            if (file instanceof Directory) {
+                directory = (Directory) file;
+            } else {
+                directory = new Directory(file);
+            }
+        }
+
+        return directory;
     }
 
     /**
