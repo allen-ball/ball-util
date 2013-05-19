@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2010, 2011 Allen D. Ball.  All rights reserved.
+ * Copyright 2010 - 2013 Allen D. Ball.  All rights reserved.
  */
 package iprotium.io;
 
@@ -20,7 +20,7 @@ import static iprotium.util.Order.NATURAL;
  * @version $Revision$
  */
 public class FileImpl extends File {
-    private static final long serialVersionUID = 2428859525771862331L;
+    private static final long serialVersionUID = -1392273539158430301L;
 
     /**
      * {@link #DOT} = {@value #DOT}
@@ -58,6 +58,8 @@ public class FileImpl extends File {
      * @see File#File(URI)
      */
     public FileImpl(URI uri) { super(uri); }
+
+    private FileImpl(File file) { this(file.getAbsolutePath()); }
 
     /**
      * Method to get the base-name (removing the last suffix) of
@@ -129,6 +131,57 @@ public class FileImpl extends File {
     }
 
     /**
+     * Static method to return the argument {@link File} as a
+     * {@link FileImpl}.  A new {@link FileImpl} instance is created only
+     * if the argument {@link File} is not an instance of {@link FileImpl}.
+     *
+     * @param   file    The {@link File}.
+     *
+     * @return  The argument {@link File} as a {@link FileImpl}.
+     */
+    public static FileImpl asFileImpl(File file) {
+        FileImpl impl = null;
+
+        if (file != null) {
+            if (file instanceof FileImpl) {
+                impl = (FileImpl) file;
+            } else {
+                impl = new FileImpl(file);
+            }
+        }
+
+        return impl;
+    }
+
+    /**
+     * @see #getChildFile(Iterable)
+     */
+    public static FileImpl getChildFile(File parent,
+                                        Iterable<CharSequence> names) {
+        FileImpl file = Directory.getChildDirectory(parent);
+        Iterator<CharSequence> iterator = names.iterator();
+
+        while (iterator.hasNext()) {
+            CharSequence name = iterator.next();
+
+            if (iterator.hasNext()) {
+                file = Directory.getChildFile(file, name);
+            } else {
+                file = new FileImpl(file, name);
+            }
+        }
+
+        return file;
+    }
+
+    /**
+     * @see #getChildFile(CharSequence...)
+     */
+    public static FileImpl getChildFile(File parent, CharSequence... names) {
+        return getChildFile(parent, Arrays.asList(names));
+    }
+
+    /**
      * @see #getNameBase()
      */
     public static String getNameBase(File file) {
@@ -178,33 +231,5 @@ public class FileImpl extends File {
         }
 
         return suffix;
-    }
-
-    /**
-     * @see #getChildFile(Iterable)
-     */
-    public static FileImpl getChildFile(File parent,
-                                        Iterable<CharSequence> names) {
-        FileImpl file = Directory.getChildDirectory(parent);
-        Iterator<CharSequence> iterator = names.iterator();
-
-        while (iterator.hasNext()) {
-            CharSequence name = iterator.next();
-
-            if (iterator.hasNext()) {
-                file = Directory.getChildFile(file, name);
-            } else {
-                file = new FileImpl(file, name);
-            }
-        }
-
-        return file;
-    }
-
-    /**
-     * @see #getChildFile(CharSequence...)
-     */
-    public static FileImpl getChildFile(File parent, CharSequence... names) {
-        return getChildFile(parent, Arrays.asList(names));
     }
 }
