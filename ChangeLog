@@ -1,3 +1,8 @@
+2013-05-26  Allen D. Ball  <ball@10-0-1-2.lan>
+
+	* src/main/java/iprotium/annotation/processing/AbstractProcessor.java:
+	Analyze interfaces in isAssignable(Element,Element).
+
 2013-05-18  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* src/main/java/iprotium/io/Directory.java:
