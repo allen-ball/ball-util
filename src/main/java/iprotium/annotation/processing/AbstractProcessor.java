@@ -6,6 +6,8 @@
 package iprotium.annotation.processing;
 
 import java.lang.reflect.Method;
+import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import javax.annotation.processing.ProcessingEnvironment;
@@ -103,9 +105,46 @@ public abstract class AbstractProcessor
     /**
      * See {@link Types#isAssignable(TypeMirror,TypeMirror)}.
      */
-    protected boolean isAssignable(Element e1, Element e2) {
-        return types.isAssignable((e1 != null) ? e1.asType() : null,
-                                  (e2 != null) ? e2.asType() : null);
+    protected boolean isAssignable(Element from, Element to) {
+        boolean isAssignable = false;
+
+        if (from instanceof TypeElement && to instanceof TypeElement) {
+            isAssignable = isAssignable((TypeElement) from, (TypeElement) to);
+        }
+
+        return isAssignable;
+    }
+
+    private boolean isAssignable(TypeElement from, TypeElement to) {
+        boolean isAssignable = types.isAssignable(from.asType(), to.asType());
+
+        if (! isAssignable) {
+            for (TypeElement supertype : supertypesOf(from)) {
+                isAssignable |= isAssignable(supertype, to);
+
+                if (isAssignable) {
+                    break;
+                }
+            }
+        }
+
+        return isAssignable;
+    }
+
+    private Collection<? extends TypeElement> supertypesOf(TypeElement type) {
+        LinkedList<TypeElement> list = new LinkedList<TypeElement>();
+
+        if (type != null) {
+            list.add((TypeElement) types.asElement(type.getSuperclass()));
+
+            for (TypeMirror mirror : type.getInterfaces()) {
+                list.add((TypeElement) types.asElement(mirror));
+            }
+        }
+
+        list.removeAll(asList((TypeElement) null));
+
+        return list;
     }
 
     /**
