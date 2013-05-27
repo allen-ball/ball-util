@@ -6,8 +6,6 @@
 package iprotium.annotation.processing;
 
 import java.lang.reflect.Method;
-import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import javax.annotation.processing.ProcessingEnvironment;
@@ -119,8 +117,9 @@ public abstract class AbstractProcessor
         boolean isAssignable = types.isAssignable(from.asType(), to.asType());
 
         if (! isAssignable) {
-            for (TypeElement supertype : supertypesOf(from)) {
-                isAssignable |= isAssignable(supertype, to);
+            for (TypeMirror supertype :
+                     types.directSupertypes(from.asType())) {
+                isAssignable |= isAssignable(types.asElement(supertype), to);
 
                 if (isAssignable) {
                     break;
@@ -129,22 +128,6 @@ public abstract class AbstractProcessor
         }
 
         return isAssignable;
-    }
-
-    private Collection<? extends TypeElement> supertypesOf(TypeElement type) {
-        LinkedList<TypeElement> list = new LinkedList<TypeElement>();
-
-        if (type != null) {
-            list.add((TypeElement) types.asElement(type.getSuperclass()));
-
-            for (TypeMirror mirror : type.getInterfaces()) {
-                list.add((TypeElement) types.asElement(mirror));
-            }
-        }
-
-        list.removeAll(asList((TypeElement) null));
-
-        return list;
     }
 
     /**
@@ -163,8 +146,8 @@ public abstract class AbstractProcessor
         ExecutableElement overridden = null;
         TypeElement type = (TypeElement) overrider.getEnclosingElement();
 
-        for (TypeMirror superclass : types.directSupertypes(type.asType())) {
-            overridden = overrides(overrider, types.asElement(superclass));
+        for (TypeMirror supertype : types.directSupertypes(type.asType())) {
+            overridden = overrides(overrider, types.asElement(supertype));
 
             if (overridden != null) {
                 break;
