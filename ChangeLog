@@ -3,6 +3,9 @@
 	* src/main/java/iprotium/annotation/processing/AbstractNoAnnotationProcessor.java:
 	Added support for ForModifiers Annotation.
 
+	* src/main/java/iprotium/annotation/processing/ObjectToStringProcessor.java:
+	Initial writing.
+
 	* src/main/java/iprotium/annotation/processing/ForModifiers.java,
 	src/main/java/iprotium/annotation/processing/ForModifiersProcessor.java:
 	Initial writing.
