@@ -14,16 +14,19 @@ import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
+import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 
 import static java.util.Arrays.asList;
+import static java.util.Collections.disjoint;
 import static java.util.Collections.singleton;
 
 /**
  * Abstract {@link javax.annotation.processing.Processor} base class for
- * processing "no" {@link java.lang.annotation.Annotation} ("*").
+ * processing "no" {@link java.lang.annotation.Annotation} ({@code "*"}).
  *
  * @see ForElementKinds
+ * @see ForModifiers
  * @see ForSubclassesOf
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
@@ -31,6 +34,8 @@ import static java.util.Collections.singleton;
  */
 public abstract class AbstractNoAnnotationProcessor extends AbstractProcessor {
     private List<ElementKind> kinds = null;
+    private boolean exclude = false;
+    private List<Modifier> modifiers = null;
     private TypeElement supertype = null;
 
     /**
@@ -46,12 +51,20 @@ public abstract class AbstractNoAnnotationProcessor extends AbstractProcessor {
         super.init(processingEnv);
 
         setElementKinds(getAnnotation(ForElementKinds.class));
+        setModifiers(getAnnotation(ForModifiers.class));
         setSubclassesOf(getAnnotation(ForSubclassesOf.class));
     }
 
     private void setElementKinds(ForElementKinds annotation) {
         if (annotation != null) {
             kinds = asList(annotation.value());
+        }
+    }
+
+    private void setModifiers(ForModifiers annotation) {
+        if (annotation != null) {
+            exclude = annotation.exclude();
+            modifiers = asList(annotation.value());
         }
     }
 
@@ -76,6 +89,18 @@ public abstract class AbstractNoAnnotationProcessor extends AbstractProcessor {
             if (kinds != null) {
                 if (! kinds.contains(element.getKind())) {
                     continue;
+                }
+            }
+
+            if (modifiers != null) {
+                if (! exclude) {
+                    if (! element.getModifiers().containsAll(modifiers)) {
+                        continue;
+                    }
+                } else {
+                    if (! disjoint(element.getModifiers(), modifiers)) {
+                        continue;
+                    }
                 }
             }
 
