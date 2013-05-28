@@ -35,9 +35,8 @@ import static javax.lang.model.util.ElementFilter.methodsIn;
  */
 @ForSubclassesOf(Object.class)
 public class ObjectCloneProcessor extends AbstractNoAnnotationProcessor {
-    private ExecutableElement CLONE = null;
-    private TypeElement OBJECT = null;
-    private TypeElement CLONEABLE = null;
+    private ExecutableElement METHOD = null;
+    private TypeElement THROWABLE = null;
 
     /**
      * Sole constructor.
@@ -49,9 +48,8 @@ public class ObjectCloneProcessor extends AbstractNoAnnotationProcessor {
         super.init(processingEnv);
 
         try {
-            CLONE = getExecutableElementFor(Object.class, "clone");
-            OBJECT = (TypeElement) CLONE.getEnclosingElement();
-            CLONEABLE = getTypeElementFor(Cloneable.class);
+            METHOD = getExecutableElementFor(Object.class, "clone");
+            THROWABLE = getTypeElementFor(Cloneable.class);
         } catch (Exception exception) {
             throw new IllegalStateException(exception);
         }
@@ -59,37 +57,41 @@ public class ObjectCloneProcessor extends AbstractNoAnnotationProcessor {
 
     @Override
     protected void process(Element element) {
+        TypeElement type = (TypeElement) element;
+
         for (ExecutableElement method :
-                 methodsIn(element.getEnclosedElements())) {
-            if (overrides(method, CLONE)) {
+                 methodsIn(type.getEnclosedElements())) {
+            if (overrides(method, METHOD)) {
                 check(method);
             }
         }
     }
 
-    private void check(ExecutableElement clone) {
-        TypeElement type = (TypeElement) clone.getEnclosingElement();
+    private void check(ExecutableElement method) {
+        TypeElement type = (TypeElement) method.getEnclosingElement();
 
-        if (! type.getInterfaces().contains(CLONEABLE.asType())) {
+        if (! type.getInterfaces().contains(THROWABLE.asType())) {
             warning(type,
                     type.getKind() + " overrides "
-                    + OBJECT.getSimpleName() + DOT + CLONE.toString()
-                    + " but does not implement " + CLONEABLE.getSimpleName());
+                    + METHOD.getEnclosingElement().getSimpleName()
+                    + DOT + METHOD.toString()
+                    + " but does not implement " + THROWABLE.getSimpleName());
         }
 
-        if (! types.isAssignable(clone.getReturnType(), type.asType())) {
-            warning(clone,
-                    clone.getKind() + " overrides "
-                    + OBJECT.getSimpleName() + DOT + CLONE.toString()
+        if (! types.isAssignable(method.getReturnType(), type.asType())) {
+            warning(method,
+                    method.getKind() + " overrides "
+                    + METHOD.getEnclosingElement().getSimpleName()
+                    + DOT + METHOD.toString()
                     + " but does not return a subclass of "
                     + type.getSimpleName());
         }
 
         ArrayList<TypeMirror> throwables = new ArrayList<TypeMirror>();
 
-        throwables.addAll(CLONE.getThrownTypes());
-        throwables.retainAll(overrides(clone).getThrownTypes());
-        throwables.removeAll(clone.getThrownTypes());
+        throwables.addAll(METHOD.getThrownTypes());
+        throwables.retainAll(overrides(method).getThrownTypes());
+        throwables.removeAll(method.getThrownTypes());
 
         for (TypeMirror mirror : throwables) {
             Element element = types.asElement(mirror);
@@ -105,9 +107,10 @@ public class ObjectCloneProcessor extends AbstractNoAnnotationProcessor {
                 break;
             }
 
-            warning(clone,
-                    clone.getKind() + " overrides "
-                    + OBJECT.getSimpleName() + DOT + CLONE.toString()
+            warning(method,
+                    method.getKind() + " overrides "
+                    + METHOD.getEnclosingElement().getSimpleName()
+                    + DOT + METHOD.toString()
                     + " but does not throw " + name);
         }
     }
