@@ -1,5 +1,8 @@
 2013-05-28  Allen D. Ball  <ball@10-0-1-2.lan>
 
+	* src/main/java/iprotium/annotation/processing/CollectionToArrayProcessor.java:
+	Initial writing.
+
 	* src/main/java/iprotium/annotation/ConstantInitializer.java,
 	src/main/java/iprotium/annotation/processing/ConstantInitializerProcessor.java:
 	Initial writing.

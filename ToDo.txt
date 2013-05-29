@@ -5,8 +5,9 @@ $Id$
 
 * Add checks to iprotium.tools or iprotium.annotation.processing:
 
+        ** CollectionToArrayProcessor: Finish implementation.
+        ** ConstantInitializerProcessor: Finish implementation.
         ** ConstructorProcessor: Require explicitly declared constructors
-        ** Finish ConstantInitializerProcessor implementation.
         ** Suggest (! Collection.isEmpty()) for (Collection.size() > 0)
         ** ByteArrayOutputStream: Prefer ByteArrayOutputStream(int)
            constructor with an argument > 32
