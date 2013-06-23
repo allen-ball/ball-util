@@ -1,9 +1,11 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2011 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2013 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
+
+import iprotium.util.ComparableUtil;
 
 /**
  * Abstract {@link Order} base class for ordering {@link Class} objects.
@@ -35,7 +37,7 @@ public abstract class ClassOrder extends Order<Class<?>> {
 
         @Override
         public int compare(Class<?> left, Class<?> right) {
-            return NATURAL.compare(getName(left), getName(right));
+            return ComparableUtil.compare(getName(left), getName(right));
         }
 
         private String getName(Class<?> type) {

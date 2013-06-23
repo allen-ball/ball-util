@@ -5,13 +5,12 @@
  */
 package iprotium.io;
 
+import iprotium.util.ComparableUtil;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.Iterator;
-
-import static iprotium.util.Order.NATURAL;
 
 /**
  * {@link File} implementation.
@@ -48,7 +47,7 @@ public class FileImpl extends File {
         super(parent, child.toString());
 
         if (parent instanceof Directory) {
-            if (NATURAL.compare(super.getParent(), parent.getPath()) == 0) {
+            if (ComparableUtil.compare(super.getParent(), parent.getPath()) == 0) {
                 this.parent = (Directory) parent;
             }
         }

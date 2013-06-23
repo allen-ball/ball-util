@@ -1,10 +1,11 @@
 /*
  * $Id$
  *
- * Copyright 2009 - 2011 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2013 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
+import iprotium.util.ComparableUtil;
 import java.io.File;
 
 /**
@@ -68,7 +69,7 @@ public abstract class FileOrder extends Order<File> {
 
         @Override
         public int compare(File left, File right) {
-            return NATURAL.compare(getName(left), getName(right));
+            return ComparableUtil.compare(getName(left), getName(right));
         }
 
         private String getName(File file) {
