@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2011 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2013 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
@@ -24,9 +24,14 @@ import java.util.List;
 public abstract class Order<T> implements Comparator<T>, Serializable {
 
     /**
-     * @see Natural
+     * @see Null
      */
-    public static final Natural<Object> NATURAL = new Natural<Object>();
+    public static final Null<Object> NULL = new Null<Object>();
+
+    /**
+     * @see NonNull
+     */
+    public static final NonNull<Object> NONNULL = new NonNull<Object>();
 
     /**
      * Sole constructor.
@@ -35,22 +40,6 @@ public abstract class Order<T> implements Comparator<T>, Serializable {
 
     @Override
     public abstract int compare(T left, T right);
-
-    protected boolean allAreNonNull(Object... objects) {
-        boolean notNull = true;
-
-        for (Object object : objects) {
-            notNull &= (object != null);
-
-            if (! notNull) {
-                break;
-            }
-        }
-
-        return notNull;
-    }
-
-    protected int intValue(boolean bool) { return bool ? 1 : 0; }
 
     /**
      * Method to construct a {@link List} from a {@link Collection} sorted
@@ -99,27 +88,55 @@ public abstract class Order<T> implements Comparator<T>, Serializable {
         return list;
     }
 
+    protected static boolean allAreNonNull(Object... objects) {
+        boolean notNull = true;
+
+        for (Object object : objects) {
+            notNull &= (object != null);
+
+            if (! notNull) {
+                break;
+            }
+        }
+
+        return notNull;
+    }
+
+    protected static int intValue(boolean bool) { return bool ? 1 : 0; }
+
     /**
-     * @see Comparable#compareTo(Object)
+     * Orders non-{@code null} {@link Objects} before {@code null}
+     * {@link Objects}.
      */
-    public static class Natural<T> extends Order<T> {
-        private static final long serialVersionUID = 3417528038704549459L;
+    public static class NonNull<T extends Object> extends Order<T> {
+        private static final long serialVersionUID = -791750204466099902L;
 
         /**
          * Sole constructor.
          */
-        protected Natural() { super(); }
+        protected NonNull() { super(); }
 
         @Override
         public int compare(T left, T right) {
-            return compare((Comparable) left, (Comparable) right);
+            return intValue(right != null) - intValue(left != null);
         }
+    }
 
-        @SuppressWarnings("unchecked")
-        private int compare(Comparable left, Comparable right) {
-            return (allAreNonNull(left, right)
-                        ? left.compareTo(right)
-                        : (intValue(right != null) - intValue(left != null)));
+    /**
+     * Orders {@code null} {@link Objects} before non-{@code null}
+     * {@link Objects}.
+     */
+    public static class Null<T extends Object> extends Order<T> {
+        private static final long serialVersionUID = -94289223176191889L;
+
+        /**
+         * Sole constructor.
+         */
+        protected Null() { super(); }
+
+        @Override
+        public int compare(T left, T right) {
+            return intValue(right == null) - intValue(left == null);
         }
     }
 }
