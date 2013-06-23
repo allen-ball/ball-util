@@ -1,3 +1,8 @@
+2013-06-23  Allen D. Ball  <ball@10-0-1-2.lan>
+
+	* src/main/java/iprotium/util/ComparableUtil.java:
+	Initial writing.
+
 2013-05-28  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* src/main/java/iprotium/annotation/processing/CollectionToArrayProcessor.java:
