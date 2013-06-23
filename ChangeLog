@@ -3,6 +3,10 @@
 	* src/main/java/iprotium/util/ComparableUtil.java:
 	Initial writing.
 
+	* src/main/java/iprotium/util/Order.java:
+	Removed Order.Natural class and corresponding member.  Added
+	Order.Null and Order.NonNull and corresponding members.
+
 2013-05-28  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* src/main/java/iprotium/annotation/processing/CollectionToArrayProcessor.java:
