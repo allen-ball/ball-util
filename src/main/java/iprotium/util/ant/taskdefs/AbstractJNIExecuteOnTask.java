@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2011 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2013 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -126,6 +126,9 @@ public abstract class AbstractJNIExecuteOnTask extends ExecuteOn {
     protected String getBundleString(String name) {
         return BUNDLE.getString(getOS(), getArch(), name);
     }
+
+    @Override
+    public String toString() { return getClass().getSimpleName(); }
 
     /**
      * Abstract base class for optional configurables.

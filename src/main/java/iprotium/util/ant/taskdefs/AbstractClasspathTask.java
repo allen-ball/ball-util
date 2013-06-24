@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2012 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2013 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -59,4 +59,7 @@ public abstract class AbstractClasspathTask extends Task {
 
         return loader;
     }
+
+    @Override
+    public String toString() { return getClass().getSimpleName(); }
 }
