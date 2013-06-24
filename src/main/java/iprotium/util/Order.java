@@ -105,8 +105,8 @@ public abstract class Order<T> implements Comparator<T>, Serializable {
     protected static int intValue(boolean bool) { return bool ? 1 : 0; }
 
     /**
-     * Orders non-{@code null} {@link Objects} before {@code null}
-     * {@link Objects}.
+     * Orders non-{@code null} {@link Object}s before {@code null}
+     * {@link Object}s.
      */
     public static class NonNull<T extends Object> extends Order<T> {
         private static final long serialVersionUID = -791750204466099902L;
@@ -123,8 +123,8 @@ public abstract class Order<T> implements Comparator<T>, Serializable {
     }
 
     /**
-     * Orders {@code null} {@link Objects} before non-{@code null}
-     * {@link Objects}.
+     * Orders {@code null} {@link Object}s before non-{@code null}
+     * {@link Object}s.
      */
     public static class Null<T extends Object> extends Order<T> {
         private static final long serialVersionUID = -94289223176191889L;

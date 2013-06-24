@@ -17,7 +17,7 @@ public abstract class ComparableUtil {
     /**
      * Static method to compare to {@link ComparableUtil} with
      * {@link Comparable#compareTo(Object)} falling back to
-     * {@link Order.NONULL} if either argument is {@code null}.
+     * {@link Order#NONNULL} if either argument is {@code null}.
      *
      * @param   left            The first {@link Comparable}.
      * @param   right           The second {@link Comparable}.
