@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2011 Allen D. Ball.  All rights reserved.
+ * Copyright 2011 - 2013 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -45,4 +45,7 @@ public class InetAddressesForTask extends Task {
             throw new BuildException(throwable);
         }
     }
+
+    @Override
+    public String toString() { return getClass().getSimpleName(); }
 }

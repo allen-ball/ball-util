@@ -106,6 +106,9 @@ public class LinkTask extends Copy {
         }
     }
 
+    @Override
+    public String toString() { return getClass().getSimpleName(); }
+
     private class Path extends ArrayList<String> {
         private static final long serialVersionUID = 1240653866390577062L;
 

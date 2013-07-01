@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2009 - 2011 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2013 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -43,4 +43,7 @@ public class CharsetListTask extends Task {
             throw new BuildException(exception);
         }
     }
+
+    @Override
+    public String toString() { return getClass().getSimpleName(); }
 }
