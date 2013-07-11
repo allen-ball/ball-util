@@ -1,13 +1,15 @@
 /*
  * $Id$
  *
- * Copyright 2009 - 2011 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2013 Allen D. Ball.  All rights reserved.
  */
 package iprotium.activation;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 /**
  * {@link javax.activation.DataSource} implementation based on
@@ -51,12 +53,12 @@ public class ByteArrayDataSource extends AbstractDataSource {
     public long length() { return size(); }
 
     @Override
-    public ByteArrayInputStream getInputStream() throws IOException {
+    public InputStream getInputStream() throws IOException {
         return new ByteArrayInputStream(out.toByteArray());
     }
 
     @Override
-    public ByteArrayOutputStream getOutputStream() throws IOException {
+    public OutputStream getOutputStream() throws IOException {
         ByteArrayOutputStream out = null;
 
         synchronized (this) {
