@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2010, 2011 Allen D. Ball.  All rights reserved.
+ * Copyright 2010 - 2013 Allen D. Ball.  All rights reserved.
  */
 package iprotium.activation;
 
@@ -33,6 +33,11 @@ public abstract class FilterDataSource extends AbstractDataSource {
             throw new NullPointerException("ds");
         }
     }
+
+    /**
+     * Private no-argument constructor (for JAXB annotated subclasses).
+     */
+    private FilterDataSource() { this(new ByteArrayDataSource(null, null)); }
 
     /**
      * Method to get the filtered {@link DataSource}.

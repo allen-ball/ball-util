@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2009 - 2011 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2013 Allen D. Ball.  All rights reserved.
  */
 package iprotium.activation;
 
@@ -60,6 +60,11 @@ public class ReaderWriterDataSource extends FilterDataSource
             throw new IllegalArgumentException("charset=" + nameOf(charset));
         }
     }
+
+    /**
+     * Private no-argument constructor (for JAXB annotated subclasses).
+     */
+    private ReaderWriterDataSource() { this(null, null); }
 
     /**
      * Method to get the {@link Charset} used to create the
