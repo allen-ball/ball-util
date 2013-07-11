@@ -3,6 +3,10 @@
 	* src/main/java/iprotium/activation/ByteArrayDataSource.java:
 	Do not narrow getInputStream() and getOutputStream() return values.
 
+	* src/main/java/iprotium/activation/FilterDataSource.java,
+	src/main/java/iprotium/activation/ReaderWriterDataSource.java:
+	Provide no-argument constructor for JAXB annotated subclasses.
+
 2013-06-23  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* src/main/java/iprotium/util/ComparableUtil.java:
