@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2011 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2013 Allen D. Ball.  All rights reserved.
  */
 package iprotium.io;
 
@@ -22,6 +22,7 @@ import java.nio.CharBuffer;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.WritableByteChannel;
+import javax.activation.DataSource;
 
 /**
  * Provides common I/O utilities implemented as static methods.
@@ -61,6 +62,62 @@ public abstract class IOUtil {
                 ((Flushable) object).flush();
             }
         } catch (IOException exception) {
+        }
+    }
+
+    /**
+     * Method to copy a {@link DataSource} to another {@link DataSource}.
+     *
+     * @param   from            The {@link DataSource} to copy from.
+     * @param   to              The {@link DataSource} to copy to.
+     * @param   filters         {@link InputStream} and
+     *                          {@link OutputStream} implementation
+     *                          {@link Class}es used to "wrap" {@code in}
+     *                          and {@code out}, respectively.
+     *
+     * @throws  IOException     If an I/O error occurs.
+     */
+    public static void copy(DataSource from, DataSource to,
+                            Class<?>... filters) throws IOException {
+        InputStream in = null;
+
+        try {
+            in = from.getInputStream();
+            copy(in, to, filters);
+        } finally {
+            try {
+                close(in);
+            } finally {
+                in = null;
+            }
+        }
+    }
+
+    /**
+     * Method to copy an {@link InputStream} to a {@link DataSource}.
+     *
+     * @param   in              The {@link InputStream}.
+     * @param   to              The {@link DataSource} to copy to.
+     * @param   filters         {@link InputStream} and
+     *                          {@link OutputStream} implementation
+     *                          {@link Class}es used to "wrap" {@code in}
+     *                          and {@code out}, respectively.
+     *
+     * @throws  IOException     If an I/O error occurs.
+     */
+    public static void copy(InputStream in, DataSource to,
+                            Class<?>... filters) throws IOException {
+        OutputStream out = null;
+
+        try {
+            out = to.getOutputStream();
+            copy(in, out, filters);
+        } finally {
+            try {
+                close(out);
+            } finally {
+                out = null;
+            }
         }
     }
 

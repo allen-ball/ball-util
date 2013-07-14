@@ -1,5 +1,9 @@
 2013-07-14  Allen D. Ball  <ball@10-0-1-2.lan>
 
+	* src/main/java/iprotium/io/IOUtil.java:
+	Added copy(DataSource,DataSource,Class<?>...) and
+	copy(InputStream,DataSource,Class<?>...) methods.
+
 	* src/main/java/iprotium/activation/AbstractDataSource.java:
 	Added APPLICATION_XML member.
 
