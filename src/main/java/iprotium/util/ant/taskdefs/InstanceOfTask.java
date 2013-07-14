@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2012 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2013 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -90,22 +90,25 @@ public class InstanceOfTask extends AbstractClasspathTask {
                 log(new TextTable(new MapTableModelImpl(map)));
             }
 
-            ReaderWriterDataSourceImpl ds = new ReaderWriterDataSourceImpl();
-            XMLEncoder encoder = null;
+            if (getClass().isAssignableFrom(InstanceOfTask.class)) {
+                ReaderWriterDataSourceImpl ds =
+                    new ReaderWriterDataSourceImpl();
+                XMLEncoder encoder = null;
 
-            try {
-                encoder = new XMLEncoder(ds.getOutputStream());
-                encoder.setExceptionListener(ds);
-                encoder.writeObject(instance);
-                encoder.flush();
+                try {
+                    encoder = new XMLEncoder(ds.getOutputStream());
+                    encoder.setExceptionListener(ds);
+                    encoder.writeObject(instance);
+                    encoder.flush();
 
-                if (ds.length() > 0) {
-                    log("");
-                    log(ds);
-                }
-            } finally {
-                if (encoder != null) {
-                    encoder.close();
+                    if (ds.length() > 0) {
+                        log("");
+                        log(ds);
+                    }
+                } finally {
+                    if (encoder != null) {
+                        encoder.close();
+                    }
                 }
             }
         } catch (BuildException exception) {
