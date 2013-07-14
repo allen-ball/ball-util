@@ -1,5 +1,8 @@
 2013-07-14  Allen D. Ball  <ball@10-0-1-2.lan>
 
+	* src/main/java/iprotium/activation/AbstractDataSource.java:
+	Added APPLICATION_XML member.
+
 	* src/main/java/iprotium/util/ant/taskdefs/InstanceOfTask.java:
 	Only produce XMLEncoder output if the implementation is not a
 	subclass of InstanceOfTask.

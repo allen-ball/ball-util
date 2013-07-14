@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2009 - 2011 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2013 Allen D. Ball.  All rights reserved.
  */
 package iprotium.activation;
 
@@ -29,6 +29,11 @@ public class AbstractDataSource implements DataSource {
      */
     public static final String APPLICATION_OCTET_STREAM =
         "application/octet-stream";
+
+    /**
+     * {@link.rfc 3023} {@value #APPLICATION_XML}
+     */
+    public static final String APPLICATION_XML = "application/xml";
 
     /**
      * {@link.rfc 2045} {@value #TEXT_PLAIN}
