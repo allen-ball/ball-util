@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2009 - 2012 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2013 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -9,6 +9,8 @@ import iprotium.text.ArrayListTableModel;
 import iprotium.text.TextTable;
 import java.util.ServiceLoader;
 import org.apache.tools.ant.BuildException;
+
+import static iprotium.util.StringUtil.NIL;
 
 /**
  * <a href="http://ant.apache.org/">Ant</a>
@@ -42,7 +44,7 @@ public class ServiceListTask extends AbstractClasspathTask {
             ServiceLoader<? extends Object> loader =
                 ServiceLoader.load(service, service.getClassLoader());
 
-            log("");
+            log(NIL);
 
             for (String line :
                      new TextTable(new ServiceTableModel<Object>(loader))) {

@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2009 - 2011 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2013 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -12,6 +12,8 @@ import iprotium.util.jni.DIR;
 import iprotium.util.jni.POSIX;
 import java.io.File;
 import org.apache.tools.ant.BuildException;
+
+import static iprotium.util.StringUtil.NIL;
 
 /**
  * <a href="http://ant.apache.org/">Ant</a>
@@ -40,7 +42,7 @@ public class OpendirTask extends AbstractMatchingTask {
             try {
                 dirp = POSIX.opendir(file);
 
-                log("");
+                log(NIL);
 
                 for (String line :
                          new TextTable(new TableModelImpl(dirp, file))) {

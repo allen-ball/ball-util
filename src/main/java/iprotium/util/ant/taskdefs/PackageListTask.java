@@ -1,13 +1,15 @@
 /*
  * $Id$
  *
- * Copyright 2009 - 2012 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2013 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
 import java.util.Set;
 import java.util.TreeSet;
 import org.apache.tools.ant.BuildException;
+
+import static iprotium.util.StringUtil.NIL;
 
 /**
  * <a href="http://ant.apache.org/">Ant</a>
@@ -60,7 +62,7 @@ public class PackageListTask extends AbstractClassFileTask {
     }
 
     private String toString(Iterable<String> iterable) {
-        String string = "";
+        String string = NIL;
 
         for (String name : iterable) {
             if (string.length() > 0) {

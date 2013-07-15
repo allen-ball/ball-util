@@ -127,6 +127,22 @@ public abstract class AbstractJNIExecuteOnTask extends ExecuteOn {
         return BUNDLE.getString(getOS(), getArch(), name);
     }
 
+    /**
+     * See {@link #log(String)}.
+     */
+    protected void log(Iterable<String> iterable) {
+        log(iterable, Project.MSG_INFO);
+    }
+
+    /**
+     * See {@link #log(String,int)}.
+     */
+    protected void log(Iterable<String> iterable, int msgLevel) {
+        for (String line : iterable) {
+            log(line, msgLevel);
+        }
+    }
+
     @Override
     public String toString() { return getClass().getSimpleName(); }
 

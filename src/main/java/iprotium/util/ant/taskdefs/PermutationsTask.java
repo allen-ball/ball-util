@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2010, 2011 Allen D. Ball.  All rights reserved.
+ * Copyright 2010 - 2013 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -9,6 +9,8 @@ import iprotium.util.Permutations;
 import java.util.Collection;
 import java.util.List;
 import org.apache.tools.ant.BuildException;
+
+import static iprotium.util.StringUtil.NIL;
 
 /**
  * Abstract <a href="http://ant.apache.org/">Ant</a>
@@ -48,7 +50,7 @@ public abstract class PermutationsTask extends InstanceOfTask {
                     count += 1;
                 }
 
-                log("");
+                log(NIL);
                 log(count + " permutations");
             } catch (BuildException exception) {
                 throw exception;
@@ -80,7 +82,7 @@ public abstract class PermutationsTask extends InstanceOfTask {
             try {
                 Collection<?> collection = Collection.class.cast(instance);
 
-                log("");
+                log(NIL);
 
                 for (List<?> list : new Permutations<Object>(collection)) {
                     log(String.valueOf(list));

@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2012 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2013 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -10,6 +10,8 @@ import iprotium.text.TextTable;
 import iprotium.util.Property;
 import java.util.Collection;
 import org.apache.tools.ant.BuildException;
+
+import static iprotium.util.StringUtil.NIL;
 
 /**
  * <a href="http://ant.apache.org/">Ant</a>
@@ -38,7 +40,7 @@ public class ShowPropertiesTask extends AbstractClassFileTask {
                 if (! collection.isEmpty()) {
                     TextTable table = new PropertyTable(collection);
 
-                    log("");
+                    log(NIL);
                     log(type.getName());
 
                     for (String line : table) {

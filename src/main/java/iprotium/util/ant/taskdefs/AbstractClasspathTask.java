@@ -10,6 +10,7 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 import org.apache.tools.ant.AntClassLoader;
 import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
 import org.apache.tools.ant.types.Path;
 import org.apache.tools.ant.types.Reference;
@@ -58,6 +59,22 @@ public abstract class AbstractClasspathTask extends Task {
         loader.setParent(getClass().getClassLoader());
 
         return loader;
+    }
+
+    /**
+     * See {@link #log(String)}.
+     */
+    protected void log(Iterable<String> iterable) {
+        log(iterable, Project.MSG_INFO);
+    }
+
+    /**
+     * See {@link #log(String,int)}.
+     */
+    protected void log(Iterable<String> iterable, int msgLevel) {
+        for (String line : iterable) {
+            log(line, msgLevel);
+        }
     }
 
     @Override

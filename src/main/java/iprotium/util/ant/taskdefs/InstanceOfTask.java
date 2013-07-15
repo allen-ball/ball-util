@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.Map;
 import org.apache.tools.ant.BuildException;
 
+import static iprotium.util.StringUtil.NIL;
+
 /**
  * <a href="http://ant.apache.org/">Ant</a>
  * {@link org.apache.tools.ant.Task} to get an instance of a specified
@@ -86,7 +88,7 @@ public class InstanceOfTask extends AbstractClasspathTask {
             BeanMap map = BeanMap.asBeanMap(instance);
 
             if (! map.isEmpty()) {
-                log("");
+                log(NIL);
                 log(new TextTable(new MapTableModelImpl(map)));
             }
 
@@ -102,7 +104,7 @@ public class InstanceOfTask extends AbstractClasspathTask {
                     encoder.flush();
 
                     if (ds.length() > 0) {
-                        log("");
+                        log(NIL);
                         log(ds);
                     }
                 } finally {
@@ -119,12 +121,6 @@ public class InstanceOfTask extends AbstractClasspathTask {
         } catch (Exception exception) {
             exception.printStackTrace();
             throw new BuildException(exception);
-        }
-    }
-
-    protected void log(Iterable<String> iterable) {
-        for (String line : iterable) {
-            log(line);
         }
     }
 

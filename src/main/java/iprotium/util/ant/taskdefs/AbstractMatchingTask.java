@@ -9,6 +9,7 @@ import java.io.File;
 import java.util.Set;
 import java.util.TreeSet;
 import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.Project;
 import org.apache.tools.ant.taskdefs.MatchingTask;
 
 /**
@@ -57,6 +58,22 @@ public abstract class AbstractMatchingTask extends MatchingTask {
         }
 
         return set;
+    }
+
+    /**
+     * See {@link #log(String)}.
+     */
+    protected void log(Iterable<String> iterable) {
+        log(iterable, Project.MSG_INFO);
+    }
+
+    /**
+     * See {@link #log(String,int)}.
+     */
+    protected void log(Iterable<String> iterable, int msgLevel) {
+        for (String line : iterable) {
+            log(line, msgLevel);
+        }
     }
 
     @Override

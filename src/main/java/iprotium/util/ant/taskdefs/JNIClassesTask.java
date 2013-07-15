@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2012 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2013 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -12,6 +12,7 @@ import org.apache.tools.ant.BuildException;
 
 import static iprotium.util.ClassOrder.NAME;
 import static iprotium.util.ClassUtil.isNative;
+import static iprotium.util.StringUtil.NIL;
 
 /**
  * <a href="http://ant.apache.org/">Ant</a>
@@ -82,7 +83,7 @@ public class JNIClassesTask extends AbstractClassFileTask {
     }
 
     private String toString(Iterable<Class<?>> iterable) {
-        String string = "";
+        String string = NIL;
 
         for (Class<?> type : iterable) {
             if (string.length() > 0) {

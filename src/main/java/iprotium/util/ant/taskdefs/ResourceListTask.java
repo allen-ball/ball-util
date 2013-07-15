@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2011 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2013 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -13,6 +13,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import org.apache.tools.ant.BuildException;
+
+import static iprotium.util.StringUtil.NIL;
 
 /**
  * <a href="http://ant.apache.org/">Ant</a>
@@ -40,7 +42,7 @@ public class ResourceListTask extends AbstractClasspathTask {
         }
 
         try {
-            log("");
+            log(NIL);
 
             for (String line : new TextTable(new TableModelImpl(getName()))) {
                 log(line);

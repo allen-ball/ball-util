@@ -1,13 +1,15 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2011 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2013 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
 import iprotium.io.FileImpl;
 import java.util.LinkedHashSet;
 import org.apache.tools.ant.BuildException;
+
+import static iprotium.util.StringUtil.NIL;
 
 /**
  * <a href="http://ant.apache.org/">Ant</a>
@@ -85,9 +87,9 @@ public class JNILDTask extends AbstractJNIExecuteOnTask {
     }
 
     private String getName() {
-        return (((getPrefix() != null) ? getPrefix() : "")
+        return (((getPrefix() != null) ? getPrefix() : NIL)
                 + getLibname()
-                + ((getSuffix() != null) ? ("." + getSuffix()) : ""));
+                + ((getSuffix() != null) ? ("." + getSuffix()) : NIL));
     }
 
     /**

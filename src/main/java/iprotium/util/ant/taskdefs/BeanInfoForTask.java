@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2012 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2013 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -17,6 +17,8 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import org.apache.tools.ant.BuildException;
 
+import static iprotium.util.StringUtil.NIL;
+
 /**
  * <a href="http://ant.apache.org/">Ant</a>
  * {@link org.apache.tools.ant.Task} to display {@link BeanInfo} for a
@@ -26,6 +28,9 @@ import org.apache.tools.ant.BuildException;
  * @version $Revision$
  */
 public class BeanInfoForTask extends AbstractClasspathTask {
+    private static final String R = "R";
+    private static final String W = "W";
+
     private String type = null;
 
     /**
@@ -65,7 +70,7 @@ public class BeanInfoForTask extends AbstractClasspathTask {
             log(line);
         }
 
-        log("");
+        log(NIL);
 
         for (String line : table) {
             log(line);
@@ -77,7 +82,7 @@ public class BeanInfoForTask extends AbstractClasspathTask {
     private void log(BeanInfo[] beans) {
         if (beans != null) {
             for (BeanInfo bean : beans) {
-                log("");
+                log(NIL);
                 log(bean);
             }
         }
@@ -102,7 +107,7 @@ public class BeanInfoForTask extends AbstractClasspathTask {
     }
 
     private String getMode(Method read, Method write) {
-        return ((read != null) ? "R" : "") + ((write != null) ? "W" : "");
+        return ((read != null) ? R : NIL) + ((write != null) ? W : NIL);
     }
 
     private class BeanHeaderTable extends SimpleTable {
@@ -170,7 +175,7 @@ public class BeanInfoForTask extends AbstractClasspathTask {
         }
 
         private String getCanonicalName(Class<?> type) {
-            return (type != null) ? type.getCanonicalName() : "";
+            return (type != null) ? type.getCanonicalName() : NIL;
         }
     }
 }

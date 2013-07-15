@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2009 - 2012 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2013 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -14,6 +14,8 @@ import javax.naming.Context;
 import javax.naming.NamingException;
 import javax.naming.spi.NamingManager;
 import org.apache.tools.ant.BuildException;
+
+import static iprotium.util.StringUtil.NIL;
 
 /**
  * <a href="http://ant.apache.org/">Ant</a>
@@ -60,7 +62,7 @@ public class JNDIListTask extends AbstractClasspathTask {
     }
 
     protected void log(Context context) throws NamingException {
-        log("");
+        log(NIL);
 
         for (String line : new ContextTable(context)) {
             log(line);
@@ -77,7 +79,7 @@ public class JNDIListTask extends AbstractClasspathTask {
         private static final long serialVersionUID = 1340868492541881755L;
 
         public ContextTableModel(Context context) throws NamingException {
-            super(Collections.list(context.listBindings("")),
+            super(Collections.list(context.listBindings(NIL)),
                   context.getNameInNamespace(), null);
         }
 

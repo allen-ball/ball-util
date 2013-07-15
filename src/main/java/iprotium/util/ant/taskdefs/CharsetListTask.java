@@ -9,6 +9,8 @@ import java.nio.charset.Charset;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 
+import static iprotium.util.StringUtil.NIL;
+
 /**
  * <a href="http://ant.apache.org/">Ant</a> {@link Task} to list the
  * available {@link Charset}s.
@@ -28,7 +30,7 @@ public class CharsetListTask extends Task {
     @Override
     public void execute() throws BuildException {
         try {
-            log("");
+            log(NIL);
 
             for (String key : Charset.availableCharsets().keySet()) {
                 log(key);
