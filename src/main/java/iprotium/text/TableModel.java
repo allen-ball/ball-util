@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2009 - 2011 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2013 Allen D. Ball.  All rights reserved.
  */
 package iprotium.text;
 
@@ -194,4 +194,7 @@ public abstract class TableModel extends AbstractTableModel
     private static int length(CharSequence sequence) {
         return (sequence != null) ? sequence.length() : 0;
     }
+
+    @Override
+    public String toString() { return super.toString(); }
 }

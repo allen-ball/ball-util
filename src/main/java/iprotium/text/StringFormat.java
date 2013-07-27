@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2009 - 2011 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2013 Allen D. Ball.  All rights reserved.
  */
 package iprotium.text;
 
@@ -81,4 +81,7 @@ public abstract class StringFormat extends Format {
     public Object parseObject(String source, ParsePosition pos) {
         return parse(source, pos);
     }
+
+    @Override
+    public String toString() { return super.toString(); }
 }
