@@ -1,3 +1,9 @@
+2013-07-27  Allen D. Ball  <ball@10-0-1-2.lan>
+
+	* src/main/java/iprotium/io/FileImpl.java:
+	Provide toURI() implementation provides leading "//" and NIL
+	host.
+
 2013-07-14  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* src/main/java/iprotium/io/IOUtil.java:

@@ -9,8 +9,11 @@ import iprotium.util.ComparableUtil;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.Iterator;
+
+import static iprotium.util.StringUtil.NIL;
 
 /**
  * {@link File} implementation.
@@ -19,12 +22,17 @@ import java.util.Iterator;
  * @version $Revision$
  */
 public class FileImpl extends File {
-    private static final long serialVersionUID = -1392273539158430301L;
+    private static final long serialVersionUID = 5252979305165338535L;
 
     /**
      * {@link #DOT} = {@value #DOT}
      */
     protected static final String DOT = ".";
+
+    /**
+     * {@link #SLASH} = {@value #SLASH}
+     */
+    protected static final String SLASH = "/";
 
     private transient Directory parent = null;
 
@@ -127,6 +135,32 @@ public class FileImpl extends File {
     @Override
     public FileImpl getCanonicalFile() throws IOException {
         return new FileImpl(getCanonicalPath());
+    }
+
+    @Override
+    public URI toURI() {
+        URI uri = null;
+        String path = getAbsolutePath();
+
+	if (File.separatorChar != '/') {
+	    path = path.replace(File.separatorChar, '/');
+        }
+
+	if (! path.startsWith(SLASH)) {
+	    path = SLASH + path;
+        }
+
+	if (! path.endsWith(SLASH) && isDirectory()) {
+	    path = path + SLASH;
+        }
+
+        try {
+            uri = new URI("file", NIL, path, null);
+        } catch (URISyntaxException exception) {
+            throw new Error(exception);
+        }
+
+        return uri;
     }
 
     /**
