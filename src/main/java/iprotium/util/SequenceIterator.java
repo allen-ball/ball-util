@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2010, 2011 Allen D. Ball.  All rights reserved.
+ * Copyright 2010 - 2013 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
@@ -40,6 +40,7 @@ public class SequenceIterator<E> extends AbstractIterator<E> {
      *
      * @param   iterables       The array of {@link Iterable}s.
      */
+    @SuppressWarnings({ "varargs" }) /* @SafeVarargs */
     public SequenceIterator(Iterable<E>... iterables) {
         this(Arrays.asList(iterables));
     }
