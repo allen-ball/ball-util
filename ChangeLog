@@ -1,3 +1,9 @@
+2013-08-01  Allen D. Ball  <ball@10-0-1-2.lan>
+
+	* src/main/java/iprotium/activation/ByteArrayDataSource.java:
+	Simplified implementation and avoid unnecessary copies between
+	getOutputStream() and getInputStream() invocations.
+
 2013-07-27  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* src/main/java/iprotium/io/FileImpl.java:
