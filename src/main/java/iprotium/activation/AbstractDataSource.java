@@ -17,7 +17,7 @@ import javax.activation.DataSource;
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
  * @version $Revision$
  */
-public class AbstractDataSource implements DataSource {
+public abstract class AbstractDataSource implements DataSource {
 
     /**
      * {@link.rfc 2045} {@value #CONTENT_TYPE}
