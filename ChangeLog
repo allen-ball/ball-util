@@ -4,6 +4,9 @@
 	Simplified implementation and avoid unnecessary copies between
 	getOutputStream() and getInputStream() invocations.
 
+	* src/main/java/iprotium/activation/DataSourceFactory.java:
+	Initial writing.
+
 2013-07-27  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* src/main/java/iprotium/io/FileImpl.java:
