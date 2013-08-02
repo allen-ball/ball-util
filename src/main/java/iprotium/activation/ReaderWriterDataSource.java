@@ -6,6 +6,7 @@
 package iprotium.activation;
 
 import iprotium.io.IOUtil;
+import java.beans.ConstructorProperties;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -40,6 +41,7 @@ public class ReaderWriterDataSource extends FilterDataSource
      * @param   type            Initial {@code "ContentType"} attribute
      *                          value.
      */
+    @ConstructorProperties({ "name", "contentType" })
     public ReaderWriterDataSource(String name, String type) {
         this(name, type, CHARSET);
     }
@@ -51,6 +53,7 @@ public class ReaderWriterDataSource extends FilterDataSource
      * @param   charset         The {@link Charset} used to encode the
      *                          {@link OutputStream}.
      */
+    @ConstructorProperties({ "name", "contentType", "charset" })
     public ReaderWriterDataSource(String name, String type, Charset charset) {
         super(new ByteArrayDataSource(name, type));
 

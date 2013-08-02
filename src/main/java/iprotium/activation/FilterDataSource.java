@@ -6,6 +6,7 @@
 package iprotium.activation;
 
 import iprotium.util.BeanUtil;
+import java.beans.ConstructorProperties;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -24,6 +25,7 @@ public abstract class FilterDataSource extends AbstractDataSource {
     /**
      * @param   ds              The filtered {@link DataSource}.
      */
+    @ConstructorProperties({ "dataSource" })
     protected FilterDataSource(DataSource ds) {
         super();
 

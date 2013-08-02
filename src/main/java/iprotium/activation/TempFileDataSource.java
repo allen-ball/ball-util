@@ -1,14 +1,17 @@
 /*
  * $Id$
  *
- * Copyright 2010 - 2012 Allen D. Ball.  All rights reserved.
+ * Copyright 2010 - 2013 Allen D. Ball.  All rights reserved.
  */
 package iprotium.activation;
 
+import java.beans.ConstructorProperties;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+
+import static iprotium.util.StringUtil.NIL;
 
 /**
  * {@link javax.activation.DataSource} backed by a temporary {@link File}
@@ -29,6 +32,7 @@ public class TempFileDataSource extends AbstractDataSource {
      *
      * @see File#createTempFile(String,String,File)
      */
+    @ConstructorProperties({ NIL, NIL, NIL, "contentType" })
     public TempFileDataSource(String prefix, String suffix, File parent,
                               String type) {
         super();
@@ -51,6 +55,7 @@ public class TempFileDataSource extends AbstractDataSource {
      * @param   type            Initial {@code "ContentType"} attribute
      *                          value.
      */
+    @ConstructorProperties({ "contentType" })
     public TempFileDataSource(String type) { this(null, null, null, type); }
 
     {
