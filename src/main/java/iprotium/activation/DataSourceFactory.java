@@ -65,6 +65,7 @@ public abstract class DataSourceFactory extends Factory<DataSource> {
      * schemes.
      */
     protected static class DEFAULT extends DataSourceFactory {
+        private static final long serialVersionUID = -2155860739353740550L;
 
         private TreeMap<String,DataSourceFactory> map =
             new TreeMap<String,DataSourceFactory>(String.CASE_INSENSITIVE_ORDER);
