@@ -1,10 +1,11 @@
 /*
  * $Id$
  *
- * Copyright 2012 Allen D. Ball.  All rights reserved.
+ * Copyright 2012, 2013 Allen D. Ball.  All rights reserved.
  */
 package iprotium.annotation.processing;
 
+import iprotium.util.StringUtil;
 import java.beans.ConstructorProperties;
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
@@ -60,10 +61,12 @@ public class ConstructorPropertiesProcessor
                 Set<String> properties = getPropertyNames(type);
 
                 for (String property : value) {
-                    if (! properties.contains(property)) {
-                        warning(element,
-                                "bean property `"
-                                + property + "' not defined");
+                    if (! StringUtil.isNil(property)) {
+                        if (! properties.contains(property)) {
+                            warning(element,
+                                    "bean property `"
+                                    + property + "' not defined");
+                        }
                     }
                 }
             } else {
