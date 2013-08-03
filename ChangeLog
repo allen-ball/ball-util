@@ -1,3 +1,10 @@
+2013-08-03  Allen D. Ball  <ball@10-0-1-2.lan>
+
+	* src/main/java/iprotium/text/MapTableModel.java:
+	Added constructors to allow columns to be specified [and
+	practically overriding the getValueAt(Map.Entry<K,V>,int)
+	method].
+
 2013-08-02  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* src/main/java/iprotium/util/Histogram.java: Initial writing.

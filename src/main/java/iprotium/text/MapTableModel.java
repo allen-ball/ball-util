@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2009 - 2011 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2013 Allen D. Ball.  All rights reserved.
  */
 package iprotium.text;
 
@@ -18,24 +18,34 @@ import javax.swing.event.TableModelEvent;
  * @version $Revision$
  */
 public class MapTableModel<K,V> extends ArrayListTableModel<Map.Entry<K,V>> {
-    private static final long serialVersionUID = -8443672322792101653L;
+    private static final long serialVersionUID = -4297567531143624941L;
 
     private final Map<K,V> map;
 
     /**
-     * Sole constructor.
+     * @see TableModel#TableModel(Object...)
      *
      * @param   map             The underlying {@link Map}.
-     * @param   key             The {@link Object} describing the key
-     *                          {@link ColumnModel}.
-     * @param   value           The {@link Object} describing the value
-     *                          {@link ColumnModel}.
      */
-    public MapTableModel(Map<K,V> map, Object key, Object value) {
-        super(null, key, value);
+    public MapTableModel(Map<K,V> map, Object... columns) {
+        super(null, columns);
 
         this.map = map;
     }
+
+    /**
+     * @see TableModel#TableModel(int)
+     *
+     * @param   map             The underlying {@link Map}.
+     */
+    public MapTableModel(Map<K,V> map, int columns) {
+        this(map, new Object[columns]);
+    }
+
+    /**
+     * @param   map             The underlying {@link Map}.
+     */
+    public MapTableModel(Map<K,V> map) { this(map, 2); }
 
     @Override
     protected Object getValueAt(Map.Entry<K,V> row, int x) {
