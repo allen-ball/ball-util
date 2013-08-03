@@ -18,7 +18,7 @@ import javax.activation.URLDataSource;
 
 /**
  * {@link DataSource} {@link Factory} abstract base class.  Provides
- * {@link #newDataSource(URI)} and {@link #newDataSource(URL)} methods.
+ * {@link #getDataSource(URI)} and {@link #getDataSource(URL)} methods.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
  * @version $Revision$
@@ -45,7 +45,7 @@ public abstract class DataSourceFactory extends Factory<DataSource> {
      *
      * @return  The {@link DataSource}.
      */
-    public abstract DataSource newDataSource(URI uri);
+    public abstract DataSource getDataSource(URI uri);
 
     /**
      * Method to create a {@link DataSource} from a {@link URL}.
@@ -55,7 +55,17 @@ public abstract class DataSourceFactory extends Factory<DataSource> {
      *
      * @return  The {@link DataSource}.
      */
-    public abstract DataSource newDataSource(URL url);
+    public DataSource getDataSource(URL url) {
+        DataSource ds = null;
+
+        try {
+            ds = getDataSource(url.toURI());
+        } catch (URISyntaxException exception) {
+            throw new Error(exception);
+        }
+
+        return ds;
+    }
 
     /**
      * Default implementation of a {@link DataSourceFactory}.  Provided for
@@ -64,8 +74,8 @@ public abstract class DataSourceFactory extends Factory<DataSource> {
      * {@code memory} scheme, and {@link URLDataSource}s for all other
      * schemes.
      */
-    protected static class DEFAULT extends DataSourceFactory {
-        private static final long serialVersionUID = -2155860739353740550L;
+    public static class DEFAULT extends DataSourceFactory {
+        private static final long serialVersionUID = -6296811135249603420L;
 
         private TreeMap<String,DataSourceFactory> map =
             new TreeMap<String,DataSourceFactory>(String.CASE_INSENSITIVE_ORDER);
@@ -91,15 +101,15 @@ public abstract class DataSourceFactory extends Factory<DataSource> {
         }
 
         @Override
-        public DataSource newDataSource(URI uri) {
+        public DataSource getDataSource(URI uri) {
             DataSource ds = null;
             String scheme = uri.getScheme();
 
             try {
                 ds =
-                    containsKey(scheme)
-                        ? map.get(scheme).newDataSource(uri)
-                        : newDataSource(uri.toURL());
+                    map.containsKey(scheme)
+                        ? map.get(scheme).getDataSource(uri)
+                        : getDataSource(uri.toURL());
             } catch (MalformedURLException exception) {
                 throw new Error(exception);
             }
@@ -108,13 +118,13 @@ public abstract class DataSourceFactory extends Factory<DataSource> {
         }
 
         @Override
-        public DataSource newDataSource(URL url) {
+        public DataSource getDataSource(URL url) {
             DataSource ds = null;
             String scheme = url.getProtocol();
 
             ds =
-                containsKey(scheme)
-                    ? map.get(scheme).newDataSource(url)
+                map.containsKey(scheme)
+                    ? map.get(scheme).getDataSource(url)
                     : new URLDataSource(url);
 
             return ds;
@@ -122,50 +132,24 @@ public abstract class DataSourceFactory extends Factory<DataSource> {
     }
 
     private static class FILE extends DataSourceFactory {
-        private static final long serialVersionUID = 2729558371922376308L;
+        private static final long serialVersionUID = -2277762571583566384L;
 
         public FILE() { super(); }
 
         @Override
-        public DataSource newDataSource(URI uri) {
+        public DataSource getDataSource(URI uri) {
             return new FileDataSource(new File(uri));
-        }
-
-        @Override
-        public DataSource newDataSource(URL url) {
-            DataSource ds = null;
-
-            try {
-                ds = newDataSource(url.toURI());
-            } catch (URISyntaxException exception) {
-                throw new Error(exception);
-            }
-
-            return ds;
         }
     }
 
     private static class MEMORY extends DataSourceFactory {
-        private static final long serialVersionUID = -1056917231748139088L;
+        private static final long serialVersionUID = -2728799048173063623L;
 
         public MEMORY() { super(); }
 
         @Override
-        public DataSource newDataSource(URI uri) {
+        public DataSource getDataSource(URI uri) {
             return new ByteArrayDataSource(uri.getSchemeSpecificPart(), null);
-        }
-
-        @Override
-        public DataSource newDataSource(URL url) {
-            DataSource ds = null;
-
-            try {
-                ds = newDataSource(url.toURI());
-            } catch (URISyntaxException exception) {
-                throw new Error(exception);
-            }
-
-            return ds;
         }
     }
 }
