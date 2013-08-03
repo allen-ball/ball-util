@@ -16,7 +16,7 @@ import java.util.TreeMap;
  * @version $Revision$
  */
 public class Histogram<K> extends TreeMap<K,Long> {
-    private static final long serialVersionUID = 379159598348785204L;
+    private static final long serialVersionUID = 1554907478172116140L;
 
     /**
      * No-argument constructor.
@@ -70,6 +70,80 @@ public class Histogram<K> extends TreeMap<K,Long> {
         for (Map.Entry<? extends K,? extends Number> entry : map.entrySet()) {
             count(entry.getKey(), entry.getValue());
         }
+    }
+
+    /**
+     * Method to get the {@link java.util.Map.Entry} corresponding to the
+     * minimum value in {@code this} {@link Histogram}.
+     *
+     * @return  The {@link java.util.Map.Entry} corresponding to the minimum
+     *          value.
+     */
+    public Map.Entry<K,Long> minEntry() {
+        Map.Entry<K,Long> minEntry = null;
+
+        synchronized (this) {
+            minEntry = firstEntry();
+
+            if (minEntry != null) {
+                for (Map.Entry<K,Long> entry : entrySet()) {
+                    if (entry.getValue() < minEntry.getValue()) {
+                        minEntry = entry;
+                    }
+                }
+            }
+        }
+
+        return minEntry;
+    }
+
+    /**
+     * Method to get the {@link java.util.Map.Entry} corresponding to the
+     * maximum value in {@code this} {@link Histogram}.
+     *
+     * @return  The {@link java.util.Map.Entry} corresponding to the maximum
+     *          value.
+     */
+    public Map.Entry<K,Long> maxEntry() {
+        Map.Entry<K,Long> maxEntry = null;
+
+        synchronized (this) {
+            maxEntry = firstEntry();
+
+            if (maxEntry != null) {
+                for (Map.Entry<K,Long> entry : entrySet()) {
+                    if (entry.getValue() > maxEntry.getValue()) {
+                        maxEntry = entry;
+                    }
+                }
+            }
+        }
+
+        return maxEntry;
+    }
+
+    /**
+     * See {@link #minEntry()}.
+     *
+     * @return  {@link #minEntry()}{@code .getKey()} if not
+     *          {@link #isEmpty()}; {@code null} otherwise.
+     */
+    public K minKey() {
+        Map.Entry<K,Long> entry = minEntry();
+
+        return (entry != null) ? entry.getKey() : null;
+    }
+
+    /**
+     * See {@link #maxEntry()}.
+     *
+     * @return  {@link #maxEntry()}{@code .getKey()} if not
+     *          {@link #isEmpty()}; {@code null} otherwise.
+     */
+    public K maxKey() {
+        Map.Entry<K,Long> entry = maxEntry();
+
+        return (entry != null) ? entry.getKey() : null;
     }
 
     /**
