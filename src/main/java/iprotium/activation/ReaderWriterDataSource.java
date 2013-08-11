@@ -15,6 +15,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.Reader;
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
@@ -43,7 +44,7 @@ public class ReaderWriterDataSource extends FilterDataSource
      */
     @ConstructorProperties({ "name", "contentType" })
     public ReaderWriterDataSource(String name, String type) {
-        this(name, type, CHARSET);
+        this(name, type, null);
     }
 
     /**
@@ -55,12 +56,38 @@ public class ReaderWriterDataSource extends FilterDataSource
      */
     @ConstructorProperties({ "name", "contentType", "charset" })
     public ReaderWriterDataSource(String name, String type, Charset charset) {
+        this(name, type, charset, null);
+    }
+
+    /**
+     * @param   name            Initial {@code "Name"} attribute value.
+     * @param   type            Initial {@code "ContentType"} attribute
+     *                          value.
+     * @param   charset         The {@link Charset} used to encode the
+     *                          {@link OutputStream}.
+     */
+    @ConstructorProperties({ "name", "contentType", "charset", "" })
+    public ReaderWriterDataSource(String name, String type,
+                                  Charset charset, String content) {
         super(new ByteArrayDataSource(name, type));
 
-        if (charset != null) {
-            this.charset = charset;
-        } else {
-            throw new IllegalArgumentException("charset=" + nameOf(charset));
+        this.charset = (charset != null) ? charset : CHARSET;
+
+        if (content != null) {
+            Reader reader = null;
+            Writer writer = null;
+
+            try {
+                reader = new StringReader(content);
+                writer = getWriter();
+
+                IOUtil.copy(reader, getWriter());
+            } catch (IOException exception) {
+                throw new ExceptionInInitializerError(exception);
+            } finally {
+                IOUtil.close(reader);
+                IOUtil.close(writer);
+            }
         }
     }
 
