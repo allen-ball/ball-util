@@ -1,5 +1,8 @@
 2013-08-10  Allen D. Ball  <ball@10-0-1-2.lan>
 
+	* src/main/java/iprotium/io/IOUtil.java:
+	Added copy(DataSource,File,Class<?>...) method.
+
 	* src/main/java/iprotium/activation/ReaderWriterDataSource.java:
 	Added a constructor to provide content.
 

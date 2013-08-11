@@ -150,6 +150,34 @@ public abstract class IOUtil {
     }
 
     /**
+     * Method to copy an {@link DataSource} to a {@link File}.
+     *
+     * @param   from            The {@link DataSource} to copy from.
+     * @param   to              The {@link File} to copy to.
+     * @param   filters         {@link DataSource} and
+     *                          {@link OutputStream} implementation
+     *                          {@link Class}es used to "wrap" {@code in}
+     *                          and {@code out}, respectively.
+     *
+     * @throws  IOException     If an I/O error occurs.
+     */
+    public static void copy(DataSource from, File to,
+                            Class<?>... filters) throws IOException {
+        InputStream in = null;
+
+        try {
+            in = from.getInputStream();
+            copy(in, to, filters);
+        } finally {
+            try {
+                close(in);
+            } finally {
+                in = null;
+            }
+        }
+    }
+
+    /**
      * Method to copy an {@link InputStream} to a {@link File}.
      *
      * @param   in              The {@link InputStream}.
