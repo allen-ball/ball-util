@@ -1,14 +1,15 @@
 /*
  * $Id$
  *
- * Copyright 2012 Allen D. Ball.  All rights reserved.
+ * Copyright 2012, 2013 Allen D. Ball.  All rights reserved.
  */
 package iprotium.tools.javadoc;
 
 import com.sun.javadoc.Tag;
 import com.sun.tools.doclets.Taglet;
-import java.beans.ConstructorProperties;
 import java.net.URI;
+
+import static iprotium.util.StringUtil.isNil;
 
 /**
  * Abstract {@link Taglet} base class.
@@ -29,15 +30,11 @@ public abstract class AbstractTaglet implements Taglet {
     /**
      * Sole constructor.
      */
-    @ConstructorProperties({ "name",
-                             "isInlineTag", "inPackage", "inOverview",
-                             "inField", "inConstructor", "inMethod",
-                             "inType" })
-    public AbstractTaglet(String name,
-                          boolean isInlineTag, boolean inPackage,
-                          boolean inOverview, boolean inField,
-                          boolean inConstructor, boolean inMethod,
-                          boolean inType) {
+    protected AbstractTaglet(String name,
+                             boolean isInlineTag, boolean inPackage,
+                             boolean inOverview, boolean inField,
+                             boolean inConstructor, boolean inMethod,
+                             boolean inType) {
         if (name != null) {
             this.name = name;
         } else {
@@ -84,6 +81,7 @@ public abstract class AbstractTaglet implements Taglet {
     public String toString(Tag tag) { return null; }
 
     protected String a(String text, URI href) {
-        return "<a href=\"" + href.toASCIIString()  + "\">" + text + "</a>";
+        return ("<a href=\"" + href.toASCIIString()  + "\">"
+                + ((! isNil(text)) ? text : href.toString()) + "</a>");
     }
 }
