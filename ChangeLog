@@ -1,3 +1,7 @@
+2013-08-29  Allen D. Ball  <ball@10-0-1-2.lan>
+
+	* pom.xml: Provide Apache Maven Core.
+
 2013-08-10  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* src/main/java/iprotium/io/IOUtil.java:
