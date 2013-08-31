@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2012 Allen D. Ball.  All rights reserved.
+ * Copyright 2012, 2013 Allen D. Ball.  All rights reserved.
  */
 package iprotium.tools.javadoc;
 
@@ -60,7 +60,7 @@ public class LinkManTaglet extends AbstractTaglet {
                 path = new File(path, "htmlman" + section);
                 path = new File(path, name + "." + section + ".html");
 
-                out = a(name + "(" + section + ")", path.toURI());
+                out = toString(a(name + "(" + section + ")", path.toURI()));
             }
         } catch (Exception exception) {
         }

@@ -7,9 +7,22 @@ package iprotium.tools.javadoc;
 
 import com.sun.javadoc.Tag;
 import com.sun.tools.doclets.Taglet;
+import iprotium.activation.ReaderWriterDataSource;
+import iprotium.io.IOUtil;
+import java.io.Writer;
 import java.net.URI;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
 import static iprotium.util.StringUtil.isNil;
+import static javax.xml.transform.OutputKeys.OMIT_XML_DECLARATION;
 
 /**
  * Abstract {@link Taglet} base class.
@@ -80,8 +93,69 @@ public abstract class AbstractTaglet implements Taglet {
     @Override
     public String toString(Tag tag) { return null; }
 
-    protected String a(String text, URI href) {
-        return ("<a href=\"" + href.toASCIIString()  + "\">"
-                + ((! isNil(text)) ? text : href.toString()) + "</a>");
+
+    /**
+     * Method to create an HTML "a" {@link Element}.
+     *
+     * @param   text            The {@link Element} text.
+     * @param   href            The href {@link org.w3c.dom.Attribute}
+     *                          value.
+     *
+     * @return  The HTML "a" {@link Element}.
+     */
+    protected Element a(String text, URI href) {
+        Element element = null;
+
+        try {
+            DocumentBuilderFactory factory =
+                DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            Document document = builder.newDocument();
+
+            element = document.createElement("a");
+            element.setAttribute("href", href.toASCIIString());
+            element.setTextContent((! isNil(text)) ? text : href.toString());
+        } catch (RuntimeException exception) {
+            throw exception;
+        } catch (Exception exception) {
+            throw new IllegalStateException(exception);
+        }
+
+        return element;
+    }
+
+    /**
+     * Method to convert a {@link Node} to a {@link String}.
+     *
+     * @param   node            The {@link Node}.
+     *
+     * @return  The {@link String} reprentation of the {@link Node}.
+     */
+    protected String toString(Node node) {
+        ReaderWriterDataSource ds = new ReaderWriterDataSourceImpl();
+        Writer writer = null;
+
+        try {
+            writer = ds.getWriter();
+
+            TransformerFactory factory = TransformerFactory.newInstance();
+            Transformer transformer = factory.newTransformer();
+
+            transformer.setOutputProperty(OMIT_XML_DECLARATION, "yes");
+            transformer.transform(new DOMSource(node),
+                                  new StreamResult(writer));
+        } catch (RuntimeException exception) {
+            throw exception;
+        } catch (Exception exception) {
+            throw new IllegalStateException(exception);
+        } finally {
+            IOUtil.close(writer);
+        }
+
+        return ds.toString();
+    }
+
+    private class ReaderWriterDataSourceImpl extends ReaderWriterDataSource {
+        public ReaderWriterDataSourceImpl() { super(null, APPLICATION_XML); }
     }
 }

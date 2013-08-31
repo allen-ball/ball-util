@@ -1,3 +1,9 @@
+2013-08-30  Allen D. Ball  <ball@10-0-1-2.lan>
+
+	* src/main/java/iprotium/tools/javadoc/AbstractTaglet.java:
+	Changed a(String,URI) method to create an Element.
+	Provide toString(Node) method.
+
 2013-08-29  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* pom.xml: Provide Apache Maven Core.

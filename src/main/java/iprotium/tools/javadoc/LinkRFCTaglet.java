@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2012 Allen D. Ball.  All rights reserved.
+ * Copyright 2012, 2013 Allen D. Ball.  All rights reserved.
  */
 package iprotium.tools.javadoc;
 
@@ -9,6 +9,8 @@ import com.sun.javadoc.Tag;
 import com.sun.tools.doclets.Taglet;
 import java.net.URI;
 import java.util.Map;
+
+import static java.lang.String.format;
 
 /**
  * Inline {@link Taglet} providing links to external RFCs.
@@ -24,6 +26,9 @@ public class LinkRFCTaglet extends AbstractTaglet {
         map.remove(key);
         map.put(key, taglet);
     }
+
+    private static final String TEXT = "RFC%d";
+    private static final String PATH = "/rfc/rfc%d.txt";
 
     /**
      * Sole constructor.
@@ -41,9 +46,9 @@ public class LinkRFCTaglet extends AbstractTaglet {
             int rfc = Integer.valueOf(in);
 
             out =
-                a("RFC " + String.valueOf(rfc),
-                  new URI("http", "www.ietf.org",
-                          "/rfc/rfc" + String.valueOf(rfc) + ".txt", null));
+                toString(a(format(TEXT, rfc),
+                           new URI("http", "www.ietf.org",
+                                   format(PATH, rfc), null)));
         } catch (Exception exception) {
         }
 
