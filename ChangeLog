@@ -1,3 +1,10 @@
+2013-09-05  Allen D. Ball  <ball@10-0-1-2.lan>
+
+	* src/main/java/iprotium/annotation/processing/AbstractProcessor.java:
+	Added protected filer member.
+	Added isAssignable(Class<?>,Element) and
+	isAssignable(Element,Class<?>) methods.
+
 2013-08-30  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* src/main/java/iprotium/tools/javadoc/AbstractTaglet.java:

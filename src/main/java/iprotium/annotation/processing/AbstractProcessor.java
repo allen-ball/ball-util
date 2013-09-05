@@ -8,6 +8,7 @@ package iprotium.annotation.processing;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Set;
+import javax.annotation.processing.Filer;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.SourceVersion;
@@ -33,7 +34,8 @@ import static javax.tools.Diagnostic.Kind.WARNING;
  * providing a {@link #getSupportedSourceVersion()} implementation, methods
  * to report {@link javax.tools.Diagnostic.Kind#ERROR}s and
  * {@link javax.tools.Diagnostic.Kind#WARNING}s, and access to
- * {@link ProcessingEnvironment#getElementUtils()} and
+ * {@link ProcessingEnvironment#getFiler()},
+ * {@link ProcessingEnvironment#getElementUtils()}, and
  * {@link ProcessingEnvironment#getTypeUtils()}.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
@@ -50,6 +52,8 @@ public abstract class AbstractProcessor
     /** {@link #SPACE} = {@value #SPACE} */
     protected static final String SPACE = " ";
 
+    /** See {@link ProcessingEnvironment#getFiler()}. */
+    protected Filer filer = null;
     /** See {@link ProcessingEnvironment#getElementUtils()}. */
     protected Elements elements = null;
     /** See {@link ProcessingEnvironment#getTypeUtils()}. */
@@ -72,6 +76,7 @@ public abstract class AbstractProcessor
     public void init(ProcessingEnvironment processingEnv) {
         super.init(processingEnv);
 
+        filer = processingEnv.getFiler();
         elements = processingEnv.getElementUtils();
         types = processingEnv.getTypeUtils();
     }
@@ -128,6 +133,20 @@ public abstract class AbstractProcessor
         }
 
         return isAssignable;
+    }
+
+    /**
+     * See {@link #isAssignable(Element,Element)}.
+     */
+    protected boolean isAssignable(Class<?> from, Element to) {
+        return isAssignable(getTypeElementFor(from), to);
+    }
+
+    /**
+     * See {@link #isAssignable(Element,Element)}.
+     */
+    protected boolean isAssignable(Element from, Class<?> to) {
+        return isAssignable(from, getTypeElementFor(to));
     }
 
     /**
