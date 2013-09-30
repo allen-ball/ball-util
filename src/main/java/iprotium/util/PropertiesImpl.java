@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2010, 2011 Allen D. Ball.  All rights reserved.
+ * Copyright 2010 - 2013 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
@@ -25,7 +25,7 @@ import java.util.Properties;
 public class PropertiesImpl extends Properties {
     private static final long serialVersionUID = -8648911923690345842L;
 
-    private static Charset CHARSET = Charset.forName("UTF-8");
+    private static final Charset CHARSET = Charset.forName("UTF-8");
 
     /**
      * See {@link Properties#Properties()}.
