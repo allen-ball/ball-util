@@ -1,3 +1,10 @@
+2013-09-29  Allen D. Ball  <ball@10-0-1-2.lan>
+
+	* src/main/java/iprotium/annotation/processing/AbstractProcessor.java:
+	Added getAnnotationMirror(Element,Class<? extends Annotation>) and
+	getAnnotationValue(Element,Class<? extends Annotation>,String)
+	methods.
+
 2013-09-05  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* src/main/java/iprotium/annotation/processing/AbstractProcessor.java:

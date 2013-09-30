@@ -5,13 +5,17 @@
  */
 package iprotium.annotation.processing;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import javax.annotation.processing.Filer;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.SourceVersion;
+import javax.lang.model.element.AnnotationMirror;
+import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
@@ -399,5 +403,63 @@ public abstract class AbstractProcessor
      */
     protected TypeElement getTypeElementFor(Class<?> type) {
         return elements.getTypeElement(type.getCanonicalName());
+    }
+
+    /**
+     * Method to get an {@link Element}'s {@link AnnotationMirror}.
+     *
+     * @param   element         The annotated {@link Element}.
+     * @param   type            The {@link Annotation} type ({@link Class}).
+     *
+     * @return  The {@link AnnotationMirror} if the {@link Element} is
+     *          annotated with the argument annotation; {@code null}
+     *          otherwise.
+     *
+     * @see Element#getAnnotationMirrors()
+     */
+    protected AnnotationMirror getAnnotationMirror(Element element,
+                                                   Class<? extends Annotation> type) {
+        AnnotationMirror annotation = null;
+
+        for (AnnotationMirror mirror : element.getAnnotationMirrors()) {
+            if (mirror.getAnnotationType().toString().equals(type.getName())) {
+                annotation = mirror;
+                break;
+            }
+        }
+
+        return annotation;
+    }
+
+    /**
+     * Method to get an {@link Element}'s {@link AnnotationValue}.
+     *
+     * @param   element         The annotated {@link Element}.
+     * @param   type            The {@link Annotation} type ({@link Class}).
+     * @param   name            The {@link Annotation} element name.
+     *
+     * @return  The {@link AnnotationValue} if the {@link Element} is
+     *          annotated with the argument annotation; {@code null}
+     *          otherwise.
+     *
+     * @see Elements#getElementValuesWithDefaults(AnnotationMirror)
+     */
+    protected AnnotationValue getAnnotationValue(Element element,
+                                                 Class<? extends Annotation> type,
+                                                 String name) {
+        AnnotationValue value = null;
+        AnnotationMirror annotation = getAnnotationMirror(element, type);
+
+        if (annotation != null) {
+            for (Map.Entry<? extends ExecutableElement,? extends AnnotationValue> entry :
+                     elements.getElementValuesWithDefaults(annotation).entrySet()) {
+                if (entry.getKey().toString().equals(name)) {
+                    value = entry.getValue();
+                    break;
+                }
+            }
+        }
+
+        return value;
     }
 }
