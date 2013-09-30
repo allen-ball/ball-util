@@ -1,12 +1,14 @@
 /*
  * $Id$
  *
- * Copyright 2011, 2012 Allen D. Ball.  All rights reserved.
+ * Copyright 2011 - 2013 Allen D. Ball.  All rights reserved.
  */
 package iprotium.annotation.processing;
 
+import iprotium.annotation.ServiceProviderFor;
 import iprotium.util.Regex;
 import java.util.regex.Pattern;
+import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.VariableElement;
@@ -19,6 +21,7 @@ import javax.lang.model.element.VariableElement;
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
  * @version $Revision$
  */
+@ServiceProviderFor({ Processor.class })
 public class RegexProcessor extends AbstractAnnotationProcessor {
 
     /**

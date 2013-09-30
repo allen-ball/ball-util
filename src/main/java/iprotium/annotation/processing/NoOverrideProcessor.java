@@ -5,6 +5,8 @@
  */
 package iprotium.annotation.processing;
 
+import iprotium.annotation.ServiceProviderFor;
+import javax.annotation.processing.Processor;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 
@@ -15,13 +17,14 @@ import static javax.lang.model.element.Modifier.PRIVATE;
 import static javax.lang.model.element.Modifier.STATIC;
 
 /**
- * {@link javax.annotation.processing.Processor} implementation to identify
- * overriding {@link java.lang.reflect.Method}s that are not marked with the
+ * {@link Processor} implementation to identify overriding
+ * {@link java.lang.reflect.Method}s that are not marked with the
  * {@link Override} {@link java.lang.annotation.Annotation}.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
  * @version $Revision$
  */
+@ServiceProviderFor({ Processor.class })
 @ForElementKinds({ METHOD })
 public class NoOverrideProcessor extends AbstractNoAnnotationProcessor {
 

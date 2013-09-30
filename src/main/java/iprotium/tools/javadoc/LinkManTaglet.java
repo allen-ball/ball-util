@@ -7,6 +7,7 @@ package iprotium.tools.javadoc;
 
 import com.sun.javadoc.Tag;
 import com.sun.tools.doclets.Taglet;
+import iprotium.annotation.ServiceProviderFor;
 import iprotium.util.Regex;
 import java.io.File;
 import java.util.Map;
@@ -19,6 +20,7 @@ import java.util.regex.Pattern;
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
  * @version $Revision$
  */
+@ServiceProviderFor({ Taglet.class })
 public class LinkManTaglet extends AbstractTaglet {
     public static void register(Map<String,Taglet> map) {
         Taglet taglet = new LinkManTaglet();

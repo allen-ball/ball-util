@@ -5,7 +5,9 @@
  */
 package iprotium.tools;
 
+import iprotium.annotation.ServiceProviderFor;
 import iprotium.annotation.processing.AbstractAnnotationProcessor;
+import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
 
@@ -16,6 +18,7 @@ import javax.lang.model.element.Element;
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
  * @version $Revision$
  */
+@ServiceProviderFor({ Processor.class })
 public class CodesProcessor extends AbstractAnnotationProcessor {
 
     /**

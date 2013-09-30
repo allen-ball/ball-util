@@ -5,8 +5,10 @@
  */
 package iprotium.annotation.processing;
 
+import iprotium.annotation.ServiceProviderFor;
 import java.util.ArrayList;
 import javax.annotation.processing.ProcessingEnvironment;
+import javax.annotation.processing.Processor;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
@@ -15,8 +17,8 @@ import javax.lang.model.type.TypeMirror;
 import static javax.lang.model.util.ElementFilter.methodsIn;
 
 /**
- * {@link javax.annotation.processing.Processor} implementation to check
- * {@link Object#clone()} implementations to verify:
+ * {@link Processor} implementation to check {@link Object#clone()}
+ * implementations to verify:
  * <ol>
  *   <li value="1">
  *     The implementing {@link Class} also implements {@link Cloneable}
@@ -33,6 +35,7 @@ import static javax.lang.model.util.ElementFilter.methodsIn;
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
  * @version $Revision$
  */
+@ServiceProviderFor({ Processor.class })
 @ForSubclassesOf(Object.class)
 public class ObjectCloneProcessor extends AbstractNoAnnotationProcessor {
     private ExecutableElement METHOD = null;

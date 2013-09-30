@@ -6,18 +6,21 @@
 package iprotium.annotation.processing;
 
 import iprotium.annotation.ConstantInitializer;
+import iprotium.annotation.ServiceProviderFor;
+import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.VariableElement;
 
 /**
- * {@link javax.annotation.processing.Processor} implementation to compile
- * initializer expresssions marked by the {@link ConstantInitializer}
- * annotation into compile-time constants.
+ * {@link Processor} implementation to compile initializer expresssions
+ * marked by the {@link ConstantInitializer} annotation into compile-time
+ * constants.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
  * @version $Revision$
  */
+@ServiceProviderFor({ Processor.class })
 public class ConstantInitializerProcessor extends AbstractAnnotationProcessor {
 
     /**

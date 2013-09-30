@@ -5,6 +5,7 @@
  */
 package iprotium.tools;
 
+import iprotium.annotation.ServiceProviderFor;
 import java.io.ObjectStreamClass;
 import java.io.Serializable;
 import java.lang.reflect.Modifier;
@@ -29,6 +30,7 @@ import static java.lang.reflect.Modifier.STATIC;
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
  * @version $Revision$
  */
+@ServiceProviderFor({ Remedy.class })
 @Codes("compiler.warn.missing.SVUID")
 public class MissingSVUIDRemedy extends Remedy implements Serializable {
     private static final long serialVersionUID = 2660379745550185787L;

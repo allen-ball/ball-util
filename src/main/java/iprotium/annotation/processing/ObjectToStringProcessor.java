@@ -5,7 +5,9 @@
  */
 package iprotium.annotation.processing;
 
+import iprotium.annotation.ServiceProviderFor;
 import javax.annotation.processing.ProcessingEnvironment;
+import javax.annotation.processing.Processor;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
@@ -25,6 +27,7 @@ import static javax.lang.model.element.Modifier.ABSTRACT;
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
  * @version $Revision$
  */
+@ServiceProviderFor({ Processor.class })
 @ForElementKinds({ CLASS })
 @ForModifiers(exclude = true, value = { ABSTRACT })
 @ForSubclassesOf(Object.class)

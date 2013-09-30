@@ -5,6 +5,7 @@
  */
 package iprotium.tools;
 
+import iprotium.annotation.ServiceProviderFor;
 import iprotium.util.Regex;
 import java.util.Locale;
 import java.util.SortedSet;
@@ -22,6 +23,7 @@ import static iprotium.lang.Punctuation.SPACE;
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
  * @version $Revision$
  */
+@ServiceProviderFor({ Remedy.class })
 @Codes("compiler.err.cant.resolve.location")
 public class CannotResolveLocationRemedy extends Remedy {
 

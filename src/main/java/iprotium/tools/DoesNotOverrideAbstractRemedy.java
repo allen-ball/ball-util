@@ -5,6 +5,7 @@
  */
 package iprotium.tools;
 
+import iprotium.annotation.ServiceProviderFor;
 import iprotium.util.Regex;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -35,6 +36,7 @@ import static java.lang.reflect.Modifier.ABSTRACT;
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
  * @version $Revision$
  */
+@ServiceProviderFor({ Remedy.class })
 @Codes("compiler.err.does.not.override.abstract")
 public class DoesNotOverrideAbstractRemedy extends Remedy {
 

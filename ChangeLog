@@ -1,5 +1,8 @@
 2013-09-29  Allen D. Ball  <ball@10-0-1-2.lan>
 
+	* Added @ServiceProviderFor annotation and processor to generate
+	META-INF/services files.
+
 	* src/main/java/iprotium/annotation/processing/AbstractProcessor.java:
 	Added getAnnotationMirror(Element,Class<? extends Annotation>) and
 	getAnnotationValue(Element,Class<? extends Annotation>,String)

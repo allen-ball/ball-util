@@ -5,18 +5,21 @@
  */
 package iprotium.annotation.processing;
 
+import iprotium.annotation.ServiceProviderFor;
 import javax.annotation.processing.ProcessingEnvironment;
+import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 
 /**
- * {@link javax.annotation.processing.Processor} implementation to check
- * {@link ForModifiers} annotations.
+ * {@link Processor} implementation to check {@link ForModifiers}
+ * annotations.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
  * @version $Revision$
  */
+@ServiceProviderFor({ Processor.class })
 public class ForModifiersProcessor extends AbstractAnnotationProcessor {
     private TypeElement supertype = null;
 

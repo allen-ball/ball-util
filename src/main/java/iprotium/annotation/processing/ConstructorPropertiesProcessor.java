@@ -5,6 +5,7 @@
  */
 package iprotium.annotation.processing;
 
+import iprotium.annotation.ServiceProviderFor;
 import iprotium.util.StringUtil;
 import java.beans.ConstructorProperties;
 import java.lang.annotation.Annotation;
@@ -12,6 +13,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
@@ -28,13 +30,14 @@ import static javax.lang.model.type.TypeKind.BOOLEAN;
 import static javax.lang.model.util.ElementFilter.methodsIn;
 
 /**
- * {@link javax.annotation.processing.Processor} implementation to verify
- * {@link ConstructorProperties} annotation are actual bean properties of
- * the {@link java.lang.reflect.Constructor}'s {@link Class}.
+ * {@link Processor} implementation to verify {@link ConstructorProperties}
+ * annotation are actual bean properties of the {@link
+ * java.lang.reflect.Constructor}'s {@link Class}.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
  * @version $Revision$
  */
+@ServiceProviderFor({ Processor.class })
 public class ConstructorPropertiesProcessor
              extends AbstractAnnotationProcessor {
     private static final String GET = "get";

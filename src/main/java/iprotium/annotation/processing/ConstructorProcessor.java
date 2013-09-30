@@ -5,6 +5,8 @@
  */
 package iprotium.annotation.processing;
 
+import iprotium.annotation.ServiceProviderFor;
+import javax.annotation.processing.Processor;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 
@@ -14,8 +16,7 @@ import static javax.lang.model.element.Modifier.PUBLIC;
 import static javax.lang.model.util.ElementFilter.constructorsIn;
 
 /**
- * {@link javax.annotation.processing.Processor} implementation to enforce
- * that {@link Class}es have:
+ * {@link Processor} implementation to enforce that {@link Class}es have:
  * <ol>
  *   <li value="1">
  *     An explicitly declared {@link java.lang.reflect.Constructor}
@@ -29,6 +30,7 @@ import static javax.lang.model.util.ElementFilter.constructorsIn;
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
  * @version $Revision$
  */
+@ServiceProviderFor({ Processor.class })
 @ForElementKinds({ CLASS })
 public class ConstructorProcessor extends AbstractNoAnnotationProcessor {
 
