@@ -7,11 +7,14 @@ package iprotium.annotation.processing;
 
 import iprotium.annotation.ServiceProviderFor;
 import iprotium.io.IOUtil;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -26,6 +29,7 @@ import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.TypeMirror;
 import javax.tools.FileObject;
 
+import static iprotium.util.ClassUtil.isAbstract;
 import static iprotium.util.StringUtil.NIL;
 import static javax.lang.model.element.Modifier.ABSTRACT;
 import static javax.lang.model.element.Modifier.PUBLIC;
@@ -51,13 +55,49 @@ import static javax.tools.StandardLocation.CLASS_OUTPUT;
 public class ServiceProviderForProcessor extends AbstractAnnotationProcessor {
     private static final Charset CHARSET = Charset.forName("UTF-8");
 
-    private TreeMap<String,Set<String>> map =
-        new TreeMap<String,Set<String>>();
+    private static final String PATH = "META-INF/services/%s";
+
+    private MapImpl map = new MapImpl();
 
     /**
      * Sole constructor.
      */
     public ServiceProviderForProcessor() { super(ServiceProviderFor.class); }
+
+    /**
+     * {@link iprotium.util.ant.taskdefs.BootstrapProcessorTask} bootstrap
+     * method.
+     */
+    public void bootstrap(Set<Class<?>> set, File destdir) throws IOException {
+        for (Class<?> provider : set) {
+            if (! isAbstract(provider)) {
+                ServiceProviderFor annotation =
+                    provider.getAnnotation(ServiceProviderFor.class);
+
+                if (annotation != null) {
+                    for (Class<?> service : annotation.value()) {
+                        map.add(service, provider);
+                    }
+                }
+            }
+        }
+
+        for (Map.Entry<String,Set<String>> entry : map.entrySet()) {
+            String service = entry.getKey();
+            File file = new File(destdir, String.format(PATH, service));
+
+            IOUtil.mkdirs(file.getParentFile());
+
+            PrintWriterImpl writer = null;
+
+            try {
+                writer = new PrintWriterImpl(file);
+                writer.write(service, entry.getValue());
+            } finally {
+                IOUtil.close(writer);
+            }
+        }
+    }
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations,
@@ -70,16 +110,12 @@ public class ServiceProviderForProcessor extends AbstractAnnotationProcessor {
                     String service = entry.getKey();
                     FileObject file =
                         filer.createResource(CLASS_OUTPUT, NIL,
-                                             "META-INF/services/" + service);
-                    PrintWriter writer = null;
+                                             String.format(PATH, service));
+                    PrintWriterImpl writer = null;
 
                     try {
                         writer = new PrintWriterImpl(file);
-                        writer.println("# " + service);
-
-                        for (String provider : entry.getValue()) {
-                            writer.println(provider);
-                        }
+                        writer.write(service, entry.getValue());
                     } finally {
                         IOUtil.close(writer);
                     }
@@ -102,20 +138,9 @@ public class ServiceProviderForProcessor extends AbstractAnnotationProcessor {
             case CLASS:
                 if (! element.getModifiers().contains(ABSTRACT)) {
                     if (hasPublicNoArgumentConstructor(element)) {
-                        String provider =
-                            ((TypeElement) element).getQualifiedName()
-                            .toString();
-
                         for (TypeElement service : value) {
                             if (isAssignable(element, service)) {
-                                String key =
-                                    service.getQualifiedName().toString();
-
-                                if (! map.containsKey(key)) {
-                                    map.put(key, new TreeSet<String>());
-                                }
-
-                                map.get(key).add(provider);
+                                map.add(service, (TypeElement) element);
                             } else {
                                 error(element,
                                       element.getKind() + " annotated with "
@@ -181,9 +206,44 @@ public class ServiceProviderForProcessor extends AbstractAnnotationProcessor {
         return found;
     }
 
+    private class MapImpl extends TreeMap<String,Set<String>> {
+        private static final long serialVersionUID = -7423881318128723418L;
+
+        public MapImpl() { super(); }
+
+        public boolean add(String service, String provider) {
+            if (! containsKey(service)) {
+                put(service, new TreeSet<String>());
+            }
+
+            return get(service).add(provider);
+        }
+
+        public boolean add(Class<?> service, Class<?> provider) {
+            return add(service.getName(), provider.getName());
+        }
+
+        public boolean add(TypeElement service, TypeElement provider) {
+            return add(service.getQualifiedName().toString(),
+                       provider.getQualifiedName().toString());
+        }
+    }
+
     private class PrintWriterImpl extends PrintWriter {
         public PrintWriterImpl(FileObject file) throws IOException {
             super(new OutputStreamWriter(file.openOutputStream(), CHARSET));
+        }
+
+        public PrintWriterImpl(File file) throws IOException {
+            super(new OutputStreamWriter(new FileOutputStream(file), CHARSET));
+        }
+
+        public void write(String service, Collection<String> collection) {
+            println("# " + service);
+
+            for (String provider : collection) {
+                println(provider);
+            }
         }
     }
 }

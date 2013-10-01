@@ -1,3 +1,9 @@
+2013-09-30  Allen D. Ball  <ball@10-0-1-2.lan>
+
+	* Replaced <provider-file-for/> Ant Task with
+	<bootstrap-processor/>; moved all service provider file generation
+	logic to ServiceProviderForProcessor.
+
 2013-09-29  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* Added @ServiceProviderFor annotation and processor to generate

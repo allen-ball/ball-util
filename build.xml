@@ -84,16 +84,12 @@
     </javac>
     <taskdef classpathref="build.classpath"
              resource="iprotium/util/ant/defaults.properties"/>
+    <bootstrap-processor classpathref="build.classpath"
+                         basedir="${target.classes.dir}"/>
     <jni-classes classpathref="build.classpath"
                  basedir="${target.classes.dir}" property="jni.classes">
       <src path="${src.dir}/main/java"/>
     </jni-classes>
-    <provider-file-for classpathref="build.classpath"
-                       basedir="${target.classes.dir}">
-      <service>com.sun.tools.doclets.Taglet</service>
-      <service>iprotium.tools.Remedy</service>
-      <service>javax.annotation.processing.Processor</service>
-    </provider-file-for>
   </target>
 
   <target name="jar"
