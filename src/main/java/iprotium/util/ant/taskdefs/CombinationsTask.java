@@ -5,6 +5,7 @@
  */
 package iprotium.util.ant.taskdefs;
 
+import iprotium.annotation.AntTask;
 import iprotium.util.Combinations;
 import java.util.Collection;
 import java.util.List;
@@ -44,6 +45,7 @@ public abstract class CombinationsTask extends InstanceOfTask {
      * <a href="http://ant.apache.org/">Ant</a>
      * {@link org.apache.tools.ant.Task} to count {@link Combinations}.
      */
+    @AntTask("combinations-count")
     public static class Count extends CombinationsTask {
 
         /**
@@ -82,6 +84,7 @@ public abstract class CombinationsTask extends InstanceOfTask {
      * <a href="http://ant.apache.org/">Ant</a>
      * {@link org.apache.tools.ant.Task} to show the {@link Combinations}.
      */
+    @AntTask("combinations-of")
     public static class Of extends CombinationsTask {
 
         /**

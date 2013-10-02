@@ -1,10 +1,11 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2011 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2013 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
+import iprotium.annotation.AntTask;
 import java.io.File;
 import java.util.LinkedHashSet;
 import org.apache.tools.ant.BuildException;
@@ -16,6 +17,7 @@ import org.apache.tools.ant.BuildException;
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
  * @version $Revision$
  */
+@AntTask("jni-cc")
 public class JNICCTask extends AbstractJNIExecuteOnTask {
     private File include = null;
     private LinkedHashSet<Definition> defineSet =

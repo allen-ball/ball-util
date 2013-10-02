@@ -5,6 +5,7 @@
  */
 package iprotium.util.ant.taskdefs;
 
+import iprotium.annotation.AntTask;
 import iprotium.io.IOUtil;
 import iprotium.util.jni.POSIX;
 import java.io.File;
@@ -22,6 +23,7 @@ import org.apache.tools.ant.taskdefs.Copy;
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
  * @version $Revision$
  */
+@AntTask("link")
 public class LinkTask extends Copy {
     private boolean symbolic = false;
     private boolean relative = true;

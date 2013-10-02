@@ -5,6 +5,7 @@
  */
 package iprotium.util.ant.taskdefs;
 
+import iprotium.annotation.AntTask;
 import java.util.Set;
 import java.util.TreeSet;
 import org.apache.tools.ant.BuildException;
@@ -19,6 +20,7 @@ import static iprotium.util.StringUtil.NIL;
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
  * @version $Revision$
  */
+@AntTask("package-list")
 public class PackageListTask extends AbstractClassFileTask {
     private static final String COMMA = ",";
 

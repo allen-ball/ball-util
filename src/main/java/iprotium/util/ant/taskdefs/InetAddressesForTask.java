@@ -5,6 +5,7 @@
  */
 package iprotium.util.ant.taskdefs;
 
+import iprotium.annotation.AntTask;
 import java.net.InetAddress;
 import java.util.Arrays;
 import org.apache.tools.ant.BuildException;
@@ -18,6 +19,7 @@ import org.apache.tools.ant.Task;
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
  * @version $Revision$
  */
+@AntTask("inet-addresses-for")
 public class InetAddressesForTask extends Task {
     private String string = null;
 

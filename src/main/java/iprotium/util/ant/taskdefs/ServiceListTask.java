@@ -5,6 +5,7 @@
  */
 package iprotium.util.ant.taskdefs;
 
+import iprotium.annotation.AntTask;
 import iprotium.text.ArrayListTableModel;
 import iprotium.text.TextTable;
 import java.util.ServiceLoader;
@@ -20,6 +21,7 @@ import static iprotium.util.StringUtil.NIL;
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
  * @version $Revision$
  */
+@AntTask("service-list")
 public class ServiceListTask extends AbstractClasspathTask {
     private String type = null;
 

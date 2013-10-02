@@ -5,6 +5,7 @@
  */
 package iprotium.util.ant.taskdefs;
 
+import iprotium.annotation.processing.AntTaskProcessor;
 import iprotium.annotation.processing.ServiceProviderForProcessor;
 import java.io.File;
 import org.apache.tools.ant.BuildException;
@@ -14,6 +15,7 @@ import org.apache.tools.ant.BuildException;
  * {@link org.apache.tools.ant.Task} to bootstrap
  * {@link javax.annotation.processing.Processor}s.
  *
+ * @see AntTaskProcessor#bootstrap(Set,File)
  * @see ServiceProviderForProcessor#bootstrap(Set,File)
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
@@ -43,6 +45,8 @@ public class BootstrapProcessorTask extends AbstractClassFileTask {
         }
 
         try {
+            new AntTaskProcessor()
+                .bootstrap(getClassSet(), getDestdir());
             new ServiceProviderForProcessor()
                 .bootstrap(getClassSet(), getDestdir());
         } catch (BuildException exception) {

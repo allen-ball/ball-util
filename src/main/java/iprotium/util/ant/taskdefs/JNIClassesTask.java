@@ -5,6 +5,7 @@
  */
 package iprotium.util.ant.taskdefs;
 
+import iprotium.annotation.AntTask;
 import java.lang.reflect.Member;
 import java.util.Set;
 import java.util.TreeSet;
@@ -22,6 +23,7 @@ import static iprotium.util.StringUtil.NIL;
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
  * @version $Revision$
  */
+@AntTask("jni-classes")
 public class JNIClassesTask extends AbstractClassFileTask {
     private static final String COMMA = ",";
 

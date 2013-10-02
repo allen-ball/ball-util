@@ -5,6 +5,7 @@
  */
 package iprotium.util.ant.taskdefs;
 
+import iprotium.annotation.AntTask;
 import iprotium.text.ArrayListTableModel;
 import iprotium.text.SimpleTable;
 import iprotium.text.TextTable;
@@ -27,6 +28,7 @@ import static iprotium.util.StringUtil.NIL;
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
  * @version $Revision$
  */
+@AntTask("bean-info-for")
 public class BeanInfoForTask extends AbstractClasspathTask {
     private static final String R = "R";
     private static final String W = "W";

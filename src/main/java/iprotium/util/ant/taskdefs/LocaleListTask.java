@@ -5,6 +5,7 @@
  */
 package iprotium.util.ant.taskdefs;
 
+import iprotium.annotation.AntTask;
 import java.util.Locale;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
@@ -18,6 +19,7 @@ import org.apache.tools.ant.Task;
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
  * @version $Revision$
  */
+@AntTask("locale-list")
 public class LocaleListTask extends Task {
 
     /**

@@ -5,6 +5,7 @@
  */
 package iprotium.util.ant.taskdefs;
 
+import iprotium.annotation.AntTask;
 import iprotium.util.SuperclassSet;
 import java.lang.reflect.TypeVariable;
 import org.apache.tools.ant.BuildException;
@@ -21,6 +22,7 @@ import static iprotium.util.ClassOrder.INHERITANCE;
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
  * @version $Revision$
  */
+@AntTask("superclasses-of")
 public class SuperclassesOfTask extends AbstractClasspathTask {
     private String type = null;
 

@@ -6,6 +6,7 @@
 package iprotium.util.ant.taskdefs;
 
 import iprotium.activation.ReaderWriterDataSource;
+import iprotium.annotation.AntTask;
 import iprotium.text.MapTableModel;
 import iprotium.text.TextTable;
 import iprotium.util.BeanMap;
@@ -32,6 +33,7 @@ import static iprotium.util.StringUtil.NIL;
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
  * @version $Revision$
  */
+@AntTask("instance-of")
 public class InstanceOfTask extends AbstractClasspathTask {
     private String type = String.class.getName();
     private List<Argument> list = new ArrayList<Argument>();

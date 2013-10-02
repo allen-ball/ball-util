@@ -1,10 +1,11 @@
 /*
  * $Id$
  *
- * Copyright 2009 - 2012 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2013 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
+import iprotium.annotation.AntTask;
 import java.util.Hashtable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -22,6 +23,7 @@ import org.apache.tools.ant.BuildException;
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
  * @version $Revision$
  */
+@AntTask("jndi-lookup")
 public class JNDILookupTask extends JNDIListTask {
     private static final Pattern PATTERN =
         Pattern.compile("(?is)(([^:]+):)?([^:]*)");

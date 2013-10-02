@@ -5,6 +5,7 @@
  */
 package iprotium.util.ant.taskdefs;
 
+import iprotium.annotation.AntTask;
 import java.net.NetworkInterface;
 import java.util.Collections;
 import java.util.List;
@@ -19,6 +20,7 @@ import org.apache.tools.ant.Task;
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
  * @version $Revision$
  */
+@AntTask("network-interfaces")
 public class NetworkInterfacesTask extends Task {
 
     /**

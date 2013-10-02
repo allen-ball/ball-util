@@ -5,6 +5,7 @@
  */
 package iprotium.util.ant.taskdefs;
 
+import iprotium.annotation.AntTask;
 import iprotium.text.ArrayListTableModel;
 import iprotium.text.TextTable;
 import java.util.Collections;
@@ -26,6 +27,7 @@ import static iprotium.util.StringUtil.NIL;
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
  * @version $Revision$
  */
+@AntTask("jndi-list")
 public class JNDIListTask extends AbstractClasspathTask {
 
     /**

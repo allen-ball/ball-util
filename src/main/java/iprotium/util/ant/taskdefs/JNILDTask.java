@@ -5,6 +5,7 @@
  */
 package iprotium.util.ant.taskdefs;
 
+import iprotium.annotation.AntTask;
 import iprotium.io.FileImpl;
 import java.util.LinkedHashSet;
 import org.apache.tools.ant.BuildException;
@@ -18,6 +19,7 @@ import static iprotium.util.StringUtil.NIL;
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
  * @version $Revision$
  */
+@AntTask("jni-ld")
 public class JNILDTask extends AbstractJNIExecuteOnTask {
     private String libname = null;
     private String prefix = null;

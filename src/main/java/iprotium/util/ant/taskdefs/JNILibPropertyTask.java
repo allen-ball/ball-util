@@ -1,10 +1,11 @@
 /*
  * $Id$
  *
- * Copyright 2009 - 2011 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2013 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
+import iprotium.annotation.AntTask;
 import org.apache.tools.ant.BuildException;
 
 /**
@@ -49,6 +50,7 @@ public abstract class JNILibPropertyTask extends AbstractPropertyTask {
      * {@link org.apache.tools.ant.Task} to get platform-specific JNI
      * library prefix.
      */
+    @AntTask("jnilib-prefix")
     public static class Prefix extends JNILibPropertyTask {
 
         /**
@@ -65,6 +67,7 @@ public abstract class JNILibPropertyTask extends AbstractPropertyTask {
      * {@link org.apache.tools.ant.Task} to get platform-specific JNI
      * library suffix.
      */
+    @AntTask("jnilib-suffix")
     public static class Suffix extends JNILibPropertyTask {
 
         /**

@@ -5,6 +5,7 @@
  */
 package iprotium.util.ant.taskdefs;
 
+import iprotium.annotation.AntTask;
 import iprotium.text.ArrayListTableModel;
 import iprotium.text.TextTable;
 import iprotium.util.Property;
@@ -21,6 +22,7 @@ import static iprotium.util.StringUtil.NIL;
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
  * @version $Revision$
  */
+@AntTask("show-properties")
 public class ShowPropertiesTask extends AbstractClassFileTask {
 
     /**

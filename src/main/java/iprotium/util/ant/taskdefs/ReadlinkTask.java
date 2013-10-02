@@ -1,10 +1,11 @@
 /*
  * $Id$
  *
- * Copyright 2009 - 2011 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2013 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
+import iprotium.annotation.AntTask;
 import iprotium.text.MapTable;
 import iprotium.util.jni.POSIX;
 import java.io.File;
@@ -20,6 +21,7 @@ import org.apache.tools.ant.BuildException;
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
  * @version $Revision$
  */
+@AntTask("readlink")
 public class ReadlinkTask extends AbstractMatchingTask {
 
     /**
