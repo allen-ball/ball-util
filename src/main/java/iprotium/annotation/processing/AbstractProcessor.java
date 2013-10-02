@@ -28,7 +28,9 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.disjoint;
 import static javax.lang.model.element.ElementKind.METHOD;
 import static javax.lang.model.element.Modifier.PRIVATE;
+import static javax.lang.model.element.Modifier.PUBLIC;
 import static javax.lang.model.element.Modifier.STATIC;
+import static javax.lang.model.util.ElementFilter.constructorsIn;
 import static javax.lang.model.util.ElementFilter.methodsIn;
 import static javax.tools.Diagnostic.Kind.ERROR;
 import static javax.tools.Diagnostic.Kind.WARNING;
@@ -53,6 +55,8 @@ public abstract class AbstractProcessor
     protected static final String COLON = ":";
     /** {@link #DOT} = {@value #DOT} */
     protected static final String DOT = ".";
+    /** {@link #SLASH} = {@value #SLASH} */
+    protected static final String SLASH = "/";
     /** {@link #SPACE} = {@value #SPACE} */
     protected static final String SPACE = " ";
 
@@ -107,6 +111,32 @@ public abstract class AbstractProcessor
      */
     protected void warning(Element element, CharSequence message) {
         processingEnv.getMessager().printMessage(WARNING, message, element);
+    }
+
+    /**
+     * Method to determine if an {@link Element} is a {@link TypeElement}
+     * that has a public no-argument constructor.
+     *
+     * @param   element         The {@link Element}.
+     *
+     * @return  {@code true} if the {@link Element} has a public no-argument
+     *          constructor; {@code false} otherwise.
+     */
+    protected boolean hasPublicNoArgumentConstructor(Element element) {
+        boolean found = false;
+
+        for (ExecutableElement constructor :
+                 constructorsIn(element.getEnclosedElements())) {
+            found |=
+                (constructor.getModifiers().contains(PUBLIC)
+                 && constructor.getParameters().isEmpty());
+
+            if (found) {
+                break;
+            }
+        }
+
+        return found;
     }
 
     /**
