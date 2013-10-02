@@ -33,7 +33,6 @@ import static iprotium.util.ClassUtil.isAbstract;
 import static iprotium.util.StringUtil.NIL;
 import static javax.lang.model.element.Modifier.ABSTRACT;
 import static javax.lang.model.element.Modifier.PUBLIC;
-import static javax.lang.model.util.ElementFilter.constructorsIn;
 import static javax.tools.StandardLocation.CLASS_OUTPUT;
 
 /**
@@ -76,7 +75,9 @@ public class ServiceProviderForProcessor extends AbstractAnnotationProcessor {
 
                 if (annotation != null) {
                     for (Class<?> service : annotation.value()) {
-                        map.add(service, provider);
+                        if (service.isAssignableFrom(provider)) {
+                            map.add(service, provider);
+                        }
                     }
                 }
             }
@@ -187,23 +188,6 @@ public class ServiceProviderForProcessor extends AbstractAnnotationProcessor {
         }
 
         return list;
-    }
-
-    private boolean hasPublicNoArgumentConstructor(Element element) {
-        boolean found = false;
-
-        for (ExecutableElement constructor :
-                 constructorsIn(element.getEnclosedElements())) {
-            found |=
-                (constructor.getModifiers().contains(PUBLIC)
-                 && constructor.getParameters().isEmpty());
-
-            if (found) {
-                break;
-            }
-        }
-
-        return found;
     }
 
     private class MapImpl extends TreeMap<String,Set<String>> {
