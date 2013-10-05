@@ -197,7 +197,8 @@ public class AntTaskProcessor extends AbstractAnnotationProcessor {
         }
 
         public boolean put(String resource, String name, TypeElement task) {
-            return put(resource, name, task.getQualifiedName().toString());
+            return put(resource,
+                       name, elements.getBinaryName(task).toString());
         }
     }
 }

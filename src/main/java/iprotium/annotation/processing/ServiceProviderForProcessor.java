@@ -208,8 +208,8 @@ public class ServiceProviderForProcessor extends AbstractAnnotationProcessor {
         }
 
         public boolean add(TypeElement service, TypeElement provider) {
-            return add(service.getQualifiedName().toString(),
-                       provider.getQualifiedName().toString());
+            return add(elements.getBinaryName(service).toString(),
+                       elements.getBinaryName(provider).toString());
         }
     }
 
