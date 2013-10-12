@@ -6,6 +6,7 @@
 package iprotium.util.ant.taskdefs;
 
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import org.apache.tools.ant.AntClassLoader;
@@ -74,6 +75,22 @@ public abstract class AbstractClasspathTask extends Task {
     protected void log(Iterable<String> iterable, int msgLevel) {
         for (String line : iterable) {
             log(line, msgLevel);
+        }
+    }
+
+    /**
+     * See {@link #log(String)}.
+     */
+    protected void log(Iterator<String> iterator) {
+        log(iterator, Project.MSG_INFO);
+    }
+
+    /**
+     * See {@link #log(String,int)}.
+     */
+    protected void log(Iterator<String> iterator, int msgLevel) {
+        while (iterator.hasNext()) {
+            log(iterator.next(), msgLevel);
         }
     }
 

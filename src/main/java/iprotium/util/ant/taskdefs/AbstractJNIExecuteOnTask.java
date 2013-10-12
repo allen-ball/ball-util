@@ -7,6 +7,7 @@ package iprotium.util.ant.taskdefs;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Iterator;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.taskdefs.ExecuteOn;
@@ -140,6 +141,22 @@ public abstract class AbstractJNIExecuteOnTask extends ExecuteOn {
     protected void log(Iterable<String> iterable, int msgLevel) {
         for (String line : iterable) {
             log(line, msgLevel);
+        }
+    }
+
+    /**
+     * See {@link #log(String)}.
+     */
+    protected void log(Iterator<String> iterator) {
+        log(iterator, Project.MSG_INFO);
+    }
+
+    /**
+     * See {@link #log(String,int)}.
+     */
+    protected void log(Iterator<String> iterator, int msgLevel) {
+        while (iterator.hasNext()) {
+            log(iterator.next(), msgLevel);
         }
     }
 

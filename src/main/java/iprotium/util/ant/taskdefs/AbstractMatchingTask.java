@@ -6,6 +6,7 @@
 package iprotium.util.ant.taskdefs;
 
 import java.io.File;
+import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 import org.apache.tools.ant.BuildException;
@@ -73,6 +74,22 @@ public abstract class AbstractMatchingTask extends MatchingTask {
     protected void log(Iterable<String> iterable, int msgLevel) {
         for (String line : iterable) {
             log(line, msgLevel);
+        }
+    }
+
+    /**
+     * See {@link #log(String)}.
+     */
+    protected void log(Iterator<String> iterator) {
+        log(iterator, Project.MSG_INFO);
+    }
+
+    /**
+     * See {@link #log(String,int)}.
+     */
+    protected void log(Iterator<String> iterator, int msgLevel) {
+        while (iterator.hasNext()) {
+            log(iterator.next(), msgLevel);
         }
     }
 
