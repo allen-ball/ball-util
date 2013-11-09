@@ -1,5 +1,7 @@
 2013-11-09  Allen D. Ball  <ball@10-0-1-2.lan>
 
+	* Integrated iprotium.xml.
+
 	* pom.xml:
 	Added explicitly dependency to JAXB API (found in modern JREs).
 
@@ -1066,4 +1068,16 @@
 	src/main/java/iprotium/util/ant/taskdefs/AbstractClasspathTask.java,
 	src/main/java/iprotium/util/ant/taskdefs/AbstractMatchingTask.java:
 	Initial writing.
+
+2013-07-14  Allen D. Ball  <ball@10-0-1-2.lan>
+
+	* Added <jaxb-marshal/> and <jaxb-unmarshal/> build targets and
+	Ant Tasks.
+
+	* src/main/java/iprotium/xml/bind/JAXBDataSource.java:
+	Initial writing.
+
+2013-07-13  Allen D. Ball  <ball@10-0-1-2.lan>
+
+	* Added <jaxb-indexes-for/> build target and Ant Task.
 

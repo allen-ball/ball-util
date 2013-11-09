@@ -226,6 +226,18 @@
         <section name="iprotium/util/jni/">
           <attribute name="Sealed" value="true"/>
         </section>
+        <section name="iprotium/xml/">
+          <attribute name="Sealed" value="true"/>
+        </section>
+        <section name="iprotium/xml/bind/">
+          <attribute name="Sealed" value="true"/>
+        </section>
+        <section name="iprotium/xml/bind/annotation/">
+          <attribute name="Sealed" value="true"/>
+        </section>
+        <section name="iprotium/xml/bind/annotation/processing/">
+          <attribute name="Sealed" value="true"/>
+        </section>
       </manifest>
     </jar>
     <jarlib-display file="${target.dir}/${artifact}"/>
@@ -344,6 +356,25 @@
              resource="iprotium/util/ant/defaults.properties"/>
     <is-assignable-from classpathref="build.classpath"
                         type="${type}" subtype="${subtype}"/>
+  </target>
+
+  <target name="jaxb-marshal"
+          description="--> Invokes &lt;jaxb-marshal/&gt; task."
+          depends="classes">
+    <taskdef classpathref="build.classpath"
+             resource="iprotium/util/ant/defaults.properties"/>
+    <jaxb-marshal classpathref="build.classpath" type="${type}">
+      <argument value="${argument}"/>
+    </jaxb-marshal>
+  </target>
+
+  <target name="jaxb-unmarshal"
+          description="--> Invokes &lt;jaxb-unmarshal/&gt; task."
+          depends="classes">
+    <taskdef classpathref="build.classpath"
+             resource="iprotium/util/ant/defaults.properties"/>
+    <jaxb-unmarshal classpathref="build.classpath"
+                    context="${context}" file="${file}"/>
   </target>
 
   <target name="jndi-list"

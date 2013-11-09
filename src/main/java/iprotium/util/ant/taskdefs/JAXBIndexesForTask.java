@@ -3,7 +3,7 @@
  *
  * Copyright 2013 Allen D. Ball.  All rights reserved.
  */
-package iprotium.xml.ant.taskdefs;
+package iprotium.util.ant.taskdefs;
 
 import iprotium.annotation.AntTask;
 import iprotium.io.Directory;
@@ -11,7 +11,6 @@ import iprotium.io.IOUtil;
 import iprotium.util.ClassOrder;
 import iprotium.util.ClassUtil;
 import iprotium.util.PackageOrder;
-import iprotium.util.ant.taskdefs.AbstractClassFileTask;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;

@@ -3,10 +3,9 @@
  *
  * Copyright 2013 Allen D. Ball.  All rights reserved.
  */
-package iprotium.xml.ant.taskdefs;
+package iprotium.util.ant.taskdefs;
 
 import iprotium.annotation.AntTask;
-import iprotium.util.ant.taskdefs.InstanceOfTask;
 import iprotium.xml.bind.JAXBDataSource;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;

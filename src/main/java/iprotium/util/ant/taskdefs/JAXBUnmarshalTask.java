@@ -3,13 +3,12 @@
  *
  * Copyright 2013 Allen D. Ball.  All rights reserved.
  */
-package iprotium.xml.ant.taskdefs;
+package iprotium.util.ant.taskdefs;
 
 import iprotium.annotation.AntTask;
 import iprotium.text.MapTableModel;
 import iprotium.text.TextTable;
 import iprotium.util.BeanMap;
-import iprotium.util.ant.taskdefs.AbstractClasspathTask;
 import java.io.File;
 import java.util.Map;
 import javax.xml.bind.JAXBContext;
