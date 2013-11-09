@@ -1,3 +1,8 @@
+2013-11-09  Allen D. Ball  <ball@10-0-1-2.lan>
+
+	* pom.xml:
+	Added explicitly dependency to JAXB API (found in modern JREs).
+
 2013-10-01  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* Added @AntTask annotation and processor to generate
