@@ -1,3 +1,9 @@
+2013-11-20  Allen D. Ball  <ball@10-0-1-2.lan>
+
+	* src/main/java/iprotium/util/PropertiesImpl.java:
+	Made CHARSET member protected and added
+	PropertiesImpl(Properties,File) constructor.
+
 2013-11-09  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* Integrated iprotium.xml.
