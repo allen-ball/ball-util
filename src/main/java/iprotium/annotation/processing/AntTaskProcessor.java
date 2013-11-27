@@ -10,6 +10,7 @@ import iprotium.annotation.ServiceProviderFor;
 import iprotium.io.IOUtil;
 import iprotium.util.PropertiesImpl;
 import iprotium.util.StringUtil;
+import iprotium.util.ant.taskdefs.BootstrapProcessorTask;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -47,59 +48,14 @@ import static javax.tools.StandardLocation.CLASS_OUTPUT;
  * @version $Revision$
  */
 @ServiceProviderFor({ Processor.class })
-public class AntTaskProcessor extends AbstractAnnotationProcessor {
+public class AntTaskProcessor extends AbstractAnnotationProcessor
+                              implements BootstrapProcessorTask.Processor {
     private MapImpl map = new MapImpl();
 
     /**
      * Sole constructor.
      */
     public AntTaskProcessor() { super(AntTask.class); }
-
-    /**
-     * {@link iprotium.util.ant.taskdefs.BootstrapProcessorTask} bootstrap
-     * method.
-     */
-    public void bootstrap(Set<Class<?>> set, File destdir) throws IOException {
-        for (Class<?> type : set) {
-            if (Task.class.isAssignableFrom(type)) {
-                if (! isAbstract(type)) {
-                    AntTask annotation = type.getAnnotation(AntTask.class);
-
-                    if (annotation != null) {
-                        String name = annotation.value();
-                        String resource = annotation.resource();
-                        Package pkg = type.getPackage();
-
-                        if (pkg != null) {
-                            resource =
-                                URI.create(pkg.getName()
-                                           .replaceAll(Pattern.quote(DOT),
-                                                       SLASH)
-                                           + SLASH + resource).normalize()
-                                .toString();
-                        }
-
-                        map.put(resource, name, type);
-                    }
-                }
-            }
-        }
-
-        for (Map.Entry<String,PropertiesImpl> entry : map.entrySet()) {
-            File file = new File(destdir, entry.getKey());
-
-            IOUtil.mkdirs(file.getParentFile());
-
-            OutputStream out = null;
-
-            try {
-                out = new FileOutputStream(file);
-                entry.getValue().store(out, entry.getKey());
-            } finally {
-                IOUtil.close(out);
-            }
-        }
-    }
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations,
@@ -176,6 +132,49 @@ public class AntTaskProcessor extends AbstractAnnotationProcessor {
                   element.getKind() + " annotated with "
                   + AT + type.getSimpleName()
                   + " but does not specify value()");
+        }
+    }
+
+    @Override
+    public void process(Set<Class<?>> set, File destdir) throws IOException {
+        for (Class<?> type : set) {
+            if (Task.class.isAssignableFrom(type)) {
+                if (! isAbstract(type)) {
+                    AntTask annotation = type.getAnnotation(AntTask.class);
+
+                    if (annotation != null) {
+                        String name = annotation.value();
+                        String resource = annotation.resource();
+                        Package pkg = type.getPackage();
+
+                        if (pkg != null) {
+                            resource =
+                                URI.create(pkg.getName()
+                                           .replaceAll(Pattern.quote(DOT),
+                                                       SLASH)
+                                           + SLASH + resource).normalize()
+                                .toString();
+                        }
+
+                        map.put(resource, name, type);
+                    }
+                }
+            }
+        }
+
+        for (Map.Entry<String,PropertiesImpl> entry : map.entrySet()) {
+            File file = new File(destdir, entry.getKey());
+
+            IOUtil.mkdirs(file.getParentFile());
+
+            OutputStream out = null;
+
+            try {
+                out = new FileOutputStream(file);
+                entry.getValue().store(out, entry.getKey());
+            } finally {
+                IOUtil.close(out);
+            }
         }
     }
 

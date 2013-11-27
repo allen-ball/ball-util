@@ -7,6 +7,7 @@ package iprotium.annotation.processing;
 
 import iprotium.annotation.ServiceProviderFor;
 import iprotium.io.IOUtil;
+import iprotium.util.ant.taskdefs.BootstrapProcessorTask;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -51,7 +52,8 @@ import static javax.tools.StandardLocation.CLASS_OUTPUT;
  * @version $Revision$
  */
 @ServiceProviderFor({ Processor.class })
-public class ServiceProviderForProcessor extends AbstractAnnotationProcessor {
+public class ServiceProviderForProcessor extends AbstractAnnotationProcessor
+                                         implements BootstrapProcessorTask.Processor {
     private static final Charset CHARSET = Charset.forName("UTF-8");
 
     private static final String PATH = "META-INF/services/%s";
@@ -62,43 +64,6 @@ public class ServiceProviderForProcessor extends AbstractAnnotationProcessor {
      * Sole constructor.
      */
     public ServiceProviderForProcessor() { super(ServiceProviderFor.class); }
-
-    /**
-     * {@link iprotium.util.ant.taskdefs.BootstrapProcessorTask} bootstrap
-     * method.
-     */
-    public void bootstrap(Set<Class<?>> set, File destdir) throws IOException {
-        for (Class<?> provider : set) {
-            if (! isAbstract(provider)) {
-                ServiceProviderFor annotation =
-                    provider.getAnnotation(ServiceProviderFor.class);
-
-                if (annotation != null) {
-                    for (Class<?> service : annotation.value()) {
-                        if (service.isAssignableFrom(provider)) {
-                            map.add(service, provider);
-                        }
-                    }
-                }
-            }
-        }
-
-        for (Map.Entry<String,Set<String>> entry : map.entrySet()) {
-            String service = entry.getKey();
-            File file = new File(destdir, String.format(PATH, service));
-
-            IOUtil.mkdirs(file.getParentFile());
-
-            PrintWriterImpl writer = null;
-
-            try {
-                writer = new PrintWriterImpl(file);
-                writer.write(service, entry.getValue());
-            } finally {
-                IOUtil.close(writer);
-            }
-        }
-    }
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations,
@@ -188,6 +153,40 @@ public class ServiceProviderForProcessor extends AbstractAnnotationProcessor {
         }
 
         return list;
+    }
+
+    @Override
+    public void process(Set<Class<?>> set, File destdir) throws IOException {
+        for (Class<?> provider : set) {
+            if (! isAbstract(provider)) {
+                ServiceProviderFor annotation =
+                    provider.getAnnotation(ServiceProviderFor.class);
+
+                if (annotation != null) {
+                    for (Class<?> service : annotation.value()) {
+                        if (service.isAssignableFrom(provider)) {
+                            map.add(service, provider);
+                        }
+                    }
+                }
+            }
+        }
+
+        for (Map.Entry<String,Set<String>> entry : map.entrySet()) {
+            String service = entry.getKey();
+            File file = new File(destdir, String.format(PATH, service));
+
+            IOUtil.mkdirs(file.getParentFile());
+
+            PrintWriterImpl writer = null;
+
+            try {
+                writer = new PrintWriterImpl(file);
+                writer.write(service, entry.getValue());
+            } finally {
+                IOUtil.close(writer);
+            }
+        }
     }
 
     private class MapImpl extends TreeMap<String,Set<String>> {

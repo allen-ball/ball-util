@@ -1,5 +1,8 @@
 2013-11-27  Allen D. Ball  <ball@10-0-1-2.lan>
 
+	* Mark bootstrap processors with BootstrapProcessorTask.Processor
+	interface.
+
 	* Annotated packages with @ManifestSection and use
 	ManifestSectionProcessor to generate JAR MANIFEST.MF.
 

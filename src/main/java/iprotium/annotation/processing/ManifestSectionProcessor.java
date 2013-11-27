@@ -8,6 +8,7 @@ package iprotium.annotation.processing;
 import iprotium.annotation.ManifestSection;
 import iprotium.annotation.ServiceProviderFor;
 import iprotium.io.IOUtil;
+import iprotium.util.ant.taskdefs.BootstrapProcessorTask;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -34,7 +35,8 @@ import static javax.tools.StandardLocation.CLASS_OUTPUT;
  * @version $Revision$
  */
 @ServiceProviderFor({ Processor.class })
-public class ManifestSectionProcessor extends AbstractAnnotationProcessor {
+public class ManifestSectionProcessor extends AbstractAnnotationProcessor
+                                      implements BootstrapProcessorTask.Processor {
     private static final String PATH = "META-INF/MANIFEST.MF";
 
     private Manifest manifest =
@@ -46,39 +48,6 @@ public class ManifestSectionProcessor extends AbstractAnnotationProcessor {
      * Sole constructor.
      */
     public ManifestSectionProcessor() { super(ManifestSection.class); }
-
-    /**
-     * {@link iprotium.util.ant.taskdefs.BootstrapProcessorTask} bootstrap
-     * method.
-     */
-    public void bootstrap(Set<Class<?>> set, File destdir) throws IOException {
-        for (Class<?> type : set) {
-            ManifestSection annotation =
-                type.getAnnotation(ManifestSection.class);
-
-            if (annotation != null) {
-                String name = type.getPackage().getName();
-
-                name = name.replaceAll(Pattern.quote(DOT), SLASH) + SLASH;
-
-                manifest.getEntries()
-                    .put(name, new AttributesImpl(annotation));
-            }
-        }
-
-        File file = new File(destdir, PATH);
-
-        IOUtil.mkdirs(file.getParentFile());
-
-        OutputStream out = null;
-
-        try {
-            out = new FileOutputStream(file);
-            manifest.write(out);
-        } finally {
-            IOUtil.close(out);
-        }
-    }
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations,
@@ -116,6 +85,36 @@ public class ManifestSectionProcessor extends AbstractAnnotationProcessor {
             element.getAnnotation(ManifestSection.class);
 
         manifest.getEntries().put(name, new AttributesImpl(annotation));
+    }
+
+    @Override
+    public void process(Set<Class<?>> set, File destdir) throws IOException {
+        for (Class<?> type : set) {
+            ManifestSection annotation =
+                type.getAnnotation(ManifestSection.class);
+
+            if (annotation != null) {
+                String name = type.getPackage().getName();
+
+                name = name.replaceAll(Pattern.quote(DOT), SLASH) + SLASH;
+
+                manifest.getEntries()
+                    .put(name, new AttributesImpl(annotation));
+            }
+        }
+
+        File file = new File(destdir, PATH);
+
+        IOUtil.mkdirs(file.getParentFile());
+
+        OutputStream out = null;
+
+        try {
+            out = new FileOutputStream(file);
+            manifest.write(out);
+        } finally {
+            IOUtil.close(out);
+        }
     }
 
     private class AttributesImpl extends Attributes {

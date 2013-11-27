@@ -5,20 +5,18 @@
  */
 package iprotium.util.ant.taskdefs;
 
-import iprotium.annotation.processing.AntTaskProcessor;
-import iprotium.annotation.processing.ManifestSectionProcessor;
-import iprotium.annotation.processing.ServiceProviderForProcessor;
 import java.io.File;
+import java.io.IOException;
+import java.util.Set;
 import org.apache.tools.ant.BuildException;
+
+import static iprotium.util.ClassUtil.isAbstract;
 
 /**
  * <a href="http://ant.apache.org/">Ant</a>
  * {@link org.apache.tools.ant.Task} to bootstrap
- * {@link javax.annotation.processing.Processor}s.
- *
- * @see AntTaskProcessor#bootstrap(Set,File)
- * @see ManifestSectionProcessor#bootstrap(Set,File)
- * @see ServiceProviderForProcessor#bootstrap(Set,File)
+ * {@link javax.annotation.processing.Processor}s.  Creates and invokes
+ * {@link Processor}s found on the class path.
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
  * @version $Revision$
@@ -47,12 +45,14 @@ public class BootstrapProcessorTask extends AbstractClassFileTask {
         }
 
         try {
-            new AntTaskProcessor()
-                .bootstrap(getClassSet(), getDestdir());
-            new ManifestSectionProcessor()
-                .bootstrap(getClassSet(), getDestdir());
-            new ServiceProviderForProcessor()
-                .bootstrap(getClassSet(), getDestdir());
+            for (Class<?> type : getClassSet()) {
+                if (Processor.class.isAssignableFrom(type)) {
+                    if (! isAbstract(type)) {
+                        type.asSubclass(Processor.class).newInstance()
+                            .process(getClassSet(), getDestdir());
+                    }
+                }
+            }
         } catch (BuildException exception) {
             throw exception;
         } catch (RuntimeException exception) {
@@ -62,5 +62,22 @@ public class BootstrapProcessorTask extends AbstractClassFileTask {
             exception.printStackTrace();
             throw new BuildException(exception);
         }
+    }
+
+    /**
+     * Bootstrap processor interface.
+     */
+    public interface Processor {
+
+        /**
+         * Bootstrap method called by this {@link org.apache.tools.ant.Task}.
+         *
+         * @param       set     The {@link Set} of {@link Class}es to
+         *                      examine.
+         * @param       destdir The root of the hierarchy to record any
+         *                      output artifacts.
+         */
+        public void process(Set<Class<?>> set, File destdir)
+            throws IOException;
     }
 }
