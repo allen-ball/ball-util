@@ -54,16 +54,6 @@
               value="${pom.artifactId}-${pom.version}.jar"/>
   </target>
 
-  <target name="buildnumber" unless="buildnumber">
-    <tstamp>
-      <format property="buildnumber.date" pattern="yyyyMMdd"/>
-      <format property="buildnumber.time" pattern="HHmm"/>
-    </tstamp>
-    <property name="buildnumber"
-              value="${buildnumber.date}${buildnumber.time}"/>
-    <echo>${buildnumber}</echo>
-  </target>
-
   <target name="classes"
           description="--> Compile Java source."
           depends="depend">
@@ -97,148 +87,9 @@
 
   <target name="jar"
           description="--> Construct iprotium-util.jar."
-          depends="buildnumber,classes">
+          depends="classes">
     <jar destfile="${target.dir}/${artifact}">
       <fileset dir="${target.classes.dir}"/>
-      <manifest>
-        <attribute name="Built-By" value="${user.name}"/>
-        <section name="iprotium/activation/">
-          <attribute name="Extension-Name" value="iprotium.activation"/>
-          <attribute name="Specification-Title" value="${pom.artifactId}"/>
-          <attribute name="Specification-Version" value="${pom.version}"/>
-          <attribute name="Specification-Vendor" value="${vendor}"/>
-          <attribute name="Implementation-Title" value="iprotium.activation"/>
-          <attribute name="Implementation-Version"
-                     value="${pom.version}.${buildnumber.date}"/>
-          <attribute name="Implementation-Vendor" value="${vendor}"/>
-          <attribute name="Sealed" value="true"/>
-        </section>
-        <section name="iprotium/annotation/">
-          <attribute name="Sealed" value="true"/>
-        </section>
-        <section name="iprotium/annotation/processing/">
-          <attribute name="Sealed" value="true"/>
-        </section>
-        <section name="iprotium/beans/">
-          <attribute name="Extension-Name" value="iprotium.beans"/>
-          <attribute name="Specification-Title" value="${pom.artifactId}"/>
-          <attribute name="Specification-Version" value="${pom.version}"/>
-          <attribute name="Specification-Vendor" value="${vendor}"/>
-          <attribute name="Implementation-Title" value="iprotium.beans"/>
-          <attribute name="Implementation-Version"
-                     value="${pom.version}.${buildnumber.date}"/>
-          <attribute name="Implementation-Vendor" value="${vendor}"/>
-          <attribute name="Sealed" value="true"/>
-        </section>
-        <section name="iprotium/io/">
-          <attribute name="Extension-Name" value="iprotium.io"/>
-          <attribute name="Specification-Title" value="${pom.artifactId}"/>
-          <attribute name="Specification-Version" value="${pom.version}"/>
-          <attribute name="Specification-Vendor" value="${vendor}"/>
-          <attribute name="Implementation-Title" value="iprotium.io"/>
-          <attribute name="Implementation-Version"
-                     value="${pom.version}.${buildnumber.date}"/>
-          <attribute name="Implementation-Vendor" value="${vendor}"/>
-          <attribute name="Sealed" value="true"/>
-        </section>
-        <section name="iprotium/lang/">
-          <attribute name="Extension-Name" value="iprotium.lang"/>
-          <attribute name="Specification-Title" value="${pom.artifactId}"/>
-          <attribute name="Specification-Version" value="${pom.version}"/>
-          <attribute name="Specification-Vendor" value="${vendor}"/>
-          <attribute name="Implementation-Title" value="iprotium.lang"/>
-          <attribute name="Implementation-Version"
-                     value="${pom.version}.${buildnumber.date}"/>
-          <attribute name="Implementation-Vendor" value="${vendor}"/>
-          <attribute name="Sealed" value="true"/>
-        </section>
-        <section name="iprotium/lang/lisp/">
-          <attribute name="Sealed" value="true"/>
-        </section>
-        <section name="iprotium/lang/lisp/scheme/">
-          <attribute name="Sealed" value="true"/>
-        </section>
-        <section name="iprotium/naming/">
-          <attribute name="Extension-Name" value="iprotium.naming"/>
-          <attribute name="Specification-Title" value="${pom.artifactId}"/>
-          <attribute name="Specification-Version" value="${pom.version}"/>
-          <attribute name="Specification-Vendor" value="${vendor}"/>
-          <attribute name="Implementation-Title" value="iprotium.naming"/>
-          <attribute name="Implementation-Version"
-                     value="${pom.version}.${buildnumber.date}"/>
-          <attribute name="Implementation-Vendor" value="${vendor}"/>
-          <attribute name="Sealed" value="true"/>
-        </section>
-        <section name="iprotium/naming/env/">
-          <attribute name="Sealed" value="true"/>
-        </section>
-        <section name="iprotium/swing/">
-          <attribute name="Extension-Name" value="iprotium.swing"/>
-          <attribute name="Specification-Title" value="${pom.artifactId}"/>
-          <attribute name="Specification-Version" value="${pom.version}"/>
-          <attribute name="Specification-Vendor" value="${vendor}"/>
-          <attribute name="Implementation-Title" value="iprotium.swing"/>
-          <attribute name="Implementation-Version"
-                     value="${pom.version}.${buildnumber.date}"/>
-          <attribute name="Implementation-Vendor" value="${vendor}"/>
-          <attribute name="Sealed" value="true"/>
-        </section>
-        <section name="iprotium/text/">
-          <attribute name="Extension-Name" value="iprotium.text"/>
-          <attribute name="Specification-Title" value="${pom.artifactId}"/>
-          <attribute name="Specification-Version" value="${pom.version}"/>
-          <attribute name="Specification-Vendor" value="${vendor}"/>
-          <attribute name="Implementation-Title" value="iprotium.text"/>
-          <attribute name="Implementation-Version"
-                     value="${pom.version}.${buildnumber.date}"/>
-          <attribute name="Implementation-Vendor" value="${vendor}"/>
-          <attribute name="Sealed" value="true"/>
-        </section>
-        <section name="iprotium/tools/">
-          <attribute name="Sealed" value="true"/>
-        </section>
-        <section name="iprotium/tools/javadoc/">
-          <attribute name="Sealed" value="true"/>
-        </section>
-        <section name="iprotium/util/">
-          <attribute name="Extension-Name" value="iprotium.util"/>
-          <attribute name="Specification-Title" value="${pom.artifactId}"/>
-          <attribute name="Specification-Version" value="${pom.version}"/>
-          <attribute name="Specification-Vendor" value="${vendor}"/>
-          <attribute name="Implementation-Title" value="iprotium.util"/>
-          <attribute name="Implementation-Version"
-                     value="${pom.version}.${buildnumber.date}"/>
-          <attribute name="Implementation-Vendor" value="${vendor}"/>
-          <attribute name="Sealed" value="true"/>
-        </section>
-        <section name="iprotium/util/ant/taskdefs/">
-          <attribute name="Sealed" value="true"/>
-        </section>
-        <section name="iprotium/util/ant/taskdefs/compilers/">
-          <attribute name="Sealed" value="true"/>
-        </section>
-        <section name="iprotium/util/ant/types/">
-          <attribute name="Sealed" value="true"/>
-        </section>
-        <section name="iprotium/util/predicate/">
-          <attribute name="Sealed" value="true"/>
-        </section>
-        <section name="iprotium/util/jni/">
-          <attribute name="Sealed" value="true"/>
-        </section>
-        <section name="iprotium/xml/">
-          <attribute name="Sealed" value="true"/>
-        </section>
-        <section name="iprotium/xml/bind/">
-          <attribute name="Sealed" value="true"/>
-        </section>
-        <section name="iprotium/xml/bind/annotation/">
-          <attribute name="Sealed" value="true"/>
-        </section>
-        <section name="iprotium/xml/bind/annotation/processing/">
-          <attribute name="Sealed" value="true"/>
-        </section>
-      </manifest>
     </jar>
     <jarlib-display file="${target.dir}/${artifact}"/>
   </target>
