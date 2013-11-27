@@ -17,6 +17,7 @@ import org.apache.tools.ant.BuildException;
  * {@link javax.annotation.processing.Processor}s.
  *
  * @see AntTaskProcessor#bootstrap(Set,File)
+ * @see ManifestSectionProcessor#bootstrap(Set,File)
  * @see ServiceProviderForProcessor#bootstrap(Set,File)
  *
  * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
