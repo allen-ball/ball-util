@@ -1,5 +1,8 @@
 2013-11-27  Allen D. Ball  <ball@10-0-1-2.lan>
 
+	* src/main/java/iprotium/util/ant/taskdefs/BootstrapProcessorTask.java:
+	Added ManifestSectionProcessor to bootstrap.
+
 	* src/main/java/iprotium/annotation/ManifestSection.java,
 	src/main/java/iprotium/annotation/processing/ManifestSectionProcessor.java:
 	Initial writing.

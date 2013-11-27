@@ -6,6 +6,7 @@
 package iprotium.util.ant.taskdefs;
 
 import iprotium.annotation.processing.AntTaskProcessor;
+import iprotium.annotation.processing.ManifestSectionProcessor;
 import iprotium.annotation.processing.ServiceProviderForProcessor;
 import java.io.File;
 import org.apache.tools.ant.BuildException;
@@ -46,6 +47,8 @@ public class BootstrapProcessorTask extends AbstractClassFileTask {
 
         try {
             new AntTaskProcessor()
+                .bootstrap(getClassSet(), getDestdir());
+            new ManifestSectionProcessor()
                 .bootstrap(getClassSet(), getDestdir());
             new ServiceProviderForProcessor()
                 .bootstrap(getClassSet(), getDestdir());
