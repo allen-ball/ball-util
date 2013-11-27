@@ -88,9 +88,9 @@
   <target name="jar"
           description="--> Construct iprotium-util.jar."
           depends="classes">
-    <jar destfile="${target.dir}/${artifact}">
+    <zip destfile="${target.dir}/${artifact}">
       <fileset dir="${target.classes.dir}"/>
-    </jar>
+    </zip>
     <jarlib-display file="${target.dir}/${artifact}"/>
   </target>
 
