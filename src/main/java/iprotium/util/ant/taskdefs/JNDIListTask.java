@@ -37,7 +37,11 @@ public class JNDIListTask extends AbstractClasspathTask {
 
     @Override
     public void execute() throws BuildException {
+        ClassLoader loader = Thread.currentThread().getContextClassLoader();
+
         try {
+            Thread.currentThread().setContextClassLoader(getClassLoader());
+
             log(getContext(null));
         } catch (BuildException exception) {
             throw exception;
@@ -47,6 +51,8 @@ public class JNDIListTask extends AbstractClasspathTask {
         } catch (Exception exception) {
             exception.printStackTrace();
             throw new BuildException(exception);
+        } finally {
+            Thread.currentThread().setContextClassLoader(loader);
         }
     }
 

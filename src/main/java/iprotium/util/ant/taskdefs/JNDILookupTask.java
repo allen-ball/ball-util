@@ -50,7 +50,11 @@ public class JNDILookupTask extends JNDIListTask {
             throw new BuildException("`name' attribute must be specified");
         }
 
+        ClassLoader loader = Thread.currentThread().getContextClassLoader();
+
         try {
+            Thread.currentThread().setContextClassLoader(getClassLoader());
+
             Matcher matcher = PATTERN.matcher(getName());
 
             if (matcher.matches()) {
@@ -83,6 +87,8 @@ public class JNDILookupTask extends JNDIListTask {
         } catch (Exception exception) {
             exception.printStackTrace();
             throw new BuildException(exception);
+        } finally {
+            Thread.currentThread().setContextClassLoader(loader);
         }
     }
 }
