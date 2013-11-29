@@ -1,3 +1,7 @@
+2013-11-29  Allen D. Ball  <ball@10-0-1-2.lan>
+
+	* Moved JNDI implementation example to example.naming.
+
 2013-11-27  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* Mark bootstrap processors with BootstrapProcessorTask.Processor
@@ -841,10 +845,6 @@
 
 	* src/main/java/iprotium/util/ISO8601DateFormat.java:
 	Initial writing.
-
-2009-08-18  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* Added iprotium.naming and iprotium.naming.env packages.
 
 2009-08-14  Allen D. Ball  <ball@10-0-1-2.lan>
 
