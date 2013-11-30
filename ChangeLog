@@ -1,5 +1,8 @@
 2013-11-29  Allen D. Ball  <ball@10-0-1-2.lan>
 
+	* src/main/java/iprotium/util/ant/taskdefs/JNDITask.java:
+	Combined JNDIListTask and JNDILookupTask into JNDITask.
+
 	* Moved JNDI implementation example to example.naming.
 
 2013-11-27  Allen D. Ball  <ball@10-0-1-2.lan>
