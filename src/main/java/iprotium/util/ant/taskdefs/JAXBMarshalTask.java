@@ -52,12 +52,9 @@ public class JAXBMarshalTask extends InstanceOfTask {
             log(ds);
         } catch (BuildException exception) {
             throw exception;
-        } catch (RuntimeException exception) {
-            exception.printStackTrace();
-            throw exception;
-        } catch (Exception exception) {
-            exception.printStackTrace();
-            throw new BuildException(exception);
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+            throw new BuildException(throwable);
         }
     }
 }

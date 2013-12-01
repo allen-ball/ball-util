@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2011, 2012 Allen D. Ball.  All rights reserved.
+ * Copyright 2011 - 2013 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -40,8 +40,6 @@ public abstract class AbstractPropertyTask extends AbstractClasspathTask {
         try {
             value = getPropertyValue();
         } catch (BuildException exception) {
-            throw exception;
-        } catch (RuntimeException exception) {
             throw exception;
         } catch (Throwable throwable) {
             if (key == null) {

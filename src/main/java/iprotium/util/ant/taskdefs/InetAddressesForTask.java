@@ -41,9 +41,8 @@ public class InetAddressesForTask extends Task {
             log(Arrays.toString(InetAddress.getAllByName(getString())));
         } catch (BuildException exception) {
             throw exception;
-        } catch (RuntimeException exception) {
-            throw exception;
         } catch (Throwable throwable) {
+            throwable.printStackTrace();
             throw new BuildException(throwable);
         }
     }

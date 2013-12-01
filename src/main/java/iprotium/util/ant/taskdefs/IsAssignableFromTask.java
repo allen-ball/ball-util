@@ -56,12 +56,9 @@ public class IsAssignableFromTask extends AbstractClasspathTask {
                 + "assignable from " + subtype.getName());
         } catch (BuildException exception) {
             throw exception;
-        } catch (RuntimeException exception) {
-            exception.printStackTrace();
-            throw exception;
-        } catch (Exception exception) {
-            exception.printStackTrace();
-            throw new BuildException(exception);
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+            throw new BuildException(throwable);
         }
     }
 }

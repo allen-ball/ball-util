@@ -39,9 +39,8 @@ public class NetworkInterfacesTask extends Task {
             }
         } catch (BuildException exception) {
             throw exception;
-        } catch (RuntimeException exception) {
-            throw exception;
         } catch (Throwable throwable) {
+            throwable.printStackTrace();
             throw new BuildException(throwable);
         }
     }
