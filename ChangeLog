@@ -1,3 +1,8 @@
+2013-12-01  Allen D. Ball  <ball@10-0-1-2.lan>
+
+	* src/main/java/iprotium/util/NetworkInterfaceUtil.java:
+	Initial writing.
+
 2013-11-29  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* src/main/java/iprotium/util/ant/taskdefs/JNDITask.java:
