@@ -17,7 +17,13 @@ import java.util.Arrays;
  * @version $Revision$
  */
 public class Directory extends FileImpl {
-    private static final long serialVersionUID = 8506847168875186580L;
+    private static final long serialVersionUID = -8771825551317597097L;
+
+    /**
+     * See {@link System#getProperty(String)} and {@code java.io.tmpdir}.
+     */
+    public static final Directory TMPDIR =
+        new Directory(System.getProperty("java.io.tmpdir"));
 
     /**
      * @see File#File(String)
