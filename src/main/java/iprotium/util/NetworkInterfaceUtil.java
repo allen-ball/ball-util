@@ -21,21 +21,6 @@ import static java.util.Collections.list;
  * @version $Revision$
  */
 public abstract class NetworkInterfaceUtil {
-
-    /**
-     * IPv4 localhost 127.0.0.1
-     */
-    public static final InetAddress LOCALHOST;
-
-    static {
-        try {
-            LOCALHOST =
-                InetAddress.getByAddress("localhost", bytes(127, 0, 0, 1));
-        } catch (Exception exception) {
-            throw new ExceptionInInitializerError(exception);
-        }
-    }
-
     private NetworkInterfaceUtil() { }
 
     /**
@@ -69,15 +54,5 @@ public abstract class NetworkInterfaceUtil {
         }
 
         return list;
-    }
-
-    private static byte[] bytes(Number... numbers) {
-        byte[] bytes = new byte[numbers.length];
-
-        for (int i = 0, n = bytes.length; i < n; i += 1) {
-            bytes[i] = numbers[i].byteValue();
-        }
-
-        return bytes;
     }
 }
