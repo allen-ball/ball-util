@@ -12,11 +12,10 @@ import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 
 /**
- * <a href="http://ant.apache.org/">Ant</a>
- * {@link org.apache.tools.ant.Task} to invoke
- * {@link InetAddress#getAllByName(String)}.
+ * {@link.uri http://ant.apache.org/ Ant} {@link org.apache.tools.ant.Task}
+ * to invoke {@link InetAddress#getAllByName(String)}.
  *
- * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
+ * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
 @AntTask("inet-addresses-for")

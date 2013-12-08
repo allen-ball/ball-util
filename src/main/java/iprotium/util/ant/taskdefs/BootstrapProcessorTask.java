@@ -13,12 +13,11 @@ import org.apache.tools.ant.BuildException;
 import static iprotium.util.ClassUtil.isAbstract;
 
 /**
- * <a href="http://ant.apache.org/">Ant</a>
- * {@link org.apache.tools.ant.Task} to bootstrap
- * {@link javax.annotation.processing.Processor}s.  Creates and invokes
- * {@link Processor}s found on the class path.
+ * {@link.uri http://ant.apache.org/ Ant} {@link org.apache.tools.ant.Task}
+ * to bootstrap {@link javax.annotation.processing.Processor}s.  Creates and
+ * invokes {@link Processor}s found on the class path.
  *
- * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
+ * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
 public class BootstrapProcessorTask extends AbstractClassFileTask {

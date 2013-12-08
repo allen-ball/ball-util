@@ -15,7 +15,7 @@ import javax.lang.model.element.Element;
  * {@link javax.annotation.processing.Processor} implementation to check
  * {@link Codes} annotations.
  *
- * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
+ * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
 @ServiceProviderFor({ Processor.class })

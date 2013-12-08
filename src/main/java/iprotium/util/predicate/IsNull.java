@@ -11,7 +11,7 @@ import iprotium.util.AbstractPredicate;
  * {@link iprotium.util.Predicate} implementation to test for not
  * {@code null}.
  *
- * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
+ * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
 public class IsNull extends AbstractPredicate {

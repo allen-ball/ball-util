@@ -14,10 +14,10 @@ import org.apache.tools.ant.Project;
 import org.apache.tools.ant.taskdefs.MatchingTask;
 
 /**
- * Abstract base class for <a href="http://ant.apache.org/">Ant</a>
+ * Abstract base class for {@link.uri http://ant.apache.org/ Ant}
  * {@link MatchingTask} implementations.
  *
- * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
+ * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
 public abstract class AbstractMatchingTask extends MatchingTask {

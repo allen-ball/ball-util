@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2009 - 2011 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2013 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
@@ -18,10 +18,10 @@ import static iprotium.util.TimeUnitEnum.HOURS;
 import static iprotium.util.TimeUnitEnum.MINUTES;
 
 /**
- * <a href="http://www.w3.org/TR/NOTE-datetime">ISO 8601</a>
+ * {@link.uri http://www.w3.org/TR/NOTE-datetime ISO 8601}
  * {@link java.text.DateFormat} implementation.
  *
- * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
+ * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
 public class ISO8601DateFormat extends SimpleDateFormat {

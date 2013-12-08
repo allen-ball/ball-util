@@ -22,10 +22,10 @@ import org.apache.tools.ant.BuildException;
 import static iprotium.util.StringUtil.NIL;
 
 /**
- * Abstract base class for JNDI <a href="http://ant.apache.org/">Ant</a>
+ * Abstract base class for JNDI {@link.uri http://ant.apache.org/ Ant}
  * {@link org.apache.tools.ant.Task}s.
  *
- * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
+ * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
 public abstract class JNDITask extends AbstractClasspathTask {
@@ -105,7 +105,7 @@ public abstract class JNDITask extends AbstractClasspathTask {
     }
 
     /**
-     * <a href="http://ant.apache.org/">Ant</a>
+     * {@link.uri http://ant.apache.org/ Ant}
      * {@link org.apache.tools.ant.Task} to list a JNDI initial
      * {@link Context}.
      *
@@ -140,7 +140,7 @@ public abstract class JNDITask extends AbstractClasspathTask {
     }
 
     /**
-     * <a href="http://ant.apache.org/">Ant</a>
+     * {@link.uri http://ant.apache.org/ Ant}
      * {@link org.apache.tools.ant.Task} to perform a JNDI look-up.
      *
      * @see NamingManager#getURLContext(String,Hashtable)

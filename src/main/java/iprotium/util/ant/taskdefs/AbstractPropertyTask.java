@@ -8,10 +8,10 @@ package iprotium.util.ant.taskdefs;
 import org.apache.tools.ant.BuildException;
 
 /**
- * Abstract <a href="http://ant.apache.org/">Ant</a> base class for
+ * Abstract {@link.uri http://ant.apache.org/ Ant} base class for
  * {@link org.apache.tools.ant.Task}s that may assign property values.
  *
- * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
+ * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
 public abstract class AbstractPropertyTask extends AbstractClasspathTask {

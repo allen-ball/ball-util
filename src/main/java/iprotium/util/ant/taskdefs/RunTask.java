@@ -9,11 +9,11 @@ import iprotium.annotation.AntTask;
 import org.apache.tools.ant.BuildException;
 
 /**
- * <a href="http://ant.apache.org/">Ant</a>
- * {@link org.apache.tools.ant.Task} to instantiate a {@link Runnable} and
- * then invoke its {@link Runnable#run()} method.
+ * {@link.uri http://ant.apache.org/ Ant} {@link org.apache.tools.ant.Task}
+ * to instantiate a {@link Runnable} and then invoke its
+ * {@link Runnable#run()} method.
  *
- * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
+ * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
 @AntTask("run")

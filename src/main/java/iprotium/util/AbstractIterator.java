@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2010, 2011 Allen D. Ball.  All rights reserved.
+ * Copyright 2010 - 2013 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
@@ -15,7 +15,7 @@ import java.util.Iterator;
  * @param       <E>             The type of {@link Object} the
  *                              {@link Iterator} produces.
  *
- * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
+ * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
 public abstract class AbstractIterator<E> implements Iterator<E>,

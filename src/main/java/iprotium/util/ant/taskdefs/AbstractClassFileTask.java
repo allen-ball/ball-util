@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2012 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2013 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -16,11 +16,11 @@ import org.apache.tools.ant.taskdefs.optional.depend.DirectoryIterator;
 import org.apache.tools.ant.types.Path;
 
 /**
- * Abstract base class for <a href="http://ant.apache.org/">Ant</a>
- * {@link org.apache.tools.ant.Task} implementations that select *.CLASS
- * files.
+ * Abstract base class for {@link.uri http://ant.apache.org/ Ant}
+ * {@link org.apache.tools.ant.Task} implementations that select
+ * {@code *.CLASS} files.
  *
- * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
+ * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
 public abstract class AbstractClassFileTask extends AbstractClasspathTask {

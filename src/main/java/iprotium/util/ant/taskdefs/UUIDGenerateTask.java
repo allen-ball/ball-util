@@ -11,13 +11,13 @@ import java.util.UUID;
 import org.apache.tools.ant.Task;
 
 /**
- * <a href="http://ant.apache.org/">Ant</a> {@link Task} to generate new
+ * {@link.uri http://ant.apache.org/ Ant} {@link Task} to generate new
  * unique {@link UUID}s.
  *
  * @see Random
  * @see Time
  *
- * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
+ * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
 @AntTask("uuid-generate")
@@ -36,8 +36,8 @@ public class UUIDGenerateTask extends AbstractPropertyTask {
     }
 
     /**
-     * <a href="http://ant.apache.org/">Ant</a> {@link Task} to generate a
-     * new {@link UUID} with {@link UUIDFactory#generateRandom()}.
+     * {@link.uri http://ant.apache.org/ Ant} {@link Task} to generate a new
+     * {@link UUID} with {@link UUIDFactory#generateRandom()}.
      */
     @AntTask("uuid-generate-random")
     public static class Random extends UUIDGenerateTask {
@@ -54,8 +54,8 @@ public class UUIDGenerateTask extends AbstractPropertyTask {
     }
 
     /**
-     * <a href="http://ant.apache.org/">Ant</a> {@link Task} to generate a
-     * new {@link UUID} with {@link UUIDFactory#generateTime()}.
+     * {@link.uri http://ant.apache.org/ Ant} {@link Task} to generate a new
+     * {@link UUID} with {@link UUIDFactory#generateTime()}.
      */
     @AntTask("uuid-generate-time")
     public static class Time extends UUIDGenerateTask {

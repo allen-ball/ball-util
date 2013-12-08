@@ -8,7 +8,7 @@ package iprotium.util;
 /**
  * Static utility methods for working with {@link Comparable}s.
  *
- * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
+ * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
 public abstract class ComparableUtil {

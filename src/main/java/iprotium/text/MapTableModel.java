@@ -14,7 +14,7 @@ import javax.swing.event.TableModelEvent;
  * @param       <K>     The type of the underlying {@link Map} key.
  * @param       <V>     The type of the underlying {@link Map} value.
  *
- * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
+ * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
 public class MapTableModel<K,V> extends ArrayListTableModel<Map.Entry<K,V>> {

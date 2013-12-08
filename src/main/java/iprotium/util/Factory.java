@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2012 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2013 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
@@ -28,7 +28,7 @@ import static iprotium.util.ClassUtil.isStatic;
  * @param       <T>             The type of {@link Object} this
  *                              {@link Factory} will produce.
  *
- * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
+ * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
 public class Factory<T> extends TreeMap<Class<?>[],Member>

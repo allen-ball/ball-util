@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2011 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2013 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.jni;
 
@@ -11,11 +11,10 @@ import java.util.ResourceBundle;
 
 /**
  * Provides wrappers to native
- * <a href="http://www.opengroup.org/onlinepubs/000095399/idx/functions.html">
- *   POSIX
- * </a> functions.
+ * {@link.uri http://www.opengroup.org/onlinepubs/000095399/idx/functions.html POSIX}
+ * functions.
  *
- * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
+ * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
 public abstract class POSIX {
@@ -27,7 +26,7 @@ public abstract class POSIX {
     private POSIX() { }
 
     /**
-     * <a href="http://www.opengroup.org/onlinepubs/000095399/functions/link.html">link</a>
+     * {@link.uri http://www.opengroup.org/onlinepubs/000095399/functions/link.html link}
      *
      * @param   from            The source {@link File}.
      * @param   to              The target {@link File}.
@@ -41,7 +40,7 @@ public abstract class POSIX {
     private static native boolean link(String from, String to);
 
     /**
-     * <a href="http://www.opengroup.org/onlinepubs/000095399/functions/symlink.html">symlink</a>
+     * {@link.uri http://www.opengroup.org/onlinepubs/000095399/functions/symlink.html symlink}
      *
      * @param   from            The source {@link File}.
      * @param   to              The target {@link File}.
@@ -55,7 +54,7 @@ public abstract class POSIX {
     private static native boolean symlink(String from, String to);
 
     /**
-     * <a href="http://www.opengroup.org/onlinepubs/000095399/functions/readlink.html">readlink</a>
+     * {@link.uri http://www.opengroup.org/onlinepubs/000095399/functions/readlink.html readlink}
      *
      * @param   from            The source {@link File}.
      *
@@ -71,7 +70,7 @@ public abstract class POSIX {
     private static native String readlink(String from);
 
     /**
-     * <a href="http://www.opengroup.org/onlinepubs/000095399/functions/opendir.html">opendir</a>
+     * {@link.uri http://www.opengroup.org/onlinepubs/000095399/functions/opendir.html opendir}
      *
      * @param   directory       The directory ({@link File}) to open.
      *

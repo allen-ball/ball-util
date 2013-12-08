@@ -12,7 +12,7 @@ import java.util.TreeMap;
 /**
  * {@link Map} implementation that provides counting methods.
  *
- * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
+ * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
 public class Histogram<K> extends TreeMap<K,Long> {

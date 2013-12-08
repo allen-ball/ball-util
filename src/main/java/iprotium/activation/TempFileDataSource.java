@@ -17,7 +17,7 @@ import static iprotium.util.StringUtil.NIL;
  * {@link javax.activation.DataSource} backed by a temporary {@link File}
  * and based on {@link FileInputStream} and {@link FileOutputStream}.
  *
- * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
+ * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
 public class TempFileDataSource extends AbstractDataSource {

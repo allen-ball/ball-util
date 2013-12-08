@@ -31,7 +31,7 @@ import static javax.tools.StandardLocation.CLASS_OUTPUT;
  * {@link Processor} implementation to scan {@link Package}s annotated with
  * {@link ManifestSection} and generate a {@code META-INF/MANIFEST.MF}.
  *
- * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
+ * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
 @ServiceProviderFor({ Processor.class })

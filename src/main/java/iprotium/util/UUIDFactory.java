@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2011, 2012 Allen D. Ball.  All rights reserved.
+ * Copyright 2011 - 2013 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
@@ -14,7 +14,7 @@ import java.util.UUID;
  * generate new {@link UUID}s with the {@code uuid_generate(3)} collection
  * of functions.
  *
- * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
+ * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
 public class UUIDFactory extends Factory<UUID> {

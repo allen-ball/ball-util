@@ -17,7 +17,7 @@ import javax.lang.model.element.VariableElement;
  * marked by the {@link ConstantInitializer} annotation into compile-time
  * constants.
  *
- * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
+ * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
 @ServiceProviderFor({ Processor.class })

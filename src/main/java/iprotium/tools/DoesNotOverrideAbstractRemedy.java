@@ -33,7 +33,7 @@ import static iprotium.lang.Punctuation.SPACE;
 import static java.lang.reflect.Modifier.ABSTRACT;
 
 /**
- * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
+ * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
 @ServiceProviderFor({ Remedy.class })

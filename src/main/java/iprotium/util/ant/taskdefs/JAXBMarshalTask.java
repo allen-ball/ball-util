@@ -12,11 +12,11 @@ import javax.xml.bind.Marshaller;
 import org.apache.tools.ant.BuildException;
 
 /**
- * <a href="http://ant.apache.org/">Ant</a>
- * {@link org.apache.tools.ant.Task} to get an instance of a specified
- * {@link Class} and then marshal with a {@link Marshaller}.
+ * {@link.uri http://ant.apache.org/ Ant} {@link org.apache.tools.ant.Task}
+ * to get an instance of a specified {@link Class} and then marshal with a
+ * {@link Marshaller}.
  *
- * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
+ * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
 @AntTask("jaxb-marshal")

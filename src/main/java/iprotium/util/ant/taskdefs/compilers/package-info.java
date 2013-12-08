@@ -4,7 +4,7 @@
  *
  * @see javax.tools.ToolProvider#getSystemJavaCompiler()
  *
- * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
+ * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  */
 @ManifestSection
 package iprotium.util.ant.taskdefs.compilers;

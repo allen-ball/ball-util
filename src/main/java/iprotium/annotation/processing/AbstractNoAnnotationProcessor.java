@@ -29,7 +29,7 @@ import static java.util.Collections.singleton;
  * @see ForModifiers
  * @see ForSubclassesOf
  *
- * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
+ * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
 public abstract class AbstractNoAnnotationProcessor extends AbstractProcessor {

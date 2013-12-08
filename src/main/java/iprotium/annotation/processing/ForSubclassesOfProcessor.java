@@ -16,7 +16,7 @@ import javax.lang.model.element.TypeElement;
  * {@link Processor} implementation to check {@link ForSubclassesOf}
  * annotations.
  *
- * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
+ * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
 @ServiceProviderFor({ Processor.class })

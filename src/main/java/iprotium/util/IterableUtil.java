@@ -14,7 +14,7 @@ import java.util.LinkedList;
  * {@link Iterable} (and {@link Iterator} and {@link Enumeration}) utility
  * methods.
  *
- * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
+ * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
 public abstract class IterableUtil {

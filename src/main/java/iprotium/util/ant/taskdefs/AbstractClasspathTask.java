@@ -18,10 +18,10 @@ import org.apache.tools.ant.types.Reference;
 import org.apache.tools.ant.util.ClasspathUtils;
 
 /**
- * Abstract base class for <a href="http://ant.apache.org/">Ant</a>
+ * Abstract base class for {@link.uri http://ant.apache.org/ Ant}
  * {@link Task} implementations that require a classpath.
  *
- * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
+ * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
 public abstract class AbstractClasspathTask extends Task {

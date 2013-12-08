@@ -16,7 +16,7 @@ import java.util.NoSuchElementException;
  *                              {@link Iterator} and the member
  *                              {@link Iterator}s produces.
  *
- * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
+ * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
 public class SequenceIterator<E> extends AbstractIterator<E> {

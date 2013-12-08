@@ -8,7 +8,7 @@ package iprotium.util.predicate;
 /**
  * {@link Not} {@link IsNull} implementation.
  *
- * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
+ * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
 public class IsNotNull extends Not {

@@ -10,7 +10,7 @@ import iprotium.util.ComparableUtil;
 /**
  * Abstract {@link Order} base class for ordering {@link Class} objects.
  *
- * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
+ * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
 public abstract class ClassOrder extends Order<Class<?>> {

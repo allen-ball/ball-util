@@ -16,7 +16,7 @@ import javax.lang.model.element.TypeElement;
  * Abstract {@link javax.annotation.processing.Processor} base class for
  * processing an {@link Annotation}.
  *
- * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
+ * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
 public abstract class AbstractAnnotationProcessor extends AbstractProcessor {

@@ -18,7 +18,7 @@ import javax.lang.model.element.VariableElement;
  * {@link String} initializers marked by the {@link Regex} annotation are
  * valid {@link Pattern}s.
  *
- * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
+ * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
 @ServiceProviderFor({ Processor.class })

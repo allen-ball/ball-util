@@ -14,7 +14,7 @@ import java.util.HashSet;
 /**
  * Abstract {@link FileFilter} base class.
  *
- * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
+ * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
 public abstract class AbstractFileFilter implements FileFilter {

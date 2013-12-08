@@ -13,7 +13,7 @@ import java.util.Arrays;
 /**
  * Directory {@link FileImpl} implementation.
  *
- * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
+ * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
 public class Directory extends FileImpl {

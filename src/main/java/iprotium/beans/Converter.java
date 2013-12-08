@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2010, 2011 Allen D. Ball.  All rights reserved.
+ * Copyright 2010 - 2013 Allen D. Ball.  All rights reserved.
  */
 package iprotium.beans;
 
@@ -13,7 +13,7 @@ import java.lang.reflect.InvocationTargetException;
  * @param       <T>             The type of {@link Object} this
  *                              {@link Converter} will target.
  *
- * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
+ * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
 public interface Converter<T> {

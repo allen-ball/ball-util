@@ -28,7 +28,7 @@ import java.util.NoSuchElementException;
  * {@link InputStream} and a {@link PrintWriter} wrapping the
  * {@link javax.activation.DataSource} {@link OutputStream}.
  *
- * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
+ * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
 public class ReaderWriterDataSource extends FilterDataSource

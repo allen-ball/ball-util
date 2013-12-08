@@ -13,7 +13,7 @@ import java.text.ParsePosition;
 /**
  * {@link String} {@link Format} base class.
  *
- * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
+ * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
 public abstract class StringFormat extends Format {

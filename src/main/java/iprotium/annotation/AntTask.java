@@ -14,10 +14,10 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
  * {@link java.lang.annotation.Annotation} to mark
- * <a href="http://ant.apache.org/">Ant</a>
+ * {@link.uri http://ant.apache.org/ Ant}
  * {@link org.apache.tools.ant.Task}s.
  *
- * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
+ * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
 @Documented

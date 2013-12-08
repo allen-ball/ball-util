@@ -14,10 +14,10 @@ import org.apache.tools.ant.taskdefs.ExecuteOn;
 import org.apache.tools.ant.types.Commandline;
 
 /**
- * <a href="http://ant.apache.org/">Ant</a>
+ * {@link.uri http://ant.apache.org/ Ant}
  * {@link org.apache.tools.ant.Task} to compile JNI shared objects.
  *
- * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
+ * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
 public abstract class AbstractJNIExecuteOnTask extends ExecuteOn {

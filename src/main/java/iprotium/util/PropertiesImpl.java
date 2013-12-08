@@ -21,7 +21,7 @@ import java.util.Properties;
  * {@link #load(InputStream)} and {@link #store(OutputStream,String)}
  * methods to specify the {@link Charset} (as {@code UTF-8}).
  *
- * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
+ * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
 public class PropertiesImpl extends Properties {

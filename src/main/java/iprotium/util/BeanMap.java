@@ -20,7 +20,7 @@ import java.util.Set;
  * {@link Map} implementation that wraps a Java {@code bean} and provides
  * entries for the {@code bean} properties.
  *
- * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
+ * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
 public class BeanMap extends AbstractMap<String,Object>

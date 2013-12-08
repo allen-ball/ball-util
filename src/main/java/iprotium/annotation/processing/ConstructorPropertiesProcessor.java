@@ -34,7 +34,7 @@ import static javax.lang.model.util.ElementFilter.methodsIn;
  * annotation are actual bean properties of the {@link
  * java.lang.reflect.Constructor}'s {@link Class}.
  *
- * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
+ * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
 @ServiceProviderFor({ Processor.class })

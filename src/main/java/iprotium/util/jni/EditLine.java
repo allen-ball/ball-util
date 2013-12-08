@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2010 - 2012 Allen D. Ball.  All rights reserved.
+ * Copyright 2010 - 2013 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.jni;
 
@@ -12,7 +12,7 @@ import java.util.ResourceBundle;
  * Provides wrappers to the native EditLine (libedit) functions.  See the
  * {@link.man editline(3)} manual page.
  *
- * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
+ * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
 public class EditLine {

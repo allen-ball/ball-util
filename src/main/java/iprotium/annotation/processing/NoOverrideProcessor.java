@@ -21,7 +21,7 @@ import static javax.lang.model.element.Modifier.STATIC;
  * {@link java.lang.reflect.Method}s that are not marked with the
  * {@link Override} {@link java.lang.annotation.Annotation}.
  *
- * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
+ * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
 @ServiceProviderFor({ Processor.class })

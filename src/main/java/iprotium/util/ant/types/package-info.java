@@ -1,7 +1,7 @@
 /**
  * See {@link org.apache.tools.ant.types}.
  *
- * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
+ * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  */
 @ManifestSection
 package iprotium.util.ant.types;

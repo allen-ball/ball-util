@@ -11,7 +11,7 @@ import java.io.File;
 /**
  * Abstract {@link Order} base class for ordering {@link File} objects.
  *
- * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
+ * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
 public abstract class FileOrder extends Order<File> {

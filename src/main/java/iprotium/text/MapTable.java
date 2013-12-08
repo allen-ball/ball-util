@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2009 - 2011 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2013 Allen D. Ball.  All rights reserved.
  */
 package iprotium.text;
 
@@ -13,7 +13,7 @@ import java.util.Map;
  * @param       <K>     The type of the underlying {@link Map} key.
  * @param       <V>     The type of the underlying {@link Map} value.
  *
- * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
+ * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
 public class MapTable<K,V> extends TextTable {

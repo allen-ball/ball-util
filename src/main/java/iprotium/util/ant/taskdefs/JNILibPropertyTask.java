@@ -9,13 +9,13 @@ import iprotium.annotation.AntTask;
 import org.apache.tools.ant.BuildException;
 
 /**
- * Abstract <a href="http://ant.apache.org/">Ant</a>
+ * Abstract {@link.uri http://ant.apache.org/ Ant}
  * {@link org.apache.tools.ant.Task} to get platform-specific JNI values.
  *
  * @see Prefix
  * @see Suffix
  *
- * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
+ * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
 public abstract class JNILibPropertyTask extends AbstractPropertyTask {
@@ -46,7 +46,7 @@ public abstract class JNILibPropertyTask extends AbstractPropertyTask {
     protected JNILibPropertyTask() { super(); }
 
     /**
-     * <a href="http://ant.apache.org/">Ant</a>
+     * {@link.uri http://ant.apache.org/ Ant}
      * {@link org.apache.tools.ant.Task} to get platform-specific JNI
      * library prefix.
      */
@@ -63,7 +63,7 @@ public abstract class JNILibPropertyTask extends AbstractPropertyTask {
     }
 
     /**
-     * <a href="http://ant.apache.org/">Ant</a>
+     * {@link.uri http://ant.apache.org/ Ant}
      * {@link org.apache.tools.ant.Task} to get platform-specific JNI
      * library suffix.
      */

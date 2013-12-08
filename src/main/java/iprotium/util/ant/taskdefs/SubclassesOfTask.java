@@ -14,11 +14,11 @@ import static iprotium.util.ClassUtil.isAbstract;
 import static iprotium.util.StringUtil.NIL;
 
 /**
- * <a href="http://ant.apache.org/">Ant</a>
- * {@link org.apache.tools.ant.Task} to determine the {@link Class}es
- * that are subclasses of the specified type.
+ * {@link.uri http://ant.apache.org/ Ant} {@link org.apache.tools.ant.Task}
+ * to determine the {@link Class}es that are subclasses of the specified
+ * type.
  *
- * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
+ * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
 @AntTask("subclasses-of")

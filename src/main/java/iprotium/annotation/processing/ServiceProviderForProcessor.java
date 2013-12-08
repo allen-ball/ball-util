@@ -48,7 +48,7 @@ import static javax.tools.StandardLocation.CLASS_OUTPUT;
  *   </li>
  * </ol>
  *
- * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
+ * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
 @ServiceProviderFor({ Processor.class })

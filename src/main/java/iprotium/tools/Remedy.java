@@ -17,7 +17,7 @@ import javax.tools.StandardJavaFileManager;
 /**
  * Abstract base class for {@link Diagnostic} remedies.
  *
- * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
+ * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
 public abstract class Remedy {

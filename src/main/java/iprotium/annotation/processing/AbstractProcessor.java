@@ -44,7 +44,7 @@ import static javax.tools.Diagnostic.Kind.WARNING;
  * {@link ProcessingEnvironment#getElementUtils()}, and
  * {@link ProcessingEnvironment#getTypeUtils()}.
  *
- * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
+ * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
 public abstract class AbstractProcessor

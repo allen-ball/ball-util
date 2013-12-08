@@ -20,7 +20,7 @@ import javax.activation.URLDataSource;
  * {@link DataSource} {@link Factory} abstract base class.  Provides
  * {@link #getDataSource(URI)} and {@link #getDataSource(URL)} methods.
  *
- * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
+ * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
 public abstract class DataSourceFactory extends Factory<DataSource> {

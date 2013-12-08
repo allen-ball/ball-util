@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 /**
  * Provides Java keywords as an {@link Enum} type.
  *
- * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
+ * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
 public enum Keyword implements Parser.Lexeme {

@@ -1,7 +1,7 @@
 /**
  * Provides {@link javax.tools} support classes.
  *
- * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
+ * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  */
 @ManifestSection
 package iprotium.tools;

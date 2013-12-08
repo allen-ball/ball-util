@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2009 - 2012 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2013 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
@@ -17,7 +17,7 @@ import java.util.LinkedHashSet;
  *                              {@link Class}es located on this search
  *                              path.
  *
- * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
+ * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
 public class PackageSearchPath<T> extends LinkedHashSet<Package> {

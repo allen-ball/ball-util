@@ -16,11 +16,10 @@ import static iprotium.util.ClassUtil.isNative;
 import static iprotium.util.StringUtil.NIL;
 
 /**
- * <a href="http://ant.apache.org/">Ant</a>
- * {@link org.apache.tools.ant.Task} to determine the classes that have
- * native members.
+ * {@link.uri http://ant.apache.org/ Ant} {@link org.apache.tools.ant.Task}
+ * to determine the classes that have native members.
  *
- * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
+ * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
 @AntTask("jni-classes")

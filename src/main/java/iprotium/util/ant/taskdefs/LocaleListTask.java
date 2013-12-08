@@ -11,12 +11,12 @@ import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 
 /**
- * <a href="http://ant.apache.org/">Ant</a> {@link Task} to list the
- * available {@link Locale}s.
+ * {@link.uri http://ant.apache.org/ Ant} {@link Task} to list the available
+ * {@link Locale}s.
  *
  * @see Locale#getAvailableLocales()
  *
- * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
+ * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
 @AntTask("locale-list")

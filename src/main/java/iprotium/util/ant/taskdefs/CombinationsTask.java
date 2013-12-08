@@ -14,11 +14,11 @@ import org.apache.tools.ant.BuildException;
 import static iprotium.util.StringUtil.NIL;
 
 /**
- * Abstract <a href="http://ant.apache.org/">Ant</a>
+ * Abstract {@link.uri http://ant.apache.org/ Ant}
  * {@link org.apache.tools.ant.Task} to analyze {@link Combinations} of a
  * {@link Collection}.
  *
- * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
+ * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
 public abstract class CombinationsTask extends InstanceOfTask {
@@ -42,7 +42,7 @@ public abstract class CombinationsTask extends InstanceOfTask {
     }
 
     /**
-     * <a href="http://ant.apache.org/">Ant</a>
+     * {@link.uri http://ant.apache.org/ Ant}
      * {@link org.apache.tools.ant.Task} to count {@link Combinations}.
      */
     @AntTask("combinations-count")
@@ -78,7 +78,7 @@ public abstract class CombinationsTask extends InstanceOfTask {
     }
 
     /**
-     * <a href="http://ant.apache.org/">Ant</a>
+     * {@link.uri http://ant.apache.org/ Ant}
      * {@link org.apache.tools.ant.Task} to show the {@link Combinations}.
      */
     @AntTask("combinations-of")

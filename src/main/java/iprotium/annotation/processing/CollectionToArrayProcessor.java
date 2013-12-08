@@ -20,7 +20,7 @@ import static javax.lang.model.util.ElementFilter.methodsIn;
  * {@link Processor} implementation to enforce {@link Collection#toArray()}
  * implementation methods return as narrow an {@link Object} as possible.
  *
- * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
+ * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
 @ServiceProviderFor({ Processor.class })

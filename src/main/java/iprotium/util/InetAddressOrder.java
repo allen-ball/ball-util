@@ -11,7 +11,7 @@ import java.net.InetAddress;
 /**
  * Abstract {@link Order} base class for ordering {@link InetAddress} objects.
  *
- * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
+ * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
 public abstract class InetAddressOrder extends Order.NonNull<InetAddress> {

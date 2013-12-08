@@ -18,7 +18,7 @@ import java.util.List;
  *
  * @param       <T>             The type to be compared.
  *
- * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
+ * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
 public abstract class Order<T> implements Comparator<T>, Serializable {

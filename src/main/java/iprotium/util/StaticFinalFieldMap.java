@@ -20,7 +20,7 @@ import static iprotium.util.ClassUtil.isStatic;
  * {@link TreeMap} implementation that maps a {@link Class}'s constant
  * ("{@code public static final}") fields' names to their values.
  *
- * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
+ * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
 public class StaticFinalFieldMap<T> extends TreeMap<String,T> {

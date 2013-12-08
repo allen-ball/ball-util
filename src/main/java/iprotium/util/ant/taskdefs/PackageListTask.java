@@ -13,11 +13,11 @@ import org.apache.tools.ant.BuildException;
 import static iprotium.util.StringUtil.NIL;
 
 /**
- * <a href="http://ant.apache.org/">Ant</a>
- * {@link org.apache.tools.ant.Task} to determine the {@link Package}s
- * represented by the argument {@link Class} files.
+ * {@link.uri http://ant.apache.org/ Ant} {@link org.apache.tools.ant.Task}
+ * to determine the {@link Package}s represented by the argument
+ * {@link Class} files.
  *
- * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
+ * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
 @AntTask("package-list")
