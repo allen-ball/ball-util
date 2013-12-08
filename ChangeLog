@@ -1,5 +1,9 @@
 2013-12-07  Allen D. Ball  <ball@10-0-1-2.lan>
 
+	* src/main/java/iprotium/tools/javadoc/TagletName.java,
+	src/main/java/iprotium/annotation/processing/TagletNameProcessor.java:
+	Initial writing.
+
 	* src/main/java/iprotium/tools/javadoc/LinkURITaglet.java:
 	Initial writing.
 
