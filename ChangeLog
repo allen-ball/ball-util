@@ -1,3 +1,8 @@
+2013-12-07  Allen D. Ball  <ball@10-0-1-2.lan>
+
+	* src/main/java/iprotium/tools/javadoc/LinkURITaglet.java:
+	Initial writing.
+
 2013-12-05  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* src/main/java/iprotium/util/InetAddressUtil.java:
