@@ -17,10 +17,11 @@ import java.util.regex.Pattern;
 /**
  * Inline {@link Taglet} providing links to {@link.man man(1)} pages.
  *
- * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
+ * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
 @ServiceProviderFor({ Taglet.class })
+@TagletName("link.man")
 public class LinkManTaglet extends AbstractTaglet {
     public static void register(Map<String,Taglet> map) {
         Taglet taglet = new LinkManTaglet();
@@ -39,9 +40,7 @@ public class LinkManTaglet extends AbstractTaglet {
     /**
      * Sole constructor.
      */
-    public LinkManTaglet() {
-        super("link.man", true, true, true, true, true, true, true);
-    }
+    public LinkManTaglet() { super(true, true, true, true, true, true, true); }
 
     @Override
     public String toString(Tag tag) {

@@ -27,11 +27,13 @@ import static javax.xml.transform.OutputKeys.OMIT_XML_DECLARATION;
 /**
  * Abstract {@link Taglet} base class.
  *
- * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
+ * <p>Note: {@link #getName()} implementation requires the subclass is
+ * annotated with {@link TagletName}.
+ *
+ * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
 public abstract class AbstractTaglet implements Taglet {
-    private final String name;
     private final boolean isInlineTag;
     private final boolean inPackage;
     private final boolean inOverview;
@@ -39,21 +41,23 @@ public abstract class AbstractTaglet implements Taglet {
     private final boolean inConstructor;
     private final boolean inMethod;
     private final boolean inType;
+    private final Document document;
 
     /**
      * Sole constructor.
+     *
+     * @param   isInlineTag     See {@link #isInlineTag()}.
+     * @param   inPackage       See {@link #inPackage()}.
+     * @param   inOverview      See {@link #inOverview()}.
+     * @param   inField         See {@link #inField()}.
+     * @param   inConstructor   See {@link #inConstructor()}.
+     * @param   inMethod        See {@link #inMethod()}.
+     * @param   inType          See {@link #inType()}.
      */
-    protected AbstractTaglet(String name,
-                             boolean isInlineTag, boolean inPackage,
+    protected AbstractTaglet(boolean isInlineTag, boolean inPackage,
                              boolean inOverview, boolean inField,
                              boolean inConstructor, boolean inMethod,
                              boolean inType) {
-        if (name != null) {
-            this.name = name;
-        } else {
-            throw new NullPointerException("name");
-        }
-
         this.isInlineTag = isInlineTag;
         this.inPackage = inPackage;
         this.inOverview = inOverview;
@@ -63,8 +67,33 @@ public abstract class AbstractTaglet implements Taglet {
         this.inType = inType;
     }
 
+    {
+        try {
+            DocumentBuilderFactory factory =
+                DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+
+            document = builder.newDocument();
+        } catch (Exception exception) {
+            throw new ExceptionInInitializerError(exception);
+        }
+    }
+
     @Override
-    public String getName() { return name; }
+    public String getName() {
+        String name = null;
+        TagletName annotation = getClass().getAnnotation(TagletName.class);
+
+        if (annotation != null) {
+            name = annotation.value();
+        }
+
+        if (name == null) {
+            name = getClass().getSimpleName().toLowerCase();
+        }
+
+        return name;
+    }
 
     @Override
     public boolean isInlineTag() { return isInlineTag; }
@@ -93,7 +122,6 @@ public abstract class AbstractTaglet implements Taglet {
     @Override
     public String toString(Tag tag) { return null; }
 
-
     /**
      * Method to create an HTML "a" {@link Element}.
      *
@@ -104,24 +132,12 @@ public abstract class AbstractTaglet implements Taglet {
      * @return  The HTML "a" {@link Element}.
      */
     protected Element a(String text, URI href) {
-        Element element = null;
+        Element a = document.createElement("a");
 
-        try {
-            DocumentBuilderFactory factory =
-                DocumentBuilderFactory.newInstance();
-            DocumentBuilder builder = factory.newDocumentBuilder();
-            Document document = builder.newDocument();
+        a.setAttribute("href", href.toASCIIString());
+        a.setTextContent((! isNil(text)) ? text : href.toString());
 
-            element = document.createElement("a");
-            element.setAttribute("href", href.toASCIIString());
-            element.setTextContent((! isNil(text)) ? text : href.toString());
-        } catch (RuntimeException exception) {
-            throw exception;
-        } catch (Exception exception) {
-            throw new IllegalStateException(exception);
-        }
-
-        return element;
+        return a;
     }
 
     /**
@@ -129,7 +145,7 @@ public abstract class AbstractTaglet implements Taglet {
      *
      * @param   node            The {@link Node}.
      *
-     * @return  The {@link String} reprentation of the {@link Node}.
+     * @return  The {@link String} representation of the {@link Node}.
      */
     protected String toString(Node node) {
         ReaderWriterDataSource ds = new ReaderWriterDataSourceImpl();

@@ -16,10 +16,11 @@ import static java.lang.String.format;
 /**
  * Inline {@link Taglet} providing links to external RFCs.
  *
- * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
+ * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
 @ServiceProviderFor({ Taglet.class })
+@TagletName("link.rfc")
 public class LinkRFCTaglet extends AbstractTaglet {
     public static void register(Map<String,Taglet> map) {
         Taglet taglet = new LinkRFCTaglet();
@@ -30,14 +31,14 @@ public class LinkRFCTaglet extends AbstractTaglet {
     }
 
     private static final String TEXT = "RFC%d";
+    private static final String PROTOCOL = "http";
+    private static final String HOST = "www.ietf.org";
     private static final String PATH = "/rfc/rfc%d.txt";
 
     /**
      * Sole constructor.
      */
-    public LinkRFCTaglet() {
-        super("link.rfc", true, true, true, true, true, true, true);
-    }
+    public LinkRFCTaglet() { super(true, true, true, true, true, true, true); }
 
     @Override
     public String toString(Tag tag) {
@@ -49,8 +50,7 @@ public class LinkRFCTaglet extends AbstractTaglet {
 
             out =
                 toString(a(format(TEXT, rfc),
-                           new URI("http", "www.ietf.org",
-                                   format(PATH, rfc), null)));
+                           new URI(PROTOCOL, HOST, format(PATH, rfc), null)));
         } catch (Exception exception) {
         }
 
