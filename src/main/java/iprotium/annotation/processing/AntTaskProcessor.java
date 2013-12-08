@@ -37,14 +37,14 @@ import static javax.tools.StandardLocation.CLASS_OUTPUT;
 
 /**
  * {@link Processor} implementation to check {@link Class}es annotated with
- * {@link AntTask} are:
+ * {@link AntTask}:
  * <ol>
- *   <li value="1">An instance of {@link Task}</li>
- *   <li value="2">Concrete</li>
- *   <li value="3">Has a public no-argument constructor</li>
+ *   <li value="1">Are an instance of {@link Task},</li>
+ *   <li value="2">Concrete, and</li>
+ *   <li value="3">Have a public no-argument constructor</li>
  * </ol>
  *
- * @author <a href="mailto:ball@iprotium.com">Allen D. Ball</a>
+ * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
 @ServiceProviderFor({ Processor.class })
