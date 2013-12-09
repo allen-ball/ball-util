@@ -24,11 +24,7 @@ import java.util.regex.Pattern;
 @TagletName("link.man")
 public class LinkManTaglet extends AbstractTaglet {
     public static void register(Map<String,Taglet> map) {
-        Taglet taglet = new LinkManTaglet();
-        String key = taglet.getName();
-
-        map.remove(key);
-        map.put(key, taglet);
+        register(LinkManTaglet.class, map);
     }
 
     @Regex

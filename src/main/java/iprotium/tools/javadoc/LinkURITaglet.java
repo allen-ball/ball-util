@@ -21,11 +21,7 @@ import java.util.Map;
 @TagletName("link.uri")
 public class LinkURITaglet extends AbstractTaglet {
     public static void register(Map<String,Taglet> map) {
-        Taglet taglet = new LinkURITaglet();
-        String key = taglet.getName();
-
-        map.remove(key);
-        map.put(key, taglet);
+        register(LinkURITaglet.class, map);
     }
 
     /**

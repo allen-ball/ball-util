@@ -11,6 +11,7 @@ import iprotium.activation.ReaderWriterDataSource;
 import iprotium.io.IOUtil;
 import java.io.Writer;
 import java.net.URI;
+import java.util.Map;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
@@ -34,6 +35,31 @@ import static javax.xml.transform.OutputKeys.OMIT_XML_DECLARATION;
  * @version $Revision$
  */
 public abstract class AbstractTaglet implements Taglet {
+
+    /**
+     * Helper method to implement {@link Taglet} static
+     * {@code register(Map)} method.
+     *
+     * @param   type            The {@link AbstractTaglet} implementation
+     *                          {@link Class}.
+     * @param   map             The javadoc {@link Taglet} {@link Map}.
+     */
+    protected static void register(Class<? extends AbstractTaglet> type,
+                                   Map<String,Taglet> map) {
+        try {
+            AbstractTaglet value = type.newInstance();
+            String key = value.getName();
+
+            if (map.containsKey(key)) {
+                map.remove(key);
+            }
+
+            map.put(key, value);
+        } catch (Exception exception) {
+            throw new ExceptionInInitializerError(exception);
+        }
+    }
+
     private final boolean isInlineTag;
     private final boolean inPackage;
     private final boolean inOverview;

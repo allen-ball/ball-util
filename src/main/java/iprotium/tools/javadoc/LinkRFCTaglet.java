@@ -23,11 +23,7 @@ import static java.lang.String.format;
 @TagletName("link.rfc")
 public class LinkRFCTaglet extends AbstractTaglet {
     public static void register(Map<String,Taglet> map) {
-        Taglet taglet = new LinkRFCTaglet();
-        String key = taglet.getName();
-
-        map.remove(key);
-        map.put(key, taglet);
+        register(LinkRFCTaglet.class, map);
     }
 
     private static final String TEXT = "RFC%d";

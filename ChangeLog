@@ -1,3 +1,10 @@
+2013-12-08  Allen D. Ball  <ball@10-0-1-2.lan>
+
+	* src/main/java/iprotium/tools/javadoc/AbstractTaglet.java:
+	Added static
+	register(Class<? extends AbstractTaglet>,Map<String,Taglet>)
+	method.
+
 2013-12-07  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* src/main/java/iprotium/tools/javadoc/AbstractTaglet.java (and subclasses):
@@ -56,7 +63,7 @@
 	* Integrated iprotium.xml.
 
 	* pom.xml:
-	Added explicitly dependency to JAXB API (found in modern JREs).
+	Added explicit dependency to JAXB API (found in modern JREs).
 
 2013-10-01  Allen D. Ball  <ball@10-0-1-2.lan>
 
