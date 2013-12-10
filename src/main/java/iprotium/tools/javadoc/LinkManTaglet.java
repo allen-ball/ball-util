@@ -6,7 +6,9 @@
 package iprotium.tools.javadoc;
 
 import com.sun.javadoc.Tag;
-import com.sun.tools.doclets.Taglet;
+import com.sun.tools.doclets.internal.toolkit.taglets.Taglet;
+import com.sun.tools.doclets.internal.toolkit.taglets.TagletOutput;
+import com.sun.tools.doclets.internal.toolkit.taglets.TagletWriter;
 import iprotium.annotation.ServiceProviderFor;
 import iprotium.util.Regex;
 import java.io.File;
@@ -39,12 +41,11 @@ public class LinkManTaglet extends AbstractTaglet {
     public LinkManTaglet() { super(true, true, true, true, true, true, true); }
 
     @Override
-    public String toString(Tag tag) {
-        String in = tag.text().trim();
-        String out = in;
+    public TagletOutput getTagletOutput(Tag tag, TagletWriter writer) throws IllegalArgumentException {
+        TagletOutput output = writer.getOutputInstance();
 
         try {
-            Matcher matcher = PATTERN.matcher(in);
+            Matcher matcher = PATTERN.matcher(tag.text().trim());
 
             if (matcher.matches()) {
                 String name = matcher.group(NAME_GROUP).trim();
@@ -57,11 +58,14 @@ public class LinkManTaglet extends AbstractTaglet {
                 path = new File(path, "htmlman" + section);
                 path = new File(path, name + "." + section + ".html");
 
-                out = toString(a(name + "(" + section + ")", path.toURI()));
+                output.setOutput(toString(a(name + "(" + section + ")",
+                                            path.toURI())));
             }
         } catch (Exception exception) {
+            throw new IllegalArgumentException(tag.position().toString(),
+                                               exception);
         }
 
-        return out;
+        return output;
     }
 }

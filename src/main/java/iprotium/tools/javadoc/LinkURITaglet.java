@@ -6,7 +6,9 @@
 package iprotium.tools.javadoc;
 
 import com.sun.javadoc.Tag;
-import com.sun.tools.doclets.Taglet;
+import com.sun.tools.doclets.internal.toolkit.taglets.Taglet;
+import com.sun.tools.doclets.internal.toolkit.taglets.TagletOutput;
+import com.sun.tools.doclets.internal.toolkit.taglets.TagletWriter;
 import iprotium.annotation.ServiceProviderFor;
 import java.net.URI;
 import java.util.Map;
@@ -30,19 +32,20 @@ public class LinkURITaglet extends AbstractTaglet {
     public LinkURITaglet() { super(true, true, true, true, true, true, true); }
 
     @Override
-    public String toString(Tag tag) {
-        String in = tag.text().trim();
-        String out = in;
+    public TagletOutput getTagletOutput(Tag tag, TagletWriter writer) throws IllegalArgumentException {
+        TagletOutput output = writer.getOutputInstance();
 
         try {
-            String[] argv = in.split("[\\p{Space}]+", 2);
+            String[] argv = tag.text().trim().split("[\\p{Space}]+", 2);
             URI href = new URI(argv[0]);
             String text = (argv.length > 1) ? argv[1] : null;
 
-            out = toString(a(text, href));
+            output.setOutput(toString(a(text, href)));
         } catch (Exception exception) {
+            throw new IllegalArgumentException(tag.position().toString(),
+                                               exception);
         }
 
-        return out;
+        return output;
     }
 }

@@ -5,8 +5,11 @@
  */
 package iprotium.tools.javadoc;
 
+import com.sun.javadoc.Doc;
 import com.sun.javadoc.Tag;
-import com.sun.tools.doclets.Taglet;
+import com.sun.tools.doclets.internal.toolkit.taglets.Taglet;
+import com.sun.tools.doclets.internal.toolkit.taglets.TagletOutput;
+import com.sun.tools.doclets.internal.toolkit.taglets.TagletWriter;
 import iprotium.activation.ReaderWriterDataSource;
 import iprotium.io.IOUtil;
 import java.io.Writer;
@@ -143,10 +146,14 @@ public abstract class AbstractTaglet implements Taglet {
     public boolean inType() { return inType; }
 
     @Override
-    public String toString(Tag[] tags) { return null; }
+    public TagletOutput getTagletOutput(Tag tag, TagletWriter writer) throws IllegalArgumentException {
+        throw new IllegalArgumentException(tag.position().toString());
+    }
 
     @Override
-    public String toString(Tag tag) { return null; }
+    public TagletOutput getTagletOutput(Doc doc, TagletWriter writer) throws IllegalArgumentException {
+        throw new IllegalArgumentException(doc.position().toString());
+    }
 
     /**
      * Method to create an HTML "a" {@link Element}.

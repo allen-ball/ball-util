@@ -1,3 +1,8 @@
+2013-12-09  Allen D. Ball  <ball@10-0-1-2.lan>
+
+	* Implement com.sun.tools.doclets.internal.toolkit.taglets.Taglet
+	instead of the legacy com.sun.tools.doclets.Taglet.
+
 2013-12-08  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* src/main/java/iprotium/tools/javadoc/AbstractTaglet.java:

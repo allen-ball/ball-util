@@ -6,7 +6,9 @@
 package iprotium.tools.javadoc;
 
 import com.sun.javadoc.Tag;
-import com.sun.tools.doclets.Taglet;
+import com.sun.tools.doclets.internal.toolkit.taglets.Taglet;
+import com.sun.tools.doclets.internal.toolkit.taglets.TagletOutput;
+import com.sun.tools.doclets.internal.toolkit.taglets.TagletWriter;
 import iprotium.annotation.ServiceProviderFor;
 import java.net.URI;
 import java.util.Map;
@@ -37,19 +39,20 @@ public class LinkRFCTaglet extends AbstractTaglet {
     public LinkRFCTaglet() { super(true, true, true, true, true, true, true); }
 
     @Override
-    public String toString(Tag tag) {
-        String in = tag.text().trim();
-        String out = in;
+    public TagletOutput getTagletOutput(Tag tag, TagletWriter writer) throws IllegalArgumentException {
+        TagletOutput output = writer.getOutputInstance();
 
         try {
-            int rfc = Integer.valueOf(in);
+            int rfc = Integer.valueOf(tag.text().trim());
 
-            out =
-                toString(a(format(TEXT, rfc),
-                           new URI(PROTOCOL, HOST, format(PATH, rfc), null)));
+            output.setOutput(toString(a(format(TEXT, rfc),
+                                        new URI(PROTOCOL, HOST,
+                                                format(PATH, rfc), null))));
         } catch (Exception exception) {
+            throw new IllegalArgumentException(tag.position().toString(),
+                                               exception);
         }
 
-        return out;
+        return output;
     }
 }

@@ -5,7 +5,7 @@
  */
 package iprotium.annotation.processing;
 
-import com.sun.tools.doclets.Taglet;
+import com.sun.tools.doclets.internal.toolkit.taglets.Taglet;
 import iprotium.annotation.ServiceProviderFor;
 import iprotium.tools.javadoc.TagletName;
 import iprotium.util.StringUtil;
@@ -21,7 +21,10 @@ import static javax.lang.model.element.Modifier.PUBLIC;
  * {@link Processor} implementation to check {@link Class}es annotated with
  * {@link TagletName}:
  * <ol>
- *   <li value="1">Are an instance of {@link Taglet},</li>
+ *   <li value="1">
+ *     Are an instance of the legacy {@link com.sun.tools.doclets.Taglet} or
+ *     the Sun internal {@link Taglet},
+ *   </li>
  *   <li value="2">Concrete, and</li>
  *   <li value="3">Have a public no-argument constructor</li>
  * </ol>
