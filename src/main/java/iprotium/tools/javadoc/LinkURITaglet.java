@@ -13,6 +13,7 @@ import iprotium.annotation.ServiceProviderFor;
 import iprotium.xml.HTML;
 import java.net.URI;
 import java.util.Map;
+import org.w3c.dom.Element;
 
 /**
  * Inline {@link Taglet} to provide external links.
@@ -33,20 +34,21 @@ public class LinkURITaglet extends AbstractTaglet {
     public LinkURITaglet() { super(true, true, true, true, true, true, true); }
 
     @Override
-    public TagletOutput getTagletOutput(Tag tag, TagletWriter writer) throws IllegalArgumentException {
-        TagletOutput output = writer.getOutputInstance();
+    public TagletOutput getTagletOutput(Tag tag,
+                                        TagletWriter writer) throws IllegalArgumentException {
+        Element element = null;
 
         try {
             String[] argv = tag.text().trim().split("[\\p{Space}]+", 2);
             URI href = new URI(argv[0]);
             String text = (argv.length > 1) ? argv[1] : null;
 
-            output.setOutput(toString(HTML.a(document, text, href)));
+            element = HTML.a(document, text, href);
         } catch (Exception exception) {
             throw new IllegalArgumentException(tag.position().toString(),
                                                exception);
         }
 
-        return output;
+        return output(writer, element);
     }
 }

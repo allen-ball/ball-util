@@ -16,6 +16,7 @@ import java.io.File;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.w3c.dom.Element;
 
 /**
  * Inline {@link Taglet} providing links to {@link.man man(1)} pages.
@@ -42,8 +43,9 @@ public class LinkManTaglet extends AbstractTaglet {
     public LinkManTaglet() { super(true, true, true, true, true, true, true); }
 
     @Override
-    public TagletOutput getTagletOutput(Tag tag, TagletWriter writer) throws IllegalArgumentException {
-        TagletOutput output = writer.getOutputInstance();
+    public TagletOutput getTagletOutput(Tag tag,
+                                        TagletWriter writer) throws IllegalArgumentException {
+        Element element = null;
 
         try {
             Matcher matcher = PATTERN.matcher(tag.text().trim());
@@ -59,15 +61,14 @@ public class LinkManTaglet extends AbstractTaglet {
                 path = new File(path, "htmlman" + section);
                 path = new File(path, name + "." + section + ".html");
 
-                output.setOutput(toString(HTML.a(document,
-                                                 name + "(" + section + ")",
-                                                 path.toURI())));
+                element =
+                    HTML.a(document, name + "(" + section + ")", path.toURI());
             }
         } catch (Exception exception) {
             throw new IllegalArgumentException(tag.position().toString(),
                                                exception);
         }
 
-        return output;
+        return output(writer, element);
     }
 }

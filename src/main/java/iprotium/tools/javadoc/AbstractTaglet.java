@@ -145,44 +145,62 @@ public abstract class AbstractTaglet implements Taglet {
     public boolean inType() { return inType; }
 
     @Override
-    public TagletOutput getTagletOutput(Tag tag, TagletWriter writer) throws IllegalArgumentException {
+    public TagletOutput getTagletOutput(Tag tag,
+                                        TagletWriter writer) throws IllegalArgumentException {
         throw new IllegalArgumentException(tag.position().toString());
     }
 
     @Override
-    public TagletOutput getTagletOutput(Doc doc, TagletWriter writer) throws IllegalArgumentException {
+    public TagletOutput getTagletOutput(Doc doc,
+                                        TagletWriter writer) throws IllegalArgumentException {
         throw new IllegalArgumentException(doc.position().toString());
     }
 
     /**
-     * Method to convert a {@link Node} to a {@link String}.
+     * Method to produce {@link Taglet} output.
      *
-     * @param   node            The {@link Node}.
+     * See {@link #getTagletOutput(Tag,TagletWriter)} and
+     * {@link #getTagletOutput(Doc,TagletWriter)}.
      *
-     * @return  The {@link String} representation of the {@link Node}.
+     * @param   writer          The {@link TagletWriter}.
+     * @param   objects         The {@link Object}s to translate to output.
+     *
+     * @return  The {@link TagletOutput}.
      */
-    protected String toString(Node node) {
+    protected TagletOutput output(TagletWriter writer, Object... objects) {
         ReaderWriterDataSource ds = new ReaderWriterDataSourceImpl();
-        Writer writer = null;
+        Writer out = null;
 
         try {
-            writer = ds.getWriter();
+            out = ds.getWriter();
 
-            TransformerFactory factory = TransformerFactory.newInstance();
-            Transformer transformer = factory.newTransformer();
+            for (Object object : objects) {
+                if (object instanceof Node) {
+                    Transformer transformer =
+                        TransformerFactory.newInstance().newTransformer();
 
-            transformer.setOutputProperty(OMIT_XML_DECLARATION, "yes");
-            transformer.transform(new DOMSource(node),
-                                  new StreamResult(writer));
+                    transformer.setOutputProperty(OMIT_XML_DECLARATION, "yes");
+                    transformer.transform(new DOMSource((Node) object),
+                                          new StreamResult(out));
+                } else {
+                    out.write(String.valueOf(object));
+                }
+            }
+
+            out.flush();
         } catch (RuntimeException exception) {
             throw exception;
         } catch (Exception exception) {
             throw new IllegalStateException(exception);
         } finally {
-            IOUtil.close(writer);
+            IOUtil.close(out);
         }
 
-        return ds.toString();
+        TagletOutput output = writer.getOutputInstance();
+
+        output.setOutput(ds.toString());
+
+        return output;
     }
 
     private class ReaderWriterDataSourceImpl extends ReaderWriterDataSource {

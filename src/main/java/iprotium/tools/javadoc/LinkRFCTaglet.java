@@ -13,6 +13,7 @@ import iprotium.annotation.ServiceProviderFor;
 import iprotium.xml.HTML;
 import java.net.URI;
 import java.util.Map;
+import org.w3c.dom.Element;
 
 import static java.lang.String.format;
 
@@ -40,22 +41,22 @@ public class LinkRFCTaglet extends AbstractTaglet {
     public LinkRFCTaglet() { super(true, true, true, true, true, true, true); }
 
     @Override
-    public TagletOutput getTagletOutput(Tag tag, TagletWriter writer) throws IllegalArgumentException {
-        TagletOutput output = writer.getOutputInstance();
+    public TagletOutput getTagletOutput(Tag tag,
+                                        TagletWriter writer) throws IllegalArgumentException {
+        Element element = null;
 
         try {
             int rfc = Integer.valueOf(tag.text().trim());
 
-            output.setOutput(toString(HTML.a(document,
-                                             format(TEXT, rfc),
-                                             new URI(PROTOCOL, HOST,
-                                                     format(PATH, rfc),
-                                                     null))));
+            element =
+                HTML.a(document,
+                       format(TEXT, rfc),
+                       new URI(PROTOCOL, HOST, format(PATH, rfc), null));
         } catch (Exception exception) {
             throw new IllegalArgumentException(tag.position().toString(),
                                                exception);
         }
 
-        return output;
+        return output(writer, element);
     }
 }
