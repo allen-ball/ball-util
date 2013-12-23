@@ -19,6 +19,15 @@ import java.util.ServiceLoader;
  * @version $Revision$
  */
 public abstract class MavenBootstrapTaglet extends AbstractTaglet {
+    private MavenBootstrapTaglet() {
+        super(false, false, false, false, false, false, false);
+    }
+
+    /**
+     * Static method to register all service providers for {@link Taglet}.
+     *
+     * @param   map             The {@link Map} of {@link Taglet}s.
+     */
     public static void register(Map<String,Taglet> map) {
         Iterator<? extends Taglet> iterator =
             ServiceLoader.load(Taglet.class,
@@ -27,23 +36,13 @@ public abstract class MavenBootstrapTaglet extends AbstractTaglet {
 
         while (iterator.hasNext()) {
             Taglet value = iterator.next();
+            String key = value.getName();
 
-            if (value instanceof AbstractTaglet) {
-                String key = ((AbstractTaglet) value).getName();
-
-                if (map.containsKey(key)) {
-                    map.remove(key);
-                }
-
-                map.put(key, value);
+            if (map.containsKey(key)) {
+                map.remove(key);
             }
-        }
-    }
 
-    /**
-     * Sole constructor.
-     */
-    public MavenBootstrapTaglet() {
-        super(false, false, false, false, false, false, false);
+            map.put(key, value);
+        }
     }
 }
