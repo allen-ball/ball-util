@@ -10,6 +10,7 @@ import com.sun.tools.doclets.internal.toolkit.taglets.Taglet;
 import com.sun.tools.doclets.internal.toolkit.taglets.TagletOutput;
 import com.sun.tools.doclets.internal.toolkit.taglets.TagletWriter;
 import iprotium.annotation.ServiceProviderFor;
+import iprotium.xml.HTML;
 import java.net.URI;
 import java.util.Map;
 
@@ -40,7 +41,7 @@ public class LinkURITaglet extends AbstractTaglet {
             URI href = new URI(argv[0]);
             String text = (argv.length > 1) ? argv[1] : null;
 
-            output.setOutput(toString(a(text, href)));
+            output.setOutput(toString(HTML.a(document, text, href)));
         } catch (Exception exception) {
             throw new IllegalArgumentException(tag.position().toString(),
                                                exception);

@@ -22,7 +22,6 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import static iprotium.util.StringUtil.isNil;
@@ -70,7 +69,7 @@ public abstract class AbstractTaglet implements Taglet {
     private final boolean inConstructor;
     private final boolean inMethod;
     private final boolean inType;
-    private final Document document;
+    protected final Document document;
 
     /**
      * Sole constructor.
@@ -153,24 +152,6 @@ public abstract class AbstractTaglet implements Taglet {
     @Override
     public TagletOutput getTagletOutput(Doc doc, TagletWriter writer) throws IllegalArgumentException {
         throw new IllegalArgumentException(doc.position().toString());
-    }
-
-    /**
-     * Method to create an HTML "a" {@link Element}.
-     *
-     * @param   text            The {@link Element} text.
-     * @param   href            The href {@link org.w3c.dom.Attribute}
-     *                          value.
-     *
-     * @return  The HTML "a" {@link Element}.
-     */
-    protected Element a(String text, URI href) {
-        Element a = document.createElement("a");
-
-        a.setAttribute("href", href.toASCIIString());
-        a.setTextContent((! isNil(text)) ? text : href.toString());
-
-        return a;
     }
 
     /**

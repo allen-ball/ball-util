@@ -11,6 +11,7 @@ import com.sun.tools.doclets.internal.toolkit.taglets.TagletOutput;
 import com.sun.tools.doclets.internal.toolkit.taglets.TagletWriter;
 import iprotium.annotation.ServiceProviderFor;
 import iprotium.util.Regex;
+import iprotium.xml.HTML;
 import java.io.File;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -58,8 +59,9 @@ public class LinkManTaglet extends AbstractTaglet {
                 path = new File(path, "htmlman" + section);
                 path = new File(path, name + "." + section + ".html");
 
-                output.setOutput(toString(a(name + "(" + section + ")",
-                                            path.toURI())));
+                output.setOutput(toString(HTML.a(document,
+                                                 name + "(" + section + ")",
+                                                 path.toURI())));
             }
         } catch (Exception exception) {
             throw new IllegalArgumentException(tag.position().toString(),

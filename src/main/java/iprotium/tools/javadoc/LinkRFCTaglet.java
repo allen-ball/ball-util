@@ -10,6 +10,7 @@ import com.sun.tools.doclets.internal.toolkit.taglets.Taglet;
 import com.sun.tools.doclets.internal.toolkit.taglets.TagletOutput;
 import com.sun.tools.doclets.internal.toolkit.taglets.TagletWriter;
 import iprotium.annotation.ServiceProviderFor;
+import iprotium.xml.HTML;
 import java.net.URI;
 import java.util.Map;
 
@@ -45,9 +46,11 @@ public class LinkRFCTaglet extends AbstractTaglet {
         try {
             int rfc = Integer.valueOf(tag.text().trim());
 
-            output.setOutput(toString(a(format(TEXT, rfc),
-                                        new URI(PROTOCOL, HOST,
-                                                format(PATH, rfc), null))));
+            output.setOutput(toString(HTML.a(document,
+                                             format(TEXT, rfc),
+                                             new URI(PROTOCOL, HOST,
+                                                     format(PATH, rfc),
+                                                     null))));
         } catch (Exception exception) {
             throw new IllegalArgumentException(tag.position().toString(),
                                                exception);
