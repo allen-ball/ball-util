@@ -16,6 +16,7 @@ import javax.lang.model.element.Element;
 import static iprotium.util.ClassUtil.isAbstract;
 import static javax.lang.model.element.Modifier.ABSTRACT;
 import static javax.lang.model.element.Modifier.PUBLIC;
+import static javax.tools.Diagnostic.Kind.ERROR;
 
 /**
  * {@link Processor} implementation to check {@link Class}es annotated with
@@ -49,25 +50,29 @@ public class TagletNameProcessor extends AbstractAnnotationProcessor {
             if (isAssignable(element, Taglet.class)) {
                 if (! element.getModifiers().contains(ABSTRACT)) {
                     if (! hasPublicNoArgumentConstructor(element)) {
-                        error(element,
+                        print(ERROR,
+                              element,
                               element.getKind() + " annotated with "
                               + AT + type.getSimpleName()
                               + " but does not have a " + PUBLIC
                               + " no-argument constructor");
                     }
                 } else {
-                    error(element,
+                    print(ERROR,
+                          element,
                           element.getKind() + " annotated with "
                           + AT + type.getSimpleName() + " but is " + ABSTRACT);
                 }
             } else {
-                error(element,
+                print(ERROR,
+                      element,
                       element.getKind() + " annotated with "
                       + AT + type.getSimpleName() + " but does not implement"
                       + Taglet.class.getName());
             }
         } else {
-            error(element,
+            print(ERROR,
+                  element,
                   element.getKind() + " annotated with "
                   + AT + type.getSimpleName()
                   + " but does not specify value()");

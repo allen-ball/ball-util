@@ -14,6 +14,7 @@ import static javax.lang.model.element.ElementKind.CLASS;
 import static javax.lang.model.element.Modifier.ABSTRACT;
 import static javax.lang.model.element.Modifier.PUBLIC;
 import static javax.lang.model.util.ElementFilter.constructorsIn;
+import static javax.tools.Diagnostic.Kind.WARNING;
 
 /**
  * {@link Processor} implementation to enforce that {@link Class}es have:
@@ -45,10 +46,11 @@ public class ConstructorProcessor extends AbstractNoAnnotationProcessor {
                  constructorsIn(element.getEnclosedElements())) {
             if (element.getModifiers().contains(ABSTRACT)) {
                 if (constructor.getModifiers().contains(PUBLIC)) {
-                    warning(constructor,
-                            constructor.getKind() + " is declared "
-                            + constructor.getModifiers()
-                            + "; suggest non-" + PUBLIC);
+                    print(WARNING,
+                          constructor,
+                          constructor.getKind() + " is declared "
+                          + constructor.getModifiers()
+                          + "; suggest non-" + PUBLIC);
                 }
             }
         }

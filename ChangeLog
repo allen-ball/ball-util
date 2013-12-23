@@ -1,5 +1,10 @@
 2013-12-22  Allen D. Ball  <ball@10-0-1-2.lan>
 
+	* src/main/java/iprotium/annotation/processing/AbstractProcessor.java:
+	Replaced error(Element,CharSequence) and
+	warning(Element,CharSequence) methods with
+	print(Diagnostic.Kind,Element,CharSequence) method.
+
 	* src/main/java/iprotium/xml/HTML.java: Initial writing.
 
 2013-12-09  Allen D. Ball  <ball@10-0-1-2.lan>

@@ -11,6 +11,9 @@ import java.util.Set;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
+import javax.tools.Diagnostic;
+
+import static javax.tools.Diagnostic.Kind.ERROR;
 
 /**
  * Abstract {@link javax.annotation.processing.Processor} base class for
@@ -51,7 +54,7 @@ public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
                 try {
                     process(roundEnv, element);
                 } catch (Exception exception) {
-                    error(element, exception.getMessage());
+                    print(ERROR, element, exception.getMessage());
                 }
             }
         }
@@ -69,13 +72,9 @@ public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
                                     Element element) throws Exception;
 
     @Override
-    protected void error(Element element, CharSequence message) {
-        super.error(element, format(message));
-    }
-
-    @Override
-    protected void warning(Element element, CharSequence message) {
-        super.warning(element, format(message));
+    protected void print(Diagnostic.Kind kind,
+                         Element element, CharSequence message) {
+        super.print(kind, element, format(message));
     }
 
     private CharSequence format(CharSequence message) {

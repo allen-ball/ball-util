@@ -23,6 +23,7 @@ import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
+import javax.tools.Diagnostic;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.disjoint;
@@ -32,8 +33,6 @@ import static javax.lang.model.element.Modifier.PUBLIC;
 import static javax.lang.model.element.Modifier.STATIC;
 import static javax.lang.model.util.ElementFilter.constructorsIn;
 import static javax.lang.model.util.ElementFilter.methodsIn;
-import static javax.tools.Diagnostic.Kind.ERROR;
-import static javax.tools.Diagnostic.Kind.WARNING;
 
 /**
  * Extends {@link javax.annotation.processing.AbstractProcessor} by
@@ -94,23 +93,15 @@ public abstract class AbstractProcessor
                                     RoundEnvironment roundEnv);
 
     /**
-     * Method to print an error.
+     * Method to print an diagnositc message.
      *
+     * @param   kind            The {@link javax.tools.Diagnostic.Kind}.
      * @param   element         The offending {@link Element}.
      * @param   message         The message {@link CharSequence}.
      */
-    protected void error(Element element, CharSequence message) {
-        processingEnv.getMessager().printMessage(ERROR, message, element);
-    }
-
-    /**
-     * Method to print a warning.
-     *
-     * @param   element         The offending {@link Element}.
-     * @param   message         The message {@link CharSequence}.
-     */
-    protected void warning(Element element, CharSequence message) {
-        processingEnv.getMessager().printMessage(WARNING, message, element);
+    protected void print(Diagnostic.Kind kind,
+                         Element element, CharSequence message) {
+        processingEnv.getMessager().printMessage(kind, message, element);
     }
 
     /**

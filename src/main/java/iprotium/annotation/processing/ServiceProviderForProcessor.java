@@ -34,6 +34,7 @@ import static iprotium.util.ClassUtil.isAbstract;
 import static iprotium.util.StringUtil.NIL;
 import static javax.lang.model.element.Modifier.ABSTRACT;
 import static javax.lang.model.element.Modifier.PUBLIC;
+import static javax.tools.Diagnostic.Kind.ERROR;
 import static javax.tools.StandardLocation.CLASS_OUTPUT;
 
 /**
@@ -108,7 +109,8 @@ public class ServiceProviderForProcessor extends AbstractAnnotationProcessor
                             if (isAssignable(element, service)) {
                                 map.add(service, (TypeElement) element);
                             } else {
-                                error(element,
+                                print(ERROR,
+                                      element,
                                       element.getKind() + " annotated with "
                                       + AT + type.getSimpleName()
                                       + " and specifies "
@@ -117,14 +119,16 @@ public class ServiceProviderForProcessor extends AbstractAnnotationProcessor
                             }
                         }
                     } else {
-                        error(element,
+                        print(ERROR,
+                              element,
                               element.getKind() + " annotated with "
                               + AT + type.getSimpleName()
                               + " but does not have a " + PUBLIC
                               + " no-argument constructor");
                     }
                 } else {
-                    error(element,
+                    print(ERROR,
+                          element,
                           element.getKind() + " annotated with "
                           + AT + type.getSimpleName() + " but is " + ABSTRACT);
                 }
@@ -135,7 +139,8 @@ public class ServiceProviderForProcessor extends AbstractAnnotationProcessor
                 /* break; */
             }
         } else {
-            error(element,
+            print(ERROR,
+                  element,
                   element.getKind() + " annotated with "
                   + AT + type.getSimpleName() + " but no services specified");
         }

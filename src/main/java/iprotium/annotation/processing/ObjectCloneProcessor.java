@@ -15,6 +15,7 @@ import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.TypeMirror;
 
 import static javax.lang.model.util.ElementFilter.methodsIn;
+import static javax.tools.Diagnostic.Kind.WARNING;
 
 /**
  * {@link Processor} implementation to check {@link Object#clone()}
@@ -74,20 +75,22 @@ public class ObjectCloneProcessor extends AbstractNoAnnotationProcessor {
         TypeElement type = (TypeElement) method.getEnclosingElement();
 
         if (! type.getInterfaces().contains(THROWABLE.asType())) {
-            warning(type,
-                    type.getKind() + " overrides "
-                    + METHOD.getEnclosingElement().getSimpleName()
-                    + DOT + METHOD.toString()
-                    + " but does not implement " + THROWABLE.getSimpleName());
+            print(WARNING,
+                  type,
+                  type.getKind() + " overrides "
+                  + METHOD.getEnclosingElement().getSimpleName()
+                  + DOT + METHOD.toString() + " but does not implement "
+                  + THROWABLE.getSimpleName());
         }
 
         if (! types.isAssignable(method.getReturnType(), type.asType())) {
-            warning(method,
-                    method.getKind() + " overrides "
-                    + METHOD.getEnclosingElement().getSimpleName()
-                    + DOT + METHOD.toString()
-                    + " but does not return a subclass of "
-                    + type.getSimpleName());
+            print(WARNING,
+                  method,
+                  method.getKind() + " overrides "
+                  + METHOD.getEnclosingElement().getSimpleName()
+                  + DOT + METHOD.toString()
+                  + " but does not return a subclass of "
+                  + type.getSimpleName());
         }
 
         ArrayList<TypeMirror> throwables = new ArrayList<TypeMirror>();
@@ -110,11 +113,11 @@ public class ObjectCloneProcessor extends AbstractNoAnnotationProcessor {
                 break;
             }
 
-            warning(method,
-                    method.getKind() + " overrides "
-                    + METHOD.getEnclosingElement().getSimpleName()
-                    + DOT + METHOD.toString()
-                    + " but does not throw " + name);
+            print(WARNING,
+                  method,
+                  method.getKind() + " overrides "
+                  + METHOD.getEnclosingElement().getSimpleName()
+                  + DOT + METHOD.toString() + " but does not throw " + name);
         }
     }
 }

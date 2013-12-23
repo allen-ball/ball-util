@@ -12,6 +12,8 @@ import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 
+import static javax.tools.Diagnostic.Kind.ERROR;
+
 /**
  * {@link Processor} implementation to check {@link ForSubclassesOf}
  * annotations.
@@ -41,7 +43,8 @@ public class ForSubclassesOfProcessor extends AbstractAnnotationProcessor {
         switch (element.getKind()) {
         case CLASS:
             if (! isAssignable(element, supertype)) {
-                error(element,
+                print(ERROR,
+                      element,
                       element.getKind() + " annotated with "
                       + AT + type.getSimpleName()
                       + " but is not a subclass of "

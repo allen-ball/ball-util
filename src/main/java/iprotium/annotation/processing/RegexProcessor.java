@@ -13,6 +13,8 @@ import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.VariableElement;
 
+import static javax.tools.Diagnostic.Kind.ERROR;
+
 /**
  * {@link javax.annotation.processing.Processor} implementation to verify
  * {@link String} initializers marked by the {@link Regex} annotation are
@@ -38,7 +40,8 @@ public class RegexProcessor extends AbstractAnnotationProcessor {
             if (regex instanceof String) {
                 Pattern.compile((String) regex);
             } else {
-                error(element,
+                print(ERROR,
+                      element,
                       "Constant value is not " + String.class.getSimpleName());
             }
         }

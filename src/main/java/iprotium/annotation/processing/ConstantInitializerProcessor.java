@@ -12,6 +12,8 @@ import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.VariableElement;
 
+import static javax.tools.Diagnostic.Kind.WARNING;
+
 /**
  * {@link Processor} implementation to compile initializer expresssions
  * marked by the {@link ConstantInitializer} annotation into compile-time
@@ -34,7 +36,8 @@ public class ConstantInitializerProcessor extends AbstractAnnotationProcessor {
         VariableElement variable = (VariableElement) element;
 
         if (variable.getConstantValue() == null) {
-            warning(variable, "initializer is not compile-time constant");
+            print(WARNING,
+                  variable, "initializer is not compile-time constant");
         }
     }
 }

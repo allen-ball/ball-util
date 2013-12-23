@@ -14,6 +14,7 @@ import javax.lang.model.element.TypeElement;
 
 import static javax.lang.model.element.ElementKind.CLASS;
 import static javax.lang.model.element.Modifier.ABSTRACT;
+import static javax.tools.Diagnostic.Kind.WARNING;
 
 /**
  * {@link javax.annotation.processing.Processor} implementation to check
@@ -56,10 +57,11 @@ public class ObjectToStringProcessor extends AbstractNoAnnotationProcessor {
         ExecutableElement method = implementationOf(METHOD, type);
 
         if (method == null || METHOD.equals(method)) {
-            warning(type,
-                    type.getKind() + " does not override "
-                    + METHOD.getEnclosingElement().getSimpleName()
-                    + DOT + METHOD.toString());
+            print(WARNING,
+                  type,
+                  type.getKind() + " does not override "
+                  + METHOD.getEnclosingElement().getSimpleName()
+                  + DOT + METHOD.toString());
         }
     }
 }

@@ -33,6 +33,7 @@ import static iprotium.util.ClassUtil.isAbstract;
 import static iprotium.util.StringUtil.NIL;
 import static javax.lang.model.element.Modifier.ABSTRACT;
 import static javax.lang.model.element.Modifier.PUBLIC;
+import static javax.tools.Diagnostic.Kind.ERROR;
 import static javax.tools.StandardLocation.CLASS_OUTPUT;
 
 /**
@@ -110,25 +111,29 @@ public class AntTaskProcessor extends AbstractAnnotationProcessor
                     if (hasPublicNoArgumentConstructor(element)) {
                         map.put(resource, name, (TypeElement) element);
                     } else {
-                        error(element,
+                        print(ERROR,
+                              element,
                               element.getKind() + " annotated with "
                               + AT + type.getSimpleName()
                               + " but does not have a " + PUBLIC
                               + " no-argument constructor");
                     }
                 } else {
-                    error(element,
+                    print(ERROR,
+                          element,
                           element.getKind() + " annotated with "
                           + AT + type.getSimpleName() + " but is " + ABSTRACT);
                 }
             } else {
-                error(element,
+                print(ERROR,
+                      element,
                       element.getKind() + " annotated with "
                       + AT + type.getSimpleName() + " but does not implement"
                       + Task.class.getName());
             }
         } else {
-            error(element,
+            print(ERROR,
+                  element,
                   element.getKind() + " annotated with "
                   + AT + type.getSimpleName()
                   + " but does not specify value()");

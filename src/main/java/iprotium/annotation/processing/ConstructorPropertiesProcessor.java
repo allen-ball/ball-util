@@ -28,6 +28,7 @@ import static javax.lang.model.element.ElementKind.CONSTRUCTOR;
 import static javax.lang.model.element.Modifier.PRIVATE;
 import static javax.lang.model.type.TypeKind.BOOLEAN;
 import static javax.lang.model.util.ElementFilter.methodsIn;
+import static javax.tools.Diagnostic.Kind.WARNING;
 
 /**
  * {@link Processor} implementation to verify {@link ConstructorProperties}
@@ -66,16 +67,18 @@ public class ConstructorPropertiesProcessor
                 for (String property : value) {
                     if (! StringUtil.isNil(property)) {
                         if (! properties.contains(property)) {
-                            warning(element,
-                                    "bean property `"
-                                    + property + "' not defined");
+                            print(WARNING,
+                                  element,
+                                  "bean property `"
+                                  + property + "' not defined");
                         }
                     }
                 }
             } else {
-                warning(element,
-                        Arrays.asList(value) + " does not match "
-                        + element.getKind() + " parameters");
+                print(WARNING,
+                      element,
+                      Arrays.asList(value) + " does not match "
+                      + element.getKind() + " parameters");
             }
         } else {
             /*

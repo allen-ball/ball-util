@@ -15,6 +15,7 @@ import static java.util.Collections.disjoint;
 import static javax.lang.model.element.ElementKind.METHOD;
 import static javax.lang.model.element.Modifier.PRIVATE;
 import static javax.lang.model.element.Modifier.STATIC;
+import static javax.tools.Diagnostic.Kind.WARNING;
 
 /**
  * {@link Processor} implementation to identify overriding
@@ -42,12 +43,12 @@ public class NoOverrideProcessor extends AbstractNoAnnotationProcessor {
             ExecutableElement specification = specifiedBy(method);
 
             if (specification != null) {
-                warning(method,
-                        method.getKind() + " specified by "
-                        + specification.getEnclosingElement() + DOT
-                        + specification.toString() + " but does not have "
-                        + AT + Override.class.getSimpleName()
-                        + " annotation");
+                print(WARNING,
+                      method,
+                      method.getKind() + " specified by "
+                      + specification.getEnclosingElement() + DOT
+                      + specification.toString() + " but does not have "
+                      + AT + Override.class.getSimpleName() + " annotation");
             }
         }
     }
