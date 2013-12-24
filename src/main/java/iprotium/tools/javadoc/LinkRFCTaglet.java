@@ -50,8 +50,8 @@ public class LinkRFCTaglet extends AbstractTaglet {
 
             element =
                 HTML.a(document,
-                       format(TEXT, rfc),
-                       new URI(PROTOCOL, HOST, format(PATH, rfc), null));
+                       new URI(PROTOCOL, HOST, format(PATH, rfc), null),
+                       format(TEXT, rfc));
         } catch (Exception exception) {
             throw new IllegalArgumentException(tag.position().toString(),
                                                exception);

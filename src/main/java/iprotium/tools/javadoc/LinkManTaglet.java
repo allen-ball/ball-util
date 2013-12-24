@@ -62,7 +62,7 @@ public class LinkManTaglet extends AbstractTaglet {
                 path = new File(path, name + "." + section + ".html");
 
                 element =
-                    HTML.a(document, name + "(" + section + ")", path.toURI());
+                    HTML.a(document, path.toURI(), name + "(" + section + ")");
             }
         } catch (Exception exception) {
             throw new IllegalArgumentException(tag.position().toString(),

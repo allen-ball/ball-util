@@ -43,7 +43,7 @@ public class LinkURITaglet extends AbstractTaglet {
             URI href = new URI(argv[0]);
             String text = (argv.length > 1) ? argv[1] : null;
 
-            element = HTML.a(document, text, href);
+            element = HTML.a(document, href, text);
         } catch (Exception exception) {
             throw new IllegalArgumentException(tag.position().toString(),
                                                exception);
