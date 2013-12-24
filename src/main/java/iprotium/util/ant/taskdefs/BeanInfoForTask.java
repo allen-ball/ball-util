@@ -9,9 +9,9 @@ import iprotium.annotation.AntTask;
 import iprotium.text.ArrayListTableModel;
 import iprotium.text.SimpleTable;
 import iprotium.text.TextTable;
+import iprotium.util.BeanInfoUtil;
 import java.beans.BeanDescriptor;
 import java.beans.BeanInfo;
-import java.beans.IndexedPropertyDescriptor;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
@@ -29,9 +29,6 @@ import static iprotium.util.StringUtil.NIL;
  */
 @AntTask("bean-info-for")
 public class BeanInfoForTask extends AbstractClasspathTask {
-    private static final String R = "R";
-    private static final String W = "W";
-
     private String type = null;
 
     /**
@@ -86,28 +83,6 @@ public class BeanInfoForTask extends AbstractClasspathTask {
         }
     }
 
-    private String getMode(PropertyDescriptor descriptor) {
-        String mode =
-            getMode(descriptor.getReadMethod(), descriptor.getWriteMethod());
-
-        if (descriptor instanceof IndexedPropertyDescriptor) {
-            mode += "[";
-            mode += getMode((IndexedPropertyDescriptor) descriptor);
-            mode += "]";
-        }
-
-        return mode;
-    }
-
-    private String getMode(IndexedPropertyDescriptor descriptor) {
-        return getMode(descriptor.getIndexedReadMethod(),
-                       descriptor.getIndexedWriteMethod());
-    }
-
-    private String getMode(Method read, Method write) {
-        return ((read != null) ? R : NIL) + ((write != null) ? W : NIL);
-    }
-
     private class BeanHeaderTable extends SimpleTable {
         public BeanHeaderTable(BeanDescriptor descriptor) {
             super(2);
@@ -149,7 +124,7 @@ public class BeanInfoForTask extends AbstractClasspathTask {
                 break;
 
             case 1:
-                value = getMode(row);
+                value = BeanInfoUtil.getMode(row);
                 break;
 
             case 2:
