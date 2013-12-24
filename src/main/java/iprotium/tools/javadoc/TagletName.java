@@ -15,7 +15,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 /**
  * {@link java.lang.annotation.Annotation} to mark
  * {@link com.sun.tools.doclets.internal.toolkit.taglets.Taglet}s
- * with their name,
+ * with their name.
  *
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
