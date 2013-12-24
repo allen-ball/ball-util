@@ -2,6 +2,9 @@
 
 	* src/main/java/iprotium/util/BeanInfoUtil.java: Initial writing.
 
+	* src/main/java/iprotium/xml/HTML.java:
+	Added methods to create <b/> and <u/> elements.
+
 2013-12-23  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* src/main/java/iprotium/tools/javadoc/MavenBootstrapTaglet.java:
