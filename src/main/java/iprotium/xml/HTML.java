@@ -20,8 +20,11 @@ import static iprotium.util.StringUtil.isNil;
  * @version $Revision$
  */
 public abstract class HTML {
+    private static final String HTML = "html";
+
     private static final String A = "a";
     private static final String B = "b";
+    private static final String CODE = "code";
     private static final String TABLE = "table";
     private static final String TD = "td";
     private static final String TR = "tr";
@@ -30,6 +33,20 @@ public abstract class HTML {
     private static final String HREF = "href";
 
     private HTML() { }
+
+    /**
+     * Method to initialize a {@link Document} as an HTML {@link Document}.
+     * Specifically adds {@code <html/>} {@link Element}.
+     *
+     * @param   document        The {@link Document} to initalize.
+     *
+     * @return  The {@link Document}.
+     */
+    public static Document init(Document document) {
+        document.appendChild(element(document, HTML));
+
+        return document;
+    }
 
     /**
      * Method to create an HTML {@code <a/>} {@link Element}.
@@ -77,6 +94,38 @@ public abstract class HTML {
 
         for (int i = 0; i < elements.length; i += 1) {
             elements[i] = b(document, values[i]);
+        }
+
+        return elements;
+    }
+
+    /**
+     * Method to create an HTML {@code <code/>} {@link Element}.
+     *
+     * @param   document        The owner {@link Document}.
+     * @param   value           The value {@link Object}.
+     *
+     * @return  The HTML {@code <code/>} {@link Element}.
+     */
+    public static Element code(Document document, Object value) {
+        return (isElement(value, CODE)
+                    ? ((Element) value)
+                    : element(document, CODE, value));
+    }
+
+    /**
+     * Method to create an HTML {@code <code/>} {@link Element} array.
+     *
+     * @param   document        The owner {@link Document}.
+     * @param   values          The value {@link Object}s.
+     *
+     * @return  The array of HTML {@code <code/>} {@link Element}s.
+     */
+    public static Element[] code(Document document, Object... values) {
+        Element[] elements = new Element[values.length];
+
+        for (int i = 0; i < elements.length; i += 1) {
+            elements[i] = code(document, values[i]);
         }
 
         return elements;

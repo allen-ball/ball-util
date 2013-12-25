@@ -1,3 +1,9 @@
+2013-12-25  Allen D. Ball  <ball@10-0-1-2.lan>
+
+	* src/main/java/iprotium/xml/HTML.java:
+	Added init(Dcoument), code(Dcoument,Object), and
+	code(Dcoument,Object...) methods.
+
 2013-12-24  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* src/main/java/iprotium/util/BeanInfoUtil.java: Initial writing.
