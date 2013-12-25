@@ -8,6 +8,9 @@
 	Added setConfiguration(Configuration) and
 	getClassDocLink(Doc,Class<?>) methods.
 
+	* src/main/java/iprotium/tools/javadoc/BeanInfoTaglet.java:
+	Initial writing.
+
 	* src/main/java/iprotium/xml/HTML.java:
 	Added init(Dcoument), code(Dcoument,Object), and
 	code(Dcoument,Object...) methods.

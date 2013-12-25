@@ -19,14 +19,12 @@ import java.beans.BeanDescriptor;
 import java.beans.BeanInfo;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
-import java.net.URI;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import org.w3c.dom.Element;
 
-import static iprotium.util.StringUtil.NIL;
 import static iprotium.util.StringUtil.isNil;
 
 /**
@@ -54,6 +52,8 @@ public class BeanInfoTaglet extends AbstractInlineTaglet {
     @Override
     public TagletOutput getTagletOutput(Tag tag,
                                         TagletWriter writer) throws IllegalArgumentException {
+        setConfiguration(writer.configuration());
+
         LinkedList<Object> list = new LinkedList<Object>();
         RootDoc root = writer.configuration().root;
 
@@ -108,12 +108,12 @@ public class BeanInfoTaglet extends AbstractInlineTaglet {
 
         HTML.tr(table,
                 HTML.b(table.getOwnerDocument(), "Bean Class:"),
-                link(doc, descriptor.getBeanClass()));
+                getClassDocLink(doc, descriptor.getBeanClass()));
 
         if (descriptor.getCustomizerClass() != null) {
             HTML.tr(table,
                     HTML.b(table.getOwnerDocument(), "Customizer Class:"),
-                    link(doc, descriptor.getCustomizerClass()));
+                    getClassDocLink(doc, descriptor.getCustomizerClass()));
         }
 
         list.add(table);
@@ -136,7 +136,7 @@ public class BeanInfoTaglet extends AbstractInlineTaglet {
         for (PropertyDescriptor row : descriptors) {
             HTML.tr(table,
                     row.getName(), BeanInfoUtil.getMode(row),
-                    link(doc, row.getPropertyType()),
+                    getClassDocLink(doc, row.getPropertyType()),
                     row.isHidden(), row.isBound(), row.isConstrained());
         }
 
@@ -149,48 +149,5 @@ public class BeanInfoTaglet extends AbstractInlineTaglet {
                 output(doc, list, info);
             }
         }
-    }
-
-    private Object link(Doc context, Class<?> type) {
-        return link(context, type.getCanonicalName());
-    }
-
-    private Object link(Doc context, String name) {
-        Object link = name;
-        ClassDoc target = getClassDoc(context, name);
-
-        if (target != null) {
-            URI href = href(getContainingClassDoc(context), target);
-
-            if (href != null) {
-                link = HTML.a(document, href, target.name());
-            }
-        }
-
-        return link;
-    }
-
-    private URI href(ClassDoc context, ClassDoc target) {
-        URI href = null;
-
-        if (target.isIncluded()) {
-            String path = NIL;
-            String[] names = context.qualifiedName().split("[.]");
-
-            for (int i = 0, n = names.length - 1; i < n; i += 1) {
-                path += "../";
-            }
-
-            path += "./";
-            path += target.qualifiedName().replaceAll("[.]", "/") + ".html";
-
-            href = URI.create(path).normalize();
-        } else {
-            /*
-             * Need to calculate URI for external javadocs.
-             */
-        }
-
-        return href;
     }
 }
