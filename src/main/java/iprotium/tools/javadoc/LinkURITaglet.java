@@ -23,7 +23,7 @@ import org.w3c.dom.Element;
  */
 @ServiceProviderFor({ Taglet.class })
 @TagletName("link.uri")
-public class LinkURITaglet extends AbstractTaglet {
+public class LinkURITaglet extends AbstractInlineTaglet {
     public static void register(Map<String,Taglet> map) {
         register(LinkURITaglet.class, map);
     }
@@ -31,7 +31,7 @@ public class LinkURITaglet extends AbstractTaglet {
     /**
      * Sole constructor.
      */
-    public LinkURITaglet() { super(true, true, true, true, true, true, true); }
+    public LinkURITaglet() { super(); }
 
     @Override
     public TagletOutput getTagletOutput(Tag tag,

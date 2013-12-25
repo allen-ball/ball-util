@@ -25,7 +25,7 @@ import static java.lang.String.format;
  */
 @ServiceProviderFor({ Taglet.class })
 @TagletName("link.rfc")
-public class LinkRFCTaglet extends AbstractTaglet {
+public class LinkRFCTaglet extends AbstractInlineTaglet {
     public static void register(Map<String,Taglet> map) {
         register(LinkRFCTaglet.class, map);
     }
@@ -38,7 +38,7 @@ public class LinkRFCTaglet extends AbstractTaglet {
     /**
      * Sole constructor.
      */
-    public LinkRFCTaglet() { super(true, true, true, true, true, true, true); }
+    public LinkRFCTaglet() { super(); }
 
     @Override
     public TagletOutput getTagletOutput(Tag tag,

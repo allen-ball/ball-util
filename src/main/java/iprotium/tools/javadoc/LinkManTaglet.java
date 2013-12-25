@@ -26,7 +26,7 @@ import org.w3c.dom.Element;
  */
 @ServiceProviderFor({ Taglet.class })
 @TagletName("link.man")
-public class LinkManTaglet extends AbstractTaglet {
+public class LinkManTaglet extends AbstractInlineTaglet {
     public static void register(Map<String,Taglet> map) {
         register(LinkManTaglet.class, map);
     }
@@ -40,7 +40,7 @@ public class LinkManTaglet extends AbstractTaglet {
     /**
      * Sole constructor.
      */
-    public LinkManTaglet() { super(true, true, true, true, true, true, true); }
+    public LinkManTaglet() { super(); }
 
     @Override
     public TagletOutput getTagletOutput(Tag tag,

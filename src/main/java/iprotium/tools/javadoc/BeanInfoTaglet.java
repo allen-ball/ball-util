@@ -41,7 +41,7 @@ import static iprotium.util.StringUtil.isNil;
  */
 @ServiceProviderFor({ Taglet.class })
 @TagletName("bean-info")
-public class BeanInfoTaglet extends AbstractTaglet {
+public class BeanInfoTaglet extends AbstractInlineTaglet {
     public static void register(Map<String,Taglet> map) {
         register(BeanInfoTaglet.class, map);
     }
@@ -49,9 +49,7 @@ public class BeanInfoTaglet extends AbstractTaglet {
     /**
      * Sole constructor.
      */
-    public BeanInfoTaglet() {
-        super(true, true, true, true, true, true, true);
-    }
+    public BeanInfoTaglet() { super(); }
 
     @Override
     public TagletOutput getTagletOutput(Tag tag,
