@@ -5,17 +5,19 @@
  */
 package iprotium.tools.javadoc;
 
+import com.sun.javadoc.ClassDoc;
 import com.sun.javadoc.Doc;
+import com.sun.javadoc.ProgramElementDoc;
 import com.sun.javadoc.Tag;
 import com.sun.tools.doclets.internal.toolkit.taglets.Taglet;
 import com.sun.tools.doclets.internal.toolkit.taglets.TagletOutput;
 import com.sun.tools.doclets.internal.toolkit.taglets.TagletWriter;
 import iprotium.activation.ReaderWriterDataSource;
 import iprotium.io.IOUtil;
+import iprotium.xml.HTML;
 import java.io.Writer;
-import java.net.URI;
+import java.util.Arrays;
 import java.util.Map;
-import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
@@ -26,6 +28,7 @@ import org.w3c.dom.Node;
 
 import static iprotium.util.StringUtil.isNil;
 import static javax.xml.transform.OutputKeys.OMIT_XML_DECLARATION;
+import static javax.xml.transform.OutputKeys.INDENT;
 
 /**
  * Abstract {@link Taglet} base class.
@@ -37,6 +40,8 @@ import static javax.xml.transform.OutputKeys.OMIT_XML_DECLARATION;
  * @version $Revision$
  */
 public abstract class AbstractTaglet implements Taglet {
+    private static final String NO = "no";
+    private static final String YES = "yes";
 
     /**
      * Helper method to implement {@link Taglet} static
@@ -70,6 +75,7 @@ public abstract class AbstractTaglet implements Taglet {
     private final boolean inMethod;
     private final boolean inType;
     protected final Document document;
+    private final Transformer transformer;
 
     /**
      * Sole constructor.
@@ -87,21 +93,24 @@ public abstract class AbstractTaglet implements Taglet {
                              boolean inConstructor, boolean inMethod,
                              boolean inType) {
         this.isInlineTag = isInlineTag;
-        this.inPackage = inPackage;
-        this.inOverview = inOverview;
-        this.inField = inField;
-        this.inConstructor = inConstructor;
-        this.inMethod = inMethod;
-        this.inType = inType;
+        this.inPackage = isInlineTag | inPackage;
+        this.inOverview = isInlineTag | inOverview;
+        this.inField = isInlineTag | inField;
+        this.inConstructor = isInlineTag | inConstructor;
+        this.inMethod = isInlineTag | inMethod;
+        this.inType = isInlineTag | inType;
     }
 
     {
         try {
-            DocumentBuilderFactory factory =
-                DocumentBuilderFactory.newInstance();
-            DocumentBuilder builder = factory.newDocumentBuilder();
+            document =
+                HTML.init(DocumentBuilderFactory.newInstance()
+                          .newDocumentBuilder()
+                          .newDocument());
 
-            document = builder.newDocument();
+            transformer = TransformerFactory.newInstance().newTransformer();
+            transformer.setOutputProperty(INDENT, YES);
+            transformer.setOutputProperty(OMIT_XML_DECLARATION, YES);
         } catch (Exception exception) {
             throw new ExceptionInInitializerError(exception);
         }
@@ -163,23 +172,20 @@ public abstract class AbstractTaglet implements Taglet {
      * {@link #getTagletOutput(Doc,TagletWriter)}.
      *
      * @param   writer          The {@link TagletWriter}.
-     * @param   objects         The {@link Object}s to translate to output.
+     * @param   iterable        The {@link Iterable} of {@link Object}s to
+     *                          translate to output.
      *
      * @return  The {@link TagletOutput}.
      */
-    protected TagletOutput output(TagletWriter writer, Object... objects) {
-        ReaderWriterDataSource ds = new ReaderWriterDataSourceImpl();
+    protected TagletOutput output(TagletWriter writer, Iterable<?> iterable) {
+        ReaderWriterDataSource ds = new ReaderWriterDataSource(null, null);
         Writer out = null;
 
         try {
             out = ds.getWriter();
 
-            for (Object object : objects) {
+            for (Object object : iterable) {
                 if (object instanceof Node) {
-                    Transformer transformer =
-                        TransformerFactory.newInstance().newTransformer();
-
-                    transformer.setOutputProperty(OMIT_XML_DECLARATION, "yes");
                     transformer.transform(new DOMSource((Node) object),
                                           new StreamResult(out));
                 } else {
@@ -203,7 +209,81 @@ public abstract class AbstractTaglet implements Taglet {
         return output;
     }
 
-    private class ReaderWriterDataSourceImpl extends ReaderWriterDataSource {
-        public ReaderWriterDataSourceImpl() { super(null, APPLICATION_XML); }
+    /**
+     * Method to produce {@link Taglet} output.
+     *
+     * See {@link #getTagletOutput(Tag,TagletWriter)} and
+     * {@link #getTagletOutput(Doc,TagletWriter)}.
+     *
+     * @param   writer          The {@link TagletWriter}.
+     * @param   objects         The {@link Object}s to translate to output.
+     *
+     * @return  The {@link TagletOutput}.
+     */
+    protected TagletOutput output(TagletWriter writer, Object... objects) {
+        return output(writer, Arrays.asList(objects));
+    }
+
+    /**
+     * Convenience method to get the containing {@link ClassDoc}.
+     *
+     * @param   doc             The {@link Doc}.
+     *
+     * @return  The containing {@link ClassDoc} or {@code null} if there is
+     *          none.
+     */
+    protected ClassDoc getContainingClassDoc(Doc doc) {
+        ClassDoc container = null;
+
+        if (doc instanceof ClassDoc) {
+            container = (ClassDoc) doc;
+        } else if (doc instanceof ProgramElementDoc) {
+            container =
+                getContainingClassDoc(((ProgramElementDoc) doc)
+                                      .containingClass());
+        }
+
+        return container;
+    }
+
+    /**
+     * Convenience method to attempt to find a {@link ClassDoc}.
+     *
+     * @param   context         The context {@link Doc}.
+     * @param   name            The name to qualify.
+     *
+     * @return  The {@link ClassDoc} if it can be found; {@code null}
+     *          otherwise.
+     */
+    protected ClassDoc getClassDoc(Doc context, String name) {
+        return getClassDoc(getContainingClassDoc(context), name);
+    }
+
+    /**
+     * Convenience method to attempt to find a {@link ClassDoc}.
+     *
+     * @param   context         The context {@link ClassDoc}.
+     * @param   name            The name to qualify.
+     *
+     * @return  The {@link ClassDoc} if it can be found; {@code null}
+     *          otherwise.
+     */
+    protected ClassDoc getClassDoc(ClassDoc context, String name) {
+        return (context != null) ? context.findClass(name) : null;
+    }
+
+    /**
+     * Convenience method to attempt to qualify a class name.
+     *
+     * @param   context         The context {@link Doc}.
+     * @param   name            The name to qualify.
+     *
+     * @return  The qualified name if the argument name can be qualified;
+     *          the argument name otherwise.
+     */
+    protected String getQualifiedName(Doc context, String name) {
+        ClassDoc doc = getClassDoc(context, name);
+
+        return (doc != null) ? doc.qualifiedName() : name;
     }
 }
