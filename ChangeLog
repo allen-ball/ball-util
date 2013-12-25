@@ -5,6 +5,8 @@
 	getContainingClassDoc(Doc), getClassDoc(Doc,String),
 	getClassDoc(ClassDoc,String), and getQualifiedName(Doc,String)
 	methods.
+	Added setConfiguration(Configuration) and
+	getClassDocLink(Doc,Class<?>) methods.
 
 	* src/main/java/iprotium/xml/HTML.java:
 	Added init(Dcoument), code(Dcoument,Object), and

@@ -9,6 +9,7 @@ import com.sun.javadoc.ClassDoc;
 import com.sun.javadoc.Doc;
 import com.sun.javadoc.ProgramElementDoc;
 import com.sun.javadoc.Tag;
+import com.sun.tools.doclets.internal.toolkit.Configuration;
 import com.sun.tools.doclets.internal.toolkit.taglets.Taglet;
 import com.sun.tools.doclets.internal.toolkit.taglets.TagletOutput;
 import com.sun.tools.doclets.internal.toolkit.taglets.TagletWriter;
@@ -16,6 +17,7 @@ import iprotium.activation.ReaderWriterDataSource;
 import iprotium.io.IOUtil;
 import iprotium.xml.HTML;
 import java.io.Writer;
+import java.net.URI;
 import java.util.Arrays;
 import java.util.Map;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -26,9 +28,10 @@ import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
+import static iprotium.util.StringUtil.NIL;
 import static iprotium.util.StringUtil.isNil;
-import static javax.xml.transform.OutputKeys.OMIT_XML_DECLARATION;
 import static javax.xml.transform.OutputKeys.INDENT;
+import static javax.xml.transform.OutputKeys.OMIT_XML_DECLARATION;
 
 /**
  * Abstract {@link Taglet} base class.
@@ -76,6 +79,7 @@ public abstract class AbstractTaglet implements Taglet {
     private final boolean inType;
     protected final Document document;
     private final Transformer transformer;
+    private transient Configuration configuration = null;
 
     /**
      * Sole constructor.
@@ -114,6 +118,17 @@ public abstract class AbstractTaglet implements Taglet {
         } catch (Exception exception) {
             throw new ExceptionInInitializerError(exception);
         }
+    }
+
+    /**
+     * Method to set the {@link Configuration}.
+     * See {@link TagletWriter#configuration()}.  Some methods'
+     * functionality may depend on the availability of this value.
+     *
+     * @param   configuration           The {@link Configuration}.
+     */
+    protected void setConfiguration(Configuration configuration) {
+        this.configuration = configuration;
     }
 
     @Override
@@ -270,6 +285,69 @@ public abstract class AbstractTaglet implements Taglet {
      */
     protected ClassDoc getClassDoc(ClassDoc context, String name) {
         return (context != null) ? context.findClass(name) : null;
+    }
+
+    /**
+     * Method to attempt to get a link to a javadoc document describing the
+     * argument {@link Class}.  {@link #setConfiguration(Configuration)}
+     * should be called first to allow external links to be calculated.
+     *
+     * @param   context         The context {@link Doc} for calculating a
+     *                          relative {@link URI}.
+     * @param   type            The target {@link Class}.
+     *
+     * @return  The {@code <a/>} {@link org.w3c.dom.Element} if the link
+     *          could be calculated; a {@link String} containing the
+     *          {@link Class} name otherwise.
+     */
+    protected Object getClassDocLink(Doc context, Class<?> type) {
+        return getClassDocLink(context, type.getCanonicalName());
+    }
+
+    private Object getClassDocLink(Doc context, String name) {
+        Object link = name;
+        ClassDoc target = getClassDoc(context, name);
+
+        if (target != null) {
+            URI href = getHref(getContainingClassDoc(context), target);
+
+            if (href != null) {
+                link = HTML.a(document, href, target.name());
+            }
+        }
+
+        return link;
+    }
+
+    private URI getHref(ClassDoc context, ClassDoc target) {
+        URI href = null;
+
+        if (target.isIncluded()) {
+            String path = NIL;
+            String[] names = context.qualifiedName().split("[.]");
+
+            for (int i = 0, n = names.length - 1; i < n; i += 1) {
+                path += "../";
+            }
+
+            path += "./";
+            path += target.qualifiedName().replaceAll("[.]", "/") + ".html";
+
+            href = URI.create(path).normalize();
+        } else {
+            if (configuration != null) {
+                String path =
+                    configuration.extern
+                    .getExternalLink(target.containingPackage().name(),
+                                     null, target.name() + ".html");
+
+                if (path != null) {
+                    href = URI.create(path);
+                }
+            }
+        }
+
+        return href;
     }
 
     /**
