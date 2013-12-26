@@ -20,23 +20,46 @@ import static iprotium.util.StringUtil.isNil;
  * @version $Revision$
  */
 public abstract class HTML {
-    private static final String HTML = "html";
+    /** {@link #HTML} = {@value #HTML} */
+    public static final String HTML = "html";
+    /** {@link #HEAD} = {@value #HEAD} */
+    public static final String HEAD = "head";
+    /** {@link #BODY} = {@value #BODY} */
+    public static final String BODY = "body";
+    /** {@link #A} = {@value #A} */
+    public static final String A = "a";
+    /** {@link #B} = {@value #B} */
+    public static final String B = "b";
+    /** {@link #CODE} = {@value #CODE} */
+    public static final String CODE = "code";
+    /** {@link #META} = {@value #META} */
+    public static final String META = "meta";
+    /** {@link #TABLE} = {@value #TABLE} */
+    public static final String TABLE = "table";
+    /** {@link #TD} = {@value #TD} */
+    public static final String TD = "td";
+    /** {@link #TR} = {@value #TR} */
+    public static final String TR = "tr";
+    /** {@link #U} = {@value #U} */
+    public static final String U = "u";
 
-    private static final String A = "a";
-    private static final String B = "b";
-    private static final String CODE = "code";
-    private static final String TABLE = "table";
-    private static final String TD = "td";
-    private static final String TR = "tr";
-    private static final String U = "u";
+    /** {@link #CHARSET} = {@value #CHARSET} */
+    public static final String CHARSET = "charset";
+    /** {@link #HREF} = {@value #HREF} */
+    public static final String HREF = "href";
 
-    private static final String HREF = "href";
+    /**
+     * {@link #MOTW} = {@value #MOTW}
+     * <p>
+     * See {@link.uri http://msdn.microsoft.com/en-us/library/ms537628(v=vs.85).ASPX Mark of the Web}.
+     */
+    public static final String MOTW = "saved from url=(0014)about:internet";
 
     private HTML() { }
 
     /**
      * Method to initialize a {@link Document} as an HTML {@link Document}.
-     * Specifically adds {@code <html/>} {@link Element}.
+     * Specifically adds {@code <html/>} {@link Document} {@link Element}.
      *
      * @param   document        The {@link Document} to initalize.
      *
@@ -44,6 +67,18 @@ public abstract class HTML {
      */
     public static Document init(Document document) {
         document.appendChild(element(document, HTML));
+
+        Element head = element(document, HEAD);
+        Element meta = element(head, META);
+
+        meta.setAttribute(CHARSET, "utf-8");
+        meta.appendChild(document.createComment(MOTW));
+
+        document.getDocumentElement().appendChild(head);
+
+        Element body = element(document, BODY);
+
+        document.getDocumentElement().appendChild(body);
 
         return document;
     }
