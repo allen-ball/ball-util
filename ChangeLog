@@ -1,5 +1,7 @@
 2013-12-28  Allen D. Ball  <ball@10-0-1-2.lan>
 
+	* Re-implemented JAXBIndexesForTask as XmlRootElementProcessor.
+
 	* src/main/java/iprotium/annotation/processing/
 	AbstractProcessor.java, ServiceProviderForProcessor.java:
 	Provide AbstractProcessor.CHARSET and
