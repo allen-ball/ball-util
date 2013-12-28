@@ -445,6 +445,8 @@ public abstract class AbstractProcessor
                     pkg = (PackageElement) container;
                     break;
                 }
+
+                container = container.getEnclosingElement();
             }
         }
 
