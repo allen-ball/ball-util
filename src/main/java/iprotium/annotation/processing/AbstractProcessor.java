@@ -5,8 +5,15 @@
  */
 package iprotium.annotation.processing;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -18,12 +25,14 @@ import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
+import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
 import javax.tools.Diagnostic;
+import javax.tools.FileObject;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.disjoint;
@@ -58,6 +67,9 @@ public abstract class AbstractProcessor
     protected static final String SLASH = "/";
     /** {@link #SPACE} = {@value #SPACE} */
     protected static final String SPACE = " ";
+
+    /** UTF-8 */
+    protected static final Charset CHARSET = Charset.forName("UTF-8");
 
     /** See {@link ProcessingEnvironment#getFiler()}. */
     protected Filer filer = null;
@@ -416,6 +428,30 @@ public abstract class AbstractProcessor
     }
 
     /**
+     * Method to get a {@link PackageElement} for a {@link TypeElement}.
+     *
+     * @param   type            The {@link TypeElement}.
+     *
+     * @return  The {@link PackageElement} for the {@link TypeElement}.
+     */
+    protected PackageElement getPackageElementFor(TypeElement type) {
+        PackageElement pkg = null;
+
+        if (type != null) {
+            Element container = type.getEnclosingElement();
+
+            while (container != null) {
+                if (container instanceof PackageElement) {
+                    pkg = (PackageElement) container;
+                    break;
+                }
+            }
+        }
+
+        return pkg;
+    }
+
+    /**
      * Method to get a {@link TypeElement} for a {@link Class}.
      *
      * @param   type            The {@link Class}.
@@ -482,5 +518,45 @@ public abstract class AbstractProcessor
         }
 
         return value;
+    }
+
+    /**
+     * {@link PrintWriter} implementation suitable for creating Java file
+     * artifacts such as service provider files.
+     */
+    protected class PrintWriterImpl extends PrintWriter {
+
+        /**
+         * Construct a {@link PrintWriter} for a {@link File}.
+         */
+        public PrintWriterImpl(File file) throws IOException {
+            this(new FileOutputStream(file));
+        }
+
+        /**
+         * Construct a {@link PrintWriter} for a {@link FileObject}.
+         */
+        public PrintWriterImpl(FileObject file) throws IOException {
+            this(file.openOutputStream());
+        }
+
+        private PrintWriterImpl(OutputStream out) throws IOException {
+            super(new OutputStreamWriter(out, CHARSET));
+        }
+
+        /**
+         * Method to write a complete file.
+         *
+         * @param       comment         The first line {@link String}.
+         * @param       iterable        The {@link Iterable} of line
+         *                              {@link String}s.
+         */
+        public void write(String comment, Iterable<String> iterable) {
+            println("# " + comment);
+
+            for (String line : iterable) {
+                println(line);
+            }
+        }
     }
 }

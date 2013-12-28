@@ -9,13 +9,8 @@ import iprotium.annotation.ServiceProviderFor;
 import iprotium.io.IOUtil;
 import iprotium.util.ant.taskdefs.BootstrapProcessorTask;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -25,7 +20,6 @@ import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.Element;
-import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.TypeMirror;
 import javax.tools.FileObject;
@@ -55,8 +49,6 @@ import static javax.tools.StandardLocation.CLASS_OUTPUT;
 @ServiceProviderFor({ Processor.class })
 public class ServiceProviderForProcessor extends AbstractAnnotationProcessor
                                          implements BootstrapProcessorTask.Processor {
-    private static final Charset CHARSET = Charset.forName("UTF-8");
-
     private static final String PATH = "META-INF/services/%s";
 
     private MapImpl map = new MapImpl();
@@ -214,24 +206,6 @@ public class ServiceProviderForProcessor extends AbstractAnnotationProcessor
         public boolean add(TypeElement service, TypeElement provider) {
             return add(elements.getBinaryName(service).toString(),
                        elements.getBinaryName(provider).toString());
-        }
-    }
-
-    private class PrintWriterImpl extends PrintWriter {
-        public PrintWriterImpl(FileObject file) throws IOException {
-            super(new OutputStreamWriter(file.openOutputStream(), CHARSET));
-        }
-
-        public PrintWriterImpl(File file) throws IOException {
-            super(new OutputStreamWriter(new FileOutputStream(file), CHARSET));
-        }
-
-        public void write(String service, Collection<String> collection) {
-            println("# " + service);
-
-            for (String provider : collection) {
-                println(provider);
-            }
         }
     }
 }

@@ -1,3 +1,11 @@
+2013-12-28  Allen D. Ball  <ball@10-0-1-2.lan>
+
+	* src/main/java/iprotium/annotation/processing/
+	AbstractProcessor.java, ServiceProviderForProcessor.java:
+	Provide AbstractProcessor.CHARSET and
+	AbstractProcessor.PrintWriterImpl.
+	Added getPackageElementFor(TypeElement) method.
+
 2013-12-25  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* src/main/java/iprotium/tools/javadoc/AbstractTaglet.java:
