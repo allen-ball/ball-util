@@ -6,11 +6,12 @@
 
 	* Re-implemented JAXBIndexesForTask as XmlRootElementProcessor.
 
-	* src/main/java/iprotium/annotation/processing/
-	AbstractProcessor.java, ServiceProviderForProcessor.java:
+	* src/main/java/iprotium/annotation/processing/AbstractProcessor.java:
 	Provide AbstractProcessor.CHARSET and
 	AbstractProcessor.PrintWriterImpl.
 	Added getPackageElementFor(TypeElement) method.
+	Added getAnnotationMirror(Element,TypeElement) and
+	getAnnotationValue(Element,TypeElement,String) methods.
 
 2013-12-25  Allen D. Ball  <ball@10-0-1-2.lan>
 
