@@ -11,6 +11,7 @@ import java.util.regex.Pattern;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
+import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
 
 import static javax.tools.Diagnostic.Kind.ERROR;
@@ -24,15 +25,17 @@ import static javax.tools.Diagnostic.Kind.ERROR;
  * @version $Revision$
  */
 @ServiceProviderFor({ Processor.class })
+@For({ Regex.class })
 public class RegexProcessor extends AbstractAnnotationProcessor {
 
     /**
      * Sole constructor.
      */
-    public RegexProcessor() { super(Regex.class); }
+    public RegexProcessor() { super(); }
 
     @Override
     public void process(RoundEnvironment roundEnv,
+                        TypeElement annotation,
                         Element element) throws Exception {
         Object regex = ((VariableElement) element).getConstantValue();
 

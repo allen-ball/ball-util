@@ -7,9 +7,11 @@ package iprotium.tools;
 
 import iprotium.annotation.ServiceProviderFor;
 import iprotium.annotation.processing.AbstractAnnotationProcessor;
+import iprotium.annotation.processing.For;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
+import javax.lang.model.element.TypeElement;
 
 /**
  * {@link javax.annotation.processing.Processor} implementation to check
@@ -19,15 +21,17 @@ import javax.lang.model.element.Element;
  * @version $Revision$
  */
 @ServiceProviderFor({ Processor.class })
+@For({ Codes.class })
 public class CodesProcessor extends AbstractAnnotationProcessor {
 
     /**
      * Sole constructor.
      */
-    public CodesProcessor() { super(Codes.class); }
+    public CodesProcessor() { super(); }
 
     @Override
     public void process(RoundEnvironment roundEnv,
+                        TypeElement annotation,
                         Element element) throws Exception {
     }
 }

@@ -47,6 +47,7 @@ import static javax.tools.StandardLocation.CLASS_OUTPUT;
  * @version $Revision$
  */
 @ServiceProviderFor({ Processor.class })
+@For({ ServiceProviderFor.class })
 public class ServiceProviderForProcessor extends AbstractAnnotationProcessor
                                          implements BootstrapProcessorTask.Processor {
     private static final String PATH = "META-INF/services/%s";
@@ -56,7 +57,7 @@ public class ServiceProviderForProcessor extends AbstractAnnotationProcessor
     /**
      * Sole constructor.
      */
-    public ServiceProviderForProcessor() { super(ServiceProviderFor.class); }
+    public ServiceProviderForProcessor() { super(); }
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations,
@@ -89,8 +90,10 @@ public class ServiceProviderForProcessor extends AbstractAnnotationProcessor
 
     @Override
     protected void process(RoundEnvironment env,
+                           TypeElement annotation,
                            Element element) throws Exception {
-        List<? extends TypeElement> value = getAnnotationValue(element);
+        List<? extends TypeElement> value =
+            getAnnotationValue(element, annotation);
 
         if (! value.isEmpty()) {
             switch (element.getKind()) {
@@ -104,7 +107,7 @@ public class ServiceProviderForProcessor extends AbstractAnnotationProcessor
                                 print(ERROR,
                                       element,
                                       element.getKind() + " annotated with "
-                                      + AT + type.getSimpleName()
+                                      + AT + annotation.getSimpleName()
                                       + " and specifies "
                                       + service.getQualifiedName()
                                       + " but is not an implementing class");
@@ -114,7 +117,7 @@ public class ServiceProviderForProcessor extends AbstractAnnotationProcessor
                         print(ERROR,
                               element,
                               element.getKind() + " annotated with "
-                              + AT + type.getSimpleName()
+                              + AT + annotation.getSimpleName()
                               + " but does not have a " + PUBLIC
                               + " no-argument constructor");
                     }
@@ -122,7 +125,8 @@ public class ServiceProviderForProcessor extends AbstractAnnotationProcessor
                     print(ERROR,
                           element,
                           element.getKind() + " annotated with "
-                          + AT + type.getSimpleName() + " but is " + ABSTRACT);
+                          + AT + annotation.getSimpleName()
+                          + " but is " + ABSTRACT);
                 }
                 break;
 
@@ -134,12 +138,15 @@ public class ServiceProviderForProcessor extends AbstractAnnotationProcessor
             print(ERROR,
                   element,
                   element.getKind() + " annotated with "
-                  + AT + type.getSimpleName() + " but no services specified");
+                  + AT + annotation.getSimpleName()
+                  + " but no services specified");
         }
     }
 
-    private List<? extends TypeElement> getAnnotationValue(Element element) {
-        AnnotationValue value = getAnnotationValue(element, type, "value()");
+    private List<? extends TypeElement> getAnnotationValue(Element element,
+                                                           TypeElement annotation) {
+        AnnotationValue value =
+            getAnnotationValue(element, annotation, "value()");
         ArrayList<TypeElement> list = new ArrayList<TypeElement>();
 
         for (Object object : (List<?>) value.getValue()) {

@@ -6,7 +6,10 @@
 package iprotium.annotation.processing;
 
 import java.lang.annotation.Annotation;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
@@ -23,19 +26,37 @@ import static javax.tools.Diagnostic.Kind.ERROR;
  * @version $Revision$
  */
 public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
-    protected final Class<? extends Annotation> type;
+    private final List<Class<? extends Annotation>> list;
+    private transient TypeElement annotation = null;
 
     /**
-     * Sole constructor.
+     * Sole non-deprecated costructor.  Implementing class must be annotated
+     * with {@link For}.
+     */
+    protected AbstractAnnotationProcessor() {
+        super();
+
+        try {
+            list = Arrays.asList(getClass().getAnnotation(For.class).value());
+        } catch (Exception exception) {
+            throw new ExceptionInInitializerError(exception);
+        }
+    }
+
+    /**
+     * Use {@link #AbstractAnnotationProcessor()} with {@link For}
+     * {@link Annotation} instead.
      *
      * @param   type            The {@link Annotation} {@link Class} to
      *                          process.
      */
+    @Deprecated
     protected AbstractAnnotationProcessor(Class<? extends Annotation> type) {
         super();
 
         if (type != null) {
-            this.type = type;
+            list =
+                Collections.<Class<? extends Annotation>>singletonList(type);
         } else {
             throw new NullPointerException("type");
         }
@@ -43,19 +64,32 @@ public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
 
     @Override
     public Set<String> getSupportedAnnotationTypes() {
-        return Collections.singleton(type.getCanonicalName());
+        Set<String> set = new LinkedHashSet<String>();
+
+        for (Class<? extends Annotation> type : list) {
+            set.add(type.getCanonicalName());
+        }
+
+        return Collections.unmodifiableSet(set);
     }
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations,
                            RoundEnvironment roundEnv) {
-        for (TypeElement type : annotations) {
-            for (Element element : roundEnv.getElementsAnnotatedWith(type)) {
-                try {
-                    process(roundEnv, element);
-                } catch (Exception exception) {
-                    print(ERROR, element, exception.getMessage());
+        for (TypeElement annotation : annotations) {
+            try {
+                this.annotation = annotation;
+
+                for (Element element :
+                         roundEnv.getElementsAnnotatedWith(annotation)) {
+                    try {
+                        process(roundEnv, annotation, element);
+                    } catch (Exception exception) {
+                        print(ERROR, element, exception.getMessage());
+                    }
                 }
+            } finally {
+                this.annotation = null;
             }
         }
 
@@ -66,9 +100,11 @@ public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
      * Callback method to process an annotated {@link Element}.
      *
      * @param   roundEnv        The {@link RoundEnvironment}.
+     * @param   annotation      The annotation {@link TypeElement}.
      * @param   element         The annotated {@link Element}.
      */
     protected abstract void process(RoundEnvironment roundEnv,
+                                    TypeElement annotation,
                                     Element element) throws Exception;
 
     @Override
@@ -78,10 +114,14 @@ public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
     }
 
     private CharSequence format(CharSequence message) {
-        CharSequence sequence =
-            new StringBuilder()
-            .append(AT).append(type.getCanonicalName())
-            .append(COLON).append(SPACE).append(message);
+        CharSequence sequence = message;
+
+        if (annotation != null) {
+            sequence =
+                new StringBuilder()
+                .append(AT).append(annotation.getQualifiedName())
+                .append(COLON).append(SPACE).append(message);
+        }
 
         return sequence;
     }

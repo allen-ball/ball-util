@@ -22,13 +22,14 @@ import static javax.tools.Diagnostic.Kind.ERROR;
  * @version $Revision$
  */
 @ServiceProviderFor({ Processor.class })
+@For({ ForSubclassesOf.class })
 public class ForSubclassesOfProcessor extends AbstractAnnotationProcessor {
     private TypeElement supertype = null;
 
     /**
      * Sole constructor.
      */
-    public ForSubclassesOfProcessor() { super(ForSubclassesOf.class); }
+    public ForSubclassesOfProcessor() { super(); }
 
     @Override
     public void init(ProcessingEnvironment processingEnv) {
@@ -39,6 +40,7 @@ public class ForSubclassesOfProcessor extends AbstractAnnotationProcessor {
 
     @Override
     public void process(RoundEnvironment roundEnv,
+                        TypeElement annotation,
                         Element element) throws Exception {
         switch (element.getKind()) {
         case CLASS:
@@ -46,7 +48,7 @@ public class ForSubclassesOfProcessor extends AbstractAnnotationProcessor {
                 print(ERROR,
                       element,
                       element.getKind() + " annotated with "
-                      + AT + type.getSimpleName()
+                      + AT + annotation.getSimpleName()
                       + " but is not a subclass of "
                       + supertype.getQualifiedName());
             }

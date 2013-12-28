@@ -38,6 +38,7 @@ import static javax.tools.StandardLocation.CLASS_OUTPUT;
  * @version $Revision$
  */
 @ServiceProviderFor({ Processor.class })
+@For({ XmlRootElement.class })
 public class XmlRootElementProcessor extends AbstractAnnotationProcessor
                                      implements BootstrapProcessorTask.Processor {
     private static final String JAXB_INDEX = "jaxb.index";
@@ -47,7 +48,7 @@ public class XmlRootElementProcessor extends AbstractAnnotationProcessor
     /**
      * Sole constructor.
      */
-    public XmlRootElementProcessor() { super(XmlRootElement.class); }
+    public XmlRootElementProcessor() { super(); }
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations,
@@ -79,6 +80,7 @@ public class XmlRootElementProcessor extends AbstractAnnotationProcessor
 
     @Override
     protected void process(RoundEnvironment env,
+                           TypeElement annotation,
                            Element element) throws Exception {
         switch (element.getKind()) {
         case CLASS:

@@ -10,6 +10,7 @@ import iprotium.annotation.ServiceProviderFor;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
+import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
 
 import static javax.tools.Diagnostic.Kind.WARNING;
@@ -23,15 +24,17 @@ import static javax.tools.Diagnostic.Kind.WARNING;
  * @version $Revision$
  */
 @ServiceProviderFor({ Processor.class })
+@For({ ConstantInitializer.class })
 public class ConstantInitializerProcessor extends AbstractAnnotationProcessor {
 
     /**
      * Sole constructor.
      */
-    public ConstantInitializerProcessor() { super(ConstantInitializer.class); }
+    public ConstantInitializerProcessor() { super(); }
 
     @Override
     public void process(RoundEnvironment roundEnv,
+                        TypeElement annotation,
                         Element element) throws Exception {
         VariableElement variable = (VariableElement) element;
 

@@ -39,6 +39,7 @@ import static javax.tools.Diagnostic.Kind.WARNING;
  * @version $Revision$
  */
 @ServiceProviderFor({ Processor.class })
+@For({ ConstructorProperties.class })
 public class ConstructorPropertiesProcessor
              extends AbstractAnnotationProcessor {
     private static final String GET = "get";
@@ -47,12 +48,11 @@ public class ConstructorPropertiesProcessor
     /**
      * Sole constructor.
      */
-    public ConstructorPropertiesProcessor() {
-        super(ConstructorProperties.class);
-    }
+    public ConstructorPropertiesProcessor() { super(); }
 
     @Override
     public void process(RoundEnvironment roundEnv,
+                        TypeElement annotation,
                         Element element) throws Exception {
         if (element.getKind() == CONSTRUCTOR) {
             String[] value =

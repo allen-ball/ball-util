@@ -1,5 +1,13 @@
 2013-12-28  Allen D. Ball  <ball@10-0-1-2.lan>
 
+	* src/main/java/iprotium/annotation/processing/AbstractAnnotationProcessor.java
+	(and subclasses):
+	Deprecated AbstractAnnotationProcessor(Class<? extends Annotation>)
+	constructor and prefer Annotation classes be specified with @For.
+	Changed abstract callback method to
+	process(RoundEnvironment,TypeElement,Element) to specify the
+	Annotation TypeElement.
+
 	* src/main/java/iprotium/annotation/processing/For.java,
 	src/main/java/iprotium/annotation/processing/ForProcessor.java:
 	Initial writing.

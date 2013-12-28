@@ -12,6 +12,7 @@ import iprotium.util.StringUtil;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
+import javax.lang.model.element.TypeElement;
 
 import static iprotium.util.ClassUtil.isAbstract;
 import static javax.lang.model.element.Modifier.ABSTRACT;
@@ -34,15 +35,17 @@ import static javax.tools.Diagnostic.Kind.ERROR;
  * @version $Revision$
  */
 @ServiceProviderFor({ Processor.class })
+@For({ TagletName.class })
 public class TagletNameProcessor extends AbstractAnnotationProcessor {
 
     /**
      * Sole constructor.
      */
-    public TagletNameProcessor() { super(TagletName.class); }
+    public TagletNameProcessor() { super(); }
 
     @Override
     protected void process(RoundEnvironment env,
+                           TypeElement annotation,
                            Element element) throws Exception {
         String name = element.getAnnotation(TagletName.class).value();
 
@@ -53,7 +56,7 @@ public class TagletNameProcessor extends AbstractAnnotationProcessor {
                         print(ERROR,
                               element,
                               element.getKind() + " annotated with "
-                              + AT + type.getSimpleName()
+                              + AT + annotation.getSimpleName()
                               + " but does not have a " + PUBLIC
                               + " no-argument constructor");
                     }
@@ -61,20 +64,21 @@ public class TagletNameProcessor extends AbstractAnnotationProcessor {
                     print(ERROR,
                           element,
                           element.getKind() + " annotated with "
-                          + AT + type.getSimpleName() + " but is " + ABSTRACT);
+                          + AT + annotation.getSimpleName()
+                          + " but is " + ABSTRACT);
                 }
             } else {
                 print(ERROR,
                       element,
                       element.getKind() + " annotated with "
-                      + AT + type.getSimpleName() + " but does not implement"
-                      + Taglet.class.getName());
+                      + AT + annotation.getSimpleName()
+                      + " but does not implement" + Taglet.class.getName());
             }
         } else {
             print(ERROR,
                   element,
                   element.getKind() + " annotated with "
-                  + AT + type.getSimpleName()
+                  + AT + annotation.getSimpleName()
                   + " but does not specify value()");
         }
     }

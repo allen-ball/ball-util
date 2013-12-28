@@ -49,6 +49,7 @@ import static javax.tools.StandardLocation.CLASS_OUTPUT;
  * @version $Revision$
  */
 @ServiceProviderFor({ Processor.class })
+@For({ AntTask.class })
 public class AntTaskProcessor extends AbstractAnnotationProcessor
                               implements BootstrapProcessorTask.Processor {
     private MapImpl map = new MapImpl();
@@ -56,7 +57,7 @@ public class AntTaskProcessor extends AbstractAnnotationProcessor
     /**
      * Sole constructor.
      */
-    public AntTaskProcessor() { super(AntTask.class); }
+    public AntTaskProcessor() { super(); }
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations,
@@ -88,6 +89,7 @@ public class AntTaskProcessor extends AbstractAnnotationProcessor
 
     @Override
     protected void process(RoundEnvironment env,
+                           TypeElement annotation,
                            Element element) throws Exception {
         String name = element.getAnnotation(AntTask.class).value();
         String resource = element.getAnnotation(AntTask.class).resource();
@@ -114,7 +116,7 @@ public class AntTaskProcessor extends AbstractAnnotationProcessor
                         print(ERROR,
                               element,
                               element.getKind() + " annotated with "
-                              + AT + type.getSimpleName()
+                              + AT + annotation.getSimpleName()
                               + " but does not have a " + PUBLIC
                               + " no-argument constructor");
                     }
@@ -122,20 +124,21 @@ public class AntTaskProcessor extends AbstractAnnotationProcessor
                     print(ERROR,
                           element,
                           element.getKind() + " annotated with "
-                          + AT + type.getSimpleName() + " but is " + ABSTRACT);
+                          + AT + annotation.getSimpleName()
+                          + " but is " + ABSTRACT);
                 }
             } else {
                 print(ERROR,
                       element,
                       element.getKind() + " annotated with "
-                      + AT + type.getSimpleName() + " but does not implement"
-                      + Task.class.getName());
+                      + AT + annotation.getSimpleName()
+                      + " but does not implement" + Task.class.getName());
             }
         } else {
             print(ERROR,
                   element,
                   element.getKind() + " annotated with "
-                  + AT + type.getSimpleName()
+                  + AT + annotation.getSimpleName()
                   + " but does not specify value()");
         }
     }

@@ -35,6 +35,7 @@ import static javax.tools.StandardLocation.CLASS_OUTPUT;
  * @version $Revision$
  */
 @ServiceProviderFor({ Processor.class })
+@For({ ManifestSection.class })
 public class ManifestSectionProcessor extends AbstractAnnotationProcessor
                                       implements BootstrapProcessorTask.Processor {
     private static final String PATH = "META-INF/MANIFEST.MF";
@@ -47,7 +48,7 @@ public class ManifestSectionProcessor extends AbstractAnnotationProcessor
     /**
      * Sole constructor.
      */
-    public ManifestSectionProcessor() { super(ManifestSection.class); }
+    public ManifestSectionProcessor() { super(); }
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations,
@@ -76,6 +77,7 @@ public class ManifestSectionProcessor extends AbstractAnnotationProcessor
 
     @Override
     protected void process(RoundEnvironment env,
+                           TypeElement ignore,
                            Element element) throws Exception {
         String name = ((PackageElement) element).getQualifiedName().toString();
 
