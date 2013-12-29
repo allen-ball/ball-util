@@ -10,6 +10,7 @@ import iprotium.io.IOUtil;
 import iprotium.util.ant.taskdefs.BootstrapProcessorTask;
 import java.io.File;
 import java.io.IOException;
+import java.lang.annotation.Annotation;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -22,25 +23,23 @@ import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
 import javax.tools.FileObject;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 import static iprotium.util.ClassUtil.isAbstract;
 import static iprotium.util.StringUtil.NIL;
-import static javax.lang.model.element.Modifier.ABSTRACT;
-import static javax.lang.model.element.Modifier.PUBLIC;
-import static javax.tools.Diagnostic.Kind.ERROR;
 import static javax.tools.StandardLocation.CLASS_OUTPUT;
 
 /**
  * {@link Processor} implementation to generate {@code jaxb.index} files
- * from {@link Class}es annotated with {@link XmlRootElement}.
+ * from {@link Class}es annotated with JAXB annotations.
  *
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
 @ServiceProviderFor({ Processor.class })
-@For({ XmlRootElement.class })
-public class XmlRootElementProcessor extends AbstractAnnotationProcessor
-                                     implements BootstrapProcessorTask.Processor {
+@For({ XmlRootElement.class, XmlType.class })
+public class JAXBIndexProcessor extends AbstractAnnotationProcessor
+                                implements BootstrapProcessorTask.Processor {
     private static final String JAXB_INDEX = "jaxb.index";
 
     private MapImpl map = new MapImpl();
@@ -48,7 +47,7 @@ public class XmlRootElementProcessor extends AbstractAnnotationProcessor
     /**
      * Sole constructor.
      */
-    public XmlRootElementProcessor() { super(); }
+    public JAXBIndexProcessor() { super(); }
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations,
@@ -97,11 +96,11 @@ public class XmlRootElementProcessor extends AbstractAnnotationProcessor
     public void process(Set<Class<?>> set, File destdir) throws IOException {
         for (Class<?> type : set) {
             if (! isAbstract(type)) {
-                XmlRootElement annotation =
-                    type.getAnnotation(XmlRootElement.class);
-
-                if (annotation != null) {
-                    map.add(type);
+                for (Class<? extends Annotation> annotation :
+                         getSupportedAnnotationTypeList()) {
+                    if (type.getAnnotation(annotation) != null) {
+                        map.add(type);
+                    }
                 }
             }
         }

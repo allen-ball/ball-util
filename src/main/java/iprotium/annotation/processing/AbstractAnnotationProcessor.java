@@ -62,11 +62,23 @@ public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
         }
     }
 
+    /**
+     * Method to get the {@link List} of supported {@link Annotation}
+     * {@link Class}es.
+     *
+     * @return  The {@link List} of supported {@link Annotation} 
+     *          {@link Class}es.
+     */
+    protected List<Class<? extends Annotation>> getSupportedAnnotationTypeList() {
+        return list;
+    }
+
     @Override
     public Set<String> getSupportedAnnotationTypes() {
         Set<String> set = new LinkedHashSet<String>();
 
-        for (Class<? extends Annotation> type : list) {
+        for (Class<? extends Annotation> type :
+                 getSupportedAnnotationTypeList()) {
             set.add(type.getCanonicalName());
         }
 

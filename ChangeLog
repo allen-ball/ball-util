@@ -12,7 +12,7 @@
 	src/main/java/iprotium/annotation/processing/ForProcessor.java:
 	Initial writing.
 
-	* Re-implemented JAXBIndexesForTask as XmlRootElementProcessor.
+	* Re-implemented JAXBIndexesForTask as JAXBIndexProcessor.
 
 	* src/main/java/iprotium/annotation/processing/AbstractProcessor.java:
 	Provide AbstractProcessor.CHARSET and
