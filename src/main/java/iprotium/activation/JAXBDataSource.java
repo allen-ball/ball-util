@@ -3,9 +3,8 @@
  *
  * Copyright 2013 Allen D. Ball.  All rights reserved.
  */
-package iprotium.xml.bind;
+package iprotium.activation;
 
-import iprotium.activation.ReaderWriterDataSource;
 import iprotium.io.IOUtil;
 import java.io.IOException;
 import java.io.InputStream;

@@ -5,8 +5,8 @@
  */
 package iprotium.util.ant.taskdefs;
 
+import iprotium.activation.JAXBDataSource;
 import iprotium.annotation.AntTask;
-import iprotium.xml.bind.JAXBDataSource;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import org.apache.tools.ant.BuildException;
