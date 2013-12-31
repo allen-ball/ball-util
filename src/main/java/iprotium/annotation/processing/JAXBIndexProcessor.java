@@ -131,15 +131,25 @@ public class JAXBIndexProcessor extends AbstractAnnotationProcessor
         public MapImpl() { super(); }
 
         public boolean add(Class<?> type) {
-            return get(type.getPackage().getName()).add(type.getSimpleName());
+            return add(type.getPackage().getName(), type.getCanonicalName());
         }
 
         public boolean add(TypeElement type) {
-            PackageElement pkg = getPackageElementFor(type);
-            String name =
-                (pkg != null) ? pkg.getQualifiedName().toString() : NIL;
+            return add(getPackageElementFor(type)
+                       .getQualifiedName().toString(),
+                       type.getQualifiedName().toString());
+        }
 
-            return get(name).add(type.getSimpleName().toString());
+        private boolean add(String pkg, String type) {
+            if (type.startsWith(pkg)) {
+                type = type.substring(pkg.length());
+            }
+
+            if (type.startsWith(DOT)) {
+                type = type.substring(DOT.length());
+            }
+
+            return get(pkg).add(type);
         }
 
         @Override
