@@ -1,3 +1,8 @@
+2014-01-02  Allen D. Ball  <ball@10-0-1-2.lan>
+
+	* src/main/java/iprotium/text/ParameterizedMessageFormat.java:
+	Initial writing.
+
 2014-01-01  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* src/main/java/iprotium/annotation/ResourceFile.java,
