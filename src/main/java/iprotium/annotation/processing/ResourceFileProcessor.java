@@ -8,7 +8,6 @@ package iprotium.annotation.processing;
 import iprotium.annotation.ResourceFile;
 import iprotium.annotation.ServiceProviderFor;
 import iprotium.io.IOUtil;
-import iprotium.text.ParameterizedMessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -22,6 +21,7 @@ import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
 import javax.tools.FileObject;
 
+import static iprotium.text.ParameterizedMessageFormat.format;
 import static iprotium.util.StringUtil.NIL;
 import static iprotium.util.StringUtil.isNil;
 import static javax.tools.Diagnostic.Kind.ERROR;
@@ -31,7 +31,7 @@ import static javax.tools.StandardLocation.CLASS_OUTPUT;
  * {@link Processor} implementation to check and assemble
  * {@link ResourceFile} {@link java.lang.annotation.Annotation}s.
  *
- * @see ParameterizedMessageFormat
+ * @see iprotium.text.ParameterizedMessageFormat
  *
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
@@ -87,10 +87,10 @@ public class ResourceFileProcessor extends AbstractAnnotationProcessor {
                 Parameters parameters = new Parameters((TypeElement) element);
 
                 for (String line : lines) {
-                    list.add(ParameterizedMessageFormat.format(line, parameters));
+                    list.add(format(line, parameters));
                 }
 
-                map.add(path, list);
+                map.add(format(path, parameters), list);
             } else {
                 print(ERROR,
                       element,

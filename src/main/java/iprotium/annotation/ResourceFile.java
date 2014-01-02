@@ -19,7 +19,9 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * {@link iprotium.annotation.processing.ResourceFileProcessor} uses
  * {@link iprotium.text.ParameterizedMessageFormat} to replace the
  * {@value #CLASS} named parameter with the annotated class name and the
- * {@value #PACKAGE} named parameter with the annotated class' package name.
+ * {@value #PACKAGE} named parameter with the annotated class' package name
+ * for both the annotation {@link #path() path} and {@link #lines() lines}
+ * members.
  *
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
