@@ -16,9 +16,10 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * {@link java.lang.annotation.Annotation} to provide resource file
  * fragments.  {@link #path() path} specifies the resource file path and
  * {@link #lines() lines} specifies the file fragment lines.  The
- * {@link iprotium.annotation.processing.ResourceFileProcessor} will replace
- * {@value #CLASS} with the annotated class name and {@value #PACKAGE} with
- * the annotated class' package name.
+ * {@link iprotium.annotation.processing.ResourceFileProcessor} uses
+ * {@link iprotium.text.ParameterizedMessageFormat} to replace the
+ * {@value #CLASS} named parameter with the annotated class name and the
+ * {@value #PACKAGE} named parameter with the annotated class' package name.
  *
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
@@ -33,10 +34,10 @@ public @interface ResourceFile {
     /**
      * {@link #CLASS} = {@value #CLASS}
      */
-    public static final String CLASS = "{class}";
+    public static final String CLASS = "class";
 
     /**
      * {@link #PACKAGE} = {@value #PACKAGE}
      */
-    public static final String PACKAGE = "{package}";
+    public static final String PACKAGE = "package";
 }

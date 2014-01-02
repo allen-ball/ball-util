@@ -8,14 +8,13 @@ package iprotium.annotation.processing;
 import iprotium.annotation.ResourceFile;
 import iprotium.annotation.ServiceProviderFor;
 import iprotium.io.IOUtil;
+import iprotium.text.ParameterizedMessageFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.regex.Pattern;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
@@ -31,6 +30,8 @@ import static javax.tools.StandardLocation.CLASS_OUTPUT;
 /**
  * {@link Processor} implementation to check and assemble
  * {@link ResourceFile} {@link java.lang.annotation.Annotation}s.
+ *
+ * @see ParameterizedMessageFormat
  *
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
@@ -82,24 +83,11 @@ public class ResourceFileProcessor extends AbstractAnnotationProcessor {
 
         if (! isNil(path)) {
             if (lines != null) {
-                TypeElement type = (TypeElement) element;
-                PackageElement pkg = getPackageElementFor(type);
-                ArrayList<String> list =
-                    new ArrayList<String>(Arrays.asList(lines));
+                ArrayList<String> list = new ArrayList<String>(lines.length);
+                Parameters parameters = new Parameters((TypeElement) element);
 
-                for (int i = 0, n = list.size(); i < n; i += 1) {
-                    String line = list.get(i);
-
-                    line =
-                        line.replaceAll(Pattern.quote(ResourceFile.CLASS),
-                                        type.getQualifiedName().toString());
-                    line =
-                        line.replaceAll(Pattern.quote(ResourceFile.PACKAGE),
-                                        (pkg != null) ?
-                                            pkg.getQualifiedName().toString()
-                                            : NIL);
-
-                    list.set(i, line);
+                for (String line : lines) {
+                    list.add(ParameterizedMessageFormat.format(line, parameters));
                 }
 
                 map.add(path, list);
@@ -130,6 +118,21 @@ public class ResourceFileProcessor extends AbstractAnnotationProcessor {
             }
 
             return get(path).addAll(collection);
+        }
+    }
+
+    private class Parameters extends TreeMap<String,Object> {
+        private static final long serialVersionUID = 2236219860675853699L;
+
+        public Parameters(TypeElement type) {
+            super();
+
+            PackageElement pkg = getPackageElementFor(type);
+
+            put(ResourceFile.CLASS,
+                type.getQualifiedName().toString());
+            put(ResourceFile.PACKAGE,
+                (pkg != null) ? pkg.getQualifiedName().toString() : NIL);
         }
     }
 }
