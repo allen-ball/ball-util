@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2009 - 2013 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2014 Allen D. Ball.  All rights reserved.
  */
 package iprotium.text;
 
@@ -42,7 +42,7 @@ public class MapTable<K,V> extends TextTable {
     }
 
     @Override
-    public MapTableModel getModel() {
-        return (MapTableModel) super.getModel();
+    public MapTableModel<?,?> getModel() {
+        return (MapTableModel<?,?>) super.getModel();
     }
 }

@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2013 Allen D. Ball.  All rights reserved.
+ * Copyright 2013, 2014 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util;
 
@@ -163,7 +163,7 @@ public class Histogram<K> extends TreeMap<K,Long> {
     }
 
     @Override
-    public Histogram clone() { return (Histogram) super.clone(); }
+    public Histogram<?> clone() { return (Histogram<?>) super.clone(); }
 
     /**
      * Convenience method to interpret a {@link Number} as a {@link Long}
