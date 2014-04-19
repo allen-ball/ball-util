@@ -17,10 +17,8 @@ import java.io.InputStream;
 import java.util.Map;
 import org.w3c.dom.Element;
 
-import static iprotium.util.StringUtil.isNil;
-
 /**
- * Inline {@link Taglet} to include a resource in the output..
+ * Inline {@link Taglet} to include a resource in the Javadoc output.
  *
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
