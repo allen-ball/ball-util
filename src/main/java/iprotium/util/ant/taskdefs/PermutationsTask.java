@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2010 - 2013 Allen D. Ball.  All rights reserved.
+ * Copyright 2010 - 2014 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -18,6 +18,8 @@ import static iprotium.util.StringUtil.NIL;
  * {@link org.apache.tools.ant.Task} to analyze {@link Permutations} of a
  * {@link Collection}.
  *
+ * {@bean-info}
+ *
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
@@ -31,6 +33,8 @@ public abstract class PermutationsTask extends InstanceOfTask {
     /**
      * {@link.uri http://ant.apache.org/ Ant}
      * {@link org.apache.tools.ant.Task} to count {@link Permutations}.
+     *
+     * {@bean-info}
      */
     @AntTask("permutations-count")
     public static class Count extends PermutationsTask {
@@ -66,6 +70,8 @@ public abstract class PermutationsTask extends InstanceOfTask {
     /**
      * {@link.uri http://ant.apache.org/ Ant}
      * {@link org.apache.tools.ant.Task} to show the {@link Permutations}.
+     *
+     * {@bean-info}
      */
     @AntTask("permutations-of")
     public static class Of extends PermutationsTask {

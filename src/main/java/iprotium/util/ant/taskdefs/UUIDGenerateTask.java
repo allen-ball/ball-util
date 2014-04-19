@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2011 - 2013 Allen D. Ball.  All rights reserved.
+ * Copyright 2011 - 2014 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -13,6 +13,8 @@ import org.apache.tools.ant.Task;
 /**
  * {@link.uri http://ant.apache.org/ Ant} {@link Task} to generate new
  * unique {@link UUID}s.
+ *
+ * {@bean-info}
  *
  * @see Random
  * @see Time
@@ -38,6 +40,8 @@ public class UUIDGenerateTask extends AbstractPropertyTask {
     /**
      * {@link.uri http://ant.apache.org/ Ant} {@link Task} to generate a new
      * {@link UUID} with {@link UUIDFactory#generateRandom()}.
+     *
+     * {@bean-info}
      */
     @AntTask("uuid-generate-random")
     public static class Random extends UUIDGenerateTask {
@@ -56,6 +60,8 @@ public class UUIDGenerateTask extends AbstractPropertyTask {
     /**
      * {@link.uri http://ant.apache.org/ Ant} {@link Task} to generate a new
      * {@link UUID} with {@link UUIDFactory#generateTime()}.
+     *
+     * {@bean-info}
      */
     @AntTask("uuid-generate-time")
     public static class Time extends UUIDGenerateTask {

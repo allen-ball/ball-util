@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2011 - 2013 Allen D. Ball.  All rights reserved.
+ * Copyright 2011 - 2014 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -10,6 +10,8 @@ import org.apache.tools.ant.BuildException;
 /**
  * Abstract {@link.uri http://ant.apache.org/ Ant} base class for
  * {@link org.apache.tools.ant.Task}s that may assign property values.
+ *
+ * {@bean-info}
  *
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$

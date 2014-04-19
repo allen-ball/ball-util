@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2009 - 2013 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2014 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -13,6 +13,8 @@ import org.apache.tools.ant.Task;
 /**
  * {@link.uri http://ant.apache.org/ Ant} {@link Task} to list the available
  * {@link Locale}s.
+ *
+ * {@bean-info}
  *
  * @see Locale#getAvailableLocales()
  *

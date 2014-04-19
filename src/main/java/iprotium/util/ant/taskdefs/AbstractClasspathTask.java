@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2013 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2014 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -20,6 +20,8 @@ import org.apache.tools.ant.util.ClasspathUtils;
 /**
  * Abstract base class for {@link.uri http://ant.apache.org/ Ant}
  * {@link Task} implementations that require a classpath.
+ *
+ * {@bean-info}
  *
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$

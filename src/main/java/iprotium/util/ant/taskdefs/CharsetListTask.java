@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2009 - 2013 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2014 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -15,6 +15,8 @@ import static iprotium.util.StringUtil.NIL;
 /**
  * {@link.uri http://ant.apache.org/ Ant} {@link Task} to list the available
  * {@link Charset}s.
+ *
+ * {@bean-info}
  *
  * @see Charset#availableCharsets()
  *

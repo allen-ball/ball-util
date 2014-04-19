@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2009 - 2013 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2014 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -16,6 +16,8 @@ import java.util.PropertyResourceBundle;
 /**
  * {@link java.util.ResourceBundle} implementation for JNI
  * {@link.uri http://ant.apache.org/ Ant} tasks.
+ *
+ * {@bean-info}
  *
  * @see AbstractJNIExecuteOnTask
  * @see JNICCTask

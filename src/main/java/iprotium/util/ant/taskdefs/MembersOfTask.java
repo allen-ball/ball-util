@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2013 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2014 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -14,6 +14,8 @@ import org.apache.tools.ant.BuildException;
 /**
  * {@link.uri http://ant.apache.org/ Ant} {@link org.apache.tools.ant.Task}
  * to display members of a specified {@link Class}.
+ *
+ * {@bean-info}
  *
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$

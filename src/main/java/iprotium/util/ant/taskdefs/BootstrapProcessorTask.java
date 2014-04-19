@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2011 - 2013 Allen D. Ball.  All rights reserved.
+ * Copyright 2011 - 2014 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -16,6 +16,8 @@ import static iprotium.util.ClassUtil.isAbstract;
  * {@link.uri http://ant.apache.org/ Ant} {@link org.apache.tools.ant.Task}
  * to bootstrap {@link javax.annotation.processing.Processor}s.  Creates and
  * invokes {@link Processor}s found on the class path.
+ *
+ * {@bean-info}
  *
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$

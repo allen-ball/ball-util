@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2013 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2014 Allen D. Ball.  All rights reserved.
  */
 package iprotium.util.ant.taskdefs;
 
@@ -18,6 +18,8 @@ import static iprotium.util.StringUtil.NIL;
 /**
  * {@link.uri http://ant.apache.org/ Ant} {@link org.apache.tools.ant.Task}
  * to determine the classes that have native members.
+ *
+ * {@bean-info}
  *
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
