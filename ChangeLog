@@ -1,3 +1,8 @@
+2014-04-19  Allen D. Ball  <ball@sol.local>
+
+	* src/main/java/iprotium/tools/javadoc/BeanInfoTaglet.java:
+	Properly handle inner classes.
+
 2014-01-02  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* src/main/java/iprotium/text/ParameterizedMessageFormat.java:

@@ -1,13 +1,12 @@
 /*
  * $Id$
  *
- * Copyright 2013 Allen D. Ball.  All rights reserved.
+ * Copyright 2013, 2014 Allen D. Ball.  All rights reserved.
  */
 package iprotium.tools.javadoc;
 
 import com.sun.javadoc.ClassDoc;
 import com.sun.javadoc.Doc;
-import com.sun.javadoc.RootDoc;
 import com.sun.javadoc.Tag;
 import com.sun.tools.doclets.internal.toolkit.taglets.Taglet;
 import com.sun.tools.doclets.internal.toolkit.taglets.TagletOutput;
@@ -44,6 +43,8 @@ public class BeanInfoTaglet extends AbstractInlineTaglet {
         register(BeanInfoTaglet.class, map);
     }
 
+    private static final String DOLLAR = "$";
+
     /**
      * Sole constructor.
      */
@@ -55,45 +56,55 @@ public class BeanInfoTaglet extends AbstractInlineTaglet {
         setConfiguration(writer.configuration());
 
         LinkedList<Object> list = new LinkedList<Object>();
-        RootDoc root = writer.configuration().root;
 
         try {
+            ClassDoc start = null;
+            ClassDoc stop = null;
             String[] argv = tag.text().trim().split("[\\p{Space}]+", 2);
 
             if (! isNil(argv[0])) {
-                argv[0] = getQualifiedName(tag.holder(), argv[0]);
+                start = getClassDoc(tag.holder(), argv[0]);
             } else {
-                ClassDoc doc = getContainingClassDoc(tag.holder());
-
-                if (doc != null) {
-                    argv[0] = doc.qualifiedName();
-                }
+                start = getContainingClassDoc(tag.holder());
             }
 
-            if (isNil(argv[0])) {
-                throw new IllegalArgumentException("Class name not specified");
+            if (start == null) {
+                throw new IllegalArgumentException("Class not specified");
             }
-
-            Class<?> start = Class.forName(argv[0]);
-            Class<?> stop = Object.class;
 
             if (argv.length > 1) {
-                argv[1] = getQualifiedName(tag.holder(), argv[1]);
-
-                if (Void.TYPE.getName().equals(argv[1])) {
-                    stop = null;
-                } else {
-                    stop = Class.forName(argv[1]);
+                if (! Void.TYPE.getName().equals(argv[1])) {
+                    stop = getClassDoc(tag.holder(), argv[1]);
                 }
+            } else {
+                stop = getClassDoc(tag.holder(), Object.class.getName());
             }
 
-            output(tag.holder(), list, Introspector.getBeanInfo(start, stop));
+            output(tag.holder(), list,
+                   Introspector.getBeanInfo(getClassFor(start),
+                                            getClassFor(stop)));
         } catch (Exception exception) {
             throw new IllegalArgumentException(tag.position().toString(),
                                                exception);
         }
 
         return output(writer, list);
+    }
+
+    private Class<?> getClassFor(ClassDoc doc) throws Exception {
+        String name = null;
+
+        if (doc != null) {
+            if (doc.containingClass() != null) {
+                name =
+                    doc.containingClass().qualifiedName()
+                    + DOLLAR + doc.simpleTypeName();
+            } else {
+                name = doc.qualifiedName();
+            }
+        }
+
+        return (name != null) ? Class.forName(name) : null;
     }
 
     private void output(Doc doc, List<Object> list, BeanInfo info) {
