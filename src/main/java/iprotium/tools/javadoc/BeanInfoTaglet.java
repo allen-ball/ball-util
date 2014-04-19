@@ -43,8 +43,6 @@ public class BeanInfoTaglet extends AbstractInlineTaglet {
         register(BeanInfoTaglet.class, map);
     }
 
-    private static final String DOLLAR = "$";
-
     /**
      * Sole constructor.
      */
@@ -89,22 +87,6 @@ public class BeanInfoTaglet extends AbstractInlineTaglet {
         }
 
         return output(writer, list);
-    }
-
-    private Class<?> getClassFor(ClassDoc doc) throws Exception {
-        String name = null;
-
-        if (doc != null) {
-            if (doc.containingClass() != null) {
-                name =
-                    doc.containingClass().qualifiedName()
-                    + DOLLAR + doc.simpleTypeName();
-            } else {
-                name = doc.qualifiedName();
-            }
-        }
-
-        return (name != null) ? Class.forName(name) : null;
     }
 
     private void output(Doc doc, List<Object> list, BeanInfo info) {

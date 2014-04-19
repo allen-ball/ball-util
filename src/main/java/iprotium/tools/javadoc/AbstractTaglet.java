@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2012, 2013 Allen D. Ball.  All rights reserved.
+ * Copyright 2012 - 2014 Allen D. Ball.  All rights reserved.
  */
 package iprotium.tools.javadoc;
 
@@ -45,6 +45,8 @@ import static javax.xml.transform.OutputKeys.OMIT_XML_DECLARATION;
 public abstract class AbstractTaglet implements Taglet {
     private static final String NO = "no";
     private static final String YES = "yes";
+
+    private static final String DOLLAR = "$";
 
     /**
      * Helper method to implement {@link Taglet} static
@@ -364,4 +366,23 @@ public abstract class AbstractTaglet implements Taglet {
 
         return (doc != null) ? doc.qualifiedName() : name;
     }
+
+    protected Class<?> getClassFor(ClassDoc doc) throws ClassNotFoundException {
+        String name = null;
+
+        if (doc != null) {
+            if (doc.containingClass() != null) {
+                name =
+                    doc.containingClass().qualifiedName()
+                    + DOLLAR + doc.simpleTypeName();
+            } else {
+                name = doc.qualifiedName();
+            }
+        }
+
+        return (name != null) ? Class.forName(name) : null;
+    }
+
+    @Override
+    public String toString() { return super.toString(); }
 }
