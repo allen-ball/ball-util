@@ -3,6 +3,9 @@
 	* src/main/java/iprotium/tools/javadoc/BeanInfoTaglet.java:
 	Properly handle inner classes.
 
+	* src/main/java/iprotium/xml/HTML.java:
+	Added pre(Document,Object) method.
+
 2014-01-02  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* src/main/java/iprotium/text/ParameterizedMessageFormat.java:

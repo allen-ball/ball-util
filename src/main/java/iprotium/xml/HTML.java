@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2013 Allen D. Ball.  All rights reserved.
+ * Copyright 2013, 2014 Allen D. Ball.  All rights reserved.
  */
 package iprotium.xml;
 
@@ -34,6 +34,8 @@ public abstract class HTML {
     public static final String CODE = "code";
     /** {@link #META} = {@value #META} */
     public static final String META = "meta";
+    /** {@link #PRE} = {@value #PRE} */
+    public static final String PRE = "pre";
     /** {@link #TABLE} = {@value #TABLE} */
     public static final String TABLE = "table";
     /** {@link #TD} = {@value #TD} */
@@ -164,6 +166,18 @@ public abstract class HTML {
         }
 
         return elements;
+    }
+
+    /**
+     * Method to create an HTML {@code <pre/>} {@link Element}.
+     *
+     * @param   document        The owner {@link Document}.
+     * @param   value           The value {@link Object}.
+     *
+     * @return  The HTML {@code <pre/>} {@link Element}.
+     */
+    public static Element pre(Document document, Object value) {
+        return element(document, PRE, value);
     }
 
     /**
