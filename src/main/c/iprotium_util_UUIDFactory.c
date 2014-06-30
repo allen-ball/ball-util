@@ -1,12 +1,12 @@
 /* $Id$ */
 
-#include "iprotium_util_UUIDFactory.h"
+#include "ball_util_UUIDFactory.h"
 
 #include <uuid/uuid.h>
 
 JNIEXPORT void JNICALL
-Java_iprotium_util_UUIDFactory_uuid_1generate(JNIEnv *env, jclass class,
-                                              jbyteArray bytes) {
+Java_ball_util_UUIDFactory_uuid_1generate(JNIEnv *env, jclass class,
+                                          jbyteArray bytes) {
     uuid_t out;
 
     uuid_generate(out);
@@ -14,9 +14,8 @@ Java_iprotium_util_UUIDFactory_uuid_1generate(JNIEnv *env, jclass class,
 }
 
 JNIEXPORT void JNICALL
-Java_iprotium_util_UUIDFactory_uuid_1generate_1random(JNIEnv *env,
-                                                      jclass class,
-                                                      jbyteArray bytes) {
+Java_ball_util_UUIDFactory_uuid_1generate_1random(JNIEnv *env, jclass class,
+                                                  jbyteArray bytes) {
     uuid_t out;
 
     uuid_generate_random(out);
@@ -24,8 +23,8 @@ Java_iprotium_util_UUIDFactory_uuid_1generate_1random(JNIEnv *env,
 }
 
 JNIEXPORT void JNICALL
-Java_iprotium_util_UUIDFactory_uuid_1generate_1time(JNIEnv *env, jclass class,
-                                                    jbyteArray bytes) {
+Java_ball_util_UUIDFactory_uuid_1generate_1time(JNIEnv *env, jclass class,
+                                                jbyteArray bytes) {
     uuid_t out;
 
     uuid_generate_time(out);

@@ -1,3 +1,7 @@
+2014-06-29  Allen D. Ball  <ball@sol.local>
+
+	* Renamed iprotium.util to ball.util.
+
 2014-04-19  Allen D. Ball  <ball@sol.local>
 
 	* src/main/java/iprotium/tools/javadoc/BeanInfoTaglet.java:

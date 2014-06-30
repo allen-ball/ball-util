@@ -1,6 +1,6 @@
 /* $Id$ */
 
-#include "iprotium_util_jni_EditLine.h"
+#include "ball_util_jni_EditLine.h"
 #ifndef USE_EDITLINE
 #define USE_EDITLINE 0
 #endif
@@ -95,8 +95,7 @@ static void setPointer(JNIEnv *env, jobject object, struct rl_t *rl) {
 #endif
 
 JNIEXPORT void JNICALL
-Java_iprotium_util_jni_EditLine_init(JNIEnv *env, jobject this,
-                                     jstring string) {
+Java_ball_util_jni_EditLine_init(JNIEnv *env, jobject this, jstring string) {
     const char *prog = (*env)->GetStringUTFChars(env, string, 0);
 #if USE_EDITLINE
     FILE *fin = fdopen(0, "r");
@@ -134,8 +133,8 @@ Java_iprotium_util_jni_EditLine_init(JNIEnv *env, jobject this,
 }
 
 JNIEXPORT jstring JNICALL
-Java_iprotium_util_jni_EditLine_readline(JNIEnv *env, jobject this,
-                                         jstring string) {
+Java_ball_util_jni_EditLine_readline(JNIEnv *env, jobject this,
+                                     jstring string) {
     jstring line = NULL;
     const char *prompt =
         (string != NULL) ? (*env)->GetStringUTFChars(env, string, 0) : NULL;
@@ -190,8 +189,8 @@ Java_iprotium_util_jni_EditLine_readline(JNIEnv *env, jobject this,
 }
 
 JNIEXPORT void JNICALL
-Java_iprotium_util_jni_EditLine_add_1history(JNIEnv *env, jobject this,
-                                             jstring string) {
+Java_ball_util_jni_EditLine_add_1history(JNIEnv *env, jobject this,
+                                         jstring string) {
     if (string != NULL) {
         const char *line = (*env)->GetStringUTFChars(env, string, 0);
 #if USE_EDITLINE
@@ -217,7 +216,7 @@ Java_iprotium_util_jni_EditLine_add_1history(JNIEnv *env, jobject this,
 }
 
 JNIEXPORT void JNICALL
-Java_iprotium_util_jni_EditLine_reset(JNIEnv *env, jobject this) {
+Java_ball_util_jni_EditLine_reset(JNIEnv *env, jobject this) {
 #if USE_EDITLINE
     EditLine *el = getPointer(env, this);
 
@@ -230,7 +229,7 @@ Java_iprotium_util_jni_EditLine_reset(JNIEnv *env, jobject this) {
 }
 
 JNIEXPORT jstring JNICALL
-Java_iprotium_util_jni_EditLine_gets(JNIEnv *env, jobject this) {
+Java_ball_util_jni_EditLine_gets(JNIEnv *env, jobject this) {
     jstring line = NULL;
 #if USE_EDITLINE
     EditLine *el = getPointer(env, this);
@@ -261,7 +260,7 @@ Java_iprotium_util_jni_EditLine_gets(JNIEnv *env, jobject this) {
 }
 
 JNIEXPORT jint JNICALL
-Java_iprotium_util_jni_EditLine_getc(JNIEnv *env, jobject this) {
+Java_ball_util_jni_EditLine_getc(JNIEnv *env, jobject this) {
     char character = -1;
 #if USE_EDITLINE
     EditLine *el = getPointer(env, this);
@@ -280,8 +279,7 @@ Java_iprotium_util_jni_EditLine_getc(JNIEnv *env, jobject this) {
 }
 
 JNIEXPORT void JNICALL
-Java_iprotium_util_jni_EditLine_push(JNIEnv *env,
-                                     jobject this, jstring string) {
+Java_ball_util_jni_EditLine_push(JNIEnv *env, jobject this, jstring string) {
     const char *str = (*env)->GetStringUTFChars(env, string, 0);
 #if USE_EDITLINE
     EditLine *el = getPointer(env, this);
@@ -302,8 +300,8 @@ Java_iprotium_util_jni_EditLine_push(JNIEnv *env,
 }
 
 JNIEXPORT jint JNICALL
-Java_iprotium_util_jni_EditLine_parse(JNIEnv *env,
-                                      jobject this, jobjectArray array) {
+Java_ball_util_jni_EditLine_parse(JNIEnv *env, jobject this,
+                                  jobjectArray array) {
     int result = -1;
 #if USE_EDITLINE
     EditLine *el = getPointer(env, this);
@@ -331,8 +329,7 @@ Java_iprotium_util_jni_EditLine_parse(JNIEnv *env,
 }
 
 JNIEXPORT jint JNICALL
-Java_iprotium_util_jni_EditLine_source(JNIEnv *env,
-                                       jobject this, jstring string) {
+Java_ball_util_jni_EditLine_source(JNIEnv *env, jobject this, jstring string) {
     int result = -1;
 #if USE_EDITLINE
     EditLine *el = getPointer(env, this);
@@ -345,7 +342,7 @@ Java_iprotium_util_jni_EditLine_source(JNIEnv *env,
 }
 
 JNIEXPORT void JNICALL
-Java_iprotium_util_jni_EditLine_end(JNIEnv *env, jobject this) {
+Java_ball_util_jni_EditLine_end(JNIEnv *env, jobject this) {
 #if USE_EDITLINE
     EditLine *el = getPointer(env, this);
 

@@ -1,6 +1,6 @@
 /* $Id$ */
 
-#include "iprotium_util_jni_DIR.h"
+#include "ball_util_jni_DIR.h"
 
 #include <dirent.h>
 #include <string.h>
@@ -33,7 +33,7 @@ static void setPointer(JNIEnv *env, jobject object, DIR *dirp) {
 }
 
 JNIEXPORT void JNICALL
-Java_iprotium_util_jni_DIR_closedir(JNIEnv *env, jobject this) {
+Java_ball_util_jni_DIR_closedir(JNIEnv *env, jobject this) {
     DIR *dirp = getPointer(env, this);
 
     setPointer(env, this, NULL);
@@ -44,7 +44,7 @@ Java_iprotium_util_jni_DIR_closedir(JNIEnv *env, jobject this) {
 }
 
 JNIEXPORT jstring JNICALL
-Java_iprotium_util_jni_DIR_readdir(JNIEnv *env, jobject this) {
+Java_ball_util_jni_DIR_readdir(JNIEnv *env, jobject this) {
     DIR *dirp = getPointer(env, this);
     struct dirent *dp = readdir(dirp);
 
@@ -52,7 +52,7 @@ Java_iprotium_util_jni_DIR_readdir(JNIEnv *env, jobject this) {
 }
 
 JNIEXPORT void JNICALL
-Java_iprotium_util_jni_DIR_rewinddir(JNIEnv *env, jobject this) {
+Java_ball_util_jni_DIR_rewinddir(JNIEnv *env, jobject this) {
     DIR *dirp = getPointer(env, this);
 
     rewinddir(dirp);

@@ -1,6 +1,6 @@
 /* $Id$ */
 
-#include "iprotium_util_jni_POSIX.h"
+#include "ball_util_jni_POSIX.h"
 
 #include <dirent.h>
 #include <limits.h>
@@ -8,8 +8,8 @@
 #include <unistd.h>
 
 JNIEXPORT jboolean JNICALL
-Java_iprotium_util_jni_POSIX_link(JNIEnv *env, jclass class,
-                                  jstring from, jstring to) {
+Java_ball_util_jni_POSIX_link(JNIEnv *env, jclass class,
+                              jstring from, jstring to) {
     const char *path1 = (*env)->GetStringUTFChars(env, from, 0);
     const char *path2 = (*env)->GetStringUTFChars(env, to, 0);
     int status = link(path1, path2);
@@ -21,8 +21,8 @@ Java_iprotium_util_jni_POSIX_link(JNIEnv *env, jclass class,
 }
 
 JNIEXPORT jboolean JNICALL
-Java_iprotium_util_jni_POSIX_symlink(JNIEnv *env, jclass class,
-                                     jstring from, jstring to) {
+Java_ball_util_jni_POSIX_symlink(JNIEnv *env, jclass class,
+                                 jstring from, jstring to) {
     const char *path1 = (*env)->GetStringUTFChars(env, from, 0);
     const char *path2 = (*env)->GetStringUTFChars(env, to, 0);
     int status = symlink(path1, path2);
@@ -34,8 +34,7 @@ Java_iprotium_util_jni_POSIX_symlink(JNIEnv *env, jclass class,
 }
 
 JNIEXPORT jstring JNICALL
-Java_iprotium_util_jni_POSIX_readlink(JNIEnv *env, jclass class,
-                                      jstring from) {
+Java_ball_util_jni_POSIX_readlink(JNIEnv *env, jclass class, jstring from) {
     const char *path = (*env)->GetStringUTFChars(env, from, 0);
     char buf[PATH_MAX];
     ssize_t len = readlink(path, buf, (sizeof buf) - 1);
@@ -50,7 +49,7 @@ Java_iprotium_util_jni_POSIX_readlink(JNIEnv *env, jclass class,
 }
 
 JNIEXPORT jlong JNICALL
-Java_iprotium_util_jni_POSIX_opendir(JNIEnv *env, jclass class, jstring from) {
+Java_ball_util_jni_POSIX_opendir(JNIEnv *env, jclass class, jstring from) {
     const char *path = (*env)->GetStringUTFChars(env, from, 0);
     DIR *dirp = opendir(path);
 

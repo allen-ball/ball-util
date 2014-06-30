@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="iprotium-util" basedir="." default="jar"
+<project name="ball-util" basedir="." default="jar"
          xmlns:artifact="antlib:org.apache.maven.artifact.ant">
 
   <description>
-    iprotium-util.jar
-    -----------------
+    ball-util.jar
+    --------------
     Java Utilities
 
     $Id$
@@ -23,8 +23,6 @@
   <property name="target.classes.dir"   location="${target.dir}/classes"/>
   <property name="target.headers.dir"   location="${target.dir}/headers"/>
   <property name="target.objects.dir"   location="${target.dir}/objects"/>
-
-  <property name="vendor"               value="iprotium.com"/>
 
   <path id="build.classpath">
     <pathelement location="${target.classes.dir}"/>
@@ -73,11 +71,11 @@
     </javac>
     <taskdef classpathref="build.classpath"
              name="bootstrap-processor"
-             classname="iprotium.util.ant.taskdefs.BootstrapProcessorTask"/>
+             classname="ball.util.ant.taskdefs.BootstrapProcessorTask"/>
     <bootstrap-processor classpathref="build.classpath"
                          basedir="${target.classes.dir}"/>
     <taskdef classpathref="build.classpath"
-             resource="iprotium/util/ant/defaults.properties"/>
+             resource="ball/util/ant/defaults.properties"/>
     <jni-classes classpathref="build.classpath"
                  basedir="${target.classes.dir}" property="jni.classes">
       <src path="${src.dir}/main/java"/>
@@ -85,7 +83,7 @@
   </target>
 
   <target name="jar"
-          description="--> Construct iprotium-util.jar."
+          description="--> Construct ball-util.jar."
           depends="classes">
     <zip destfile="${target.dir}/${artifact}">
       <fileset dir="${target.classes.dir}"/>
@@ -107,7 +105,7 @@
     <mkdir dir="${target.objects.dir}"/>
     <available property="use.editline" file="/usr/include/histedit.h"/>
     <taskdef classpathref="build.classpath"
-             resource="iprotium/util/ant/defaults.properties"/>
+             resource="ball/util/ant/defaults.properties"/>
     <jni-cc include="${target.headers.dir}" dest="${target.objects.dir}">
       <define name="USE_EDITLINE" if="use.editline"/>
       <fileset dir="${src.dir}/main/c" includes="*.c"/>
@@ -121,7 +119,7 @@
     <available property="link.libuuid" file="/lib/libuuid.so.1"/>
     <system-load-library property="have.libuuid" libname="uuid"/>
     <taskdef classpathref="build.classpath"
-             resource="iprotium/util/ant/defaults.properties"/>
+             resource="ball/util/ant/defaults.properties"/>
     <jni-ld destdir="${target.dir}" libname="${pom.artifactId}"
             property="jnilib">
       <link name="edit" if="use.editline"/>
@@ -147,7 +145,7 @@
           description="--> Invokes &lt;bean-info-for/&gt; task."
           depends="classes">
     <taskdef classpathref="build.classpath"
-             resource="iprotium/util/ant/defaults.properties"/>
+             resource="ball/util/ant/defaults.properties"/>
     <bean-info-for classpathref="build.classpath" type="${type}"/>
   </target>
 
@@ -155,7 +153,7 @@
           description="--> Invokes &lt;charset-list/&gt; task."
           depends="classes">
     <taskdef classpathref="build.classpath"
-             resource="iprotium/util/ant/defaults.properties"/>
+             resource="ball/util/ant/defaults.properties"/>
     <charset-list/>
   </target>
 
@@ -163,7 +161,7 @@
           description="--> Invokes &lt;combinations-count/&gt; task."
           depends="classes">
     <taskdef classpathref="build.classpath"
-             resource="iprotium/util/ant/defaults.properties"/>
+             resource="ball/util/ant/defaults.properties"/>
     <combinations-count classpathref="build.classpath"
                         type="${type}" count="${count}">
       <argument type="${argument.type}" value="${argument.value}"/>
@@ -174,7 +172,7 @@
           description="--> Invokes &lt;combinations-of/&gt; task."
           depends="classes">
     <taskdef classpathref="build.classpath"
-             resource="iprotium/util/ant/defaults.properties"/>
+             resource="ball/util/ant/defaults.properties"/>
     <combinations-of classpathref="build.classpath"
                      type="${type}" count="${count}">
       <argument type="${argument.type}" value="${argument.value}"/>
@@ -185,7 +183,7 @@
           description="--> Invokes &lt;inet-addresses-for/&gt; task."
           depends="classes">
     <taskdef classpathref="build.classpath"
-             resource="iprotium/util/ant/defaults.properties"/>
+             resource="ball/util/ant/defaults.properties"/>
     <inet-addresses-for string="${string}"/>
   </target>
 
@@ -193,7 +191,7 @@
           description="--> Invokes &lt;instance-of/&gt; task."
           depends="classes">
     <taskdef classpathref="build.classpath"
-             resource="iprotium/util/ant/defaults.properties"/>
+             resource="ball/util/ant/defaults.properties"/>
     <instance-of classpathref="build.classpath" type="${type}">
       <argument value="${argument}"/>
     </instance-of>
@@ -203,7 +201,7 @@
           description="--> Invokes &lt;is-assignable-from/&gt; task."
           depends="classes">
     <taskdef classpathref="build.classpath"
-             resource="iprotium/util/ant/defaults.properties"/>
+             resource="ball/util/ant/defaults.properties"/>
     <is-assignable-from classpathref="build.classpath"
                         type="${type}" subtype="${subtype}"/>
   </target>
@@ -212,7 +210,7 @@
           description="--> Invokes &lt;jaxb-marshal/&gt; task."
           depends="classes">
     <taskdef classpathref="build.classpath"
-             resource="iprotium/util/ant/defaults.properties"/>
+             resource="ball/util/ant/defaults.properties"/>
     <jaxb-marshal classpathref="build.classpath" type="${type}">
       <argument value="${argument}"/>
     </jaxb-marshal>
@@ -222,7 +220,7 @@
           description="--> Invokes &lt;jaxb-unmarshal/&gt; task."
           depends="classes">
     <taskdef classpathref="build.classpath"
-             resource="iprotium/util/ant/defaults.properties"/>
+             resource="ball/util/ant/defaults.properties"/>
     <jaxb-unmarshal classpathref="build.classpath"
                     context="${context}" file="${file}"/>
   </target>
@@ -231,7 +229,7 @@
           description="--> Invokes &lt;jndi-list/&gt; task."
           depends="classes">
     <taskdef classpathref="build.classpath"
-             resource="iprotium/util/ant/defaults.properties"/>
+             resource="ball/util/ant/defaults.properties"/>
     <jndi-list classpathref="build.classpath"/>
   </target>
 
@@ -239,7 +237,7 @@
           description="--> Invokes &lt;jndi-lookup/&gt; task."
           depends="classes">
     <taskdef classpathref="build.classpath"
-             resource="iprotium/util/ant/defaults.properties"/>
+             resource="ball/util/ant/defaults.properties"/>
     <jndi-lookup classpathref="build.classpath" name="${name}"/>
   </target>
 
@@ -247,7 +245,7 @@
           description="--> Invokes &lt;jni-classes/&gt; task."
           depends="classes">
     <taskdef classpathref="build.classpath"
-             resource="iprotium/util/ant/defaults.properties"/>
+             resource="ball/util/ant/defaults.properties"/>
     <jni-classes classpathref="build.classpath" basedir="${build.class.dir}">
       <src path="${src.dir}/main/java"/>
     </jni-classes>
@@ -257,7 +255,7 @@
           description="--> Invokes &lt;jnilib-prefix/&gt; task."
           depends="classes">
     <taskdef classpathref="build.classpath"
-             resource="iprotium/util/ant/defaults.properties"/>
+             resource="ball/util/ant/defaults.properties"/>
     <jnilib-prefix/>
   </target>
 
@@ -265,7 +263,7 @@
           description="--> Invokes &lt;jnilib-suffix/&gt; task."
           depends="classes">
     <taskdef classpathref="build.classpath"
-             resource="iprotium/util/ant/defaults.properties"/>
+             resource="ball/util/ant/defaults.properties"/>
     <jnilib-suffix/>
   </target>
 
@@ -274,7 +272,7 @@
           depends="classes">
     <mkdir dir="${target.dir}/links"/>
     <taskdef classpathref="build.classpath"
-             resource="iprotium/util/ant/defaults.properties"/>
+             resource="ball/util/ant/defaults.properties"/>
     <link symbolic="true" relative="true" todir="${target.dir}/links">
       <fileset dir="${target.classes.dir}"/>
     </link>
@@ -284,7 +282,7 @@
           description="--> Invokes &lt;locale-list/&gt; task."
           depends="classes">
     <taskdef classpathref="build.classpath"
-             resource="iprotium/util/ant/defaults.properties"/>
+             resource="ball/util/ant/defaults.properties"/>
     <locale-list/>
   </target>
 
@@ -292,7 +290,7 @@
           description="--> Invokes &lt;members-of/&gt; task."
           depends="classes">
     <taskdef classpathref="build.classpath"
-             resource="iprotium/util/ant/defaults.properties"/>
+             resource="ball/util/ant/defaults.properties"/>
     <members-of classpathref="build.classpath" type="${type}"/>
   </target>
 
@@ -300,7 +298,7 @@
           description="--> Invokes &lt;network-interfaces/&gt; task."
           depends="classes">
     <taskdef classpathref="build.classpath"
-             resource="iprotium/util/ant/defaults.properties"/>
+             resource="ball/util/ant/defaults.properties"/>
     <network-interfaces/>
   </target>
 
@@ -308,7 +306,7 @@
           description="--> Invokes &lt;opendir/&gt; task."
           depends="classes">
     <taskdef classpathref="build.classpath"
-             resource="iprotium/util/ant/defaults.properties"/>
+             resource="ball/util/ant/defaults.properties"/>
     <opendir file="."/>
   </target>
 
@@ -316,7 +314,7 @@
           description="--> Invokes &lt;package-list/&gt; task."
           depends="classes">
     <taskdef classpathref="build.classpath"
-             resource="iprotium/util/ant/defaults.properties"/>
+             resource="ball/util/ant/defaults.properties"/>
     <package-list classpathref="build.classpath"
                   basedir="${target.classes.dir}">
       <src path="${src.dir}/main/java"/>
@@ -327,7 +325,7 @@
           description="--> Invokes &lt;permutations-count/&gt; task."
           depends="classes">
     <taskdef classpathref="build.classpath"
-             resource="iprotium/util/ant/defaults.properties"/>
+             resource="ball/util/ant/defaults.properties"/>
     <permutations-count classpathref="build.classpath" type="${type}">
       <argument type="${argument.type}" value="${argument.value}"/>
     </permutations-count>
@@ -337,7 +335,7 @@
           description="--> Invokes &lt;permutations-of/&gt; task."
           depends="classes">
     <taskdef classpathref="build.classpath"
-             resource="iprotium/util/ant/defaults.properties"/>
+             resource="ball/util/ant/defaults.properties"/>
     <permutations-of classpathref="build.classpath" type="${type}">
       <argument type="${argument.type}" value="${argument.value}"/>
     </permutations-of>
@@ -347,7 +345,7 @@
           description="--> Invokes &lt;readlink/&gt; task."
           depends="classes">
     <taskdef classpathref="build.classpath"
-             resource="iprotium/util/ant/defaults.properties"/>
+             resource="ball/util/ant/defaults.properties"/>
     <readlink basedir="${target.dir}"/>
   </target>
 
@@ -355,7 +353,7 @@
           description="--> Invokes &lt;resource-list/&gt; task."
           depends="classes">
     <taskdef classpathref="build.classpath"
-             resource="iprotium/util/ant/defaults.properties"/>
+             resource="ball/util/ant/defaults.properties"/>
     <resource-list classpathref="build.classpath" name="${name}"/>
   </target>
 
@@ -363,7 +361,7 @@
           description="--> Invokes &lt;run/&gt; task."
           depends="classes">
     <taskdef classpathref="build.classpath"
-             resource="iprotium/util/ant/defaults.properties"/>
+             resource="ball/util/ant/defaults.properties"/>
     <run classpathref="build.classpath" type="${type}"/>
   </target>
 
@@ -371,7 +369,7 @@
           description="--> Invokes &lt;service-list/&gt; task."
           depends="classes">
     <taskdef classpathref="build.classpath"
-             resource="iprotium/util/ant/defaults.properties"/>
+             resource="ball/util/ant/defaults.properties"/>
     <service-list classpathref="build.classpath" type="${type}"/>
   </target>
 
@@ -379,7 +377,7 @@
           description="--> Invokes &lt;show-properties/&gt; task."
           depends="classes">
     <taskdef classpathref="build.classpath"
-             resource="iprotium/util/ant/defaults.properties"/>
+             resource="ball/util/ant/defaults.properties"/>
     <show-properties classpathref="build.classpath"
                      basedir="${target.classes.dir}">
       <src path="${src.dir}/main/java"/>
@@ -390,7 +388,7 @@
           description="--> Invokes &lt;subclasses-of/&gt; task."
           depends="classes">
     <taskdef classpathref="build.classpath"
-             resource="iprotium/util/ant/defaults.properties"/>
+             resource="ball/util/ant/defaults.properties"/>
     <subclasses-of classpathref="build.classpath"
                    basedir="${target.classes.dir}" type="${type}">
       <src path="${src.dir}/main/java"/>
@@ -401,7 +399,7 @@
           description="--> Invokes &lt;superclasses-of/&gt; task."
           depends="classes">
     <taskdef classpathref="build.classpath"
-             resource="iprotium/util/ant/defaults.properties"/>
+             resource="ball/util/ant/defaults.properties"/>
     <superclasses-of classpathref="build.classpath" type="${type}"/>
   </target>
 
@@ -409,7 +407,7 @@
           description="--> Invokes &lt;system-load-library/&gt; task."
           depends="classes">
     <taskdef classpathref="build.classpath"
-             resource="iprotium/util/ant/defaults.properties"/>
+             resource="ball/util/ant/defaults.properties"/>
     <system-load-library libname="${name}"/>
   </target>
 
@@ -417,7 +415,7 @@
           description="--> Invokes &lt;uuid-generate/&gt; task."
           depends="classes">
     <taskdef classpathref="build.classpath"
-             resource="iprotium/util/ant/defaults.properties"/>
+             resource="ball/util/ant/defaults.properties"/>
     <uuid-generate/>
   </target>
 
@@ -425,7 +423,7 @@
           description="--> Invokes &lt;uuid-generate-random/&gt; task."
           depends="classes">
     <taskdef classpathref="build.classpath"
-             resource="iprotium/util/ant/defaults.properties"/>
+             resource="ball/util/ant/defaults.properties"/>
     <uuid-generate-random/>
   </target>
 
@@ -433,7 +431,7 @@
           description="--> Invokes &lt;uuid-generate-time/&gt; task."
           depends="classes">
     <taskdef classpathref="build.classpath"
-             resource="iprotium/util/ant/defaults.properties"/>
+             resource="ball/util/ant/defaults.properties"/>
     <uuid-generate-time/>
   </target>
 
