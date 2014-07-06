@@ -14,6 +14,8 @@
   <property name="build.properties.file" location="build.properties"/>
   <property file="${build.properties.file}"/>
   <property name="build.sysclasspath"   value="ignore"/>
+
+  <!-- Bootstrap build.compiler -->
   <available classname="${build.compiler.adapter}"
              property="build.compiler" value="${build.compiler.adapter}"/>
 
