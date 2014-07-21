@@ -14,6 +14,7 @@ import java.io.PrintWriter;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.nio.charset.Charset;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -465,6 +466,25 @@ public abstract class AbstractProcessor
     }
 
     /**
+     * Method to get a {@link List} of {@link TypeElement}s for an array
+     * of {@link Class}es.
+     *
+     * @param   types           The {@link Class}es.
+     *
+     * @return  The {@link List} of {@link TypeElement}s for the
+     *          {@link Class}es.
+     */
+    protected List<TypeElement> getTypeElementsFor(Class<?>... types) {
+        TypeElement[] array = new TypeElement[types.length];
+
+        for (int i = 0; i < array.length; i += 1) {
+            array[i] = getTypeElementFor(types[i]);
+        }
+
+        return Arrays.asList(array);
+    }
+
+    /**
      * Method to get an {@link Element}'s {@link AnnotationMirror}.
      *
      * @param   element         The annotated {@link Element}.
@@ -569,6 +589,9 @@ public abstract class AbstractProcessor
 
         return value;
     }
+
+    @Override
+    public String toString() { return super.toString(); }
 
     /**
      * {@link PrintWriter} implementation suitable for creating Java file

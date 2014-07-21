@@ -1,3 +1,8 @@
+2014-07-21  Allen D. Ball  <ball@sol.local>
+
+	* src/main/java/ball/annotation/processing/AbstractProcessor.java:
+	Added getTypeElementsFor(Class<?>...) method.
+
 2014-07-05  Allen D. Ball  <ball@sol.local>
 
 	* pom.xml: Specify JDK dependency,
