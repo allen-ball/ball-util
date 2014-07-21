@@ -66,7 +66,7 @@ public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
      * Method to get the {@link List} of supported {@link Annotation}
      * {@link Class}es.
      *
-     * @return  The {@link List} of supported {@link Annotation} 
+     * @return  The {@link List} of supported {@link Annotation}
      *          {@link Class}es.
      */
     protected List<Class<? extends Annotation>> getSupportedAnnotationTypeList() {
