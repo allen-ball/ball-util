@@ -5,6 +5,7 @@
  */
 package ball.util.ant.taskdefs;
 
+import ball.annotation.AntTask;
 import java.io.File;
 import java.util.Iterator;
 import java.util.Set;
@@ -44,6 +45,21 @@ public abstract class AbstractMatchingTask extends MatchingTask {
         }
     }
 
+    /**
+     * See {@link AntTask#value()}.
+     */
+    public String getAntTaskName() {
+        AntTask annotation = getClass().getAnnotation(AntTask.class);
+
+        return (annotation != null) ? annotation.value() : null;
+    }
+
+    /**
+     * Method to get {@code this} {@link MatchingTask}'s {@link File}s as a
+     * {@link Set}.
+     *
+     * @return  The {@link Set} of matching {@link File}s.
+     */
     protected Set<File> getMatchingFileSet() {
         TreeSet<File> set = new TreeSet<File>();
         File base = getBasedir();

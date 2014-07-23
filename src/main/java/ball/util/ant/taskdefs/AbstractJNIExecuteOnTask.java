@@ -5,6 +5,7 @@
  */
 package ball.util.ant.taskdefs;
 
+import ball.annotation.AntTask;
 import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
@@ -126,6 +127,23 @@ public abstract class AbstractJNIExecuteOnTask extends ExecuteOn {
         super.execute();
     }
 
+    /**
+     * See {@link AntTask#value()}.
+     */
+    public String getAntTaskName() {
+        AntTask annotation = getClass().getAnnotation(AntTask.class);
+
+        return (annotation != null) ? annotation.value() : null;
+    }
+
+    /**
+     * Method to get the {@link String} specified by the {@code os} and
+     * {@code arch} properties and the parameter.
+     *
+     * @param   name            The parameter name.
+     *
+     * @return  The bundle {@link String}.
+     */
     protected String getBundleString(String name) {
         return BUNDLE.getString(getOS(), getArch(), name);
     }
