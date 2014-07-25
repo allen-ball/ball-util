@@ -1,3 +1,8 @@
+2014-07-24  Allen D. Ball  <ball@sol.local>
+
+	* src/main/java/ball/swing/ClosedFutureJFrame.java:
+	Initial writing.
+
 2014-07-23  Allen D. Ball  <ball@sol.local>
 
 	* src/main/java/ball/util/ant/taskdefs/AbstractClasspathTask.java,
