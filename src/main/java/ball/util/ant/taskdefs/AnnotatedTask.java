@@ -22,7 +22,7 @@ public interface AnnotatedTask {
      *
      * @see Implementation
      */
-    public final Implementation IMPL = new Implementation();
+    public static final Implementation IMPL = new Implementation();
 
     /**
      * Method to get {@link AntTask#value()}.
