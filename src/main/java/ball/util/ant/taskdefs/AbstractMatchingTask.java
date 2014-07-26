@@ -5,7 +5,6 @@
  */
 package ball.util.ant.taskdefs;
 
-import ball.annotation.AntTask;
 import java.io.File;
 import java.util.Iterator;
 import java.util.Set;
@@ -23,7 +22,8 @@ import org.apache.tools.ant.taskdefs.MatchingTask;
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
-public abstract class AbstractMatchingTask extends MatchingTask {
+public abstract class AbstractMatchingTask extends MatchingTask
+                                           implements AnnotatedTask {
     private File basedir = null;
     private File file = null;
 
@@ -43,15 +43,6 @@ public abstract class AbstractMatchingTask extends MatchingTask {
         if (getBasedir() == null && getFile() == null) {
             setBasedir(getProject().resolveFile("."));
         }
-    }
-
-    /**
-     * See {@link AntTask#value()}.
-     */
-    public String getAntTaskName() {
-        AntTask annotation = getClass().getAnnotation(AntTask.class);
-
-        return (annotation != null) ? annotation.value() : null;
     }
 
     /**
@@ -110,6 +101,9 @@ public abstract class AbstractMatchingTask extends MatchingTask {
             log(iterator.next(), msgLevel);
         }
     }
+
+    @Override
+    public String getAntTaskName() { return IMPL.getAntTaskName(getClass()); }
 
     @Override
     public String toString() { return getClass().getSimpleName(); }

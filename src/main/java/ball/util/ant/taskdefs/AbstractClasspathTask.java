@@ -5,7 +5,6 @@
  */
 package ball.util.ant.taskdefs;
 
-import ball.annotation.AntTask;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.SortedMap;
@@ -27,7 +26,8 @@ import org.apache.tools.ant.util.ClasspathUtils;
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
-public abstract class AbstractClasspathTask extends Task {
+public abstract class AbstractClasspathTask extends Task
+                                            implements AnnotatedTask {
     private ClasspathUtils.Delegate delegate = null;
 
     /**
@@ -52,15 +52,6 @@ public abstract class AbstractClasspathTask extends Task {
 
     @Override
     public abstract void execute() throws BuildException;
-
-    /**
-     * See {@link AntTask#value()}.
-     */
-    public String getAntTaskName() {
-        AntTask annotation = getClass().getAnnotation(AntTask.class);
-
-        return (annotation != null) ? annotation.value() : null;
-    }
 
     /**
      * Method to get the {@link AntClassLoader} specified by this
@@ -111,6 +102,9 @@ public abstract class AbstractClasspathTask extends Task {
             log(iterator.next(), msgLevel);
         }
     }
+
+    @Override
+    public String getAntTaskName() { return IMPL.getAntTaskName(getClass()); }
 
     @Override
     public String toString() { return getClass().getSimpleName(); }

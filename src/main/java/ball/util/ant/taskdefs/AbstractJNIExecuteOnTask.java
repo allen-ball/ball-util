@@ -5,7 +5,6 @@
  */
 package ball.util.ant.taskdefs;
 
-import ball.annotation.AntTask;
 import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
@@ -23,7 +22,8 @@ import org.apache.tools.ant.types.Commandline;
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
-public abstract class AbstractJNIExecuteOnTask extends ExecuteOn {
+public abstract class AbstractJNIExecuteOnTask extends ExecuteOn
+                                               implements AnnotatedTask {
     private static final FileDirBoth FILE = new FileDirBoth();
 
     /**
@@ -128,15 +128,6 @@ public abstract class AbstractJNIExecuteOnTask extends ExecuteOn {
     }
 
     /**
-     * See {@link AntTask#value()}.
-     */
-    public String getAntTaskName() {
-        AntTask annotation = getClass().getAnnotation(AntTask.class);
-
-        return (annotation != null) ? annotation.value() : null;
-    }
-
-    /**
      * Method to get the {@link String} specified by the {@code os} and
      * {@code arch} properties and the parameter.
      *
@@ -179,6 +170,9 @@ public abstract class AbstractJNIExecuteOnTask extends ExecuteOn {
             log(iterator.next(), msgLevel);
         }
     }
+
+    @Override
+    public String getAntTaskName() { return IMPL.getAntTaskName(getClass()); }
 
     @Override
     public String toString() { return getClass().getSimpleName(); }
