@@ -1,5 +1,7 @@
 2014-07-26  Allen D. Ball  <ball@sol.local>
 
+	* Moved @AntTask to ball.util.ant.taskdefs.
+
 	* src/main/java/ball/util/ant/taskdefs/AnnotatedTask.java:
 	Initial writing.
 

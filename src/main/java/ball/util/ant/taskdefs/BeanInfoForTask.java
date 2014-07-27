@@ -5,7 +5,6 @@
  */
 package ball.util.ant.taskdefs;
 
-import ball.annotation.AntTask;
 import ball.text.ArrayListTableModel;
 import ball.text.SimpleTable;
 import ball.text.TextTable;

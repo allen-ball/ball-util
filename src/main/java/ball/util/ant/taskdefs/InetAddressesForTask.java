@@ -5,7 +5,6 @@
  */
 package ball.util.ant.taskdefs;
 
-import ball.annotation.AntTask;
 import java.net.InetAddress;
 import java.util.Arrays;
 import org.apache.tools.ant.BuildException;

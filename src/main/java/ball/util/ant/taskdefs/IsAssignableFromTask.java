@@ -5,7 +5,6 @@
  */
 package ball.util.ant.taskdefs;
 
-import ball.annotation.AntTask;
 import ball.util.SuperclassSet;
 import org.apache.tools.ant.BuildException;
 

@@ -5,7 +5,6 @@
  */
 package ball.util.ant.taskdefs;
 
-import ball.annotation.AntTask;
 import ball.text.MapTableModel;
 import ball.text.TextTable;
 import ball.util.BeanMap;

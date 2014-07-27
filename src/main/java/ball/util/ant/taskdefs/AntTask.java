@@ -3,7 +3,7 @@
  *
  * Copyright 2013, 2014 Allen D. Ball.  All rights reserved.
  */
-package ball.annotation;
+package ball.util.ant.taskdefs;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;

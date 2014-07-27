@@ -5,7 +5,6 @@
  */
 package ball.util.ant.taskdefs;
 
-import ball.annotation.AntTask;
 import java.lang.reflect.Member;
 import java.util.Set;
 import java.util.TreeSet;

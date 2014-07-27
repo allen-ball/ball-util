@@ -5,11 +5,11 @@
  */
 package ball.annotation.processing;
 
-import ball.annotation.AntTask;
 import ball.annotation.ServiceProviderFor;
 import ball.io.IOUtil;
 import ball.util.PropertiesImpl;
 import ball.util.StringUtil;
+import ball.util.ant.taskdefs.AntTask;
 import ball.util.ant.taskdefs.BootstrapProcessorTask;
 import java.io.File;
 import java.io.FileOutputStream;

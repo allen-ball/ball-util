@@ -5,7 +5,6 @@
  */
 package ball.util.ant.taskdefs;
 
-import ball.annotation.AntTask;
 import java.io.File;
 import java.util.LinkedHashSet;
 import org.apache.tools.ant.BuildException;

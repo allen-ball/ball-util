@@ -6,7 +6,6 @@
 package ball.util.ant.taskdefs;
 
 import ball.activation.JAXBDataSource;
-import ball.annotation.AntTask;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import org.apache.tools.ant.BuildException;

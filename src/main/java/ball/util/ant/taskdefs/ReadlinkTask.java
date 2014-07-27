@@ -5,7 +5,6 @@
  */
 package ball.util.ant.taskdefs;
 
-import ball.annotation.AntTask;
 import ball.text.MapTable;
 import ball.util.jni.POSIX;
 import java.io.File;

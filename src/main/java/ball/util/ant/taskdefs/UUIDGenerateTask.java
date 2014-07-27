@@ -5,7 +5,6 @@
  */
 package ball.util.ant.taskdefs;
 
-import ball.annotation.AntTask;
 import ball.util.UUIDFactory;
 import java.util.UUID;
 import org.apache.tools.ant.Task;

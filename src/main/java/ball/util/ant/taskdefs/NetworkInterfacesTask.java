@@ -5,7 +5,6 @@
  */
 package ball.util.ant.taskdefs;
 
-import ball.annotation.AntTask;
 import java.net.NetworkInterface;
 import java.util.Collections;
 import java.util.List;

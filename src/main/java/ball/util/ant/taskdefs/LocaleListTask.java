@@ -5,7 +5,6 @@
  */
 package ball.util.ant.taskdefs;
 
-import ball.annotation.AntTask;
 import java.util.Locale;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
