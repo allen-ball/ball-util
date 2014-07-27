@@ -1,3 +1,8 @@
+2014-07-27  Allen D. Ball  <ball@sol.local>
+
+	* src/main/java/ball/annotation/processing/NoopProcessor.java:
+	Initial writing.
+
 2014-07-26  Allen D. Ball  <ball@sol.local>
 
 	* Moved @AntTask to ball.util.ant.taskdefs.
