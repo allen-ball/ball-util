@@ -5,10 +5,7 @@
  */
 package ball.util.ant.taskdefs;
 
-import ball.util.SuperclassSet;
 import org.apache.tools.ant.BuildException;
-
-import static ball.util.ClassOrder.INHERITANCE;
 
 /**
  * {@link.uri http://ant.apache.org/ Ant} {@link org.apache.tools.ant.Task}
