@@ -5,7 +5,7 @@
  */
 package ball.util;
 
-import java.util.TreeSet;
+import java.util.LinkedHashSet;
 
 /**
  * {@link TreeSet} implementation that calculates the superclasses and
@@ -14,7 +14,7 @@ import java.util.TreeSet;
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
-public class SuperclassSet extends TreeSet<Class<?>> {
+public class SuperclassSet extends LinkedHashSet<Class<?>> {
     private static final long serialVersionUID = -3268498163976821406L;
 
     /**
@@ -23,25 +23,26 @@ public class SuperclassSet extends TreeSet<Class<?>> {
      * @param   type            The {@link Class}.
      */
     public SuperclassSet(Class<?> type) {
-        super(ClassOrder.NAME);
+        super();
 
         addSuperclassesOf(type);
+        addInterfacesOf(type);
     }
 
     private void addSuperclassesOf(Class<?> type) {
         if (type != null) {
-            if (! contains(type)) {
-                add(type);
-
-                addSuperclassesOf(type.getSuperclass());
-                addSuperclassesOf(type.getInterfaces());
-            }
+            add(type);
+            addSuperclassesOf(type.getSuperclass());
         }
     }
 
-    private void addSuperclassesOf(Class<?>[] types) {
-        for (Class<?> type : types) {
-            addSuperclassesOf(type);
+    private void addInterfacesOf(Class<?> type) {
+        if (type != null) {
+            for (Class<?> supertype : type.getInterfaces()) {
+                addSuperclassesOf(supertype);
+            }
+
+            addInterfacesOf(type.getSuperclass());
         }
     }
 }

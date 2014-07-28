@@ -1,3 +1,8 @@
+2014-07-28  Allen D. Ball  <ball@sol.local>
+
+	* src/main/java/ball/util/SuperclassSet.java:
+	Re-factored as a subclass of LinkedHashSet.
+
 2014-07-27  Allen D. Ball  <ball@sol.local>
 
 	* src/main/java/ball/annotation/processing/NoopProcessor.java:
