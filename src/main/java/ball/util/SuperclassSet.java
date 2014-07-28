@@ -8,7 +8,7 @@ package ball.util;
 import java.util.LinkedHashSet;
 
 /**
- * {@link TreeSet} implementation that calculates the superclasses and
+ * {@link LinkedHashSet} implementation that calculates the superclasses and
  * super-interfaces of a {@link Class}.
  *
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
