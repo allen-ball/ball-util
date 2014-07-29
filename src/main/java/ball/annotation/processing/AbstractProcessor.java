@@ -18,6 +18,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 import javax.annotation.processing.Filer;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
@@ -35,12 +36,15 @@ import javax.lang.model.util.Types;
 import javax.tools.Diagnostic;
 import javax.tools.FileObject;
 
+import static java.beans.Introspector.decapitalize;
 import static java.util.Arrays.asList;
 import static java.util.Collections.disjoint;
+import static javax.lang.model.element.ElementKind.CLASS;
 import static javax.lang.model.element.ElementKind.METHOD;
 import static javax.lang.model.element.Modifier.PRIVATE;
 import static javax.lang.model.element.Modifier.PUBLIC;
 import static javax.lang.model.element.Modifier.STATIC;
+import static javax.lang.model.type.TypeKind.BOOLEAN;
 import static javax.lang.model.util.ElementFilter.constructorsIn;
 import static javax.lang.model.util.ElementFilter.methodsIn;
 
@@ -78,6 +82,9 @@ public abstract class AbstractProcessor
     protected Elements elements = null;
     /** See {@link ProcessingEnvironment#getTypeUtils()}. */
     protected Types types = null;
+
+    private static final String GET = "get";
+    private static final String IS = "is";
 
     /**
      * Sole constructor.
@@ -588,6 +595,49 @@ public abstract class AbstractProcessor
         }
 
         return value;
+    }
+
+    /**
+     * Method to get the {@link Set} of bean property names for the
+     * specified {@link TypeElement}.
+     *
+     * @param   type            The {@link TypeElement} to analyze.
+     *
+     * @return  The {@link Set} of bean property names.
+     */
+    protected Set<String> getPropertyNames(TypeElement type) {
+        TreeSet<String> set = new TreeSet<String>();
+
+        getPropertyNames(set, type);
+
+        return set;
+    }
+
+    private void getPropertyNames(Set<String> set, TypeElement type) {
+        for (ExecutableElement element :
+                 methodsIn(type.getEnclosedElements())) {
+            if ((! element.getModifiers().contains(PRIVATE))
+                && element.getParameters().isEmpty()
+                && (! types.getNullType().equals(element.getReturnType()))) {
+                String name = element.getSimpleName().toString();
+
+                if (name.startsWith(IS)) {
+                    if (element.getReturnType().getKind() == BOOLEAN) {
+                        set.add(decapitalize(name.substring(IS.length())));
+                    }
+                }
+
+                if (name.startsWith(GET)) {
+                    set.add(decapitalize(name.substring(GET.length())));
+                }
+            }
+        }
+
+        Element superclass = types.asElement(type.getSuperclass());
+
+        if (superclass != null && superclass.getKind() == CLASS) {
+            getPropertyNames(set, (TypeElement) superclass);
+        }
     }
 
     @Override

@@ -1,5 +1,9 @@
 2014-07-28  Allen D. Ball  <ball@sol.local>
 
+	* src/main/java/ball/annotation/processing/
+	AbstractProcessor.java, ConstructorPropertiesProcessor.java:
+	Re-factored getPropertyNames(TypeElement) to base class.
+
 	* src/main/java/ball/util/SuperclassSet.java:
 	Re-factored as a subclass of LinkedHashSet.
 
