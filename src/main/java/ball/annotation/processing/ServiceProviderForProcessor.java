@@ -131,8 +131,7 @@ public class ServiceProviderForProcessor extends AbstractAnnotationProcessor
                 break;
 
             default:
-                throw new IllegalStateException();
-                /* break; */
+                break;
             }
         } else {
             print(ERROR,

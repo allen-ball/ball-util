@@ -55,8 +55,7 @@ public class ForModifiersProcessor extends AbstractAnnotationProcessor {
             break;
 
         default:
-            throw new IllegalStateException();
-            /* break; */
+            break;
         }
     }
 }

@@ -87,8 +87,7 @@ public class JAXBIndexProcessor extends AbstractAnnotationProcessor
             break;
 
         default:
-            throw new IllegalStateException();
-            /* break; */
+            break;
         }
     }
 
