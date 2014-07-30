@@ -1,5 +1,12 @@
 2014-07-29  Allen D. Ball  <ball@sol.local>
 
+	* src/main/java/ball/annotation/processing/AbstractProcessor.java:
+	Changed getPropertyNames(TypeElement) implementation to use
+	BeanPropertyMethodEnum to determine candidate methods match getter
+	or setter method signatures.
+	Added isAssignable() methods for comparing parameter and argument
+	type lists.
+
 	* src/main/java/ball/util/BeanPropertyMethodEnum.java:
 	Initial writing.
 
