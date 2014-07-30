@@ -16,7 +16,6 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.nio.charset.Charset;
 import java.util.Arrays;
-import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -697,7 +696,7 @@ public abstract class AbstractProcessor
                  methodsIn(type.getEnclosedElements())) {
             if (! element.getModifiers().contains(PRIVATE)) {
                 for (BeanPropertyMethodEnum methodEnum :
-                         EnumSet.allOf(BeanPropertyMethodEnum.class)) {
+                         BeanPropertyMethodEnum.values()) {
                     String name =
                         methodEnum.getPropertyName(element.getSimpleName().toString());
 
