@@ -15,6 +15,8 @@ import java.util.Collections;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 
+import static ball.util.BeanPropertyMethodEnum.getPropertyName;
+
 /**
  * Interface indicating {@link Task} is annotated with {@link AntTask} and
  * related annotations.
@@ -99,9 +101,6 @@ public interface AnnotatedTask {
                               AnnotatedElement element,
                               Annotation... annotations) throws BuildException {
             for (Annotation annotation : annotations) {
-                validate(task, element,
-                         annotation.annotationType().getAnnotations());
-
                 AntTaskAttributeConstraint constraint =
                     annotation.annotationType()
                     .getAnnotation(AntTaskAttributeConstraint.class);
@@ -115,7 +114,7 @@ public interface AnnotatedTask {
                             name = ((Field) element).getName();
                             value = ((Field) element).get(task);
                         } else if (element instanceof Method) {
-                            name = ((Method) element).getName();
+                            name = getPropertyName((Method) element);
                             value = ((Method) element).invoke(task);
                         } else {
                             throw new IllegalStateException();
@@ -131,6 +130,8 @@ public interface AnnotatedTask {
                     } catch (Exception exception) {
                         throw new RuntimeException(exception);
                     }
+                } else {
+                    validate(task, element, annotation);
                 }
             }
         }
