@@ -93,10 +93,10 @@ public enum BeanPropertyMethodEnum {
             }
         }
 
-        private abstract class Templates<T> {
-            public abstract T GET();
-            public abstract void SET(T value);
-            public abstract boolean IS();
+        public interface Templates<T> {
+            public T GET();
+            public void SET(T value);
+            public boolean IS();
         }
     }
 }
