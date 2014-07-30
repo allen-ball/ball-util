@@ -5,6 +5,14 @@
  */
 package ball.util.ant.taskdefs;
 
+import ball.util.SuperclassSet;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.AnnotatedElement;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Collections;
+import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 
 /**
@@ -17,11 +25,11 @@ import org.apache.tools.ant.Task;
 public interface AnnotatedTask {
 
     /**
-     * {@link Implementation} class instance.
+     * {@link Delegate} class instance.
      *
-     * @see Implementation
+     * @see Delegate
      */
-    public static final Implementation IMPL = new Implementation();
+    public static final Delegate DELEGATE = new Delegate();
 
     /**
      * Method to get {@link AntTask#value()}.
@@ -29,28 +37,102 @@ public interface AnnotatedTask {
      * @return  {@link AntTask#value()} if {@code this} {@link Task} is
      *          annotated; {@code null} otherwise.
      *
-     * @see Implementation#getAntTaskName(Class)
+     * @see Delegate#getAntTaskName(Task)
      */
     public String getAntTaskName();
 
     /**
-     * {@link AnnotatedTask} helper class.
+     * Method to get check attributes annotated with
+     * {@link AntTaskAttributeConstraint}.
+     *
+     * @throws  BuildException  If a {@link AntTaskAttributeConstraint}
+     *                          {@link AntTaskAttributeValidator} fails.
+     *
+     * @see Delegate#validate(Task)
      */
-    public static class Implementation {
-        private Implementation() { }
+    public void validate() throws BuildException;
+
+    /**
+     * {@link AnnotatedTask} delegate helper class.
+     */
+    public static class Delegate {
+        private Delegate() { }
 
         /**
          * See {@link AnnotatedTask#getAntTaskName()}.
          *
-         * @param       type    The implementing {@link Class}.
+         * @param       task    The {@link Task}.
          *
-         * @return      {@link AntTask#value()} if the {@link Class} is
-         *          annotated; {@code null} otherwise.
+         * @return      {@link AntTask#value()} if the {@link Task} is
+         *              annotated; {@code null} otherwise.
          */
-        public String getAntTaskName(Class<? extends Task> type) {
-            AntTask annotation = type.getAnnotation(AntTask.class);
+        public String getAntTaskName(Task task) {
+            AntTask annotation = task.getClass().getAnnotation(AntTask.class);
 
             return (annotation != null) ? annotation.value() : null;
+        }
+
+        /**
+         * See {@link AnnotatedTask#validate()}.
+         *
+         * @param       task    The {@link Task} to validate.
+         *
+         * @throws      BuildException
+         *                      If a {@link AntTaskAttributeConstraint}
+         *                      {@link AntTaskAttributeValidator} fails.
+         */
+        public void validate(Task task) throws BuildException {
+            for (Class<?> type : new SuperclassSet(task.getClass())) {
+                ArrayList<AnnotatedElement> list =
+                    new ArrayList<AnnotatedElement>();
+
+                Collections.addAll(list, type.getDeclaredFields());
+                Collections.addAll(list, type.getDeclaredMethods());
+
+                for (AnnotatedElement element : list) {
+                    validate(task, element, element.getAnnotations());
+                }
+            }
+        }
+
+        private void validate(Task task,
+                              AnnotatedElement element,
+                              Annotation... annotations) throws BuildException {
+            for (Annotation annotation : annotations) {
+                validate(task, element,
+                         annotation.annotationType().getAnnotations());
+
+                AntTaskAttributeConstraint constraint =
+                    annotation.annotationType()
+                    .getAnnotation(AntTaskAttributeConstraint.class);
+
+                if (constraint != null) {
+                    try {
+                        String name = null;
+                        Object value = null;
+
+                        if (element instanceof Field) {
+                            name = ((Field) element).getName();
+                            value = ((Field) element).get(task);
+                        } else if (element instanceof Method) {
+                            name = ((Method) element).getName();
+                            value = ((Method) element).invoke(task);
+                        } else {
+                            throw new IllegalStateException();
+                        }
+
+                        constraint
+                            .value().newInstance()
+                            .validate(task, name, value);
+                    } catch (BuildException exception) {
+                        throw exception;
+                    } catch (RuntimeException exception) {
+                        throw exception;
+                    } catch (Exception exception) {
+                        throw new RuntimeException(exception);
+                    }
+                }
+            }
         }
     }
 }

@@ -1,5 +1,9 @@
 2014-07-29  Allen D. Ball  <ball@sol.local>
 
+	* Added AntTaskAttributeConstraint framework.  Added
+	AnnotatedTask.validate() callback (with delegate implementation)
+	to evaluate constraints.
+
 	* src/main/java/ball/annotation/processing/AbstractProcessor.java:
 	Changed getPropertyNames(TypeElement) implementation to use
 	BeanPropertyMethodEnum to determine candidate methods match getter

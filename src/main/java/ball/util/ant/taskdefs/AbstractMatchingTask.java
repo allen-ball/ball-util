@@ -103,7 +103,10 @@ public abstract class AbstractMatchingTask extends MatchingTask
     }
 
     @Override
-    public String getAntTaskName() { return IMPL.getAntTaskName(getClass()); }
+    public String getAntTaskName() { return DELEGATE.getAntTaskName(this); }
+
+    @Override
+    public void validate() throws BuildException { DELEGATE.validate(this); }
 
     @Override
     public String toString() { return getClass().getSimpleName(); }
