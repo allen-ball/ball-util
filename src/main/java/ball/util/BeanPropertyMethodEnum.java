@@ -82,6 +82,30 @@ public enum BeanPropertyMethodEnum {
         return pattern;
     }
 
+    /**
+     * Static method to get a property name from a {@link Method} name.
+     * (This method does not check return type or parameter types.)
+     *
+     * @return  The property name if method name matches the pattern;
+     *          {@code null} if the argument is {@code null} or the name
+     *          doesn't match.
+     */
+    public static String getPropertyName(Method method) {
+        String name = null;
+
+        if (method != null) {
+            for (BeanPropertyMethodEnum methodEnum : values()) {
+                name = methodEnum.getPropertyName(method.getName());
+
+                if (name != null) {
+                    break;
+                }
+            }
+        }
+
+        return name;
+    }
+
     private static class MethodTemplateMap extends TreeMap<String,Method> {
         private static final long serialVersionUID = -615108090828566640L;
 
