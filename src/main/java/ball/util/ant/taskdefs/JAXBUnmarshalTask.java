@@ -34,21 +34,17 @@ public class JAXBUnmarshalTask extends AbstractClasspathTask {
      */
     public JAXBUnmarshalTask() { super(); }
 
-    protected String getContext() { return context; }
+    @NotNull
+    public String getContext() { return context; }
     public void setContext(String context) { this.context = context; }
 
-    protected File getFile() { return file; }
+    @NotNull
+    public File getFile() { return file; }
     public void setFile(File file) { this.file = file; }
 
     @Override
     public void execute() throws BuildException {
-        if (getContext() == null) {
-            throw new BuildException("`context' attribute must be specified");
-        }
-
-        if (getFile() == null) {
-            throw new BuildException("`file' attribute must be specified");
-        }
+        super.execute();
 
         try {
             Object object =

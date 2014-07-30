@@ -29,7 +29,7 @@ public class JAXBMarshalTask extends InstanceOfTask {
      */
     public JAXBMarshalTask() { super(); }
 
-    protected String getContext() { return context; }
+    public String getContext() { return context; }
     public void setContext(String context) { this.context = context; }
 
     @Override

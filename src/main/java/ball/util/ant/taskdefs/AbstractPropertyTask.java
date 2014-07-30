@@ -24,7 +24,7 @@ public abstract class AbstractPropertyTask extends AbstractClasspathTask {
      */
     protected AbstractPropertyTask() { super(); }
 
-    protected String getProperty() { return property; }
+    public String getProperty() { return property; }
     public void setProperty(String property) { this.property = property; }
 
     /**
@@ -36,6 +36,8 @@ public abstract class AbstractPropertyTask extends AbstractClasspathTask {
 
     @Override
     public void execute() throws BuildException {
+        super.execute();
+
         String key = getProperty();
         String value = null;
 

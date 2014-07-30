@@ -28,14 +28,13 @@ public class MembersOfTask extends AbstractClasspathTask {
      */
     public MembersOfTask() { super(); }
 
-    protected String getType() { return type; }
+    @NotNull
+    public String getType() { return type; }
     public void setType(String type) { this.type = type; }
 
     @Override
     public void execute() throws BuildException {
-        if (getType() == null) {
-            throw new BuildException("`type' attribute must be specified");
-        }
+        super.execute();
 
         try {
             Class<?> type = Class.forName(getType(), false, getClassLoader());

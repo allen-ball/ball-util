@@ -30,7 +30,7 @@ public class BootstrapProcessorTask extends AbstractClassFileTask {
      */
     public BootstrapProcessorTask() { super(); }
 
-    protected File getDestdir() { return destdir; }
+    public File getDestdir() { return destdir; }
     public void setDestdir(File destdir) { this.destdir = destdir; }
 
     @Override

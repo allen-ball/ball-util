@@ -51,7 +51,9 @@ public abstract class AbstractClasspathTask extends Task
     }
 
     @Override
-    public abstract void execute() throws BuildException;
+    public void execute() throws BuildException {
+        validate();
+    }
 
     /**
      * Method to get the {@link AntClassLoader} specified by this

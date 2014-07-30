@@ -1,5 +1,9 @@
 2014-07-29  Allen D. Ball  <ball@sol.local>
 
+	* Changed all Ant Task implementations to call
+	AnnotatedTask.validate() in execute() and applied
+	AntTaskAttributeConstraint annotations.
+
 	* Added AntTaskAttributeConstraint framework.  Added
 	AnnotatedTask.validate() callback (with delegate implementation)
 	to evaluate constraints.

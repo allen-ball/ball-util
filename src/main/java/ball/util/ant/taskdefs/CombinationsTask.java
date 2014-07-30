@@ -30,17 +30,9 @@ public abstract class CombinationsTask extends InstanceOfTask {
      */
     protected CombinationsTask() { super(); }
 
-    protected Integer getCount() { return count; }
+    @NotNull
+    public Integer getCount() { return count; }
     public void setCount(Integer count) { this.count = count; }
-
-    @Override
-    public void execute() throws BuildException {
-        if (getCount() == null) {
-            throw new BuildException("`count' attribute must be specified");
-        }
-
-        super.execute();
-    }
 
     /**
      * {@link.uri http://ant.apache.org/ Ant}

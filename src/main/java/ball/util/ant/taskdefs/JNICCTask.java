@@ -33,7 +33,7 @@ public class JNICCTask extends AbstractJNIExecuteOnTask {
         setParallel(false);
     }
 
-    protected File getInclude() { return include; }
+    public File getInclude() { return include; }
     public void setInclude(File include) { this.include = include; }
 
     public void addConfiguredDefine(Definition definition) {

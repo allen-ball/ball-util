@@ -30,14 +30,13 @@ public class ServiceListTask extends AbstractClasspathTask {
      */
     public ServiceListTask() { super(); }
 
-    protected String getType() { return type; }
+    @NotNull
+    public String getType() { return type; }
     public void setType(String type) { this.type = type; }
 
     @Override
     public void execute() throws BuildException {
-        if (getType() == null) {
-            throw new BuildException("`type' attribute must be specified");
-        }
+        super.execute();
 
         try {
             Class<? extends Object> service =

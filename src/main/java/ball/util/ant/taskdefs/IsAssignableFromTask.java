@@ -26,21 +26,17 @@ public class IsAssignableFromTask extends AbstractClasspathTask {
      */
     public IsAssignableFromTask() { super(); }
 
-    protected String getType() { return type; }
+    @NotNull
+    public String getType() { return type; }
     public void setType(String type) { this.type = type; }
 
-    protected String getSubtype() { return subtype; }
+    @NotNull
+    public String getSubtype() { return subtype; }
     public void setSubtype(String subtype) { this.subtype = subtype; }
 
     @Override
     public void execute() throws BuildException {
-        if (getType() == null) {
-            throw new BuildException("`type' attribute must be specified");
-        }
-
-        if (getSubtype() == null) {
-            throw new BuildException("`subtype' attribute must be specified");
-        }
+        super.execute();
 
         try {
             Class<?> supertype =

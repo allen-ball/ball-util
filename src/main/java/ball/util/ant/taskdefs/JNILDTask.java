@@ -37,16 +37,17 @@ public class JNILDTask extends AbstractJNIExecuteOnTask {
         setParallel(true);
     }
 
-    protected String getLibname() { return libname; }
+    @NotNull
+    public String getLibname() { return libname; }
     public void setLibname(String libname) { this.libname = libname; }
 
-    protected String getPrefix() { return prefix; }
+    public String getPrefix() { return prefix; }
     public void setPrefix(String prefix) { this.prefix = prefix; }
 
-    protected String getSuffix() { return suffix; }
+    public String getSuffix() { return suffix; }
     public void setSuffix(String suffix) { this.suffix = suffix; }
 
-    protected String getProperty() { return property; }
+    public String getProperty() { return property; }
     public void setProperty(String property) { this.property = property; }
 
     public void addConfiguredLink(Library library) { linkSet.add(library); }
@@ -79,10 +80,6 @@ public class JNILDTask extends AbstractJNIExecuteOnTask {
     @Override
     public void execute() throws BuildException {
         super.execute();
-
-        if (getLibname() == null) {
-            throw new BuildException("`libname' attribute must be specified");
-        }
 
         if (getProperty() != null) {
             getProject().setProperty(getProperty(), getName());

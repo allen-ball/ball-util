@@ -36,10 +36,10 @@ public abstract class AbstractClassFileTask extends AbstractClasspathTask {
      */
     protected AbstractClassFileTask() { super(); }
 
-    protected File getBasedir() { return basedir; }
+    public File getBasedir() { return basedir; }
     public void setBasedir(File basedir) { this.basedir = basedir; }
 
-    protected Path getSrcdir() { return srcPath; }
+    public Path getSrcdir() { return srcPath; }
     public void setSrcdir(Path srcdir) {
         if (srcPath == null) {
             srcPath = srcdir;
@@ -58,6 +58,8 @@ public abstract class AbstractClassFileTask extends AbstractClasspathTask {
 
     @Override
     public void execute() throws BuildException {
+        super.execute();
+
         if (getBasedir() == null) {
             setBasedir(getProject().resolveFile("."));
         }

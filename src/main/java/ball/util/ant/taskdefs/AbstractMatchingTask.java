@@ -32,14 +32,16 @@ public abstract class AbstractMatchingTask extends MatchingTask
      */
     protected AbstractMatchingTask() { super(); }
 
-    protected File getBasedir() { return basedir; }
+    public File getBasedir() { return basedir; }
     public void setBasedir(File basedir) { this.basedir = basedir; }
 
-    protected File getFile() { return file; }
+    public File getFile() { return file; }
     public void setFile(File file) { this.file = file; }
 
     @Override
     public void execute() throws BuildException {
+        validate();
+
         if (getBasedir() == null && getFile() == null) {
             setBasedir(getProject().resolveFile("."));
         }

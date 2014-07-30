@@ -124,6 +124,8 @@ public abstract class JNDITask extends AbstractClasspathTask {
 
         @Override
         public void execute() throws BuildException {
+            super.execute();
+
             ClassLoader loader =
                 Thread.currentThread().getContextClassLoader();
 
@@ -167,17 +169,16 @@ public abstract class JNDITask extends AbstractClasspathTask {
          */
         public Lookup() { super(); }
 
-        protected String getName() { return name; }
+        @NotNull
+        public String getName() { return name; }
         public void setName(String name) { this.name = name; }
 
-        protected String getProperty() { return property; }
+        public String getProperty() { return property; }
         public void setProperty(String property) { this.property = property; }
 
         @Override
         public void execute() throws BuildException {
-            if (getName() == null) {
-                throw new BuildException("`name' attribute must be specified");
-            }
+            super.execute();
 
             ClassLoader loader =
                 Thread.currentThread().getContextClassLoader();

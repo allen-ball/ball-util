@@ -39,10 +39,10 @@ public class JNIClassesTask extends AbstractClassFileTask {
         setSeparator(COMMA);
     }
 
-    protected String getProperty() { return property; }
+    public String getProperty() { return property; }
     public void setProperty(String property) { this.property = property; }
 
-    protected String getSeparator() { return separator; }
+    public String getSeparator() { return separator; }
     public void setSeparator(String separator) { this.separator = separator; }
 
     @Override

@@ -40,27 +40,24 @@ public class SubclassesOfTask extends AbstractClassFileTask {
         setSeparator(COMMA);
     }
 
-    protected String getType() { return type; }
+    @NotNull
+    public String getType() { return type; }
     public void setType(String type) { this.type = type; }
 
-    protected boolean getIncludeAbstract() { return includeAbstract; }
+    public boolean getIncludeAbstract() { return includeAbstract; }
     public void setIncludeAbstract(boolean includeAbstract) {
         this.includeAbstract = includeAbstract;
     }
 
-    protected String getProperty() { return property; }
+    public String getProperty() { return property; }
     public void setProperty(String property) { this.property = property; }
 
-    protected String getSeparator() { return separator; }
+    public String getSeparator() { return separator; }
     public void setSeparator(String separator) { this.separator = separator; }
 
     @Override
     public void execute() throws BuildException {
         super.execute();
-
-        if (getType() == null) {
-            throw new BuildException("`type' attribute must be specified");
-        }
 
         try {
             Class<?> supertype =

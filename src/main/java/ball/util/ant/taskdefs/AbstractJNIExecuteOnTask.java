@@ -76,13 +76,13 @@ public abstract class AbstractJNIExecuteOnTask extends ExecuteOn
         setVerbose(true);
     }
 
-    protected String getArch() { return arch; }
+    public String getArch() { return arch; }
     public void setArch(String arch) { this.arch = arch; }
 
-    protected String getOS() { return os; }
+    public String getOS() { return os; }
     public void setOS(String os) { this.os = os; }
 
-    protected File getDestdir() { return destdir; }
+    public File getDestdir() { return destdir; }
     public void setDestdir(File destdir) { this.destdir = destdir; }
 
     protected abstract String command();
@@ -102,6 +102,8 @@ public abstract class AbstractJNIExecuteOnTask extends ExecuteOn
 
     @Override
     public void execute() throws BuildException {
+        validate();
+
         if (getDestdir() == null) {
             setDestdir(getProject().resolveFile("."));
         }

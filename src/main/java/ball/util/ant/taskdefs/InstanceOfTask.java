@@ -44,19 +44,22 @@ public class InstanceOfTask extends AbstractClasspathTask {
      */
     public InstanceOfTask() { super(); }
 
-    protected String getType() { return type; }
+    @NotNull
+    public String getType() { return type; }
     public void setType(String type) { this.type = type; }
 
     public void addConfiguredArgument(Argument argument) {
         list.add(argument);
     }
 
-    protected List<Argument> getArgumentList() { return list; }
+    public List<Argument> getArgumentList() { return list; }
 
     public void setArgument(String string) { list.add(new Argument(string)); }
 
     @Override
     public void execute() throws BuildException {
+        super.execute();
+
         try {
             Class<?> type = Class.forName(getType(), false, getClassLoader());
 
@@ -142,10 +145,10 @@ public class InstanceOfTask extends AbstractClasspathTask {
          */
         public Argument() { this(null); }
 
-        protected String getType() { return type; }
+        public String getType() { return type; }
         public void setType(String type) { this.type = type; }
 
-        protected String getValue() { return value; }
+        public String getValue() { return value; }
         public void setValue(String value) { this.value = value; }
 
         @Override

@@ -28,15 +28,12 @@ public class InetAddressesForTask extends Task {
      */
     public InetAddressesForTask() { super(); }
 
-    protected String getString() { return string; }
+    @NotNull
+    public String getString() { return string; }
     public void setString(String string) { this.string = string; }
 
     @Override
     public void execute() throws BuildException {
-        if (getString() == null) {
-            throw new BuildException("`string' attribute must be specified");
-        }
-
         try {
             log(Arrays.toString(InetAddress.getAllByName(getString())));
         } catch (BuildException exception) {

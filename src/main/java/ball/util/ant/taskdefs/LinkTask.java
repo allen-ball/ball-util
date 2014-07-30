@@ -43,10 +43,10 @@ public class LinkTask extends Copy {
         }
     }
 
-    protected boolean isRelative() { return relative; }
+    public boolean isRelative() { return relative; }
     public void setRelative(boolean relative) { this.relative = relative; }
 
-    protected boolean isSymbolic() { return symbolic; }
+    public boolean isSymbolic() { return symbolic; }
     public void setSymbolic(boolean symbolic) { this.symbolic = symbolic; }
 
     @Override

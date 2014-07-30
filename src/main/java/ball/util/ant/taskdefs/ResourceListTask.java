@@ -34,14 +34,13 @@ public class ResourceListTask extends AbstractClasspathTask {
      */
     public ResourceListTask() { super(); }
 
-    protected String getName() { return name; }
+    @NotNull
+    public String getName() { return name; }
     public void setName(String name) { this.name = name; }
 
     @Override
     public void execute() throws BuildException {
-        if (getName() == null) {
-            throw new BuildException("`name' attribute must be specified");
-        }
+        super.execute();
 
         try {
             log(NIL);
