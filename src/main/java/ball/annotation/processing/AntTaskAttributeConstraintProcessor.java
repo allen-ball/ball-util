@@ -8,6 +8,7 @@ package ball.annotation.processing;
 import ball.annotation.ServiceProviderFor;
 import ball.util.BeanPropertyMethodEnum;
 import ball.util.ant.taskdefs.AntTaskAttributeConstraint;
+import ball.util.ant.taskdefs.NotEmpty;
 import ball.util.ant.taskdefs.NotNull;
 import java.util.Arrays;
 import javax.annotation.processing.Processor;
@@ -26,7 +27,7 @@ import static javax.tools.Diagnostic.Kind.ERROR;
  * @version $Revision$
  */
 @ServiceProviderFor({ Processor.class })
-@For({ AntTaskAttributeConstraint.class, NotNull.class })
+@For({ AntTaskAttributeConstraint.class, NotEmpty.class, NotNull.class })
 public class AntTaskAttributeConstraintProcessor
              extends AbstractAnnotationProcessor {
 
