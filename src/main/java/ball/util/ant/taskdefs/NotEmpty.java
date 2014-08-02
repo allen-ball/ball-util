@@ -16,7 +16,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
  * {@link AntTaskAttributeConstraint} annotation to indicate that an
- * attribute cannot be {@code null}.
+ * attribute cannot be an empty {@link java.util.Collection}.
  *
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
