@@ -6,6 +6,9 @@
 	* src/main/java/ball/tools/javadoc/AbstractTaglet.java:
 	Changed getClassDocLink(Doc,Class<?>) to handle array types.
 
+	* src/main/java/ball/tools/javadoc/BeanInfoTaglet.java:
+	Added "isIndexed" column and correctly link array types.
+
 2014-08-08  Allen D. Ball  <ball@sol.local>
 
 	* src/main/java/ball/text/ColumnWidthsTableModelListener.java:

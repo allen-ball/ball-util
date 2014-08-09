@@ -16,6 +16,7 @@ import com.sun.tools.doclets.internal.toolkit.taglets.TagletOutput;
 import com.sun.tools.doclets.internal.toolkit.taglets.TagletWriter;
 import java.beans.BeanDescriptor;
 import java.beans.BeanInfo;
+import java.beans.IndexedPropertyDescriptor;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.util.Arrays;
@@ -118,7 +119,7 @@ public class BeanInfoTaglet extends AbstractInlineTaglet {
 
         Object[] headers = new String[] {
             "Property", "Mode", "Type",
-            "isHidden", "isBound", "isConstrained"
+            "isIndexed", "isHidden", "isBound", "isConstrained"
         };
 
         headers = HTML.b(table.getOwnerDocument(), headers);
@@ -127,9 +128,18 @@ public class BeanInfoTaglet extends AbstractInlineTaglet {
         HTML.tr(table, headers);
 
         for (PropertyDescriptor row : descriptors) {
+            boolean isIndexed = (row instanceof IndexedPropertyDescriptor);
+            Class<?> type = row.getPropertyType();
+
+            if (isIndexed) {
+                type =
+                    ((IndexedPropertyDescriptor) row).getIndexedPropertyType();
+            }
+
             HTML.tr(table,
                     row.getName(), BeanInfoUtil.getMode(row),
-                    getClassDocLink(doc, row.getPropertyType()),
+                    getClassDocLink(doc, type),
+                    isIndexed,
                     row.isHidden(), row.isBound(), row.isConstrained());
         }
 
