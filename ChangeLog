@@ -1,3 +1,8 @@
+2014-08-08  Allen D. Ball  <ball@sol.local>
+
+	* src/main/java/ball/text/ColumnWidthsTableModelListener.java:
+	Initial writing.
+
 2014-08-03  Allen D. Ball  <ball@sol.local>
 
 	* Added ball.swing.table package.
