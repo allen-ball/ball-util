@@ -5,9 +5,11 @@
  */
 package ball.util.ant.taskdefs;
 
+import ball.text.TextTable;
 import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
+import javax.swing.table.TableModel;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.taskdefs.ExecuteOn;
@@ -139,6 +141,18 @@ public abstract class AbstractJNIExecuteOnTask extends ExecuteOn
      */
     protected String getBundleString(String name) {
         return BUNDLE.getString(getOS(), getArch(), name);
+    }
+
+    /**
+     * See {@link #log(Iterable)}.
+     */
+    protected void log(TableModel model) { log(model, Project.MSG_INFO); }
+
+    /**
+     * See {@link #log(Iterable,int)}.
+     */
+    protected void log(TableModel model, int msgLevel) {
+        log(new TextTable(model), Project.MSG_INFO);
     }
 
     /**

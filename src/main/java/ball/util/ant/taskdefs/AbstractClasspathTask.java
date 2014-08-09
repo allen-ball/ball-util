@@ -5,10 +5,12 @@
  */
 package ball.util.ant.taskdefs;
 
+import ball.text.TextTable;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import javax.swing.table.TableModel;
 import org.apache.tools.ant.AntClassLoader;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
@@ -71,6 +73,18 @@ public abstract class AbstractClasspathTask extends Task
         loader.setParent(getClass().getClassLoader());
 
         return loader;
+    }
+
+    /**
+     * See {@link #log(Iterable)}.
+     */
+    protected void log(TableModel model) { log(model, Project.MSG_INFO); }
+
+    /**
+     * See {@link #log(Iterable,int)}.
+     */
+    protected void log(TableModel model, int msgLevel) {
+        log(new TextTable(model), Project.MSG_INFO);
     }
 
     /**

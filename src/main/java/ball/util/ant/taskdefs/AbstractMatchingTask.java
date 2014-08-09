@@ -5,10 +5,12 @@
  */
 package ball.util.ant.taskdefs;
 
+import ball.text.TextTable;
 import java.io.File;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
+import javax.swing.table.TableModel;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.taskdefs.MatchingTask;
@@ -70,6 +72,18 @@ public abstract class AbstractMatchingTask extends MatchingTask
         }
 
         return set;
+    }
+
+    /**
+     * See {@link #log(Iterable)}.
+     */
+    protected void log(TableModel model) { log(model, Project.MSG_INFO); }
+
+    /**
+     * See {@link #log(Iterable,int)}.
+     */
+    protected void log(TableModel model, int msgLevel) {
+        log(new TextTable(model), Project.MSG_INFO);
     }
 
     /**

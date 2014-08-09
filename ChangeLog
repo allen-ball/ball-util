@@ -1,5 +1,10 @@
 2014-08-09  Allen D. Ball  <ball@sol.local>
 
+	* src/main/java/ball/util/ant/taskdefs/AbstractClasspathTask.java,
+	src/main/java/ball/util/ant/taskdefs/AbstractJNIExecuteOnTask.java,
+	src/main/java/ball/util/ant/taskdefs/AbstractMatchingTask.java:
+	Added log(TableModel) and log(TableModel,int) methods.
+
 	* src/main/java/ball/swing/table/AbstractTableModelImpl.java:
 	Initial writing.
 
