@@ -5,9 +5,8 @@
  */
 package ball.util.ant.taskdefs;
 
-import ball.text.ArrayListTableModel;
-import ball.text.SimpleTable;
-import ball.text.TextTable;
+import ball.swing.table.ArrayListTableModel;
+import ball.swing.table.SimpleTableModel;
 import ball.util.BeanInfoUtil;
 import java.beans.BeanDescriptor;
 import java.beans.BeanInfo;
@@ -58,19 +57,9 @@ public class BeanInfoForTask extends AbstractClasspathTask {
     }
 
     private void log(BeanInfo bean) {
-        TextTable header = new BeanHeaderTable(bean.getBeanDescriptor());
-        TextTable table = new BeanPropertyTable(bean.getPropertyDescriptors());
-
-        for (String line : header) {
-            log(line);
-        }
-
+        log(new BeanHeaderTableModel(bean.getBeanDescriptor()));
         log(NIL);
-
-        for (String line : table) {
-            log(line);
-        }
-
+        log(new BeanPropertyTableModel(bean.getPropertyDescriptors()));
         log(bean.getAdditionalBeanInfo());
     }
 
@@ -83,9 +72,11 @@ public class BeanInfoForTask extends AbstractClasspathTask {
         }
     }
 
-    private class BeanHeaderTable extends SimpleTable {
-        public BeanHeaderTable(BeanDescriptor descriptor) {
-            super(2);
+    private class BeanHeaderTableModel extends SimpleTableModel {
+        private static final long serialVersionUID = 8971908583993581514L;
+
+        public BeanHeaderTableModel(BeanDescriptor descriptor) {
+            super(new Object[][] { }, 2);
 
             row("Bean Class:",
                 descriptor.getBeanClass().getName());
@@ -97,15 +88,9 @@ public class BeanInfoForTask extends AbstractClasspathTask {
         }
     }
 
-    private class BeanPropertyTable extends TextTable {
-        public BeanPropertyTable(PropertyDescriptor[] rows) {
-            super(new BeanPropertyTableModel(rows));
-        }
-    }
-
     private class BeanPropertyTableModel
                   extends ArrayListTableModel<PropertyDescriptor> {
-        private static final long serialVersionUID = 4092624978038121007L;
+        private static final long serialVersionUID = -8940320167807577680L;
 
         public BeanPropertyTableModel(PropertyDescriptor[] rows) {
             super(Arrays.asList(rows),

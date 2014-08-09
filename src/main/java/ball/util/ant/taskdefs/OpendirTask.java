@@ -6,8 +6,7 @@
 package ball.util.ant.taskdefs;
 
 import ball.io.IOUtil;
-import ball.text.ArrayListTableModel;
-import ball.text.TextTable;
+import ball.swing.table.ArrayListTableModel;
 import ball.util.jni.DIR;
 import ball.util.jni.POSIX;
 import java.io.File;
@@ -46,11 +45,7 @@ public class OpendirTask extends AbstractMatchingTask {
                 dirp = POSIX.opendir(file);
 
                 log(NIL);
-
-                for (String line :
-                         new TextTable(new TableModelImpl(dirp, file))) {
-                    log(line);
-                }
+                log(new TableModelImpl(dirp, file));
             } finally {
                 try {
                     IOUtil.close(dirp);
@@ -62,7 +57,7 @@ public class OpendirTask extends AbstractMatchingTask {
     }
 
     private class TableModelImpl extends ArrayListTableModel<String> {
-        private static final long serialVersionUID = -7344745156450390992L;
+        private static final long serialVersionUID = -7558131158505546679L;
 
         public TableModelImpl(DIR dirp, File file) {
             super(dirp, String.valueOf(file));

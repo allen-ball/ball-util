@@ -5,8 +5,7 @@
  */
 package ball.util.ant.taskdefs;
 
-import ball.text.ArrayListTableModel;
-import ball.text.TextTable;
+import ball.swing.table.ArrayListTableModel;
 import ball.util.Regex;
 import java.util.Collections;
 import java.util.Hashtable;
@@ -66,20 +65,11 @@ public abstract class JNDITask extends AbstractClasspathTask {
      */
     protected void log(Context context) throws NamingException {
         log(NIL);
-
-        for (String line : new ContextTable(context)) {
-            log(line);
-        }
-    }
-
-    private class ContextTable extends TextTable {
-        public ContextTable(Context context) throws NamingException {
-            super(new ContextTableModel(context));
-        }
+        log(new ContextTableModel(context));
     }
 
     private class ContextTableModel extends ArrayListTableModel<Binding> {
-        private static final long serialVersionUID = -6380659141051842412L;
+        private static final long serialVersionUID = -9071374026742198331L;
 
         public ContextTableModel(Context context) throws NamingException {
             super(Collections.list(context.listBindings(NIL)),

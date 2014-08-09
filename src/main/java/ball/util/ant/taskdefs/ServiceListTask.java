@@ -5,8 +5,7 @@
  */
 package ball.util.ant.taskdefs;
 
-import ball.text.ArrayListTableModel;
-import ball.text.TextTable;
+import ball.swing.table.ArrayListTableModel;
 import java.util.ServiceLoader;
 import org.apache.tools.ant.BuildException;
 
@@ -46,11 +45,7 @@ public class ServiceListTask extends AbstractClasspathTask {
                 ServiceLoader.load(service, service.getClassLoader());
 
             log(NIL);
-
-            for (String line :
-                     new TextTable(new ServiceTableModel<Object>(loader))) {
-                log(line);
-            }
+            log(new ServiceTableModel<Object>(loader));
         } catch (BuildException exception) {
             throw exception;
         } catch (Throwable throwable) {
@@ -60,7 +55,7 @@ public class ServiceListTask extends AbstractClasspathTask {
     }
 
     private class ServiceTableModel<T> extends ArrayListTableModel<T> {
-        private static final long serialVersionUID = 3484542128744178765L;
+        private static final long serialVersionUID = -5715637931939152699L;
 
         public ServiceTableModel(ServiceLoader<? extends T> loader) {
             super(loader, loader.toString());

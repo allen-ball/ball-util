@@ -5,8 +5,7 @@
  */
 package ball.util.ant.taskdefs;
 
-import ball.text.ArrayListTableModel;
-import ball.text.TextTable;
+import ball.swing.table.ArrayListTableModel;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Collection;
@@ -44,10 +43,7 @@ public class ResourceListTask extends AbstractClasspathTask {
 
         try {
             log(NIL);
-
-            for (String line : new TextTable(new TableModelImpl(getName()))) {
-                log(line);
-            }
+            log(new TableModelImpl(getName()));
         } catch (BuildException exception) {
             throw exception;
         } catch (Throwable throwable) {
@@ -57,7 +53,7 @@ public class ResourceListTask extends AbstractClasspathTask {
     }
 
     private class TableModelImpl extends ArrayListTableModel<URL> {
-        private static final long serialVersionUID = -5969955756512777492L;
+        private static final long serialVersionUID = 3143072162049088643L;
 
         public TableModelImpl(String name) throws IOException {
             this(Collections.list(getClassLoader().getResources(name)), name);

@@ -6,8 +6,7 @@
 package ball.util.ant.taskdefs;
 
 import ball.activation.ReaderWriterDataSource;
-import ball.text.MapTableModel;
-import ball.text.TextTable;
+import ball.swing.table.MapTableModel;
 import ball.util.BeanMap;
 import ball.util.Factory;
 import java.beans.ExceptionListener;
@@ -94,7 +93,7 @@ public class InstanceOfTask extends AbstractClasspathTask {
 
             if (! map.isEmpty()) {
                 log(NIL);
-                log(new TextTable(new MapTableModelImpl(map)));
+                log(new MapTableModelImpl(map));
             }
 
             if (getClass().isAssignableFrom(InstanceOfTask.class)) {
@@ -156,7 +155,7 @@ public class InstanceOfTask extends AbstractClasspathTask {
     }
 
     private class ClassList extends ArrayList<Class<?>> {
-        private static final long serialVersionUID = 2550066994634751402L;
+        private static final long serialVersionUID = -4504828433924386345L;
 
         public ClassList() { super(); }
 
@@ -165,7 +164,7 @@ public class InstanceOfTask extends AbstractClasspathTask {
     }
 
     private class MapTableModelImpl extends MapTableModel<String,Object> {
-        private static final long serialVersionUID = -8318399100323530367L;
+        private static final long serialVersionUID = -5822168627317896186L;
 
         public MapTableModelImpl(Map<String,Object> map) {
             super(map, "Property Name", "Value");

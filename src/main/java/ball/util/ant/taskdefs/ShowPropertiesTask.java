@@ -5,8 +5,7 @@
  */
 package ball.util.ant.taskdefs;
 
-import ball.text.ArrayListTableModel;
-import ball.text.TextTable;
+import ball.swing.table.ArrayListTableModel;
 import ball.util.Property;
 import java.util.Collection;
 import org.apache.tools.ant.BuildException;
@@ -40,14 +39,9 @@ public class ShowPropertiesTask extends AbstractClassFileTask {
                     Property.getStaticPropertyFields(type);
 
                 if (! collection.isEmpty()) {
-                    TextTable table = new PropertyTable(collection);
-
                     log(NIL);
                     log(type.getName());
-
-                    for (String line : table) {
-                        log(line);
-                    }
+                    log(new PropertyTableModel(collection));
                 }
             }
         } catch (BuildException exception) {
@@ -58,14 +52,8 @@ public class ShowPropertiesTask extends AbstractClassFileTask {
         }
     }
 
-    private class PropertyTable extends TextTable {
-        public PropertyTable(Collection<Property<?>> collection) {
-            super(new PropertyTableModel(collection));
-        }
-    }
-
     private class PropertyTableModel extends ArrayListTableModel<Property<?>> {
-        private static final long serialVersionUID = -5904606396606185528L;
+        private static final long serialVersionUID = -8530857150274440131L;
 
         public PropertyTableModel(Collection<Property<?>> collection) {
             super(collection, 3);

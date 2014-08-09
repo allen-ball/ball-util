@@ -5,8 +5,7 @@
  */
 package ball.util.ant.taskdefs;
 
-import ball.text.MapTableModel;
-import ball.text.TextTable;
+import ball.swing.table.MapTableModel;
 import ball.util.BeanMap;
 import java.io.File;
 import java.util.Map;
@@ -58,7 +57,7 @@ public class JAXBUnmarshalTask extends AbstractClasspathTask {
 
             if (! map.isEmpty()) {
                 log(NIL);
-                log(new TextTable(new MapTableModelImpl(map)));
+                log(new MapTableModelImpl(map));
             }
         } catch (BuildException exception) {
             throw exception;
@@ -69,7 +68,7 @@ public class JAXBUnmarshalTask extends AbstractClasspathTask {
     }
 
     private class MapTableModelImpl extends MapTableModel<String,Object> {
-        private static final long serialVersionUID = -3462718921749259867L;
+        private static final long serialVersionUID = 5596210755886286084L;
 
         public MapTableModelImpl(Map<String,Object> map) {
             super(map, "Property Name", "Value");

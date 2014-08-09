@@ -5,7 +5,7 @@
  */
 package ball.util.ant.taskdefs;
 
-import ball.text.MapTable;
+import ball.swing.table.MapTableModel;
 import ball.util.jni.POSIX;
 import java.io.File;
 import java.util.LinkedHashMap;
@@ -45,10 +45,7 @@ public class ReadlinkTask extends AbstractMatchingTask {
         }
 
         if (! map.isEmpty()) {
-            for (String line :
-                     new MapTable<File,File>(map, "Link", "Target")) {
-                log(line);
-            }
+            log(new MapTableModel<File,File>(map, "Link", "Target"));
         }
     }
 }
