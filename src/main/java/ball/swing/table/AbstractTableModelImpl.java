@@ -6,6 +6,8 @@
 package ball.swing.table;
 
 import java.util.Arrays;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 
 /**
@@ -16,7 +18,8 @@ import javax.swing.table.AbstractTableModel;
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
-public abstract class AbstractTableModelImpl extends AbstractTableModel {
+public abstract class AbstractTableModelImpl extends AbstractTableModel
+                                             implements TableModelListener {
     private String[] names = new String[] { };
     private Class<?>[] types = new Class<?>[] { };
 
@@ -29,7 +32,15 @@ public abstract class AbstractTableModelImpl extends AbstractTableModel {
     protected AbstractTableModelImpl(String... names) {
         super();
 
-        this.names = Arrays.copyOf(names, names.length);
+        if (names.length > 0) {
+            this.names = Arrays.copyOf(names, names.length);
+            this.types = Arrays.copyOf(types, names.length);
+        } else {
+            throw new IllegalArgumentException("names="
+                                               + Arrays.asList(names));
+        }
+
+        addTableModelListener(this);
     }
 
     /**
@@ -41,8 +52,6 @@ public abstract class AbstractTableModelImpl extends AbstractTableModel {
     protected AbstractTableModelImpl(int columns) {
         this(new String[columns]);
     }
-
-    { types = Arrays.copyOf(types, getColumnCount()); }
 
     /**
      * Convenience method to get the column names as an array.
@@ -103,9 +112,7 @@ public abstract class AbstractTableModelImpl extends AbstractTableModel {
     public void setColumnClass(int x, Class<?> type) { types[x] = type; }
 
     @Override
-    public String getColumnName(int x) {
-        return (names[x] != null) ? names[x] : super.getColumnName(x);
-    }
+    public String getColumnName(int x) { return names[x]; }
 
     public void setColumnName(int x, String name) { names[x] = name; }
 
@@ -122,6 +129,9 @@ public abstract class AbstractTableModelImpl extends AbstractTableModel {
     public void setValueAt(Object value, int y, int x) {
         throw new UnsupportedOperationException("setValueAt(Object,int,int)");
     }
+
+    @Override
+    public void tableChanged(TableModelEvent event) { }
 
     @Override
     public String toString() { return super.toString(); }

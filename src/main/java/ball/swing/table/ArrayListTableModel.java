@@ -3,31 +3,32 @@
  *
  * Copyright 2009 - 2014 Allen D. Ball.  All rights reserved.
  */
-package ball.text;
+package ball.swing.table;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
 /**
- * Abstract base class for {@link TableModel} implementations based on an
- * {@link ArrayList}.
+ * Abstract base class for {@link javax.swing.table.TableModel}
+ * implementations based on an {@link ArrayList}.
  *
  * @param       <R>     The type of table row.
  *
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
-public abstract class ArrayListTableModel<R> extends TableModel {
+public abstract class ArrayListTableModel<R> extends AbstractTableModelImpl {
     private final ArrayList<R> list = new ArrayList<R>();
 
     /**
-     * @see TableModel#TableModel(Object...)
+     * @see AbstractTableModelImpl#AbstractTableModelImpl(String...)
      *
      * @param   iterable        The {@link Iterable} of row values.
+     * @param   names           The column names.
      */
-    public ArrayListTableModel(Iterable<? extends R> iterable,
-                               Object... columns) {
-        super(columns);
+    protected ArrayListTableModel(Iterable<? extends R> iterable,
+                                  String... names) {
+        super(names);
 
         if (iterable != null) {
             for (R element : iterable) {
@@ -37,12 +38,14 @@ public abstract class ArrayListTableModel<R> extends TableModel {
     }
 
     /**
-     * @see TableModel#TableModel(int)
+     * @see AbstractTableModelImpl#AbstractTableModelImpl(int)
      *
      * @param   iterable        The {@link Iterable} of row values.
+     * @param   columns         The number of columns.
      */
-    public ArrayListTableModel(Iterable<? extends R> iterable, int columns) {
-        this(iterable, new Object[columns]);
+    protected ArrayListTableModel(Iterable<? extends R> iterable,
+                                  int columns) {
+        this(iterable, new String[columns]);
     }
 
     /**

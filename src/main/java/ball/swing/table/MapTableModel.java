@@ -3,13 +3,13 @@
  *
  * Copyright 2009 - 2014 Allen D. Ball.  All rights reserved.
  */
-package ball.text;
+package ball.swing.table;
 
 import java.util.Map;
 import javax.swing.event.TableModelEvent;
 
 /**
- * {@link Map} {@link TableModel} implementation.
+ * {@link Map} {@link javax.swing.table.TableModel} implementation.
  *
  * @param       <K>     The type of the underlying {@link Map} key.
  * @param       <V>     The type of the underlying {@link Map} value.
@@ -18,28 +18,30 @@ import javax.swing.event.TableModelEvent;
  * @version $Revision$
  */
 public class MapTableModel<K,V> extends ArrayListTableModel<Map.Entry<K,V>> {
-    private static final long serialVersionUID = -6259927963300375077L;
+    private static final long serialVersionUID = 7979196059433549407L;
 
     private final Map<K,V> map;
 
     /**
-     * @see TableModel#TableModel(Object...)
+     * @see AbstractTableModelImpl#AbstractTableModelImpl(String...)
      *
      * @param   map             The underlying {@link Map}.
+     * @param   names           The column names.
      */
-    public MapTableModel(Map<K,V> map, Object... columns) {
-        super(null, columns);
+    public MapTableModel(Map<K,V> map, String... names) {
+        super(map.entrySet(), names);
 
         this.map = map;
     }
 
     /**
-     * @see TableModel#TableModel(int)
+     * @see AbstractTableModelImpl#AbstractTableModelImpl(int)
      *
      * @param   map             The underlying {@link Map}.
+     * @param   columns         The number of columns.
      */
     public MapTableModel(Map<K,V> map, int columns) {
-        this(map, new Object[columns]);
+        this(map, new String[columns]);
     }
 
     /**

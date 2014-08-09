@@ -3,49 +3,39 @@
  *
  * Copyright 2009 - 2014 Allen D. Ball.  All rights reserved.
  */
-package ball.text;
+package ball.swing.table;
 
 import java.util.Arrays;
-import java.util.Collection;
 
 /**
- * Simple {@link TableModel} implementation.
+ * Simple {@link javax.swing.table.TableModel} implementation.
  *
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
 public class SimpleTableModel extends ArrayListTableModel<Object[]> {
-    private static final long serialVersionUID = -4832847325043057132L;
+    private static final long serialVersionUID = 4595844725709334308L;
 
     /**
-     * @see ArrayListTableModel#ArrayListTableModel(Iterable,Object...)
+     * @see ArrayListTableModel#ArrayListTableModel(Iterable,String...)
      *
-     * @param   rows            The {@link TableModel}'s rows.
+     * @param   rows            The {@link javax.swing.table.TableModel}'s
+     *                          rows.
+     * @param   names           The column names.
      */
-    public SimpleTableModel(Object[][] rows, Object... columns) {
-        super((rows != null) ? Arrays.asList(rows) : null, columns);
+    public SimpleTableModel(Object[][] rows, String... names) {
+        super(Arrays.asList(rows), names);
     }
 
     /**
      * @see ArrayListTableModel#ArrayListTableModel(Iterable,int)
      *
      * @param   rows            The TableModel's rows.
+     * @param   columns         The number of columns.
      */
     public SimpleTableModel(Object[][] rows, int columns) {
-        this(rows, new Object[columns]);
+        this(rows, new String[columns]);
     }
-
-    /**
-     * @see ArrayListTableModel#ArrayListTableModel(Iterable,Object...)
-     */
-    public SimpleTableModel(Object... columns) {
-        this(null, columns);
-    }
-
-    /**
-     * @see ArrayListTableModel#ArrayListTableModel(Iterable,int)
-     */
-    public SimpleTableModel(int columns) { this(null, new Object[columns]); }
 
     /**
      * Convenience method to add a new row.
@@ -56,6 +46,7 @@ public class SimpleTableModel extends ArrayListTableModel<Object[]> {
     public void row(Object... row) {
         list().add(row);
 
+        fireTableStructureChanged();
         fireTableDataChanged();
     }
 

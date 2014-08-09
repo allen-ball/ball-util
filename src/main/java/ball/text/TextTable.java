@@ -11,9 +11,13 @@ import ball.util.StringUtil;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.util.Arrays;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableModel;
 
+import static ball.util.StringUtil.NIL;
 import static ball.util.StringUtil.SPACE;
 import static ball.util.StringUtil.rtrim;
 
@@ -23,10 +27,10 @@ import static ball.util.StringUtil.rtrim;
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
-public class TextTable extends ReaderWriterDataSource
-                       implements TableModelListener {
+public class TextTable extends ReaderWriterDataSource {
     private final TableModel model;
-    private final int[] tabs;
+    private int[] tabs = new int[] { };
+    private int[] widths = new int[] { };
 
     /**
      * Sole constructor.
@@ -38,12 +42,8 @@ public class TextTable extends ReaderWriterDataSource
         super(null, TEXT_PLAIN);
 
         this.model = model;
-        this.tabs = new int[getModel().getColumnCount()];
 
-        getModel().addTableModelListener(this);
-        getModel().fireTableDataChanged();
-
-        setTabs(tabs);
+        getModel().addTableModelListener(new ModelListenerImpl());
     }
 
     /**
@@ -54,54 +54,36 @@ public class TextTable extends ReaderWriterDataSource
     public TableModel getModel() { return model; }
 
     /**
-     * Method to set the suggested tab stops.
-     *
-     * @param   tabs            The columns' tab stops.
-     */
-    public void setTabs(int... tabs) {
-        for (int x = 0; x < tabs.length; x += 1) {
-            setTab(x, tabs[x]);
-        }
-    }
-
-    /**
-     * Method to get the suggested tab stop for a column.
-     *
-     * @param   x               The column index.
-     *
-     * @return  The tab stop.
-     */
-    public int getTab(int x) { return tabs[x]; }
-
-    /**
-     * Method to set the suggested tab stop for a column.
-     *
-     * @param   x               The column index.
-     * @param   stop            The tab stop.
-     */
-    public void setTab(int x, int stop) {
-        if (getTab(x) != stop) {
-            tabs[x] = stop;
-
-            getModel().fireTableStructureChanged();
-        }
-    }
-
-    /**
-     * Method to render the {@link TextTable}.  This implementation
-     * overrides the {@link #getInputStream()} method.  If
-     * {@code super}.{@link #length()} returns less than {@code 0}, it then
-     * calls {@link #render()} to update the {@link TextTable}.  The
-     * {@link #tableChanged(TableModelEvent)} method may clear the
-     * {@link TextTable}.
+     * Method to render the {@link TextTable}.
      */
     protected void render() {
+        TableModel model = getModel();
+
+        if (model instanceof AbstractTableModel) {
+            ((AbstractTableModel) model).fireTableDataChanged();
+        }
+
+        tabs = Arrays.copyOf(tabs, model.getColumnCount());
+        widths = Arrays.copyOf(widths, model.getColumnCount());
+
+        for (int x = 0; x < widths.length; x += 1) {
+            widths[x] = length(model.getColumnName(x));
+
+            for (int y = 0, n = model.getRowCount(); y < n; y += 1) {
+                Object object = model.getValueAt(y, x);
+                String string =
+                    (object != null) ? object.toString() : null;
+
+                widths[x] = Math.max(widths[x], length(string));
+            }
+        }
+
         PrintWriter out = null;
 
         try {
             out = getPrintWriter();
 
-            StringBuilder header = line(fill(getModel().header()));
+            StringBuilder header = line(fill(header()));
             StringBuilder boundary =
                 StringUtil.fill(new StringBuilder(), header.length(), '-');
 
@@ -110,8 +92,8 @@ public class TextTable extends ReaderWriterDataSource
                 out.println(boundary);
             }
 
-            for (int y = 0, n = getModel().getRowCount(); y < n; y += 1) {
-                out.println(rtrim(line(fill(format(getModel().row(y))))));
+            for (int y = 0, n = model.getRowCount(); y < n; y += 1) {
+                out.println(rtrim(line(fill(format(row(y))))));
             }
         } catch (IOException exception) {
             throw new IllegalStateException(exception);
@@ -124,11 +106,33 @@ public class TextTable extends ReaderWriterDataSource
         }
     }
 
+    private String[] header() {
+        String[] header = new String[getModel().getColumnCount()];
+
+        for (int x = 0; x < header.length; x += 1) {
+            String string = getModel().getColumnName(x);
+
+            header[x] = (string != null) ? string : NIL;
+        }
+
+        return header;
+    }
+
+    private Object[] row(int y) {
+        Object[] row = new Object[getModel().getColumnCount()];
+
+        for (int x = 0; x < row.length; x += 1) {
+            row[x] = getModel().getValueAt(y, x);
+        }
+
+        return row;
+    }
+
     private String[] format(Object... row) {
         String[] strings = new String[row.length];
 
         for (int x = 0; x < strings.length; x += 1) {
-            strings[x] = getModel().getColumnModel(x).format(row[x]);
+            strings[x] = String.valueOf(row[x]);
         }
 
         return strings;
@@ -138,9 +142,7 @@ public class TextTable extends ReaderWriterDataSource
         String[] strings = new String[row.length];
 
         for (int x = 0; x < strings.length; x += 1) {
-            int width = getModel().getColumnWidth(x);
-
-            strings[x] = getModel().getColumnModel(x).fill(row[x], width);
+            strings[x] = StringUtil.rfill(row[x], widths[x], SPACE);
         }
 
         return strings;
@@ -154,7 +156,7 @@ public class TextTable extends ReaderWriterDataSource
                 line.append(SPACE);
             }
 
-            while (line.length() < getTab(x)) {
+            while (line.length() < tabs[x]) {
                 line.append(SPACE);
             }
 
@@ -173,6 +175,17 @@ public class TextTable extends ReaderWriterDataSource
         return super.getInputStream();
     }
 
-    @Override
-    public void tableChanged(TableModelEvent event) { clear(); }
+    private static int length(CharSequence sequence) {
+        return (sequence != null) ? sequence.length() : 0;
+    }
+
+    private class ModelListenerImpl implements TableModelListener {
+        public ModelListenerImpl() { }
+
+        @Override
+        public void tableChanged(TableModelEvent event) { clear(); }
+
+        @Override
+        public String toString() { return super.toString(); }
+    }
 }
