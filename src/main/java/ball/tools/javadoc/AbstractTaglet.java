@@ -303,18 +303,21 @@ public abstract class AbstractTaglet implements Taglet {
      *          {@link Class} name otherwise.
      */
     protected Object getClassDocLink(Doc context, Class<?> type) {
-        return getClassDocLink(context, type.getCanonicalName());
-    }
+        String brackets = "";
 
-    private Object getClassDocLink(Doc context, String name) {
-        Object link = name;
-        ClassDoc target = getClassDoc(context, name);
+        while (type.isArray()) {
+            brackets = "[]" + brackets;
+            type = type.getComponentType();
+        }
+
+        Object link = type.getCanonicalName() + brackets;
+        ClassDoc target = getClassDoc(context, type.getCanonicalName());
 
         if (target != null) {
             URI href = getHref(getContainingClassDoc(context), target);
 
             if (href != null) {
-                link = HTML.a(document, href, target.name());
+                link = HTML.a(document, href, target.name() + brackets);
             }
         }
 

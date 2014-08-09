@@ -3,6 +3,9 @@
 	* src/main/java/ball/swing/table/AbstractTableModelImpl.java:
 	Initial writing.
 
+	* src/main/java/ball/tools/javadoc/AbstractTaglet.java:
+	Changed getClassDocLink(Doc,Class<?>) to handle array types.
+
 2014-08-08  Allen D. Ball  <ball@sol.local>
 
 	* src/main/java/ball/text/ColumnWidthsTableModelListener.java:
