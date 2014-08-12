@@ -56,17 +56,20 @@ public class JAXBIndexProcessor extends AbstractAnnotationProcessor
 
         try {
             if (roundEnv.processingOver()) {
-                for (Map.Entry<String,Set<String>> entry : map.entrySet()) {
-                    FileObject file =
-                        filer.createResource(CLASS_OUTPUT,
-                                             entry.getKey(), JAXB_INDEX);
-                    PrintWriterImpl writer = null;
+                if (! roundEnv.errorRaised()) {
+                    for (Map.Entry<String,Set<String>> entry :
+                             map.entrySet()) {
+                        FileObject file =
+                            filer.createResource(CLASS_OUTPUT,
+                                                 entry.getKey(), JAXB_INDEX);
+                        PrintWriterImpl writer = null;
 
-                    try {
-                        writer = new PrintWriterImpl(file);
-                        writer.write(JAXB_INDEX, entry.getValue());
-                    } finally {
-                        IOUtil.close(writer);
+                        try {
+                            writer = new PrintWriterImpl(file);
+                            writer.write(JAXB_INDEX, entry.getValue());
+                        } finally {
+                            IOUtil.close(writer);
+                        }
                     }
                 }
             }

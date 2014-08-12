@@ -57,15 +57,17 @@ public class ManifestSectionProcessor extends AbstractAnnotationProcessor
 
         try {
             if (roundEnv.processingOver()) {
-                FileObject file =
-                    filer.createResource(CLASS_OUTPUT, NIL, PATH);
-                OutputStream out = null;
+                if (! roundEnv.errorRaised()) {
+                    FileObject file =
+                        filer.createResource(CLASS_OUTPUT, NIL, PATH);
+                    OutputStream out = null;
 
-                try {
-                    out = file.openOutputStream();
-                    manifest.write(out);
-                } finally {
-                    IOUtil.close(out);
+                    try {
+                        out = file.openOutputStream();
+                        manifest.write(out);
+                    } finally {
+                        IOUtil.close(out);
+                    }
                 }
             }
         } catch (Exception exception) {

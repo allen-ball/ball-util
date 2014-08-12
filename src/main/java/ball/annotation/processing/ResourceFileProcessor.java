@@ -53,17 +53,20 @@ public class ResourceFileProcessor extends AbstractAnnotationProcessor {
 
         try {
             if (roundEnv.processingOver()) {
-                for (Map.Entry<String,List<String>> entry : map.entrySet()) {
-                    String path = entry.getKey();
-                    FileObject file =
-                        filer.createResource(CLASS_OUTPUT, NIL, path);
-                    PrintWriterImpl writer = null;
+                if (! roundEnv.errorRaised()) {
+                    for (Map.Entry<String,List<String>> entry :
+                             map.entrySet()) {
+                        String path = entry.getKey();
+                        FileObject file =
+                            filer.createResource(CLASS_OUTPUT, NIL, path);
+                        PrintWriterImpl writer = null;
 
-                    try {
-                        writer = new PrintWriterImpl(file);
-                        writer.write(path, entry.getValue());
-                    } finally {
-                        IOUtil.close(writer);
+                        try {
+                            writer = new PrintWriterImpl(file);
+                            writer.write(path, entry.getValue());
+                        } finally {
+                            IOUtil.close(writer);
+                        }
                     }
                 }
             }

@@ -66,18 +66,21 @@ public class ServiceProviderForProcessor extends AbstractAnnotationProcessor
 
         try {
             if (roundEnv.processingOver()) {
-                for (Map.Entry<String,Set<String>> entry : map.entrySet()) {
-                    String service = entry.getKey();
-                    FileObject file =
-                        filer.createResource(CLASS_OUTPUT, NIL,
-                                             String.format(PATH, service));
-                    PrintWriterImpl writer = null;
+                if (! roundEnv.errorRaised()) {
+                    for (Map.Entry<String,Set<String>> entry :
+                             map.entrySet()) {
+                        String service = entry.getKey();
+                        FileObject file =
+                            filer.createResource(CLASS_OUTPUT, NIL,
+                                                 String.format(PATH, service));
+                        PrintWriterImpl writer = null;
 
-                    try {
-                        writer = new PrintWriterImpl(file);
-                        writer.write(service, entry.getValue());
-                    } finally {
-                        IOUtil.close(writer);
+                        try {
+                            writer = new PrintWriterImpl(file);
+                            writer.write(service, entry.getValue());
+                        } finally {
+                            IOUtil.close(writer);
+                        }
                     }
                 }
             }

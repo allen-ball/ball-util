@@ -66,17 +66,20 @@ public class AntTaskProcessor extends AbstractAnnotationProcessor
 
         try {
             if (roundEnv.processingOver()) {
-                for (Map.Entry<String,PropertiesImpl> entry : map.entrySet()) {
-                    FileObject file =
-                        filer.createResource(CLASS_OUTPUT,
-                                             NIL, entry.getKey());
-                    OutputStream out = null;
+                if (! roundEnv.errorRaised()) {
+                    for (Map.Entry<String,PropertiesImpl> entry :
+                             map.entrySet()) {
+                        FileObject file =
+                            filer.createResource(CLASS_OUTPUT,
+                                                 NIL, entry.getKey());
+                        OutputStream out = null;
 
-                    try {
-                        out = file.openOutputStream();
-                        entry.getValue().store(out, entry.getKey());
-                    } finally {
-                        IOUtil.close(out);
+                        try {
+                            out = file.openOutputStream();
+                            entry.getValue().store(out, entry.getKey());
+                        } finally {
+                            IOUtil.close(out);
+                        }
                     }
                 }
             }
