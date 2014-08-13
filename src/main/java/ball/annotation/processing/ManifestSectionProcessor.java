@@ -55,9 +55,9 @@ public class ManifestSectionProcessor extends AbstractAnnotationProcessor
                            RoundEnvironment roundEnv) {
         boolean result = super.process(annotations, roundEnv);
 
-        try {
+        if (! roundEnv.errorRaised()) {
             if (roundEnv.processingOver()) {
-                if (! roundEnv.errorRaised()) {
+                try {
                     FileObject file =
                         filer.createResource(CLASS_OUTPUT, NIL, PATH);
                     OutputStream out = null;
@@ -68,10 +68,10 @@ public class ManifestSectionProcessor extends AbstractAnnotationProcessor
                     } finally {
                         IOUtil.close(out);
                     }
+                } catch (Exception exception) {
+                    exception.printStackTrace(System.err);
                 }
             }
-        } catch (Exception exception) {
-            exception.printStackTrace(System.err);
         }
 
         return result;

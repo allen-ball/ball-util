@@ -51,9 +51,9 @@ public class ResourceFileProcessor extends AbstractAnnotationProcessor {
                            RoundEnvironment roundEnv) {
         boolean result = super.process(annotations, roundEnv);
 
-        try {
+        if (! roundEnv.errorRaised()) {
             if (roundEnv.processingOver()) {
-                if (! roundEnv.errorRaised()) {
+                try {
                     for (Map.Entry<String,List<String>> entry :
                              map.entrySet()) {
                         String path = entry.getKey();
@@ -68,10 +68,10 @@ public class ResourceFileProcessor extends AbstractAnnotationProcessor {
                             IOUtil.close(writer);
                         }
                     }
+                } catch (Exception exception) {
+                    exception.printStackTrace(System.err);
                 }
             }
-        } catch (Exception exception) {
-            exception.printStackTrace(System.err);
         }
 
         return result;

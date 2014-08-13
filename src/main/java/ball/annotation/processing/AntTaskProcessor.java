@@ -64,9 +64,9 @@ public class AntTaskProcessor extends AbstractAnnotationProcessor
                            RoundEnvironment roundEnv) {
         boolean result = super.process(annotations, roundEnv);
 
-        try {
+        if (! roundEnv.errorRaised()) {
             if (roundEnv.processingOver()) {
-                if (! roundEnv.errorRaised()) {
+                try {
                     for (Map.Entry<String,PropertiesImpl> entry :
                              map.entrySet()) {
                         FileObject file =
@@ -81,10 +81,10 @@ public class AntTaskProcessor extends AbstractAnnotationProcessor
                             IOUtil.close(out);
                         }
                     }
+                } catch (Exception exception) {
+                    exception.printStackTrace(System.err);
                 }
             }
-        } catch (Exception exception) {
-            exception.printStackTrace(System.err);
         }
 
         return result;
