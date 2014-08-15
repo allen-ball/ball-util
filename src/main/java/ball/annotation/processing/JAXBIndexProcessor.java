@@ -109,10 +109,7 @@ public class JAXBIndexProcessor extends AbstractAnnotationProcessor
 
         for (Map.Entry<String,Set<String>> entry : map.entrySet()) {
             String pkg = entry.getKey();
-            File file =
-                new File(destdir,
-                         pkg.replaceAll(Pattern.quote("."), File.separator)
-                         + File.separator + JAXB_INDEX);
+            File file = new File(new File(destdir, asPath(pkg)), JAXB_INDEX);
 
             IOUtil.mkdirs(file.getParentFile());
 

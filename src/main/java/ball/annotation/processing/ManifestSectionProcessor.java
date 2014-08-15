@@ -16,7 +16,6 @@ import java.io.OutputStream;
 import java.util.Set;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
-import java.util.regex.Pattern;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
@@ -81,14 +80,11 @@ public class ManifestSectionProcessor extends AbstractAnnotationProcessor
     protected void process(RoundEnvironment env,
                            TypeElement ignore,
                            Element element) throws Exception {
-        String name = ((PackageElement) element).getQualifiedName().toString();
-
-        name = name.replaceAll(Pattern.quote(DOT), SLASH) + SLASH;
-
         ManifestSection annotation =
             element.getAnnotation(ManifestSection.class);
 
-        manifest.getEntries().put(name, new AttributesImpl(annotation));
+        manifest.getEntries().put(asPath((PackageElement) element),
+                                  new AttributesImpl(annotation));
     }
 
     @Override
@@ -98,12 +94,8 @@ public class ManifestSectionProcessor extends AbstractAnnotationProcessor
                 type.getAnnotation(ManifestSection.class);
 
             if (annotation != null) {
-                String name = type.getPackage().getName();
-
-                name = name.replaceAll(Pattern.quote(DOT), SLASH) + SLASH;
-
-                manifest.getEntries()
-                    .put(name, new AttributesImpl(annotation));
+                manifest.getEntries().put(asPath(type.getPackage()),
+                                          new AttributesImpl(annotation));
             }
         }
 

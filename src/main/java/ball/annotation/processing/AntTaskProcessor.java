@@ -19,7 +19,6 @@ import java.net.URI;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.regex.Pattern;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
@@ -105,9 +104,9 @@ public class AntTaskProcessor extends AbstractAnnotationProcessor
 
         if (enclosing != null) {
             resource =
-                URI.create(((PackageElement) enclosing).getQualifiedName()
-                           .toString().replaceAll(Pattern.quote(DOT), SLASH)
-                           + SLASH + resource).normalize().toString();
+                URI.create(asPath((PackageElement) enclosing) + resource)
+                .normalize()
+                .toString();
         }
 
         if (! StringUtil.isNil(name)) {
@@ -160,10 +159,8 @@ public class AntTaskProcessor extends AbstractAnnotationProcessor
 
                         if (pkg != null) {
                             resource =
-                                URI.create(pkg.getName()
-                                           .replaceAll(Pattern.quote(DOT),
-                                                       SLASH)
-                                           + SLASH + resource).normalize()
+                                URI.create(asPath(pkg) + resource)
+                                .normalize()
                                 .toString();
                         }
 
