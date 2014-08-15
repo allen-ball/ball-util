@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.regex.Pattern;
 import javax.annotation.processing.Filer;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
@@ -717,6 +718,63 @@ public abstract class AbstractProcessor
         if (superclass != null && superclass.getKind() == CLASS) {
             getPropertyNames(set, (TypeElement) superclass);
         }
+    }
+
+    /**
+     * Method to get the argument {@link TypeElement} name as a path.
+     *
+     * @param   element         The {@link TypeElement}.
+     *
+     * @return  The {@link TypeElement} name as a path.
+     *
+     * @see Elements#getBinaryName(TypeElement)
+     */
+    protected String asPath(TypeElement element) {
+        return asPath(elements.getBinaryName(element).toString());
+    }
+
+    /**
+     * Method to get the argument {@link Class} name as a path.
+     *
+     * @param   type            The {@link Class}.
+     *
+     * @return  The {@link Class} name as a path.
+     */
+    protected String asPath(Class<?> type) { return asPath(type.getName()); }
+
+    /**
+     * Method to get the argument {@link PackageElement} name as a path
+     * (including the trailing {@value SLASH}).
+     *
+     * @param   element         The {@link PackageElement}.
+     *
+     * @return  The {@link PackageElement} name as a path.
+     */
+    protected String asPath(PackageElement element) {
+        return asPath(element.getQualifiedName().toString()) + SLASH;
+    }
+
+    /**
+     * Method to get the argument {@link Package} name as a path (including
+     * the trailing {@value SLASH}).
+     *
+     * @param   pkg             The {@link Package}.
+     *
+     * @return  The {@link Package} name as a path.
+     */
+    protected String asPath(Package pkg) {
+        return asPath(pkg.getName()) + SLASH;
+    }
+
+    /**
+     * Method to get the argument name as a path.
+     *
+     * @param   name            The name {@link String}.
+     *
+     * @return  The argument {@link String} as a path.
+     */
+    protected String asPath(String name) {
+        return name.replaceAll(Pattern.quote(DOT), SLASH);
     }
 
     @Override
