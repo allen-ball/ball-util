@@ -465,8 +465,27 @@ public abstract class AbstractProcessor
      * @return  The {@link ExecutableElement} for the {@link Method}.
      */
     protected ExecutableElement getExecutableElementFor(Method method) {
-        ExecutableElement executable = null;
         TypeElement type = getTypeElementFor(method.getDeclaringClass());
+
+        return getExecutableElementFor(type, method);
+    }
+
+    /**
+     * Method to get an {@link ExecutableElement} for a {@link Method} if an
+     * equivalent is declared in the argument {@link TypeElement}.
+     *
+     * This method does not compare return types nor modifiers and only
+     * examines the {@link ExecutableElement}s declared in the argument
+     * {@link TypeElement}.
+     *
+     * @param   type            The {@link TypeElement}.
+     * @param   method          The {@link Method} prototype.
+     *
+     * @return  The {@link ExecutableElement} for the {@link Method}.
+     */
+    protected ExecutableElement getExecutableElementFor(TypeElement type,
+                                                        Method method) {
+        ExecutableElement executable = null;
 
         if (type != null) {
             for (ExecutableElement element :

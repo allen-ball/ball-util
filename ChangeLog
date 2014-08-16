@@ -1,3 +1,8 @@
+2014-08-16  Allen D. Ball  <ball@sol.local>
+
+	* src/main/java/ball/annotation/processing/AbstractProcessor.java:
+	Added getExecutableElementFor(TypeElement,Method) method.
+
 2014-08-14  Allen D. Ball  <ball@sol.local>
 
 	* src/main/java/ball/annotation/processing/AbstractProcessor.java:
