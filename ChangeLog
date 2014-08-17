@@ -2,6 +2,8 @@
 
 	* src/main/java/ball/annotation/processing/AbstractProcessor.java:
 	Added getExecutableElementFor(TypeElement,Method) method.
+	Added asType(Element), asType(Class<?>), and getModifierSet(int)
+	methods.
 
 2014-08-14  Allen D. Ball  <ball@sol.local>
 

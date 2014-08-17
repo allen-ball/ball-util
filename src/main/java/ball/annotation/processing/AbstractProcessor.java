@@ -19,6 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.regex.Pattern;
 import javax.annotation.processing.Filer;
@@ -29,6 +30,7 @@ import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
+import javax.lang.model.element.Modifier;
 import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
@@ -590,6 +592,34 @@ public abstract class AbstractProcessor
     }
 
     /**
+     * Method to translate {@link Class} {@link java.lang.reflect.Modifier}
+     * bits to a {@link Set} of {@link Modifier}s.
+     *
+     * @param   modifiers               The {@code int} representing the
+     *                                  modifiers.
+     *
+     * @return  The {@link Set} of {@link Modifier}s.
+     */
+    protected Set<Modifier> getModifierSet(int modifiers) {
+        TreeMap<String,Modifier> map =
+            new TreeMap<String,Modifier>(String.CASE_INSENSITIVE_ORDER);
+
+        if (modifiers != 0) {
+            for (Modifier modifier : Modifier.values()) {
+                map.put(modifier.toString(), modifier);
+            }
+
+            String string =
+                java.lang.reflect.Modifier.toString(modifiers).toUpperCase();
+
+            map.keySet()
+                .retainAll(Arrays.asList(string.split("[\\p{Space}]+")));
+        }
+
+        return new TreeSet<Modifier>(map.values());
+    }
+
+    /**
      * Method to get an {@link Element}'s {@link AnnotationMirror}.
      *
      * @param   element         The annotated {@link Element}.
@@ -737,6 +767,20 @@ public abstract class AbstractProcessor
         if (superclass != null && superclass.getKind() == CLASS) {
             getPropertyNames(set, (TypeElement) superclass);
         }
+    }
+
+    /**
+     * See {@link Element#asType()}.
+     */
+    protected TypeMirror asType(Element element) {
+        return (element != null) ? element.asType() : null;
+    }
+
+    /**
+     * See {@link #asType(Element)} and {@link #getTypeElementFor(Class)}.
+     */
+    protected TypeMirror asType(Class<?> type) {
+        return asType(getTypeElementFor(type));
     }
 
     /**
