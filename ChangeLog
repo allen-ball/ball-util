@@ -1,5 +1,11 @@
 2014-08-17  Allen D. Ball  <ball@sol.local>
 
+	* src/main/java/ball/annotation/processing/AbstractProcessor.java:
+	Added print(Diagnostic.Kind,Element,Throwable) method.
+	Reduced variations of isAssignable() methods and "shortened the
+	distance" to the ultimate
+	Types.isAssignable(TypeMirror,TypeMirror) call.
+
 	* src/main/java/ball/activation/ThrowableDataSource.java:
 	Initial writing.
 

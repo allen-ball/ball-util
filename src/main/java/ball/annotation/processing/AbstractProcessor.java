@@ -5,6 +5,7 @@
  */
 package ball.annotation.processing;
 
+import ball.activation.ThrowableDataSource;
 import ball.util.BeanPropertyMethodEnum;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -41,9 +42,9 @@ import javax.lang.model.util.Types;
 import javax.tools.Diagnostic;
 import javax.tools.FileObject;
 
+import static ball.lang.PrimitiveTypeMap.asBoxedType;
 import static java.util.Arrays.asList;
 import static java.util.Collections.disjoint;
-import static javax.lang.model.element.ElementKind.CLASS;
 import static javax.lang.model.element.ElementKind.METHOD;
 import static javax.lang.model.element.Modifier.PRIVATE;
 import static javax.lang.model.element.Modifier.PUBLIC;
@@ -114,7 +115,7 @@ public abstract class AbstractProcessor
                                     RoundEnvironment roundEnv);
 
     /**
-     * Method to print an diagnositc message.
+     * Method to print a diagnositc message.
      *
      * @param   kind            The {@link javax.tools.Diagnostic.Kind}.
      * @param   element         The offending {@link Element}.
@@ -123,6 +124,18 @@ public abstract class AbstractProcessor
     protected void print(Diagnostic.Kind kind,
                          Element element, CharSequence message) {
         processingEnv.getMessager().printMessage(kind, message, element);
+    }
+
+    /**
+     * Method to print a {@link Throwable}.
+     *
+     * @param   kind            The {@link javax.tools.Diagnostic.Kind}.
+     * @param   element         The offending {@link Element}.
+     * @param   throwable       The {@link Throwable}.
+     */
+    protected void print(Diagnostic.Kind kind,
+                         Element element, Throwable throwable) {
+        print(kind, element, new ThrowableDataSource(throwable).toString());
     }
 
     /**
@@ -154,109 +167,42 @@ public abstract class AbstractProcessor
     /**
      * See {@link Types#isAssignable(TypeMirror,TypeMirror)}.
      */
-    protected boolean isAssignable(Element from, Element to) {
-        boolean isAssignable = false;
+    protected boolean isAssignable(TypeMirror from, TypeMirror to) {
+        from =
+            (from != null && from.getKind().isPrimitive())
+                ? asType(types.boxedClass((PrimitiveType) from))
+                : from;
+        to =
+            (to != null && to.getKind().isPrimitive())
+                ? asType(types.boxedClass((PrimitiveType) to))
+                : to;
 
-        if (from instanceof TypeElement && to instanceof TypeElement) {
-            isAssignable = isAssignable((TypeElement) from, (TypeElement) to);
-        }
-
-        return isAssignable;
-    }
-
-    private boolean isAssignable(TypeElement from, TypeElement to) {
-        boolean isAssignable = types.isAssignable(from.asType(), to.asType());
-
-        if (! isAssignable) {
-            for (TypeMirror supertype :
-                     types.directSupertypes(from.asType())) {
-                isAssignable |= isAssignable(types.asElement(supertype), to);
-
-                if (isAssignable) {
-                    break;
-                }
-            }
-        }
-
-        return isAssignable;
+        return types.isAssignable(from, to);
     }
 
     /**
-     * See {@link #isAssignable(Element,Element)}.
+     * See {@link Types#isAssignable(TypeMirror,TypeMirror)}.
      */
-    protected boolean isAssignable(Class<?> from, Element to) {
-        return isAssignable(getTypeElementFor(from), to);
+    protected boolean isAssignable(Element from, Element to) {
+        return isAssignable(asType(from), asType(to));
     }
 
     /**
-     * See {@link #isAssignable(Element,Element)}.
+     * See {@link Types#isAssignable(TypeMirror,TypeMirror)}.
      */
     protected boolean isAssignable(Element from, Class<?> to) {
-        return isAssignable(from, getTypeElementFor(to));
+        return isAssignable(asType(from), to);
     }
 
     /**
-     * See {@link #isAssignable(Element,Element)}.
+     * See {@link Types#isAssignable(TypeMirror,TypeMirror)}.
      */
     protected boolean isAssignable(TypeMirror from, Class<?> to) {
-        return isAssignable(from.getKind().isPrimitive()
-                                ? types.boxedClass((PrimitiveType) from)
-                                : types.asElement(from),
-                            to);
+        return isAssignable(from, asType(asBoxedType(to)));
     }
 
     /**
-     * See {@link #isAssignable(Element,Element)}.
-     */
-    protected boolean isAssignable(Class<?> from, TypeMirror to) {
-        return isAssignable(from,
-                            to.getKind().isPrimitive()
-                                ? types.boxedClass((PrimitiveType) to)
-                                : types.asElement(to));
-    }
-
-    /**
-     * See {@link #isAssignable(Element,Element)}.
-     */
-    protected boolean isAssignable(List<? extends Element> from,
-                                   List<? extends Element> to) {
-        boolean isAssignable = (from.size() == to.size());
-
-        if (isAssignable) {
-            for (int i = 0, n = to.size(); i < n; i += 1) {
-                isAssignable &= isAssignable(from.get(i), to.get(i));
-
-                if (! isAssignable) {
-                    break;
-                }
-            }
-        }
-
-        return isAssignable;
-    }
-
-    /**
-     * See {@link #isAssignable(Element,Element)}.
-     */
-    protected boolean isAssignable(Class<?>[] from,
-                                   List<? extends Element> to) {
-        boolean isAssignable = (from.length == to.size());
-
-        if (isAssignable) {
-            for (int i = 0, n = to.size(); i < n; i += 1) {
-                isAssignable &= isAssignable(from[i], to.get(i));
-
-                if (! isAssignable) {
-                    break;
-                }
-            }
-        }
-
-        return isAssignable;
-    }
-
-    /**
-     * See {@link #isAssignable(Element,Element)}.
+     * See {@link Types#isSameType(TypeMirror,TypeMirror)}.
      */
     protected boolean isAssignable(List<? extends Element> from,
                                    Class<?>[] to) {
@@ -744,7 +690,7 @@ public abstract class AbstractProcessor
     private void getPropertyNames(Set<String> set, TypeElement type) {
         for (ExecutableElement element :
                  methodsIn(type.getEnclosedElements())) {
-            if (! element.getModifiers().contains(PRIVATE)) {
+            if (element.getModifiers().contains(PUBLIC)) {
                 for (BeanPropertyMethodEnum methodEnum :
                          BeanPropertyMethodEnum.values()) {
                     String name =
@@ -764,8 +710,14 @@ public abstract class AbstractProcessor
 
         Element superclass = types.asElement(type.getSuperclass());
 
-        if (superclass != null && superclass.getKind() == CLASS) {
-            getPropertyNames(set, (TypeElement) superclass);
+        if (superclass != null)
+            switch (superclass.getKind()) {
+            case CLASS:
+                getPropertyNames(set, (TypeElement) superclass);
+                break;
+
+            default:
+                break;
         }
     }
 
