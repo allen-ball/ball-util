@@ -24,7 +24,7 @@ public enum BeanPropertyMethodEnum {
     GET, IS, SET;
 
     private static final SortedMap<String,Method> MAP =
-        Collections.unmodifiableSortedMap(new MethodTemplateMap());
+        Collections.unmodifiableSortedMap(new MethodPrototypeMap());
 
     @Regex
     private static final String PROPERTY_REGEX = "([\\p{Upper}][\\p{Alnum}]+)";
@@ -106,21 +106,21 @@ public enum BeanPropertyMethodEnum {
         return name;
     }
 
-    private static class MethodTemplateMap extends TreeMap<String,Method> {
-        private static final long serialVersionUID = -615108090828566640L;
+    private static class MethodPrototypeMap extends TreeMap<String,Method> {
+        private static final long serialVersionUID = 5606267671777182148L;
 
-        public MethodTemplateMap() {
+        public MethodPrototypeMap() {
             super(String.CASE_INSENSITIVE_ORDER);
 
-            for (Method method : Templates.class.getDeclaredMethods()) {
+            for (Method method : Prototypes.class.getDeclaredMethods()) {
                 put(method.getName(), method);
             }
         }
 
-        public interface Templates<T> {
+        public interface Prototypes<T> {
             public T GET();
-            public void SET(T value);
             public boolean IS();
+            public void SET(T value);
         }
     }
 }
