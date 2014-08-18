@@ -97,7 +97,7 @@ public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
                     try {
                         process(roundEnv, annotation, element);
                     } catch (Exception exception) {
-                        print(ERROR, element, exception.getMessage());
+                        print(ERROR, element, exception);
                     }
                 }
             } finally {

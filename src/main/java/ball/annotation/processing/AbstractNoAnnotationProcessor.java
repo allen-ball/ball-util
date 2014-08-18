@@ -20,6 +20,7 @@ import javax.lang.model.element.TypeElement;
 import static java.util.Arrays.asList;
 import static java.util.Collections.disjoint;
 import static java.util.Collections.singleton;
+import static javax.tools.Diagnostic.Kind.ERROR;
 
 /**
  * Abstract {@link javax.annotation.processing.Processor} base class for
@@ -85,41 +86,44 @@ public abstract class AbstractNoAnnotationProcessor extends AbstractProcessor {
     public boolean process(Set<? extends TypeElement> annotations,
                            RoundEnvironment roundEnv) {
         for (Element element : new IterableImpl(roundEnv.getRootElements())) {
-
-            if (kinds != null) {
-                if (! kinds.contains(element.getKind())) {
-                    continue;
-                }
-            }
-
-            if (modifiers != null) {
-                if (! exclude) {
-                    if (! element.getModifiers().containsAll(modifiers)) {
-                        continue;
-                    }
-                } else {
-                    if (! disjoint(element.getModifiers(), modifiers)) {
+            try {
+                if (kinds != null) {
+                    if (! kinds.contains(element.getKind())) {
                         continue;
                     }
                 }
-            }
 
-            if (supertype != null) {
-                switch (element.getKind()) {
-                case CLASS:
-                case INTERFACE:
-                    if (! isAssignable(element, supertype)) {
-                        continue;
+                if (modifiers != null) {
+                    if (! exclude) {
+                        if (! element.getModifiers().containsAll(modifiers)) {
+                            continue;
+                        }
+                    } else {
+                        if (! disjoint(element.getModifiers(), modifiers)) {
+                            continue;
+                        }
                     }
-                    break;
-
-                default:
-                    continue;
-                    /* break; */
                 }
-            }
 
-            process(element);
+                if (supertype != null) {
+                    switch (element.getKind()) {
+                    case CLASS:
+                    case INTERFACE:
+                        if (! isAssignable(element, supertype)) {
+                            continue;
+                        }
+                        break;
+
+                    default:
+                        continue;
+                        /* break; */
+                    }
+                }
+
+                process(element);
+            } catch (Exception exception) {
+                print(ERROR, element, exception);
+            }
         }
 
         return false;
