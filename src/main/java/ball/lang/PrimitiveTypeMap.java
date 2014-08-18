@@ -41,4 +41,19 @@ public class PrimitiveTypeMap extends HashMap<Class<?>,Class<?>> {
         put(Short.TYPE, Short.class);
         put(Void.TYPE, Void.class);
     }
+
+    /**
+     * Static method to get the "boxed" {@link Class} for a Java primitive
+     * {@link Class}.
+     *
+     * @param   type            The {@link Class}.
+     *
+     * @return  The "boxed" {@link Class} if the argument {@link Class} is a
+     *          primitive type; the argument otherwise.
+     */
+    public static Class<?> asBoxedType(Class<?> type) {
+        Class<?> value = (type != null) ? INSTANCE.get(type) : null;
+
+        return (value != null) ? value : type;
+    }
 }
