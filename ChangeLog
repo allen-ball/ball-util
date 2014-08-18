@@ -1,3 +1,7 @@
+2014-08-17  Allen D. Ball  <ball@sol.local>
+
+	* src/main/java/ball/lang/PrimitiveTypeMap.java: Initial writing.
+
 2014-08-16  Allen D. Ball  <ball@sol.local>
 
 	* src/main/java/ball/annotation/processing/AbstractProcessor.java:
