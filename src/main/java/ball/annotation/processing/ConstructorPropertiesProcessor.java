@@ -24,6 +24,7 @@ import javax.lang.model.type.TypeMirror;
 import static javax.lang.model.element.ElementKind.CONSTRUCTOR;
 import static javax.lang.model.element.Modifier.PRIVATE;
 import static javax.lang.model.util.ElementFilter.methodsIn;
+import static javax.tools.Diagnostic.Kind.ERROR;
 import static javax.tools.Diagnostic.Kind.WARNING;
 
 /**
@@ -48,7 +49,8 @@ public class ConstructorPropertiesProcessor
     public void process(RoundEnvironment roundEnv,
                         TypeElement annotation,
                         Element element) throws Exception {
-        if (element.getKind() == CONSTRUCTOR) {
+        switch (element.getKind()) {
+        case CONSTRUCTOR:
             String[] value =
                 element.getAnnotation(ConstructorProperties.class).value();
             List<? extends VariableElement> parameters =
@@ -74,14 +76,14 @@ public class ConstructorPropertiesProcessor
                       Arrays.asList(value) + " does not match "
                       + element.getKind() + " parameters");
             }
-        } else {
-            /*
-             * compiler.err.annotation.type.not.applicable
-             *
-             * error(element,
-             *       "annotation type not applicable"
-             *       + " to this kind of declaration");
-             */
+            break;
+
+        default:
+            print(ERROR,
+                  element,
+                  element.getKind() + " annotated with "
+                  + AT + annotation.getSimpleName());
+            break;
         }
     }
 }

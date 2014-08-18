@@ -45,7 +45,6 @@ import javax.tools.FileObject;
 import static ball.lang.PrimitiveTypeMap.asBoxedType;
 import static java.util.Arrays.asList;
 import static java.util.Collections.disjoint;
-import static javax.lang.model.element.ElementKind.METHOD;
 import static javax.lang.model.element.Modifier.PRIVATE;
 import static javax.lang.model.element.Modifier.PUBLIC;
 import static javax.lang.model.element.Modifier.STATIC;
@@ -449,33 +448,42 @@ public abstract class AbstractProcessor
     }
 
     private boolean same(ExecutableElement element, Method method) {
-        boolean same = (element.getKind() == METHOD);
+        boolean same = true;
 
-        if (same) {
-            same &= element.getSimpleName().contentEquals(method.getName());
-        }
-
-        if (same) {
-            same &= (element.isVarArgs() == method.isVarArgs());
-        }
-
-        if (same) {
-            List<? extends VariableElement> list = element.getParameters();
-            Class<?>[] array = method.getParameterTypes();
-
-            if (list.size() == array.length) {
-                for (int i = 0, n = list.size(); i < n; i += 1) {
-                    same &=
-                        types.isSameType(list.get(i).asType(),
-                                         getTypeElementFor(array[i]).asType());
-
-                    if (! same) {
-                        break;
-                    }
-                }
-            } else {
-                same &= false;
+        switch (element.getKind()) {
+        case METHOD:
+            if (same) {
+                same &=
+                    element.getSimpleName().contentEquals(method.getName());
             }
+
+            if (same) {
+                same &= (element.isVarArgs() == method.isVarArgs());
+            }
+
+            if (same) {
+                List<? extends VariableElement> list = element.getParameters();
+                Class<?>[] array = method.getParameterTypes();
+
+                if (list.size() == array.length) {
+                    for (int i = 0, n = list.size(); i < n; i += 1) {
+                        same &=
+                            types.isSameType(list.get(i).asType(),
+                                             getTypeElementFor(array[i]).asType());
+
+                        if (! same) {
+                            break;
+                        }
+                    }
+                } else {
+                    same &= false;
+                }
+            }
+            break;
+
+        default:
+            same &= false;
+            break;
         }
 
         return same;
