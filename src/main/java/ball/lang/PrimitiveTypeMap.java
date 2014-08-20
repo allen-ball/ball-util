@@ -52,8 +52,6 @@ public class PrimitiveTypeMap extends HashMap<Class<?>,Class<?>> {
      *          primitive type; the argument otherwise.
      */
     public static Class<?> asBoxedType(Class<?> type) {
-        Class<?> value = (type != null) ? INSTANCE.get(type) : null;
-
-        return (value != null) ? value : type;
+        return (type != null && type.isPrimitive()) ? INSTANCE.get(type) : type;
     }
 }
