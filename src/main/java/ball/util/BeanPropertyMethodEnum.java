@@ -7,8 +7,8 @@ package ball.util;
 
 import java.lang.reflect.Method;
 import java.util.Collections;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.util.EnumMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -23,8 +23,8 @@ import static java.beans.Introspector.decapitalize;
 public enum BeanPropertyMethodEnum {
     GET, IS, SET;
 
-    private static final SortedMap<String,Method> MAP =
-        Collections.unmodifiableSortedMap(new MethodPrototypeMap());
+    private static final Map<BeanPropertyMethodEnum,Method> MAP =
+        Collections.unmodifiableMap(new MethodPrototypeMap());
 
     @Regex
     private static final String PROPERTY_REGEX = "([\\p{Upper}][\\p{Alnum}]+)";
@@ -37,7 +37,7 @@ public enum BeanPropertyMethodEnum {
      *
      * @return  The return type {@link Class}.
      */
-    public Class<?> getReturnType() { return MAP.get(name()).getReturnType(); }
+    public Class<?> getReturnType() { return MAP.get(this).getReturnType(); }
 
     /**
      * Method to get the prototype parameter types ({@link Class}es) for
@@ -46,7 +46,7 @@ public enum BeanPropertyMethodEnum {
      * @return  The parameter types array (of {@link Class}es).
      */
     public Class<?>[] getParameterTypes() {
-        return MAP.get(name()).getParameterTypes();
+        return MAP.get(this).getParameterTypes();
     }
 
     /**
@@ -106,14 +106,15 @@ public enum BeanPropertyMethodEnum {
         return name;
     }
 
-    private static class MethodPrototypeMap extends TreeMap<String,Method> {
+    private static class MethodPrototypeMap
+                         extends EnumMap<BeanPropertyMethodEnum,Method> {
         private static final long serialVersionUID = 5606267671777182148L;
 
         public MethodPrototypeMap() {
-            super(String.CASE_INSENSITIVE_ORDER);
+            super(BeanPropertyMethodEnum.class);
 
             for (Method method : Prototypes.class.getDeclaredMethods()) {
-                put(method.getName(), method);
+                put(BeanPropertyMethodEnum.valueOf(method.getName()), method);
             }
         }
 
