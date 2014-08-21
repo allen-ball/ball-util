@@ -110,7 +110,7 @@ public class AntTaskProcessor extends AbstractAnnotationProcessor
         }
 
         if (! StringUtil.isNil(name)) {
-            if (isAssignable(element, Task.class)) {
+            if (isAssignable(element.asType(), Task.class)) {
                 if (! element.getModifiers().contains(ABSTRACT)) {
                     if (hasPublicNoArgumentConstructor(element)) {
                         map.put(resource, name, (TypeElement) element);

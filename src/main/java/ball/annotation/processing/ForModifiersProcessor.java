@@ -44,7 +44,7 @@ public class ForModifiersProcessor extends AbstractAnnotationProcessor {
                         Element element) throws Exception {
         switch (element.getKind()) {
         case CLASS:
-            if (! isAssignable(element, supertype)) {
+            if (! isAssignable(element.asType(), supertype.asType())) {
                 print(ERROR,
                       element,
                       element.getKind() + " annotated with "

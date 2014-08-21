@@ -51,9 +51,13 @@ public abstract class AbstractNoAnnotationProcessor extends AbstractProcessor {
     public void init(ProcessingEnvironment processingEnv) {
         super.init(processingEnv);
 
-        setElementKinds(getAnnotation(ForElementKinds.class));
-        setModifiers(getAnnotation(ForModifiers.class));
-        setSubclassesOf(getAnnotation(ForSubclassesOf.class));
+        try {
+            setElementKinds(getAnnotation(ForElementKinds.class));
+            setModifiers(getAnnotation(ForModifiers.class));
+            setSubclassesOf(getAnnotation(ForSubclassesOf.class));
+        } catch (Exception exception) {
+            print(ERROR, null, exception);
+        }
     }
 
     private void setElementKinds(ForElementKinds annotation) {
@@ -109,7 +113,7 @@ public abstract class AbstractNoAnnotationProcessor extends AbstractProcessor {
                     switch (element.getKind()) {
                     case CLASS:
                     case INTERFACE:
-                        if (! isAssignable(element, supertype)) {
+                        if (! isAssignable(element.asType(), supertype.asType())) {
                             continue;
                         }
                         break;

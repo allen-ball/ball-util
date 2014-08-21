@@ -104,7 +104,7 @@ public class ServiceProviderForProcessor extends AbstractAnnotationProcessor
                 if (! element.getModifiers().contains(ABSTRACT)) {
                     if (hasPublicNoArgumentConstructor(element)) {
                         for (TypeElement service : value) {
-                            if (isAssignable(element, service)) {
+                            if (isAssignable(element.asType(), service.asType())) {
                                 map.add(service, (TypeElement) element);
                             } else {
                                 print(ERROR,

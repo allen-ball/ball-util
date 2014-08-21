@@ -50,7 +50,7 @@ public class TagletNameProcessor extends AbstractAnnotationProcessor {
         String name = element.getAnnotation(TagletName.class).value();
 
         if (! StringUtil.isNil(name)) {
-            if (isAssignable(element, Taglet.class)) {
+            if (isAssignable(element.asType(), Taglet.class)) {
                 if (! element.getModifiers().contains(ABSTRACT)) {
                     if (! hasPublicNoArgumentConstructor(element)) {
                         print(ERROR,

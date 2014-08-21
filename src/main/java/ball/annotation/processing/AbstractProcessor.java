@@ -35,7 +35,9 @@ import javax.lang.model.element.Modifier;
 import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
+import javax.lang.model.type.ArrayType;
 import javax.lang.model.type.PrimitiveType;
+import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
@@ -51,6 +53,7 @@ import static javax.lang.model.element.Modifier.STATIC;
 import static javax.lang.model.type.TypeKind.BOOLEAN;
 import static javax.lang.model.util.ElementFilter.constructorsIn;
 import static javax.lang.model.util.ElementFilter.methodsIn;
+import static javax.tools.Diagnostic.Kind.ERROR;
 
 /**
  * Extends {@link javax.annotation.processing.AbstractProcessor} by
@@ -104,9 +107,13 @@ public abstract class AbstractProcessor
     public void init(ProcessingEnvironment processingEnv) {
         super.init(processingEnv);
 
-        filer = processingEnv.getFiler();
-        elements = processingEnv.getElementUtils();
-        types = processingEnv.getTypeUtils();
+        try {
+            filer = processingEnv.getFiler();
+            elements = processingEnv.getElementUtils();
+            types = processingEnv.getTypeUtils();
+        } catch (Exception exception) {
+            print(ERROR, null, exception);
+        }
     }
 
     @Override
@@ -161,63 +168,6 @@ public abstract class AbstractProcessor
         }
 
         return found;
-    }
-
-    /**
-     * See {@link Types#isAssignable(TypeMirror,TypeMirror)}.
-     */
-    protected boolean isAssignable(TypeMirror from, TypeMirror to) {
-        from =
-            (from != null && from.getKind().isPrimitive())
-                ? asType(types.boxedClass((PrimitiveType) from))
-                : from;
-        to =
-            (to != null && to.getKind().isPrimitive())
-                ? asType(types.boxedClass((PrimitiveType) to))
-                : to;
-
-        return types.isAssignable(from, to);
-    }
-
-    /**
-     * See {@link Types#isAssignable(TypeMirror,TypeMirror)}.
-     */
-    protected boolean isAssignable(Element from, Element to) {
-        return isAssignable(asType(from), asType(to));
-    }
-
-    /**
-     * See {@link Types#isAssignable(TypeMirror,TypeMirror)}.
-     */
-    protected boolean isAssignable(Element from, Class<?> to) {
-        return isAssignable(asType(from), to);
-    }
-
-    /**
-     * See {@link Types#isAssignable(TypeMirror,TypeMirror)}.
-     */
-    protected boolean isAssignable(TypeMirror from, Class<?> to) {
-        return isAssignable(from, asType(asBoxedType(to)));
-    }
-
-    /**
-     * See {@link Types#isSameType(TypeMirror,TypeMirror)}.
-     */
-    protected boolean isAssignable(List<? extends Element> from,
-                                   Class<?>[] to) {
-        boolean isAssignable = (from.size() == to.length);
-
-        if (isAssignable) {
-            for (int i = 0; i < to.length; i += 1) {
-                isAssignable &= isAssignable(from.get(i), to[i]);
-
-                if (! isAssignable) {
-                    break;
-                }
-            }
-        }
-
-        return isAssignable;
     }
 
     /**
@@ -357,6 +307,97 @@ public abstract class AbstractProcessor
     }
 
     /**
+     * See {@link Types#isAssignable(TypeMirror,TypeMirror)}.
+     */
+    protected boolean isAssignable(TypeMirror from, TypeMirror to) {
+        return types.isAssignable(from, to);
+    }
+
+    /**
+     * See {@link Types#isAssignable(TypeMirror,TypeMirror)}.
+     */
+    protected boolean isAssignable(TypeMirror from, Class<?> to) {
+        boolean isAssignable = true;
+
+        if (from instanceof ArrayType && to.isArray()) {
+            isAssignable &=
+                isAssignable(((ArrayType) from).getComponentType(),
+                           to.getComponentType());
+        } else if (from instanceof PrimitiveType && to.isPrimitive()) {
+            isAssignable &= from.toString().equals(to.getName());
+        } else {
+            isAssignable &= isAssignable(from, getTypeMirrorFor(to));
+        }
+
+        return isAssignable;
+    }
+
+    /**
+     * See {@link Types#isAssignable(TypeMirror,TypeMirror)}.
+     */
+    protected boolean isAssignable(List<? extends Element> from,
+                                   Class<?>[] to) {
+        boolean isAssignable = (from.size() == to.length);
+
+        if (isAssignable) {
+            for (int i = 0; i < to.length; i += 1) {
+                isAssignable &= isAssignable(from.get(i).asType(), to[i]);
+
+                if (! isAssignable) {
+                    break;
+                }
+            }
+        }
+
+        return isAssignable;
+    }
+
+    /**
+     * See {@link Types#isSameType(TypeMirror,TypeMirror)}.
+     */
+    protected boolean isSameType(TypeMirror from, TypeMirror to) {
+        return types.isSameType(from, to);
+    }
+
+    /**
+     * See {@link Types#isSameType(TypeMirror,TypeMirror)}.
+     */
+    protected boolean isSameType(TypeMirror from, Class<?> to) {
+        boolean isSameType = true;
+
+        if (from instanceof ArrayType && to.isArray()) {
+            isSameType &=
+                isSameType(((ArrayType) from).getComponentType(),
+                           to.getComponentType());
+        } else if (from instanceof PrimitiveType && to.isPrimitive()) {
+            isSameType &= from.toString().equals(to.getName());
+        } else {
+            isSameType &= isSameType(from, getTypeMirrorFor(to));
+        }
+
+        return isSameType;
+    }
+
+    /**
+     * See {@link Types#isSameType(TypeMirror,TypeMirror)}.
+     */
+    protected boolean isSameType(List<? extends Element> from, Class<?>[] to) {
+        boolean isSameType = (from.size() == to.length);
+
+        if (isSameType) {
+            for (int i = 0; i < to.length; i += 1) {
+                isSameType &= isSameType(from.get(i).asType(), to[i]);
+
+                if (! isSameType) {
+                    break;
+                }
+            }
+        }
+
+        return isSameType;
+    }
+
+    /**
      * Method to return the {@link ExecutableElement}
      * ({@link java.lang.reflect.Method}) the argument
      * {@link ExecutableElement} is specified by (if any).
@@ -421,10 +462,6 @@ public abstract class AbstractProcessor
      * Method to get an {@link ExecutableElement} for a {@link Method} if an
      * equivalent is declared in the argument {@link TypeElement}.
      *
-     * This method does not compare return types nor modifiers and only
-     * examines the {@link ExecutableElement}s declared in the argument
-     * {@link TypeElement}.
-     *
      * @param   type            The {@link TypeElement}.
      * @param   method          The {@link Method} prototype.
      *
@@ -437,7 +474,12 @@ public abstract class AbstractProcessor
         if (type != null) {
             for (ExecutableElement element :
                      methodsIn(type.getEnclosedElements())) {
-                if (same(element, method)) {
+                if (element.getSimpleName().contentEquals(method.getName())
+                    && (element.isVarArgs() == method.isVarArgs())
+                    && isSameType(element.getReturnType(),
+                                  method.getReturnType())
+                    && isSameType(element.getParameters(),
+                                  method.getParameterTypes())) {
                     executable = element;
                     break;
                 }
@@ -445,48 +487,6 @@ public abstract class AbstractProcessor
         }
 
         return executable;
-    }
-
-    private boolean same(ExecutableElement element, Method method) {
-        boolean same = true;
-
-        switch (element.getKind()) {
-        case METHOD:
-            if (same) {
-                same &=
-                    element.getSimpleName().contentEquals(method.getName());
-            }
-
-            if (same) {
-                same &= (element.isVarArgs() == method.isVarArgs());
-            }
-
-            if (same) {
-                List<? extends VariableElement> list = element.getParameters();
-                Class<?>[] array = method.getParameterTypes();
-
-                if (list.size() == array.length) {
-                    for (int i = 0, n = list.size(); i < n; i += 1) {
-                        same &=
-                            types.isSameType(list.get(i).asType(),
-                                             getTypeElementFor(array[i]).asType());
-
-                        if (! same) {
-                            break;
-                        }
-                    }
-                } else {
-                    same &= false;
-                }
-            }
-            break;
-
-        default:
-            same &= false;
-            break;
-        }
-
-        return same;
     }
 
     /**
@@ -497,22 +497,7 @@ public abstract class AbstractProcessor
      * @return  The {@link PackageElement} for the {@link TypeElement}.
      */
     protected PackageElement getPackageElementFor(TypeElement type) {
-        PackageElement pkg = null;
-
-        if (type != null) {
-            Element container = type.getEnclosingElement();
-
-            while (container != null) {
-                if (container instanceof PackageElement) {
-                    pkg = (PackageElement) container;
-                    break;
-                }
-
-                container = container.getEnclosingElement();
-            }
-        }
-
-        return pkg;
+        return (type != null) ? elements.getPackageOf(type) : null;
     }
 
     /**
@@ -523,23 +508,63 @@ public abstract class AbstractProcessor
      * @return  The {@link TypeElement} for the {@link Class}.
      */
     protected TypeElement getTypeElementFor(Class<?> type) {
-        return elements.getTypeElement(type.getCanonicalName());
+        TypeElement element = null;
+
+        try {
+            element = elements.getTypeElement(type.getCanonicalName());
+        } catch (Exception exception) {
+            throw new IllegalArgumentException("type=" + String.valueOf(type),
+                                               exception);
+        }
+
+        return element;
     }
 
     /**
-     * Method to get a {@link List} of {@link TypeElement}s for an array
+     * Method to get a {@link TypeMirror} for a {@link Class}.
+     *
+     * @param   type            The {@link Class}.
+     *
+     * @return  The {@link TypeMirror} for the {@link Class}.
+     */
+    protected TypeMirror getTypeMirrorFor(Class<?> type) {
+        TypeMirror mirror = null;
+
+        try {
+            if (type.isArray()) {
+                TypeMirror component =
+                    getTypeMirrorFor(type.getComponentType());
+
+                mirror = types.getArrayType(component);
+            } else if (type.isPrimitive()) {
+                TypeKind kind = TypeKind.valueOf(type.getName().toUpperCase());
+
+                mirror = types.getPrimitiveType(kind);
+            } else {
+                mirror = getTypeElementFor(type).asType();
+            }
+        } catch (Exception exception) {
+            throw new IllegalArgumentException("type=" + String.valueOf(type),
+                                               exception);
+        }
+
+        return mirror;
+    }
+
+    /**
+     * Method to get a {@link List} of {@link TypeMirror}s for an array
      * of {@link Class}es.
      *
      * @param   types           The {@link Class}es.
      *
-     * @return  The {@link List} of {@link TypeElement}s for the
+     * @return  The {@link List} of {@link TypeMirror}s for the
      *          {@link Class}es.
      */
-    protected List<TypeElement> getTypeElementsFor(Class<?>... types) {
-        TypeElement[] array = new TypeElement[types.length];
+    protected List<TypeMirror> getTypeMirrorsFor(Class<?>... types) {
+        TypeMirror[] array = new TypeMirror[types.length];
 
         for (int i = 0; i < array.length; i += 1) {
-            array[i] = getTypeElementFor(types[i]);
+            array[i] = getTypeMirrorFor(types[i]);
         }
 
         return Arrays.asList(array);
@@ -727,20 +752,6 @@ public abstract class AbstractProcessor
             default:
                 break;
         }
-    }
-
-    /**
-     * See {@link Element#asType()}.
-     */
-    protected TypeMirror asType(Element element) {
-        return (element != null) ? element.asType() : null;
-    }
-
-    /**
-     * See {@link #asType(Element)} and {@link #getTypeElementFor(Class)}.
-     */
-    protected TypeMirror asType(Class<?> type) {
-        return asType(getTypeElementFor(type));
     }
 
     /**
