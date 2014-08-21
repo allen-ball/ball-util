@@ -17,6 +17,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.nio.charset.Charset;
 import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -572,30 +573,28 @@ public abstract class AbstractProcessor
 
     /**
      * Method to translate {@link Class} {@link java.lang.reflect.Modifier}
-     * bits to a {@link Set} of {@link Modifier}s.
+     * bits to a {@link EnumSet} of {@link Modifier}s.
      *
      * @param   modifiers               The {@code int} representing the
      *                                  modifiers.
      *
-     * @return  The {@link Set} of {@link Modifier}s.
+     * @return  The {@link EnumSet} of {@link Modifier}s.
      */
-    protected Set<Modifier> getModifierSet(int modifiers) {
-        TreeMap<String,Modifier> map =
-            new TreeMap<String,Modifier>(String.CASE_INSENSITIVE_ORDER);
+    protected EnumSet<Modifier> getModifierSet(int modifiers) {
+        TreeMap<String,Modifier> map = new TreeMap<String,Modifier>();
 
         if (modifiers != 0) {
             for (Modifier modifier : Modifier.values()) {
                 map.put(modifier.toString(), modifier);
             }
 
-            String string =
-                java.lang.reflect.Modifier.toString(modifiers).toUpperCase();
+            String string = java.lang.reflect.Modifier.toString(modifiers);
 
             map.keySet()
                 .retainAll(Arrays.asList(string.split("[\\p{Space}]+")));
         }
 
-        return new TreeSet<Modifier>(map.values());
+        return EnumSet.copyOf(map.values());
     }
 
     /**
