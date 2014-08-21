@@ -15,6 +15,7 @@ import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.TypeMirror;
 
 import static javax.lang.model.util.ElementFilter.methodsIn;
+import static javax.tools.Diagnostic.Kind.ERROR;
 import static javax.tools.Diagnostic.Kind.WARNING;
 
 /**
@@ -55,7 +56,7 @@ public class ObjectCloneProcessor extends AbstractNoAnnotationProcessor {
             METHOD = getExecutableElementFor(Object.class, "clone");
             THROWABLE = getTypeElementFor(Cloneable.class);
         } catch (Exception exception) {
-            throw new IllegalStateException(exception);
+            print(ERROR, null, exception);
         }
     }
 

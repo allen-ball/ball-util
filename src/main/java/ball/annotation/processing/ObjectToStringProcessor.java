@@ -14,6 +14,7 @@ import javax.lang.model.element.TypeElement;
 
 import static javax.lang.model.element.ElementKind.CLASS;
 import static javax.lang.model.element.Modifier.ABSTRACT;
+import static javax.tools.Diagnostic.Kind.ERROR;
 import static javax.tools.Diagnostic.Kind.WARNING;
 
 /**
@@ -47,7 +48,7 @@ public class ObjectToStringProcessor extends AbstractNoAnnotationProcessor {
         try {
             METHOD = getExecutableElementFor(Object.class, "toString");
         } catch (Exception exception) {
-            throw new IllegalStateException(exception);
+            print(ERROR, null, exception);
         }
     }
 

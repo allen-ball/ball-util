@@ -15,6 +15,7 @@ import javax.lang.model.element.TypeElement;
 
 import static javax.lang.model.element.ElementKind.CLASS;
 import static javax.lang.model.util.ElementFilter.methodsIn;
+import static javax.tools.Diagnostic.Kind.ERROR;
 
 /**
  * {@link Processor} implementation to enforce {@link Collection#toArray()}
@@ -41,7 +42,7 @@ public class CollectionToArrayProcessor extends AbstractNoAnnotationProcessor {
         try {
             METHOD = getExecutableElementFor(Collection.class, "toArray");
         } catch (Exception exception) {
-            throw new IllegalStateException(exception);
+            print(ERROR, null, exception);
         }
     }
 
@@ -57,5 +58,8 @@ public class CollectionToArrayProcessor extends AbstractNoAnnotationProcessor {
 
     private void check(ExecutableElement method) {
         TypeElement type = (TypeElement) method.getEnclosingElement();
+        /*
+         * XXX
+         */
     }
 }
