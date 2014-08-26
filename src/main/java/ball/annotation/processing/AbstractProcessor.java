@@ -14,6 +14,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.nio.charset.Charset;
 import java.util.Arrays;
@@ -172,9 +173,8 @@ public abstract class AbstractProcessor
     }
 
     /**
-     * Method to return the {@link ExecutableElement}
-     * ({@link java.lang.reflect.Method}) the argument
-     * {@link ExecutableElement} overrides (if any).
+     * Method to return the {@link ExecutableElement} ({@link Method}) the
+     * argument {@link ExecutableElement} overrides (if any).
      *
      * @param   overrider       The {@link ExecutableElement}.
      *
@@ -244,9 +244,8 @@ public abstract class AbstractProcessor
     }
 
     /**
-     * Method to determine if a {@link ExecutableElement}
-     * ({@link java.lang.reflect.Method}) overrides another
-     * {@link ExecutableElement}.
+     * Method to determine if a {@link ExecutableElement} ({@link Method})
+     * overrides another {@link ExecutableElement}.
      *
      * @param   overrider       The (possibly) overriding
      *                          {@link ExecutableElement}.
@@ -265,9 +264,8 @@ public abstract class AbstractProcessor
     }
 
     /**
-     * Method to return the {@link ExecutableElement}
-     * ({@link java.lang.reflect.Method}) the argument
-     * {@link ExecutableElement} is overriden by (if any).
+     * Method to return the {@link ExecutableElement} ({@link Method}) the
+     * argument {@link ExecutableElement} is overriden by (if any).
      *
      * @param   overridden      The {@link ExecutableElement}.
      * @param   type            The {@link TypeElement}.
@@ -399,9 +397,8 @@ public abstract class AbstractProcessor
     }
 
     /**
-     * Method to return the {@link ExecutableElement}
-     * ({@link java.lang.reflect.Method}) the argument
-     * {@link ExecutableElement} is specified by (if any).
+     * Method to return the {@link ExecutableElement} ({@link Method}) the
+     * argument {@link ExecutableElement} is specified by (if any).
      *
      * @param   method          The {@link ExecutableElement}.
      *
@@ -573,14 +570,13 @@ public abstract class AbstractProcessor
 
     /**
      * Method to translate {@link Class} {@link java.lang.reflect.Modifier}
-     * bits to a {@link EnumSet} of {@link Modifier}s.
+     * bits to an {@link EnumSet} of {@link Modifier}s.
      *
-     * @param   modifiers               The {@code int} representing the
-     *                                  modifiers.
+     * @param   modifiers       The {@code int} representing the modifiers.
      *
      * @return  The {@link EnumSet} of {@link Modifier}s.
      */
-    protected EnumSet<Modifier> getModifierSet(int modifiers) {
+    protected EnumSet<Modifier> asModifierSet(int modifiers) {
         TreeMap<String,Modifier> map = new TreeMap<String,Modifier>();
 
         if (modifiers != 0) {
@@ -595,6 +591,28 @@ public abstract class AbstractProcessor
         }
 
         return EnumSet.copyOf(map.values());
+    }
+
+    /**
+     * See {@link #asModifierSet(int)}.
+     *
+     * @param   type            The {@link Class}.
+     *
+     * @return  The {@link EnumSet} of {@link Modifier}s.
+     */
+    protected EnumSet<Modifier> getModifierSetFor(Class<?> type) {
+        return asModifierSet(type.getModifiers());
+    }
+
+    /**
+     * See {@link #asModifierSet(int)}.
+     *
+     * @param   member          The {@link Member}.
+     *
+     * @return  The {@link EnumSet} of {@link Modifier}s.
+     */
+    protected EnumSet<Modifier> getModifierSetFor(Member member) {
+        return asModifierSet(member.getModifiers());
     }
 
     /**
