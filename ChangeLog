@@ -1,5 +1,8 @@
 2014-08-25  Allen D. Ball  <ball@sol.local>
 
+	* src/main/java/ball/annotation/Manifest.java:
+	Replaced @ManifestSection with @Manifest.*.
+
 	* src/main/java/ball/annotation/processing/AbstractProcessor.java:
 	Added getModifierSetFor(Class<?>) and getModifierSetFor(Member)
 	methods.

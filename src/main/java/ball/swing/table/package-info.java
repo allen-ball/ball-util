@@ -3,7 +3,7 @@
  *
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  */
-@ManifestSection
+@Manifest.Section
 package ball.swing.table;
 
-import ball.annotation.ManifestSection;
+import ball.annotation.Manifest;
