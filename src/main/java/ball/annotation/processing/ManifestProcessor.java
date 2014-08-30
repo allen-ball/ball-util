@@ -320,13 +320,6 @@ public class ManifestProcessor extends AbstractAnnotationProcessor
             super();
 
             getMainAttributes().putValue("Manifest-Version", "1.0");
-
-            String version = System.getProperty("ant.version");
-
-            if (version != null) {
-                getMainAttributes().putValue("Ant-Version", version);
-            }
-
             getEntries().put("Build-Information", new BuildInformation());
         }
 
