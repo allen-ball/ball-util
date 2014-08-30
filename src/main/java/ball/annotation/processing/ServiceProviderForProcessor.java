@@ -50,7 +50,7 @@ import static javax.tools.StandardLocation.CLASS_OUTPUT;
 @For({ ServiceProviderFor.class })
 public class ServiceProviderForProcessor extends AbstractAnnotationProcessor
                                          implements BootstrapProcessorTask.Processor {
-    private static final String PATH = "META-INF/services/%s";
+    private static final String PATH = META_INF + "/services/%s";
 
     private MapImpl map = new MapImpl();
 
