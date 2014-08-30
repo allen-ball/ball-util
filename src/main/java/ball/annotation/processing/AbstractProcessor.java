@@ -71,6 +71,9 @@ import static javax.tools.Diagnostic.Kind.ERROR;
  */
 public abstract class AbstractProcessor
                       extends javax.annotation.processing.AbstractProcessor {
+    /** {@link #META_INF} = {@value #META_INF} */
+    protected static final String META_INF = "META-INF";
+
     /** {@link #AT} = {@value #AT} */
     protected static final String AT = "@";
     /** {@link #COLON} = {@value #COLON} */
