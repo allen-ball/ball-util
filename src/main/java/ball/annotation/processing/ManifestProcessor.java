@@ -5,18 +5,20 @@
  */
 package ball.annotation.processing;
 
+import ball.annotation.Manifest.Attribute;
 import ball.annotation.Manifest.DependsOn;
 import ball.annotation.Manifest.DesignTimeOnly;
 import ball.annotation.Manifest.JavaBean;
 import ball.annotation.Manifest.MainClass;
-import ball.annotation.Manifest.Attribute;
 import ball.annotation.Manifest.Section;
 import ball.annotation.ServiceProviderFor;
 import ball.io.IOUtil;
 import ball.util.ant.taskdefs.BootstrapProcessorTask;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -38,7 +40,6 @@ import static ball.lang.Punctuation.COMMA;
 import static ball.lang.Punctuation.LP;
 import static ball.lang.Punctuation.RP;
 import static ball.util.StringUtil.NIL;
-import static ball.util.StringUtil.NIL;
 import static javax.tools.Diagnostic.Kind.ERROR;
 import static javax.tools.Diagnostic.Kind.WARNING;
 import static javax.tools.StandardLocation.CLASS_OUTPUT;
@@ -58,7 +59,7 @@ import static javax.tools.StandardLocation.CLASS_OUTPUT;
      })
 public class ManifestProcessor extends AbstractAnnotationProcessor
                                implements BootstrapProcessorTask.Processor {
-    private static final String MANIFEST_MF = "META-INF/MANIFEST.MF";
+    private static final String MANIFEST_MF = "MANIFEST.MF";
 
     private static final String DOT_CLASS = ".class";
 
@@ -68,7 +69,7 @@ public class ManifestProcessor extends AbstractAnnotationProcessor
 
     private static final Method MAIN = MAIN.class.getDeclaredMethods()[0];
 
-    private ManifestImpl manifest = new ManifestImpl();
+    private ManifestImpl manifest = null;
     private HashSet<Element> processed = new HashSet<Element>();
 
     /**
@@ -79,13 +80,36 @@ public class ManifestProcessor extends AbstractAnnotationProcessor
     @Override
     public boolean process(Set<? extends TypeElement> annotations,
                            RoundEnvironment roundEnv) {
-        boolean result = super.process(annotations, roundEnv);
+        boolean result = true;
 
-        if (! roundEnv.errorRaised()) {
-            if (roundEnv.processingOver()) {
+        try {
+            String path = META_INF + SLASH + MANIFEST_MF;
+
+            if (manifest == null) {
+                manifest = new ManifestImpl();
+
+                InputStream in = null;
+
                 try {
                     FileObject file =
-                        filer.createResource(CLASS_OUTPUT, NIL, MANIFEST_MF);
+                        filer.getResource(CLASS_OUTPUT, NIL, path);
+
+                    if (file.getLastModified() != 0) {
+                        in = file.openInputStream();
+                        manifest.read(in);
+                    }
+                } catch (Exception exception) {
+                } finally {
+                    IOUtil.close(in);
+                }
+            }
+
+            if (! roundEnv.errorRaised()) {
+                result &= super.process(annotations, roundEnv);
+
+                if (roundEnv.processingOver()) {
+                    FileObject file =
+                        filer.createResource(CLASS_OUTPUT, NIL, path);
                     OutputStream out = null;
 
                     try {
@@ -94,10 +118,10 @@ public class ManifestProcessor extends AbstractAnnotationProcessor
                     } finally {
                         IOUtil.close(out);
                     }
-                } catch (Exception exception) {
-                    exception.printStackTrace(System.err);
                 }
             }
+        } catch (Exception exception) {
+            print(ERROR, null, exception);
         }
 
         return result;
@@ -123,7 +147,8 @@ public class ManifestProcessor extends AbstractAnnotationProcessor
                         getExecutableElementFor(type, MAIN);
 
                     if (method != null
-                        && method.getModifiers().containsAll(getModifierSetFor(MAIN))) {
+                        && (method.getModifiers()
+                            .containsAll(getModifierSetFor(MAIN)))) {
                         String name = elements.getBinaryName(type).toString();
                         String old = manifest.put(main, name);
 
@@ -184,7 +209,26 @@ public class ManifestProcessor extends AbstractAnnotationProcessor
 
     @Override
     public void process(Set<Class<?>> set, File destdir) throws IOException {
+        File file = new File(new File(destdir, META_INF), MANIFEST_MF);
+
+        if (manifest == null) {
+            manifest = new ManifestImpl();
+
+            if (file.exists()) {
+                FileInputStream in = null;
+
+                try {
+                    in = new FileInputStream(file);
+                    manifest.read(in);
+                } finally {
+                    IOUtil.close(in);
+                }
+            }
+        }
+
         for (Class<?> type : set) {
+            Attribute attribute = type.getAnnotation(Attribute.class);
+
             MainClass main = type.getAnnotation(MainClass.class);
 
             if (main != null) {
@@ -205,8 +249,6 @@ public class ManifestProcessor extends AbstractAnnotationProcessor
                 manifest.put(asPath(type), bean, depends, design);
             }
         }
-
-        File file = new File(destdir, MANIFEST_MF);
 
         IOUtil.mkdirs(file.getParentFile());
 
@@ -278,6 +320,14 @@ public class ManifestProcessor extends AbstractAnnotationProcessor
             super();
 
             getMainAttributes().putValue("Manifest-Version", "1.0");
+
+            String version = System.getProperty("ant.version");
+
+            if (version != null) {
+                getMainAttributes().putValue("Ant-Version", version);
+            }
+
+            getEntries().put("Build-Information", new BuildInformation());
         }
 
         public String put(MainClass main, String name) {
@@ -340,5 +390,22 @@ public class ManifestProcessor extends AbstractAnnotationProcessor
 
         @Override
         public String toString() { return super.toString(); }
+
+        private class BuildInformation extends Attributes {
+            public BuildInformation() {
+                super();
+
+                putValue("Build-Time",
+                         String.valueOf(System.currentTimeMillis()));
+                putValue("Java-Vendor", System.getProperty("java.vendor"));
+                putValue("Java-Version", System.getProperty("java.version"));
+                putValue("Os-Arch", System.getProperty("os.arch"));
+                putValue("Os-Name", System.getProperty("os.name"));
+                putValue("Os-Version", System.getProperty("os.version"));
+            }
+
+            @Override
+            public String toString() { return super.toString(); }
+        }
     }
 }
