@@ -27,6 +27,7 @@ import javax.xml.bind.annotation.XmlType;
 
 import static ball.util.ClassUtil.isAbstract;
 import static ball.util.StringUtil.NIL;
+import static javax.tools.Diagnostic.Kind.ERROR;
 import static javax.tools.StandardLocation.CLASS_OUTPUT;
 
 /**
@@ -52,11 +53,13 @@ public class JAXBIndexProcessor extends AbstractAnnotationProcessor
     @Override
     public boolean process(Set<? extends TypeElement> annotations,
                            RoundEnvironment roundEnv) {
-        boolean result = super.process(annotations, roundEnv);
+        boolean result = true;
 
-        if (! roundEnv.errorRaised()) {
-            if (roundEnv.processingOver()) {
-                try {
+        try {
+            if (! roundEnv.errorRaised()) {
+                result &= super.process(annotations, roundEnv);
+
+                if (roundEnv.processingOver()) {
                     for (Map.Entry<String,Set<String>> entry :
                              map.entrySet()) {
                         FileObject file =
@@ -71,10 +74,10 @@ public class JAXBIndexProcessor extends AbstractAnnotationProcessor
                             IOUtil.close(writer);
                         }
                     }
-                } catch (Exception exception) {
-                    exception.printStackTrace(System.err);
                 }
             }
+        } catch (Exception exception) {
+            print(ERROR, null, exception);
         }
 
         return result;
