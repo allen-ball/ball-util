@@ -1,3 +1,8 @@
+2014-09-06  Allen D. Ball  <ball@sol.local>
+
+	* src/main/java/ball/annotation/processing/ManifestProcessor.java:
+	Preserve any Attributes already specified in the MANIFEST.MF.
+
 2014-08-29  Allen D. Ball  <ball@sol.local>
 
 	* src/main/java/ball/annotation/processing/ManifestProcessor.java:
