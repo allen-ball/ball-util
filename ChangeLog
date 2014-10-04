@@ -1,3 +1,9 @@
+2014-10-04  Allen D. Ball  <ball@sol.local>
+
+	* src/main/java/ball/io/BOMCharsetMap.java,
+	src/main/java/ball/io/UnicodeReader.java:
+	Initial writing.
+
 2014-09-06  Allen D. Ball  <ball@sol.local>
 
 	* src/main/java/ball/annotation/processing/ManifestProcessor.java:
