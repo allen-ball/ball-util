@@ -286,7 +286,11 @@ public abstract class AbstractTaglet implements Taglet {
      *          otherwise.
      */
     protected ClassDoc getClassDoc(ClassDoc context, String name) {
-        return (context != null) ? context.findClass(name) : null;
+        return ((context != null)
+                    ? (isNil(name)
+                           ? context
+                           : context.findClass(name))
+                    : null);
     }
 
     /**
