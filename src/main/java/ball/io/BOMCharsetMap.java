@@ -14,6 +14,8 @@ import java.util.Map;
 /**
  * Byte order mark to {@link Charset} {@link Map} implementation.
  *
+ * {@include.map #INSTANCE}
+ *
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
@@ -65,7 +67,7 @@ public class BOMCharsetMap extends LinkedHashMap<byte[],Charset> {
             buffer
                 .append(toString(entry.getKey()))
                 .append("=")
-                .append(nameOf(entry.getValue()));
+                .append(toString(entry.getValue()));
 
             if (iterator.hasNext()) {
                 buffer.append(", ");
@@ -95,7 +97,7 @@ public class BOMCharsetMap extends LinkedHashMap<byte[],Charset> {
         return buffer.toString();
     }
 
-    private String nameOf(Charset charset) {
+    private String toString(Charset charset) {
         return (charset != null) ? charset.name() : null;
     }
 }
