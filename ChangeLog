@@ -3,6 +3,9 @@
 	* src/main/java/ball/tools/javadoc/AbstractTaglet.java:
 	Modified getClassDoc(ClassDoc,String) to accept nil name parameter.
 
+	* src/main/java/ball/tools/javadoc/IncludeMapTaglet.java:
+	Initial writing.
+
 2014-10-04  Allen D. Ball  <ball@sol.local>
 
 	* src/main/java/ball/io/BOMCharsetMap.java,
