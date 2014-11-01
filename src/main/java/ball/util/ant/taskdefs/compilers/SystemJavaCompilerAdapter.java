@@ -205,8 +205,10 @@ public class SystemJavaCompilerAdapter implements CompilerAdapter,
                 String source = source(diagnostic);
 
                 if (source != null) {
-                    log(source);
-                    log(pointer(diagnostic));
+                    if (String.valueOf(diagnostic).indexOf(source) < 0) {
+                        log(source);
+                        log(pointer(diagnostic));
+                    }
                 }
             }
 
