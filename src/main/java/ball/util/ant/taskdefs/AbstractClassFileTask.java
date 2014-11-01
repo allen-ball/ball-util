@@ -66,7 +66,7 @@ public abstract class AbstractClassFileTask extends AbstractClasspathTask {
     }
 
     protected Set<Class<?>> getClassSet() throws BuildException {
-        TreeSet<Class<?>> set = new TreeSet<Class<?>>(ClassOrder.NAME);
+        TreeSet<Class<?>> set = new TreeSet<>(ClassOrder.NAME);
 
         try {
             DirectoryIterator iterator =

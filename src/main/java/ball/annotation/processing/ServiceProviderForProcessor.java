@@ -151,7 +151,7 @@ public class ServiceProviderForProcessor extends AbstractAnnotationProcessor
                                                            TypeElement annotation) {
         AnnotationValue value =
             getAnnotationValue(element, annotation, "value()");
-        ArrayList<TypeElement> list = new ArrayList<TypeElement>();
+        ArrayList<TypeElement> list = new ArrayList<>();
 
         for (Object object : (List<?>) value.getValue()) {
             TypeMirror mirror =

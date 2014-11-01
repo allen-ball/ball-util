@@ -1,5 +1,7 @@
 2014-11-01  Allen D. Ball  <ball@sol.local>
 
+	* Use diamond ("<>") operator where possible.
+
 	* src/main/java/ball/util/ant/taskdefs/compilers/SystemJavaCompilerAdapter.java:
 	Avoid printing source line and pointer if the source is already
 	printed in the diagnostic message.

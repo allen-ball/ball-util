@@ -42,7 +42,7 @@ public abstract class AbstractFilenameFilter implements FilenameFilter {
      * @see File#list(FilenameFilter)
      */
     public String[] list(File... parents) {
-        HashSet<String> set = new HashSet<String>();
+        HashSet<String> set = new HashSet<>();
 
         for (File parent : parents) {
             if (parent != null) {

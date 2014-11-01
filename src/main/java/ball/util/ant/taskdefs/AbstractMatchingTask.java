@@ -56,7 +56,7 @@ public abstract class AbstractMatchingTask extends MatchingTask
      * @return  The {@link Set} of matching {@link File}s.
      */
     protected Set<File> getMatchingFileSet() {
-        TreeSet<File> set = new TreeSet<File>();
+        TreeSet<File> set = new TreeSet<>();
         File base = getBasedir();
 
         if (base != null) {

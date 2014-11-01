@@ -48,7 +48,7 @@ public class PackageListTask extends AbstractClassFileTask {
     public void execute() throws BuildException {
         super.execute();
 
-        Set<String> set = new TreeSet<String>();
+        Set<String> set = new TreeSet<>();
 
         for (Class<?> type : getClassSet()) {
             set.add(type.getPackage().getName());

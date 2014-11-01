@@ -43,8 +43,7 @@ public class Shell implements Runnable {
             String line = el.readline(prompt);
 
             if (line != null) {
-                TreeMap<Integer,Parser.Token> map =
-                    new TreeMap<Integer,Parser.Token>();
+                TreeMap<Integer,Parser.Token> map = new TreeMap<>();
 
                 for (Parser.Token token : PARSER.parse(line)) {
                     map.put(token.end(), token);

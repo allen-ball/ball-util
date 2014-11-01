@@ -40,7 +40,8 @@ public class SequenceIterator<E> extends AbstractIterator<E> {
      *
      * @param   iterables       The array of {@link Iterable}s.
      */
-    @SuppressWarnings({ "varargs" }) /* @SafeVarargs */
+    @SafeVarargs
+    @SuppressWarnings({ "varargs" })
     public SequenceIterator(Iterable<E>... iterables) {
         this(Arrays.asList(iterables));
     }

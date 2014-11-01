@@ -88,7 +88,7 @@ public class ResourceFileProcessor extends AbstractAnnotationProcessor {
 
         if (! isNil(path)) {
             if (lines != null) {
-                ArrayList<String> list = new ArrayList<String>(lines.length);
+                ArrayList<String> list = new ArrayList<>(lines.length);
                 Parameters parameters = new Parameters((TypeElement) element);
 
                 for (String line : lines) {

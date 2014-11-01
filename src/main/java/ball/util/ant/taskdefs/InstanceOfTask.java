@@ -35,7 +35,7 @@ import static ball.util.StringUtil.NIL;
 @AntTask("instance-of")
 public class InstanceOfTask extends AbstractClasspathTask {
     private String type = String.class.getName();
-    private List<Argument> list = new ArrayList<Argument>();
+    private List<Argument> list = new ArrayList<>();
     protected Object instance = null;
 
     /**
@@ -65,7 +65,7 @@ public class InstanceOfTask extends AbstractClasspathTask {
             log(type.getName());
 
             ClassList parameters = new ClassList();
-            List<Object> arguments = new ArrayList<Object>();
+            List<Object> arguments = new ArrayList<>();
 
             for (Argument argument : list) {
                 Factory<?> factory =

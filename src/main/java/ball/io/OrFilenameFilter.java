@@ -19,7 +19,7 @@ import java.util.List;
  * @version $Revision$
  */
 public class OrFilenameFilter extends AbstractFilenameFilter {
-    private final List<FilenameFilter> list = new ArrayList<FilenameFilter>();
+    private final List<FilenameFilter> list = new ArrayList<>();
 
     /**
      * @param   collection      The {@link Collection} of

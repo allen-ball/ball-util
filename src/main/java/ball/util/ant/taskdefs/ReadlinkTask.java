@@ -34,7 +34,7 @@ public class ReadlinkTask extends AbstractMatchingTask {
     public void execute() throws BuildException {
         super.execute();
 
-        LinkedHashMap<File,File> map = new LinkedHashMap<File,File>();
+        LinkedHashMap<File,File> map = new LinkedHashMap<>();
 
         for (File source : getMatchingFileSet()) {
             File target = POSIX.readlink(source);

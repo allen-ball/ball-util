@@ -28,7 +28,7 @@ public abstract class IterableUtil {
      * @return  An {@link Iterable} that wraps the {@link Iterator}.
      */
     public static <E> Iterable<E> asIterable(Iterator<E> iterator) {
-        return new FromIterator<E>(iterator);
+        return new FromIterator<>(iterator);
     }
 
     /**
@@ -39,7 +39,7 @@ public abstract class IterableUtil {
      * @return  An {@link Iterable} that wraps the {@link Enumeration}.
      */
     public static <E> Iterable<E> asIterable(Enumeration<E> enumeration) {
-        return new FromEnumeration<E>(enumeration);
+        return new FromEnumeration<>(enumeration);
     }
 
     /**
@@ -67,7 +67,7 @@ public abstract class IterableUtil {
      * @return  An {@link Iterable} that wraps the {@link Iterator}.
      */
     public static <T> Iterable<T> filter(Class<T> type, Iterator<?> iterator) {
-        return new TypeFilter<T>(type, iterator);
+        return new TypeFilter<>(type, iterator);
     }
 
     /**
@@ -112,7 +112,7 @@ public abstract class IterableUtil {
      */
     public static <T> Iterable<T> filter(Predicate predicate,
                                          Iterator<T> iterator) {
-        return new FilteredIterator<T>(predicate, iterator);
+        return new FilteredIterator<>(predicate, iterator);
     }
 
     /**
