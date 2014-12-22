@@ -1,3 +1,8 @@
+2014-12-21  Allen D. Ball  <ball@sol.local>
+
+	* src/main/resources/ball/util/ant/taskdefs/JNIResourceBundle.properties:
+	Support Oracle JDK 1.7 on Mac OS X.
+
 2014-11-01  Allen D. Ball  <ball@sol.local>
 
 	* Use diamond ("<>") operator where possible.
