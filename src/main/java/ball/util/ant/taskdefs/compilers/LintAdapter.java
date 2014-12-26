@@ -18,6 +18,7 @@ import javax.tools.Diagnostic;
 import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
 
+import static ball.util.StringUtil.NIL;
 import static javax.tools.JavaFileObject.Kind.CLASS;
 import static javax.tools.StandardLocation.CLASS_OUTPUT;
 import static javax.tools.StandardLocation.CLASS_PATH;
@@ -79,7 +80,7 @@ public class LintAdapter extends SystemJavaCompilerAdapter {
 
             try {
                 iterable =
-                    fm.list(CLASS_OUTPUT, "",
+                    fm.list(CLASS_OUTPUT, NIL,
                             Collections.singleton(CLASS), true);
             } catch (Throwable throwable) {
                 iterable = Collections.<JavaFileObject>emptyList();

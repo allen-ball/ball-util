@@ -14,6 +14,8 @@ import java.util.MissingResourceException;
 import java.util.Properties;
 import java.util.Set;
 
+import static ball.util.StringUtil.NIL;
+
 /**
  * Abstract Property base class.
  *
@@ -337,6 +339,6 @@ public abstract class Property<T> implements Comparable<Property<?>> {
             }
         }
 
-        return (prefix != null) ? prefix : "";
+        return (prefix != null) ? prefix : NIL;
     }
 }

@@ -307,7 +307,7 @@ public abstract class AbstractTaglet implements Taglet {
      *          {@link Class} name otherwise.
      */
     protected Object getClassDocLink(Doc context, Class<?> type) {
-        String brackets = "";
+        String brackets = NIL;
 
         while (type.isArray()) {
             brackets = "[]" + brackets;

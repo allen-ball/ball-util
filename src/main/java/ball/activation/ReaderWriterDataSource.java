@@ -22,6 +22,8 @@ import java.nio.charset.Charset;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+import static ball.util.StringUtil.NIL;
+
 /**
  * {@link javax.activation.DataSource} implementation that provides a
  * {@link BufferedReader} wrapping the {@link javax.activation.DataSource}
@@ -66,7 +68,7 @@ public class ReaderWriterDataSource extends FilterDataSource
      * @param   charset         The {@link Charset} used to encode the
      *                          {@link OutputStream}.
      */
-    @ConstructorProperties({ "name", "contentType", "charset", "" })
+    @ConstructorProperties({ "name", "contentType", "charset", NIL })
     public ReaderWriterDataSource(String name, String type,
                                   Charset charset, String content) {
         super(new ByteArrayDataSource(name, type));

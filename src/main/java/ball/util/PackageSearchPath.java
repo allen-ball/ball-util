@@ -10,6 +10,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 
+import static ball.util.StringUtil.NIL;
+
 /**
  * Package search path mechanism.
  *
@@ -34,7 +36,7 @@ public class PackageSearchPath<T> extends LinkedHashSet<Package> {
      * @param   superclass      The type of {@link Class} to search for.
      * @param   packages        The {@link Package}s to search.
      */
-    @ConstructorProperties({ "superclass", "" })
+    @ConstructorProperties({ "superclass", NIL })
     public PackageSearchPath(Class<? extends T> superclass,
                              Package... packages) {
         this(superclass, Arrays.asList(packages));
@@ -45,7 +47,7 @@ public class PackageSearchPath<T> extends LinkedHashSet<Package> {
      * @param   collection      The {@link Collection} of {@link Package}s
      *                          to search.
      */
-    @ConstructorProperties({ "superclass", "" })
+    @ConstructorProperties({ "superclass", NIL })
     public PackageSearchPath(Class<? extends T> superclass,
                              Collection<Package> collection) {
         super();

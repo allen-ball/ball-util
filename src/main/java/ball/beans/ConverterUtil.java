@@ -10,6 +10,8 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.TreeMap;
 
+import static ball.util.StringUtil.NIL;
+
 /**
  * {@link Converter} utility methods.
  *
