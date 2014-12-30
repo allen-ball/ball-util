@@ -42,4 +42,81 @@
       <scope>provided</scope>
     </dependency>
   </dependencies>
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-javadoc-plugin</artifactId>
+          <configuration>
+            <includeDependencySources>true</includeDependencySources>
+            <dependencySourceIncludes>
+              <dependencySourceInclude>
+                org.apache.ant:*
+              </dependencySourceInclude>
+            </dependencySourceIncludes>
+            <!-- Replicated from Ant source build.xml -->
+            <tags>
+              <tag>
+                <name>todo</name>
+                <head>To do:</head>
+                <placement>a</placement>
+              </tag>
+              <tag>
+                <name>ant.task</name>
+                <head>Task:</head>
+                <placement>X</placement>
+              </tag>
+              <tag>
+                <name>ant.datatype</name>
+                <head>Data type:</head>
+                <placement>X</placement>
+              </tag>
+              <tag>
+                <name>ant.attribute</name>
+                <head>Attribute:</head>
+                <placement>X</placement>
+              </tag>
+              <tag>
+                <name>ant.attribute.group</name>
+                <head>Attribute group:</head>
+                <placement>X</placement>
+              </tag>
+              <tag>
+                <name>ant.element</name>
+                <head>Nested element:</head>
+                <placement>X</placement>
+              </tag>
+            </tags>
+            <groups>
+              <group>
+                <title>Apache Ant Core</title>
+                <packages>org.apache.tools.ant*</packages>
+              </group>
+              <group>
+                <title>Core Tasks</title>
+                <packages>org.apache.tools.ant.taskdefs*</packages>
+              </group>
+              <group>
+                <title>Core Types</title>
+                <packages>org.apache.tools.ant.types*</packages>
+              </group>
+              <group>
+                <title>Optional Tasks</title>
+                <packages>org.apache.tools.ant.taskdefs.optional*</packages>
+              </group>
+              <group>
+                <title>Optional Types</title>
+                <packages>org.apache.tools.ant.types.optional*</packages>
+              </group>
+              <group>
+                <title>Ant Utilities</title>
+                <packages>org.apache.tools.ant.util*</packages>
+              </group>
+            </groups>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
 </project>
