@@ -54,8 +54,8 @@
               value="${pom.artifactId}-${pom.version}.jar"/>
   </target>
 
-  <target name="classes"
-          description="--> Compile Java source."
+  <target name="resources"
+          description="--> Copy resources."
           depends="depend">
     <mkdir dir="${target.classes.dir}"/>
     <filter token="POM.ARTIFACTID" value="${pom.artifactId}"/>
@@ -63,6 +63,11 @@
           todir="${target.classes.dir}">
       <fileset dir="${src.dir}/main/resources"/>
     </copy>
+  </target>
+
+  <target name="classes"
+          description="--> Compile Java source."
+          depends="resources">
     <javac destdir="${target.classes.dir}">
       <compilerarg compiler="modern" value="-Xlint"/>
       <compilerarg compiler="modern" value="-g:source,lines,vars"/>
@@ -117,7 +122,7 @@
 
   <target name="jnilib"
           description="--> Compile JNI library."
-          depends="objects">
+          depends="objects" if="jni.classes">
     <available property="link.libuuid" file="/lib/libuuid.so.1"/>
     <system-load-library property="have.libuuid" libname="uuid"/>
     <taskdef classpathref="build.classpath"
