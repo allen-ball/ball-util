@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2013, 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2013 - 2015 Allen D. Ball.  All rights reserved.
  */
 package ball.tools;
 
@@ -37,7 +37,7 @@ import static java.lang.reflect.Modifier.ABSTRACT;
  * @version $Revision$
  */
 @ServiceProviderFor({ Remedy.class })
-@Codes("compiler.err.does.not.override.abstract")
+@Codes({ "compiler.err.does.not.override.abstract" })
 public class DoesNotOverrideAbstractRemedy extends Remedy {
 
     @Regex

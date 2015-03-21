@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2011 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2011 - 2015 Allen D. Ball.  All rights reserved.
  */
 package ball.tools;
 
@@ -24,7 +24,7 @@ import static ball.lang.Punctuation.SPACE;
  * @version $Revision$
  */
 @ServiceProviderFor({ Remedy.class })
-@Codes("compiler.err.cant.resolve.location")
+@Codes({ "compiler.err.cant.resolve.location" })
 public class CannotResolveLocationRemedy extends Remedy {
 
     @Regex

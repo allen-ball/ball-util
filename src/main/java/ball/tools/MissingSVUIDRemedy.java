@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2011 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2011 - 2015 Allen D. Ball.  All rights reserved.
  */
 package ball.tools;
 
@@ -31,7 +31,7 @@ import static java.lang.reflect.Modifier.STATIC;
  * @version $Revision$
  */
 @ServiceProviderFor({ Remedy.class })
-@Codes("compiler.warn.missing.SVUID")
+@Codes({ "compiler.warn.missing.SVUID" })
 public class MissingSVUIDRemedy extends Remedy implements Serializable {
     private static final long serialVersionUID = 4284917790386692392L;
 
