@@ -90,28 +90,12 @@
             </tags>
             <groups>
               <group>
-                <title>Apache Ant Core</title>
-                <packages>org.apache.tools.ant*</packages>
+                <title>${project.name}</title>
+                <packages>ball.*</packages>
               </group>
               <group>
-                <title>Core Tasks</title>
-                <packages>org.apache.tools.ant.taskdefs*</packages>
-              </group>
-              <group>
-                <title>Core Types</title>
-                <packages>org.apache.tools.ant.types*</packages>
-              </group>
-              <group>
-                <title>Optional Tasks</title>
-                <packages>org.apache.tools.ant.taskdefs.optional*</packages>
-              </group>
-              <group>
-                <title>Optional Types</title>
-                <packages>org.apache.tools.ant.types.optional*</packages>
-              </group>
-              <group>
-                <title>Ant Utilities</title>
-                <packages>org.apache.tools.ant.util*</packages>
+                <title>Apache Ant</title>
+                <packages>org.apache.*</packages>
               </group>
             </groups>
           </configuration>
