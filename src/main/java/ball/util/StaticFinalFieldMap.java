@@ -78,7 +78,7 @@ public class StaticFinalFieldMap<T> extends TreeMap<String,T> {
      * @return  The reverse {@link Map}.
      */
     public SortedMap<T,String> reverseMap() {
-        TreeMap<T,String> map = new TreeMap<>();
+        TreeMap<T,String> map = new TreeMap<T,String>();
 
         for (Map.Entry<String,T> entry : entrySet()) {
             map.put(entry.getValue(), entry.getKey());

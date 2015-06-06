@@ -75,7 +75,7 @@ public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
 
     @Override
     public Set<String> getSupportedAnnotationTypes() {
-        Set<String> set = new LinkedHashSet<>();
+        Set<String> set = new LinkedHashSet<String>();
 
         for (Class<? extends Annotation> type :
                  getSupportedAnnotationTypeList()) {

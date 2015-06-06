@@ -49,7 +49,7 @@ public class JNIClassesTask extends AbstractClassFileTask {
     public void execute() throws BuildException {
         super.execute();
 
-        Set<Class<?>> set = new TreeSet<>(NAME);
+        Set<Class<?>> set = new TreeSet<Class<?>>(NAME);
 
         for (Class<?> type : getClassSet()) {
             if (hasNative(type.getDeclaredConstructors())

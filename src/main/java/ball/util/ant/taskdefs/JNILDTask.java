@@ -26,7 +26,7 @@ public class JNILDTask extends AbstractJNIExecuteOnTask {
     private String prefix = null;
     private String suffix = null;
     private String property = null;
-    private LinkedHashSet<Library> linkSet = new LinkedHashSet<>();
+    private LinkedHashSet<Library> linkSet = new LinkedHashSet<Library>();
 
     /**
      * Sole constructor.

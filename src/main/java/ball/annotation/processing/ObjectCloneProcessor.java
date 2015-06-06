@@ -94,7 +94,7 @@ public class ObjectCloneProcessor extends AbstractNoAnnotationProcessor {
                   + type.getSimpleName());
         }
 
-        ArrayList<TypeMirror> throwables = new ArrayList<>();
+        ArrayList<TypeMirror> throwables = new ArrayList<TypeMirror>();
 
         throwables.addAll(METHOD.getThrownTypes());
         throwables.retainAll(overrides(method).getThrownTypes());

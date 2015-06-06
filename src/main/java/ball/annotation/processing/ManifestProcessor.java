@@ -70,7 +70,7 @@ public class ManifestProcessor extends AbstractAnnotationProcessor
     private static final Method MAIN = MAIN.class.getDeclaredMethods()[0];
 
     private ManifestImpl manifest = null;
-    private HashSet<Element> processed = new HashSet<>();
+    private HashSet<Element> processed = new HashSet<Element>();
 
     /**
      * Sole constructor.

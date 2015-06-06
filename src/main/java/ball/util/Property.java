@@ -271,7 +271,7 @@ public abstract class Property<T> implements Comparable<Property<?>> {
      *          {@link Property} and {@link Iterable} fields.
      */
     public static Set<Property<?>> getStaticPropertyFields(Class<?>... types) {
-        LinkedHashSet<Property<?>> set = new LinkedHashSet<>();
+        LinkedHashSet<Property<?>> set = new LinkedHashSet<Property<?>>();
 
         for (Class<?> type : types) {
             for (Field field : type.getDeclaredFields()) {

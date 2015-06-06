@@ -21,7 +21,8 @@ import org.apache.tools.ant.BuildException;
 @AntTask("jni-cc")
 public class JNICCTask extends AbstractJNIExecuteOnTask {
     private File include = null;
-    private LinkedHashSet<Definition> defineSet = new LinkedHashSet<>();
+    private LinkedHashSet<Definition> defineSet =
+        new LinkedHashSet<Definition>();
 
     /**
      * Sole constructor.

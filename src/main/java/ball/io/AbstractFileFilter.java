@@ -45,7 +45,7 @@ public abstract class AbstractFileFilter implements FileFilter {
      * @see File#listFiles(FileFilter)
      */
     public File[] list(File... parents) {
-        HashSet<File> set = new HashSet<>();
+        HashSet<File> set = new HashSet<File>();
 
         for (File parent : parents) {
             if (parent != null) {

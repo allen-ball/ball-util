@@ -82,7 +82,8 @@ public class Combinations<E> extends Permutations<E> {
 
             @Override
             public Iterator<List<E>> iterator() {
-                Collection<Iterable<List<E>>> collection = new LinkedList<>();
+                Collection<Iterable<List<E>>> collection =
+                    new LinkedList<Iterable<List<E>>>();
 
                 for (int i = 0, n = list.size(); i < n; i += 1) {
                     List<E> combination = new ListImpl(prefix, list.get(i));
@@ -91,7 +92,7 @@ public class Combinations<E> extends Permutations<E> {
                     collection.add(new IterableImpl(combination, rest));
                 }
 
-                return new SequenceIterator<>(collection);
+                return new SequenceIterator<List<E>>(collection);
             }
         }
 

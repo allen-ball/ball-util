@@ -29,7 +29,7 @@ public class IsInstanceOf extends And {
 
     private static class Impl extends AbstractPredicate {
         private final TreeSet<Class<?>> set =
-            new TreeSet<>(ClassOrder.INHERITANCE);
+            new TreeSet<Class<?>>(ClassOrder.INHERITANCE);
 
         public Impl(Class<?>... types) {
             super();

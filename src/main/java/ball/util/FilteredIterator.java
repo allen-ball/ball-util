@@ -24,7 +24,7 @@ import java.util.LinkedList;
 public class FilteredIterator<E> extends AbstractIterator<E> {
     private final Predicate predicate;
     private final Iterator<? extends E> iterator;
-    private final LinkedList<E> list = new LinkedList<>();
+    private final LinkedList<E> list = new LinkedList<E>();
 
 
     /**

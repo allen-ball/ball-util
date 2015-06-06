@@ -18,7 +18,7 @@ import java.util.Collection;
  * @version $Revision$
  */
 public abstract class ArrayListTableModel<R> extends AbstractTableModelImpl {
-    private final ArrayList<R> list = new ArrayList<>();
+    private final ArrayList<R> list = new ArrayList<R>();
 
     /**
      * @see AbstractTableModelImpl#AbstractTableModelImpl(String...)

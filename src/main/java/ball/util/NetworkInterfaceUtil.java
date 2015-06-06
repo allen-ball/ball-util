@@ -30,7 +30,7 @@ public abstract class NetworkInterfaceUtil {
      * @return  The {@link List} of {@link InterfaceAddress}es.
      */
     public static List<InterfaceAddress> getInterfaceAddressList() throws SocketException {
-        ArrayList<InterfaceAddress> list = new ArrayList<>();
+        ArrayList<InterfaceAddress> list = new ArrayList<InterfaceAddress>();
 
         for (NetworkInterface ni :
                  list(NetworkInterface.getNetworkInterfaces())) {
@@ -47,7 +47,7 @@ public abstract class NetworkInterfaceUtil {
      * @return  The {@link List} of {@link InetAddress}es.
      */
     public static List<InetAddress> getInterfaceInetAddressList() throws SocketException {
-        ArrayList<InetAddress> list = new ArrayList<>();
+        ArrayList<InetAddress> list = new ArrayList<InetAddress>();
 
         for (InterfaceAddress address : getInterfaceAddressList()) {
             list.add(address.getAddress());

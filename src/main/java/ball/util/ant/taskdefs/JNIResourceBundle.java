@@ -54,7 +54,7 @@ public class JNIResourceBundle extends PropertyResourceBundle {
     }
 
     private List<String> searchList(String os, String arch, String name) {
-        List<String> list = new ArrayList<>();
+        List<String> list = new ArrayList<String>();
 
         if (os != null) {
             os = canonicalize(os);

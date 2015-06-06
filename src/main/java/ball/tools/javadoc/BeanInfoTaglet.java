@@ -54,7 +54,7 @@ public class BeanInfoTaglet extends AbstractInlineTaglet {
                                         TagletWriter writer) throws IllegalArgumentException {
         setConfiguration(writer.configuration());
 
-        LinkedList<Object> list = new LinkedList<>();
+        LinkedList<Object> list = new LinkedList<Object>();
 
         try {
             ClassDoc start = null;

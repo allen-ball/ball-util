@@ -26,12 +26,12 @@ public abstract class Order<T> implements Comparator<T>, Serializable {
     /**
      * @see Null
      */
-    public static final Null<Object> NULL = new Null<>();
+    public static final Null<Object> NULL = new Null<Object>();
 
     /**
      * @see NonNull
      */
-    public static final NonNull<Object> NONNULL = new NonNull<>();
+    public static final NonNull<Object> NONNULL = new NonNull<Object>();
 
     /**
      * Sole constructor.
@@ -51,7 +51,7 @@ public abstract class Order<T> implements Comparator<T>, Serializable {
      *          this {@link Order}.
      */
     public List<T> asList(Collection<? extends T> collection) {
-        List<T> list = new ArrayList<>(collection);
+        List<T> list = new ArrayList<T>(collection);
 
         sort(list);
 

@@ -85,7 +85,8 @@ public interface AnnotatedTask {
          */
         public void validate(Task task) throws BuildException {
             for (Class<?> type : new SuperclassSet(task.getClass())) {
-                ArrayList<AnnotatedElement> list = new ArrayList<>();
+                ArrayList<AnnotatedElement> list =
+                    new ArrayList<AnnotatedElement>();
 
                 Collections.addAll(list, type.getDeclaredFields());
                 Collections.addAll(list, type.getDeclaredMethods());

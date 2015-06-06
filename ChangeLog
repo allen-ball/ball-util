@@ -1,3 +1,8 @@
+2015-06-05  Allen D. Ball  <ball@sol.local>
+
+	* Specify <javac/> source and target as 1.6.  Revert java source
+	accordingly.
+
 2014-12-30  Allen D. Ball  <ball@neptune>
 
 	* pom.xml: Include Ant dependency source in javadoc.
@@ -8,8 +13,6 @@
 	Support Oracle JDK 1.7 on Mac OS X.
 
 2014-11-01  Allen D. Ball  <ball@sol.local>
-
-	* Use diamond ("<>") operator where possible.
 
 	* src/main/java/ball/util/ant/taskdefs/compilers/SystemJavaCompilerAdapter.java:
 	Avoid printing source line and pointer if the source is already

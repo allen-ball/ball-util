@@ -25,7 +25,7 @@ public abstract class Remedy {
         public static final SortedMap<String,Remedy> MAP;
 
         static {
-            TreeMap<String,Remedy> map = new TreeMap<>();
+            TreeMap<String,Remedy> map = new TreeMap<String,Remedy>();
 
             for (Remedy remedy : ServiceLoader.load(Remedy.class)) {
                 for (String code : remedy.getCodes()) {
