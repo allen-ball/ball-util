@@ -16,11 +16,14 @@
   <name>Utilities</name>
   <version>1.0</version>
   <packaging>jar</packaging>
+  <properties>
+    <jre.version>1.6</jre.version>
+  </properties>
   <dependencies verbose="true">
     <dependency>
       <groupId>java</groupId>
       <artifactId>jdk</artifactId>
-      <version>1.6</version>
+      <version>${jre.version}</version>
     </dependency>
     <dependency>
       <groupId>javax.xml.bind</groupId>

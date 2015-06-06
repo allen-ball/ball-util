@@ -68,7 +68,8 @@
   <target name="classes"
           description="--> Compile Java source."
           depends="resources">
-    <javac source="1.6" target="1.6"
+    <javac source="${pom.properties.jre.version}"
+           target="${pom.properties.jre.version}"
            destdir="${target.classes.dir}">
       <compilerarg compiler="modern" value="-Xlint"/>
       <compilerarg compiler="modern" value="-g:source,lines,vars"/>
