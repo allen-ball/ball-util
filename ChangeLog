@@ -1,3 +1,7 @@
+2015-07-18  Allen D. Ball  <ball@sol.local>
+
+	* build.xml: Added install-ant-lib target.
+
 2015-06-05  Allen D. Ball  <ball@sol.local>
 
 	* Specify <javac/> source and target as 1.6.  Revert java source
