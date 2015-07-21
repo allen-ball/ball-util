@@ -152,23 +152,6 @@
     </artifact:install>
   </target>
 
-  <target name="install-ant-lib"
-          depends="install">
-    <taskdef classpathref="build.classpath"
-             resource="ball/util/ant/defaults.properties"/>
-    <jnilib-suffix property="jnilib.suffix"/>
-    <artifact:dependencies>
-      <dependency groupId="${pom.groupId}" artifactId="${pom.artifactId}"
-                  version="${pom.version}" type="jar"/>
-      <dependency groupId="${pom.groupId}" artifactId="${pom.artifactId}"
-                  version="${pom.version}" type="${jnilib.suffix}"
-                  classifier="${os.name}-${os.arch}"/>
-    </artifact:dependencies>
-    <mkdir dir="${user.home}/.ant/lib"/>
-    <copy filtering="false" preservelastmodified="true"
-          file="${ball:ball-util:jar}" todir="${user.home}/.ant/lib"/>
-  </target>
-
   <target name="bean-info-for"
           description="--> Invokes &lt;bean-info-for/&gt; task."
           depends="classes">
