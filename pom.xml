@@ -14,7 +14,6 @@
   <groupId>ball</groupId>
   <artifactId>ball-util</artifactId>
   <name>Utilities</name>
-  <version>1.0</version>
   <packaging>jar</packaging>
   <properties>
     <jre.version>1.6</jre.version>
