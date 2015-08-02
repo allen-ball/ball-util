@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2012 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2012 - 2015 Allen D. Ball.  All rights reserved.
  */
 package ball.tools.javadoc;
 
@@ -318,14 +318,30 @@ public abstract class AbstractTaglet implements Taglet {
         ClassDoc target = getClassDoc(context, type.getCanonicalName());
 
         if (target != null) {
-            URI href = getHref(getContainingClassDoc(context), target);
-
-            if (href != null) {
-                link = HTML.a(document, href, target.name() + brackets);
-            }
+            link = getClassDocLink(context, target.name() + brackets, target);
         }
 
         return link;
+    }
+
+    /**
+     * Method to create a link to a {@link ClassDoc}.
+     * {@link #setConfiguration(Configuration)} should be called first to
+     * allow external links to be calculated.
+     *
+     * @param   context         The context {@link Doc} for calculating a
+     *                          relative {@link URI}.
+     * @param   value           The value of the created link.
+     * @param   target          The target {@link ClassDoc}.
+     *
+     * @return  The {@code <a/>} {@link org.w3c.dom.Element} if the link
+     *          could be calculated; the {@code value} otherwise.
+     */
+    protected Object getClassDocLink(Doc context,
+                                     Object value, ClassDoc target) {
+        URI href = getHref(getContainingClassDoc(context), target);
+
+        return (href != null) ? HTML.a(document, href, value) : value;
     }
 
     private URI getHref(ClassDoc context, ClassDoc target) {

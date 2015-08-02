@@ -1,5 +1,8 @@
 2015-08-01  Allen D. Ball  <ball@sol.local>
 
+	* src/main/java/ball/tools/javadoc/AbstractTaglet.java:
+	Added getClassDocLink(Doc,Object,ClassDoc) method.
+
 	* src/main/java/ball/io/Directory.java:
 	Added JAVA_HOME, USER_DIR, and USER_HOME static final members.
 
