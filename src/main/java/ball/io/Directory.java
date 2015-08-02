@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2010 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2010 - 2015 Allen D. Ball.  All rights reserved.
  */
 package ball.io;
 
@@ -17,13 +17,31 @@ import java.util.Arrays;
  * @version $Revision$
  */
 public class Directory extends FileImpl {
-    private static final long serialVersionUID = 7288861303773354608L;
+    private static final long serialVersionUID = 3183474028935755479L;
+
+    /**
+     * See {@link System#getProperty(String)} and {@code java.home}.
+     */
+    public static final Directory JAVA_HOME =
+        new Directory(System.getProperty("java.home"));
 
     /**
      * See {@link System#getProperty(String)} and {@code java.io.tmpdir}.
      */
     public static final Directory TMPDIR =
         new Directory(System.getProperty("java.io.tmpdir"));
+
+    /**
+     * See {@link System#getProperty(String)} and {@code user.dir}.
+     */
+    public static final Directory USER_DIR =
+        new Directory(System.getProperty("user.dir"));
+
+    /**
+     * See {@link System#getProperty(String)} and {@code user.home}.
+     */
+    public static final Directory USER_HOME =
+        new Directory(System.getProperty("user.home"));
 
     /**
      * @see File#File(String)
