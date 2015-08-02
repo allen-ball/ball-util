@@ -3,6 +3,9 @@
 	* src/main/java/ball/tools/javadoc/AbstractTaglet.java:
 	Added getClassDocLink(Doc,Object,ClassDoc) method.
 
+	* src/main/java/ball/tools/javadoc/LinkThisTaglet.java:
+	Initial writing.
+
 	* src/main/java/ball/io/Directory.java:
 	Added JAVA_HOME, USER_DIR, and USER_HOME static final members.
 
