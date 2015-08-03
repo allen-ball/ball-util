@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2015 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.taskdefs;
 
