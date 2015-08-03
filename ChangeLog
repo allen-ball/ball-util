@@ -1,5 +1,7 @@
 2015-08-02  Allen D. Ball  <ball@sol.local>
 
+	* Added <main/> Ant Task.
+
 	* src/main/java/ball/util/ant/taskdefs/InstanceOfTask.java:
 	Re-factored as a subclass of TypeTask.
 
