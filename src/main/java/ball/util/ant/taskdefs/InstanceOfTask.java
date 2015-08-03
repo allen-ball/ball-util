@@ -33,19 +33,18 @@ import static ball.util.StringUtil.NIL;
  * @version $Revision$
  */
 @AntTask("instance-of")
-public class InstanceOfTask extends AbstractClasspathTask {
-    private String type = String.class.getName();
-    private List<Argument> list = new ArrayList<Argument>();
+public class InstanceOfTask extends TypeTask {
+    private final List<Argument> list = new ArrayList<Argument>();
     protected Object instance = null;
 
     /**
      * Sole constructor.
      */
-    public InstanceOfTask() { super(); }
+    public InstanceOfTask() {
+        super();
 
-    @NotNull
-    public String getType() { return type; }
-    public void setType(String type) { this.type = type; }
+        setType(String.class.getName());
+    }
 
     public void addConfiguredArgument(Argument argument) {
         list.add(argument);
