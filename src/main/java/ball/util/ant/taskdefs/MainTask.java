@@ -7,6 +7,7 @@ package ball.util.ant.taskdefs;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.security.Permission;
 import java.util.ArrayList;
 import java.util.Arrays;
 import org.apache.tools.ant.BuildException;
@@ -62,7 +63,7 @@ public class MainTask extends TypeTask {
             try {
                 SecurityManager manager = System.getSecurityManager();
 
-                System.setSecurityManager(new NoExitSecurityManager());
+                System.setSecurityManager(new NoExitSecurityManagerImpl());
 
                 try {
                     method.invoke(null, (Object) argv);
@@ -105,5 +106,13 @@ public class MainTask extends TypeTask {
 
         @Override
         public String toString() { return getValue(); }
+    }
+
+    private class NoExitSecurityManagerImpl extends NoExitSecurityManager {
+        public NoExitSecurityManagerImpl() { super(); }
+
+        @Override
+        public void checkPermission(Permission permission, Object context) {
+        }
     }
 }
