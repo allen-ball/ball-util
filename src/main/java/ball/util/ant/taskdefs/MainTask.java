@@ -15,6 +15,8 @@ import org.apache.tools.ant.ExitException;
 import org.apache.tools.ant.util.optional.NoExitSecurityManager;
 
 import static ball.util.ClassUtil.isStatic;
+import static ball.util.StringUtil.NIL;
+import static ball.util.StringUtil.isNil;
 
 /**
  * {@link.uri http://ant.apache.org/ Ant} {@link org.apache.tools.ant.Task}
@@ -46,7 +48,8 @@ public class MainTask extends TypeTask {
             String[] argv = new String[list.size()];
 
             for (int i = 0; i < argv.length; i += 1) {
-                argv[i] = list.get(i).getValue();
+                argv[i] =
+                    getProject().replaceProperties(list.get(i).getValue());
             }
 
             Class<?> type = Class.forName(getType(), false, getClassLoader());
@@ -103,6 +106,10 @@ public class MainTask extends TypeTask {
 
         public String getValue() { return value; }
         public void setValue(String value) { this.value = value; }
+
+        public void addText(String text) {
+            setValue((isNil(getValue()) ? NIL : getValue()) + text);
+        }
 
         @Override
         public String toString() { return getValue(); }

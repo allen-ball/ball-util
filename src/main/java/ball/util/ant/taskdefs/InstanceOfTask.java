@@ -20,6 +20,7 @@ import java.util.Map;
 import org.apache.tools.ant.BuildException;
 
 import static ball.util.StringUtil.NIL;
+import static ball.util.StringUtil.isNil;
 
 /**
  * {@link.uri http://ant.apache.org/ Ant} {@link org.apache.tools.ant.Task}
@@ -73,7 +74,11 @@ public class InstanceOfTask extends TypeTask {
                                                       type.getClassLoader()));
 
                 parameters.add(factory.getType());
-                arguments.add(factory.getInstance(argument.getValue()));
+
+                String string =
+                    getProject().replaceProperties(argument.getValue());
+
+                arguments.add(factory.getInstance(string));
             }
 
             log(String.valueOf(parameters));
@@ -148,6 +153,10 @@ public class InstanceOfTask extends TypeTask {
 
         public String getValue() { return value; }
         public void setValue(String value) { this.value = value; }
+
+        public void addText(String text) {
+            setValue((isNil(getValue()) ? NIL : getValue()) + text);
+        }
 
         @Override
         public String toString() { return getValue(); }
