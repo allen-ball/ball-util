@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2015 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.taskdefs;
 
@@ -59,13 +59,13 @@ public class JNIClassesTask extends AbstractClassFileTask {
             }
         }
 
-        if (! set.isEmpty()) {
-            if (getProperty() != null) {
+        if (getProperty() != null) {
+            if (! set.isEmpty()) {
                 getProject().setProperty(getProperty(), toString(set));
-            } else {
-                for (Class<?> type : set) {
-                    log(type.getName());
-                }
+            }
+        } else {
+            for (Class<?> type : set) {
+                log(type.getName());
             }
         }
     }
