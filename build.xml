@@ -20,9 +20,9 @@
   <available classname="${build.compiler.adapter}"
              property="build.compiler" value="${build.compiler.adapter}"/>
 
-  <target name="classes"
+  <target name="jar-classes"
           description="--> Compile Java source."
-          depends="resources">
+          depends="jar-resources">
     <javac source="${pom.properties.jre.version}"
            target="${pom.properties.jre.version}"
            destdir="${target.classes.dir}">
@@ -46,23 +46,9 @@
     </jni-classes>
   </target>
 
-  <target name="objects"
-          description="--> Compile JNI objects."
-          depends="headers" if="jni.classes">
-    <mkdir dir="${target.objects.dir}"/>
-    <available property="use.editline" file="/usr/include/histedit.h"/>
-    <taskdef classpathref="build.classpath"
-             resource="ball/util/ant/defaults.properties"/>
-    <jni-cc include="${target.headers.dir}" dest="${target.objects.dir}">
-      <define name="USE_EDITLINE" if="use.editline"/>
-      <fileset dir="${src.dir}/main/c" includes="*.c"/>
-      <mapper type="glob" from="*.c" to="*.o"/>
-    </jni-cc>
-  </target>
-
   <target name="jnilib"
           description="--> Compile JNI library."
-          depends="objects" if="jni.classes">
+          depends="jnilib-objects" if="jni.classes">
     <available property="link.libuuid" file="/lib/libuuid.so.1"/>
     <system-load-library property="have.libuuid" libname="uuid"/>
     <taskdef classpathref="build.classpath"
@@ -77,22 +63,23 @@
     </jni-ld>
   </target>
 
-  <target name="install"
-          description="--> Installs pom.xml and artifacts to local repository."
-          depends="jar,jnilib">
+  <target name="jnilib-objects"
+          description="--> Compile JNI objects."
+          depends="jnilib-headers" if="jni.classes">
+    <mkdir dir="${target.objects.dir}"/>
+    <available property="use.editline" file="/usr/include/histedit.h"/>
     <taskdef classpathref="build.classpath"
              resource="ball/util/ant/defaults.properties"/>
-    <jnilib-suffix property="jnilib.suffix"/>
-    <artifact:install file="${target.dir}/${artifact}">
-      <pom refid="pom"/>
-      <attach file="${target.dir}/${jnilib}"
-              classifier="${os.name}-${os.arch}" type="${jnilib.suffix}"/>
-    </artifact:install>
+    <jni-cc include="${target.headers.dir}" dest="${target.objects.dir}">
+      <define name="USE_EDITLINE" if="use.editline"/>
+      <fileset dir="${src.dir}/main/c" includes="*.c"/>
+      <mapper type="glob" from="*.c" to="*.o"/>
+    </jni-cc>
   </target>
 
   <target name="bean-info-for"
           description="--> Invokes &lt;bean-info-for/&gt; task."
-          depends="classes">
+          depends="jar-classes">
     <taskdef classpathref="build.classpath"
              resource="ball/util/ant/defaults.properties"/>
     <bean-info-for classpathref="build.classpath" type="${type}"/>
@@ -100,7 +87,7 @@
 
   <target name="charset-list"
           description="--> Invokes &lt;charset-list/&gt; task."
-          depends="classes">
+          depends="jar-classes">
     <taskdef classpathref="build.classpath"
              resource="ball/util/ant/defaults.properties"/>
     <charset-list/>
@@ -108,7 +95,7 @@
 
   <target name="combinations-count"
           description="--> Invokes &lt;combinations-count/&gt; task."
-          depends="classes">
+          depends="jar-classes">
     <taskdef classpathref="build.classpath"
              resource="ball/util/ant/defaults.properties"/>
     <combinations-count classpathref="build.classpath"
@@ -119,7 +106,7 @@
 
   <target name="combinations-of"
           description="--> Invokes &lt;combinations-of/&gt; task."
-          depends="classes">
+          depends="jar-classes">
     <taskdef classpathref="build.classpath"
              resource="ball/util/ant/defaults.properties"/>
     <combinations-of classpathref="build.classpath"
@@ -130,7 +117,7 @@
 
   <target name="inet-addresses-for"
           description="--> Invokes &lt;inet-addresses-for/&gt; task."
-          depends="classes">
+          depends="jar-classes">
     <taskdef classpathref="build.classpath"
              resource="ball/util/ant/defaults.properties"/>
     <inet-addresses-for string="${string}"/>
@@ -138,7 +125,7 @@
 
   <target name="instance-of"
           description="--> Invokes &lt;instance-of/&gt; task."
-          depends="classes">
+          depends="jar-classes">
     <taskdef classpathref="build.classpath"
              resource="ball/util/ant/defaults.properties"/>
     <instance-of classpathref="build.classpath" type="${type}">
@@ -148,7 +135,7 @@
 
   <target name="is-assignable-from"
           description="--> Invokes &lt;is-assignable-from/&gt; task."
-          depends="classes">
+          depends="jar-classes">
     <taskdef classpathref="build.classpath"
              resource="ball/util/ant/defaults.properties"/>
     <is-assignable-from classpathref="build.classpath"
@@ -157,7 +144,7 @@
 
   <target name="jaxb-marshal"
           description="--> Invokes &lt;jaxb-marshal/&gt; task."
-          depends="classes">
+          depends="jar-classes">
     <taskdef classpathref="build.classpath"
              resource="ball/util/ant/defaults.properties"/>
     <jaxb-marshal classpathref="build.classpath" type="${type}">
@@ -167,7 +154,7 @@
 
   <target name="jaxb-unmarshal"
           description="--> Invokes &lt;jaxb-unmarshal/&gt; task."
-          depends="classes">
+          depends="jar-classes">
     <taskdef classpathref="build.classpath"
              resource="ball/util/ant/defaults.properties"/>
     <jaxb-unmarshal classpathref="build.classpath"
@@ -176,7 +163,7 @@
 
   <target name="jndi-list"
           description="--> Invokes &lt;jndi-list/&gt; task."
-          depends="classes">
+          depends="jar-classes">
     <taskdef classpathref="build.classpath"
              resource="ball/util/ant/defaults.properties"/>
     <jndi-list classpathref="build.classpath"/>
@@ -184,7 +171,7 @@
 
   <target name="jndi-lookup"
           description="--> Invokes &lt;jndi-lookup/&gt; task."
-          depends="classes">
+          depends="jar-classes">
     <taskdef classpathref="build.classpath"
              resource="ball/util/ant/defaults.properties"/>
     <jndi-lookup classpathref="build.classpath" name="${name}"/>
@@ -192,7 +179,7 @@
 
   <target name="jni-classes"
           description="--> Invokes &lt;jni-classes/&gt; task."
-          depends="classes">
+          depends="jar-classes">
     <taskdef classpathref="build.classpath"
              resource="ball/util/ant/defaults.properties"/>
     <jni-classes classpathref="build.classpath" basedir="${build.class.dir}">
@@ -202,7 +189,7 @@
 
   <target name="jnilib-prefix"
           description="--> Invokes &lt;jnilib-prefix/&gt; task."
-          depends="classes">
+          depends="jar-classes">
     <taskdef classpathref="build.classpath"
              resource="ball/util/ant/defaults.properties"/>
     <jnilib-prefix/>
@@ -210,7 +197,7 @@
 
   <target name="jnilib-suffix"
           description="--> Invokes &lt;jnilib-suffix/&gt; task."
-          depends="classes">
+          depends="jar-classes">
     <taskdef classpathref="build.classpath"
              resource="ball/util/ant/defaults.properties"/>
     <jnilib-suffix/>
@@ -218,7 +205,7 @@
 
   <target name="link"
           description="--> Invokes &lt;link/&gt; task."
-          depends="classes">
+          depends="jar-classes">
     <mkdir dir="${target.dir}/links"/>
     <taskdef classpathref="build.classpath"
              resource="ball/util/ant/defaults.properties"/>
@@ -229,7 +216,7 @@
 
   <target name="locale-list"
           description="--> Invokes &lt;locale-list/&gt; task."
-          depends="classes">
+          depends="jar-classes">
     <taskdef classpathref="build.classpath"
              resource="ball/util/ant/defaults.properties"/>
     <locale-list/>
@@ -237,7 +224,7 @@
 
   <target name="members-of"
           description="--> Invokes &lt;members-of/&gt; task."
-          depends="classes">
+          depends="jar-classes">
     <taskdef classpathref="build.classpath"
              resource="ball/util/ant/defaults.properties"/>
     <members-of classpathref="build.classpath" type="${type}"/>
@@ -245,7 +232,7 @@
 
   <target name="network-interfaces"
           description="--> Invokes &lt;network-interfaces/&gt; task."
-          depends="classes">
+          depends="jar-classes">
     <taskdef classpathref="build.classpath"
              resource="ball/util/ant/defaults.properties"/>
     <network-interfaces/>
@@ -253,7 +240,7 @@
 
   <target name="opendir"
           description="--> Invokes &lt;opendir/&gt; task."
-          depends="classes">
+          depends="jar-classes">
     <taskdef classpathref="build.classpath"
              resource="ball/util/ant/defaults.properties"/>
     <opendir file="."/>
@@ -261,7 +248,7 @@
 
   <target name="package-list"
           description="--> Invokes &lt;package-list/&gt; task."
-          depends="classes">
+          depends="jar-classes">
     <taskdef classpathref="build.classpath"
              resource="ball/util/ant/defaults.properties"/>
     <package-list classpathref="build.classpath"
@@ -272,7 +259,7 @@
 
   <target name="permutations-count"
           description="--> Invokes &lt;permutations-count/&gt; task."
-          depends="classes">
+          depends="jar-classes">
     <taskdef classpathref="build.classpath"
              resource="ball/util/ant/defaults.properties"/>
     <permutations-count classpathref="build.classpath" type="${type}">
@@ -282,7 +269,7 @@
 
   <target name="permutations-of"
           description="--> Invokes &lt;permutations-of/&gt; task."
-          depends="classes">
+          depends="jar-classes">
     <taskdef classpathref="build.classpath"
              resource="ball/util/ant/defaults.properties"/>
     <permutations-of classpathref="build.classpath" type="${type}">
@@ -292,7 +279,7 @@
 
   <target name="readlink"
           description="--> Invokes &lt;readlink/&gt; task."
-          depends="classes">
+          depends="jar-classes">
     <taskdef classpathref="build.classpath"
              resource="ball/util/ant/defaults.properties"/>
     <readlink basedir="${target.dir}"/>
@@ -300,7 +287,7 @@
 
   <target name="resource-list"
           description="--> Invokes &lt;resource-list/&gt; task."
-          depends="classes">
+          depends="jar-classes">
     <taskdef classpathref="build.classpath"
              resource="ball/util/ant/defaults.properties"/>
     <resource-list classpathref="build.classpath" name="${name}"/>
@@ -308,7 +295,7 @@
 
   <target name="run"
           description="--> Invokes &lt;run/&gt; task."
-          depends="classes">
+          depends="jar-classes">
     <taskdef classpathref="build.classpath"
              resource="ball/util/ant/defaults.properties"/>
     <run classpathref="build.classpath" type="${type}"/>
@@ -316,7 +303,7 @@
 
   <target name="service-list"
           description="--> Invokes &lt;service-list/&gt; task."
-          depends="classes">
+          depends="jar-classes">
     <taskdef classpathref="build.classpath"
              resource="ball/util/ant/defaults.properties"/>
     <service-list classpathref="build.classpath" type="${type}"/>
@@ -324,7 +311,7 @@
 
   <target name="show-properties"
           description="--> Invokes &lt;show-properties/&gt; task."
-          depends="classes">
+          depends="jar-classes">
     <taskdef classpathref="build.classpath"
              resource="ball/util/ant/defaults.properties"/>
     <show-properties classpathref="build.classpath"
@@ -335,7 +322,7 @@
 
   <target name="subclasses-of"
           description="--> Invokes &lt;subclasses-of/&gt; task."
-          depends="classes">
+          depends="jar-classes">
     <taskdef classpathref="build.classpath"
              resource="ball/util/ant/defaults.properties"/>
     <subclasses-of classpathref="build.classpath"
@@ -346,7 +333,7 @@
 
   <target name="superclasses-of"
           description="--> Invokes &lt;superclasses-of/&gt; task."
-          depends="classes">
+          depends="jar-classes">
     <taskdef classpathref="build.classpath"
              resource="ball/util/ant/defaults.properties"/>
     <superclasses-of classpathref="build.classpath" type="${type}"/>
@@ -354,7 +341,7 @@
 
   <target name="system-load-library"
           description="--> Invokes &lt;system-load-library/&gt; task."
-          depends="classes">
+          depends="jar-classes">
     <taskdef classpathref="build.classpath"
              resource="ball/util/ant/defaults.properties"/>
     <system-load-library libname="${name}"/>
@@ -362,7 +349,7 @@
 
   <target name="uuid-generate"
           description="--> Invokes &lt;uuid-generate/&gt; task."
-          depends="classes">
+          depends="jar-classes">
     <taskdef classpathref="build.classpath"
              resource="ball/util/ant/defaults.properties"/>
     <uuid-generate/>
@@ -370,7 +357,7 @@
 
   <target name="uuid-generate-random"
           description="--> Invokes &lt;uuid-generate-random/&gt; task."
-          depends="classes">
+          depends="jar-classes">
     <taskdef classpathref="build.classpath"
              resource="ball/util/ant/defaults.properties"/>
     <uuid-generate-random/>
@@ -378,7 +365,7 @@
 
   <target name="uuid-generate-time"
           description="--> Invokes &lt;uuid-generate-time/&gt; task."
-          depends="classes">
+          depends="jar-classes">
     <taskdef classpathref="build.classpath"
              resource="ball/util/ant/defaults.properties"/>
     <uuid-generate-time/>
