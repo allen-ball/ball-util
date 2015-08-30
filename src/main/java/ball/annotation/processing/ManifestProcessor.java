@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2013, 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2013 - 2015 Allen D. Ball.  All rights reserved.
  */
 package ball.annotation.processing;
 
@@ -321,17 +321,12 @@ public class ManifestProcessor extends AbstractAnnotationProcessor
 
     private class ManifestImpl extends Manifest {
         private static final String MANIFEST_VERSION = "Manifest-Version";
-        private static final String BUILD_INFORMATION = "Build-Information";
 
         public ManifestImpl() { super(); }
 
         protected void init() {
             if (getMainAttributes().getValue(MANIFEST_VERSION) == null) {
                 getMainAttributes().putValue(MANIFEST_VERSION, "1.0");
-            }
-
-            if (getAttributes(BUILD_INFORMATION) == null) {
-                putAttributes(BUILD_INFORMATION, new BuildInformation());
             }
         }
 
@@ -395,22 +390,6 @@ public class ManifestProcessor extends AbstractAnnotationProcessor
             }
 
             return (buffer != null) ? buffer.toString() : NIL;
-        }
-
-        @Override
-        public String toString() { return super.toString(); }
-    }
-
-    private class BuildInformation extends Attributes {
-        public BuildInformation() {
-            super();
-
-            putValue("Build-Time", String.valueOf(System.currentTimeMillis()));
-            putValue("Java-Vendor", System.getProperty("java.vendor"));
-            putValue("Java-Version", System.getProperty("java.version"));
-            putValue("Os-Arch", System.getProperty("os.arch"));
-            putValue("Os-Name", System.getProperty("os.name"));
-            putValue("Os-Version", System.getProperty("os.version"));
         }
 
         @Override
