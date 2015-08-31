@@ -1,12 +1,18 @@
 /*
  * $Id$
  *
- * Copyright 2010 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2010 - 2015 Allen D. Ball.  All rights reserved.
  */
 package ball.util;
 
+import ball.io.IOUtil;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Member;
 import java.lang.reflect.Modifier;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.jar.Manifest;
 
 /**
  * {@link Class} utility methods.
@@ -15,7 +21,61 @@ import java.lang.reflect.Modifier;
  * @version $Revision$
  */
 public abstract class ClassUtil {
+    private static final String DOT_CLASS = ".class";
+
     private ClassUtil() { }
+
+    /**
+     * Method to get {@link Manifest} for a {@link Class}.
+     *
+     * @param   type            The {@link Class}.
+     *
+     * @return  The {@link Manifest} if the {@code MANIFEST.MF} file is
+     *          located and parsed; {@code null} otherwise.
+     */
+    public static Manifest getManifestFor(Class<?> type) {
+        Manifest manifest = null;
+        URL url = getManifestURLFor(type);
+        InputStream in = null;
+
+        try {
+            in = url.openStream();
+            manifest = new Manifest(in);
+        } catch (IOException exception) {
+        } finally {
+            IOUtil.close(in);
+        }
+
+        return manifest;
+    }
+
+    /**
+     * Method to locate the {@code MAINFEST.MF} for a {@link Class}.
+     *
+     * @param   type            The {@link Class}.
+     *
+     * @return  The {@link URL} if the {@code MANIFEST.MF} file is located;
+     *          {@code null} otherwise.
+     */
+    public static URL getManifestURLFor(Class<?> type) {
+        URL url = null;
+        String resource = type.getSimpleName() + DOT_CLASS;
+        String path = type.getResource(resource).toString();
+
+        path =
+            path.substring(0,
+                           path.length()
+                           - (type.getCanonicalName().length()
+                              + DOT_CLASS.length()))
+            + "META-INF/MANIFEST.MF";
+
+        try {
+            url = new URL(path);
+        } catch (MalformedURLException exception) {
+        }
+
+        return url;
+    }
 
     /**
      * See {@link Modifier#isAbstract(int)}.
