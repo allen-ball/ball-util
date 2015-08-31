@@ -6,6 +6,8 @@
 	Added getManifestFor(Class<?>) and getManifestURLFor(Class<?>)
 	methods.
 
+	* src/main/java/ball/util/JNILib.java: Initial writing.
+
 2015-08-04  Allen D. Ball  <ball@sol.local>
 
 	* src/main/java/ball/util/ant/taskdefs/InstanceOfTask.java,
