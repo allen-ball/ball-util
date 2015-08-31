@@ -1,12 +1,12 @@
 /*
  * $Id$
  *
- * Copyright 2010 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2010 - 2015 Allen D. Ball.  All rights reserved.
  */
 package ball.util.jni;
 
+import ball.util.JNILib;
 import java.io.File;
-import java.util.ResourceBundle;
 
 /**
  * Provides wrappers to the native EditLine (libedit) functions.  See the
@@ -16,10 +16,7 @@ import java.util.ResourceBundle;
  * @version $Revision$
  */
 public class EditLine {
-    private static final ResourceBundle BUNDLE =
-        ResourceBundle.getBundle(EditLine.class.getName());
-
-    static { System.loadLibrary(BUNDLE.getString("jnilib").trim()); }
+    static { JNILib.loadFor(EditLine.class); }
 
     /**
      * {@link.man EditLine *} holder used by native methods.

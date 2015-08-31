@@ -1,5 +1,8 @@
 2015-08-30  Allen D. Ball  <ball@sol.local>
 
+	* Use the JNILib.loadFor(Class<?>) mechanism to load JNI
+	libraries.
+
 	* Added <manifest-for/> Ant Task and target.
 
 	* src/main/java/ball/util/ClassUtil.java:

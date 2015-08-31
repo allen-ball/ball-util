@@ -1,13 +1,13 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2015 Allen D. Ball.  All rights reserved.
  */
 package ball.util.jni;
 
 import ball.io.FileImpl;
+import ball.util.JNILib;
 import java.io.File;
-import java.util.ResourceBundle;
 
 /**
  * Provides wrappers to native
@@ -18,10 +18,7 @@ import java.util.ResourceBundle;
  * @version $Revision$
  */
 public abstract class POSIX {
-    private static final ResourceBundle BUNDLE =
-        ResourceBundle.getBundle(POSIX.class.getName());
-
-    static { System.loadLibrary(BUNDLE.getString("jnilib").trim()); }
+    static { JNILib.loadFor(POSIX.class); }
 
     private POSIX() { }
 

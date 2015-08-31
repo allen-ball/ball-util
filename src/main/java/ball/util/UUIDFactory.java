@@ -1,12 +1,12 @@
 /*
  * $Id$
  *
- * Copyright 2011 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2011 - 2015 Allen D. Ball.  All rights reserved.
  */
 package ball.util;
 
+import ball.util.JNILib;
 import java.nio.ByteBuffer;
-import java.util.ResourceBundle;
 import java.util.UUID;
 
 /**
@@ -18,12 +18,9 @@ import java.util.UUID;
  * @version $Revision$
  */
 public class UUIDFactory extends Factory<UUID> {
-    private static final long serialVersionUID = 4141910900990945223L;
+    private static final long serialVersionUID = 2636388251268998745L;
 
-    private static final ResourceBundle BUNDLE =
-        ResourceBundle.getBundle(UUIDFactory.class.getName());
-
-    static { System.loadLibrary(BUNDLE.getString("jnilib").trim()); }
+    static { JNILib.loadFor(UUIDFactory.class); }
 
     private static final UUIDFactory DEFAULT = new UUIDFactory();
 
