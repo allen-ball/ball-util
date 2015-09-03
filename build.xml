@@ -12,15 +12,11 @@
 
   <aether:resolve>
     <dependencies>
-      <dependency coords="ball:pom-build:1.0:xml:compile"/>
+      <dependency coords="ball:parent:1.0:xml:compile"/>
     </dependencies>
     <properties/>
   </aether:resolve>
-  <import file="${ball:pom-build:xml}"/>
-
-  <!-- Bootstrap build.compiler -->
-  <available classname="${build.compiler.adapter}"
-             property="build.compiler" value="${build.compiler.adapter}"/>
+  <import file="${ball:parent:xml}"/>
 
   <target name="jar-classes"
           description="--> Compile Java source."
