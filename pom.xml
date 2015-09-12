@@ -85,16 +85,6 @@
                 <placement>X</placement>
               </tag>
             </tags>
-            <groups>
-              <group>
-                <title>${project.name}</title>
-                <packages>ball.*</packages>
-              </group>
-              <group>
-                <title>Apache Ant</title>
-                <packages>org.apache.*</packages>
-              </group>
-            </groups>
           </configuration>
         </plugin>
       </plugins>
