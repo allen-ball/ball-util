@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2013, 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2013 - 2015 Allen D. Ball.  All rights reserved.
  */
 package ball.xml;
 
@@ -257,12 +257,29 @@ public abstract class HTML {
         return elements;
     }
 
-    private static Element element(Document document, String name) {
+    /**
+     * Method to create an {@link Element}.
+     *
+     * @param   document        The owner {@link Document}.
+     * @param   name            The name {@link String}.
+     *
+     * @return  The {@link Element}.
+     */
+    public static Element element(Document document, String name) {
         return element(document, name, null);
     }
 
-    private static Element element(Document document,
-                                   String name, Object value) {
+    /**
+     * Method to create an {@link Element}.
+     *
+     * @param   document        The owner {@link Document}.
+     * @param   name            The name {@link String}.
+     * @param   value           The value {@link Object}.
+     *
+     * @return  The {@link Element}.
+     */
+    public static Element element(Document document,
+                                  String name, Object value) {
         Element element = document.createElement(name);
 
         if (value != null) {
