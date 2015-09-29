@@ -1,3 +1,8 @@
+2015-09-28  Allen D. Ball  <ball@sol.local>
+
+	* src/main/java/ball/util/ant/taskdefs/JNIClassesTask.java:
+	Catch and ignore NoClassDefFoundError.
+
 2015-08-30  Allen D. Ball  <ball@sol.local>
 
 	* Use the JNILib.loadFor(Class<?>) mechanism to load JNI

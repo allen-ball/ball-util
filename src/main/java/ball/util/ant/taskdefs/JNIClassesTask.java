@@ -52,9 +52,30 @@ public class JNIClassesTask extends AbstractClassFileTask {
         Set<Class<?>> set = new TreeSet<Class<?>>(NAME);
 
         for (Class<?> type : getClassSet()) {
-            if (hasNative(type.getDeclaredConstructors())
-                || hasNative(type.getDeclaredFields())
-                || hasNative(type.getDeclaredMethods())) {
+            boolean hasNative = false;
+
+            try {
+                if (! hasNative) {
+                    hasNative |= hasNative(type.getDeclaredConstructors());
+                }
+            } catch (NoClassDefFoundError error) {
+            }
+
+            try {
+                if (! hasNative) {
+                    hasNative |= hasNative(type.getDeclaredFields());
+                }
+            } catch (NoClassDefFoundError error) {
+            }
+
+            try {
+                if (! hasNative) {
+                    hasNative |= hasNative(type.getDeclaredMethods());
+                }
+            } catch (NoClassDefFoundError error) {
+            }
+
+            if (hasNative) {
                 set.add(type);
             }
         }
