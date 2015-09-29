@@ -1,5 +1,8 @@
 2015-09-28  Allen D. Ball  <ball@sol.local>
 
+	* src/main/java/ball/tools/javadoc/AbstractTaglet.java:
+	Made transformer member protected.
+
 	* src/main/java/ball/util/ant/taskdefs/JNIClassesTask.java:
 	Catch and ignore NoClassDefFoundError.
 

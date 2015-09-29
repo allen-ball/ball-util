@@ -80,7 +80,7 @@ public abstract class AbstractTaglet implements Taglet {
     private final boolean inMethod;
     private final boolean inType;
     protected final Document document;
-    private final Transformer transformer;
+    protected final Transformer transformer;
     private transient Configuration configuration = null;
 
     /**
