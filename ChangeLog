@@ -3,6 +3,9 @@
 	* src/main/java/ball/tools/javadoc/AbstractTaglet.java:
 	Made transformer member protected.
 
+	* src/main/java/ball/tools/javadoc/POMTaglet.java:
+	Initial writing (interim check-in).
+
 	* src/main/java/ball/xml/HTML.java:
 	Made element(Document,String) and element(Document,String,Object)
 	methods public.
