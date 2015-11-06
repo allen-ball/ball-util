@@ -5,6 +5,8 @@ $Id$
 
 * Add checks to iprotium.tools or iprotium.annotation.processing:
 
+        ** Check arguments to IOUtil.close(Object) are Closeable,
+           IOUtil.flush(Object) are Flushable, etc.
         ** CollectionToArrayProcessor: Finish implementation.
         ** ConstantInitializerProcessor: Finish implementation.
         ** ConstructorProcessor: Require explicitly declared constructors
