@@ -1,3 +1,11 @@
+2016-02-19  Allen D. Ball  <ball@sol.local>
+
+	* src/main/java/ball/util/ant/types/OptionalTextType.java,
+	src/main/java/ball/util/ant/types/StringAttributeType.java,
+	src/main/java/ball/util/ant/types/StringValueType.java,
+	src/main/java/ball/util/ant/types/TypedAttributeType.java:
+	Initial writing.
+
 2015-09-28  Allen D. Ball  <ball@sol.local>
 
 	* src/main/java/ball/tools/javadoc/AbstractTaglet.java:
