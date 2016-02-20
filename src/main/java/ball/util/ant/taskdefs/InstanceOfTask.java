@@ -1,10 +1,11 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2015 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2016 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.taskdefs;
 
+import ball.util.ant.types.TypedAttributeType;
 import ball.activation.ReaderWriterDataSource;
 import ball.swing.table.MapTableModel;
 import ball.util.BeanMap;
@@ -35,7 +36,8 @@ import static ball.util.StringUtil.isNil;
  */
 @AntTask("instance-of")
 public class InstanceOfTask extends TypeTask {
-    private final List<Argument> list = new ArrayList<Argument>();
+    private final List<TypedAttributeType> list =
+        new ArrayList<TypedAttributeType>();
     protected Object instance = null;
 
     /**
@@ -47,13 +49,15 @@ public class InstanceOfTask extends TypeTask {
         setType(String.class.getName());
     }
 
-    public void addConfiguredArgument(Argument argument) {
+    public void addConfiguredArgument(TypedAttributeType argument) {
         list.add(argument);
     }
 
-    public List<Argument> getArgumentList() { return list; }
+    public List<TypedAttributeType> getArgumentList() { return list; }
 
-    public void setArgument(String string) { list.add(new Argument(string)); }
+    public void setArgument(String string) {
+        list.add(new TypedAttributeType(string));
+    }
 
     @Override
     public void execute() throws BuildException {
@@ -67,7 +71,7 @@ public class InstanceOfTask extends TypeTask {
             ClassList parameters = new ClassList();
             List<Object> arguments = new ArrayList<Object>();
 
-            for (Argument argument : list) {
+            for (TypedAttributeType argument : list) {
                 Factory<?> factory =
                     new Factory<Object>(Class.forName(argument.getType(),
                                                       false,
@@ -127,39 +131,6 @@ public class InstanceOfTask extends TypeTask {
             throwable.printStackTrace();
             throw new BuildException(throwable);
         }
-    }
-
-    /**
-     * {@link InstanceOfTask} argument.
-     */
-    public static class Argument {
-        private String type = String.class.getName();
-        private String value = null;
-
-        /**
-         * @param       value   The initial value.
-         *
-         * @see #setValue(String)
-         */
-        public Argument(String value) { setValue(value); }
-
-        /**
-         * No-argument constructor.
-         */
-        public Argument() { this(null); }
-
-        public String getType() { return type; }
-        public void setType(String type) { this.type = type; }
-
-        public String getValue() { return value; }
-        public void setValue(String value) { this.value = value; }
-
-        public void addText(String text) {
-            setValue((isNil(getValue()) ? NIL : getValue()) + text);
-        }
-
-        @Override
-        public String toString() { return getValue(); }
     }
 
     private class ClassList extends ArrayList<Class<?>> {

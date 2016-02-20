@@ -1,12 +1,13 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2016 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.taskdefs;
 
 import ball.io.FileImpl;
-import java.util.LinkedHashSet;
+import ball.util.ant.types.OptionalTextType;
+import java.util.ArrayList;
 import org.apache.tools.ant.BuildException;
 
 import static ball.util.StringUtil.NIL;
@@ -26,7 +27,8 @@ public class JNILDTask extends AbstractJNIExecuteOnTask {
     private String prefix = null;
     private String suffix = null;
     private String property = null;
-    private LinkedHashSet<Library> linkSet = new LinkedHashSet<Library>();
+    private ArrayList<OptionalTextType> linkSet =
+        new ArrayList<OptionalTextType>();
 
     /**
      * Sole constructor.
@@ -50,7 +52,9 @@ public class JNILDTask extends AbstractJNIExecuteOnTask {
     public String getProperty() { return property; }
     public void setProperty(String property) { this.property = property; }
 
-    public void addConfiguredLink(Library library) { linkSet.add(library); }
+    public void addConfiguredLink(OptionalTextType library) {
+        linkSet.add(library);
+    }
 
     @Override
     protected String command() {
@@ -58,11 +62,9 @@ public class JNILDTask extends AbstractJNIExecuteOnTask {
             getBundleString("ld")
             + SPACE + new FileImpl(getDestdir(), getName()).getAbsolutePath();
 
-        for (Library library : linkSet) {
+        for (OptionalTextType library : linkSet) {
             if (library.isActive(getProject())) {
-                string += SPACE;
-                string += getBundleString("ld-l");
-                string += library.getName();
+                string += SPACE + getBundleString("ld-l") + library;
             }
         }
 
@@ -90,25 +92,5 @@ public class JNILDTask extends AbstractJNIExecuteOnTask {
         return (((getPrefix() != null) ? getPrefix() : NIL)
                 + getLibname()
                 + ((getSuffix() != null) ? ("." + getSuffix()) : NIL));
-    }
-
-    /**
-     * {@link JNILDTask} LD link definition.
-     */
-    public static class Library extends Optional {
-
-        /**
-         * Sole constructor.
-         *
-         * @param       name            The library name.
-         *
-         * @see #setName(String)
-         */
-        public Library(String name) { super(name); }
-
-        /**
-         * No-argument constructor.
-         */
-        public Library() { this(null); }
     }
 }

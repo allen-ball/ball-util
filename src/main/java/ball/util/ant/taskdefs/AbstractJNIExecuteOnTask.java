@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2016 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.taskdefs;
 
@@ -195,84 +195,4 @@ public abstract class AbstractJNIExecuteOnTask extends ExecuteOn
 
     @Override
     public String toString() { return getClass().getSimpleName(); }
-
-    /**
-     * Abstract base class for optional configurables.
-     */
-    protected static abstract class Optional {
-        private String name = null;
-        private String ifP = null;
-        private String unless = null;
-
-        /**
-         * Sole constructor.
-         *
-         * @param       name            The definition name.
-         *
-         * @see #setName(String)
-         */
-        protected Optional(String name) { setName(name); }
-
-        /**
-         * Method to specify the name of this {@link Optional} configurable.
-         *
-         * @param       name    The name of this {@link Optional}
-         *                      configurable.
-         */
-        public void setName(String name) { this.name = name; }
-        public String getName() { return name; }
-
-        /**
-         * See {@link #setName(String)}.
-         */
-        public void addText(String name) {
-            if (getName() != null) {
-                name = getName() + name;
-            }
-
-            setName(name);
-        }
-
-        /**
-         * Sets the "if" condition to test on execution.  If the named
-         * property is set, the {@link Optional} configurable will be
-         * included.
-         *
-         * @param       ifP     The property condition to test on
-         *                      execution.  If the value is {@code null} no
-         *                      "if" test will not be performed.
-         */
-        public void setIf(String ifP) { this.ifP = ifP; }
-        public String getIf() { return ifP; }
-
-        /**
-         * Sets the "unless" condition to test on execution.  If the named
-         * property is set, the {@link Optional} configurable will not be
-         * included.
-         *
-         * @param       unless  The property condition to test on
-         *                      execution.  If the value is {@code null} no
-         *                      "unless" test will not be performed.
-         */
-        public void setUnless(String unless) { this.unless = unless; }
-        public String getUnless() { return unless; }
-
-        /**
-         * Method to determine if the "if" and "unless" tests have been
-         * satisfied.
-         *
-         * @param       project The {@link Project}.
-         *
-         * @return      {@code true} if the "if" and "unless" tests have
-         *              beed satisfied; {@code false} otherwise.
-         */
-        public boolean isActive(Project project) {
-            return ((getIf() == null || project.getProperty(getIf()) != null)
-                    && (getUnless() == null
-                        || project.getProperty(getUnless()) == null));
-        }
-
-        @Override
-        public int hashCode() { return System.identityHashCode(getName()); }
-    }
 }

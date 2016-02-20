@@ -53,10 +53,10 @@
              resource="ball/util/ant/defaults.properties"/>
     <jni-ld destdir="${target.dir}" libname="${pom.artifactId}"
             property="jnilib">
-      <link name="edit" if="use.editline"/>
-      <link name="readline" unless="use.editline"/>
-      <link name="termcap" unless="use.editline"/>
-      <link name="uuid" if="have.libuuid"/>
+      <link if="use.editline">edit</link>
+      <link unless="use.editline">readline</link>
+      <link unless="use.editline">termcap</link>
+      <link if="have.libuuid">uuid</link>
       <fileset dir="${target.objects.dir}" includes="**/*.o"/>
     </jni-ld>
   </target>

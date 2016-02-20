@@ -1,10 +1,11 @@
 /*
  * $Id$
  *
- * Copyright 2015 Allen D. Ball.  All rights reserved.
+ * Copyright 2015, 2016 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.taskdefs;
 
+import ball.util.ant.types.OptionalTextType;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.security.Permission;
@@ -29,14 +30,15 @@ import static ball.util.StringUtil.isNil;
  */
 @AntTask("main")
 public class MainTask extends TypeTask {
-    private final ArrayList<Argument> list = new ArrayList<Argument>();
+    private final ArrayList<OptionalTextType> list =
+        new ArrayList<OptionalTextType>();
 
     /**
      * Sole constructor.
      */
     public MainTask() { super(); }
 
-    public void addConfiguredArgument(Argument argument) {
+    public void addConfiguredArgument(OptionalTextType argument) {
         list.add(argument);
     }
 
@@ -45,15 +47,17 @@ public class MainTask extends TypeTask {
         super.execute();
 
         try {
-            String[] argv = new String[list.size()];
+            ArrayList<String> argv = new ArrayList<String>(list.size());
 
-            for (int i = 0; i < argv.length; i += 1) {
-                argv[i] =
-                    getProject().replaceProperties(list.get(i).getValue());
+            for (OptionalTextType argument : list) {
+                if (argument.isActive(getProject())) {
+                    argv.add(argument.toString());
+                }
             }
 
             Class<?> type = Class.forName(getType(), false, getClassLoader());
-            Method method = type.getDeclaredMethod("main", argv.getClass());
+            String[] array = argv.toArray(new String[] { });
+            Method method = type.getDeclaredMethod("main", array.getClass());
 
             log(method.toString());
 
@@ -61,7 +65,7 @@ public class MainTask extends TypeTask {
                 throw new BuildException(method + " is not static");
             }
 
-            log(String.valueOf(Arrays.asList(argv)));
+            log(String.valueOf(Arrays.asList(array)));
 
             try {
                 SecurityManager manager = System.getSecurityManager();
@@ -69,7 +73,7 @@ public class MainTask extends TypeTask {
                 System.setSecurityManager(new NoExitSecurityManagerImpl());
 
                 try {
-                    method.invoke(null, (Object) argv);
+                    method.invoke(null, (Object) array);
                     log("return without call to System.exit(int)");
                 } catch (InvocationTargetException exception) {
                     Throwable cause = exception.getCause();
@@ -93,33 +97,14 @@ public class MainTask extends TypeTask {
         }
     }
 
-    /**
-     * {@link MainTask} argument.
-     */
-    public static class Argument {
-        private String value = null;
-
-        /**
-         * No-argument constructor.
-         */
-        public Argument() { }
-
-        public String getValue() { return value; }
-        public void setValue(String value) { this.value = value; }
-
-        public void addText(String text) {
-            setValue((isNil(getValue()) ? NIL : getValue()) + text);
-        }
-
-        @Override
-        public String toString() { return getValue(); }
-    }
-
     private class NoExitSecurityManagerImpl extends NoExitSecurityManager {
         public NoExitSecurityManagerImpl() { super(); }
 
         @Override
         public void checkPermission(Permission permission, Object context) {
         }
+
+        @Override
+        public String toString() { return super.toString(); }
     }
 }
