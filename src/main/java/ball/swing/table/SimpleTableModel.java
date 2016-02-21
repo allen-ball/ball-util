@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2009 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2016 Allen D. Ball.  All rights reserved.
  */
 package ball.swing.table;
 
@@ -14,7 +14,7 @@ import java.util.Arrays;
  * @version $Revision$
  */
 public class SimpleTableModel extends ArrayListTableModel<Object[]> {
-    private static final long serialVersionUID = 4595844725709334308L;
+    private static final long serialVersionUID = 8874758772454561013L;
 
     /**
      * @see ArrayListTableModel#ArrayListTableModel(Iterable,String...)
@@ -42,12 +42,16 @@ public class SimpleTableModel extends ArrayListTableModel<Object[]> {
      *
      * @param   row             The array of {@link Object}s that make up
      *                          the row to be added.
+     *
+     * @return  {@code this} {@link SimpleTableModel}.
      */
-    public void row(Object... row) {
+    public SimpleTableModel row(Object... row) {
         list().add(row);
 
         fireTableStructureChanged();
         fireTableDataChanged();
+
+        return this;
     }
 
     @Override

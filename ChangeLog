@@ -1,3 +1,9 @@
+2016-02-20  Allen D. Ball  <ball@sol.local>
+
+	* src/main/java/ball/swing/table/SimpleTableModel.java:
+	Changed row(Object...) method to return the SimpleTableModel
+	instance to support chaining.
+
 2016-02-19  Allen D. Ball  <ball@sol.local>
 
 	* src/main/java/ball/util/ant/types/OptionalTextType.java,
