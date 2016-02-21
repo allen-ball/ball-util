@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2009 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2016 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.taskdefs;
 
@@ -45,7 +45,7 @@ public class ReadlinkTask extends AbstractMatchingTask {
         }
 
         if (! map.isEmpty()) {
-            log(new MapTableModel<File,File>(map, "Link", "Target"));
+            log(new MapTableModel(map, "Link", "Target"));
         }
     }
 }

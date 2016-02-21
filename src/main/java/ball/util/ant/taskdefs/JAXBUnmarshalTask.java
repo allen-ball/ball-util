@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2013, 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2013 - 2016 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.taskdefs;
 
@@ -67,15 +67,14 @@ public class JAXBUnmarshalTask extends AbstractClasspathTask {
         }
     }
 
-    private class MapTableModelImpl extends MapTableModel<String,Object> {
-        private static final long serialVersionUID = 5596210755886286084L;
+    private class MapTableModelImpl extends MapTableModel {
 
         public MapTableModelImpl(Map<String,Object> map) {
             super(map, "Property Name", "Value");
         }
 
         @Override
-        protected Object getValueAt(Map.Entry<String,Object> row, int x) {
+        protected Object getValueAt(Object row, int x) {
             return String.valueOf(super.getValueAt(row, x));
         }
     }

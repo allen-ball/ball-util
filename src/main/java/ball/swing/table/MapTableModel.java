@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2009 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2016 Allen D. Ball.  All rights reserved.
  */
 package ball.swing.table;
 
@@ -11,56 +11,42 @@ import javax.swing.event.TableModelEvent;
 /**
  * {@link Map} {@link javax.swing.table.TableModel} implementation.
  *
- * @param       <K>     The type of the underlying {@link Map} key.
- * @param       <V>     The type of the underlying {@link Map} value.
- *
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
-public class MapTableModel<K,V> extends ArrayListTableModel<Map.Entry<K,V>> {
-    private static final long serialVersionUID = 7979196059433549407L;
+public class MapTableModel extends ArrayListTableModel<Object> {
 
-    private final Map<K,V> map;
+    private final Map<?,?> map;
 
     /**
      * @see AbstractTableModelImpl#AbstractTableModelImpl(String...)
      *
      * @param   map             The underlying {@link Map}.
-     * @param   names           The column names.
+     * @param   key             The key column name.
+     * @param   value           The value column name.
      */
-    public MapTableModel(Map<K,V> map, String... names) {
-        super(map.entrySet(), names);
+    public MapTableModel(Map<?,?> map, String key, String value) {
+        super(map.keySet(), key, value);
 
         this.map = map;
     }
 
     /**
-     * @see AbstractTableModelImpl#AbstractTableModelImpl(int)
-     *
-     * @param   map             The underlying {@link Map}.
-     * @param   columns         The number of columns.
-     */
-    public MapTableModel(Map<K,V> map, int columns) {
-        this(map, new String[columns]);
-    }
-
-    /**
      * @param   map             The underlying {@link Map}.
      */
-    public MapTableModel(Map<K,V> map) { this(map, 2); }
+    public MapTableModel(Map<?,?> map) { this(map, null, null); }
 
     @Override
-    protected Object getValueAt(Map.Entry<K,V> row, int x) {
+    protected Object getValueAt(Object row, int x) {
         Object value = null;
 
         switch (x) {
         case 0:
-        default:
-            value = row.getKey();
+            value = row;
             break;
 
-        case 1:
-            value = row.getValue();
+        default:
+            value = map.get(row);
             break;
         }
 
@@ -70,7 +56,7 @@ public class MapTableModel<K,V> extends ArrayListTableModel<Map.Entry<K,V>> {
     @Override
     public void tableChanged(TableModelEvent event) {
         list().clear();
-        list().addAll(map.entrySet());
+        list().addAll(map.keySet());
 
         super.tableChanged(event);
     }
