@@ -1,7 +1,7 @@
 2016-02-21  Allen D. Ball  <ball@sol.local>
 
 	* src/main/java/ball/swing/table/MapTableModel.java:
-	Do not require specification of Map generic parameters.
+	Only require specification of Map generic key parameter.
 
 2016-02-20  Allen D. Ball  <ball@sol.local>
 

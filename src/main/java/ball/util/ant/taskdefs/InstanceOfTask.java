@@ -142,15 +142,15 @@ public class InstanceOfTask extends TypeTask {
         public Class<?>[] toArray() { return toArray(new Class<?>[] { }); }
     }
 
-    private class MapTableModelImpl extends MapTableModel {
-        private static final long serialVersionUID = 7511150801498311279L;
+    private class MapTableModelImpl extends MapTableModel<String> {
+        private static final long serialVersionUID = -5445428678397999210L;
 
         public MapTableModelImpl(Map<String,Object> map) {
             super(map, "Property Name", "Value");
         }
 
         @Override
-        protected Object getValueAt(Object row, int x) {
+        protected Object getValueAt(String row, int x) {
             return String.valueOf(super.getValueAt(row, x));
         }
     }
