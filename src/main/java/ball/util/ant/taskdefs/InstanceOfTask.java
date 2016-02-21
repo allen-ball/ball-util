@@ -143,6 +143,7 @@ public class InstanceOfTask extends TypeTask {
     }
 
     private class MapTableModelImpl extends MapTableModel {
+        private static final long serialVersionUID = 7511150801498311279L;
 
         public MapTableModelImpl(Map<String,Object> map) {
             super(map, "Property Name", "Value");

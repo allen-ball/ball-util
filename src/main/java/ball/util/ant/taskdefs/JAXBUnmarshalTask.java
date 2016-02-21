@@ -68,6 +68,7 @@ public class JAXBUnmarshalTask extends AbstractClasspathTask {
     }
 
     private class MapTableModelImpl extends MapTableModel {
+        private static final long serialVersionUID = -6226621284459438053L;
 
         public MapTableModelImpl(Map<String,Object> map) {
             super(map, "Property Name", "Value");

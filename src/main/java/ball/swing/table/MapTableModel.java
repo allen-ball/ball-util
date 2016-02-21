@@ -15,6 +15,7 @@ import javax.swing.event.TableModelEvent;
  * @version $Revision$
  */
 public class MapTableModel extends ArrayListTableModel<Object> {
+    private static final long serialVersionUID = 3122046507873679308L;
 
     private final Map<?,?> map;
 
