@@ -1,7 +1,7 @@
 2016-02-21  Allen D. Ball  <ball@sol.local>
 
 	* src/main/java/ball/swing/table/MapTableModel.java:
-	Only require specification of Map generic key parameter.
+	Added support rows consisting of multiple Maps.
 
 2016-02-20  Allen D. Ball  <ball@sol.local>
 

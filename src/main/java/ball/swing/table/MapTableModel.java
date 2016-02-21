@@ -6,11 +6,15 @@
 package ball.swing.table;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 import javax.swing.event.TableModelEvent;
 
 /**
- * {@link Map} {@link javax.swing.table.TableModel} implementation.
+ * {@link Map} {@link javax.swing.table.TableModel} implementation.  Table
+ * rows are made up of one or more {@link Map}s.
  *
  * @param       <K>     The type of the underlying {@link Map} key.
  *
@@ -18,10 +22,33 @@ import javax.swing.event.TableModelEvent;
  * @version $Revision$
  */
 public class MapTableModel<K> extends ArrayListTableModel<K> {
-    private static final long serialVersionUID = -7422743562060267365L;
+    private static final long serialVersionUID = -1688193597062997567L;
 
-    private final ArrayList<Map<? extends K,? extends Object>> list =
+    private final ArrayList<Map<? extends K,?>> list =
         new ArrayList<Map<? extends K,?>>();
+
+    /**
+     * @see AbstractTableModelImpl#AbstractTableModelImpl(String...)
+     *
+     * @param   collection      The {@link Collection} of {@link Map}s.
+     * @param   names           The column names.
+     */
+    public MapTableModel(Collection<Map<? extends K,?>> collection,
+                         String... names) {
+        super(collection.iterator().next().keySet(), names);
+
+        list.addAll(collection);
+    }
+
+    /**
+     * @see AbstractTableModelImpl#AbstractTableModelImpl(int)
+     *
+     * @param   collection      The {@link Collection} of {@link Map}s.
+     * @param   columns         The number of columns.
+     */
+    public MapTableModel(Collection<Map<? extends K,?>> collection) {
+        this(collection, new String[collection.size() + 1]);
+    }
 
     /**
      * @see AbstractTableModelImpl#AbstractTableModelImpl(String...)
@@ -31,9 +58,7 @@ public class MapTableModel<K> extends ArrayListTableModel<K> {
      * @param   value           The value column name.
      */
     public MapTableModel(Map<? extends K,?> map, String key, String value) {
-        super(map.keySet(), key, value);
-
-        list.add(map);
+        this(Arrays.<Map<? extends K,?>>asList(map), key, value);
     }
 
     /**
