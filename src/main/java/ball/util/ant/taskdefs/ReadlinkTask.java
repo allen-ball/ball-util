@@ -45,7 +45,7 @@ public class ReadlinkTask extends AbstractMatchingTask {
         }
 
         if (! map.isEmpty()) {
-            log(new MapTableModel<File>(map, "Link", "Target"));
+            log(new MapTableModel(map, "Link", "Target"));
         }
     }
 }

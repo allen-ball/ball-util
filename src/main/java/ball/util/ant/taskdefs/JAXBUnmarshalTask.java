@@ -67,15 +67,15 @@ public class JAXBUnmarshalTask extends AbstractClasspathTask {
         }
     }
 
-    private class MapTableModelImpl extends MapTableModel<String> {
-        private static final long serialVersionUID = 5100075833788023264L;
+    private class MapTableModelImpl extends MapTableModel {
+        private static final long serialVersionUID = -6226621284459438053L;
 
         public MapTableModelImpl(Map<String,Object> map) {
             super(map, "Property Name", "Value");
         }
 
         @Override
-        protected Object getValueAt(String row, int x) {
+        protected Object getValueAt(Object row, int x) {
             return String.valueOf(super.getValueAt(row, x));
         }
     }

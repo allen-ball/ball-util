@@ -5,71 +5,49 @@
  */
 package ball.swing.table;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Map;
 import javax.swing.event.TableModelEvent;
 
 /**
- * {@link Map} {@link javax.swing.table.TableModel} implementation.  Table
- * rows are made up of one or more {@link Map}s.
- *
- * @param       <K>     The type of the underlying {@link Map} key.
+ * {@link Map} {@link javax.swing.table.TableModel} implementation.
  *
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
-public class MapTableModel<K> extends ArrayListTableModel<K> {
-    private static final long serialVersionUID = -1688193597062997567L;
+public class MapTableModel extends ArrayListTableModel<Object> {
+    private static final long serialVersionUID = -5407679562418839946L;
 
-    private final ArrayList<Map<? extends K,?>> list =
-        new ArrayList<Map<? extends K,?>>();
+    private final Map<?,?> map;
 
     /**
      * @see AbstractTableModelImpl#AbstractTableModelImpl(String...)
      *
-     * @param   collection      The {@link Collection} of {@link Map}s.
+     * @param   map             The underlying {@link Map}.
      * @param   names           The column names.
      */
-    public MapTableModel(Collection<Map<? extends K,?>> collection,
-                         String... names) {
-        super(collection.iterator().next().keySet(), names);
+    public MapTableModel(Map<?,?> map, String... names) {
+        super(map.keySet(), names);
 
-        list.addAll(collection);
+        this.map = map;
     }
 
     /**
      * @see AbstractTableModelImpl#AbstractTableModelImpl(int)
      *
-     * @param   collection      The {@link Collection} of {@link Map}s.
+     * @param   map             The underlying {@link Map}.
      * @param   columns         The number of columns.
      */
-    public MapTableModel(Collection<Map<? extends K,?>> collection) {
-        this(collection, new String[collection.size() + 1]);
-    }
-
-    /**
-     * @see AbstractTableModelImpl#AbstractTableModelImpl(String...)
-     *
-     * @param   map             The underlying {@link Map}.
-     * @param   key             The key column name.
-     * @param   value           The value column name.
-     */
-    public MapTableModel(Map<? extends K,?> map, String key, String value) {
-        this(Arrays.<Map<? extends K,?>>asList(map), key, value);
+    public MapTableModel(Map<?,?> map, int columns) {
+        this(map, new String[columns]);
     }
 
     /**
      * @param   map             The underlying {@link Map}.
      */
-    public MapTableModel(Map<? extends K,?> map) {
-        this(map, null, null);
-    }
+    public MapTableModel(Map<?,?> map) { this(map, 2); }
 
     @Override
-    protected Object getValueAt(K row, int x) {
+    protected Object getValueAt(Object row, int x) {
         Object value = null;
 
         switch (x) {
@@ -78,7 +56,7 @@ public class MapTableModel<K> extends ArrayListTableModel<K> {
             break;
 
         default:
-            value = list.get(x - 1).get(row);
+            value = map.get(row);
             break;
         }
 
@@ -88,7 +66,7 @@ public class MapTableModel<K> extends ArrayListTableModel<K> {
     @Override
     public void tableChanged(TableModelEvent event) {
         list().clear();
-        list().addAll(list.get(0).keySet());
+        list().addAll(map.keySet());
 
         super.tableChanged(event);
     }
