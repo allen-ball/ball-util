@@ -5,6 +5,7 @@
  */
 package ball.util;
 
+import java.util.Arrays;
 import java.util.regex.Pattern;
 
 import static java.lang.Character.isWhitespace;
@@ -599,5 +600,31 @@ public abstract class StringUtil {
      */
     public static String concat(Iterable<?> iterable) {
         return concat(NIL, iterable);
+    }
+
+    /**
+     * Static method to concatenate the argument {@link Object} array
+     * elements' {@link String} representations to a {@link String} with
+     * each member separated by an optional {@link CharSequence}.
+     *
+     * @param   separator       The separator {@link CharSequence}.
+     * @param   objects         The {@link Object} array.
+     *
+     * @return  A {@link String}.
+     */
+    public static String concat(CharSequence separator, Object[] objects) {
+        return concat(separator, Arrays.asList(objects));
+    }
+
+    /**
+     * Static method to concatenate the argument {@link Object} array
+     * elements' {@link String} representations to a {@link String}.
+     *
+     * @param   objects         The {@link Object} array.
+     *
+     * @return  A {@link String}.
+     */
+    public static String concat(Object[] objects) {
+        return concat(NIL, objects);
     }
 }
