@@ -564,4 +564,40 @@ public abstract class StringUtil {
     public static StringBuilder trim(StringBuilder buffer) {
         return ltrim(rtrim(buffer));
     }
+
+    /**
+     * Static method to concatenate the argument {@link Iterable} member
+     * {@link Object}s' {@link String} representations to a {@link String}
+     * with each member separated by an optional {@link CharSequence}.
+     *
+     * @param   separator       The separator {@link CharSequence}.
+     * @param   iterable        The {@link Iterable}.
+     *
+     * @return  A {@link String}.
+     */
+    public static String concat(CharSequence separator, Iterable<?> iterable) {
+        StringBuilder buffer = new StringBuilder();
+
+        for (Object object : iterable) {
+            if (buffer.length() > 0 && separator != null) {
+                buffer.append(separator);
+            }
+
+            buffer.append(String.valueOf(object));
+        }
+
+        return buffer.toString();
+    }
+
+    /**
+     * Static method to concatenate the argument {@link Iterable} member
+     * {@link Object}s' {@link String} representations to a {@link String}.
+     *
+     * @param   iterable        The {@link Iterable}.
+     *
+     * @return  A {@link String}.
+     */
+    public static String concat(Iterable<?> iterable) {
+        return concat(NIL, iterable);
+    }
 }

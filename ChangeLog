@@ -1,3 +1,9 @@
+2016-02-26  Allen D. Ball  <ball@sol.local>
+
+	* src/main/java/ball/util/StringUtil.java:
+	Added concat(CharSequence,Iterable<?>) and concat(Iterable<?>)
+	methods.
+
 2016-02-20  Allen D. Ball  <ball@sol.local>
 
 	* src/main/java/ball/swing/table/SimpleTableModel.java:
