@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2013 - 2015 Allen D. Ball.  All rights reserved.
+ * Copyright 2013 - 2016 Allen D. Ball.  All rights reserved.
  */
 package ball.annotation.processing;
 
@@ -22,6 +22,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.jar.Attributes;
@@ -40,6 +41,7 @@ import static ball.lang.Punctuation.COMMA;
 import static ball.lang.Punctuation.LP;
 import static ball.lang.Punctuation.RP;
 import static ball.util.StringUtil.NIL;
+import static ball.util.StringUtil.concat;
 import static javax.tools.Diagnostic.Kind.ERROR;
 import static javax.tools.Diagnostic.Kind.WARNING;
 import static javax.tools.StandardLocation.CLASS_OUTPUT;
@@ -365,31 +367,17 @@ public class ManifestProcessor extends AbstractAnnotationProcessor
 
             if (depends != null) {
                 attributes.putValue(getAttributeName(depends.getClass()),
-                                    concatenate(SPACE, depends.value()));
+                                    concat(SPACE, depends.value()));
             }
 
             if (design != null) {
                 attributes.putValue(getAttributeName(design.getClass()),
-                                    concatenate(SPACE, design.value()));
+                                    concat(SPACE, design.value()));
             }
         }
 
         private String getAttributeName(Class<? extends Annotation> type) {
             return type.getAnnotation(Attribute.class).value();
-        }
-
-        private String concatenate(String separator, String... strings) {
-            StringBuilder buffer = null;
-
-            for (String string : strings) {
-                if (buffer == null) {
-                    buffer = new StringBuilder(string);
-                } else {
-                    buffer.append(separator).append(string);
-                }
-            }
-
-            return (buffer != null) ? buffer.toString() : NIL;
         }
 
         @Override
