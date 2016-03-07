@@ -1,3 +1,8 @@
+2016-03-07  Allen D. Ball  <ball@sol.local>
+
+	* src/main/java/ball/swing/table/MapsTableModel.java:
+	Initial writing.
+
 2016-02-26  Allen D. Ball  <ball@sol.local>
 
 	* src/main/java/ball/util/StringUtil.java:
