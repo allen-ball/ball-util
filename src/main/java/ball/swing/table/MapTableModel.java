@@ -15,7 +15,7 @@ import javax.swing.event.TableModelEvent;
  * @version $Revision$
  */
 public class MapTableModel extends ArrayListTableModel<Object> {
-    private static final long serialVersionUID = -5407679562418839946L;
+    private static final long serialVersionUID = 299182543130741505L;
 
     private final Map<?,?> map;
 
@@ -46,6 +46,13 @@ public class MapTableModel extends ArrayListTableModel<Object> {
      */
     public MapTableModel(Map<?,?> map) { this(map, 2); }
 
+    /**
+     * Method to get the underlying {@link Map}.
+     *
+     * @return  The underlying {@link Map}.
+     */
+    protected Map<?,?> map() { return map; }
+
     @Override
     protected Object getValueAt(Object row, int x) {
         Object value = null;
@@ -56,7 +63,7 @@ public class MapTableModel extends ArrayListTableModel<Object> {
             break;
 
         default:
-            value = map.get(row);
+            value = map().get(row);
             break;
         }
 
@@ -66,7 +73,7 @@ public class MapTableModel extends ArrayListTableModel<Object> {
     @Override
     public void tableChanged(TableModelEvent event) {
         list().clear();
-        list().addAll(map.keySet());
+        list().addAll(map().keySet());
 
         super.tableChanged(event);
     }
