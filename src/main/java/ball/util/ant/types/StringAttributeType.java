@@ -106,7 +106,8 @@ public class StringAttributeType extends StringValueType {
      */
     public static List<StringAttributeType> fromMap(Map<?,?> map,
                                                     String prefix) {
-        ArrayList<StringAttributeType> list = new ArrayList<>(map.size());
+        ArrayList<StringAttributeType> list =
+            new ArrayList<StringAttributeType>(map.size());
 
         for (Map.Entry<?,?> entry : map.entrySet()) {
             String key = entry.getKey().toString();
