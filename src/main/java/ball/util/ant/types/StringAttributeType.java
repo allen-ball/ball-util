@@ -71,7 +71,7 @@ public class StringAttributeType extends StringValueType {
      * @return  The {@link Map}.
      */
     public static Map<String,String> asMap(Iterable<? extends StringAttributeType> iterable) {
-        LinkedHashMap<String,String> map = new LinkedHashMap<>();
+        LinkedHashMap<String,String> map = new LinkedHashMap<String,String>();
 
         for (StringAttributeType attribute : iterable) {
             map.put(attribute.getName(), attribute.getValue());
