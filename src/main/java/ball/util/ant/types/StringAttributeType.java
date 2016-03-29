@@ -59,23 +59,4 @@ public class StringAttributeType extends StringValueType
 
     @Override
     public String toString() { return getName() + "=" + getValue(); }
-
-    /**
-     * Static method to convert an {@link Iterable} of
-     * {@link StringAttributeType}s to a {@link Map}.
-     *
-     * @param   iterable        The {@link Iterable} of
-     *                          {@link StringAttributeType}s.
-     *
-     * @return  The {@link Map}.
-     */
-    public static Map<String,String> asMap(Iterable<? extends StringAttributeType> iterable) {
-        LinkedHashMap<String,String> map = new LinkedHashMap<String,String>();
-
-        for (StringAttributeType attribute : iterable) {
-            map.put(attribute.getName(), attribute.getValue());
-        }
-
-        return map;
-    }
 }
