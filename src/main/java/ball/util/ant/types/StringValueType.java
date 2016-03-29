@@ -27,7 +27,13 @@ public class StringValueType extends OptionalTextType {
     public StringValueType() { super(); }
 
     public String getValue() { return value; }
-    public void setValue(String value) { this.value = value; }
+    public String setValue(String value) {
+        String previous = this.value;
+
+        this.value = value;
+
+        return previous;
+    }
 
     @Override
     public void addText(String text) {

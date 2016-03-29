@@ -1,3 +1,8 @@
+2016-03-28  Allen D. Ball  <ball@sol.local>
+
+	* src/main/java/ball/util/ant/types/StringAttributeType.java:
+	Implement Map.Entry<String,String>.
+
 2016-03-13  Allen D. Ball  <ball@sol.local>
 
 	* src/main/java/ball/util/ant/types/StringAttributeType.java:

@@ -7,13 +7,8 @@ package ball.util.ant.types;
 
 import ball.util.ant.taskdefs.NotNull;
 import java.beans.ConstructorProperties;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
-
-import static ball.util.StringUtil.NIL;
 
 /**
  * Class to provide a {@link String} name-value (attribute) for
@@ -25,7 +20,8 @@ import static ball.util.StringUtil.NIL;
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
-public class StringAttributeType extends StringValueType {
+public class StringAttributeType extends StringValueType
+                                 implements Map.Entry<String,String> {
     private String name = null;
 
     /**
@@ -59,6 +55,9 @@ public class StringAttributeType extends StringValueType {
     public void setName(String name) { this.name = name; }
 
     @Override
+    public String getKey() { return getName(); }
+
+    @Override
     public String toString() { return getName() + "=" + getValue(); }
 
     /**
@@ -78,49 +77,5 @@ public class StringAttributeType extends StringValueType {
         }
 
         return map;
-    }
-
-    /**
-     * Static method to convert a {@link Map} to a {@link List} of
-     * {@link StringAttributeType}s.
-     *
-     * @param   map             The {@link Map}.
-     *
-     * @return  A {@link List} of {@link StringAttributeType}s.
-     */
-    public static List<StringAttributeType> fromMap(Map<?,?> map) {
-        return fromMap(map, NIL);
-    }
-
-    /**
-     * Static method to convert a {@link Map} to a {@link List} of
-     * {@link StringAttributeType}s.  A prefix may be specified to select
-     * and rewrite the {@link Map} keys when creating the
-     * {@link StringAttributeType}s.
-     *
-     * @param   map             The {@link Map}.
-     * @param   prefix          The {@link String} prefix to select
-     *                          {@link Map} entry keys.
-     *
-     * @return  A {@link List} of {@link StringAttributeType}s.
-     */
-    public static List<StringAttributeType> fromMap(Map<?,?> map,
-                                                    String prefix) {
-        ArrayList<StringAttributeType> list =
-            new ArrayList<StringAttributeType>(map.size());
-
-        for (Map.Entry<?,?> entry : map.entrySet()) {
-            String key = entry.getKey().toString();
-
-            if (key.startsWith(prefix)) {
-                StringAttributeType attribute =
-                    new StringAttributeType(key.substring(prefix.length()),
-                                            entry.getValue());
-
-                list.add(attribute);
-            }
-        }
-
-        return list;
     }
 }
