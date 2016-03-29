@@ -1,5 +1,9 @@
 2016-03-28  Allen D. Ball  <ball@sol.local>
 
+	* src/main/java/ball/util/ant/taskdefs/AbstractClasspathTask.java:
+	Added getPrefixedProjectProperties(String) and static
+	getPrefixedPropertiesFrom(Map<?,?>,String) methods.
+
 	* src/main/java/ball/util/ant/types/StringAttributeType.java:
 	Implement Map.Entry<String,String>.
 
