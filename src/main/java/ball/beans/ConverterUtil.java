@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2010 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2010 - 2016 Allen D. Ball.  All rights reserved.
  */
 package ball.beans;
 
@@ -117,6 +117,7 @@ public abstract class ConverterUtil {
         }
     }
 
+    @SuppressWarnings({ "rawtypes" })
     private static class ConverterMap extends InstanceMap<Converter> {
         private static final long serialVersionUID = 8994194106976712933L;
 
