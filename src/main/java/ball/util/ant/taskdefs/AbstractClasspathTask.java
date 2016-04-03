@@ -6,13 +6,7 @@
 package ball.util.ant.taskdefs;
 
 import ball.text.TextTable;
-import ball.util.PropertiesImpl;
-import java.util.Collections;
 import java.util.Iterator;
-import java.util.Map;
-import java.util.Properties;
-import java.util.SortedMap;
-import java.util.TreeMap;
 import javax.swing.table.TableModel;
 import org.apache.tools.ant.AntClassLoader;
 import org.apache.tools.ant.BuildException;
@@ -79,21 +73,6 @@ public abstract class AbstractClasspathTask extends Task
     }
 
     /**
-     * Method to extract the prefixed {@link Properties} from the
-     * {@link Project} properties into a new {@link Properties}.  The prefix
-     * is removed from the property names in the returned
-     * {@link Properties}.
-     *
-     * @param   prefix          The {@link String} prefix to select
-     *                          {@link Map} entry keys.
-     *
-     * @return  The {@link Properties} matching the argument prefix.
-     */
-    protected Properties getPrefixedProjectProperties(String prefix) {
-        return getPrefixedPropertiesFrom(getProject().getProperties(), prefix);
-    }
-
-    /**
      * See {@link #log(Iterable)}.
      */
     protected void log(TableModel model) { log(model, Project.MSG_INFO); }
@@ -145,35 +124,4 @@ public abstract class AbstractClasspathTask extends Task
 
     @Override
     public String toString() { return getClass().getSimpleName(); }
-
-    /**
-     * Static method to extract prefixed {@link Properties} from a
-     * {@link Map}.  A prefix must be specified to select {@link Map} keys
-     * and that prefix is removed from the key name in the
-     * {@link Properties}.  The returned {@link Properties} is not backed by
-     * the argument {@link Map}.
-     *
-     * @param   map             The {@link Map}.
-     * @param   prefix          The {@link String} prefix to select
-     *                          {@link Map} entry keys.
-     *
-     * @return  The {@link Properties} matching the argument prefix.
-     */
-    public static Properties getPrefixedPropertiesFrom(Map<?,?> map,
-                                                       String prefix) {
-        Properties properties = new PropertiesImpl();
-
-        for (Map.Entry<?,?> entry : map.entrySet()) {
-            String key = entry.getKey().toString();
-
-            if (key.startsWith(prefix)) {
-                Object value = entry.getValue();
-
-                properties.setProperty(key.substring(prefix.length()),
-                                       (value != null) ? value.toString() : null);
-            }
-        }
-
-        return properties;
-    }
 }
