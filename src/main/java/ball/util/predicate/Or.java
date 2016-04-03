@@ -1,11 +1,11 @@
 /*
  * $Id$
  *
- * Copyright 2012 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2012 - 2016 Allen D. Ball.  All rights reserved.
  */
 package ball.util.predicate;
 
-import ball.util.AbstractPredicate;
+import ball.util.AbstractCompoundPredicate;
 import ball.util.Predicate;
 
 /**
@@ -14,29 +14,22 @@ import ball.util.Predicate;
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
-public class Or extends AbstractPredicate {
-    private final Predicate[] predicates;
+public class Or<T> extends AbstractCompoundPredicate<T> {
 
     /**
      * Sole constructor.
      *
      * @param   predicates      The {@link Predicate}s to {@code or}.
      */
-    public Or(Predicate... predicates) {
-        super();
-
-        if (predicates != null) {
-            this.predicates = predicates;
-        } else {
-            throw new NullPointerException("predicate");
-        }
-    }
+    @SafeVarargs
+    @SuppressWarnings({ "unchecked", "varargs" })
+    public Or(Predicate<T>... predicates) { super(predicates); }
 
     @Override
-    public boolean apply(Object object) {
-        boolean result = (predicates.length == 0);
+    public boolean apply(T object) {
+        boolean result = list().isEmpty();
 
-        for (Predicate predicate : predicates) {
+        for (Predicate<T> predicate : list()) {
             result |= predicate.apply(object);
 
             if (result) {

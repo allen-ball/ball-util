@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2010 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2010 - 2016 Allen D. Ball.  All rights reserved.
  */
 package ball.util;
 
@@ -53,4 +53,7 @@ public abstract class AbstractIterator<E> implements Iterator<E>,
      */
     @Override
     public final E nextElement() { return next(); }
+
+    @Override
+    public String toString() { return super.toString(); }
 }

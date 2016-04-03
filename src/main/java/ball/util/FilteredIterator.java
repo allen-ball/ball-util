@@ -1,12 +1,15 @@
 /*
  * $Id$
  *
- * Copyright 2012 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2012 - 2016 Allen D. Ball.  All rights reserved.
  */
 package ball.util;
 
+import java.beans.ConstructorProperties;
 import java.util.Iterator;
 import java.util.LinkedList;
+
+import static ball.util.StringUtil.NIL;
 
 /**
  * Filtered {@link Iterator} implementation.
@@ -22,10 +25,9 @@ import java.util.LinkedList;
  * @version $Revision$
  */
 public class FilteredIterator<E> extends AbstractIterator<E> {
-    private final Predicate predicate;
+    private final Predicate<E> predicate;
     private final Iterator<? extends E> iterator;
     private final LinkedList<E> list = new LinkedList<E>();
-
 
     /**
      * Construct a {@link FilteredIterator} from the argument
@@ -34,7 +36,8 @@ public class FilteredIterator<E> extends AbstractIterator<E> {
      * @param   predicate       The {@link Predicate}.
      * @param   iterable        The {@link Iterable}.
      */
-    public FilteredIterator(Predicate predicate,
+    @ConstructorProperties({ "predicate", NIL })
+    public FilteredIterator(Predicate<E> predicate,
                             Iterable<? extends E> iterable) {
         this(predicate, iterable.iterator());
     }
@@ -46,7 +49,8 @@ public class FilteredIterator<E> extends AbstractIterator<E> {
      * @param   predicate       The {@link Predicate}.
      * @param   iterator        The {@link Iterator}.
      */
-    public FilteredIterator(Predicate predicate,
+    @ConstructorProperties({ "predicate", NIL })
+    public FilteredIterator(Predicate<E> predicate,
                             Iterator<? extends E> iterator) {
         if (predicate != null) {
             this.predicate = predicate;
@@ -61,6 +65,13 @@ public class FilteredIterator<E> extends AbstractIterator<E> {
         }
     }
 
+    /**
+     * Method to get the {@link Predicate}.
+     *
+     * @return  The {@link Predicate}.
+     */
+    protected Predicate<E> getPredicate() { return predicate; }
+
     @Override
     public boolean hasNext() {
         synchronized (this) {
@@ -68,7 +79,7 @@ public class FilteredIterator<E> extends AbstractIterator<E> {
                 if (iterator.hasNext()) {
                     E next = iterator.next();
 
-                    if (predicate.apply(next)) {
+                    if (getPredicate().apply(next)) {
                         list.add(next);
                     }
                 } else {

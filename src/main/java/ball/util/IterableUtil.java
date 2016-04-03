@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2012 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2012 - 2016 Allen D. Ball.  All rights reserved.
  */
 package ball.util;
 
@@ -95,7 +95,7 @@ public abstract class IterableUtil {
      *
      * @return  An {@link Iterable} that wraps the {@link Iterable}.
      */
-    public static <T> Iterable<T> filter(Predicate predicate,
+    public static <T> Iterable<T> filter(Predicate<T> predicate,
                                          Iterable<T> iterable) {
         return filter(predicate, iterable.iterator());
     }
@@ -110,7 +110,7 @@ public abstract class IterableUtil {
      *
      * @return  An {@link Iterator} that wraps the {@link Iterator}.
      */
-    public static <T> Iterable<T> filter(Predicate predicate,
+    public static <T> Iterable<T> filter(Predicate<T> predicate,
                                          Iterator<T> iterator) {
         return new FilteredIterator<T>(predicate, iterator);
     }
@@ -125,7 +125,7 @@ public abstract class IterableUtil {
      *
      * @return  An {@link Enumeration} that wraps the {@link Enumeration}.
      */
-    public static <T> Iterable<T> filter(Predicate predicate,
+    public static <T> Iterable<T> filter(Predicate<T> predicate,
                                          Enumeration<T> enumeration) {
         return filter(predicate, asIterable(enumeration));
     }

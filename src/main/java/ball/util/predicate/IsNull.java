@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2012 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2012 - 2016 Allen D. Ball.  All rights reserved.
  */
 package ball.util.predicate;
 
@@ -13,7 +13,7 @@ import ball.util.AbstractPredicate;
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
-public class IsNull extends AbstractPredicate {
+public class IsNull extends AbstractPredicate<Object> {
     private static final IsNull DEFAULT = new IsNull();
 
     /**

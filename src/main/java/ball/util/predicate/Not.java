@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2012 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2012 - 2016 Allen D. Ball.  All rights reserved.
  */
 package ball.util.predicate;
 
@@ -14,15 +14,15 @@ import ball.util.Predicate;
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
-public class Not extends AbstractPredicate {
-    private final Predicate predicate;
+public class Not extends AbstractPredicate<Object> {
+    private final Predicate<Object> predicate;
 
     /**
      * Sole constructor.
      *
      * @param   predicate       The {@link Predicate} to {@code not}.
      */
-    public Not(Predicate predicate) {
+    public Not(Predicate<Object> predicate) {
         super();
 
         if (predicate != null) {

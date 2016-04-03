@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2012 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2012 - 2016 Allen D. Ball.  All rights reserved.
  */
 package ball.util.predicate;
 
@@ -16,18 +16,19 @@ import java.util.TreeSet;
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
-public class IsInstanceOf extends And {
+public class IsInstanceOf extends And<Object> {
 
     /**
      * Sole constructor.
      *
      * @param   types           The {@link Class}es to filter for.
      */
+    @SuppressWarnings({ "unchecked" })
     public IsInstanceOf(Class<?>... types) {
         super(IsNotNull.getDefault(), new Impl(types));
     }
 
-    private static class Impl extends AbstractPredicate {
+    private static class Impl extends AbstractPredicate<Object> {
         private final TreeSet<Class<?>> set =
             new TreeSet<Class<?>>(ClassOrder.INHERITANCE);
 
