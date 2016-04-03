@@ -59,7 +59,7 @@ public abstract class MapUtil {
      *
      * @return  The target {@link Properties}.
      */
-    public static Properties copy(Map<String,?> from, Properties to) {
+    public static Properties copy(Map<?,?> from, Properties to) {
         return (Properties) copy(from.entrySet(), to);
     }
 }
