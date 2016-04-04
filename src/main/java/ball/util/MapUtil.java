@@ -60,6 +60,20 @@ public abstract class MapUtil {
      * @return  The target {@link Properties}.
      */
     public static Properties copy(Map<?,?> from, Properties to) {
-        return (Properties) copy(from.entrySet(), to);
+        return copy(from.entrySet(), to);
+    }
+
+    /**
+     * Method to copy {@link Map.Entry}s to a {@link Properties}.
+     *
+     * @param   from            The source {@link Map.Entry}
+     *                          {@link Iterable}.
+     * @param   to              The target {@link Properties}.
+     *
+     * @return  The target {@link Properties}.
+     */
+    public static Properties copy(Iterable<? extends Map.Entry<?,?>> from,
+                                  Properties to) {
+        return (Properties) copy(from, (Map<Object,Object>) to);
     }
 }
