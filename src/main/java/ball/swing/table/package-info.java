@@ -1,3 +1,8 @@
+/*
+ * $Id$
+ *
+ * Copyright 2016 Allen D. Ball.  All rights reserved.
+ */
 /**
  * {@link javax.swing.table} implementation classes.
  *

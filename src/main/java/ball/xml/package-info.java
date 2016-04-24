@@ -1,3 +1,8 @@
+/*
+ * $Id$
+ *
+ * Copyright 2016 Allen D. Ball.  All rights reserved.
+ */
 /**
  * Classes for XML processing.
  *

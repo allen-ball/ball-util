@@ -1,3 +1,8 @@
+/*
+ * $Id$
+ *
+ * Copyright 2016 Allen D. Ball.  All rights reserved.
+ */
 /**
  * Provides {@link javax.activation.DataSource} (and other
  * {@link javax.activation}) implementation classes.

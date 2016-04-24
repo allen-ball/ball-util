@@ -1,3 +1,8 @@
+/*
+ * $Id$
+ *
+ * Copyright 2016 Allen D. Ball.  All rights reserved.
+ */
 /**
  * Provides {@link org.apache.tools.ant.taskdefs.compilers.CompilerAdapter}
  * implementation for the system {@link javax.tools.JavaCompiler}.
