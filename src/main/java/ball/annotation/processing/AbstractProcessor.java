@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2012 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2012 - 2016 Allen D. Ball.  All rights reserved.
  */
 package ball.annotation.processing;
 
@@ -808,31 +808,31 @@ public abstract class AbstractProcessor
         return asPath(element.getQualifiedName().toString()) + SLASH;
     }
 
+    @Override
+    public String toString() { return super.toString(); }
+
     /**
-     * Method to get the argument {@link Package} name as a path (including
-     * the trailing {@value SLASH}).
+     * Static method to get the argument {@link Package} name as a path
+     * (including the trailing {@value SLASH}).
      *
      * @param   pkg             The {@link Package}.
      *
      * @return  The {@link Package} name as a path.
      */
-    protected String asPath(Package pkg) {
+    protected static String asPath(Package pkg) {
         return asPath(pkg.getName()) + SLASH;
     }
 
     /**
-     * Method to get the argument name as a path.
+     * Static method to get the argument name as a path.
      *
      * @param   name            The name {@link String}.
      *
      * @return  The argument {@link String} as a path.
      */
-    protected String asPath(String name) {
+    protected static String asPath(String name) {
         return name.replaceAll(Pattern.quote(DOT), SLASH);
     }
-
-    @Override
-    public String toString() { return super.toString(); }
 
     /**
      * {@link PrintWriter} implementation suitable for creating Java file

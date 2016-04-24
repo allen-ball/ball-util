@@ -1,12 +1,11 @@
 /*
  * $Id$
  *
- * Copyright 2011 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2011 - 2016 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.taskdefs;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Set;
 import org.apache.tools.ant.BuildException;
 
@@ -75,7 +74,6 @@ public class BootstrapProcessorTask extends AbstractClassFileTask {
          * @param       destdir The root of the hierarchy to record any
          *                      output artifacts.
          */
-        public void process(Set<Class<?>> set, File destdir)
-            throws IOException;
+        public void process(Set<Class<?>> set, File destdir) throws Exception;
     }
 }
