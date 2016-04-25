@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns:aether="antlib:org.eclipse.aether.ant"
          name="ball-util" basedir="." default="jar">
-
   <description>
     ball-util.jar
     --------------
@@ -376,5 +375,4 @@
              resource="ball/util/ant/defaults.properties"/>
     <uuid-generate-time/>
   </target>
-
 </project>
