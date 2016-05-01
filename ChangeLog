@@ -3,6 +3,10 @@
 	* src/main/java/ball/util/ant/taskdefs/JNILibTask.java:
 	Added <jnilib-file-name-for/> and <jnilib-load/> Tasks.
 
+	* src/main/java/ball/util/ant/taskdefs/LibtoolTask.java:
+	Initial writing: Implements <libtool-compile/> and <libtool-link/>
+	Ant Tasks.
+
 2016-04-30  Allen D. Ball  <ball@sol.local>
 
 	* src/main/java/ball/util/JNILib.java:
@@ -126,11 +130,6 @@
 
 	* pom.xml: Include Ant dependency source in javadoc.
 
-2014-12-21  Allen D. Ball  <ball@sol.local>
-
-	* src/main/resources/ball/util/ant/taskdefs/JNIResourceBundle.properties:
-	Support Oracle JDK 1.7 on Mac OS X.
-
 2014-11-01  Allen D. Ball  <ball@sol.local>
 
 	* src/main/java/ball/util/ant/taskdefs/compilers/SystemJavaCompilerAdapter.java:
@@ -210,7 +209,6 @@
 	text-specific logic.
 
 	* src/main/java/ball/util/ant/taskdefs/AbstractClasspathTask.java,
-	src/main/java/ball/util/ant/taskdefs/AbstractJNIExecuteOnTask.java,
 	src/main/java/ball/util/ant/taskdefs/AbstractMatchingTask.java:
 	Added log(TableModel) and log(TableModel,int) methods.
 
@@ -281,7 +279,6 @@
 2014-07-23  Allen D. Ball  <ball@sol.local>
 
 	* src/main/java/ball/util/ant/taskdefs/AbstractClasspathTask.java,
-	src/main/java/ball/util/ant/taskdefs/AbstractJNIExecuteOnTask.java,
 	src/main/java/ball/util/ant/taskdefs/AbstractMatchingTask.java:
 	Implemented the getAntTaskName() method.
 
@@ -890,15 +887,6 @@
 
 	* Added <inet-addresses-for/> build target and Ant Task.
 
-2010-12-27  Allen D. Ball  <ball@mercury.local>
-
-	* Added <system-load-library/> build target and Ant Task.
-
-	* src/main/java/iprotium/util/ant/taskdefs/JNICCTask.java,
-	src/main/java/iprotium/util/ant/taskdefs/JNILDTask.java:
-	Support <define/> to specify CPP defines and <link/> to specify
-	link libraries.
-
 2010-12-26  Allen D. Ball  <ball@mercury.local>
 
 	* src/main/java/iprotium/util/jni/EditLine.java:
@@ -1050,10 +1038,6 @@
 	* src/main/java/iprotium/io/IOUtil.java:
 	Expose copy(ReadableByteChannel,ByteBuffer,WritableByteChannel)
 	and copy(Readable,CharBuffer,Appendable).
-
-	* JNIResourceBundle.properties:
-	Added -I/System/Library/Frameworks/JavaVM.framework/Headers for
-	Mac OS X.
 
 2010-10-23  Allen D. Ball  <ball@10-0-1-2.lan>
 
@@ -1357,10 +1341,6 @@
 	Ant Tasks.
 
 	* Added <link/> build target and Ant Task.
-
-2009-03-23  Allen D. Ball  <ball@10-0-1-4.lan>
-
-	* iprotium.util.ant.taskdefs.JNIResourceBundle: Initial writing.
 
 2009-03-21  Allen D. Ball  <ball@10-0-1-4.lan>
 
