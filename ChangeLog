@@ -1301,12 +1301,6 @@
 	* src/main/java/iprotium/util/ant/taskdefs/JNDIListTask.java:
 	Initial writing.
 
-2009-06-16  Allen D. Ball  <ball@10-0-1-4.lan>
-
-	* src/main/java/iprotium/util/ant/taskdefs/JNILibPropertyTask.java:
-	Use System.mapLibraryName(String) to calculate JNI library prefix
-	and suffix.
-
 2009-05-26  Allen D. Ball  <ball@10-0-1-4.lan>
 
 	* Added <lint/> target and Ant Task.
