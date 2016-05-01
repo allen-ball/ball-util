@@ -1,3 +1,8 @@
+2016-04-30  Allen D. Ball  <ball@sol.local>
+
+	* src/main/java/ball/util/JNILib.java:
+	Added PREFIX and SUFFIX members.
+
 2016-04-24  Allen D. Ball  <ball@sol.local>
 
 	* Honor @AntLib annotation to generate antlib.xml descriptors.
