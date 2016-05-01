@@ -5,6 +5,8 @@
  */
 package ball.util.ant.types;
 
+import java.beans.ConstructorProperties;
+
 import static ball.util.StringUtil.NIL;
 import static ball.util.StringUtil.isNil;
 
@@ -22,7 +24,17 @@ public class StringValueType extends OptionalTextType {
     private String value = null;
 
     /**
-     * Sole constructor.
+     * @param   value           The value.
+     */
+    @ConstructorProperties({ "value" })
+    public StringValueType(String value) {
+        this();
+
+        setValue(value);
+    }
+
+    /**
+     * No-argument constructor.
      */
     public StringValueType() { super(); }
 
