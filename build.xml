@@ -46,18 +46,20 @@
   <target name="jnilib"
           description="--> Compile JNI library."
           depends="jnilib-objects" if="jni.classes">
-    <available property="link.libuuid" file="/lib/libuuid.so.1"/>
-    <system-load-library property="have.libuuid" libname="uuid"/>
     <taskdef classpathref="build.classpath"
              resource="ball/util/ant/defaults.properties"/>
-    <jni-ld destdir="${target.dir}" libname="${pom.artifactId}"
-            property="jnilib">
+    <jnilib-load libname="uuid" property="link.libuuid"/>
+    <jnilib-file-name-for libname="${pom.artifactId}" property="jnilib"/>
+    <libtool-link dest="${target.dir}">
       <link if="use.editline">edit</link>
       <link unless="use.editline">readline</link>
       <link unless="use.editline">termcap</link>
-      <link if="have.libuuid">uuid</link>
-      <fileset dir="${target.objects.dir}" includes="**/*.o"/>
-    </jni-ld>
+      <link if="link.libuuid">uuid</link>
+      <object>/usr/lib64/libuuid.so</object>
+      <object>/usr/lib/libuuid.so</object>
+      <fileset dir="${target.objects.dir}" includes="**/*.lo"/>
+      <mapper type="glob" from="*.lo" to="${jnilib}"/>
+    </libtool-link>
   </target>
 
   <target name="jnilib-objects"
@@ -67,11 +69,15 @@
     <available property="use.editline" file="/usr/include/histedit.h"/>
     <taskdef classpathref="build.classpath"
              resource="ball/util/ant/defaults.properties"/>
-    <jni-cc include="${target.headers.dir}" dest="${target.objects.dir}">
+    <libtool-compile dest="${target.objects.dir}">
+      <option>-g</option>
+      <include>${java.home}/../include</include>
+      <include>${java.home}/../include/${env.OSTYPE}</include>
+      <include>${target.headers.dir}</include>
       <define name="USE_EDITLINE" if="use.editline"/>
       <fileset dir="${src.dir}/main/c" includes="*.c"/>
-      <mapper type="glob" from="*.c" to="*.o"/>
-    </jni-cc>
+      <mapper type="glob" from="*.c" to="*.lo"/>
+    </libtool-compile>
   </target>
 
   <target name="bean-info-for"
@@ -182,6 +188,22 @@
     <jni-classes classpathref="build.classpath" basedir="${build.class.dir}">
       <src path="${src.dir}/main/java"/>
     </jni-classes>
+  </target>
+
+  <target name="jnilib-file-name-for"
+          description="--> Invokes &lt;jnilib-file-name-for/&gt; task."
+          depends="jar-classes">
+    <taskdef classpathref="build.classpath"
+             resource="ball/util/ant/defaults.properties"/>
+    <jnilib-file-name-for libname="${libname}"/>
+  </target>
+
+  <target name="jnilib-load"
+          description="--> Invokes &lt;jnilib-load/&gt; task."
+          depends="jar-classes">
+    <taskdef classpathref="build.classpath"
+             resource="ball/util/ant/defaults.properties"/>
+    <jnilib-load libname="${libname}"/>
   </target>
 
   <target name="jnilib-prefix"
@@ -342,14 +364,6 @@
     <taskdef classpathref="build.classpath"
              resource="ball/util/ant/defaults.properties"/>
     <superclasses-of classpathref="build.classpath" type="${type}"/>
-  </target>
-
-  <target name="system-load-library"
-          description="--> Invokes &lt;system-load-library/&gt; task."
-          depends="jar-classes">
-    <taskdef classpathref="build.classpath"
-             resource="ball/util/ant/defaults.properties"/>
-    <system-load-library libname="${name}"/>
   </target>
 
   <target name="uuid-generate"
