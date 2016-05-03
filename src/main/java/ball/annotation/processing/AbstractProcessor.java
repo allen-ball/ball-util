@@ -540,7 +540,10 @@ public abstract class AbstractProcessor
             } else if (type.isPrimitive()) {
                 TypeKind kind = TypeKind.valueOf(type.getName().toUpperCase());
 
-                mirror = types.getPrimitiveType(kind);
+                mirror =
+                    kind.isPrimitive()
+                        ? types.getPrimitiveType(kind)
+                        : types.getNoType(kind);
             } else {
                 mirror = getTypeElementFor(type).asType();
             }
