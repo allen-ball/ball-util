@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2009 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2016 Allen D. Ball.  All rights reserved.
  */
 package ball.util;
 
@@ -15,6 +15,7 @@ import java.io.File;
  * @version $Revision$
  */
 public abstract class FileOrder extends Order<File> {
+    private static final long serialVersionUID = 3286681696585961819L;
 
     /**
      * {@link File#lastModified()} {@link Order}.

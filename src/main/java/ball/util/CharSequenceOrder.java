@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2010 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2010 - 2016 Allen D. Ball.  All rights reserved.
  */
 package ball.util;
 
@@ -19,6 +19,7 @@ package ball.util;
  * @version $Revision$
  */
 public abstract class CharSequenceOrder extends Order<CharSequence> {
+    private static final long serialVersionUID = 2370157830215855054L;
 
     /**
      * See {@link CharSequenceOrder.CaseSensitive}.

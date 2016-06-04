@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2013, 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2013 - 2016 Allen D. Ball.  All rights reserved.
  */
 package ball.activation;
 
@@ -24,6 +24,7 @@ import javax.activation.URLDataSource;
  * @version $Revision$
  */
 public abstract class DataSourceFactory extends Factory<DataSource> {
+    private static final long serialVersionUID = -3427329230965514662L;
 
     /**
      * Static method to get a default {@link DataSourceFactory} instance.

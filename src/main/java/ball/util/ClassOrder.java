@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2016 Allen D. Ball.  All rights reserved.
  */
 package ball.util;
 
@@ -14,6 +14,7 @@ import ball.util.ComparableUtil;
  * @version $Revision$
  */
 public abstract class ClassOrder extends Order<Class<?>> {
+    private static final long serialVersionUID = 2292484414300248875L;
 
     /**
      * See {@link Class#getName()}.

@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2016 Allen D. Ball.  All rights reserved.
  */
 package ball.util;
 
@@ -22,6 +22,7 @@ import java.util.List;
  * @version $Revision$
  */
 public abstract class Order<T> implements Comparator<T>, Serializable {
+    private static final long serialVersionUID = -1395573906781155839L;
 
     /**
      * @see Null
@@ -103,6 +104,9 @@ public abstract class Order<T> implements Comparator<T>, Serializable {
     }
 
     protected static int intValue(boolean bool) { return bool ? 1 : 0; }
+
+    @Override
+    public String toString() { return super.toString(); }
 
     /**
      * Orders non-{@code null} {@link Object}s before {@code null}

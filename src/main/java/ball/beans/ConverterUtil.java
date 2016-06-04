@@ -81,6 +81,8 @@ public abstract class ConverterUtil {
 
     private static abstract class InstanceMap<T>
                                   extends TreeMap<Class<? extends T>,T> {
+        private static final long serialVersionUID = -3648091184530928194L;
+
         private final Class<T> supertype;
 
         protected InstanceMap(Class<T> supertype) {

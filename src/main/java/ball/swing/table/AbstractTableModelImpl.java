@@ -20,6 +20,8 @@ import javax.swing.table.AbstractTableModel;
  */
 public abstract class AbstractTableModelImpl extends AbstractTableModel
                                              implements TableModelListener {
+    private static final long serialVersionUID = -4459832803497493630L;
+
     private String[] names = new String[] { };
     private Class<?>[] types = new Class<?>[] { };
 

@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2013, 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2013 - 2016 Allen D. Ball.  All rights reserved.
  */
 package ball.util;
 
@@ -15,6 +15,7 @@ import java.net.InetAddress;
  * @version $Revision$
  */
 public abstract class InetAddressOrder extends Order.NonNull<InetAddress> {
+    private static final long serialVersionUID = 1748825185989187065L;
 
     /**
      * See {@link InetAddress#getAddress()}.

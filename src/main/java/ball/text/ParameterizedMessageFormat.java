@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2014 - 2016 Allen D. Ball.  All rights reserved.
  */
 package ball.text;
 
@@ -19,6 +19,8 @@ import java.util.regex.Pattern;
  * @version $Revision$
  */
 public abstract class ParameterizedMessageFormat extends MessageFormat {
+    private static final long serialVersionUID = -5750488498631645637L;
+
     private ParameterizedMessageFormat() { super(null); }
 
     /**

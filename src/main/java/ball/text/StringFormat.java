@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2009 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2016 Allen D. Ball.  All rights reserved.
  */
 package ball.text;
 
@@ -17,6 +17,7 @@ import java.text.ParsePosition;
  * @version $Revision$
  */
 public abstract class StringFormat extends Format {
+    private static final long serialVersionUID = 488288557671578461L;
 
     /**
      * Sole constructor.
