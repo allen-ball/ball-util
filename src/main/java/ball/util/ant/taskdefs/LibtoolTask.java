@@ -18,9 +18,9 @@ import org.apache.tools.ant.types.Commandline;
 
 /**
  * {@link.uri http://ant.apache.org/ Ant}
- * {@link org.apache.tools.ant.Task} to invoke {@man libtool(1)}.
+ * {@link org.apache.tools.ant.Task} to invoke {@link.man libtool(1)}.
  *
- * {@bean-info}
+ * {@bean.info}
  *
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
@@ -85,13 +85,13 @@ public abstract class LibtoolTask extends ExecuteOn implements AnnotatedTask {
     public void setCommand(String command) { this.command = command; }
 
     /**
-     * @{code -shared}
+     * {@code -shared}
      */
     public boolean getShared() { return shared; }
     public void setShared(boolean shared) { this.shared = shared; }
 
     /**
-     * @{code -static}
+     * {@code -static}
      */
     public boolean getStatic() { return _static; }
     public void setStatic(boolean _static) { this._static = _static; }
@@ -163,10 +163,11 @@ public abstract class LibtoolTask extends ExecuteOn implements AnnotatedTask {
     public String toString() { return getClass().getSimpleName(); }
 
     /**
-     * {@link.uri http://ant.apache.org/ Ant} {@link Task} to invoke
+     * {@link.uri http://ant.apache.org/ Ant}
+     * {@link org.apache.tools.ant.Task} to invoke
      * {@code "libtool --mode=compile"}.
      *
-     * {@bean-info}
+     * {@bean.info}
      */
     @AntTask("libtool-compile")
     public static class Compile extends LibtoolTask {
@@ -222,10 +223,11 @@ public abstract class LibtoolTask extends ExecuteOn implements AnnotatedTask {
     }
 
     /**
-     * {@link.uri http://ant.apache.org/ Ant} {@link Task} to invoke
+     * {@link.uri http://ant.apache.org/ Ant}
+     * {@link org.apache.tools.ant.Task} to invoke
      * {@code "libtool --mode=link"}.
      *
-     * {@bean-info}
+     * {@bean.info}
      */
     @AntTask("libtool-link")
     public static class Link extends LibtoolTask {
@@ -251,7 +253,7 @@ public abstract class LibtoolTask extends ExecuteOn implements AnnotatedTask {
         }
 
         /**
-         * @{code -module}
+         * {@code -module}
          */
         public boolean getModule() { return module; }
         public void setModule(boolean module) { this.module = module; }

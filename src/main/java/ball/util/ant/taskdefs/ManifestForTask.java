@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2015 Allen D. Ball.  All rights reserved.
+ * Copyright 2015, 2016 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.taskdefs;
 
@@ -14,7 +14,7 @@ import org.apache.tools.ant.BuildException;
  * {@link.uri http://ant.apache.org/ Ant} {@link org.apache.tools.ant.Task}
  * to locate a {@link Manifest} for a {@link Class}.
  *
- * {@bean-info}
+ * {@bean.info}
  *
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$

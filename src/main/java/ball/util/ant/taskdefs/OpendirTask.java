@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2009 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2016 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.taskdefs;
 
@@ -18,7 +18,7 @@ import static ball.util.StringUtil.NIL;
  * {@link.uri http://ant.apache.org/ Ant} {@link org.apache.tools.ant.Task}
  * to run {@link POSIX#opendir(File)}.
  *
- * {@bean-info}
+ * {@bean.info}
  *
  * @see POSIX#opendir(File)
  * @see DIR

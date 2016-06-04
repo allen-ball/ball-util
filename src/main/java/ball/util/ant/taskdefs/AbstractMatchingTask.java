@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2016 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.taskdefs;
 
@@ -19,7 +19,7 @@ import org.apache.tools.ant.taskdefs.MatchingTask;
  * Abstract base class for {@link.uri http://ant.apache.org/ Ant}
  * {@link MatchingTask} implementations.
  *
- * {@bean-info}
+ * {@bean.info}
  *
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$

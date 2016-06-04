@@ -34,9 +34,9 @@ public abstract class MapUtil {
     }
 
     /**
-     * Method to copy {@link Map.Entry}s to another {@link Map}.
+     * Method to copy {@link Map} entries to another {@link Map}.
      *
-     * @param   from            The source {@link Map.Entry}
+     * @param   from            The source {@link java.util.Map.Entry}
      *                          {@link Iterable}.
      * @param   to              The target {@link Map}.
      *
@@ -64,9 +64,9 @@ public abstract class MapUtil {
     }
 
     /**
-     * Method to copy {@link Map.Entry}s to a {@link Properties}.
+     * Method to copy {@link Map} entries to a {@link Properties}.
      *
-     * @param   from            The source {@link Map.Entry}
+     * @param   from            The source {@link java.util.Map.Entry}
      *                          {@link Iterable}.
      * @param   to              The target {@link Properties}.
      *

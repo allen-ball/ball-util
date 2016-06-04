@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2012 - 2015 Allen D. Ball.  All rights reserved.
+ * Copyright 2012 - 2016 Allen D. Ball.  All rights reserved.
  */
 package ball.tools.javadoc;
 
@@ -12,9 +12,10 @@ import com.sun.javadoc.ClassDoc;
 import com.sun.javadoc.Doc;
 import com.sun.javadoc.ProgramElementDoc;
 import com.sun.javadoc.Tag;
+import com.sun.tools.doclets.formats.html.markup.RawHtml;
 import com.sun.tools.doclets.internal.toolkit.Configuration;
+import com.sun.tools.doclets.internal.toolkit.Content;
 import com.sun.tools.doclets.internal.toolkit.taglets.Taglet;
-import com.sun.tools.doclets.internal.toolkit.taglets.TagletOutput;
 import com.sun.tools.doclets.internal.toolkit.taglets.TagletWriter;
 import java.io.Writer;
 import java.net.URI;
@@ -171,30 +172,30 @@ public abstract class AbstractTaglet implements Taglet {
     public boolean inType() { return inType; }
 
     @Override
-    public TagletOutput getTagletOutput(Tag tag,
-                                        TagletWriter writer) throws IllegalArgumentException {
+    public Content getTagletOutput(Tag tag,
+                                   TagletWriter writer) throws IllegalArgumentException {
         throw new IllegalArgumentException(tag.position().toString());
     }
 
     @Override
-    public TagletOutput getTagletOutput(Doc doc,
-                                        TagletWriter writer) throws IllegalArgumentException {
+    public Content getTagletOutput(Doc doc,
+                                   TagletWriter writer) throws IllegalArgumentException {
         throw new IllegalArgumentException(doc.position().toString());
     }
 
     /**
-     * Method to produce {@link Taglet} output.
+     * Method to produce {@link Taglet} content.
      *
      * See {@link #getTagletOutput(Tag,TagletWriter)} and
      * {@link #getTagletOutput(Doc,TagletWriter)}.
      *
      * @param   writer          The {@link TagletWriter}.
      * @param   iterable        The {@link Iterable} of {@link Object}s to
-     *                          translate to output.
+     *                          translate to content.
      *
-     * @return  The {@link TagletOutput}.
+     * @return  The {@link Content}.
      */
-    protected TagletOutput output(TagletWriter writer, Iterable<?> iterable) {
+    protected Content content(TagletWriter writer, Iterable<?> iterable) {
         ReaderWriterDataSource ds = new ReaderWriterDataSource(null, null);
         Writer out = null;
 
@@ -219,26 +220,26 @@ public abstract class AbstractTaglet implements Taglet {
             IOUtil.close(out);
         }
 
-        TagletOutput output = writer.getOutputInstance();
+        Content content = writer.getOutputInstance();
 
-        output.setOutput(ds.toString());
+        content.addContent(new RawHtml(ds.toString()));
 
-        return output;
+        return content;
     }
 
     /**
-     * Method to produce {@link Taglet} output.
+     * Method to produce {@link Taglet} content.
      *
      * See {@link #getTagletOutput(Tag,TagletWriter)} and
      * {@link #getTagletOutput(Doc,TagletWriter)}.
      *
      * @param   writer          The {@link TagletWriter}.
-     * @param   objects         The {@link Object}s to translate to output.
+     * @param   objects         The {@link Object}s to translate to content.
      *
-     * @return  The {@link TagletOutput}.
+     * @return  The {@link Content}.
      */
-    protected TagletOutput output(TagletWriter writer, Object... objects) {
-        return output(writer, Arrays.asList(objects));
+    protected Content content(TagletWriter writer, Object... objects) {
+        return content(writer, Arrays.asList(objects));
     }
 
     /**
@@ -364,7 +365,8 @@ public abstract class AbstractTaglet implements Taglet {
                 String path =
                     configuration.extern
                     .getExternalLink(target.containingPackage().name(),
-                                     null, target.name() + ".html");
+                                     null, target.name() + ".html")
+                    .toString();
 
                 if (path != null) {
                     href = URI.create(path);

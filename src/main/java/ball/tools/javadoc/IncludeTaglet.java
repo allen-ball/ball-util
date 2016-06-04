@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2014 - 2016 Allen D. Ball.  All rights reserved.
  */
 package ball.tools.javadoc;
 
@@ -10,8 +10,8 @@ import ball.annotation.ServiceProviderFor;
 import ball.io.IOUtil;
 import ball.xml.HTML;
 import com.sun.javadoc.Tag;
+import com.sun.tools.doclets.internal.toolkit.Content;
 import com.sun.tools.doclets.internal.toolkit.taglets.Taglet;
-import com.sun.tools.doclets.internal.toolkit.taglets.TagletOutput;
 import com.sun.tools.doclets.internal.toolkit.taglets.TagletWriter;
 import java.io.InputStream;
 import java.util.Map;
@@ -36,8 +36,8 @@ public class IncludeTaglet extends AbstractInlineTaglet {
     public IncludeTaglet() { super(); }
 
     @Override
-    public TagletOutput getTagletOutput(Tag tag,
-                                        TagletWriter writer) throws IllegalArgumentException {
+    public Content getTagletOutput(Tag tag,
+                                   TagletWriter writer) throws IllegalArgumentException {
         Element element = null;
         InputStream in = null;
 
@@ -59,6 +59,6 @@ public class IncludeTaglet extends AbstractInlineTaglet {
             IOUtil.close(in);
         }
 
-        return output(writer, element);
+        return content(writer, element);
     }
 }

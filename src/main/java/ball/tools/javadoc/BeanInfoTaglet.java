@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2013, 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2013 - 2016 Allen D. Ball.  All rights reserved.
  */
 package ball.tools.javadoc;
 
@@ -11,8 +11,8 @@ import ball.xml.HTML;
 import com.sun.javadoc.ClassDoc;
 import com.sun.javadoc.Doc;
 import com.sun.javadoc.Tag;
+import com.sun.tools.doclets.internal.toolkit.Content;
 import com.sun.tools.doclets.internal.toolkit.taglets.Taglet;
-import com.sun.tools.doclets.internal.toolkit.taglets.TagletOutput;
 import com.sun.tools.doclets.internal.toolkit.taglets.TagletWriter;
 import java.beans.BeanDescriptor;
 import java.beans.BeanInfo;
@@ -32,13 +32,13 @@ import static ball.util.StringUtil.isNil;
  *
  * For example:
  *
- * {@bean-info}
+ * {@bean.info}
  *
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
 @ServiceProviderFor({ Taglet.class })
-@TagletName("bean-info")
+@TagletName("bean.info")
 public class BeanInfoTaglet extends AbstractInlineTaglet {
     public static void register(Map<String,Taglet> map) {
         register(BeanInfoTaglet.class, map);
@@ -50,8 +50,8 @@ public class BeanInfoTaglet extends AbstractInlineTaglet {
     public BeanInfoTaglet() { super(); }
 
     @Override
-    public TagletOutput getTagletOutput(Tag tag,
-                                        TagletWriter writer) throws IllegalArgumentException {
+    public Content getTagletOutput(Tag tag,
+                                   TagletWriter writer) throws IllegalArgumentException {
         setConfiguration(writer.configuration());
 
         LinkedList<Object> list = new LinkedList<Object>();
@@ -87,7 +87,7 @@ public class BeanInfoTaglet extends AbstractInlineTaglet {
                                                exception);
         }
 
-        return output(writer, list);
+        return content(writer, list);
     }
 
     private void output(Doc doc, List<Object> list, BeanInfo info) {

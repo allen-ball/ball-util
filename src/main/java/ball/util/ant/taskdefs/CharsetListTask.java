@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2009 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2016 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.taskdefs;
 
@@ -15,7 +15,7 @@ import static ball.util.StringUtil.NIL;
  * {@link.uri http://ant.apache.org/ Ant} {@link Task} to list the available
  * {@link Charset}s.
  *
- * {@bean-info}
+ * {@bean.info}
  *
  * @see Charset#availableCharsets()
  *

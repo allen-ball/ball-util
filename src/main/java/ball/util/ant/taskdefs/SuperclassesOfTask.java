@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2016 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.taskdefs;
 
@@ -17,7 +17,7 @@ import static ball.util.ClassOrder.INHERITANCE;
  * {@link.uri http://ant.apache.org/ Ant} {@link org.apache.tools.ant.Task}
  * to display superclasses of a specified {@link Class}.
  *
- * {@bean-info}
+ * {@bean.info}
  *
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$

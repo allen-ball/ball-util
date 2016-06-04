@@ -14,7 +14,7 @@ import static ball.util.StringUtil.NIL;
  * Abstract {@link.uri http://ant.apache.org/ Ant}
  * {@link org.apache.tools.ant.Task} to get platform-specific JNI values.
  *
- * {@bean-info}
+ * {@bean.info}
  *
  * @see FileNameFor
  * @see Load
@@ -37,7 +37,7 @@ public abstract class JNILibTask extends AbstractPropertyTask {
      * {@link org.apache.tools.ant.Task} to get platform-specific JNI
      * library file name.
      *
-     * {@bean-info}
+     * {@bean.info}
      */
     @AntTask("jnilib-file-name-for")
     public static class FileNameFor extends JNILibTask {
@@ -65,7 +65,7 @@ public abstract class JNILibTask extends AbstractPropertyTask {
      * {@link org.apache.tools.ant.Task} to load JNI library (and set the
      * property if successful).
      *
-     * {@bean-info}
+     * {@bean.info}
      */
     @AntTask("jnilib-load")
     public static class Load extends FileNameFor {
@@ -88,7 +88,7 @@ public abstract class JNILibTask extends AbstractPropertyTask {
      * {@link org.apache.tools.ant.Task} to get platform-specific JNI
      * library prefix.
      *
-     * {@bean-info}
+     * {@bean.info}
      */
     @AntTask("jnilib-prefix")
     public static class Prefix extends JNILibTask {
@@ -107,7 +107,7 @@ public abstract class JNILibTask extends AbstractPropertyTask {
      * {@link org.apache.tools.ant.Task} to get platform-specific JNI
      * library suffix.
      *
-     * {@bean-info}
+     * {@bean.info}
      */
     @AntTask("jnilib-suffix")
     public static class Suffix extends JNILibTask {

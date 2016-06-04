@@ -27,7 +27,7 @@ import static ball.util.StringUtil.isNil;
  * {@link.uri http://ant.apache.org/ Ant} {@link org.apache.tools.ant.Task}
  * to get an instance of a specified {@link Class}.
  *
- * {@bean-info}
+ * {@bean.info}
  *
  * @see Factory
  *

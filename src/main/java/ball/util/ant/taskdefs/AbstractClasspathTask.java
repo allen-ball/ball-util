@@ -20,7 +20,7 @@ import org.apache.tools.ant.util.ClasspathUtils;
  * Abstract base class for {@link.uri http://ant.apache.org/ Ant}
  * {@link Task} implementations that require a classpath.
  *
- * {@bean-info}
+ * {@bean.info}
  *
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$

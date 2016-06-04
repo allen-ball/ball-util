@@ -16,7 +16,7 @@ import static ball.util.ClassUtil.isAbstract;
  * to bootstrap {@link javax.annotation.processing.Processor}s.  Creates and
  * invokes {@link Processor}s found on the class path.
  *
- * {@bean-info}
+ * {@bean.info}
  *
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$

@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2009 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2016 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.taskdefs;
 
@@ -23,7 +23,7 @@ import static ball.util.StringUtil.NIL;
  * Abstract base class for JNDI {@link.uri http://ant.apache.org/ Ant}
  * {@link org.apache.tools.ant.Task}s.
  *
- * {@bean-info}
+ * {@bean.info}
  *
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
@@ -100,7 +100,7 @@ public abstract class JNDITask extends AbstractClasspathTask {
      * {@link org.apache.tools.ant.Task} to list a JNDI initial
      * {@link Context}.
      *
-     * {@bean-info}
+     * {@bean.info}
      *
      * @see NamingManager#getInitialContext(Hashtable)
      */
@@ -138,7 +138,7 @@ public abstract class JNDITask extends AbstractClasspathTask {
      * {@link.uri http://ant.apache.org/ Ant}
      * {@link org.apache.tools.ant.Task} to perform a JNDI look-up.
      *
-     * {@bean-info}
+     * {@bean.info}
      *
      * @see NamingManager#getURLContext(String,Hashtable)
      * @see NamingManager#getInitialContext(Hashtable)

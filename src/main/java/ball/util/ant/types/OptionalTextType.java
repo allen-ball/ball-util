@@ -14,7 +14,7 @@ import static ball.util.StringUtil.isNil;
  * {@link.uri http://ant.apache.org/ Ant} {@link org.apache.tools.ant.Task}
  * implementations.  Support "if" and "unless" property predicates.
  *
- * {@bean-info}
+ * {@bean.info}
  *
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
