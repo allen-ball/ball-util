@@ -22,6 +22,13 @@
     <dependency>
       <groupId>java</groupId>
       <artifactId>jdk</artifactId>
+      <version>${java.specification.version}</version>
+      <scope>system</scope>
+      <systemPath>${tools.jar}</systemPath>
+    </dependency>
+    <dependency>
+      <groupId>java</groupId>
+      <artifactId>jre</artifactId>
       <version>${jre.version}</version>
     </dependency>
     <dependency>
