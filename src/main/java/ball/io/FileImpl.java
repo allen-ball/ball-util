@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2010 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2010 - 2016 Allen D. Ball.  All rights reserved.
  */
 package ball.io;
 
@@ -37,19 +37,27 @@ public class FileImpl extends File {
     private transient Directory parent = null;
 
     /**
-     * @see File#File(String)
+     * See {@link File#File(String)}.
+     *
+     * @param   pathname        The {@link CharSequence}.
      */
     public FileImpl(CharSequence pathname) { super(pathname.toString()); }
 
     /**
-     * @see File#File(String,String)
+     * See {@link File#File(String,String)}.
+     *
+     * @param   parent          The parent {@link CharSequence}.
+     * @param   child           The child {@link CharSequence}.
      */
     public FileImpl(CharSequence parent, CharSequence child) {
         super(parent.toString(), child.toString());
     }
 
     /**
-     * @see File#File(File,String)
+     * See {@link File#File(File,String)}.
+     *
+     * @param   parent          The parent {@link File}.
+     * @param   child           The child {@link CharSequence}.
      */
     public FileImpl(File parent, CharSequence child) {
         super(parent, child.toString());
@@ -62,7 +70,9 @@ public class FileImpl extends File {
     }
 
     /**
-     * @see File#File(URI)
+     * See {@link File#File(URI)}.
+     *
+     * @param   uri             The file {@link URI}.
      */
     public FileImpl(URI uri) { super(uri); }
 
@@ -187,7 +197,14 @@ public class FileImpl extends File {
     }
 
     /**
-     * @see #getChildFile(Iterable)
+     * See {@link #getChildFile(Iterable)}.
+     *
+     * @param   parent          The parent {@link File} (directory).
+     * @param   names           The names that make up the subpath of the
+     *                          child {@link FileImpl}.
+     *
+     * @return  A child {@link File} with a subpath represented by
+     *          {@code names}.
      */
     public static FileImpl getChildFile(File parent,
                                         Iterable<CharSequence> names) {
@@ -208,21 +225,36 @@ public class FileImpl extends File {
     }
 
     /**
-     * @see #getChildFile(CharSequence...)
+     * See {@link #getChildFile(CharSequence...)}.
+     *
+     * @param   parent          The parent {@link File} (directory).
+     * @param   names           The names that make up the subpath of the
+     *                          child {@link FileImpl}.
+     *
+     * @return  A child {@link File} with a subpath represented by
+     *          {@code names}.
      */
     public static FileImpl getChildFile(File parent, CharSequence... names) {
         return getChildFile(parent, Arrays.asList(names));
     }
 
     /**
-     * @see #getNameBase()
+     * See {@link #getNameBase()}.
+     *
+     * @param   file            The {@link File}.
+     *
+     * @return  The base-name of the {@link File}'s name.
      */
     public static String getNameBase(File file) {
         return (file != null) ? getNameBase(file.getName()) : null;
     }
 
     /**
-     * @see #getNameBase()
+     * See {@link #getNameBase()}.
+     *
+     * @param   name    The name {@link CharSequence}.
+     *
+     * @return  The base-name of the name.
      */
     public static String getNameBase(CharSequence name) {
         String base = null;
@@ -242,14 +274,23 @@ public class FileImpl extends File {
     }
 
     /**
-     * @see #getNameSuffix()
+     * See {@link #getNameSuffix()}.
+     *
+     * @param   file            The {@link File}.
+     *
+     * @return  The suffix of the {@link File}'s name ({@code null} if
+     *          there is none).
      */
     public static String getNameSuffix(File file) {
         return (file != null) ? getNameSuffix(file.getName()) : null;
     }
 
     /**
-     * @see #getNameSuffix()
+     * See {@link #getNameSuffix()}.
+     *
+     * @param   name    The name {@link CharSequence}.
+     *
+     * @return  The suffix of this name ({@code null} if there is none).
      */
     public static String getNameSuffix(CharSequence name) {
         String suffix = null;

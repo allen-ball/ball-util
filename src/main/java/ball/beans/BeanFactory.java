@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2012 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2012 - 2016 Allen D. Ball.  All rights reserved.
  */
 package ball.beans;
 
@@ -19,6 +19,9 @@ public class BeanFactory<T> extends Factory<T> {
 
     /**
      * See {@link Factory#Factory(Class)}.
+     *
+     * @param   type            The {@link Class} of {@link Object} this
+     *                          {@link Factory} will produce.
      */
     @ConstructorProperties({ "type" })
     public BeanFactory(Class<? extends T> type) { super(type); }

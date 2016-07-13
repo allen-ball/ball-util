@@ -62,6 +62,14 @@ public abstract class CharSequenceOrder extends Order<CharSequence> {
 
     /**
      * Character comparator.
+     *
+     * @param   left            The "left" value to compare.
+     * @param   right           The "right" value to compare.
+     *
+     * @return  A value less than zero if {@code left} is ordered before
+     *          {@code right}, a value greater than zero if {@code left} is
+     *          ordered after {@code right}, or zero if {@code left} is
+     *          interchangeable with {@code right} in the order.
      */
     protected abstract int compare(int left, int right);
 

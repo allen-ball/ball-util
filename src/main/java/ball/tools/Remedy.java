@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2011 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2011 - 2016 Allen D. Ball.  All rights reserved.
  */
 package ball.tools;
 
@@ -52,6 +52,8 @@ public abstract class Remedy {
 
     /**
      * See {@link Codes} and {@link Diagnostic#getCode()}.
+     *
+     * @return  This {@link Remedy}'s codes.
      */
     public String[] getCodes() {
         Codes codes = getClass().getAnnotation(Codes.class);

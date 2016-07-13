@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2010 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2010 - 2016 Allen D. Ball.  All rights reserved.
  */
 package ball.util;
 
@@ -18,6 +18,8 @@ public class CharacterFactory extends Factory<Character> {
 
     /**
      * {@link CharacterFactory} factory method.
+     *
+     * @return  The default {@link CharacterFactory}.
      */
     public static CharacterFactory getDefault() { return DEFAULT; }
 

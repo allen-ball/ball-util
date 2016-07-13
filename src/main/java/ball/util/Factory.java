@@ -185,6 +185,8 @@ public class Factory<T> extends TreeMap<Class<?>[],Member>
      * @param   arguments       The arguments to the {@link Object} static
      *                          factory method or constructor.
      *
+     * @return  The {@link Object} instance.
+     *
      * @throws  IllegalAccessException
      *                          If the specified {@link Constructor} or
      *                          {@link Method} enforces Java language

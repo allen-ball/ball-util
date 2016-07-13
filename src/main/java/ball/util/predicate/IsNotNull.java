@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2012 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2012 - 2016 Allen D. Ball.  All rights reserved.
  */
 package ball.util.predicate;
 
@@ -16,6 +16,8 @@ public class IsNotNull extends Not {
 
     /**
      * {@link IsNotNull} factory method.
+     *
+     * @return  The default {@link IsNotNull}.
      */
     public static IsNotNull getDefault() { return DEFAULT; }
 

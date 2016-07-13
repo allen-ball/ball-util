@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2011 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2011 - 2016 Allen D. Ball.  All rights reserved.
  */
 package ball.util;
 
@@ -31,7 +31,9 @@ public class Shell implements Runnable {
     public Shell() { el = new EditLine(getClass().getName()); }
 
     /**
-     * XXX
+     * Method to execute a request.
+     *
+     * @param   argv            The array of request tokens.
      */
     protected void execute(String[] argv) {
         System.out.println(Arrays.toString(argv));

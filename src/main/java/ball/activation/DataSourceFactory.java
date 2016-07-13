@@ -96,6 +96,9 @@ public abstract class DataSourceFactory extends Factory<DataSource> {
          * implementing class should have the simple name
          * ({@link Class#getSimpleName()}) corresponding to the scheme it is
          * implementing.
+         *
+         * @param       factory         The {@link DataSourceFactory} to
+         *                              register.
          */
         protected void register(DataSourceFactory factory) {
             map.put(factory.getClass().getSimpleName(), factory);

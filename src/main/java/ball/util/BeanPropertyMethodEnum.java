@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2014 - 2016 Allen D. Ball.  All rights reserved.
  */
 package ball.util;
 
@@ -85,6 +85,8 @@ public enum BeanPropertyMethodEnum {
     /**
      * Static method to get a property name from a {@link Method} name.
      * (This method does not check return type or parameter types.)
+     *
+     * @param   method          The {@link Method}.
      *
      * @return  The property name if method name matches the pattern;
      *          {@code null} if the argument is {@code null} or the name

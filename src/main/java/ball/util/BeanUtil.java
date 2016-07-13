@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2010 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2010 - 2016 Allen D. Ball.  All rights reserved.
  */
 package ball.util;
 
@@ -33,6 +33,8 @@ public abstract class BeanUtil {
      *                          {@code null}).
      * @param   name            The name of the property to get.
      *
+     * @return  The property value ({@link Object}).
+     *
      * @throws  IllegalAccessException
      *                          If this method does not have access to the
      *                          property getter method.
@@ -63,6 +65,8 @@ public abstract class BeanUtil {
      *
      * @param   bean            The {@code bean} to interrogate.
      * @param   name            The name of the property to get.
+     *
+     * @return  The property value ({@link Object}).
      *
      * @throws  NullPointerException
      *                          If {@code bean} is {@code null}.
@@ -174,6 +178,8 @@ public abstract class BeanUtil {
      * @param   name            The name of the property to get.
      * @param   index           The property index.
      *
+     * @return  The property value ({@link Object}).
+     *
      * @throws  IllegalAccessException
      *                          If this method does not have access to the
      *                          property getter method.
@@ -206,6 +212,8 @@ public abstract class BeanUtil {
      * @param   bean            The {@code bean} to interrogate.
      * @param   name            The name of the property to get.
      * @param   index           The property index.
+     *
+     * @return  The property value ({@link Object}).
      *
      * @throws  NullPointerException
      *                          If {@code bean} is {@code null}.

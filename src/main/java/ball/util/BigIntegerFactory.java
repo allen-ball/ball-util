@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2010 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2010 - 2016 Allen D. Ball.  All rights reserved.
  */
 package ball.util;
 
@@ -20,6 +20,8 @@ public class BigIntegerFactory extends Factory<BigInteger> {
 
     /**
      * {@link BigIntegerFactory} factory method.
+     *
+     * @return  The default {@link BigIntegerFactory}.
      */
     public static BigIntegerFactory getDefault() { return DEFAULT; }
 

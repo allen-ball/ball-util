@@ -86,12 +86,16 @@ public abstract class LibtoolTask extends ExecuteOn implements AnnotatedTask {
 
     /**
      * {@code -shared}
+     *
+     * @return  {@code true} if set; {@code false} otherwise.
      */
     public boolean getShared() { return shared; }
     public void setShared(boolean shared) { this.shared = shared; }
 
     /**
      * {@code -static}
+     *
+     * @return  {@code true} if set; {@code false} otherwise.
      */
     public boolean getStatic() { return _static; }
     public void setStatic(boolean _static) { this._static = _static; }
@@ -254,6 +258,8 @@ public abstract class LibtoolTask extends ExecuteOn implements AnnotatedTask {
 
         /**
          * {@code -module}
+         *
+         * @return      {@code true} if set; {@code false} otherwise.
          */
         public boolean getModule() { return module; }
         public void setModule(boolean module) { this.module = module; }

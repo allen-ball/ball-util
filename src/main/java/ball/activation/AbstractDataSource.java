@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2009 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2016 Allen D. Ball.  All rights reserved.
  */
 package ball.activation;
 
@@ -91,6 +91,8 @@ public abstract class AbstractDataSource implements DataSource {
      *                          {@link Class}es.
      *
      * @return  The "wrapped" {@link InputStream}.
+     *
+     * @throws  IOException     If an I/O error occurs.
      */
     public InputStream getInputStream(Class<?>... types) throws IOException {
         return IOUtil.wrap(getInputStream(), types);
@@ -104,6 +106,8 @@ public abstract class AbstractDataSource implements DataSource {
      *                          {@link Class}es.
      *
      * @return  The "wrapped" {@link OutputStream}.
+     *
+     * @throws  IOException     If an I/O error occurs.
      */
     public OutputStream getOutputStream(Class<?>... types) throws IOException {
         return IOUtil.wrap(getOutputStream(), types);

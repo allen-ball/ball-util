@@ -56,6 +56,8 @@ public abstract class POMTaglet extends AbstractInlineTaglet {
      * @param   tag             The {@link Tag}.
      *
      * @return  The POM {@link File}.
+     *
+     * @throws  Exception       If the POM {@link File} cannot be found.
      */
     protected File getPomFileFor(Tag tag) throws Exception {
         File file = null;

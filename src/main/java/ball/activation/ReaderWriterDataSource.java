@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2009 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2016 Allen D. Ball.  All rights reserved.
  */
 package ball.activation;
 
@@ -67,6 +67,7 @@ public class ReaderWriterDataSource extends FilterDataSource
      *                          value.
      * @param   charset         The {@link Charset} used to encode the
      *                          {@link OutputStream}.
+     * @param   content         The initial content {@link String}.
      */
     @ConstructorProperties({ "name", "contentType", "charset", NIL })
     public ReaderWriterDataSource(String name, String type,
@@ -114,6 +115,8 @@ public class ReaderWriterDataSource extends FilterDataSource
      *
      * @return  A {@link Reader} wrapping the
      *          {@link javax.activation.DataSource} {@link InputStream}.
+     *
+     * @throws  IOException     If an I/O exception occurs.
      */
     public Reader getReader() throws IOException {
         return new InputStreamReader(getInputStream(), getCharset());
@@ -127,6 +130,8 @@ public class ReaderWriterDataSource extends FilterDataSource
      *
      * @return  A {@link Writer} wrapping the
      *          {@link javax.activation.DataSource} {@link OutputStream}.
+     *
+     * @throws  IOException     If an I/O exception occurs.
      */
     public Writer getWriter() throws IOException {
         return new OutputStreamWriter(getOutputStream(), getCharset());
@@ -140,6 +145,8 @@ public class ReaderWriterDataSource extends FilterDataSource
      *
      * @return  A {@link BufferedReader} wrapping the
      *          {@link javax.activation.DataSource} {@link InputStream}.
+     *
+     * @throws  IOException     If an I/O exception occurs.
      */
     public BufferedReader getBufferedReader() throws IOException {
         return new BufferedReader(getReader());
@@ -153,6 +160,8 @@ public class ReaderWriterDataSource extends FilterDataSource
      *
      * @return  A {@link PrintWriter} wrapping the
      *          {@link javax.activation.DataSource} {@link OutputStream}.
+     *
+     * @throws  IOException     If an I/O exception occurs.
      */
     public PrintWriter getPrintWriter() throws IOException {
         return new PrintWriter(getWriter(), true);

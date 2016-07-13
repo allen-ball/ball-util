@@ -23,6 +23,7 @@ public abstract class IterableUtil {
     /**
      * Static method to wrap a {@link Iterator} as a {@link Iterable}.
      *
+     * @param   <E>             The element type.
      * @param   iterator        The {@link Iterator}.
      *
      * @return  An {@link Iterable} that wraps the {@link Iterator}.
@@ -34,6 +35,7 @@ public abstract class IterableUtil {
     /**
      * Static method to wrap a {@link Enumeration} as a {@link Iterable}.
      *
+     * @param   <E>             The element type.
      * @param   enumeration     The {@link Enumeration}.
      *
      * @return  An {@link Iterable} that wraps the {@link Enumeration}.
@@ -47,6 +49,7 @@ public abstract class IterableUtil {
      * type ({@link Class}).  {@link Object}s that are not of the specified
      * type are skipped.
      *
+     * @param   <T>             The element type.
      * @param   type            The type ({@link Class}).
      * @param   iterable        The {@link Iterable}.
      *
@@ -61,6 +64,7 @@ public abstract class IterableUtil {
      * type ({@link Class}).  {@link Object}s that are not of the specified
      * type are skipped.
      *
+     * @param   <T>             The element type.
      * @param   type            The type ({@link Class}).
      * @param   iterator        The {@link Iterator}.
      *
@@ -75,6 +79,7 @@ public abstract class IterableUtil {
      * type ({@link Class}).  {@link Object}s that are not of the specified
      * type are skipped.
      *
+     * @param   <T>             The element type.
      * @param   type            The type ({@link Class}).
      * @param   enumeration     The {@link Enumeration}.
      *
@@ -90,6 +95,7 @@ public abstract class IterableUtil {
      * {@link Predicate}.  {@link Object}s that do not match the
      * {@link Predicate} are skipped.
      *
+     * @param   <T>             The element type.
      * @param   predicate       The {@link Predicate}.
      * @param   iterable        The {@link Iterable}.
      *
@@ -105,6 +111,7 @@ public abstract class IterableUtil {
      * {@link Predicate}.  {@link Object}s that do not match the
      * {@link Predicate} are skipped.
      *
+     * @param   <T>             The element type.
      * @param   predicate       The {@link Predicate}.
      * @param   iterator        The {@link Iterator}.
      *
@@ -120,6 +127,7 @@ public abstract class IterableUtil {
      * {@link Predicate}.  {@link Object}s that do not match the
      * {@link Predicate} are skipped.
      *
+     * @param   <T>             The element type.
      * @param   predicate       The {@link Predicate}.
      * @param   enumeration     The {@link Enumeration}.
      *

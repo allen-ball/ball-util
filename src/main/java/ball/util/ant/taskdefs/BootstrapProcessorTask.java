@@ -73,6 +73,10 @@ public class BootstrapProcessorTask extends AbstractClassFileTask {
          *                      examine.
          * @param       destdir The root of the hierarchy to record any
          *                      output artifacts.
+         *
+         * @throws      Exception
+         *                      If the implementation throws an
+         *                      {@link Exception}.
          */
         public void process(Set<Class<?>> set, File destdir) throws Exception;
     }

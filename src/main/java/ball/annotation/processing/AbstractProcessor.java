@@ -310,6 +310,12 @@ public abstract class AbstractProcessor
 
     /**
      * See {@link Types#isAssignable(TypeMirror,TypeMirror)}.
+     *
+     * @param   from            The left-hand side of the assignment.
+     * @param   to              The right-hand side of the assignment.
+     *
+     * @return  {@code true} if {@code from} can be assigned to {@code to};
+     *          {@code false} otherwise.
      */
     protected boolean isAssignable(TypeMirror from, TypeMirror to) {
         return types.isAssignable(from, to);
@@ -317,6 +323,12 @@ public abstract class AbstractProcessor
 
     /**
      * See {@link Types#isAssignable(TypeMirror,TypeMirror)}.
+     *
+     * @param   from            The left-hand side of the assignment.
+     * @param   to              The right-hand side of the assignment.
+     *
+     * @return  {@code true} if {@code from} can be assigned to {@code to};
+     *          {@code false} otherwise.
      */
     protected boolean isAssignable(TypeMirror from, Class<?> to) {
         boolean isAssignable = true;
@@ -336,6 +348,14 @@ public abstract class AbstractProcessor
 
     /**
      * See {@link Types#isAssignable(TypeMirror,TypeMirror)}.
+     *
+     * @param   from            The parameter list (the left-hand side of
+     *                          the assignment).
+     * @param   to              The argument list (the right-hand side of
+     *                          the assignment).
+     *
+     * @return  {@code true} if {@code from} can be assigned to {@code to};
+     *          {@code false} otherwise.
      */
     protected boolean isAssignable(List<? extends Element> from,
                                    Class<?>[] to) {
@@ -356,6 +376,12 @@ public abstract class AbstractProcessor
 
     /**
      * See {@link Types#isSameType(TypeMirror,TypeMirror)}.
+     *
+     * @param   from            The left-hand side of the type test.
+     * @param   to              The right-hand side of the type test.
+     *
+     * @return  {@code true} if {@code from} represents the same type as
+     *                          {@code to}; {@code false} otherwise.
      */
     protected boolean isSameType(TypeMirror from, TypeMirror to) {
         return types.isSameType(from, to);
@@ -363,6 +389,12 @@ public abstract class AbstractProcessor
 
     /**
      * See {@link Types#isSameType(TypeMirror,TypeMirror)}.
+     *
+     * @param   from            The left-hand side of the type test.
+     * @param   to              The right-hand side of the type test.
+     *
+     * @return  {@code true} if {@code from} represents the same type as
+     *                          {@code to}; {@code false} otherwise.
      */
     protected boolean isSameType(TypeMirror from, Class<?> to) {
         boolean isSameType = true;
@@ -382,6 +414,14 @@ public abstract class AbstractProcessor
 
     /**
      * See {@link Types#isSameType(TypeMirror,TypeMirror)}.
+     *
+     * @param   from            The parameter list (the left-hand side of
+     *                          the type test).
+     * @param   to              The argument list (the right-hand side of
+     *                          the type test).
+     *
+     * @return  {@code true} if {@code from} represents the same types as
+     *                          {@code to}; {@code false} otherwise.
      */
     protected boolean isSameType(List<? extends Element> from, Class<?>[] to) {
         boolean isSameType = (from.size() == to.length);
@@ -437,6 +477,9 @@ public abstract class AbstractProcessor
      * @param   parameters      The {@link Method} parameter types.
      *
      * @return  The {@link ExecutableElement} for the {@link Method}.
+     *
+     * @throws  NoSuchMethodException
+     *                          If the named {@link Method} does not exist.
      */
     protected ExecutableElement getExecutableElementFor(Class<?> type,
                                                         String name,
@@ -845,6 +888,10 @@ public abstract class AbstractProcessor
 
         /**
          * Construct a {@link PrintWriter} for a {@link File}.
+         *
+         * @param       file    The {@link File}.
+         * @throws      IOException
+         *                      If the underlying stream cannot be created.
          */
         public PrintWriterImpl(File file) throws IOException {
             this(new FileOutputStream(file));
@@ -852,6 +899,10 @@ public abstract class AbstractProcessor
 
         /**
          * Construct a {@link PrintWriter} for a {@link FileObject}.
+         *
+         * @param       file    The {@link FileObject}.
+         * @throws      IOException
+         *                      If the underlying stream cannot be created.
          */
         public PrintWriterImpl(FileObject file) throws IOException {
             this(file.openOutputStream());

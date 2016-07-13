@@ -42,6 +42,9 @@ public abstract class JNDITask extends AbstractClasspathTask {
      *
      * @return  The {@link Context}.
      *
+     * @throws  NamingException If the {@link Context} cannot be obtained
+     *                          for the scheme.
+     *
      * @see NamingManager#getURLContext(String,Hashtable)
      * @see NamingManager#getInitialContext(Hashtable)
      */
@@ -62,6 +65,9 @@ public abstract class JNDITask extends AbstractClasspathTask {
      * Method to display a {@link Context}.
      *
      * @param   context         The {@link Context} to display.
+     *
+     * @throws  NamingException If the {@link Context} bindings cannot be
+     *                          loggged.
      */
     protected void log(Context context) throws NamingException {
         log(NIL);

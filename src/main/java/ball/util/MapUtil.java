@@ -23,6 +23,8 @@ public abstract class MapUtil {
     /**
      * Method to copy one {@link Map}'s entries to another.
      *
+     * @param   <K>             The {@link Map} key type.
+     * @param   <V>             The {@link Map} value type.
      * @param   from            The source {@link Map}.
      * @param   to              The target {@link Map}.
      *
@@ -36,6 +38,8 @@ public abstract class MapUtil {
     /**
      * Method to copy {@link Map} entries to another {@link Map}.
      *
+     * @param   <K>             The {@link Map} key type.
+     * @param   <V>             The {@link Map} value type.
      * @param   from            The source {@link java.util.Map.Entry}
      *                          {@link Iterable}.
      * @param   to              The target {@link Map}.

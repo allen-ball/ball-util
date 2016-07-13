@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2013 - 2015 Allen D. Ball.  All rights reserved.
+ * Copyright 2013 - 2016 Allen D. Ball.  All rights reserved.
  */
 package ball.xml;
 
@@ -89,8 +89,7 @@ public abstract class HTML {
      * Method to create an HTML {@code <a/>} {@link Element}.
      *
      * @param   document        The owner {@link Document}.
-     * @param   href            The href {@link org.w3c.dom.Attribute}
-     *                          value.
+     * @param   href            The href {@link org.w3c.dom.Attr} value.
      * @param   value           The {@link Element} content.
      *
      * @return  The HTML {@code <a/>} {@link Element}.

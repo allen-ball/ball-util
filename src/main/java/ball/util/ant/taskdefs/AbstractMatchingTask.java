@@ -76,11 +76,16 @@ public abstract class AbstractMatchingTask extends MatchingTask
 
     /**
      * See {@link #log(Iterable)}.
+     *
+     * @param   model           The {@link TableModel} to log.
      */
     protected void log(TableModel model) { log(model, Project.MSG_INFO); }
 
     /**
      * See {@link #log(Iterable,int)}.
+     *
+     * @param   model           The {@link TableModel} to log.
+     * @param   msgLevel        The log message level.
      */
     protected void log(TableModel model, int msgLevel) {
         log(new TextTable(model), Project.MSG_INFO);
@@ -88,6 +93,9 @@ public abstract class AbstractMatchingTask extends MatchingTask
 
     /**
      * See {@link #log(String)}.
+     *
+     * @param   iterable        The {@link Iterable} of {@link String}s to
+     *                          log.
      */
     protected void log(Iterable<String> iterable) {
         log(iterable, Project.MSG_INFO);
@@ -95,6 +103,10 @@ public abstract class AbstractMatchingTask extends MatchingTask
 
     /**
      * See {@link #log(String,int)}.
+     *
+     * @param   iterable        The {@link Iterable} of {@link String}s to
+     *                          log.
+     * @param   msgLevel        The log message level.
      */
     protected void log(Iterable<String> iterable, int msgLevel) {
         for (String line : iterable) {
@@ -104,6 +116,9 @@ public abstract class AbstractMatchingTask extends MatchingTask
 
     /**
      * See {@link #log(String)}.
+     *
+     * @param   iterator        The {@link Iterator} of {@link String}s to
+     *                          log.
      */
     protected void log(Iterator<String> iterator) {
         log(iterator, Project.MSG_INFO);
@@ -111,6 +126,10 @@ public abstract class AbstractMatchingTask extends MatchingTask
 
     /**
      * See {@link #log(String,int)}.
+     *
+     * @param   iterator        The {@link Iterator} of {@link String}s to
+     *                          log.
+     * @param   msgLevel        The log message level.
      */
     protected void log(Iterator<String> iterator, int msgLevel) {
         while (iterator.hasNext()) {

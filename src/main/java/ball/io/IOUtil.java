@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2016 Allen D. Ball.  All rights reserved.
  */
 package ball.io;
 
@@ -360,6 +360,9 @@ public abstract class IOUtil {
      *                          {@link Class}es.
      *
      * @return  The "wrapped" {@link InputStream}.
+     *
+     * @throws  IOException     If any of the wrapping streams throw an
+     *                          {@link IOException}.
      */
     public static InputStream wrap(InputStream in,
                                    Class<?>... types) throws IOException {
@@ -402,6 +405,9 @@ public abstract class IOUtil {
      *                          {@link Class}es.
      *
      * @return  The "wrapped" {@link OutputStream}.
+     *
+     * @throws  IOException     If any of the wrapping streams throw an
+     *                          {@link IOException}.
      */
     public static OutputStream wrap(OutputStream out,
                                     Class<?>... types) throws IOException {

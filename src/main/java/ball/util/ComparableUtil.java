@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2013, 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2013 - 2016 Allen D. Ball.  All rights reserved.
  */
 package ball.util;
 
@@ -19,6 +19,7 @@ public abstract class ComparableUtil {
      * {@link Comparable#compareTo(Object)} falling back to
      * {@link Order#NONNULL} if either argument is {@code null}.
      *
+     * @param   <T>             The {@link Comparable} type.
      * @param   left            The first {@link Comparable}.
      * @param   right           The second {@link Comparable}.
      *

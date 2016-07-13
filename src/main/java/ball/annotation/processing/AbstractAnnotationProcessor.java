@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2012 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2012 - 2016 Allen D. Ball.  All rights reserved.
  */
 package ball.annotation.processing;
 
@@ -114,6 +114,8 @@ public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
      * @param   roundEnv        The {@link RoundEnvironment}.
      * @param   annotation      The annotation {@link TypeElement}.
      * @param   element         The annotated {@link Element}.
+     *
+     * @throws  Exception       If an exception occurs.
      */
     protected abstract void process(RoundEnvironment roundEnv,
                                     TypeElement annotation,

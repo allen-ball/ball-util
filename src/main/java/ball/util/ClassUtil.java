@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2010 - 2015 Allen D. Ball.  All rights reserved.
+ * Copyright 2010 - 2016 Allen D. Ball.  All rights reserved.
  */
 package ball.util;
 
@@ -79,6 +79,11 @@ public abstract class ClassUtil {
 
     /**
      * See {@link Modifier#isAbstract(int)}.
+     *
+     * @param   type            The {@link Class} to test.
+     *
+     * @return  {@code true} if the argument is {@code abstract};
+     *          {@code false} otherwise.
      */
     public static boolean isAbstract(Class<?> type) {
         return Modifier.isAbstract(type.getModifiers());
@@ -86,6 +91,11 @@ public abstract class ClassUtil {
 
     /**
      * See {@link Modifier#isAbstract(int)}.
+     *
+     * @param   member          The {@link Member} to test.
+     *
+     * @return  {@code true} if the argument is {@code abstract};
+     *          {@code false} otherwise.
      */
     public static boolean isAbstract(Member member) {
         return Modifier.isAbstract(member.getModifiers());
@@ -93,6 +103,11 @@ public abstract class ClassUtil {
 
     /**
      * See {@link Modifier#isFinal(int)}.
+     *
+     * @param   type            The {@link Class} to test.
+     *
+     * @return  {@code true} if the argument is {@code final};
+     *          {@code false} otherwise.
      */
     public static boolean isFinal(Class<?> type) {
         return Modifier.isFinal(type.getModifiers());
@@ -100,6 +115,11 @@ public abstract class ClassUtil {
 
     /**
      * See {@link Modifier#isFinal(int)}.
+     *
+     * @param   member          The {@link Member} to test.
+     *
+     * @return  {@code true} if the argument is {@code final};
+     *          {@code false} otherwise.
      */
     public static boolean isFinal(Member member) {
         return Modifier.isFinal(member.getModifiers());
@@ -107,6 +127,11 @@ public abstract class ClassUtil {
 
     /**
      * See {@link Modifier#isPublic(int)}.
+     *
+     * @param   type            The {@link Class} to test.
+     *
+     * @return  {@code true} if the argument is {@code public};
+     *          {@code false} otherwise.
      */
     public static boolean isPublic(Class<?> type) {
         return Modifier.isPublic(type.getModifiers());
@@ -114,6 +139,11 @@ public abstract class ClassUtil {
 
     /**
      * See {@link Modifier#isPublic(int)}.
+     *
+     * @param   member          The {@link Member} to test.
+     *
+     * @return  {@code true} if the argument is {@code public};
+     *          {@code false} otherwise.
      */
     public static boolean isPublic(Member member) {
         return Modifier.isPublic(member.getModifiers());
@@ -121,6 +151,11 @@ public abstract class ClassUtil {
 
     /**
      * See {@link Modifier#isStatic(int)}.
+     *
+     * @param   type            The {@link Class} to test.
+     *
+     * @return  {@code true} if the argument is {@code static};
+     *          {@code false} otherwise.
      */
     public static boolean isStatic(Class<?> type) {
         return Modifier.isStatic(type.getModifiers());
@@ -128,6 +163,11 @@ public abstract class ClassUtil {
 
     /**
      * See {@link Modifier#isStatic(int)}.
+     *
+     * @param   member          The {@link Member} to test.
+     *
+     * @return  {@code true} if the argument is {@code static};
+     *          {@code false} otherwise.
      */
     public static boolean isStatic(Member member) {
         return Modifier.isStatic(member.getModifiers());
@@ -135,6 +175,11 @@ public abstract class ClassUtil {
 
     /**
      * See {@link Modifier#isNative(int)}.
+     *
+     * @param   type            The {@link Class} to test.
+     *
+     * @return  {@code true} if the argument is {@code native};
+     *          {@code false} otherwise.
      */
     public static boolean isNative(Class<?> type) {
         return Modifier.isNative(type.getModifiers());
@@ -142,6 +187,11 @@ public abstract class ClassUtil {
 
     /**
      * See {@link Modifier#isNative(int)}.
+     *
+     * @param   member          The {@link Member} to test.
+     *
+     * @return  {@code true} if the argument is {@code native};
+     *          {@code false} otherwise.
      */
     public static boolean isNative(Member member) {
         return Modifier.isNative(member.getModifiers());

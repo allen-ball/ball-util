@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2011 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2011 - 2016 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.taskdefs.compilers;
 
@@ -190,6 +190,8 @@ public class SystemJavaCompilerAdapter implements CompilerAdapter,
 
     /**
      * See {@link Javac#log(String)}.
+     *
+     * @param   string          The {@link String} to log.
      */
     protected void log(String string) { getJavac().log(string); }
 

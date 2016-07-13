@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2010 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2010 - 2016 Allen D. Ball.  All rights reserved.
  */
 package ball.util;
 
@@ -20,6 +20,8 @@ public class ShortFactory extends Factory<Short> {
 
     /**
      * {@link ShortFactory} factory method.
+     *
+     * @return  The default {@link ShortFactory}.
      */
     public static ShortFactory getDefault() { return DEFAULT; }
 

@@ -18,6 +18,8 @@ public class IsNull extends AbstractPredicate<Object> {
 
     /**
      * {@link IsNull} factory method.
+     *
+     * @return  The default {@link IsNull}.
      */
     public static IsNull getDefault() { return DEFAULT; }
 

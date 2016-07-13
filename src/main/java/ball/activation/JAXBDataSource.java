@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2013, 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2013 - 2016 Allen D. Ball.  All rights reserved.
  */
 package ball.activation;
 
@@ -48,6 +48,9 @@ public class JAXBDataSource extends ReaderWriterDataSource {
      * Marshal the argument {@link Object}.
      *
      * @param   object          The {@link Object} to marshal.
+     *
+     * @throws  IOException     If an I/O exception occurs.
+     * @throws  JAXBException   If a JAXB exception occurs.
      */
     public void marshal(Object object) throws IOException, JAXBException {
         marshal(JAXBContext.newInstance(object.getClass()), object);
@@ -58,6 +61,9 @@ public class JAXBDataSource extends ReaderWriterDataSource {
      *
      * @param   context         The {@link JAXBContext}.
      * @param   object          The {@link Object} to marshal.
+     *
+     * @throws  IOException     If an I/O exception occurs.
+     * @throws  JAXBException   If a JAXB exception occurs.
      */
     public void marshal(JAXBContext context,
                         Object object) throws IOException, JAXBException {
@@ -79,18 +85,30 @@ public class JAXBDataSource extends ReaderWriterDataSource {
     /**
      * Unmarshal the argument {@link Object}.
      *
-     * @param   type            The target {@link Class} to unmarshal.
+     * @param   <T>             The target type.
+     * @param   type            The target {@link Class}.
+     *
+     * @return  The unmarshalled {@link Object}.
+     *
+     * @throws  IOException     If an I/O exception occurs.
+     * @throws  JAXBException   If a JAXB exception occurs.
      */
     public <T> T unmarshal(Class<? extends T> type) throws IOException,
-                                                         JAXBException {
+                                                           JAXBException {
         return unmarshal(JAXBContext.newInstance(type), type);
     }
 
     /**
      * Unmarshal the argument {@link Object}.
      *
+     * @param   <T>             The target type.
      * @param   context         The {@link JAXBContext}.
-     * @param   type            The target {@link Class} to unmarshal.
+     * @param   type            The target {@link Class}.
+     *
+     * @return  The unmarshalled {@link Object}.
+     *
+     * @throws  IOException     If an I/O exception occurs.
+     * @throws  JAXBException   If a JAXB exception occurs.
      */
     public <T> T unmarshal(JAXBContext context,
                            Class<? extends T> type) throws IOException,

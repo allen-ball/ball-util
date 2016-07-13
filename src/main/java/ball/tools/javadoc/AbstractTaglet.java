@@ -398,6 +398,9 @@ public abstract class AbstractTaglet implements Taglet {
      * @param   doc             The {@link ClassDoc} (may be {@code null}).
      *
      * @return  The corresponding {@link Class}.
+     *
+     * @throws  ClassNotFoundException
+     *                          If the {@link Class} is not found.
      */
     protected Class<?> getClassFor(ClassDoc doc) throws ClassNotFoundException {
         String name = null;

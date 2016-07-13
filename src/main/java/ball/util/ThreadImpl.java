@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2010 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2010 - 2016 Allen D. Ball.  All rights reserved.
  */
 package ball.util;
 
@@ -78,12 +78,15 @@ public abstract class ThreadImpl extends Thread {
     protected static long getElapsedTime(long start) { return now() - start; }
 
     /**
-     * @see System#currentTimeMillis()
+     * See {@link System#currentTimeMillis()}.
+     *
+     * @return  The difference, measured in milliseconds, between the
+     *          current time and midnight, January 1, 1970 UTC.
      */
     protected static long now() { return System.currentTimeMillis(); }
 
     /**
-     * @see Runtime#addShutdownHook(Thread)
+     * See {@link Runtime#addShutdownHook(Thread)}.
      */
     protected class ShutdownHookThread extends Thread {
         public ShutdownHookThread() {

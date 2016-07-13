@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2010 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2010 - 2016 Allen D. Ball.  All rights reserved.
  */
 package ball.util;
 
@@ -39,6 +39,10 @@ public class PropertiesImpl extends Properties {
 
     /**
      * See {@link Properties#Properties(Properties)}.
+     *
+     * @param   defaults        A {@link Properties} that contains default
+     *                          values for any keys not found in this
+     *                          {@link Properties}.
      */
     public PropertiesImpl(Properties defaults) { super(defaults); }
 
@@ -48,6 +52,9 @@ public class PropertiesImpl extends Properties {
      * @param   defaults        The default {@link Properties}.
      * @param   file            The {@link File} to load
      *                          (may be {@code null}).
+     *
+     * @throws  IOException     If {@code file} is not null and cannot be
+     *                          read.
      */
     public PropertiesImpl(Properties defaults, File file) throws IOException {
         this(defaults);

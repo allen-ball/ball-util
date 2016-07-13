@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2010 - 2015 Allen D. Ball.  All rights reserved.
+ * Copyright 2010 - 2016 Allen D. Ball.  All rights reserved.
  */
 package ball.io;
 
@@ -44,24 +44,34 @@ public class Directory extends FileImpl {
         new Directory(System.getProperty("user.home"));
 
     /**
-     * @see File#File(String)
+     * See {@link File#File(String)}.
+     *
+     * @param   pathname        The {@link CharSequence}.
      */
     public Directory(CharSequence pathname) { super(pathname); }
 
     /**
-     * @see File#File(String,String)
+     * See {@link File#File(String,String)}.
+     *
+     * @param   parent          The parent {@link CharSequence}.
+     * @param   child           The child {@link CharSequence}.
      */
     public Directory(CharSequence parent, CharSequence child) {
         super(parent, child);
     }
 
     /**
-     * @see File#File(File,String)
+     * See {@link File#File(File,String)}.
+     *
+     * @param   parent          The parent {@link File}.
+     * @param   child           The child {@link CharSequence}.
      */
     public Directory(File parent, CharSequence child) { super(parent, child); }
 
     /**
-     * @see File#File(URI)
+     * See {@link File#File(URI)}.
+     *
+     * @param   uri             The directory (file) {@link URI}.
      */
     public Directory(URI uri) { super(uri); }
 
@@ -150,7 +160,14 @@ public class Directory extends FileImpl {
     }
 
     /**
-     * @see #getChildDirectory(Iterable)
+     * See {@link #getChildDirectory(Iterable)}.
+     *
+     * @param   parent          The parent {@link Directory}.
+     * @param   names           The names that make up the subpath of the
+     *                          child {@link Directory}.
+     *
+     * @return  A child {@link Directory} with a subpath represented by
+     *          {@code names}.
      */
     public static Directory getChildDirectory(File parent,
                                               Iterable<CharSequence> names) {
@@ -167,7 +184,14 @@ public class Directory extends FileImpl {
     }
 
     /**
-     * @see #getChildDirectory(CharSequence...)
+     * See {@link #getChildDirectory(CharSequence...)}.
+     *
+     * @param   parent          The parent {@link Directory}.
+     * @param   names           The names that make up the subpath of the
+     *                          child {@link Directory}.
+     *
+     * @return  A child {@link Directory} with a subpath represented by
+     *          {@code names}.
      */
     public static Directory getChildDirectory(File parent,
                                               CharSequence... names) {

@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2013, 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2013 - 2016 Allen D. Ball.  All rights reserved.
  */
 package ball.util;
 
@@ -28,6 +28,9 @@ public abstract class NetworkInterfaceUtil {
      * {@link List}.
      *
      * @return  The {@link List} of {@link InterfaceAddress}es.
+     *
+     * @throws  SocketException         If the {@link InterfaceAddress}es
+     *                                  cannot be determined.
      */
     public static List<InterfaceAddress> getInterfaceAddressList() throws SocketException {
         ArrayList<InterfaceAddress> list = new ArrayList<InterfaceAddress>();
@@ -45,6 +48,9 @@ public abstract class NetworkInterfaceUtil {
      * {@link List}.
      *
      * @return  The {@link List} of {@link InetAddress}es.
+     *
+     * @throws  SocketException         If the {@link InterfaceAddress}es
+     *                                  cannot be determined.
      */
     public static List<InetAddress> getInterfaceInetAddressList() throws SocketException {
         ArrayList<InetAddress> list = new ArrayList<InetAddress>();

@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2011 - 2015 Allen D. Ball.  All rights reserved.
+ * Copyright 2011 - 2016 Allen D. Ball.  All rights reserved.
  */
 package ball.util;
 
@@ -26,6 +26,8 @@ public class UUIDFactory extends Factory<UUID> {
 
     /**
      * {@link UUIDFactory} factory method.
+     *
+     * @return  The default {@link UUIDFactory}.
      */
     public static UUIDFactory getDefault() { return DEFAULT; }
 

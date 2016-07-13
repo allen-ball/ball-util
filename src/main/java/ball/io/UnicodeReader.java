@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2014 - 2016 Allen D. Ball.  All rights reserved.
  */
 package ball.io;
 
@@ -31,6 +31,9 @@ public class UnicodeReader extends LineNumberReader {
 
     /**
      * @param   file            The {@link File} to open.
+     *
+     * @throws  FileNotFoundException
+     *                          If the {@link File} is not found.
      */
     public UnicodeReader(File file) throws FileNotFoundException {
         this(new FileInputStream(file));

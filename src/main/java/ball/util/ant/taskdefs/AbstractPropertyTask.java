@@ -31,6 +31,8 @@ public abstract class AbstractPropertyTask extends AbstractClasspathTask {
      * Method to get the value to assign to the property.
      *
      * @return  The property value.
+     *
+     * @throws  Throwable       As specified by implementing subclass.
      */
     protected abstract String getPropertyValue() throws Throwable;
 

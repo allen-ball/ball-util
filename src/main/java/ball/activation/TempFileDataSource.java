@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2010 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2010 - 2016 Allen D. Ball.  All rights reserved.
  */
 package ball.activation;
 
@@ -27,6 +27,9 @@ public class TempFileDataSource extends AbstractDataSource {
     private File file = null;
 
     /**
+     * @param   prefix          The file name prefix.
+     * @param   suffix          The file name suffix.
+     * @param   parent          The parent {@link File}.
      * @param   type            Initial {@code "ContentType"} attribute
      *                          value.
      *

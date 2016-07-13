@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2010 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2010 - 2016 Allen D. Ball.  All rights reserved.
  */
 package ball.util;
 
@@ -18,6 +18,8 @@ public class StringFactory extends Factory<String> {
 
     /**
      * {@link StringFactory} factory method.
+     *
+     * @return  The default {@link StringFactory}.
      */
     public static StringFactory getDefault() { return DEFAULT; }
 

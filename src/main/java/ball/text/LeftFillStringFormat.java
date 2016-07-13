@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2009 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2016 Allen D. Ball.  All rights reserved.
  */
 package ball.text;
 
@@ -17,14 +17,19 @@ public class LeftFillStringFormat extends FillStringFormat {
     private static final long serialVersionUID = 5459922417228548968L;
 
     /**
-     * @see FillStringFormat#FillStringFormat(int,char)
+     * See {@link FillStringFormat#FillStringFormat(int,char)}.
+     *
+     * @param   width           The fill-to width.
+     * @param   filler          The filler {@code char}.
      */
     public LeftFillStringFormat(int width, char filler) {
         super(width, filler);
     }
 
     /**
-     * @see FillStringFormat#FillStringFormat(int)
+     * See {@link FillStringFormat#FillStringFormat(int)}.
+     *
+     * @param   width           The fill-to width.
      */
     public LeftFillStringFormat(int width) { this(width, StringUtil.SPACE); }
 
