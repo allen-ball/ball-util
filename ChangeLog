@@ -1,3 +1,9 @@
+2016-08-27  Allen D. Ball  <ball@sol.local>
+
+	* src/main/java/ball/util/PropertiesImpl.java:
+	Added configure(Object) and static configure(Properties,Object)
+	methods.
+
 2016-06-04  Allen D. Ball  <ball@sol.local>
 
 	* src/main/java/ball/tools/javadoc/:

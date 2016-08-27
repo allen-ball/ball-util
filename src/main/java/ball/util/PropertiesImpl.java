@@ -5,6 +5,7 @@
  */
 package ball.util;
 
+import ball.beans.ConverterUtil;
 import ball.io.IOUtil;
 import java.io.File;
 import java.io.FileInputStream;
@@ -13,6 +14,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.lang.reflect.Method;
 import java.nio.charset.Charset;
 import java.util.Properties;
 
@@ -71,6 +73,17 @@ public class PropertiesImpl extends Properties {
         }
     }
 
+    /**
+     * Method to configure an {@link Object} properties with values in
+     * {@code this} {@link PropertiesImp}.  (An {@link Object} "setter" does
+     * not have to return {@code void} to be invoked.)
+     *
+     * @param   object          The {@link Object} to configure.
+     *
+     * @return  The argument {@link Object}.
+     */
+    public Object configure(Object object) { return configure(this, object); }
+
     @Override
     public void load(InputStream in) throws IOException { load(this, in); }
 
@@ -91,5 +104,64 @@ public class PropertiesImpl extends Properties {
 
         properties.store(writer, comment);
         IOUtil.flush(writer);
+    }
+
+    /**
+     * See {@link #configure(Object)}.
+     *
+     * @param   properties      The {@link Properties} with the
+     *                          configuration parameters..
+     * @param   object          The {@link Object} to configure.
+     *
+     * @return  The argument {@link Object}.
+     */
+    public static Object configure(Properties properties, Object object) {
+        for (String key : properties.stringPropertyNames()) {
+            String value = properties.getProperty(key);
+            Method method =
+                getSetMethod(object,
+                             key, (value != null) ? value.getClass() : null);
+
+            if (method != null) {
+                try {
+                    method.invoke(object,
+                                  ConverterUtil.convert(method, 0, value));
+                } catch (Exception exception) {
+                }
+            }
+        }
+
+        return object;
+    }
+
+    private static Method getSetMethod(Object object,
+                                       String property, Class<?> parameter) {
+        Method method = null;
+        String name =
+            "set"
+            + property.substring(0, 1).toUpperCase()
+            + property.substring(1);
+
+        if (method == null) {
+            if (parameter != null) {
+                try {
+                    method = object.getClass().getMethod(name, parameter);
+                } catch (Exception exception) {
+                }
+            }
+        }
+
+        if (method == null) {
+            for (Method m : object.getClass().getMethods()) {
+                if (m.getName().equals(name)
+                    && (! m.isVarArgs())
+                    && m.getParameterTypes().length == 1) {
+                    method = m;
+                    break;
+                }
+            }
+        }
+
+        return method;
     }
 }
