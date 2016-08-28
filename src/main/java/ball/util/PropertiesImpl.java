@@ -27,7 +27,7 @@ import java.util.Properties;
  * @version $Revision$
  */
 public class PropertiesImpl extends Properties {
-    private static final long serialVersionUID = -5422894536821798748L;
+    private static final long serialVersionUID = -4305031333446153770L;
 
     /**
      * UTF-8
