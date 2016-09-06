@@ -80,4 +80,30 @@ public abstract class MapUtil {
                                   Properties to) {
         return (Properties) copy(from, (Map<Object,Object>) to);
     }
+
+    /**
+     * Method to get a {@link Map} value by comparing keys as {@link String}
+     * values.
+     *
+     * @param   <K>             The {@link Map} key type.
+     * @param   <V>             The {@link Map} value type.
+     * @param   map             The {@link Map} to search.
+     * @param   key             The key as a {@link String}.
+     *
+     * @return  The value missing the argument key or {@code null} if there
+     *          is no match.
+     */
+    public static <K,V> V getByKeyToString(Map<? extends K,? extends V> map,
+                                           String key) {
+        V value = null;
+
+        for (Map.Entry<? extends K,? extends V> entry : map.entrySet()) {
+            if (entry.getKey().toString().equals(key)) {
+                value = entry.getValue();
+                break;
+            }
+        }
+
+        return value;
+    }
 }

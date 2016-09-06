@@ -1,3 +1,9 @@
+2016-09-05  Allen D. Ball  <ball@sol.local>
+
+	* src/main/java/ball/util/MapUtil.java;
+	Added the getByKeyToString(Map<? extends K,? extends V>,String)
+	method.
+
 2016-08-27  Allen D. Ball  <ball@sol.local>
 
 	* src/main/java/ball/util/PropertiesImpl.java:
