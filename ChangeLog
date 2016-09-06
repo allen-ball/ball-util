@@ -4,6 +4,9 @@
 	Added the getByKeyToString(Map<? extends K,? extends V>,String)
 	method.
 
+	* src/main/java/ball/annotation/processing/AbstractProcessor.java:
+	Removed getAnnotationValue(*) methods.
+
 2016-08-27  Allen D. Ball  <ball@sol.local>
 
 	* src/main/java/ball/util/PropertiesImpl.java:

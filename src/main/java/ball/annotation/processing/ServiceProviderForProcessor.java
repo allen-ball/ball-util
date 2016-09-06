@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2013, 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2013 - 2016 Allen D. Ball.  All rights reserved.
  */
 package ball.annotation.processing;
 
@@ -18,6 +18,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
+import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
@@ -25,6 +26,7 @@ import javax.lang.model.type.TypeMirror;
 import javax.tools.FileObject;
 
 import static ball.util.ClassUtil.isAbstract;
+import static ball.util.MapUtil.getByKeyToString;
 import static ball.util.StringUtil.NIL;
 import static javax.lang.model.element.Modifier.ABSTRACT;
 import static javax.lang.model.element.Modifier.PUBLIC;
@@ -97,15 +99,18 @@ public class ServiceProviderForProcessor extends AbstractAnnotationProcessor
     protected void process(RoundEnvironment env,
                            TypeElement annotation,
                            Element element) throws Exception {
-        List<? extends TypeElement> value =
-            getAnnotationValue(element, annotation);
+        AnnotationMirror mirror = getAnnotationMirror(element, annotation);
+        AnnotationValue value =
+            getByKeyToString(elements.getElementValuesWithDefaults(mirror),
+                             "value()");
+        TypeElementList list = new TypeElementList(value);
 
-        if (! value.isEmpty()) {
+        if (! list.isEmpty()) {
             switch (element.getKind()) {
             case CLASS:
                 if (! element.getModifiers().contains(ABSTRACT)) {
                     if (hasPublicNoArgumentConstructor(element)) {
-                        for (TypeElement service : value) {
+                        for (TypeElement service : list) {
                             if (isAssignable(element.asType(), service.asType())) {
                                 map.add(service, (TypeElement) element);
                             } else {
@@ -145,22 +150,6 @@ public class ServiceProviderForProcessor extends AbstractAnnotationProcessor
                   + AT + annotation.getSimpleName()
                   + " but no services specified");
         }
-    }
-
-    private List<? extends TypeElement> getAnnotationValue(Element element,
-                                                           TypeElement annotation) {
-        AnnotationValue value =
-            getAnnotationValue(element, annotation, "value()");
-        ArrayList<TypeElement> list = new ArrayList<TypeElement>();
-
-        for (Object object : (List<?>) value.getValue()) {
-            TypeMirror mirror =
-                (TypeMirror) ((AnnotationValue) object).getValue();
-
-            list.add((TypeElement) types.asElement(mirror));
-        }
-
-        return list;
     }
 
     @Override
@@ -217,6 +206,23 @@ public class ServiceProviderForProcessor extends AbstractAnnotationProcessor
         public boolean add(TypeElement service, TypeElement provider) {
             return add(elements.getBinaryName(service).toString(),
                        elements.getBinaryName(provider).toString());
+        }
+    }
+
+    private class TypeElementList extends ArrayList<TypeElement> {
+        private static final long serialVersionUID = 7466610173670377111L;
+
+        public TypeElementList(AnnotationValue value) {
+            super();
+
+            if (value != null) {
+                for (Object object : (List<?>) value.getValue()) {
+                    TypeMirror mirror =
+                        (TypeMirror) ((AnnotationValue) object).getValue();
+
+                    add((TypeElement) types.asElement(mirror));
+                }
+            }
         }
     }
 }

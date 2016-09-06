@@ -715,62 +715,6 @@ public abstract class AbstractProcessor
     }
 
     /**
-     * Method to get an {@link Element}'s {@link AnnotationValue}.
-     *
-     * @param   element         The annotated {@link Element}.
-     * @param   type            The {@link Annotation} type ({@link Class}).
-     * @param   name            The {@link Annotation} element name.
-     *
-     * @return  The {@link AnnotationValue} if the {@link Element} is
-     *          annotated with the argument annotation; {@code null}
-     *          otherwise.
-     *
-     * @see Elements#getElementValuesWithDefaults(AnnotationMirror)
-     */
-    protected AnnotationValue getAnnotationValue(Element element,
-                                                 Class<? extends Annotation> type,
-                                                 String name) {
-        return getAnnotationValue(getAnnotationMirror(element, type), name);
-    }
-
-    /**
-     * Method to get an {@link Element}'s {@link AnnotationValue}.
-     *
-     * @param   element         The annotated {@link Element}.
-     * @param   type            The {@link Annotation} type
-     *                          ({@link TypeElement}).
-     * @param   name            The {@link Annotation} element name.
-     *
-     * @return  The {@link AnnotationValue} if the {@link Element} is
-     *          annotated with the argument annotation; {@code null}
-     *          otherwise.
-     *
-     * @see Elements#getElementValuesWithDefaults(AnnotationMirror)
-     */
-    protected AnnotationValue getAnnotationValue(Element element,
-                                                 TypeElement type,
-                                                 String name) {
-        return getAnnotationValue(getAnnotationMirror(element, type), name);
-    }
-
-    private AnnotationValue getAnnotationValue(AnnotationMirror annotation,
-                                               String name) {
-        AnnotationValue value = null;
-
-        if (annotation != null) {
-            for (Map.Entry<? extends ExecutableElement,? extends AnnotationValue> entry :
-                     elements.getElementValuesWithDefaults(annotation).entrySet()) {
-                if (entry.getKey().toString().equals(name)) {
-                    value = entry.getValue();
-                    break;
-                }
-            }
-        }
-
-        return value;
-    }
-
-    /**
      * Method to get the {@link Set} of bean property names for the
      * specified {@link TypeElement}.
      *
