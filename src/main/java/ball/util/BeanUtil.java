@@ -8,6 +8,7 @@ package ball.util;
 import ball.beans.ConverterUtil;
 import ball.beans.PropertyDescriptorMap;
 import java.beans.BeanInfo;
+import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.beans.PropertyVetoException;
 import java.lang.reflect.InvocationTargetException;
@@ -24,6 +25,35 @@ import java.util.Map;
  */
 public abstract class BeanUtil {
     private BeanUtil() { }
+
+    /**
+     * Method to get a bean property name corresponding to a method if it is
+     * a bean getter or setter.
+     *
+     * @param   method          The {@link Method}.
+     *
+     * @return  The property name if the method is a bean getter or setter;
+     *          {@code null} otherwise.
+     */
+    public static String getPropertyName(Method method) {
+        String name = null;
+
+        try {
+            BeanInfo info =
+                Introspector.getBeanInfo(method.getDeclaringClass());
+
+            for (PropertyDescriptor descriptor :
+                     info.getPropertyDescriptors()) {
+                if (method.equals(descriptor.getReadMethod())) {
+                    name = descriptor.getName();
+                    break;
+                }
+            }
+        } catch (Exception exception) {
+        }
+
+        return name;
+    }
 
     /**
      * Method to get a {@code bean} property value.
