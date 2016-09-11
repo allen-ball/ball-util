@@ -654,7 +654,7 @@ public abstract class AbstractProcessor
      *
      * @param   element         The {@link ExecutableElement}.
      *
-     * @return  {@code true} if the {@link Element} has a non-privtae getter
+     * @return  {@code true} if the {@link Element} has a non-private getter
      *          method; {@code false} otherwise.
      */
     protected boolean isGetterMethod(ExecutableElement element) {
