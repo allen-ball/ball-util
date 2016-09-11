@@ -6,11 +6,9 @@
 package ball.annotation.processing;
 
 import ball.annotation.ServiceProviderFor;
-import ball.util.BeanPropertyMethodEnum;
 import ball.util.ant.taskdefs.AntTaskAttributeConstraint;
 import ball.util.ant.taskdefs.NotEmpty;
 import ball.util.ant.taskdefs.NotNull;
-import java.util.Arrays;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
@@ -56,26 +54,5 @@ public class AntTaskAttributeConstraintProcessor
             }
             break;
         }
-    }
-
-    private boolean isGetterMethod(ExecutableElement element) {
-        boolean isGetterMethod = false;
-
-        if (! element.getModifiers().contains(PRIVATE)) {
-            for (BeanPropertyMethodEnum methodEnum :
-                     Arrays.asList(BeanPropertyMethodEnum.GET,
-                                   BeanPropertyMethodEnum.IS)) {
-                if (methodEnum.getPropertyName(element.getSimpleName().toString()) != null
-                    && isAssignable(element.getReturnType(),
-                                    methodEnum.getReturnType())
-                    && isAssignable(element.getParameters(),
-                                    methodEnum.getParameterTypes())) {
-                    isGetterMethod |= true;
-                    break;
-                }
-            }
-        }
-
-        return isGetterMethod;
     }
 }

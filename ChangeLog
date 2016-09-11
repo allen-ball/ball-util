@@ -1,10 +1,14 @@
 2016-09-10  Allen D. Ball  <ball@sol.local>
 
+	* src/main/java/ball/util/BeanUtil.java:
+	Added getPropertyName(Method) method.
+
 	* src/main/java/ball/annotation/AnnotationUtil.java:
 	Initial writing.
 
-	* src/main/java/ball/util/BeanUtil.java:
-	Added getPropertyName(Method) method.
+	* src/main/java/ball/annotation/processing/AbstractProcessor.java;
+	Added getPropertyName(ExecutableElement) and
+	isGetterMethod(ExecutableElement) methods.
 
 2016-09-07  Allen D. Ball  <ball@sol.local>
 

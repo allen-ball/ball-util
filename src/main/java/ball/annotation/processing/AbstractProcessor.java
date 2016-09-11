@@ -5,6 +5,7 @@
  */
 package ball.annotation.processing;
 
+import ball.util.BeanPropertyMethodEnum;
 import ball.activation.ThrowableDataSource;
 import ball.util.BeanPropertyMethodEnum;
 import java.io.File;
@@ -615,6 +616,66 @@ public abstract class AbstractProcessor
         }
 
         return Arrays.asList(array);
+    }
+
+    /**
+     * Method to get bean property name from an {@link ExecutableElement}.
+     *
+     * @param   element         The {@link ExecutableElement}.
+     *
+     * @return  the name {@link String} if the {@link ExecutableElement}
+     *          is a getter or setter method; {@code null} otherwise.
+     */
+    protected String getPropertyName(ExecutableElement element) {
+        String name = null;
+
+        if (! element.getModifiers().contains(PRIVATE)) {
+            for (BeanPropertyMethodEnum methodEnum :
+                     BeanPropertyMethodEnum.values()) {
+                String string =
+                    methodEnum.getPropertyName(element.getSimpleName().toString());
+
+                if (string != null
+                    && isAssignable(element.getReturnType(),
+                                    methodEnum.getReturnType())
+                    && isAssignable(element.getParameters(),
+                                    methodEnum.getParameterTypes())) {
+                    name = string;
+                    break;
+                }
+            }
+        }
+
+        return name;
+    }
+
+    /**
+     * Method to determine if an {@link ExecutableElement} is a bean getter.
+     *
+     * @param   element         The {@link ExecutableElement}.
+     *
+     * @return  {@code true} if the {@link Element} has a non-privtae getter
+     *          method; {@code false} otherwise.
+     */
+    protected boolean isGetterMethod(ExecutableElement element) {
+        boolean isGetterMethod = false;
+
+        if (! element.getModifiers().contains(PRIVATE)) {
+            for (BeanPropertyMethodEnum methodEnum :
+                     Arrays.asList(BeanPropertyMethodEnum.GET,
+                                   BeanPropertyMethodEnum.IS)) {
+                if (methodEnum.getPropertyName(element.getSimpleName().toString()) != null
+                    && isAssignable(element.getReturnType(),
+                                    methodEnum.getReturnType())
+                    && isAssignable(element.getParameters(),
+                                    methodEnum.getParameterTypes())) {
+                    isGetterMethod |= true;
+                    break;
+                }
+            }
+        }
+
+        return isGetterMethod;
     }
 
     /**
