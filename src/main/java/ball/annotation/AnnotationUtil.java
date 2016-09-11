@@ -33,7 +33,7 @@ public abstract class AnnotationUtil {
      *
      * @return  An {@link Iterable} of annotated {@link Class}es.
      *
-     * @see Class#getClassses()
+     * @see Class#getClasses()
      */
     public static Iterable<Class<?>> getClassesAnnotatedWith(Class<?> type,
                                                              Class<? extends Annotation> annotation) {
