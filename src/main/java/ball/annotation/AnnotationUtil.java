@@ -16,7 +16,7 @@ import java.util.Arrays;
 import static ball.util.IterableUtil.filter;
 
 /**
- * {@link Annotataion} utility methods.
+ * {@link Annotation} utility methods.
  *
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
