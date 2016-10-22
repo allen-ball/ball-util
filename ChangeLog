@@ -1,3 +1,8 @@
+2016-10-22  Allen D. Ball  <ball@sol.local>
+
+	* src/main/java/ball/util/TimeUnitEnum.java:
+	Added isOlderThan(Number,long) method.
+
 2016-09-10  Allen D. Ball  <ball@sol.local>
 
 	* src/main/java/ball/util/BeanUtil.java:

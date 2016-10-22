@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2016 Allen D. Ball.  All rights reserved.
  */
 package ball.util;
 
@@ -70,4 +70,18 @@ public enum TimeUnitEnum {
      * @return  The duration in milliseconds.
      */
     public long toMilliseconds() { return toMilliseconds(1); }
+
+    /**
+     * Method to determine if the argument time is older than the current
+     * duration.
+     *
+     * @param   duration        The duration in {@link TimeUnitEnum}.
+     * @param   time            The millisecond value to test.
+     *
+     * @return  {@code true} if the argument time is older than this
+     *          duration; {@code false} otherwise.
+     */
+    public boolean isOlderThan(Number duration, long time) {
+        return (System.currentTimeMillis() - toMilliseconds(duration)) > time;
+    }
 }
