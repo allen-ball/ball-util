@@ -21,7 +21,7 @@ import java.util.jar.Manifest;
  * @version $Revision$
  */
 public abstract class ClassUtil {
-    private static final String DOT_CLASS = ".class";
+    private static final String _CLASS = ".class";
 
     private ClassUtil() { }
 
@@ -59,14 +59,14 @@ public abstract class ClassUtil {
      */
     public static URL getManifestURLFor(Class<?> type) {
         URL url = null;
-        String resource = type.getSimpleName() + DOT_CLASS;
+        String resource = type.getSimpleName() + _CLASS;
         String path = type.getResource(resource).toString();
 
         path =
             path.substring(0,
                            path.length()
                            - (type.getCanonicalName().length()
-                              + DOT_CLASS.length()))
+                              + _CLASS.length()))
             + "META-INF/MANIFEST.MF";
 
         try {

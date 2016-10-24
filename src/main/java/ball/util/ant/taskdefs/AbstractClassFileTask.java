@@ -26,7 +26,7 @@ import org.apache.tools.ant.types.Path;
  * @version $Revision$
  */
 public abstract class AbstractClassFileTask extends AbstractClasspathTask {
-    private static final String DOT_JAVA = ".java";
+    private static final String _JAVA = ".java";
 
     private File basedir = null;
     private Path srcPath = null;
@@ -101,8 +101,7 @@ public abstract class AbstractClassFileTask extends AbstractClasspathTask {
             }
 
             String child =
-                ClassFileUtils.convertDotName(type.getCanonicalName())
-                + DOT_JAVA;
+                ClassFileUtils.convertDotName(type.getCanonicalName()) + _JAVA;
 
             for (String parent : srcPath.list()) {
                 file = new File(parent, child);

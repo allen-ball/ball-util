@@ -63,7 +63,7 @@ public class ManifestProcessor extends AbstractAnnotationProcessor
                                implements BootstrapProcessorTask.Processor {
     private static final String MANIFEST_MF = "MANIFEST.MF";
 
-    private static final String DOT_CLASS = ".class";
+    private static final String _CLASS = ".class";
 
     private static abstract class MAIN {
         public static void main(String[] argv) { }
@@ -270,12 +270,12 @@ public class ManifestProcessor extends AbstractAnnotationProcessor
 
     @Override
     protected String asPath(TypeElement element) {
-        return super.asPath(element) + DOT_CLASS;
+        return super.asPath(element) + _CLASS;
     }
 
     @Override
     protected String asPath(Class<?> type) {
-        return super.asPath(type) + DOT_CLASS;
+        return super.asPath(type) + _CLASS;
     }
 
     private String toString(Method method) {
