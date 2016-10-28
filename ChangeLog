@@ -1,3 +1,8 @@
+2016-10-28  Allen D. Ball  <ball@sol.local>
+
+	* src/main/resources/ball/annotation/processing/NoopProcessor.properties:
+	Added javax.persistence annotations.
+
 2016-10-22  Allen D. Ball  <ball@sol.local>
 
 	* src/main/java/ball/util/TimeUnitEnum.java:
