@@ -1,3 +1,8 @@
+2016-10-29  Allen D. Ball  <ball@sol.local>
+
+	* src/main/java/ball/util/ant/taskdefs/AbstractClasspathTask.java:
+	Added getClassForName(String) method.
+
 2016-10-28  Allen D. Ball  <ball@sol.local>
 
 	* src/main/resources/ball/annotation/processing/NoopProcessor.properties:

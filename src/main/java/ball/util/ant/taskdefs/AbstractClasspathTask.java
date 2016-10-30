@@ -73,6 +73,22 @@ public abstract class AbstractClasspathTask extends Task
     }
 
     /**
+     * Method to get the {@link Class} associated with the argument name
+     * using the {@link ClassLoader} provided by {@link #getClassLoader()}.
+     *
+     * @param   name            The fully qualified name of the desired
+     *                          class.
+     *
+     * @return  The {@link Class} for the specified name.
+     *
+     * @throws  ClassNotFoundException
+     *                          If the {@link Class} is not found.
+     */
+    protected Class<?> getClassForName(String name) throws ClassNotFoundException {
+        return Class.forName(name, false, getClassLoader());
+    }
+
+    /**
      * See {@link #log(Iterable)}.
      *
      * @param   model           The {@link TableModel} to log.
