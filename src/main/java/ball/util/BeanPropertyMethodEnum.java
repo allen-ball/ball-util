@@ -27,7 +27,7 @@ public enum BeanPropertyMethodEnum {
         Collections.unmodifiableMap(new MethodPrototypeMap());
 
     @Regex
-    private static final String PROPERTY_REGEX = "([\\p{Upper}][\\p{Alnum}]+)";
+    private static final String PROPERTY_REGEX = "([\\p{Upper}][\\p{Alnum}]*)";
 
     private Pattern pattern = null;
 

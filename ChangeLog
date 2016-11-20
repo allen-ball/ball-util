@@ -1,3 +1,8 @@
+2016-11-19  Allen D. Ball  <ball@sol.local>
+
+	* src/main/java/ball/util/BeanPropertyMethodEnum.java:
+	Support single-character property names.
+
 2016-10-29  Allen D. Ball  <ball@sol.local>
 
 	* src/main/java/ball/util/ant/taskdefs/AbstractClasspathTask.java:
