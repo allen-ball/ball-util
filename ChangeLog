@@ -1,3 +1,7 @@
+2016-11-22  Allen D. Ball  <ball@sol.local>
+
+	* src/main/java/ball/util/MapView.java: Initial writing.
+
 2016-11-21  Allen D. Ball  <ball@sol.local>
 
 	* src/main/java/ball/util/Coordinate.java,
