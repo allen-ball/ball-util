@@ -11,9 +11,13 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 import javax.swing.table.TableModel;
+import org.apache.tools.ant.AntClassLoader;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.taskdefs.MatchingTask;
+import org.apache.tools.ant.types.Path;
+import org.apache.tools.ant.types.Reference;
+import org.apache.tools.ant.util.ClasspathUtils;
 
 /**
  * Abstract base class for {@link.uri http://ant.apache.org/ Ant}
@@ -26,6 +30,7 @@ import org.apache.tools.ant.taskdefs.MatchingTask;
  */
 public abstract class AbstractMatchingTask extends MatchingTask
                                            implements AnnotatedTask {
+    private ClasspathUtils.Delegate delegate = null;
     private File basedir = null;
     private File file = null;
 
@@ -40,6 +45,21 @@ public abstract class AbstractMatchingTask extends MatchingTask
     public File getFile() { return file; }
     public void setFile(File file) { this.file = file; }
 
+    public void setClasspathRef(Reference reference) {
+        delegate.setClasspathref(reference);
+    }
+
+    public Path createClasspath() { return delegate.createClasspath(); }
+
+    @Override
+    public void init() throws BuildException {
+        super.init();
+
+        if (delegate == null) {
+            delegate = ClasspathUtils.getDelegate(this);
+        }
+    }
+
     @Override
     public void execute() throws BuildException {
         validate();
@@ -47,6 +67,40 @@ public abstract class AbstractMatchingTask extends MatchingTask
         if (getBasedir() == null && getFile() == null) {
             setBasedir(getProject().resolveFile("."));
         }
+    }
+
+    /**
+     * Method to get the {@link AntClassLoader} specified by this
+     * {@link Task}.
+     *
+     * @return  The {@link AntClassLoader}.
+     */
+    protected AntClassLoader getClassLoader() {
+        if (delegate.getClasspath() == null) {
+            delegate.createClasspath();
+        }
+
+        AntClassLoader loader = (AntClassLoader) delegate.getClassLoader();
+
+        loader.setParent(getClass().getClassLoader());
+
+        return loader;
+    }
+
+    /**
+     * Method to get the {@link Class} associated with the argument name
+     * using the {@link ClassLoader} provided by {@link #getClassLoader()}.
+     *
+     * @param   name            The fully qualified name of the desired
+     *                          class.
+     *
+     * @return  The {@link Class} for the specified name.
+     *
+     * @throws  ClassNotFoundException
+     *                          If the {@link Class} is not found.
+     */
+    protected Class<?> getClassForName(String name) throws ClassNotFoundException {
+        return Class.forName(name, false, getClassLoader());
     }
 
     /**

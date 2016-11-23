@@ -2,6 +2,9 @@
 
 	* src/main/java/ball/util/MapView.java: Initial writing.
 
+	* src/main/java/ball/util/ant/taskdefs/AbstractMatchingTask.java:
+	Added AbstractClasspathTask functionality.
+
 2016-11-21  Allen D. Ball  <ball@sol.local>
 
 	* src/main/java/ball/util/Coordinate.java,
