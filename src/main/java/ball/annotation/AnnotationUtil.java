@@ -5,15 +5,14 @@
  */
 package ball.annotation;
 
-import ball.util.AbstractPredicate;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
-
-import static ball.util.IterableUtil.filter;
+import java.util.List;
 
 /**
  * {@link Annotation} utility methods.
@@ -37,8 +36,7 @@ public abstract class AnnotationUtil {
      */
     public static Iterable<Class<?>> getClassesAnnotatedWith(Class<?> type,
                                                              Class<? extends Annotation> annotation) {
-        return filter(new IsAnnotatedWith<Class<?>>(annotation),
-                      Arrays.asList(type.getClasses()));
+        return annotatedWith(Arrays.asList(type.getClasses()), annotation);
     }
 
     /**
@@ -54,8 +52,8 @@ public abstract class AnnotationUtil {
      */
     public static Iterable<Constructor<?>> getConstructorsAnnotatedWith(Class<?> type,
                                                                         Class<? extends Annotation> annotation) {
-        return filter(new IsAnnotatedWith<Constructor<?>>(annotation),
-                      Arrays.asList(type.getConstructors()));
+        return annotatedWith(Arrays.asList(type.getConstructors()),
+                             annotation);
     }
 
     /**
@@ -71,8 +69,7 @@ public abstract class AnnotationUtil {
      */
     public static Iterable<Field> getFieldsAnnotatedWith(Class<?> type,
                                                          Class<? extends Annotation> annotation) {
-        return filter(new IsAnnotatedWith<Field>(annotation),
-                      Arrays.asList(type.getFields()));
+        return annotatedWith(Arrays.asList(type.getFields()), annotation);
     }
 
     /**
@@ -88,27 +85,19 @@ public abstract class AnnotationUtil {
      */
     public static Iterable<Method> getMethodsAnnotatedWith(Class<?> type,
                                                            Class<? extends Annotation> annotation) {
-        return filter(new IsAnnotatedWith<Method>(annotation),
-                      Arrays.asList(type.getMethods()));
+        return annotatedWith(Arrays.asList(type.getMethods()), annotation);
     }
 
-    private static class IsAnnotatedWith<T extends AnnotatedElement>
-                         extends AbstractPredicate<T> {
-        private final Class<? extends Annotation> annotation;
+    private static <T extends AnnotatedElement> List<T> annotatedWith(Iterable<T> elements,
+                                                                      Class<? extends Annotation> annotation) {
+        ArrayList<T> list = new ArrayList<T>();
 
-        public IsAnnotatedWith(Class<? extends Annotation> annotation) {
-            super();
-
-            if (annotation != null) {
-                this.annotation = annotation;
-            } else {
-                throw new NullPointerException("annotation");
+        for (T element : elements) {
+            if (element.getAnnotation(annotation) != null) {
+                list.add(element);
             }
         }
 
-        @Override
-        public boolean apply(T object) {
-            return (object.getAnnotation(annotation) != null);
-        }
+        return list;
     }
 }

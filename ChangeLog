@@ -89,10 +89,6 @@
 	Added static copy(Iterable<? extends Map.Entry<?,?>>,Properties)
 	method.
 
-2016-04-02  Allen D. Ball  <ball@sol.local>
-
-	* Added generic parameter to Predicate class definition.
-
 2016-03-29  Allen D. Ball  <ball@sol.local>
 
 	* src/main/java/ball/util/MapUtil.java: Initial writing.
@@ -728,11 +724,6 @@
 	Added getTypeElement(Class<?>) and
 	overrides(ExecutableElement,ExecutableElement) methods.
 
-2013-01-03  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* Renamed iprotium.util.Criteria (and subclasses) to
-	iprotium.util.Predicate.
-
 2013-01-02  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* src/main/java/iprotium/annotation/processing/ConstructorProcessor.java:
@@ -792,12 +783,6 @@
 
 	* src/main/java/iprotium/util/BeanUtil.java:
 	Do not require source or destination Map keys to be Strings.
-
-	* src/main/java/iprotium/util/Criteria.java (and subclasses):
-	Initial writing.
-
-	* src/main/java/iprotium/util/FilteredIterator.java:
-	Initial writing.
 
 	* src/main/java/iprotium/util/IterableUtil.java: Initial writing.
 
