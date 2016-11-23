@@ -5,6 +5,7 @@
  */
 package ball.util;
 
+import java.io.Serializable;
 import java.util.AbstractMap;
 import java.util.Map;
 import java.util.Set;
@@ -21,7 +22,8 @@ import java.util.Set;
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
-public class MapView<K,V> extends AbstractMap<K,V> {
+public class MapView<K,V> extends AbstractMap<K,V> implements Serializable {
+    private static final long serialVersionUID = 5823793890947160939L;
 
     private final Map<K,V> map;
 
