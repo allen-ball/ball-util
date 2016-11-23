@@ -1,15 +1,13 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2016 Allen D. Ball.  All rights reserved.
  */
 package ball.util;
 
 import java.util.AbstractList;
-import java.util.AbstractMap;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -17,37 +15,55 @@ import java.util.TreeSet;
 /**
  * {@link Coordinate} {@link java.util.Map} implementation.
  *
+ * @param       <V>             The value type.
+ *
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
-public class CoordinateMap<V> extends TreeMap<Coordinate,V> {
-    private static final long serialVersionUID = -3607087524921600254L;
+public class CoordinateMap<V> extends MapView<Coordinate,V> {
+    private static final long serialVersionUID = -5266359325878137898L;
 
-    private Coordinate min = null;
-    private Coordinate max = null;
+    protected Coordinate min = null;
+    protected Coordinate max = null;
 
     /**
      * No-argument constructor.
      */
-    public CoordinateMap() { super(); }
+    public CoordinateMap() { super(new TreeMap<Coordinate,V>()); }
 
     /**
      * Constructor to specify minimum and maximum {@code Y} and {@code X}.
      *
      * @param   y0              {@code MIN(y)}
-     * @param   yN              {@code MAX(y) + 1}
      * @param   x0              {@code MIN(x)}
+     * @param   yN              {@code MAX(y) + 1}
      * @param   xN              {@code MAX(x) + 1}
      */
-    public CoordinateMap(Number y0, Number yN, Number x0, Number xN) {
-        this(y0.intValue(), yN.intValue(), x0.intValue(), xN.intValue());
+    public CoordinateMap(Number y0, Number x0, Number yN, Number xN) {
+        this(y0.intValue(), x0.intValue(), yN.intValue(), xN.intValue());
     }
 
-    private CoordinateMap(int y0, int yN, int x0, int xN) {
+    private CoordinateMap(int y0, int x0, int yN, int xN) {
         this();
 
         this.min = new Coordinate(Math.min(y0, yN), Math.min(x0, xN));
         this.max = new Coordinate(Math.max(y0, yN), Math.max(x0, xN));
+    }
+
+    /**
+     * Method to get a sub-{@link Map} of {@code this} {@link Map} also
+     * backed by {@code this} {@link Map}.
+     *
+     * @param   y0              {@code MIN(y)}
+     * @param   x0              {@code MIN(x)}
+     * @param   yN              {@code MAX(y) + 1}
+     * @param   xN              {@code MAX(x) + 1}
+     *
+     * @return  The sub-{@link Map} ({@link CoordinateMap}).
+     */
+    public CoordinateMap<V> subMap(Number y0, Number x0,
+                                   Number yN, Number xN) {
+        return new Backed(y0, x0, yN, xN);
     }
 
     /**
@@ -132,8 +148,67 @@ public class CoordinateMap<V> extends TreeMap<Coordinate,V> {
         return super.put(key, value);
     }
 
-    private abstract class BackedList extends AbstractList<V> {
-        protected BackedList() {
+    private class Backed extends CoordinateMap<V> {
+        private static final long serialVersionUID = -5583234581295736510L;
+
+        private final TreeSet<Coordinate> keySet = new TreeSet<Coordinate>();
+
+        public Backed(Number y0, Number x0, Number yN, Number xN) {
+            super(y0, x0, yN, xN);
+
+            for (Coordinate key : map().keySet()) {
+                if (key.within(min, max)) {
+                    keySet.add(key);
+                }
+            }
+        }
+
+        @Override
+        public V get(Object key) {
+            return keySet.contains(key) ? super.get(key) : null;
+        }
+
+        @Override
+        public V put(Coordinate key, V value) {
+            V old = get(key);
+
+            keySet.add(key);
+            super.put(key, value);
+
+            return old;
+        }
+
+        @Override
+        public V remove(Object key) {
+            return keySet.remove(key) ? super.remove(key) : null;
+        }
+
+        @Override
+        public void clear() {
+            map().keySet().removeAll(keySet);
+            keySet.clear();
+        }
+
+        @Override
+        public Set<Coordinate> keySet() { return keySet; }
+
+        @Override
+        public Set<Entry<Coordinate,V>> entrySet() {
+            keySet.retainAll(map().keySet());
+            entrySet.clear();
+
+            for (Entry<Coordinate,V> entry : map().entrySet()) {
+                if (keySet.contains(entry.getKey())) {
+                    entrySet.add(entry);
+                }
+            }
+
+            return this.entrySet;
+        }
+    }
+
+    private abstract class Line extends AbstractList<V> {
+        protected Line() {
             super();
         }
 
@@ -151,7 +226,7 @@ public class CoordinateMap<V> extends TreeMap<Coordinate,V> {
         }
     }
 
-    private class Column extends BackedList {
+    private class Column extends Line {
         private final int y0;
         private final int yN;
         private final int x;
@@ -176,7 +251,7 @@ public class CoordinateMap<V> extends TreeMap<Coordinate,V> {
         public int size() { return yN - y0; }
     }
 
-    private class Row extends BackedList {
+    private class Row extends Line {
         private final int y;
         private final int x0;
         private final int xN;
