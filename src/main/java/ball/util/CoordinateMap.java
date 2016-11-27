@@ -6,11 +6,16 @@
 package ball.util;
 
 import java.util.AbstractList;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.TreeSet;
+import javax.swing.event.EventListenerList;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+import javax.swing.table.TableModel;
 
 /**
  * {@link Coordinate} {@link java.util.Map} implementation.
@@ -20,11 +25,13 @@ import java.util.TreeSet;
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
-public class CoordinateMap<V> extends MapView<Coordinate,V> {
-    private static final long serialVersionUID = -5266359325878137898L;
+public class CoordinateMap<V> extends MapView<Coordinate,V>
+                              implements TableModel {
+    private static final long serialVersionUID = 5717513338045277168L;
 
-    protected Coordinate min = null;
-    protected Coordinate max = null;
+    private Coordinate min = null;
+    private Coordinate max = null;
+    private EventListenerList list = new EventListenerList();
 
     /**
      * No-argument constructor.
@@ -40,14 +47,121 @@ public class CoordinateMap<V> extends MapView<Coordinate,V> {
      * @param   xN              {@code MAX(x) + 1}
      */
     public CoordinateMap(Number y0, Number x0, Number yN, Number xN) {
-        this(y0.intValue(), x0.intValue(), yN.intValue(), xN.intValue());
-    }
-
-    private CoordinateMap(int y0, int x0, int yN, int xN) {
         this();
 
-        this.min = new Coordinate(Math.min(y0, yN), Math.min(x0, xN));
-        this.max = new Coordinate(Math.max(y0, yN), Math.max(x0, xN));
+        resize(y0, x0, yN, xN);
+    }
+
+    /**
+     * Constructor to specify maximum {@code Y} and {@code X} (origin
+     * {@code (0, 0)}).
+     *
+     * @param   yN              {@code MAX(y) + 1}
+     * @param   xN              {@code MAX(x) + 1}
+     */
+    public CoordinateMap(Number yN, Number xN) { this(0, yN, 0, xN); }
+
+    private CoordinateMap(Map<Coordinate,V> map,
+                          Number y0, Number x0, Number yN, Number xN) {
+        super(map);
+
+        resize(y0, x0, yN, xN);
+    }
+
+    /**
+     * Method to specify new limits for the {@link CoordinateMap}.
+     *
+     * @param   y0              {@code MIN(y)}
+     * @param   x0              {@code MIN(x)}
+     * @param   yN              {@code MAX(y) + 1}
+     * @param   xN              {@code MAX(x) + 1}
+     *
+     * @return  {@code this} {@link CoordinateMap}.
+     */
+    public CoordinateMap<V> resize(Number y0, Number x0,
+                                   Number yN, Number xN) {
+        resize(y0.intValue(), x0.intValue(), yN.intValue(), xN.intValue());
+
+        return this;
+    }
+
+    private void resize(int y0, int x0, int yN, int xN) {
+        min = new Coordinate(Math.min(y0, yN), Math.min(x0, xN));
+        max = new Coordinate(Math.max(y0, yN), Math.max(x0, xN));
+
+        keySet().retainAll(Coordinate.generate(min, max));
+
+        fireTableStructureChanged();
+    }
+
+    public Coordinate getMin() { return min; }
+    public Coordinate getMax() { return max; }
+
+    public int getMinY() { return getMin().getY(); }
+    public int getMinX() { return getMin().getX(); }
+
+    public int getMaxY() { return getMax().getY(); }
+    public int getMaxX() { return getMax().getX(); }
+
+    /**
+     * Method to get a {@link List} of columns
+     * (see {@link #column(Number)}).
+     *
+     * @return  The {@link List} of columns.
+     */
+    public List<CoordinateMap<V>> columns() {
+        ArrayList<CoordinateMap<V>> list =
+            new ArrayList<CoordinateMap<V>>(getColumnCount());
+
+        if (getColumnCount() > 0) {
+            for (int x = getMinX(), xN = getMaxX(); x < xN; x += 1) {
+                list.add(column(x));
+            }
+        }
+
+        return list;
+    }
+
+    /**
+     * Method to get a {@link List} of rows (see {@link #row(Number)}).
+     *
+     * @return  The {@link List} of rows.
+     */
+    public List<CoordinateMap<V>> rows() {
+        ArrayList<CoordinateMap<V>> list =
+            new ArrayList<CoordinateMap<V>>(getRowCount());
+
+        if (getRowCount() > 0) {
+            for (int y = getMinY(), yN = getMaxY(); y < yN; y += 1) {
+                list.add(row(y));
+            }
+        }
+
+        return list;
+    }
+
+    /**
+     * Method to get the {@link List} representing the specified column
+     * backed by the {@link CoordinateMap}.
+     *
+     * @param   x               The X-coordinate.
+     *
+     * @return  The {@link CoordinateMap} representing the column.
+     */
+    public CoordinateMap<V> column(Number x) {
+        return subMap(getMinY(), x, getMaxY(), x.intValue() + 1);
+    }
+
+    /**
+     * Method to get the {@link List} representing the specified row backed
+     * by the {@link CoordinateMap}.
+     *
+     * @param   y               The Y-coordinate.
+     *
+     * @return  The {@link CoordinateMap} representing the row.
+     */
+    public CoordinateMap<V> row(Number y) {
+        return subMap(y, getMinX(), y.intValue() + 1, getMaxX());
     }
 
     /**
@@ -63,37 +177,17 @@ public class CoordinateMap<V> extends MapView<Coordinate,V> {
      */
     public CoordinateMap<V> subMap(Number y0, Number x0,
                                    Number yN, Number xN) {
-        return new Backed(y0, x0, yN, xN);
+        return new Sub<V>(this, y0, x0, yN, xN);
     }
 
     /**
-     * Constructor to specify maximum {@code Y} and {@code X} (origin
-     * {@code (0, 0)}).
+     * Method to get {@code this} {@link CoordinateMap} values as a
+     * {@link List}.  Updates made through {@link List#set(int,Object)} will
+     * be made to {@code this} {@link CoordinateMap}.
      *
-     * @param   yN              {@code MAX(y) + 1}
-     * @param   xN              {@code MAX(x) + 1}
+     * @return  The {@link List} of {@link CoordinateMap} values.
      */
-    public CoordinateMap(Number yN, Number xN) { this(0, yN, 0, xN); }
-
-    /**
-     * Method to get the {@link List} representing the specified column
-     * backed by the {@link CoordinateMap}.
-     *
-     * @param   x               The X-coordinate.
-     *
-     * @return  The {@link List} of values.
-     */
-    public List<V> getColumn(Number x) { return new Column(x.intValue()); }
-
-    /**
-     * Method to get the {@link List} representing the specified row backed
-     * by the {@link CoordinateMap}.
-     *
-     * @param   y               The Y-coordinate.
-     *
-     * @return  The {@link List} of values.
-     */
-    public List<V> getRow(Number y) { return new Row(y.intValue()); }
+    public List<V> asList() { return new BackedList(); }
 
     /**
      * See {@link #containsKey(Object)}.
@@ -118,7 +212,7 @@ public class CoordinateMap<V> extends MapView<Coordinate,V> {
     public V get(Number y, Number x) { return get(new Coordinate(y, x)); }
 
     /**
-     * See {@link #put(Coordinate,V)}.
+     * See {@link #put(Object,Object)}.
      *
      * @param   y               The Y-coordinate.
      * @param   x               The X-coordinate.
@@ -131,148 +225,208 @@ public class CoordinateMap<V> extends MapView<Coordinate,V> {
     public V put(Coordinate key, V value) {
         if (min != null) {
             min =
-                new Coordinate(Math.min(key.getY(), min.getY()),
-                               Math.min(key.getX(), min.getX()));
+                new Coordinate(Math.min(key.getY(), getMinY()),
+                               Math.min(key.getX(), getMinX()));
         } else {
             min = key;
         }
 
         if (max != null) {
             max =
-                new Coordinate(Math.max(key.getY() + 1, max.getY()),
-                               Math.max(key.getX() + 1, max.getX()));
+                new Coordinate(Math.max(key.getY() + 1, getMaxY()),
+                               Math.max(key.getX() + 1, getMaxX()));
         } else {
             max = new Coordinate(key.getY() + 1, key.getX() + 1);
         }
 
-        return super.put(key, value);
+        V old = super.put(key, value);
+
+        fireTableCellUpdated(key.getY() - getMinY(), key.getX() - getMinX());
+
+        return old;
     }
 
-    private class Backed extends CoordinateMap<V> {
-        private static final long serialVersionUID = -5583234581295736510L;
+    @Override
+    public V remove(Object key) {
+        V old = super.remove(key);
 
-        private final TreeSet<Coordinate> keySet = new TreeSet<Coordinate>();
+        if (key instanceof Coordinate) {
+            Coordinate coordinate = (Coordinate) key;
 
-        public Backed(Number y0, Number x0, Number yN, Number xN) {
-            super(y0, x0, yN, xN);
+            fireTableCellUpdated(coordinate.getY() - getMinY(),
+                                 coordinate.getX() - getMinX());
+        }
 
-            for (Coordinate key : map().keySet()) {
-                if (key.within(min, max)) {
-                    keySet.add(key);
-                }
-            }
+        return old;
+    }
+
+    @Override
+    public void clear() {
+        super.clear();
+        fireTableDataChanged();
+    }
+
+    @Override
+    public int getRowCount() {
+        return (getMax() != null) ? (getMaxX() - getMinX()) : 0;
+    }
+
+    @Override
+    public int getColumnCount() {
+        return (getMax() != null) ? (getMaxY() - getMinY()) : 0;
+    }
+
+    @Override
+    public String getColumnName(int x) { return null; }
+
+    @Override
+    public Class<?> getColumnClass(int x) { return Object.class; }
+
+    @Override
+    public boolean isCellEditable(int y, int x) { return false; }
+
+    @Override
+    public V getValueAt(int y, int x) {
+        return get(y - getMinY(), x - getMinX());
+    }
+
+    @Override
+    public void setValueAt(Object value, int y, int x) {
+        /*
+         * put(y - getMinY(), x - getMinX(), type.cast(value));
+         */
+        throw new UnsupportedOperationException("setValueAt(Object,int,int)");
+    }
+
+    @Override
+    public void addTableModelListener(TableModelListener listener) {
+        list.add(TableModelListener.class, listener);
+    }
+
+    @Override
+    public void removeTableModelListener(TableModelListener listener) {
+        list.remove(TableModelListener.class, listener);
+    }
+
+    protected TableModelListener[] getTableModelListeners() {
+        return list.getListeners(TableModelListener.class);
+    }
+
+    protected void fireTableDataChanged() {
+        fireTableChanged(new TableModelEvent(this));
+    }
+
+    protected void fireTableStructureChanged() {
+        fireTableChanged(new TableModelEvent(this,
+                                             TableModelEvent.HEADER_ROW));
+    }
+
+    protected void fireTableRowsInserted(int start, int end) {
+        fireTableChanged(new TableModelEvent(this, start, end,
+                                             TableModelEvent.ALL_COLUMNS,
+                                             TableModelEvent.INSERT));
+    }
+
+    protected void fireTableRowsUpdated(int start, int end) {
+        fireTableChanged(new TableModelEvent(this, start, end,
+                                             TableModelEvent.ALL_COLUMNS,
+                                             TableModelEvent.UPDATE));
+    }
+
+    protected void fireTableRowsDeleted(int start, int end) {
+        fireTableChanged(new TableModelEvent(this, start, end,
+                                             TableModelEvent.ALL_COLUMNS,
+                                             TableModelEvent.DELETE));
+    }
+
+    protected void fireTableCellUpdated(int row, int column) {
+        fireTableChanged(new TableModelEvent(this, row, row, column));
+    }
+
+    protected void fireTableChanged(TableModelEvent event) {
+        TableModelListener[] listeners = getTableModelListeners();
+
+        for (int i = listeners.length - 1; i >= 0; i -= 1) {
+            listeners[i].tableChanged(event);
+        }
+    }
+
+    private static class Sub<V> extends CoordinateMap<V> {
+        private static final long serialVersionUID = -8955440257770431164L;
+
+        public Sub(CoordinateMap<V> map,
+                   Number y0, Number x0, Number yN, Number xN) {
+            super(map, y0, x0, yN, xN);
         }
 
         @Override
-        public V get(Object key) {
-            return keySet.contains(key) ? super.get(key) : null;
+        protected CoordinateMap<V> map() {
+            return (CoordinateMap<V>) super.map();
+        }
+
+        @Override
+        public V get(Object key) { return get((Coordinate) key); }
+
+        private V get(Coordinate key) {
+            return key.within(getMin(), getMax()) ? super.get(key) : null;
         }
 
         @Override
         public V put(Coordinate key, V value) {
-            V old = get(key);
+            if (! key.within(getMin(), getMax())) {
+                throw new IllegalArgumentException(key + " is outside "
+                                                   + getMin() + " and "
+                                                   + getMax());
+            }
 
-            keySet.add(key);
-            super.put(key, value);
-
-            return old;
+            return super.put(key, value);
         }
 
         @Override
-        public V remove(Object key) {
-            return keySet.remove(key) ? super.remove(key) : null;
-        }
+        public V remove(Object key) { return remove((Coordinate) key); }
 
-        @Override
-        public void clear() {
-            map().keySet().removeAll(keySet);
-            keySet.clear();
+        private V remove(Coordinate key) {
+            return key.within(getMin(), getMax()) ? super.remove(key) : null;
         }
-
-        @Override
-        public Set<Coordinate> keySet() { return keySet; }
 
         @Override
         public Set<Entry<Coordinate,V>> entrySet() {
-            keySet.retainAll(map().keySet());
             entrySet.clear();
 
             for (Entry<Coordinate,V> entry : map().entrySet()) {
-                if (keySet.contains(entry.getKey())) {
+                if (entry.getKey().within(getMin(), getMax())) {
                     entrySet.add(entry);
                 }
             }
 
-            return this.entrySet;
+            return entrySet;
         }
     }
 
-    private abstract class Line extends AbstractList<V> {
-        protected Line() {
+    private class BackedList extends AbstractList<V> {
+        private ArrayList<Coordinate> list = new ArrayList<Coordinate>();
+
+        public BackedList() {
             super();
+
+            list.addAll(Coordinate.generate(CoordinateMap.this.getMin(),
+                                            CoordinateMap.this.getMax()));
         }
 
         @Override
-        public boolean add(V value) {
-            throw new UnsupportedOperationException();
+        public int size() { return list.size(); }
+
+        @Override
+        public V get(int index) {
+            return CoordinateMap.this.get(list.get(index));
+        }
+
+        @Override
+        public V set(int index, V value) {
+            return CoordinateMap.this.put(list.get(index), value);
         }
 
         @Override
         public void clear() { throw new UnsupportedOperationException(); }
-
-        @Override
-        public boolean addAll(int index, Collection<? extends V> collection) {
-            throw new UnsupportedOperationException();
-        }
-    }
-
-    private class Column extends Line {
-        private final int y0;
-        private final int yN;
-        private final int x;
-
-        public Column(int x) {
-            super();
-
-            this.y0 = min.getY();
-            this.yN = max.getY();
-            this.x = x;
-        }
-
-        @Override
-        public V get(int y) { return CoordinateMap.this.get(y - y0, x); }
-
-        @Override
-        public V set(int y, V value) {
-            return CoordinateMap.this.put(y - y0, x, value);
-        }
-
-        @Override
-        public int size() { return yN - y0; }
-    }
-
-    private class Row extends Line {
-        private final int y;
-        private final int x0;
-        private final int xN;
-
-        public Row(int y) {
-            super();
-
-            this.y = y;
-            this.x0 = min.getX();
-            this.xN = max.getX();
-        }
-
-        @Override
-        public V get(int x) { return CoordinateMap.this.get(y, x - x0); }
-
-        @Override
-        public V set(int x, V value) {
-            return CoordinateMap.this.put(y, x - x0, value);
-        }
-
-        @Override
-        public int size() { return xN - x0; }
     }
 }
