@@ -71,7 +71,7 @@ public abstract class AbstractMatchingTask extends MatchingTask
 
     /**
      * Method to get the {@link AntClassLoader} specified by this
-     * {@link Task}.
+     * {@link org.apache.tools.ant.Task}.
      *
      * @return  The {@link AntClassLoader}.
      */
