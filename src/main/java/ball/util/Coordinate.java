@@ -8,6 +8,8 @@ package ball.util;
 import java.beans.ConstructorProperties;
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 /**
  * X-Y coordinate representation.
@@ -18,7 +20,7 @@ import java.util.Arrays;
  * @version $Revision$
  */
 public class Coordinate implements Comparable<Coordinate>, Serializable {
-    private static final long serialVersionUID = 1158814562434472666L;
+    private static final long serialVersionUID = 4588951577088861983L;
 
     private final int y;
     private final int x;
@@ -41,7 +43,7 @@ public class Coordinate implements Comparable<Coordinate>, Serializable {
 
     /**
      * Method to determine if {@code this} {@link Coordinate} is within the
-     * area described by the argument {@link Coordinates}.
+     * area described by the argument {@link Coordinate}s.
      *
      * @param   min             The minimum {@link Coordinate}.
      * @param   max             The maximum {@link Coordinate}.
@@ -52,9 +54,6 @@ public class Coordinate implements Comparable<Coordinate>, Serializable {
         return ((min.getY() <= getY() && getY() < max.getY())
                 && (min.getX() <= getX() && getX() < max.getX()));
     }
-
-    @Override
-    public String toString() { return Arrays.asList(y, x).toString(); }
 
     @Override
     public int compareTo(Coordinate that) {
@@ -71,5 +70,59 @@ public class Coordinate implements Comparable<Coordinate>, Serializable {
         }
 
         return difference;
+    }
+
+    @Override
+    public boolean equals(Object that) {
+        return ((that instanceof Coordinate)
+                    ? (this.compareTo((Coordinate) that) == 0)
+                    : super.equals(that));
+    }
+
+    @Override
+    public int hashCode() { return Arrays.asList(y, x).hashCode(); }
+
+    @Override
+    public String toString() { return Arrays.asList(y, x).toString(); }
+
+    /**
+     * Static method to return a {@link SortedSet} of {@link Coordinate}s
+     * specified by the parameters.
+     *
+     * @param   min             {@code [y0, x0]}
+     * @param   max             {@code [yN, xN]}
+     *
+     * @return  The {@link SortedSet} of {@link Coordinate}s.
+     */
+    public static SortedSet<Coordinate> generate(Coordinate min,
+                                                 Coordinate max) {
+        return generate(Math.min(min.getY(), max.getY()),
+                        Math.min(min.getX(), max.getX()),
+                        Math.max(min.getY(), max.getY()),
+                        Math.max(min.getX(), max.getX()));
+    }
+
+    /**
+     * Static method to return a {@link SortedSet} of {@link Coordinate}s
+     * specified by the parameters.
+     *
+     * @param   y0              {@code MIN(y)}
+     * @param   x0              {@code MIN(x)}
+     * @param   yN              {@code MAX(y) + 1}
+     * @param   xN              {@code MAX(x) + 1}
+     *
+     * @return  The {@link SortedSet} of {@link Coordinate}s.
+     */
+    public static SortedSet<Coordinate> generate(int y0, int x0,
+                                                 int yN, int xN) {
+        TreeSet<Coordinate> set = new TreeSet<Coordinate>();
+
+        for (int y = y0; y < yN; y += 1) {
+            for (int x = x0; x < xN; x += 1) {
+                set.add(new Coordinate(y, x));
+            }
+        }
+
+        return set;
     }
 }
