@@ -7,6 +7,7 @@ package ball.util;
 
 import java.io.Serializable;
 import java.util.AbstractMap;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -96,7 +97,14 @@ public class MapView<K,V> extends AbstractMap<K,V> implements Serializable {
 
         @Override
         public Iterator<Entry<K,V>> iterator() {
-            return new EntryIterator(super.iterator());
+            ArrayList<Entry<K,V>> list = new ArrayList<Entry<K,V>>();
+            Iterator<Entry<K,V>> iterator = super.iterator();
+
+            while (iterator.hasNext()) {
+                list.add(iterator.next());
+            }
+
+            return new EntryIterator(list.iterator());
         }
     }
 
