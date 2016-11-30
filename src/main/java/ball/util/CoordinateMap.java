@@ -32,6 +32,7 @@ public class CoordinateMap<V> extends MapView<Coordinate,V>
     private Coordinate min = null;
     private Coordinate max = null;
     private EventListenerList list = new EventListenerList();
+    private Class<?> type = Object.class;
 
     /**
      * No-argument constructor.
@@ -280,7 +281,7 @@ public class CoordinateMap<V> extends MapView<Coordinate,V>
     public String getColumnName(int x) { return null; }
 
     @Override
-    public Class<?> getColumnClass(int x) { return Object.class; }
+    public Class<?> getColumnClass(int x) { return type; }
 
     @Override
     public boolean isCellEditable(int y, int x) { return false; }
