@@ -1,3 +1,8 @@
+2016-12-19  Allen D. Ball  <ball@sol.local>
+
+	* src/main/java/ball/util/CoordinateMap.java:
+	Added support for getType() and getColumnClass(int) methods.
+
 2016-11-22  Allen D. Ball  <ball@sol.local>
 
 	* src/main/java/ball/util/MapView.java: Initial writing.
