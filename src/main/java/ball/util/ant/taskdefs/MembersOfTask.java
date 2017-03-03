@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2017 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.taskdefs;
 
@@ -20,17 +20,12 @@ import org.apache.tools.ant.BuildException;
  * @version $Revision$
  */
 @AntTask("members-of")
-public class MembersOfTask extends AbstractClasspathTask {
-    private String type = null;
+public class MembersOfTask extends TypeTask {
 
     /**
      * Sole constructor.
      */
     public MembersOfTask() { super(); }
-
-    @NotNull
-    public String getType() { return type; }
-    public void setType(String type) { this.type = type; }
 
     @Override
     public void execute() throws BuildException {

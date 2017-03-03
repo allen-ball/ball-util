@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2017 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.taskdefs;
 
@@ -23,17 +23,12 @@ import static ball.util.ClassOrder.INHERITANCE;
  * @version $Revision$
  */
 @AntTask("superclasses-of")
-public class SuperclassesOfTask extends AbstractClasspathTask {
-    private String type = null;
+public class SuperclassesOfTask extends TypeTask {
 
     /**
      * Sole constructor.
      */
     public SuperclassesOfTask() { super(); }
-
-    @NotNull
-    public String getType() { return type; }
-    public void setType(String type) { this.type = type; }
 
     @Override
     public void execute() throws BuildException {

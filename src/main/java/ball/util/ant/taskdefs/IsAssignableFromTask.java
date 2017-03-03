@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2017 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.taskdefs;
 
@@ -17,18 +17,13 @@ import org.apache.tools.ant.BuildException;
  * @version $Revision$
  */
 @AntTask("is-assignable-from")
-public class IsAssignableFromTask extends AbstractClasspathTask {
-    private String type = null;
+public class IsAssignableFromTask extends TypeTask {
     private String subtype = null;
 
     /**
      * Sole constructor.
      */
     public IsAssignableFromTask() { super(); }
-
-    @NotNull
-    public String getType() { return type; }
-    public void setType(String type) { this.type = type; }
 
     @NotNull
     public String getSubtype() { return subtype; }

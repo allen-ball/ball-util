@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2009 - 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2017 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.taskdefs;
 
@@ -21,17 +21,12 @@ import static ball.util.StringUtil.NIL;
  * @version $Revision$
  */
 @AntTask("service-list")
-public class ServiceListTask extends AbstractClasspathTask {
-    private String type = null;
+public class ServiceListTask extends TypeTask {
 
     /**
      * Sole constructor.
      */
     public ServiceListTask() { super(); }
-
-    @NotNull
-    public String getType() { return type; }
-    public void setType(String type) { this.type = type; }
 
     @Override
     public void execute() throws BuildException {

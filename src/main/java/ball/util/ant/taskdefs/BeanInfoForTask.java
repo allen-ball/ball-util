@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2017 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.taskdefs;
 
@@ -28,17 +28,12 @@ import static ball.util.StringUtil.NIL;
  * @version $Revision$
  */
 @AntTask("bean-info-for")
-public class BeanInfoForTask extends AbstractClasspathTask {
-    private String type = null;
+public class BeanInfoForTask extends TypeTask {
 
     /**
      * Sole constructor.
      */
     public BeanInfoForTask() { super(); }
-
-    @NotNull
-    public String getType() { return type; }
-    public void setType(String type) { this.type = type; }
 
     @Override
     public void execute() throws BuildException {
