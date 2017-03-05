@@ -13,6 +13,9 @@ import java.beans.BeanDescriptor;
 import java.beans.BeanInfo;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.lang.reflect.TypeVariable;
 import java.util.Arrays;
 import org.apache.tools.ant.BuildException;
@@ -44,8 +47,9 @@ public abstract class TypeTask extends AbstractClasspathTask {
     public void setType(String type) { this.type = type; }
 
     /**
-     * {@link.uri http://ant.apache.org/ Ant} {@link org.apache.tools.ant.Task}
-     * to display {@link BeanInfo} for a specified {@link Class}.
+     * {@link.uri http://ant.apache.org/ Ant}
+     * {@link org.apache.tools.ant.Task} to display {@link BeanInfo}
+     * for a specified {@link Class}.
      *
      * {@bean.info}
      */
@@ -156,8 +160,9 @@ public abstract class TypeTask extends AbstractClasspathTask {
     }
 
     /**
-     * {@link.uri http://ant.apache.org/ Ant} {@link org.apache.tools.ant.Task}
-     * to display superclasses of a specified {@link Class}.
+     * {@link.uri http://ant.apache.org/ Ant}
+     * {@link org.apache.tools.ant.Task} to display superclasses of a
+     * specified {@link Class}.
      *
      * {@bean.info}
      */
@@ -182,7 +187,8 @@ public abstract class TypeTask extends AbstractClasspathTask {
                 Class<?> supertype =
                     Class.forName(getType(), false, getClassLoader());
                 Class<?> subtype =
-                    Class.forName(getSubtype(), false, supertype.getClassLoader());
+                    Class.forName(getSubtype(),
+                                  false, supertype.getClassLoader());
 
                 log(supertype.getName() + " is "
                     + (supertype.isAssignableFrom(subtype) ? "" : "not ")
@@ -197,8 +203,59 @@ public abstract class TypeTask extends AbstractClasspathTask {
     }
 
     /**
-     * {@link.uri http://ant.apache.org/ Ant} {@link org.apache.tools.ant.Task}
-     * to display superclasses of a specified {@link Class}.
+     * {@link.uri http://ant.apache.org/ Ant}
+     * {@link org.apache.tools.ant.Task} to display members of a specified
+     * {@link Class}.
+     *
+     * {@bean.info}
+     */
+    @AntTask("members-of")
+    public class MembersOf extends TypeTask {
+
+        /**
+         * Sole constructor.
+         */
+        public MembersOf() { super(); }
+
+        @Override
+        public void execute() throws BuildException {
+            super.execute();
+
+            try {
+                Class<?> type =
+                    Class.forName(getType(), false, getClassLoader());
+
+                log(String.valueOf(type));
+
+                for (Constructor<?> constructor :
+                         type.getDeclaredConstructors()) {
+                    log(constructor.toGenericString());
+                }
+
+                for (Field field : type.getDeclaredFields()) {
+                    log(field.toGenericString());
+                }
+
+                for (Method method : type.getDeclaredMethods()) {
+                    log(method.toGenericString());
+                }
+
+                for (Class<?> cls : type.getDeclaredClasses()) {
+                    log(cls.toString());
+                }
+            } catch (BuildException exception) {
+                throw exception;
+            } catch (Throwable throwable) {
+                throwable.printStackTrace();
+                throw new BuildException(throwable);
+            }
+        }
+    }
+
+    /**
+     * {@link.uri http://ant.apache.org/ Ant}
+     * {@link org.apache.tools.ant.Task} to display superclasses of a
+     * specified {@link Class}.
      *
      * {@bean.info}
      */
