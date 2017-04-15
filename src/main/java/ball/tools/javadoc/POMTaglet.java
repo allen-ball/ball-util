@@ -117,25 +117,24 @@ public abstract class POMTaglet extends AbstractInlineTaglet {
     }
 
     /**
-     * {@link Taglet} to provide POM "coordinates"
-     * (as a {@code <dependency/>} element) to include this documented
-     * {@link Class} or {@link Package}.
+     * {@link Taglet} to provide POM coordinates as a {@code <dependency/>}
+     * element to include this documented {@link Class} or {@link Package}.
      *
      * <p>For example:</p>
      *
-     * {@pom.coordinates}
+     * {@pom.dependency}
      */
     @ServiceProviderFor({ Taglet.class })
-    @TagletName("pom.coordinates")
-    public static class Coordinates extends POMTaglet {
+    @TagletName("pom.dependency")
+    public static class Dependency extends POMTaglet {
         public static void register(Map<String,Taglet> map) {
-            register(Coordinates.class, map);
+            register(Dependency.class, map);
         }
 
         /**
          * Sole constructor.
          */
-        public Coordinates() { super(); }
+        public Dependency() { super(); }
 
         @Override
         public Content getTagletOutput(Tag tag,

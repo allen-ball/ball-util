@@ -4,6 +4,7 @@
 	Specify Transformer output index width.
 
 	* src/main/java/ball/tools/javadoc/POMTaglet.java:
+	Renamed {@pom.coordinates} to {@pom.dependency}.
 	Implement getModelFor(Tag) method.
 
 2016-12-19  Allen D. Ball  <ball@sol.local>
