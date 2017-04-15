@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2012 - 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2012 - 2017 Allen D. Ball.  All rights reserved.
  */
 package ball.tools.javadoc;
 
@@ -44,6 +44,9 @@ import static javax.xml.transform.OutputKeys.OMIT_XML_DECLARATION;
  * @version $Revision$
  */
 public abstract class AbstractTaglet implements Taglet {
+    private static final String INDENT_AMOUNT =
+        "{http://xml.apache.org/xslt}indent-amount";
+
     private static final String NO = "no";
     private static final String YES = "yes";
 
@@ -116,8 +119,9 @@ public abstract class AbstractTaglet implements Taglet {
                           .newDocument());
 
             transformer = TransformerFactory.newInstance().newTransformer();
-            transformer.setOutputProperty(INDENT, YES);
             transformer.setOutputProperty(OMIT_XML_DECLARATION, YES);
+            transformer.setOutputProperty(INDENT, YES);
+            transformer.setOutputProperty(INDENT_AMOUNT, String.valueOf(2));
         } catch (Exception exception) {
             throw new ExceptionInInitializerError(exception);
         }

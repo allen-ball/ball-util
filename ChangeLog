@@ -1,3 +1,11 @@
+2017-04-15  Allen D. Ball  <ball@sol.local>
+
+	* src/main/java/ball/tools/javadoc/AbstractTaglet.java:
+	Specify Transformer output index width.
+
+	* src/main/java/ball/tools/javadoc/POMTaglet.java:
+	Implement getModelFor(Tag) method.
+
 2016-12-19  Allen D. Ball  <ball@sol.local>
 
 	* src/main/java/ball/util/CoordinateMap.java:

@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2015, 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2015 - 2017 Allen D. Ball.  All rights reserved.
  */
 package ball.tools.javadoc;
 
@@ -14,18 +14,14 @@ import com.sun.tools.doclets.internal.toolkit.Content;
 import com.sun.tools.doclets.internal.toolkit.taglets.Taglet;
 import com.sun.tools.doclets.internal.toolkit.taglets.TagletWriter;
 import java.io.File;
-import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.io.Writer;
 import java.util.Map;
+import java.util.TreeMap;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-/* import org.apache.maven.project.DefaultProjectBuilder; */
-/* import org.apache.maven.project.DefaultProjectBuildingRequest; */
-import org.apache.maven.project.MavenProject;
 import org.apache.maven.model.Model;
-/* import org.apache.maven.project.ProjectBuildingResult; */
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.w3c.dom.Element;
 
@@ -45,6 +41,8 @@ public abstract class POMTaglet extends AbstractInlineTaglet {
     private static final String ARTIFACT_ID = "artifactId";
     private static final String VERSION = "version";
 
+    private static final TreeMap<File,Model> MAP = new TreeMap<File,Model>();
+
     /**
      * Sole constructor.
      */
@@ -61,15 +59,17 @@ public abstract class POMTaglet extends AbstractInlineTaglet {
      */
     protected File getPomFileFor(Tag tag) throws Exception {
         File file = null;
-        String relative = tag.text().trim();
+        String name = tag.text().trim();
 
-        if (! isNil(relative)) {
-            file = new File(tag.position().file().getParentFile(), relative);
+        if (! isNil(name)) {
+            file = new File(tag.position().file().getParentFile(), name);
         } else {
+            name = POM_XML;
+
             File parent = tag.position().file().getParentFile();
 
             while (parent != null) {
-                file = new File(parent, POM_XML);
+                file = new File(parent, name);
 
                 if (file.isFile()) {
                     break;
@@ -82,10 +82,38 @@ public abstract class POMTaglet extends AbstractInlineTaglet {
         }
 
         if (file == null || (! file.isFile())) {
-            throw new FileNotFoundException();
+            throw new FileNotFoundException(name);
         }
 
         return file;
+    }
+
+    /**
+     * Method to locate the POM {@link Model} from a {@link Tag}.
+     *
+     * @param   tag             The {@link Tag}.
+     *
+     * @return  The POM {@link Model}.
+     *
+     * @throws  Exception       If the POM {@link Model} cannot be loaded.
+     */
+    protected Model getModelFor(Tag tag) throws Exception {
+        File file = getPomFileFor(tag);
+        Model model = MAP.get(file);
+
+        if (model == null) {
+            FileReader reader = null;
+
+            try {
+                reader = new FileReader(getPomFileFor(tag));
+                model = new MavenXpp3Reader().read(reader);
+                MAP.put(file, model);
+            } finally {
+                IOUtil.close(reader);
+            }
+        }
+
+        return model;
     }
 
     /**
@@ -115,33 +143,14 @@ public abstract class POMTaglet extends AbstractInlineTaglet {
             setConfiguration(writer.configuration());
 
             Element element = null;
-            InputStream in = null;
 
             try {
-                File pom = getPomFileFor(tag);
+                Model model = getModelFor(tag);
 
-                in = new FileInputStream(pom);
-
-                Model model = new MavenXpp3Reader().read(in, true);
-
-                model.setPomFile(pom);
-
-                MavenProject project = new MavenProject(model);
-
-                project.setParentFile(pom.getParentFile());
-                project.setPomFile(pom);
-                /*
-                 * DefaultProjectBuildingRequest request =
-                 *    new DefaultProjectBuildingRequest();
-                 * ProjectBuildingResult result =
-                 *    new DefaultProjectBuilder()
-                 *    .build(getPomFileFor(tag), request);
-                 * MavenProject project = result.getProject();
-                 */
                 element =
-                    dependency(project.getGroupId(),
-                               project.getArtifactId(),
-                               project.getVersion());
+                    dependency(model.getGroupId(),
+                               model.getArtifactId(),
+                               model.getVersion());
 
                 ReaderWriterDataSource ds =
                     new ReaderWriterDataSource(null, null);
@@ -157,8 +166,6 @@ public abstract class POMTaglet extends AbstractInlineTaglet {
             } catch (Exception exception) {
                 throw new IllegalArgumentException(tag.position().toString(),
                                                    exception);
-            } finally {
-                IOUtil.close(in);
             }
 
             return content(writer, element);
