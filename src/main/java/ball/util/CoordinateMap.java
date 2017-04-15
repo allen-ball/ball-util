@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2016, 2017 Allen D. Ball.  All rights reserved.
  */
 package ball.util;
 
@@ -233,6 +233,8 @@ public class CoordinateMap<V> extends MapView<Coordinate,V>
      *
      * @param   y               The Y-coordinate.
      * @param   x               The X-coordinate.
+     *
+     * @return  The value at the coordinate (may be {@code null}).
      */
     public V get(Number y, Number x) { return get(new Coordinate(y, x)); }
 
@@ -241,6 +243,9 @@ public class CoordinateMap<V> extends MapView<Coordinate,V>
      *
      * @param   y               The Y-coordinate.
      * @param   x               The X-coordinate.
+     * @param   value           The value at the coordinate.
+     *
+     * @return  The previous value at the coordinate.
      */
     public V put(Number y, Number x, V value) {
         return put(new Coordinate(y, x), value);

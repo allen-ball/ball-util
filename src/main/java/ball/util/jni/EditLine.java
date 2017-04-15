@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2010 - 2015 Allen D. Ball.  All rights reserved.
+ * Copyright 2010 - 2017 Allen D. Ball.  All rights reserved.
  */
 package ball.util.jni;
 
@@ -34,12 +34,18 @@ public class EditLine {
     /**
      * GNU readline compatilble method.  See the {@link.man readline(3)}
      * manual page.
+     *
+     * @param   prompt          See the manual page.
+     *
+     * @return  See the manual page.
      */
     public native String readline(String prompt);
 
     /**
      * GNU readline compatilble method.  See the {@link.man readline(3)}
      * manual page.
+     *
+     * @param   line            See the manual page.
      */
     public native void add_history(String line);
 
@@ -50,11 +56,15 @@ public class EditLine {
 
     /**
      * See the {@link.man el_gets(3)} manual page.
+     *
+     * @return  See the manual page.
      */
     protected native String gets();
 
     /**
      * See the {@link.man el_getc(3)} manual page.
+     *
+     * @return  See the manual page.
      */
     protected native int getc();
 
@@ -69,6 +79,8 @@ public class EditLine {
      * See the {@link.man el_parse(3)} manual page.
      *
      * @param   argv            The argument {@code argv}.
+     *
+     * @return  See the manual page.
      */
     protected native int parse(String[] argv);
 
@@ -76,6 +88,8 @@ public class EditLine {
      * See the {@link.man el_source(3)} manual page.
      *
      * @param   file            The {@link File} to source.
+     *
+     * @return  See the manual page.
      */
     protected int source(File file) { return source(file.getAbsolutePath()); }
     private native int source(String path);
