@@ -14,8 +14,8 @@ import com.sun.tools.doclets.internal.toolkit.Content;
 import com.sun.tools.doclets.internal.toolkit.taglets.Taglet;
 import com.sun.tools.doclets.internal.toolkit.taglets.TagletWriter;
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.Writer;
 import java.util.Map;
 import java.util.TreeMap;
@@ -41,7 +41,8 @@ public abstract class POMTaglet extends AbstractInlineTaglet {
     private static final String ARTIFACT_ID = "artifactId";
     private static final String VERSION = "version";
 
-    private static final TreeMap<File,Model> MAP = new TreeMap<File,Model>();
+    private static final TreeMap<File,Model> MODELS =
+        new TreeMap<File,Model>();
 
     /**
      * Sole constructor.
@@ -98,16 +99,19 @@ public abstract class POMTaglet extends AbstractInlineTaglet {
      * @throws  Exception       If the POM {@link Model} cannot be loaded.
      */
     protected Model getModelFor(Tag tag) throws Exception {
-        File file = getPomFileFor(tag);
-        Model model = MAP.get(file);
+        File file = getPomFileFor(tag).getAbsoluteFile();
+        Model model = MODELS.get(file);
 
         if (model == null) {
             FileReader reader = null;
 
             try {
                 reader = new FileReader(getPomFileFor(tag));
+
                 model = new MavenXpp3Reader().read(reader);
-                MAP.put(file, model);
+                model.setPomFile(file);
+
+                MODELS.put(file, model);
             } finally {
                 IOUtil.close(reader);
             }
