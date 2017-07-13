@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2010 - 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2010 - 2017 Allen D. Ball.  All rights reserved.
  */
 package ball.util;
 
@@ -126,6 +126,102 @@ public abstract class ClassUtil {
     }
 
     /**
+     * See {@link Modifier#isInterface(int)}.
+     *
+     * @param   type            The {@link Class} to test.
+     *
+     * @return  {@code true} if the argument is an {@code interface};
+     *          {@code false} otherwise.
+     */
+    public static boolean isInterface(Class<?> type) {
+        return Modifier.isInterface(type.getModifiers());
+    }
+
+    /**
+     * See {@link Modifier#isInterface(int)}.
+     *
+     * @param   member          The {@link Member} to test.
+     *
+     * @return  {@code true} if the argument is an {@code interface};
+     *          {@code false} otherwise.
+     */
+    public static boolean isInterface(Member member) {
+        return Modifier.isInterface(member.getModifiers());
+    }
+
+    /**
+     * See {@link Modifier#isNative(int)}.
+     *
+     * @param   type            The {@link Class} to test.
+     *
+     * @return  {@code true} if the argument is {@code native};
+     *          {@code false} otherwise.
+     */
+    public static boolean isNative(Class<?> type) {
+        return Modifier.isNative(type.getModifiers());
+    }
+
+    /**
+     * See {@link Modifier#isNative(int)}.
+     *
+     * @param   member          The {@link Member} to test.
+     *
+     * @return  {@code true} if the argument is {@code native};
+     *          {@code false} otherwise.
+     */
+    public static boolean isNative(Member member) {
+        return Modifier.isNative(member.getModifiers());
+    }
+
+    /**
+     * See {@link Modifier#isPrivate(int)}.
+     *
+     * @param   type            The {@link Class} to test.
+     *
+     * @return  {@code true} if the argument is {@code private};
+     *          {@code false} otherwise.
+     */
+    public static boolean isPrivate(Class<?> type) {
+        return Modifier.isPrivate(type.getModifiers());
+    }
+
+    /**
+     * See {@link Modifier#isPrivate(int)}.
+     *
+     * @param   member          The {@link Member} to test.
+     *
+     * @return  {@code true} if the argument is {@code private};
+     *          {@code false} otherwise.
+     */
+    public static boolean isPrivate(Member member) {
+        return Modifier.isPrivate(member.getModifiers());
+    }
+
+    /**
+     * See {@link Modifier#isProtected(int)}.
+     *
+     * @param   type            The {@link Class} to test.
+     *
+     * @return  {@code true} if the argument is {@code protected};
+     *          {@code false} otherwise.
+     */
+    public static boolean isProtected(Class<?> type) {
+        return Modifier.isProtected(type.getModifiers());
+    }
+
+    /**
+     * See {@link Modifier#isProtected(int)}.
+     *
+     * @param   member          The {@link Member} to test.
+     *
+     * @return  {@code true} if the argument is {@code protected};
+     *          {@code false} otherwise.
+     */
+    public static boolean isProtected(Member member) {
+        return Modifier.isProtected(member.getModifiers());
+    }
+
+    /**
      * See {@link Modifier#isPublic(int)}.
      *
      * @param   type            The {@link Class} to test.
@@ -174,26 +270,98 @@ public abstract class ClassUtil {
     }
 
     /**
-     * See {@link Modifier#isNative(int)}.
+     * See {@link Modifier#isStrict(int)}.
      *
      * @param   type            The {@link Class} to test.
      *
-     * @return  {@code true} if the argument is {@code native};
+     * @return  {@code true} if the argument is {@code strict};
      *          {@code false} otherwise.
      */
-    public static boolean isNative(Class<?> type) {
-        return Modifier.isNative(type.getModifiers());
+    public static boolean isStrict(Class<?> type) {
+        return Modifier.isStrict(type.getModifiers());
     }
 
     /**
-     * See {@link Modifier#isNative(int)}.
+     * See {@link Modifier#isStrict(int)}.
      *
      * @param   member          The {@link Member} to test.
      *
-     * @return  {@code true} if the argument is {@code native};
+     * @return  {@code true} if the argument is {@code strict};
      *          {@code false} otherwise.
      */
-    public static boolean isNative(Member member) {
-        return Modifier.isNative(member.getModifiers());
+    public static boolean isStrict(Member member) {
+        return Modifier.isStrict(member.getModifiers());
+    }
+
+    /**
+     * See {@link Modifier#isSynchronized(int)}.
+     *
+     * @param   type            The {@link Class} to test.
+     *
+     * @return  {@code true} if the argument is {@code synchronized};
+     *          {@code false} otherwise.
+     */
+    public static boolean isSynchronized(Class<?> type) {
+        return Modifier.isSynchronized(type.getModifiers());
+    }
+
+    /**
+     * See {@link Modifier#isSynchronized(int)}.
+     *
+     * @param   member          The {@link Member} to test.
+     *
+     * @return  {@code true} if the argument is {@code synchronized};
+     *          {@code false} otherwise.
+     */
+    public static boolean isSynchronized(Member member) {
+        return Modifier.isSynchronized(member.getModifiers());
+    }
+
+    /**
+     * See {@link Modifier#isTransient(int)}.
+     *
+     * @param   type            The {@link Class} to test.
+     *
+     * @return  {@code true} if the argument is {@code transient};
+     *          {@code false} otherwise.
+     */
+    public static boolean isTransient(Class<?> type) {
+        return Modifier.isTransient(type.getModifiers());
+    }
+
+    /**
+     * See {@link Modifier#isTransient(int)}.
+     *
+     * @param   member          The {@link Member} to test.
+     *
+     * @return  {@code true} if the argument is {@code transient};
+     *          {@code false} otherwise.
+     */
+    public static boolean isTransient(Member member) {
+        return Modifier.isTransient(member.getModifiers());
+    }
+
+    /**
+     * See {@link Modifier#isVolatile(int)}.
+     *
+     * @param   type            The {@link Class} to test.
+     *
+     * @return  {@code true} if the argument is {@code volaile};
+     *          {@code false} otherwise.
+     */
+    public static boolean isVolatile(Class<?> type) {
+        return Modifier.isVolatile(type.getModifiers());
+    }
+
+    /**
+     * See {@link Modifier#isVolatile(int)}.
+     *
+     * @param   member          The {@link Member} to test.
+     *
+     * @return  {@code true} if the argument is {@code volaile};
+     *          {@code false} otherwise.
+     */
+    public static boolean isVolatile(Member member) {
+        return Modifier.isVolatile(member.getModifiers());
     }
 }
