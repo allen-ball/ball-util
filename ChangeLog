@@ -1,3 +1,8 @@
+2017-07-29  Allen D. Ball  <ball@sol>
+
+	* src/main/java/ball/annotation/processing/AbstractProcessor.java:
+	Added getTargetElementTypesFor() methods.
+
 2017-07-12  Allen D. Ball  <ball@sol.local>
 
 	* src/main/java/ball/util/ClassUtil.java:

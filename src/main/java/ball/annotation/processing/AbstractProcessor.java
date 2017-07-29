@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2012 - 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2012 - 2017 Allen D. Ball.  All rights reserved.
  */
 package ball.annotation.processing;
 
@@ -15,6 +15,8 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.lang.annotation.Annotation;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Target;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.nio.charset.Charset;
@@ -148,6 +150,39 @@ public abstract class AbstractProcessor
     protected void print(Diagnostic.Kind kind,
                          Element element, Throwable throwable) {
         print(kind, element, new ThrowableDataSource(throwable).toString());
+    }
+
+    /**
+     * Method to get an {@link Annotation}'s {@link Target}
+     * {@link ElementType}s.
+     *
+     * @param   annotation      The {@link Annotation}.
+     *
+     * @return  The array of {@link Target} {@link ElementType}s or
+     *          {@code null} if the argument is {@code null} or if none
+     *          specified.
+     */
+    protected ElementType[] getTargetElementTypesFor(Annotation annotation) {
+        return ((annotation != null)
+                    ? getTargetElementTypesFor(annotation.annotationType())
+                    : null);
+    }
+
+    /**
+     * Method to get an {@link Annotation}'s {@link Target}
+     * {@link ElementType}s.
+     *
+     * @param   type            The {@link Annotation#annotationType()}.
+     *
+     * @return  The array of {@link Target} {@link ElementType}s or
+     *          {@code null} if the argument is {@code null} or if none
+     *          specified.
+     */
+    protected ElementType[] getTargetElementTypesFor(Class<? extends Annotation> type) {
+        Target target =
+            (type != null) ? type.getAnnotation(Target.class) : null;
+
+        return (target != null) ? target.value() : null;
     }
 
     /**
