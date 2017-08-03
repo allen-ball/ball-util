@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2013 - 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2013 - 2017 Allen D. Ball.  All rights reserved.
  */
 package ball.tools.javadoc;
 
@@ -12,6 +12,7 @@ import com.sun.tools.doclets.internal.toolkit.Content;
 import com.sun.tools.doclets.internal.toolkit.taglets.Taglet;
 import com.sun.tools.doclets.internal.toolkit.taglets.TagletWriter;
 import java.net.URI;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import org.w3c.dom.Element;
 
@@ -28,6 +29,8 @@ public class LinkURITaglet extends AbstractInlineTaglet {
         register(LinkURITaglet.class, map);
     }
 
+    private static final String SPACES = "[\\p{Space}]+";
+
     /**
      * Sole constructor.
      */
@@ -39,11 +42,33 @@ public class LinkURITaglet extends AbstractInlineTaglet {
         Element element = null;
 
         try {
-            String[] argv = tag.text().trim().split("[\\p{Space}]+", 2);
+            String text = tag.text().trim();
+            String[] argv = text.split(SPACES, 2);
             URI href = new URI(argv[0]);
-            String text = (argv.length > 1) ? argv[1] : null;
+
+            text = (argv.length > 1) ? argv[1] : null;
+
+            LinkedHashMap<String,String> map =
+                new LinkedHashMap<String,String>();
+
+            for (;;) {
+                argv = text.split(SPACES, 2);
+
+                String[] nvp = argv[0].split("=", 2);
+
+                if (argv.length > 1 && nvp.length > 1) {
+                    map.put(nvp[0], nvp[1]);
+                    text = argv[1];
+                } else {
+                    break;
+                }
+            }
 
             element = HTML.a(document, href, text);
+
+            for (Map.Entry<String,String> entry : map.entrySet()) {
+                element.setAttribute(entry.getKey(), entry.getValue());
+            }
         } catch (Exception exception) {
             throw new IllegalArgumentException(tag.position().toString(),
                                                exception);
