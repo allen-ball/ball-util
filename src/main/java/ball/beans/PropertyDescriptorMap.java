@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2010 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2010 - 2017 Allen D. Ball.  All rights reserved.
  */
 package ball.beans;
 
@@ -49,7 +49,8 @@ public class PropertyDescriptorMap
 
         try {
             PropertyDescriptor[] descriptors =
-                Introspector.getBeanInfo(type).getPropertyDescriptors();
+                Introspector.getBeanInfo(type, Object.class)
+                .getPropertyDescriptors();
 
             if (descriptors != null) {
                 for (PropertyDescriptor descriptor : descriptors) {
