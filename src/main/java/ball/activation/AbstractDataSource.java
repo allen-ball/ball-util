@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2009 - 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2017 Allen D. Ball.  All rights reserved.
  */
 package ball.activation;
 
@@ -167,4 +167,7 @@ public abstract class AbstractDataSource implements DataSource {
     public OutputStream getOutputStream() throws IOException {
         throw new UnsupportedOperationException();
     }
+
+    @Override
+    public String toString() { return super.toString(); }
 }
