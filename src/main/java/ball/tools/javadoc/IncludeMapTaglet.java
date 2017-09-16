@@ -8,7 +8,6 @@ package ball.tools.javadoc;
 import ball.annotation.ServiceProviderFor;
 import ball.xml.HTML;
 import com.sun.javadoc.ClassDoc;
-import com.sun.javadoc.Doc;
 import com.sun.javadoc.Tag;
 import com.sun.tools.doclets.internal.toolkit.Content;
 import com.sun.tools.doclets.internal.toolkit.taglets.Taglet;
@@ -46,7 +45,7 @@ public class IncludeMapTaglet extends AbstractInlineTaglet {
         Element element = null;
 
         try {
-            Doc doc = getContainingClassDoc(tag.holder());
+            ClassDoc doc = getContainingClassDoc(tag.holder());
             String[] text = tag.text().trim().split(Pattern.quote("#"), 2);
             Class<?> type = getClassFor(getClassDoc(doc, text[0]));
             Map<?,?> map = (Map<?,?>) type.getField(text[1]).get(null);
@@ -73,7 +72,7 @@ public class IncludeMapTaglet extends AbstractInlineTaglet {
         return content(writer, element);
     }
 
-    private void renderTo(Doc doc, Object object, Node node) {
+    private void renderTo(ClassDoc doc, Object object, Node node) {
         if (object instanceof byte[]) {
             append(node, toString((byte[]) object));
         } else if (object instanceof boolean[]) {

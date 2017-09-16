@@ -361,7 +361,14 @@ public abstract class AbstractTaglet implements Taglet {
             }
 
             path += "./";
-            path += target.qualifiedName().replaceAll("[.]", "/") + ".html";
+
+            if (! isNil(target.containingPackage().name())) {
+                path +=
+                    target.containingPackage().name().replaceAll("[.]", "/")
+                    + "/";
+            }
+
+            path += target.name() + ".html";
 
             href = URI.create(path).normalize();
         } else {
