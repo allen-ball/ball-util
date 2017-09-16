@@ -7,14 +7,20 @@ package ball.tools.javadoc;
 
 import ball.annotation.ServiceProviderFor;
 import ball.xml.HTML;
+import com.sun.javadoc.ClassDoc;
+import com.sun.javadoc.Doc;
 import com.sun.javadoc.Tag;
 import com.sun.tools.doclets.internal.toolkit.Content;
 import com.sun.tools.doclets.internal.toolkit.taglets.Taglet;
 import com.sun.tools.doclets.internal.toolkit.taglets.TagletWriter;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Map;
 import java.util.regex.Pattern;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+
+import static ball.util.StringUtil.NIL;
 
 /**
  * Inline {@link Taglet} to include a {@link Map} value as a table.
@@ -40,10 +46,9 @@ public class IncludeMapTaglet extends AbstractInlineTaglet {
         Element element = null;
 
         try {
+            Doc doc = getContainingClassDoc(tag.holder());
             String[] text = tag.text().trim().split(Pattern.quote("#"), 2);
-            Class<?> type =
-                getClassFor(getClassDoc(getContainingClassDoc(tag.holder()),
-                                        text[0]));
+            Class<?> type = getClassFor(getClassDoc(doc, text[0]));
             Map<?,?> map = (Map<?,?>) type.getField(text[1]).get(null);
 
             Element table = HTML.table(document);
@@ -53,8 +58,10 @@ public class IncludeMapTaglet extends AbstractInlineTaglet {
                     HTML.b(table.getOwnerDocument(), "Value"));
 
             for (Map.Entry<?,?> entry : map.entrySet()) {
-                HTML.tr(table,
-                        toString(entry.getKey()), toString(entry.getValue()));
+                Element tr = HTML.tr(table, NIL, NIL);
+
+                renderTo(doc, entry.getKey(), tr.getFirstChild());
+                renderTo(doc, entry.getValue(), tr.getLastChild());
             }
 
             element = table;
@@ -66,28 +73,51 @@ public class IncludeMapTaglet extends AbstractInlineTaglet {
         return content(writer, element);
     }
 
-    private String toString(Object object) {
-        String string = null;
-
+    private void renderTo(Doc doc, Object object, Node node) {
         if (object instanceof byte[]) {
-            string = toString((byte[]) object);
+            append(node, toString((byte[]) object));
         } else if (object instanceof boolean[]) {
-            string = Arrays.toString((boolean[]) object);
+            append(node, Arrays.toString((boolean[]) object));
         } else if (object instanceof double[]) {
-            string = Arrays.toString((double[]) object);
+            append(node, Arrays.toString((double[]) object));
         } else if (object instanceof float[]) {
-            string = Arrays.toString((float[]) object);
+            append(node, Arrays.toString((float[]) object));
         } else if (object instanceof int[]) {
-            string = Arrays.toString((int[]) object);
+            append(node, Arrays.toString((int[]) object));
         } else if (object instanceof long[]) {
-            string = Arrays.toString((long[]) object);
+            append(node, Arrays.toString((long[]) object));
         } else if (object instanceof Object[]) {
-            string = Arrays.toString((Object[]) object);
-        } else {
-            string = String.valueOf(object);
-        }
+            append(node, "[");
 
-        return string;
+            Object[] array = (Object[]) object;
+
+            for (int i = 0; i < array.length; i += 1) {
+                if (i > 0) {
+                    append(node, ", ");
+                }
+
+                renderTo(doc, array[i], node);
+            }
+
+            append(node, "]");
+        } else if (object instanceof Class<?>) {
+            Object link = getClassDocLink(doc, (Class<?>) object);
+
+            if (link instanceof Node) {
+                node.appendChild((Node) link);
+            } else {
+                append(node, String.valueOf(link));
+            }
+        } else if (object instanceof Collection<?>) {
+            renderTo(doc, ((Collection<?>) object).toArray(new Object[] { }),
+                     node);
+        } else {
+            append(node, String.valueOf(object));
+        }
+    }
+
+    private void append(Node node, String string) {
+        node.appendChild(node.getOwnerDocument().createTextNode(string));
     }
 
     private String toString(byte[] bytes) {

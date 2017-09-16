@@ -1,5 +1,8 @@
 2017-09-15  Allen D. Ball  <ball@sol>
 
+	* src/main/java/ball/tools/javadoc/IncludeMapTaglet.java:
+	Render Class values as javadoc links.
+
 	* src/main/java/ball/xml/HTML.java:
 	Added P member and p(Document,Object...) method.
 
