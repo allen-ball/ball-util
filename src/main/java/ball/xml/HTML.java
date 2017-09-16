@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2013 - 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2013 - 2017 Allen D. Ball.  All rights reserved.
  */
 package ball.xml;
 
@@ -34,6 +34,8 @@ public abstract class HTML {
     public static final String CODE = "code";
     /** {@link #META} = {@value #META} */
     public static final String META = "meta";
+    /** {@link #P} = {@value #P} */
+    public static final String P = "p";
     /** {@link #PRE} = {@value #PRE} */
     public static final String PRE = "pre";
     /** {@link #TABLE} = {@value #TABLE} */
@@ -165,6 +167,28 @@ public abstract class HTML {
         }
 
         return elements;
+    }
+
+    /**
+     * Method to create an HTML {@code <p/>} {@link Element}.
+     *
+     * @param   document        The owner {@link Document}.
+     * @param   values          The value {@link Object}s.
+     *
+     * @return  The HTML {@code <p/>} {@link Element}.
+     */
+    public static Element p(Document document, Object... values) {
+        Element p = element(document, P);
+
+        for (Object value : values) {
+            if (value instanceof Node) {
+                p.appendChild((Node) value);
+            } else {
+                p.appendChild(document.createTextNode(String.valueOf(value)));
+            }
+        }
+
+        return p;
     }
 
     /**
