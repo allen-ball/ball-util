@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2014 - 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2014 - 2017 Allen D. Ball.  All rights reserved.
  */
 package ball.tools.javadoc;
 
