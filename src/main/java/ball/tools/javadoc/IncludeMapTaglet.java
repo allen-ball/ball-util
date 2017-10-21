@@ -107,6 +107,14 @@ public class IncludeMapTaglet extends AbstractInlineTaglet {
             } else {
                 append(node, String.valueOf(link));
             }
+        } else if (object instanceof Enum<?>) {
+            Object link = getEnumDocLink(doc, (Enum<?>) object);
+
+            if (link instanceof Node) {
+                node.appendChild((Node) link);
+            } else {
+                append(node, String.valueOf(link));
+            }
         } else if (object instanceof Collection<?>) {
             renderTo(doc, ((Collection<?>) object).toArray(new Object[] { }),
                      node);

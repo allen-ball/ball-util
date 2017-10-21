@@ -389,6 +389,37 @@ public abstract class AbstractTaglet implements Taglet {
     }
 
     /**
+     * Method to attempt to get a link to a javadoc document describing the
+     * argument {@link Enum} constant.
+     * {@link #setConfiguration(Configuration)} should be called first to
+     * allow external links to be calculated.
+     *
+     * @param   context         The context {@link Doc} for calculating a
+     *                          relative {@link URI}.
+     * @param   constant        The target {@link Enum} constant.
+     *
+     * @return  The {@code <a/>} {@link org.w3c.dom.Element} if the link
+     *          could be calculated; a {@link String} containing the
+     *          {@link Enum} name otherwise.
+     */
+    protected Object getEnumDocLink(Doc context, Enum<?> constant) {
+        Object link = constant.name();
+        ClassDoc target =
+            getClassDoc(context,
+                        constant.getDeclaringClass().getCanonicalName());
+
+        if (target != null) {
+            URI href =
+                getHref(getContainingClassDoc(context), target)
+                .resolve("#" + constant.name());
+
+            link = HTML.a(document, href, constant.name());
+        }
+
+        return link;
+    }
+
+    /**
      * Convenience method to attempt to qualify a class name.
      *
      * @param   context         The context {@link Doc}.

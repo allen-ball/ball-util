@@ -1,3 +1,8 @@
+2017-10-21  Allen D. Ball  <ball@sol>
+
+	* src/main/java/ball/tools/javadoc/AbstractTaglet.java:
+	Added getEnumDocLink(Doc,Enum<?>) method.
+
 2017-09-16  Allen D. Ball  <ball@sol>
 
 	* src/main/java/ball/tools/javadoc/AbstractTaglet.java:
