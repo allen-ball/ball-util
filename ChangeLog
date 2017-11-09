@@ -1,3 +1,8 @@
+2017-11-09  Allen D. Ball  <ball@sol>
+
+	* src/main/resources/ball/annotation/processing/NoopProcessor.properties:
+	Added Spring annotations.
+
 2017-10-21  Allen D. Ball  <ball@sol>
 
 	* src/main/java/ball/tools/javadoc/AbstractTaglet.java:
