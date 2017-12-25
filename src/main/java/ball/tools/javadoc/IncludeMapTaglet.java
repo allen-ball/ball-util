@@ -12,12 +12,9 @@ import com.sun.javadoc.Tag;
 import com.sun.tools.doclets.internal.toolkit.Content;
 import com.sun.tools.doclets.internal.toolkit.taglets.Taglet;
 import com.sun.tools.doclets.internal.toolkit.taglets.TagletWriter;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Map;
 import java.util.regex.Pattern;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 
 import static ball.util.StringUtil.NIL;
 
@@ -29,7 +26,7 @@ import static ball.util.StringUtil.NIL;
  */
 @ServiceProviderFor({ Taglet.class })
 @TagletName("include.map")
-public class IncludeMapTaglet extends AbstractInlineTaglet {
+public class IncludeMapTaglet extends IncludeCollectionTaglet {
     public static void register(Map<String,Taglet> map) {
         register(IncludeMapTaglet.class, map);
     }
@@ -70,78 +67,5 @@ public class IncludeMapTaglet extends AbstractInlineTaglet {
         }
 
         return content(writer, element);
-    }
-
-    private void renderTo(ClassDoc doc, Object object, Node node) {
-        if (object instanceof byte[]) {
-            append(node, toString((byte[]) object));
-        } else if (object instanceof boolean[]) {
-            append(node, Arrays.toString((boolean[]) object));
-        } else if (object instanceof double[]) {
-            append(node, Arrays.toString((double[]) object));
-        } else if (object instanceof float[]) {
-            append(node, Arrays.toString((float[]) object));
-        } else if (object instanceof int[]) {
-            append(node, Arrays.toString((int[]) object));
-        } else if (object instanceof long[]) {
-            append(node, Arrays.toString((long[]) object));
-        } else if (object instanceof Object[]) {
-            append(node, "[");
-
-            Object[] array = (Object[]) object;
-
-            for (int i = 0; i < array.length; i += 1) {
-                if (i > 0) {
-                    append(node, ", ");
-                }
-
-                renderTo(doc, array[i], node);
-            }
-
-            append(node, "]");
-        } else if (object instanceof Class<?>) {
-            Object link = getClassDocLink(doc, (Class<?>) object);
-
-            if (link instanceof Node) {
-                node.appendChild((Node) link);
-            } else {
-                append(node, String.valueOf(link));
-            }
-        } else if (object instanceof Enum<?>) {
-            Object link = getEnumDocLink(doc, (Enum<?>) object);
-
-            if (link instanceof Node) {
-                node.appendChild((Node) link);
-            } else {
-                append(node, String.valueOf(link));
-            }
-        } else if (object instanceof Collection<?>) {
-            renderTo(doc, ((Collection<?>) object).toArray(new Object[] { }),
-                     node);
-        } else {
-            append(node, String.valueOf(object));
-        }
-    }
-
-    private void append(Node node, String string) {
-        node.appendChild(node.getOwnerDocument().createTextNode(string));
-    }
-
-    private String toString(byte[] bytes) {
-        StringBuilder buffer = new StringBuilder();
-
-        buffer.append("[");
-
-        for (int i = 0; i < bytes.length; i += 1) {
-            if (i > 0) {
-                buffer.append(", ");
-            }
-
-            buffer.append(String.format("0x%02X", bytes[i]));
-        }
-
-        buffer.append("]");
-
-        return buffer.toString();
     }
 }
