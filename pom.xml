@@ -21,15 +21,15 @@
   <dependencies verbose="true">
     <dependency>
       <groupId>java</groupId>
-      <artifactId>jdk</artifactId>
+      <artifactId>jre</artifactId>
+      <version>${jre.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>jdk</groupId>
+      <artifactId>rt</artifactId>
       <version>${java.specification.version}</version>
       <scope>system</scope>
       <systemPath>${tools.jar}</systemPath>
-    </dependency>
-    <dependency>
-      <groupId>java</groupId>
-      <artifactId>jre</artifactId>
-      <version>${jre.version}</version>
     </dependency>
     <dependency>
       <groupId>org.apache.ant</groupId>
