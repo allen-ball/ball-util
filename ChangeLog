@@ -2,6 +2,7 @@
 
 	* src/main/resources/ball/annotation/processing/NoopProcessor.properties:
 	Added java.lang and javax.annotation annotations.
+	Added org.springframework.scheduling.annotation annotations.
 
 2017-12-24  Allen D. Ball  <ball@sol.local>
 
