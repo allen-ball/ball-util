@@ -1,3 +1,8 @@
+2018-02-27  Allen D. Ball  <ball@sol.local>
+
+	* src/main/resources/ball/annotation/processing/NoopProcessor.properties:
+	Added java.lang and javax.annotation annotations.
+
 2017-12-24  Allen D. Ball  <ball@sol.local>
 
 	* src/main/java/ball/tools/javadoc/IncludeCollectionTaglet.java:
