@@ -1,3 +1,8 @@
+2018-03-03  Allen D. Ball  <ball@sol.local>
+
+	* src/main/resources/ball/annotation/processing/NoopProcessor.properties:
+	Added org.springframework.boot.autoconfigure.domain annotations.
+
 2018-02-27  Allen D. Ball  <ball@sol.local>
 
 	* src/main/resources/ball/annotation/processing/NoopProcessor.properties:
