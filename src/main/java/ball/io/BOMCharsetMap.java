@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2014 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.io;
 
@@ -14,7 +14,7 @@ import java.util.Map;
 /**
  * Byte order mark to {@link Charset} {@link Map} implementation.
  *
- * {@include.map #INSTANCE}
+ * {@include #INSTANCE}
  *
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
