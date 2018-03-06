@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2015 - 2017 Allen D. Ball.  All rights reserved.
+ * Copyright 2015 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.tools.javadoc;
 
@@ -18,7 +18,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.Writer;
 import java.util.Map;
-import java.util.TreeMap;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import org.apache.maven.model.Model;
@@ -40,9 +39,6 @@ public abstract class POMTaglet extends AbstractInlineTaglet {
     private static final String GROUP_ID = "groupId";
     private static final String ARTIFACT_ID = "artifactId";
     private static final String VERSION = "version";
-
-    private static final TreeMap<File,Model> MODELS =
-        new TreeMap<File,Model>();
 
     /**
      * Sole constructor.
@@ -90,7 +86,7 @@ public abstract class POMTaglet extends AbstractInlineTaglet {
     }
 
     /**
-     * Method to locate the POM {@link Model} from a {@link Tag}.
+     * Method to get the {@link Model} from a {@link Tag}.
      *
      * @param   tag             The {@link Tag}.
      *
@@ -99,22 +95,16 @@ public abstract class POMTaglet extends AbstractInlineTaglet {
      * @throws  Exception       If the POM {@link Model} cannot be loaded.
      */
     protected Model getModelFor(Tag tag) throws Exception {
+        Model model = null;
         File file = getPomFileFor(tag).getAbsoluteFile();
-        Model model = MODELS.get(file);
+        FileReader reader = null;
 
-        if (model == null) {
-            FileReader reader = null;
-
-            try {
-                reader = new FileReader(getPomFileFor(tag));
-
-                model = new MavenXpp3Reader().read(reader);
-                model.setPomFile(file);
-
-                MODELS.put(file, model);
-            } finally {
-                IOUtil.close(reader);
-            }
+        try {
+            reader = new FileReader(file);
+            model = new MavenXpp3Reader().read(reader);
+            model.setPomFile(file);
+        } finally {
+            IOUtil.close(reader);
         }
 
         return model;
