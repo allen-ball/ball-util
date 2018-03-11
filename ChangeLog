@@ -1,7 +1,10 @@
 2018-03-10  Allen D. Ball  <ball@sol.local>
 
-	* src/main/java/ball/tools/javadoc/POMTaglet.java,
-	src/main/java/ball/tools/maven/EmbeddedMaven.java,
+	* src/main/java/ball/tools/javadoc/MavenTaglet.java:
+	Renamed POMTaglet to MavenTaglet; renamed {@pom.dependency} to
+	{@pom.coordinates}.
+
+	* src/main/java/ball/tools/maven/EmbeddedMaven.java,
 	src/main/java/ball/tools/maven/EmbeddedPlexusCore.java:
 	Interim check-in.
 

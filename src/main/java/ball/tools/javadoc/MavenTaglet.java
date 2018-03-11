@@ -8,7 +8,7 @@ package ball.tools.javadoc;
 import ball.activation.ReaderWriterDataSource;
 import ball.annotation.ServiceProviderFor;
 import ball.io.IOUtil;
-import ball.tools.maven.EmbeddedMaven;
+/* import ball.tools.maven.EmbeddedMaven; */
 import ball.xml.HTML;
 import com.sun.javadoc.Tag;
 import com.sun.tools.doclets.internal.toolkit.Content;
@@ -24,7 +24,6 @@ import javax.xml.transform.stream.StreamResult;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.apache.maven.project.MavenProject;
-import org.codehaus.plexus.PlexusContainer;
 import org.w3c.dom.Element;
 
 import static ball.util.StringUtil.isNil;
@@ -36,7 +35,7 @@ import static ball.util.StringUtil.isNil;
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
-public abstract class POMTaglet extends AbstractInlineTaglet {
+public abstract class MavenTaglet extends AbstractInlineTaglet {
     private static final String POM_XML = "pom.xml";
 
     private static final String DEPENDENCY = "dependency";
@@ -44,13 +43,10 @@ public abstract class POMTaglet extends AbstractInlineTaglet {
     private static final String ARTIFACT_ID = "artifactId";
     private static final String VERSION = "version";
 
-    private final ClassLoader loader =
-        Thread.currentThread().getContextClassLoader();
-
     /**
      * Sole constructor.
      */
-    protected POMTaglet() { super(); }
+    protected MavenTaglet() { super(); }
 
     /**
      * Method to locate the POM from a {@link Tag}.
@@ -108,7 +104,7 @@ public abstract class POMTaglet extends AbstractInlineTaglet {
         try {
             model = getProjectFor(file).getModel();
         } catch (Throwable throwable) {
-            throwable.printStackTrace(System.err);
+            /* throwable.printStackTrace(System.err); */
         } finally {
             if (model == null) {
                 FileReader reader = null;
@@ -136,7 +132,7 @@ public abstract class POMTaglet extends AbstractInlineTaglet {
      * @throws  Exception       If the POM {@link Model} cannot be loaded.
      */
     protected MavenProject getProjectFor(File file) throws Exception {
-        return new EmbeddedMaven(file).getProject();
+        return /* new EmbeddedMaven(file).getProject() */ null;
     }
 
     /**
@@ -145,19 +141,19 @@ public abstract class POMTaglet extends AbstractInlineTaglet {
      *
      * <p>For example:</p>
      *
-     * {@pom.dependency}
+     * {@pom.coordinates}
      */
     @ServiceProviderFor({ Taglet.class })
-    @TagletName("pom.dependency")
-    public static class Dependency extends POMTaglet {
+    @TagletName("pom.coordinates")
+    public static class Coordinates extends MavenTaglet {
         public static void register(Map<String,Taglet> map) {
-            register(Dependency.class, map);
+            register(Coordinates.class, map);
         }
 
         /**
          * Sole constructor.
          */
-        public Dependency() { super(); }
+        public Coordinates() { super(); }
 
         @Override
         public Content getTagletOutput(Tag tag,
