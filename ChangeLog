@@ -1,3 +1,8 @@
+2018-03-11  Allen D. Ball  <ball@sol.local>
+
+	* src/main/java/ball/activation/ReaderWriterDataSource.java:
+	Added getPrintStream() method.
+
 2018-03-10  Allen D. Ball  <ball@sol.local>
 
 	* src/main/java/ball/tools/javadoc/MavenTaglet.java:

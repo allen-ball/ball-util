@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2009 - 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.activation;
 
@@ -13,6 +13,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.StringReader;
@@ -165,6 +166,21 @@ public class ReaderWriterDataSource extends FilterDataSource
      */
     public PrintWriter getPrintWriter() throws IOException {
         return new PrintWriter(getWriter(), true);
+    }
+
+    /**
+     * Method to return a new {@link PrintStream} to write to the underlying
+     * {@link OutputStream}.
+     *
+     * @see #getOutputStream()
+     *
+     * @return  A {@link PrintStream} wrapping the
+     *          {@link javax.activation.DataSource} {@link OutputStream}.
+     *
+     * @throws  IOException     If an I/O exception occurs.
+     */
+    public PrintStream getPrintStream() throws IOException {
+        return new PrintStream(getOutputStream(), true, getCharset().name());
     }
 
     /**
