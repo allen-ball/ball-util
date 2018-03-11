@@ -8,7 +8,7 @@ package ball.tools.javadoc;
 import ball.activation.ReaderWriterDataSource;
 import ball.annotation.ServiceProviderFor;
 import ball.io.IOUtil;
-/* import ball.tools.maven.EmbeddedMaven; */
+import ball.tools.maven.EmbeddedMaven;
 import ball.xml.HTML;
 import com.sun.javadoc.Tag;
 import com.sun.tools.doclets.internal.toolkit.Content;
@@ -102,7 +102,11 @@ public abstract class MavenTaglet extends AbstractInlineTaglet {
         File file = getPomFileFor(tag).getAbsoluteFile();
 
         try {
-            model = getProjectFor(file).getModel();
+            MavenProject project = getProjectFor(file);
+
+            if (project != null) {
+                model = project.getModel();
+            }
         } catch (Throwable throwable) {
             /* throwable.printStackTrace(System.err); */
         } finally {
@@ -132,7 +136,7 @@ public abstract class MavenTaglet extends AbstractInlineTaglet {
      * @throws  Exception       If the POM {@link Model} cannot be loaded.
      */
     protected MavenProject getProjectFor(File file) throws Exception {
-        return /* new EmbeddedMaven(file).getProject() */ null;
+        return new EmbeddedMaven(file).getProject();
     }
 
     /**
