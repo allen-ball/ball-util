@@ -6,6 +6,9 @@
 	* src/main/java/ball/activation/ReaderWriterDataSource.java:
 	Added getPrintStream() method.
 
+	* src/main/java/ball/util/PropertiesImpl.java:
+	Added PropertiesImpl(Properties,String) constructor.
+
 2018-03-10  Allen D. Ball  <ball@sol.local>
 
 	* src/main/java/ball/tools/javadoc/MavenTaglet.java:

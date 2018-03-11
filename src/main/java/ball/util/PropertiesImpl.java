@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2010 - 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2010 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.util;
 
@@ -66,6 +66,32 @@ public class PropertiesImpl extends Properties {
 
             try {
                 in = new FileInputStream(file);
+                load(in);
+            } finally {
+                IOUtil.close(in);
+            }
+        }
+    }
+
+    /**
+     * See {@link #PropertiesImpl(Properties)}.
+     *
+     * @param   defaults        The default {@link Properties}.
+     * @param   resource        The name of the {@code resource} to load
+     *                          (may be {@code null}).
+     *
+     * @throws  IOException     If {@code resource} is not null and cannot be
+     *                          read.
+     */
+    public PropertiesImpl(Properties defaults,
+                          String resource) throws IOException {
+        this(defaults);
+
+        if (resource != null) {
+            InputStream in = null;
+
+            try {
+                in = getClass().getResourceAsStream(resource);
                 load(in);
             } finally {
                 IOUtil.close(in);
