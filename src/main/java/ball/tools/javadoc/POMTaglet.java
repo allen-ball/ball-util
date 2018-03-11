@@ -8,6 +8,7 @@ package ball.tools.javadoc;
 import ball.activation.ReaderWriterDataSource;
 import ball.annotation.ServiceProviderFor;
 import ball.io.IOUtil;
+import ball.tools.maven.EmbeddedMaven;
 import ball.xml.HTML;
 import com.sun.javadoc.Tag;
 import com.sun.tools.doclets.internal.toolkit.Content;
@@ -22,12 +23,15 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
+import org.apache.maven.project.MavenProject;
+import org.codehaus.plexus.PlexusContainer;
 import org.w3c.dom.Element;
 
 import static ball.util.StringUtil.isNil;
 
 /**
- * Abstract base class for inline {@link Taglet}s that load the Maven POM.
+ * Abstract base class for inline {@link Taglet}s that load the
+ * {@link org.apache.maven.Maven} POM.
  *
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
@@ -39,6 +43,9 @@ public abstract class POMTaglet extends AbstractInlineTaglet {
     private static final String GROUP_ID = "groupId";
     private static final String ARTIFACT_ID = "artifactId";
     private static final String VERSION = "version";
+
+    private final ClassLoader loader =
+        Thread.currentThread().getContextClassLoader();
 
     /**
      * Sole constructor.
@@ -97,17 +104,39 @@ public abstract class POMTaglet extends AbstractInlineTaglet {
     protected Model getModelFor(Tag tag) throws Exception {
         Model model = null;
         File file = getPomFileFor(tag).getAbsoluteFile();
-        FileReader reader = null;
 
         try {
-            reader = new FileReader(file);
-            model = new MavenXpp3Reader().read(reader);
-            model.setPomFile(file);
+            model = getProjectFor(file).getModel();
+        } catch (Throwable throwable) {
+            throwable.printStackTrace(System.err);
         } finally {
-            IOUtil.close(reader);
+            if (model == null) {
+                FileReader reader = null;
+
+                try {
+                    reader = new FileReader(file);
+                    model = new MavenXpp3Reader().read(reader);
+                    model.setPomFile(file);
+                } finally {
+                    IOUtil.close(reader);
+                }
+            }
         }
 
         return model;
+    }
+
+    /**
+     * Method to load the {@link MavenProject} from a POM {@link File}.
+     *
+     * @param   file            The POM {@link File}.
+     *
+     * @return  The {@link MavenProject}.
+     *
+     * @throws  Exception       If the POM {@link Model} cannot be loaded.
+     */
+    protected MavenProject getProjectFor(File file) throws Exception {
+        return new EmbeddedMaven(file).getProject();
     }
 
     /**

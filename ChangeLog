@@ -1,3 +1,10 @@
+2018-03-10  Allen D. Ball  <ball@sol.local>
+
+	* src/main/java/ball/tools/javadoc/POMTaglet.java,
+	src/main/java/ball/tools/maven/EmbeddedMaven.java,
+	src/main/java/ball/tools/maven/EmbeddedPlexusCore.java:
+	Interim check-in.
+
 2018-03-04  Allen D. Ball  <ball@sol.local>
 
 	* src/main/java/ball/tools/javadoc/IncludeTaglet.java:
