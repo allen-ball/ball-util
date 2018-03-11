@@ -55,8 +55,8 @@ public class EmbeddedMaven {
                 MavenCliImpl cli = new MavenCliImpl();
 
                 cli.doMain(file.getParentFile(), "-B", "help:effective-pom");
-*/
 System.out.println(cli.getOutput());
+*/
             }
         }
 
