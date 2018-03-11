@@ -9,6 +9,7 @@ import ball.activation.ReaderWriterDataSource;
 import ball.annotation.ServiceProviderFor;
 import ball.io.IOUtil;
 import ball.tools.maven.EmbeddedMaven;
+import ball.util.PropertiesImpl;
 import ball.xml.HTML;
 import com.sun.javadoc.Tag;
 import com.sun.tools.doclets.internal.toolkit.Content;
@@ -168,11 +169,21 @@ public abstract class MavenTaglet extends AbstractInlineTaglet {
 
             try {
                 Model model = getModelFor(tag);
+                String groupId = model.getGroupId();
+                String artifactId = model.getArtifactId();
+                String version = model.getVersion();
 
-                element =
-                    dependency(model.getGroupId(),
-                               model.getArtifactId(),
-                               model.getVersion());
+                if (isNil(version)) {
+                    String resource =
+                        "/META-INF/maven/"
+                        + groupId + "/" + artifactId + "/pom.properties";
+                    PropertiesImpl properties =
+                        new PropertiesImpl(null, resource);
+
+                    version = properties.getProperty(VERSION);
+                }
+
+                element = dependency(groupId, artifactId, version);
 
                 ReaderWriterDataSource ds =
                     new ReaderWriterDataSource(null, null);

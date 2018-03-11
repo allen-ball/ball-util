@@ -1,5 +1,9 @@
 2018-03-11  Allen D. Ball  <ball@sol.local>
 
+	* src/main/java/ball/tools/javadoc/MavenTaglet.java:
+	Leverage pom.properties if version can't be determined by parsing
+	project pom.xml.
+
 	* src/main/java/ball/tools/maven/EmbeddedMaven.java:
 	Interim check-in.
 
