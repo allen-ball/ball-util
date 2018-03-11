@@ -1,5 +1,8 @@
 2018-03-11  Allen D. Ball  <ball@sol.local>
 
+	* src/main/java/ball/tools/maven/EmbeddedMaven.java:
+	Interim check-in.
+
 	* src/main/java/ball/activation/ReaderWriterDataSource.java:
 	Added getPrintStream() method.
 
@@ -8,10 +11,6 @@
 	* src/main/java/ball/tools/javadoc/MavenTaglet.java:
 	Renamed POMTaglet to MavenTaglet; renamed {@pom.dependency} to
 	{@pom.coordinates}.
-
-	* src/main/java/ball/tools/maven/EmbeddedMaven.java,
-	src/main/java/ball/tools/maven/EmbeddedPlexusCore.java:
-	Interim check-in.
 
 2018-03-04  Allen D. Ball  <ball@sol.local>
 

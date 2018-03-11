@@ -5,28 +5,20 @@
  */
 package ball.tools.maven;
 
+import java.io.PrintStream;
+import ball.activation.ReaderWriterDataSource;
 import java.io.File;
 import org.apache.maven.Maven;
+import org.apache.maven.cli.CliRequest;
 import org.apache.maven.cli.MavenCli;
-import org.apache.maven.cli.configuration.ConfigurationProcessor;
-import org.apache.maven.cli.event.DefaultEventSpyContext;
-import org.apache.maven.cli.internal.extension.model.CoreExtension;
-import org.apache.maven.eventspy.internal.EventSpyDispatcher;
 import org.apache.maven.execution.DefaultMavenExecutionRequest;
+import org.apache.maven.execution.MavenExecutionRequestPopulationException;
 import org.apache.maven.execution.MavenExecutionRequestPopulator;
 import org.apache.maven.execution.MavenExecutionResult;
-import org.apache.maven.extension.internal.CoreExtensionEntry;
 import org.apache.maven.model.building.ModelProcessor;
 import org.apache.maven.project.MavenProject;
-import org.apache.maven.toolchain.building.ToolchainsBuilder;
-import org.codehaus.plexus.ContainerConfiguration;
-import org.codehaus.plexus.DefaultContainerConfiguration;
-import org.codehaus.plexus.DefaultPlexusContainer;
-import org.codehaus.plexus.PlexusConstants;
 import org.codehaus.plexus.PlexusContainer;
-import org.codehaus.plexus.classworlds.ClassWorld;
-import org.codehaus.plexus.classworlds.realm.ClassRealm;
-import org.sonatype.plexus.components.sec.dispatcher.SecDispatcher;
+import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
 
 /**
  * Embedded {@link Maven} loader.
@@ -34,11 +26,8 @@ import org.sonatype.plexus.components.sec.dispatcher.SecDispatcher;
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
-public class EmbeddedMaven extends EmbeddedPlexusCore {
-    private static final String MAVEN = "maven";
-
-    private ClassRealm realm = null;
-    private PlexusContainer container = null;
+public class EmbeddedMaven {
+    private final File file;
     private MavenProject project = null;
 
     /**
@@ -47,89 +36,11 @@ public class EmbeddedMaven extends EmbeddedPlexusCore {
      * @param   file            The POM {@link File}.
      */
     public EmbeddedMaven(File file) {
-        super();
-
-        System.setProperty("maven.multiModuleProjectDirectory",
-                           file.getParentFile().getAbsolutePath());
-        new MavenCli() {
-            @Override
-            protected void customizeContainer(PlexusContainer container) {
-                try {
-                    Maven maven = container.lookup(Maven.class);
-                    DefaultMavenExecutionRequest request =
-                        new DefaultMavenExecutionRequest();
-
-                    container.lookup(MavenExecutionRequestPopulator.class)
-                        .populateDefaults(request);
-
-                    MavenExecutionResult result = maven.execute(request);
-
-                    EmbeddedMaven.this.project = result.getProject();
-                } catch (Exception exception) {
-                    throw new ExceptionInInitializerError(exception);
-                }
-            }
+        if (file != null) {
+            this.file = file;
+        } else {
+            throw new NullPointerException("file");
         }
-            .doMain(new String[] {
-                    "-B", "dependency:build-classpath"
-                    },
-                    file.getParentFile().getAbsolutePath(),
-                    System.out, System.err);
-    }
-
-    @Override
-    public ClassRealm getClassRealm() {
-        synchronized (this) {
-            if (realm == null) {
-                /*
-                 * If Maven extension or core extensions specified,
-                 *
-                 * realm = getClassWorld().newRealm("maven.ext", null);
-                 *
-                 * and add to the Realm.
-                 */
-                realm = super.getClassRealm();
-            }
-        }
-
-        return realm;
-    }
-
-    /**
-     * Method to get and initialize the Maven container.
-     *
-     * @return  The Maven {@link PlexusContainer}.
-     *
-     * @throws  Exception       If the {@link PlexusContainer} cannot be
-     *                          created and/or initialized.
-     */
-    public PlexusContainer getPlexusContainer() throws Exception {
-        synchronized (this) {
-            if (container == null) {
-                realm = super.getClassRealm();
-
-                ContainerConfiguration configuration =
-                    new DefaultContainerConfiguration()
-                    .setClassWorld(super.getClassWorld())
-                    .setRealm(realm)
-                    .setClassPathScanning(PlexusConstants.SCANNING_INDEX)
-                    .setAutoWiring(true)
-                    .setJSR250Lifecycle(true)
-                    .setName(MAVEN);
-
-                container = new DefaultPlexusContainer(configuration);
-/*
-                EventSpyDispatcher dispatcher =
-                    container.lookup(EventSpyDispatcher.class);
-                DefaultEventSpyContext context = new DefaultEventSpyContext();
-
-                context.getData().put("plexus", container);
-                dispatcher.init(context);
-*/
-            }
-        }
-
-        return container;
     }
 
     /**
@@ -137,5 +48,74 @@ public class EmbeddedMaven extends EmbeddedPlexusCore {
      *
      * @return  The {@link MavenProject}.
      */
-    public MavenProject getProject() { return project; }
+    public MavenProject getProject() {
+        synchronized (this) {
+            if (project == null) {
+/*
+                MavenCliImpl cli = new MavenCliImpl();
+
+                cli.doMain(file.getParentFile(), "-B", "help:effective-pom");
+*/
+System.out.println(cli.getOutput());
+            }
+        }
+
+        return project;
+    }
+
+    private class MavenCliImpl extends MavenCli {
+        private final ReaderWriterDataSource ds =
+            new ReaderWriterDataSource(null, null);
+        private final PrintStream out;
+
+        public MavenCliImpl() {
+            super();
+
+            try {
+                out = ds.getPrintStream();
+            } catch (Exception exception) {
+                throw new ExceptionInInitializerError(exception);
+            }
+        }
+
+        public int doMain(File directory, String... argv) {
+System.out.println(directory);
+            System.setProperty("maven.multiModuleProjectDirectory",
+                               directory.getAbsolutePath());
+
+            return super.doMain(argv,
+                                directory.getAbsolutePath(),
+                                out, out);
+        }
+
+        public String getOutput() { return ds.toString(); }
+
+        @Override
+        protected ModelProcessor createModelProcessor(PlexusContainer container) throws ComponentLookupException {
+System.out.println(String.valueOf("INTERCEPT"));
+            ModelProcessor processor =
+                super.createModelProcessor(container);
+System.out.println(String.valueOf(processor));
+/*
+            Maven maven = container.lookup(Maven.class);
+System.out.println(maven);
+            DefaultMavenExecutionRequest request =
+                new DefaultMavenExecutionRequest();
+
+            try {
+                container
+                    .lookup(MavenExecutionRequestPopulator.class)
+                    .populateDefaults(request);
+            } catch (MavenExecutionRequestPopulationException exception) {
+                throw new ComponentLookupException(exception, null, null);
+            }
+
+            MavenExecutionResult result = maven.execute(request);
+
+            EmbeddedMaven.this.project = result.getProject();
+System.out.println(EmbeddedMaven.this.project);
+*/
+            return processor;
+        }
+    }
 }
