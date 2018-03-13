@@ -4,9 +4,6 @@
 	Leverage pom.properties if version can't be determined by parsing
 	project pom.xml.
 
-	* src/main/java/ball/tools/maven/EmbeddedMaven.java:
-	Interim check-in.
-
 	* src/main/java/ball/activation/ReaderWriterDataSource.java:
 	Added getPrintStream() method.
 
