@@ -5,9 +5,9 @@
  */
 package ball.tools.maven;
 
-import java.io.PrintStream;
 import ball.activation.ReaderWriterDataSource;
 import java.io.File;
+import java.io.PrintStream;
 import org.apache.maven.Maven;
 import org.apache.maven.cli.CliRequest;
 import org.apache.maven.cli.MavenCli;
