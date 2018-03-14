@@ -25,8 +25,8 @@
       <version>${jre.version}</version>
     </dependency>
     <dependency>
-      <groupId>jdk</groupId>
-      <artifactId>rt</artifactId>
+      <groupId>java</groupId>
+      <artifactId>jdk</artifactId>
       <version>${java.specification.version}</version>
       <scope>system</scope>
       <systemPath>${tools.jar}</systemPath>
@@ -42,4 +42,23 @@
       <scope>provided</scope>
     </dependency>
   </dependencies>
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-javadoc-plugin</artifactId>
+          <configuration>
+            <tagletArtifacts combine.self="override">
+              <tagletArtifact>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>${project.artifactId}</artifactId>
+                <version>${project.version}</version>
+              </tagletArtifact>
+            </tagletArtifacts>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
 </project>
