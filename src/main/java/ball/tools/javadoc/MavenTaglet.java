@@ -8,8 +8,8 @@ package ball.tools.javadoc;
 import ball.activation.ReaderWriterDataSource;
 import ball.annotation.ServiceProviderFor;
 import ball.io.IOUtil;
-import ball.tools.maven.EmbeddedMaven;
-import ball.util.PropertiesImpl;
+/* import ball.tools.maven.EmbeddedMaven; */
+import ball.tools.maven.POMProperties;
 import ball.xml.HTML;
 import com.sun.javadoc.Tag;
 import com.sun.tools.doclets.internal.toolkit.Content;
@@ -18,6 +18,7 @@ import com.sun.tools.doclets.internal.toolkit.taglets.TagletWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.Writer;
 import java.util.Map;
 import javax.xml.transform.dom.DOMSource;
@@ -27,6 +28,9 @@ import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.apache.maven.project.MavenProject;
 import org.w3c.dom.Element;
 
+import static ball.tools.maven.POMProperties.ARTIFACT_ID;
+import static ball.tools.maven.POMProperties.GROUP_ID;
+import static ball.tools.maven.POMProperties.VERSION;
 import static ball.util.StringUtil.isNil;
 
 /**
@@ -38,11 +42,7 @@ import static ball.util.StringUtil.isNil;
  */
 public abstract class MavenTaglet extends AbstractInlineTaglet {
     private static final String POM_XML = "pom.xml";
-
     private static final String DEPENDENCY = "dependency";
-    private static final String GROUP_ID = "groupId";
-    private static final String ARTIFACT_ID = "artifactId";
-    private static final String VERSION = "version";
 
     /**
      * Sole constructor.
@@ -137,7 +137,7 @@ public abstract class MavenTaglet extends AbstractInlineTaglet {
      * @throws  Exception       If the POM {@link Model} cannot be loaded.
      */
     protected MavenProject getProjectFor(File file) throws Exception {
-        return new EmbeddedMaven(file).getProject();
+        return null /* new EmbeddedMaven(file).getProject() */;
     }
 
     /**
@@ -174,13 +174,9 @@ public abstract class MavenTaglet extends AbstractInlineTaglet {
                 String version = model.getVersion();
 
                 if (isNil(version)) {
-                    String resource =
-                        "/META-INF/maven/"
-                        + groupId + "/" + artifactId + "/pom.properties";
-                    PropertiesImpl properties =
-                        new PropertiesImpl(null, resource);
-
-                    version = properties.getProperty(VERSION);
+                    version =
+                        new POMProperties(groupId, artifactId)
+                        .getVersion();
                 }
 
                 element = dependency(groupId, artifactId, version);
