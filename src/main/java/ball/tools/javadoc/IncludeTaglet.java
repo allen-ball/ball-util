@@ -23,6 +23,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import static ball.util.StringUtil.NIL;
+import static ball.util.StringUtil.isNil;
 
 /**
  * Inline {@link Taglet} to include a static {@link Class} member or
@@ -54,7 +55,10 @@ public class IncludeTaglet extends AbstractInlineTaglet {
             ClassDoc doc = getContainingClassDoc(tag.holder());
 
             if (text.length > 1) {
-                Class<?> type = getClassFor(getClassDoc(doc, text[0]));
+                Class<?> type =
+                    getClassFor((! isNil(text[0]))
+                                    ? getClassDoc(doc, text[0])
+                                    : doc);
 
                 resource = type.getField(text[1]).get(null);
             } else {
@@ -97,13 +101,15 @@ public class IncludeTaglet extends AbstractInlineTaglet {
                     renderTo(doc, entry.getKey(), tr.getFirstChild());
                     renderTo(doc, entry.getValue(), tr.getLastChild());
                 }
-            } else /* if (resource instanceof InputStream) */ {
+            } else if (resource instanceof InputStream) {
                 ReaderWriterDataSource ds =
                     new ReaderWriterDataSource(null, null);
 
                 IOUtil.copy((InputStream) resource, ds);
 
                 element = HTML.pre(document, ds.toString());
+            } else {
+                element = HTML.pre(document, String.valueOf(resource));
             }
         } catch (Exception exception) {
             throw new IllegalArgumentException(tag.position().toString(),
