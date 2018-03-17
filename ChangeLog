@@ -3,6 +3,9 @@
 	* src/main/java/ball/tools/javadoc/IncludeTaglet.java:
 	Support implicit containing class reference and String resources.
 
+	* src/main/java/ball/tools/maven/POMProperties.java:
+	Initial writing.
+
 2018-03-13  Allen D. Ball  <ball@sol.local>
 
 	* pom.xml: Avoid loading this <taglet/> artifact twice.
