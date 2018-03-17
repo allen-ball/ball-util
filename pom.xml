@@ -18,18 +18,51 @@
   <properties>
     <jre.version>1.6</jre.version>
   </properties>
+  <profiles>
+    <profile>
+      <id>compile</id>
+      <activation><activeByDefault>true</activeByDefault></activation>
+      <dependencies>
+        <dependency>
+          <groupId>com.sun</groupId>
+          <artifactId>tools</artifactId>
+        </dependency>
+      </dependencies>
+    </profile>
+    <profile>
+      <id>javadoc</id>
+      <dependencies>
+        <dependency>
+          <groupId>com.sun</groupId>
+          <artifactId>tools</artifactId>
+        </dependency>
+      </dependencies>
+      <build>
+        <pluginManagement>
+          <plugins>
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-javadoc-plugin</artifactId>
+              <configuration>
+                <tagletArtifacts combine.self="override">
+                  <tagletArtifact>
+                    <groupId>${project.groupId}</groupId>
+                    <artifactId>${project.artifactId}</artifactId>
+                    <version>${project.version}</version>
+                  </tagletArtifact>
+                </tagletArtifacts>
+              </configuration>
+            </plugin>
+          </plugins>
+        </pluginManagement>
+      </build>
+    </profile>
+  </profiles>
   <dependencies verbose="true">
     <dependency>
       <groupId>java</groupId>
       <artifactId>jre</artifactId>
       <version>${jre.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>java</groupId>
-      <artifactId>jdk</artifactId>
-      <version>${java.specification.version}</version>
-      <scope>system</scope>
-      <systemPath>${tools.jar}</systemPath>
     </dependency>
     <dependency>
       <groupId>org.apache.ant</groupId>
@@ -42,23 +75,4 @@
       <scope>provided</scope>
     </dependency>
   </dependencies>
-  <build>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-javadoc-plugin</artifactId>
-          <configuration>
-            <tagletArtifacts combine.self="override">
-              <tagletArtifact>
-                <groupId>${project.groupId}</groupId>
-                <artifactId>${project.artifactId}</artifactId>
-                <version>${project.version}</version>
-              </tagletArtifact>
-            </tagletArtifacts>
-          </configuration>
-        </plugin>
-      </plugins>
-    </pluginManagement>
-  </build>
 </project>
