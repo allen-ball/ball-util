@@ -30,7 +30,7 @@
       </dependencies>
     </profile>
     <profile>
-      <id>javadoc</id>
+      <id>reporting</id>
       <dependencies>
         <dependency>
           <groupId>com.sun</groupId>

@@ -1,5 +1,7 @@
 2018-03-17  Allen D. Ball  <ball@sol.local>
 
+	* pom.xml: Use new profile names defined in parent.
+
 	* src/main/java/ball/tools/javadoc/IncludeTaglet.java:
 	Support implicit containing class reference and String resources.
 
