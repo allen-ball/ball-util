@@ -1,3 +1,8 @@
+2018-03-18  Allen D. Ball  <ball@sol.local>
+
+	* src/main/resources/ball/annotation/processing/NoopProcessor.properties:
+	Added org.springframework.boot.autoconfigure.condition annotations.
+
 2018-03-17  Allen D. Ball  <ball@sol.local>
 
 	* pom.xml: Use new profile names defined in parent.
