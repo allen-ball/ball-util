@@ -20,23 +20,7 @@
   </properties>
   <profiles>
     <profile>
-      <id>compile</id>
-      <activation><activeByDefault>true</activeByDefault></activation>
-      <dependencies>
-        <dependency>
-          <groupId>com.sun</groupId>
-          <artifactId>tools</artifactId>
-        </dependency>
-      </dependencies>
-    </profile>
-    <profile>
       <id>reporting</id>
-      <dependencies>
-        <dependency>
-          <groupId>com.sun</groupId>
-          <artifactId>tools</artifactId>
-        </dependency>
-      </dependencies>
       <build>
         <pluginManagement>
           <plugins>
@@ -65,14 +49,21 @@
       <version>${jre.version}</version>
     </dependency>
     <dependency>
+      <groupId>com.sun</groupId>
+      <artifactId>tools</artifactId>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
       <groupId>org.apache.ant</groupId>
       <artifactId>ant</artifactId>
       <scope>provided</scope>
+      <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-core</artifactId>
       <scope>provided</scope>
+      <optional>true</optional>
     </dependency>
   </dependencies>
 </project>
