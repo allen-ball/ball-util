@@ -20,26 +20,42 @@
   </properties>
   <profiles>
     <profile>
-      <id>reporting</id>
+      <id>javadoc</id>
+      <activation>
+        <file><exists>${basedir}/src/main/javadoc</exists></file>
+      </activation>
       <build>
-        <pluginManagement>
-          <plugins>
-            <plugin>
-              <groupId>org.apache.maven.plugins</groupId>
-              <artifactId>maven-javadoc-plugin</artifactId>
-              <configuration>
-                <tagletArtifacts combine.self="override">
-                  <tagletArtifact>
-                    <groupId>${project.groupId}</groupId>
-                    <artifactId>${project.artifactId}</artifactId>
-                    <version>${project.version}</version>
-                  </tagletArtifact>
-                </tagletArtifacts>
-              </configuration>
-            </plugin>
-          </plugins>
-        </pluginManagement>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <configuration>
+              <tagletpath>${project.build.outputDirectory}:${dependency.runtime.classpath}</tagletpath>
+              <tagletArtifacts combine.self="override"/>
+            </configuration>
+          </plugin>
+        </plugins>
       </build>
+    </profile>
+    <profile>
+      <id>site</id>
+      <reporting>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <configuration>
+              <tagletArtifacts combine.self="override">
+                <tagletArtifact>
+                  <groupId>${project.groupId}</groupId>
+                  <artifactId>${project.artifactId}</artifactId>
+                  <version>${project.version}</version>
+                </tagletArtifact>
+              </tagletArtifacts>
+            </configuration>
+          </plugin>
+        </plugins>
+      </reporting>
     </profile>
   </profiles>
   <dependencies verbose="true">
