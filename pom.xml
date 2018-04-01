@@ -90,20 +90,16 @@
           <artifactId>ball-artifact-maven-plugin</artifactId>
           <executions>
             <execution>
-              <id>attach-shared-libraries</id>
+              <id>attach-shared-library</id>
               <goals>
                 <goal>attach</goal>
               </goals>
               <configuration>
-                <artifacts>
-                  <artifact>
-                    <type>dylib</type>
-                    <classifier>${os.name}-${os.arch}</classifier>
-                    <file>
-                      ${project.build.directory}/lib${project.artifactId}.dylib
-                    </file>
-                  </artifact>
-                </artifacts>
+                <type>dylib</type>
+                <classifier>${os.name}-${os.arch}</classifier>
+                <file>
+                  ${project.build.directory}/lib${project.artifactId}.dylib
+                </file>
               </configuration>
             </execution>
           </executions>
