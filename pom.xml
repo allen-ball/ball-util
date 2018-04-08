@@ -37,26 +37,6 @@
         </plugins>
       </build>
     </profile>
-    <profile>
-      <id>site</id>
-      <reporting>
-        <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-javadoc-plugin</artifactId>
-            <configuration>
-              <tagletArtifacts combine.self="override">
-                <tagletArtifact>
-                  <groupId>${project.groupId}</groupId>
-                  <artifactId>${project.artifactId}</artifactId>
-                  <version>${project.version}</version>
-                </tagletArtifact>
-              </tagletArtifacts>
-            </configuration>
-          </plugin>
-        </plugins>
-      </reporting>
-    </profile>
   </profiles>
   <dependencies verbose="true">
     <dependency>
