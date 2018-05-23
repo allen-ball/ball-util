@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.util;
 
@@ -42,7 +42,9 @@ public abstract class ClassOrder extends Order<Class<?>> {
         }
 
         private String getName(Class<?> type) {
-            return (type != null) ? type.getName() : null;
+            return ((type != null)
+                        ? (type.getCanonicalName() + "/" + type.getName())
+                        : null);
         }
     }
 
