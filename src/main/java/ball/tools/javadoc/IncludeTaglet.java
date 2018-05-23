@@ -149,12 +149,13 @@ public class IncludeTaglet extends AbstractInlineTaglet {
 
             append(node, "]");
         } else if (object instanceof Class<?>) {
-            Object link = getClassDocLink(doc, (Class<?>) object);
+            Class<?> type = (Class<?>) object;
+            Object link = getClassDocLink(doc, type);
 
             if (link instanceof Node) {
                 node.appendChild((Node) link);
             } else {
-                append(node, String.valueOf(link));
+                append(node, type.getCanonicalName());
             }
         } else if (object instanceof Enum<?>) {
             Object link = getEnumDocLink(doc, (Enum<?>) object);
