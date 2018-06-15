@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2016 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.taskdefs;
 
@@ -52,7 +52,8 @@ public abstract class LibtoolTask extends ExecuteOn implements AnnotatedTask {
      */
     protected static final String TARGETFILE = "TARGETFILE";
 
-    private String tag = null;
+    private String libtool = "glibtool";
+    private String tag = "CC";
     private String mode = null;
     private String command = "gcc";
     private boolean shared = true;
@@ -72,6 +73,10 @@ public abstract class LibtoolTask extends ExecuteOn implements AnnotatedTask {
         setType(FILE);
         setVerbose(true);
     }
+
+    @NotNull
+    public String getLibtool() { return libtool; }
+    public void setLibtool(String libtool) { this.libtool = libtool; }
 
     public String getTag() { return tag; }
     public void setTag(String tag) { this.tag = tag; }
@@ -107,7 +112,7 @@ public abstract class LibtoolTask extends ExecuteOn implements AnnotatedTask {
     protected String command() {
         StringBuilder buffer = new StringBuilder();
 
-        buffer.append("libtool");
+        buffer.append(getLibtool());
 
         if (getTag() != null) {
             buffer.append(SPACE).append("--tag=").append(getTag());
