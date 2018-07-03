@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2015 - 2017 Allen D. Ball.  All rights reserved.
+ * Copyright 2015 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.taskdefs;
 
@@ -17,6 +17,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.TypeVariable;
+import java.net.URL;
 import java.util.Arrays;
 import org.apache.tools.ant.BuildException;
 
@@ -54,7 +55,7 @@ public abstract class TypeTask extends AbstractClasspathTask {
      * {@bean.info}
      */
     @AntTask("bean-info-for")
-    public class BeanInfoFor extends TypeTask {
+    public static class BeanInfoFor extends TypeTask {
 
         /**
          * Sole constructor.
@@ -167,7 +168,7 @@ public abstract class TypeTask extends AbstractClasspathTask {
      * {@bean.info}
      */
     @AntTask("is-assignable-from")
-    public class IsAssignableFrom extends TypeTask {
+    public static class IsAssignableFrom extends TypeTask {
         private String subtype = null;
 
         /**
@@ -210,7 +211,7 @@ public abstract class TypeTask extends AbstractClasspathTask {
      * {@bean.info}
      */
     @AntTask("members-of")
-    public class MembersOf extends TypeTask {
+    public static class MembersOf extends TypeTask {
 
         /**
          * Sole constructor.
@@ -254,13 +255,52 @@ public abstract class TypeTask extends AbstractClasspathTask {
 
     /**
      * {@link.uri http://ant.apache.org/ Ant}
+     * {@link org.apache.tools.ant.Task} to display resource path to a
+     * specified {@link Class}.
+     *
+     * {@bean.info}
+     */
+    @AntTask("resource-path-to")
+    public static class ResourcePathTo extends TypeTask {
+
+        /**
+         * Sole constructor.
+         */
+        public ResourcePathTo() { super(); }
+
+        @Override
+        public void execute() throws BuildException {
+            super.execute();
+
+            try {
+                Class<?> type =
+                    Class.forName(getType(), false, getClassLoader());
+
+                log(String.valueOf(type));
+
+                URL url =
+                    type.getClass()
+                    .getResource(type.getSimpleName() + ".class");
+
+                log(String.valueOf(url));
+            } catch (BuildException exception) {
+                throw exception;
+            } catch (Throwable throwable) {
+                throwable.printStackTrace();
+                throw new BuildException(throwable);
+            }
+        }
+    }
+
+    /**
+     * {@link.uri http://ant.apache.org/ Ant}
      * {@link org.apache.tools.ant.Task} to display superclasses of a
      * specified {@link Class}.
      *
      * {@bean.info}
      */
     @AntTask("superclasses-of")
-    public class SuperclassesOf extends TypeTask {
+    public static class SuperclassesOf extends TypeTask {
 
         /**
          * Sole constructor.

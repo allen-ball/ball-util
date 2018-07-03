@@ -257,6 +257,14 @@
     <members-of classpathref="build.classpath" type="${type}"/>
   </target>
 
+  <target name="resource-path-to"
+          description="--> Invokes &lt;resource-path-to/&gt; task."
+          depends="jar-classes">
+    <taskdef classpathref="build.classpath"
+             resource="ball/util/ant/defaults.properties"/>
+    <resource-path-to classpathref="build.classpath" type="${type}"/>
+  </target>
+
   <target name="network-interfaces"
           description="--> Invokes &lt;network-interfaces/&gt; task."
           depends="jar-classes">
