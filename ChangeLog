@@ -1,3 +1,8 @@
+2018-07-02  Allen D. Ball  <ball@sol.local>
+
+	* src/main/java/ball/util/ant/taskdefs/compilers/SystemJavaCompilerAdapter.java:
+	Do not change <javac/> task attributes.
+
 2018-06-15  Allen D. Ball  <ball@sol.local>
 
 	* src/main/java/ball/util/ant/taskdefs/LibtoolTask.java:

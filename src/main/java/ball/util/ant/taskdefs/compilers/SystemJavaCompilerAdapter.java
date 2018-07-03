@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2011 - 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2011 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.taskdefs.compilers;
 
@@ -61,7 +61,6 @@ public class SystemJavaCompilerAdapter implements CompilerAdapter,
         this.javac = javac;
 
         javac.add(this);
-        javac.setCompiler("modern");
     }
 
     @Override
