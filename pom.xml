@@ -5,16 +5,17 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
                              http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
+  <name>Utilities</name>
+  <groupId>ball</groupId>
+  <artifactId>ball-util</artifactId>
+  <version>1.0</version>
+  <packaging>jar</packaging>
   <parent>
     <groupId>ball</groupId>
     <artifactId>parent</artifactId>
     <version>1.0</version>
     <relativePath>../ball/parent/pom.xml</relativePath>
   </parent>
-  <groupId>ball</groupId>
-  <artifactId>ball-util</artifactId>
-  <name>Utilities</name>
-  <packaging>jar</packaging>
   <properties>
     <jre.version>1.6</jre.version>
   </properties>
