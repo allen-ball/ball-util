@@ -43,43 +43,6 @@
     </jni-classes>
   </target>
 
-  <target name="jnilib"
-          description="--> Compile JNI library."
-          depends="jnilib-objects" if="jni.classes">
-    <taskdef classpathref="build.classpath"
-             resource="ball/util/ant/defaults.properties"/>
-    <jnilib-load libname="uuid" property="link.libuuid"/>
-    <jnilib-file-name-for libname="${pom.artifactId}" property="jnilib"/>
-    <libtool-link dest="${target.dir}">
-      <link if="use.editline">edit</link>
-      <link unless="use.editline">readline</link>
-      <link unless="use.editline">termcap</link>
-      <link if="link.libuuid">uuid</link>
-      <object>/usr/lib64/libuuid.so</object>
-      <object>/usr/lib/libuuid.so</object>
-      <fileset dir="${target.objects.dir}" includes="**/*.lo"/>
-      <mapper type="glob" from="*.lo" to="${jnilib}"/>
-    </libtool-link>
-  </target>
-
-  <target name="jnilib-objects"
-          description="--> Compile JNI objects."
-          depends="jnilib-headers" if="jni.classes">
-    <mkdir dir="${target.objects.dir}"/>
-    <available property="use.editline" file="/usr/include/histedit.h"/>
-    <taskdef classpathref="build.classpath"
-             resource="ball/util/ant/defaults.properties"/>
-    <libtool-compile dest="${target.objects.dir}">
-      <option>-g</option>
-      <include>${java.home}/../include</include>
-      <include>${java.home}/../include/darwin</include>
-      <include>${target.headers.dir}</include>
-      <define name="USE_EDITLINE" if="use.editline"/>
-      <fileset dir="${src.dir}/main/c" includes="*.c"/>
-      <mapper type="glob" from="*.c" to="*.lo"/>
-    </libtool-compile>
-  </target>
-
   <target name="bean-info-for"
           description="--> Invokes &lt;bean-info-for/&gt; task."
           depends="jar-classes">
@@ -190,49 +153,6 @@
     </jni-classes>
   </target>
 
-  <target name="jnilib-file-name-for"
-          description="--> Invokes &lt;jnilib-file-name-for/&gt; task."
-          depends="jar-classes">
-    <taskdef classpathref="build.classpath"
-             resource="ball/util/ant/defaults.properties"/>
-    <jnilib-file-name-for libname="${libname}"/>
-  </target>
-
-  <target name="jnilib-load"
-          description="--> Invokes &lt;jnilib-load/&gt; task."
-          depends="jar-classes">
-    <taskdef classpathref="build.classpath"
-             resource="ball/util/ant/defaults.properties"/>
-    <jnilib-load libname="${libname}"/>
-  </target>
-
-  <target name="jnilib-prefix"
-          description="--> Invokes &lt;jnilib-prefix/&gt; task."
-          depends="jar-classes">
-    <taskdef classpathref="build.classpath"
-             resource="ball/util/ant/defaults.properties"/>
-    <jnilib-prefix/>
-  </target>
-
-  <target name="jnilib-suffix"
-          description="--> Invokes &lt;jnilib-suffix/&gt; task."
-          depends="jar-classes">
-    <taskdef classpathref="build.classpath"
-             resource="ball/util/ant/defaults.properties"/>
-    <jnilib-suffix/>
-  </target>
-
-  <target name="link"
-          description="--> Invokes &lt;link/&gt; task."
-          depends="jar-classes">
-    <mkdir dir="${target.dir}/links"/>
-    <taskdef classpathref="build.classpath"
-             resource="ball/util/ant/defaults.properties"/>
-    <link symbolic="true" relative="true" todir="${target.dir}/links">
-      <fileset dir="${target.classes.dir}"/>
-    </link>
-  </target>
-
   <target name="locale-list"
           description="--> Invokes &lt;locale-list/&gt; task."
           depends="jar-classes">
@@ -273,14 +193,6 @@
     <network-interfaces/>
   </target>
 
-  <target name="opendir"
-          description="--> Invokes &lt;opendir/&gt; task."
-          depends="jar-classes">
-    <taskdef classpathref="build.classpath"
-             resource="ball/util/ant/defaults.properties"/>
-    <opendir file="."/>
-  </target>
-
   <target name="package-list"
           description="--> Invokes &lt;package-list/&gt; task."
           depends="jar-classes">
@@ -310,14 +222,6 @@
     <permutations-of classpathref="build.classpath" type="${type}">
       <argument type="${argument.type}" value="${argument.value}"/>
     </permutations-of>
-  </target>
-
-  <target name="readlink"
-          description="--> Invokes &lt;readlink/&gt; task."
-          depends="jar-classes">
-    <taskdef classpathref="build.classpath"
-             resource="ball/util/ant/defaults.properties"/>
-    <readlink basedir="${target.dir}"/>
   </target>
 
   <target name="resource-list"

@@ -1,13 +1,14 @@
 /*
  * $Id$
  *
- * Copyright 2011 - 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2011 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.util;
 
-import ball.util.JNILib;
 import java.nio.ByteBuffer;
 import java.util.UUID;
+import org.fusesource.hawtjni.runtime.JniClass;
+import org.fusesource.hawtjni.runtime.Library;
 
 /**
  * {@link UUID} {@link Factory} implementation.  Provides interfaces to
@@ -17,10 +18,18 @@ import java.util.UUID;
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
+@JniClass
 public class UUIDFactory extends Factory<UUID> {
     private static final long serialVersionUID = 2636388251268998745L;
 
-    static { JNILib.loadFor(UUIDFactory.class); }
+    private static final Library LIBRARY =
+        new Library("ball-util", UUIDFactory.class);
+
+    static { LIBRARY.load(); }
+
+    public static native void uuid_generate(byte[] bytes);
+    public static native void uuid_generate_random(byte[] bytes);
+    public static native void uuid_generate_time(byte[] bytes);
 
     private static final UUIDFactory DEFAULT = new UUIDFactory();
 
@@ -60,8 +69,6 @@ public class UUIDFactory extends Factory<UUID> {
         return new UUID(msb, lsb);
     }
 
-    private static native void uuid_generate(byte[] bytes);
-
     /**
      * Method to generate a new {@link UUID} with the
      * {@code uuid_generate_random(3)} function.
@@ -76,8 +83,6 @@ public class UUIDFactory extends Factory<UUID> {
         return toUUID(bytes);
     }
 
-    private static native void uuid_generate_random(byte[] bytes);
-
     /**
      * Method to generate a new {@link UUID} with the
      * {@code uuid_generate_time(3)} function.
@@ -91,6 +96,4 @@ public class UUIDFactory extends Factory<UUID> {
 
         return toUUID(bytes);
     }
-
-    private static native void uuid_generate_time(byte[] bytes);
 }

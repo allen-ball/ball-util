@@ -3,12 +3,6 @@
 	* src/main/java/ball/util/ant/taskdefs/TypeTask.java:
 	Added <resource-path-to/> Ant Task and target.
 
-2018-06-15  Allen D. Ball  <ball@sol.local>
-
-	* src/main/java/ball/util/ant/taskdefs/LibtoolTask.java:
-	[Quietly] Set defaults for `libtool' and `tag' (to "glibtool" and
-	"CC", respectively) to work with Homebrew-compiled libtool.
-
 2018-04-01  Allen D. Ball  <ball@sol.local>
 
 	* src/main/java/ball/util/ant/taskdefs/AnnotatedTask.java:
@@ -204,20 +198,6 @@
 
 	* src/main/java/ball/tools/javadoc/:
 	Support JDK8 javadoc.
-
-2016-05-01  Allen D. Ball  <ball@sol.local>
-
-	* src/main/java/ball/util/ant/taskdefs/JNILibTask.java:
-	Added <jnilib-file-name-for/> and <jnilib-load/> Tasks.
-
-	* src/main/java/ball/util/ant/taskdefs/LibtoolTask.java:
-	Initial writing: Implements <libtool-compile/> and <libtool-link/>
-	Ant Tasks.
-
-2016-04-30  Allen D. Ball  <ball@sol.local>
-
-	* src/main/java/ball/util/JNILib.java:
-	Added PREFIX and SUFFIX members.
 
 2016-04-24  Allen D. Ball  <ball@sol.local>
 
@@ -965,12 +945,6 @@
 	src/main/java/iprotium/tools/javadoc/LinkRFCTaglet.java:
 	Initial writing.
 
-2012-01-01  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/c/iprotium_util_jni_EditLine.c:
-	Use common struct rl_t for both editline and readline
-	implementations.
-
 2011-07-09  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* src/main/java/iprotium/lang/java/Punctuation.java:
@@ -1079,27 +1053,13 @@
 
 	* Added <inet-addresses-for/> build target and Ant Task.
 
-2010-12-26  Allen D. Ball  <ball@mercury.local>
-
-	* src/main/java/iprotium/util/jni/EditLine.java:
-	Added readline(String) and add_history(String) methods.
-	Fallback to GNU Readline if EditLine is not available.
-
 2010-12-23  Allen D. Ball  <ball@mercury.local>
 
 	* src/main/java/iprotium/util/Parser.java: Initial writing.
 
 2010-12-21  Allen D. Ball  <ball@mercury.local>
 
-	* src/main/java/iprotium/util/jni/POSIX.java,
-	src/main/java/iprotium/util/jni/DIR.java:
-	Moved closedir(), readdir(), and rewinddir() native methods to DIR.
-
 	* Added <run/> build target and Ant Task.
-
-2010-12-20  Allen D. Ball  <ball@mercury.local>
-
-	* src/main/java/iprotium/util/jni/EditLine.java: Initial writing.
 
 2010-12-07  Allen D. Ball  <ball@10-0-1-2.lan>
 
@@ -1400,14 +1360,6 @@
 	src/main/java/iprotium/io/AbstractFilenameFilter.java:
 	Initial writing.
 
-2009-10-25  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* Added <opendir/> build target and Ant Task.
-
-	* src/main/java/iprotium/util/jni/POSIX.java:
-	Added opendir(File), closedir(DIR), readdir(DIR), and
-	rewinddir(DIR) methods.
-
 2009-10-24  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* pom.xml: Changed <groupId/> to "iprotium".
@@ -1481,14 +1433,6 @@
 
 	* Added <lint/> target and Ant Task.
 
-2009-04-28  Allen D. Ball  <ball@10-0-1-4.lan>
-
-	* Added <readlink/> build target and Ant Task.
-
-	* src/main/java/iprotium/util/jni/POSIX.java,
-	src/main/c/iprotium_util_jni_POSIX.c:
-	Added readlink(File) method.
-
 2009-03-30  Allen D. Ball  <ball@10-0-1-4.lan>
 
 	* src/main/java/iprotium/activation/ReaderWriterDataSource.java:
@@ -1526,13 +1470,6 @@
 2009-03-27  Allen D. Ball  <ball@10-0-1-4.lan>
 
 	* Added iprotium.activation package.
-
-2009-03-25  Allen D. Ball  <ball@10-0-1-4.lan>
-
-	* Added <jnilib-prefix/> and <jnilib-suffix/> build targets and
-	Ant Tasks.
-
-	* Added <link/> build target and Ant Task.
 
 2009-03-21  Allen D. Ball  <ball@10-0-1-4.lan>
 
@@ -1612,16 +1549,9 @@
 
 2008-11-03  Allen D. Ball  <ball@10-0-1-4.lan>
 
-	* Added iprotium.util.jni package.
-
 	* Added <list-resources/> build target and Ant Task.
 
 	* src/main/java/iprotium/util/MissingPropertyException.java:
-	Initial writing.
-
-	* src/main/java/iprotium/util/jni/POSIX.java,
-	src/main/resources/iprotium/util/jni/POSIX.properties,
-	src/main/c/iprotium_util_jni_POSIX.c:
 	Initial writing.
 
 2008-11-01  Allen D. Ball  <ball@10-0-1-4.lan>
