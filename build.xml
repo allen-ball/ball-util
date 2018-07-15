@@ -72,7 +72,7 @@
     <libtool-compile dest="${target.objects.dir}">
       <option>-g</option>
       <include>${java.home}/../include</include>
-      <include>${java.home}/../include/${env.OSTYPE}</include>
+      <include>${java.home}/../include/darwin</include>
       <include>${target.headers.dir}</include>
       <define name="USE_EDITLINE" if="use.editline"/>
       <fileset dir="${src.dir}/main/c" includes="*.c"/>

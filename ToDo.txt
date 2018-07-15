@@ -1,5 +1,7 @@
 $Id$
 
+* build.xml: Remove magic "darwin" from <libtool-compile/>.
+
 * CoordinateMap: Calculate getColumnClass(int) (type member) by determining
   parameter V through reflection.
 
