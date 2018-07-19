@@ -22,10 +22,7 @@ import org.fusesource.hawtjni.runtime.Library;
 public class UUIDFactory extends Factory<UUID> {
     private static final long serialVersionUID = 2636388251268998745L;
 
-    private static final Library LIBRARY =
-        new Library("ball-util", UUIDFactory.class);
-
-    static { LIBRARY.load(); }
+    static { new Library("ball-util", UUIDFactory.class).load(); }
 
     public static native void uuid_generate(byte[] bytes);
     public static native void uuid_generate_random(byte[] bytes);
