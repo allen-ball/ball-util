@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2015, 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2015 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.taskdefs;
 
@@ -73,8 +73,10 @@ public class MainTask extends TypeTask {
                 System.setSecurityManager(new NoExitSecurityManagerImpl());
 
                 try {
-                    method.invoke(null, (Object) array);
-                    log("return without call to System.exit(int)");
+                    Object object = method.invoke(null, (Object) array);
+
+                    log("return " + String.valueOf(object)
+                        + " without call to System.exit(int)");
                 } catch (InvocationTargetException exception) {
                     Throwable cause = exception.getCause();
 
