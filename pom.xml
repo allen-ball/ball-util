@@ -41,7 +41,7 @@
   </profiles>
   <dependencies verbose="true">
     <dependency>
-      <groupId>com.sun</groupId>
+      <groupId>jdk</groupId>
       <artifactId>tools</artifactId>
       <optional>true</optional>
     </dependency>
