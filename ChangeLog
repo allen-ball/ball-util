@@ -1,3 +1,8 @@
+2018-08-20  Allen D. Ball  <ball@sol.local>
+
+	* src/main/java/ball/util/ant/types/TypedAttributeType.java:
+	Initial check-in (previously overlooked).
+
 2018-07-31  Allen D. Ball  <ball@sol.local>
 
 	* pom.xml: Released version 1.0.0.
