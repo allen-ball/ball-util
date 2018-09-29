@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2013, 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2013 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.annotation.processing;
 
@@ -11,6 +11,7 @@ import javax.annotation.processing.Processor;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
+import lombok.ToString;
 
 import static javax.lang.model.element.ElementKind.CLASS;
 import static javax.lang.model.element.Modifier.ABSTRACT;
@@ -55,14 +56,17 @@ public class ObjectToStringProcessor extends AbstractNoAnnotationProcessor {
     @Override
     protected void process(Element element) {
         TypeElement type = (TypeElement) element;
-        ExecutableElement method = implementationOf(METHOD, type);
 
-        if (method == null || METHOD.equals(method)) {
-            print(WARNING,
-                  type,
-                  type.getKind() + " does not override "
-                  + METHOD.getEnclosingElement().getSimpleName()
-                  + DOT + METHOD.toString());
+        if (type.getAnnotation(ToString.class) == null) {
+            ExecutableElement method = implementationOf(METHOD, type);
+
+            if (method == null || METHOD.equals(method)) {
+                print(WARNING,
+                      type,
+                      type.getKind() + " does not override "
+                      + METHOD.getEnclosingElement().getSimpleName()
+                      + DOT + METHOD.toString());
+            }
         }
     }
 }
