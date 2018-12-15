@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.util;
 
@@ -18,7 +18,7 @@ import java.util.Comparator;
 public class ArrayOrder<T> extends Order<T[]> {
     private static final long serialVersionUID = -490553470060610287L;
 
-    private final Comparator<? super T> comparator;
+    /** @serial */ private final Comparator<? super T> comparator;
 
     /**
      * Sole constructor.

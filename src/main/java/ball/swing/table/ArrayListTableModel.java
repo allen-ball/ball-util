@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2009 - 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.swing.table;
 
@@ -20,7 +20,7 @@ import java.util.Collection;
 public abstract class ArrayListTableModel<R> extends AbstractTableModelImpl {
     private static final long serialVersionUID = -7927458440773401575L;
 
-    private final ArrayList<R> list = new ArrayList<R>();
+    /** @serial */ private final ArrayList<R> list = new ArrayList<R>();
 
     /**
      * @see AbstractTableModelImpl#AbstractTableModelImpl(String...)

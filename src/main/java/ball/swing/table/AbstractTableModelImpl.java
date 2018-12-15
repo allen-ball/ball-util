@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2014 - 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2014 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.swing.table;
 
@@ -22,8 +22,8 @@ public abstract class AbstractTableModelImpl extends AbstractTableModel
                                              implements TableModelListener {
     private static final long serialVersionUID = -4459832803497493630L;
 
-    private String[] names = new String[] { };
-    private Class<?>[] types = new Class<?>[] { };
+    /** @serial */ private String[] names = new String[] { };
+    /** @serial */ private Class<?>[] types = new Class<?>[] { };
 
     /**
      * Construct a {@link javax.swing.table.TableModel} with the specified

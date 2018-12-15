@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2013 - 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2013 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.annotation.processing;
 
@@ -283,7 +283,7 @@ public class AntTaskProcessor extends AbstractAnnotationProcessor
     public static class AntLibXML extends TreeMap<String,String> {
         private static final long serialVersionUID = 2430157873343229512L;
 
-        private final String path;
+        /** @serial */ private final String path;
 
         private AntLibXML(String pkg, ResourceMap map) {
             this(asPath(pkg) + SLASH + ANTLIB_XML);

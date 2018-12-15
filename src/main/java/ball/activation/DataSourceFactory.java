@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2013 - 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2013 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.activation;
 
@@ -78,6 +78,7 @@ public abstract class DataSourceFactory extends Factory<DataSource> {
     public static class DEFAULT extends DataSourceFactory {
         private static final long serialVersionUID = -1598830549426218182L;
 
+        /** @serial */
         private TreeMap<String,DataSourceFactory> map =
             new TreeMap<String,DataSourceFactory>(String.CASE_INSENSITIVE_ORDER);
 

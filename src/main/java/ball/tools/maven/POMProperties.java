@@ -44,8 +44,8 @@ public class POMProperties extends PropertiesImpl {
     public static final String RESOURCE =
         String.format("/META-INF/maven/%%s/%%s/%s", POM_PROPERTIES);
 
-    private final String groupId;
-    private final String artifactId;
+    /** @serial */ private final String groupId;
+    /** @serial */ private final String artifactId;
 
     /**
      * Constructor to load default resource at {@link #RESOURCE}.

@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2014 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.swing;
 
@@ -23,10 +23,10 @@ import javax.swing.JFrame;
 public class ClosedFutureJFrame extends JFrame {
     private static final long serialVersionUID = 5053218780099876938L;
 
-    private final Object lock = new Object();
-    private boolean isStarted = false;
-    private boolean isCancelled = false;
-    private final FutureImpl future = new FutureImpl();
+    /** @serial */ private final Object lock = new Object();
+    /** @serial */ private boolean isStarted = false;
+    /** @serial */ private boolean isCancelled = false;
+    /** @serial */ private final FutureImpl future = new FutureImpl();
 
     /**
      * Sole constructor.

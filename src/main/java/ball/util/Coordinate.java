@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2016 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.util;
 
@@ -22,8 +22,8 @@ import java.util.TreeSet;
 public class Coordinate implements Comparable<Coordinate>, Serializable {
     private static final long serialVersionUID = 4588951577088861983L;
 
-    private final int y;
-    private final int x;
+    /** @serial */ private final int y;
+    /** @serial */ private final int x;
 
     /**
      * @param   y               The Y-coordinate.

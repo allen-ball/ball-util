@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2009 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.util;
 
@@ -30,7 +30,7 @@ public class PackageSearchPath<T> extends LinkedHashSet<Package> {
      */
     protected static final String DOT = ".";
 
-    private final Class<? extends T> superclass;
+    /** @serial */ private final Class<? extends T> superclass;
 
     /**
      * @param   superclass      The type of {@link Class} to search for.

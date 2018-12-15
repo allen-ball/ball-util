@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2016 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.swing.table;
 
@@ -18,6 +18,7 @@ import java.util.Map;
 public class MapsTableModel extends MapTableModel {
     private static final long serialVersionUID = -2742452353623299139L;
 
+    /** @serial */
     private final ArrayList<Map<?,?>> list = new ArrayList<Map<?,?>>();;
 
     /**

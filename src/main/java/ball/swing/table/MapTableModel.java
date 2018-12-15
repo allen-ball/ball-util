@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2009 - 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.swing.table;
 
@@ -17,7 +17,7 @@ import javax.swing.event.TableModelEvent;
 public class MapTableModel extends ArrayListTableModel<Object> {
     private static final long serialVersionUID = 299182543130741505L;
 
-    private final Map<?,?> map;
+    /** @serial */ private final Map<?,?> map;
 
     /**
      * @see AbstractTableModelImpl#AbstractTableModelImpl(String...)

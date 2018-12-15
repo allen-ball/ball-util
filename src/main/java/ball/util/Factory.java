@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.util;
 
@@ -35,8 +35,8 @@ public class Factory<T> extends TreeMap<Class<?>[],Member>
                         implements Converter<T> {
     private static final long serialVersionUID = 7215172252790252847L;
 
-    private final Class<? extends T> type;
-    private final Object factory;
+    /** @serial */ private final Class<? extends T> type;
+    /** @serial */ private final Object factory;
 
     /**
      * Sole public constructor.

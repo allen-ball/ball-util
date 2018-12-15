@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2009 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.util;
 
@@ -54,11 +54,11 @@ public class ISO8601DateFormat extends SimpleDateFormat {
     private static final String T = "T";
     private static final String Z = "Z";
 
-    private final SimpleDateFormat date = new SimpleDateFormat(DATE);
-    private final SimpleDateFormat time = new SimpleDateFormat(TIME);
-    private final SimpleDateFormat fraction = new SimpleDateFormat(FRACTION);
-    private final NumberFormat nn = new DecimalFormat("00");
-    private boolean isFractionFormatted = false;
+    /** @serial */ private final SimpleDateFormat date = new SimpleDateFormat(DATE);
+    /** @serial */ private final SimpleDateFormat time = new SimpleDateFormat(TIME);
+    /** @serial */ private final SimpleDateFormat fraction = new SimpleDateFormat(FRACTION);
+    /** @serial */ private final NumberFormat nn = new DecimalFormat("00");
+    /** @serial */ private boolean isFractionFormatted = false;
 
     /**
      * Sole constructor.

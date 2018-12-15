@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2010 - 2017 Allen D. Ball.  All rights reserved.
+ * Copyright 2010 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.beans;
 
@@ -40,7 +40,7 @@ public class PropertyDescriptorMap
         return MAP.get(type).clone();
     }
 
-    private final Class<?> type;
+    /** @serial */ private final Class<?> type;
 
     private PropertyDescriptorMap(Class<?> type) {
         super();

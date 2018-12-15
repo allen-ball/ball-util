@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2016, 2017 Allen D. Ball.  All rights reserved.
+ * Copyright 2016 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.util;
 
@@ -29,10 +29,10 @@ public class CoordinateMap<V> extends MapView<Coordinate,V>
                               implements TableModel {
     private static final long serialVersionUID = -8666646030783369361L;
 
-    private final Class<? extends V> type;
-    private Coordinate min = null;
-    private Coordinate max = null;
-    private final EventListenerList list = new EventListenerList();
+    /** @serial */ private final Class<? extends V> type;
+    /** @serial */ private Coordinate min = null;
+    /** @serial */ private Coordinate max = null;
+    /** @serial */ private final EventListenerList list = new EventListenerList();
 
     /**
      * Constructor to create an empty {@link CoordinateMap}.

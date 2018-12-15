@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.util;
 
@@ -27,8 +27,8 @@ public class BeanMap extends AbstractMap<String,Object>
                      implements Serializable {
     private static final long serialVersionUID = 3658982087036937752L;
 
-    private final Object bean;
-    private final Set<Map.Entry<String,Object>> entrySet0;
+    /** @serial */ private final Object bean;
+    /** @serial */ private final Set<Map.Entry<String,Object>> entrySet0;
 
     /**
      * Construct a {@link BeanMap} from a {@code bean}.

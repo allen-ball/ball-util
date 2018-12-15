@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2016 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.util;
 
@@ -28,8 +28,8 @@ import java.util.Set;
 public class MapView<K,V> extends AbstractMap<K,V> implements Serializable {
     private static final long serialVersionUID = -1914866590078121842L;
 
-    private final Map<K,V> map;
-    protected final EntrySet entrySet = new EntrySet();
+    /** @serial */ private final Map<K,V> map;
+    /** @serial */ protected final EntrySet entrySet = new EntrySet();
 
     /**
      * Sole constructor.
