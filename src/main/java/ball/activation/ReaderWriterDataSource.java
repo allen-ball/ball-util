@@ -78,19 +78,11 @@ public class ReaderWriterDataSource extends FilterDataSource
         this.charset = (charset != null) ? charset : CHARSET;
 
         if (content != null) {
-            Reader reader = null;
-            Writer writer = null;
-
-            try {
-                reader = new StringReader(content);
-                writer = getWriter();
-
-                IOUtil.copy(reader, getWriter());
+            try (Reader reader = new StringReader(content);
+                 Writer writer = getWriter()) {
+                IOUtil.copy(reader, writer);
             } catch (IOException exception) {
                 throw new ExceptionInInitializerError(exception);
-            } finally {
-                IOUtil.close(reader);
-                IOUtil.close(writer);
             }
         }
     }
@@ -196,17 +188,8 @@ public class ReaderWriterDataSource extends FilterDataSource
      *                          writing to the {@link PrintWriter}.
      */
     public void writeTo(PrintWriter writer) throws IOException {
-        BufferedReader reader = null;
-
-        try {
-            reader = getBufferedReader();
+        try (BufferedReader reader = getBufferedReader()) {
             IOUtil.copy(reader, writer);
-        } finally {
-            try {
-                IOUtil.close(reader);
-            } finally {
-                reader = null;
-            }
         }
     }
 
@@ -224,19 +207,13 @@ public class ReaderWriterDataSource extends FilterDataSource
     @Override
     public String toString() {
         String string = null;
-        Reader reader = null;
-        StringWriter writer = null;
 
-        try {
-            reader = getReader();
-            writer = new StringWriter();
+        try (Reader reader = getReader();
+             StringWriter writer = new StringWriter()) {
             IOUtil.copy(reader, writer);
             string = writer.toString();
         } catch (IOException exception) {
             string = super.toString();
-        } finally {
-            IOUtil.close(reader);
-            IOUtil.close(writer);
         }
 
         return string;

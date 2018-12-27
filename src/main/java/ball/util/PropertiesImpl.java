@@ -6,7 +6,6 @@
 package ball.util;
 
 import ball.beans.ConverterUtil;
-import ball.io.IOUtil;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -62,13 +61,8 @@ public class PropertiesImpl extends Properties {
         this(defaults);
 
         if (file != null) {
-            InputStream in = null;
-
-            try {
-                in = new FileInputStream(file);
+            try (InputStream in = new FileInputStream(file)) {
                 load(in);
-            } finally {
-                IOUtil.close(in);
             }
         }
     }
@@ -88,13 +82,8 @@ public class PropertiesImpl extends Properties {
         this(defaults);
 
         if (resource != null) {
-            InputStream in = null;
-
-            try {
-                in = getClass().getResourceAsStream(resource);
+            try (InputStream in = getClass().getResourceAsStream(resource)) {
                 load(in);
-            } finally {
-                IOUtil.close(in);
             }
         }
     }
@@ -129,7 +118,7 @@ public class PropertiesImpl extends Properties {
         OutputStreamWriter writer = new OutputStreamWriter(out, CHARSET);
 
         properties.store(writer, comment);
-        IOUtil.flush(writer);
+        writer.flush();
     }
 
     /**

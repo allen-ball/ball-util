@@ -77,13 +77,10 @@ public class ServiceProviderForProcessor extends AbstractAnnotationProcessor
                         FileObject file =
                             filer.createResource(CLASS_OUTPUT, NIL,
                                                  String.format(PATH, service));
-                        PrintWriterImpl writer = null;
 
-                        try {
-                            writer = new PrintWriterImpl(file);
+                        try (PrintWriterImpl writer =
+                                 new PrintWriterImpl(file)) {
                             writer.write(service, entry.getValue());
-                        } finally {
-                            IOUtil.close(writer);
                         }
                     }
                 }
@@ -175,13 +172,8 @@ public class ServiceProviderForProcessor extends AbstractAnnotationProcessor
 
             IOUtil.mkdirs(file.getParentFile());
 
-            PrintWriterImpl writer = null;
-
-            try {
-                writer = new PrintWriterImpl(file);
+            try (PrintWriterImpl writer = new PrintWriterImpl(file)) {
                 writer.write(service, entry.getValue());
-            } finally {
-                IOUtil.close(writer);
             }
         }
     }

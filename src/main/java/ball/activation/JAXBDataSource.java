@@ -1,11 +1,10 @@
 /*
  * $Id$
  *
- * Copyright 2013 - 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2013 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.activation;
 
-import ball.io.IOUtil;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -67,18 +66,12 @@ public class JAXBDataSource extends ReaderWriterDataSource {
      */
     public void marshal(JAXBContext context,
                         Object object) throws IOException, JAXBException {
-        OutputStream out = null;
-
-        try {
-            out = getOutputStream();
-
+        try (OutputStream out = getOutputStream()) {
             Marshaller marshaller = context.createMarshaller();
 
             marshaller.setProperty("jaxb.encoding", getCharset().name());
             marshaller.setProperty("jaxb.formatted.output", true);
             marshaller.marshal(object, out);
-        } finally {
-            IOUtil.close(out);
         }
     }
 
@@ -114,16 +107,11 @@ public class JAXBDataSource extends ReaderWriterDataSource {
                            Class<? extends T> type) throws IOException,
                                                            JAXBException {
         T object = null;
-        InputStream in = null;
 
-        try {
-            in = getInputStream();
-
+        try (InputStream in = getInputStream()) {
             Unmarshaller unmarshaller = context.createUnmarshaller();
 
             object = type.cast(unmarshaller.unmarshal(in));
-        } finally {
-            IOUtil.close(in);
         }
 
         return object;

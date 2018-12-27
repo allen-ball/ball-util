@@ -1,12 +1,11 @@
 /*
  * $Id$
  *
- * Copyright 2012 - 2017 Allen D. Ball.  All rights reserved.
+ * Copyright 2012 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.tools.javadoc;
 
 import ball.activation.ReaderWriterDataSource;
-import ball.io.IOUtil;
 import ball.xml.HTML;
 import com.sun.javadoc.ClassDoc;
 import com.sun.javadoc.Doc;
@@ -201,11 +200,8 @@ public abstract class AbstractTaglet implements Taglet {
      */
     protected Content content(TagletWriter writer, Iterable<?> iterable) {
         ReaderWriterDataSource ds = new ReaderWriterDataSource(null, null);
-        Writer out = null;
 
-        try {
-            out = ds.getWriter();
-
+        try (Writer out = ds.getWriter()) {
             for (Object object : iterable) {
                 if (object instanceof Node) {
                     transformer.transform(new DOMSource((Node) object),
@@ -220,8 +216,6 @@ public abstract class AbstractTaglet implements Taglet {
             throw exception;
         } catch (Exception exception) {
             throw new IllegalStateException(exception);
-        } finally {
-            IOUtil.close(out);
         }
 
         Content content = writer.getOutputInstance();

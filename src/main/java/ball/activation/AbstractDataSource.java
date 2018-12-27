@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2009 - 2017 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.activation;
 
@@ -62,15 +62,10 @@ public abstract class AbstractDataSource implements DataSource {
      *                          {@link UnsupportedOperationException}.
      */
     public void clear() {
-        OutputStream out = null;
-
         try {
-            out = getOutputStream();
-            out.close();
+            getOutputStream().close();
         } catch (IOException exception) {
             throw new IllegalStateException(exception);
-        } finally {
-            IOUtil.close(out);
         }
     }
 
@@ -126,17 +121,8 @@ public abstract class AbstractDataSource implements DataSource {
      *                          to the {@link OutputStream}.
      */
     public void writeTo(OutputStream out) throws IOException {
-        InputStream in = null;
-
-        try {
-            in = getInputStream();
+        try (InputStream in = getInputStream()) {
             IOUtil.copy(in, out);
-        } finally {
-            try {
-                IOUtil.close(in);
-            } finally {
-                in = null;
-            }
         }
     }
 

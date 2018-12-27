@@ -1,12 +1,11 @@
 /*
  * $Id$
  *
- * Copyright 2011 - 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2011 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.taskdefs.compilers;
 
 import ball.io.CharSequenceReader;
-import ball.io.IOUtil;
 import ball.tools.DiagnosticMap;
 import java.io.File;
 import java.io.IOException;
@@ -68,23 +67,22 @@ public class SystemJavaCompilerAdapter implements CompilerAdapter,
     public boolean execute() throws BuildException {
         boolean success = false;
         DiagnosticMap map = new DiagnosticMap();
-        StandardJavaFileManager fm = null;
 
-        try {
-            compiler = ToolProvider.getSystemJavaCompiler();
+        compiler = ToolProvider.getSystemJavaCompiler();
 
-            if (compiler == null) {
-                throw new NullPointerException("No system Java compiler");
-            }
+        if (compiler == null) {
+            throw new NullPointerException("No system Java compiler");
+        }
 
-            Locale locale = null;
-            Charset charset = null;
+        Locale locale = null;
+        Charset charset = null;
 
-            if (getJavac().getEncoding() != null) {
-                charset = Charset.forName(getJavac().getEncoding());
-            }
+        if (getJavac().getEncoding() != null) {
+            charset = Charset.forName(getJavac().getEncoding());
+        }
 
-            fm = compiler.getStandardFileManager(map, locale, charset);
+        try (StandardJavaFileManager fm =
+                 compiler.getStandardFileManager(map, locale, charset)) {
             fm.setLocation(StandardLocation.PLATFORM_CLASS_PATH,
                            asFileList(getJavac().getBootclasspath()));
             fm.setLocation(StandardLocation.CLASS_PATH,
@@ -101,12 +99,6 @@ public class SystemJavaCompilerAdapter implements CompilerAdapter,
             throw new BuildException(throwable);
         } finally {
             log(map);
-
-            try {
-                IOUtil.close(fm);
-            } finally {
-                fm = null;
-            }
         }
 
         return success;
@@ -230,25 +222,15 @@ public class SystemJavaCompilerAdapter implements CompilerAdapter,
 
     private String source(Diagnostic<? extends JavaFileObject> diagnostic) {
         String line = null;
-        CharSequenceReader reader = null;
 
-        try {
-            CharSequence sequence =
-                diagnostic.getSource().getCharContent(true);
-
-            reader = new CharSequenceReader(sequence);
-
+        try (CharSequenceReader reader =
+                 new CharSequenceReader(diagnostic.getSource()
+                                        .getCharContent(true))) {
             do {
                 line = reader.readLine();
             } while (line != null
                      && reader.getLineNumber() < diagnostic.getLineNumber());
         } catch (IOException exception) {
-        } finally {
-            try {
-                IOUtil.close(reader);
-            } finally {
-                reader = null;
-            }
         }
 
         return line;

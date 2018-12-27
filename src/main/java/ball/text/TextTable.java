@@ -1,12 +1,11 @@
 /*
  * $Id$
  *
- * Copyright 2009 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.text;
 
 import ball.activation.ReaderWriterDataSource;
-import ball.io.IOUtil;
 import ball.util.StringUtil;
 import java.io.IOException;
 import java.io.InputStream;
@@ -78,11 +77,7 @@ public class TextTable extends ReaderWriterDataSource {
             }
         }
 
-        PrintWriter out = null;
-
-        try {
-            out = getPrintWriter();
-
+        try (PrintWriter out = getPrintWriter()) {
             StringBuilder header = line(fill(header()));
             StringBuilder boundary =
                 StringUtil.fill(new StringBuilder(), header.length(), '-');
@@ -97,12 +92,6 @@ public class TextTable extends ReaderWriterDataSource {
             }
         } catch (IOException exception) {
             throw new IllegalStateException(exception);
-        } finally {
-            try {
-                IOUtil.close(out);
-            } finally {
-                out = null;
-            }
         }
     }
 

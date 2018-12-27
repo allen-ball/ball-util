@@ -1,11 +1,10 @@
 /*
  * $Id$
  *
- * Copyright 2010 - 2017 Allen D. Ball.  All rights reserved.
+ * Copyright 2010 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.util;
 
-import ball.io.IOUtil;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Member;
@@ -36,14 +35,10 @@ public abstract class ClassUtil {
     public static Manifest getManifestFor(Class<?> type) {
         Manifest manifest = null;
         URL url = getManifestURLFor(type);
-        InputStream in = null;
 
-        try {
-            in = url.openStream();
+        try (InputStream in = url.openStream()) {
             manifest = new Manifest(in);
         } catch (IOException exception) {
-        } finally {
-            IOUtil.close(in);
         }
 
         return manifest;

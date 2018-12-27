@@ -14,6 +14,8 @@ import com.sun.javadoc.Tag;
 import com.sun.tools.doclets.internal.toolkit.Content;
 import com.sun.tools.doclets.internal.toolkit.taglets.Taglet;
 import com.sun.tools.doclets.internal.toolkit.taglets.TagletWriter;
+import java.io.Closeable;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Collection;
@@ -115,7 +117,12 @@ public class IncludeTaglet extends AbstractInlineTaglet {
             throw new IllegalArgumentException(tag.position().toString(),
                                                exception);
         } finally {
-            IOUtil.close(resource);
+            if (resource instanceof Closeable) {
+                try {
+                    ((Closeable) resource).close();
+                } catch (IOException exception) {
+                }
+            }
         }
 
         return content(writer, element);

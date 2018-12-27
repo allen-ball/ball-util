@@ -6,6 +6,11 @@
 
 	* Use <> operator.
 
+	* Use try-with-resources.
+
+	* src/main/java/ball/io/IOUtil.java:
+	Removed close(Object) and flush(Object) methods.
+
 	* src/main/java/ball/util/CoordinateMap.java:
 	Added resize(Number,Number) method.
 
@@ -1216,8 +1221,6 @@
 
 	* src/main/java/iprotium/io/IOUtil.java:
 	Added copy(Readable,Appendable) method.
-	Changed close(Closeable) method to close(Object) and added
-	flush(Object) method.
 	In copy() methods, flush output after completing the copy.
 
 2010-09-23  Allen D. Ball  <ball@10-0-1-2.lan>

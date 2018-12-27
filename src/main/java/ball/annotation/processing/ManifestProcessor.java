@@ -90,19 +90,13 @@ public class ManifestProcessor extends AbstractAnnotationProcessor
             if (manifest == null) {
                 manifest = new ManifestImpl();
 
-                InputStream in = null;
+                FileObject file = filer.getResource(CLASS_OUTPUT, NIL, path);
 
-                try {
-                    FileObject file =
-                        filer.getResource(CLASS_OUTPUT, NIL, path);
-
-                    if (file.getLastModified() != 0) {
-                        in = file.openInputStream();
+                if (file.getLastModified() != 0) {
+                    try (InputStream in = file.openInputStream()) {
                         manifest.read(in);
+                    } catch (Exception exception) {
                     }
-                } catch (Exception exception) {
-                } finally {
-                    IOUtil.close(in);
                 }
 
                 manifest.init();
@@ -114,13 +108,9 @@ public class ManifestProcessor extends AbstractAnnotationProcessor
                 if (roundEnv.processingOver()) {
                     FileObject file =
                         filer.createResource(CLASS_OUTPUT, NIL, path);
-                    OutputStream out = null;
 
-                    try {
-                        out = file.openOutputStream();
+                    try (OutputStream out = file.openOutputStream()) {
                         manifest.write(out);
-                    } finally {
-                        IOUtil.close(out);
                     }
                 }
             }
@@ -219,13 +209,8 @@ public class ManifestProcessor extends AbstractAnnotationProcessor
             manifest = new ManifestImpl();
 
             if (file.exists()) {
-                FileInputStream in = null;
-
-                try {
-                    in = new FileInputStream(file);
+                try (FileInputStream in = new FileInputStream(file)) {
                     manifest.read(in);
-                } finally {
-                    IOUtil.close(in);
                 }
             }
 
@@ -258,13 +243,8 @@ public class ManifestProcessor extends AbstractAnnotationProcessor
 
         IOUtil.mkdirs(file.getParentFile());
 
-        OutputStream out = null;
-
-        try {
-            out = new FileOutputStream(file);
+        try (OutputStream out = new FileOutputStream(file)) {
             manifest.write(out);
-        } finally {
-            IOUtil.close(out);
         }
     }
 

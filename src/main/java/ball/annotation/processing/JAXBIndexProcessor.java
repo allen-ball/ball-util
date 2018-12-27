@@ -65,13 +65,10 @@ public class JAXBIndexProcessor extends AbstractAnnotationProcessor
                         FileObject file =
                             filer.createResource(CLASS_OUTPUT,
                                                  entry.getKey(), JAXB_INDEX);
-                        PrintWriterImpl writer = null;
 
-                        try {
-                            writer = new PrintWriterImpl(file);
+                        try (PrintWriterImpl writer =
+                                 new PrintWriterImpl(file)) {
                             writer.write(JAXB_INDEX, entry.getValue());
-                        } finally {
-                            IOUtil.close(writer);
                         }
                     }
                 }
@@ -116,13 +113,8 @@ public class JAXBIndexProcessor extends AbstractAnnotationProcessor
 
             IOUtil.mkdirs(file.getParentFile());
 
-            PrintWriterImpl writer = null;
-
-            try {
-                writer = new PrintWriterImpl(file);
+            try (PrintWriterImpl writer = new PrintWriterImpl(file)) {
                 writer.write(JAXB_INDEX, entry.getValue());
-            } finally {
-                IOUtil.close(writer);
             }
         }
     }

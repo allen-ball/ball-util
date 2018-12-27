@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.io;
 
@@ -11,6 +11,7 @@ import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.Flushable;
 import java.io.Flushable;
 import java.io.IOException;
 import java.io.InputStream;
@@ -34,38 +35,6 @@ public abstract class IOUtil {
     private IOUtil() { }
 
     /**
-     * Method to quietly close an {@link Object} if it is an instance of
-     * {@link Closeable}.
-     *
-     * @param   object          The {@link Object} to close if it is an
-     *                          instance of {@link Closeable}.
-     */
-    public static void close(Object object) {
-        try {
-            if (object instanceof Closeable) {
-                ((Closeable) object).close();
-            }
-        } catch (IOException exception) {
-        }
-    }
-
-    /**
-     * Method to quietly flush an {@link Object} if it is an instance of
-     * {@link Flushable}.
-     *
-     * @param   object          The {@link Object} to flush if it is an
-     *                          instance of {@link Flushable}.
-     */
-    public static void flush(Object object) {
-        try {
-            if (object instanceof Flushable) {
-                ((Flushable) object).flush();
-            }
-        } catch (IOException exception) {
-        }
-    }
-
-    /**
      * Method to copy a {@link DataSource} to another {@link DataSource}.
      *
      * @param   from            The {@link DataSource} to copy from.
@@ -79,17 +48,8 @@ public abstract class IOUtil {
      */
     public static void copy(DataSource from, DataSource to,
                             Class<?>... filters) throws IOException {
-        InputStream in = null;
-
-        try {
-            in = from.getInputStream();
+        try (InputStream in = from.getInputStream()) {
             copy(in, to, filters);
-        } finally {
-            try {
-                close(in);
-            } finally {
-                in = null;
-            }
         }
     }
 
@@ -107,17 +67,8 @@ public abstract class IOUtil {
      */
     public static void copy(InputStream in, DataSource to,
                             Class<?>... filters) throws IOException {
-        OutputStream out = null;
-
-        try {
-            out = to.getOutputStream();
+        try (OutputStream out = to.getOutputStream()) {
             copy(in, out, filters);
-        } finally {
-            try {
-                close(out);
-            } finally {
-                out = null;
-            }
         }
     }
 
@@ -135,17 +86,8 @@ public abstract class IOUtil {
      */
     public static void copy(File from, File to,
                             Class<?>... filters) throws IOException {
-        InputStream in = null;
-
-        try {
-            in = new FileInputStream(from);
+        try (InputStream in = new FileInputStream(from)) {
             copy(in, to, filters);
-        } finally {
-            try {
-                close(in);
-            } finally {
-                in = null;
-            }
         }
     }
 
@@ -163,17 +105,8 @@ public abstract class IOUtil {
      */
     public static void copy(DataSource from, File to,
                             Class<?>... filters) throws IOException {
-        InputStream in = null;
-
-        try {
-            in = from.getInputStream();
+        try (InputStream in = from.getInputStream()) {
             copy(in, to, filters);
-        } finally {
-            try {
-                close(in);
-            } finally {
-                in = null;
-            }
         }
     }
 
@@ -191,17 +124,8 @@ public abstract class IOUtil {
      */
     public static void copy(InputStream in, File to,
                             Class<?>... filters) throws IOException {
-        OutputStream out = null;
-
-        try {
-            out = new FileOutputStream(to);
+        try (OutputStream out = new FileOutputStream(to)) {
             copy(in, out, filters);
-        } finally {
-            try {
-                close(out);
-            } finally {
-                out = null;
-            }
         }
     }
 
@@ -233,7 +157,7 @@ public abstract class IOUtil {
         }
 
         copy(Channels.newChannel(in), Channels.newChannel(out));
-        flush(out);
+        out.flush();
     }
 
     /**
@@ -317,7 +241,9 @@ public abstract class IOUtil {
             }
         }
 
-        flush(out);
+        if (out instanceof Flushable) {
+            ((Flushable) out).flush();
+        }
     }
 
     /**
@@ -348,7 +274,7 @@ public abstract class IOUtil {
             }
         }
 
-        flush(writer);
+        writer.flush();
     }
 
     /**

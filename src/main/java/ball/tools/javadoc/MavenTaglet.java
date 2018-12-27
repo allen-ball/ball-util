@@ -7,7 +7,6 @@ package ball.tools.javadoc;
 
 import ball.activation.ReaderWriterDataSource;
 import ball.annotation.ServiceProviderFor;
-import ball.io.IOUtil;
 /* import ball.tools.maven.EmbeddedMaven; */
 import ball.tools.maven.POMProperties;
 import ball.xml.HTML;
@@ -112,14 +111,9 @@ public abstract class MavenTaglet extends AbstractInlineTaglet {
             /* throwable.printStackTrace(System.err); */
         } finally {
             if (model == null) {
-                FileReader reader = null;
-
-                try {
-                    reader = new FileReader(file);
+                try (FileReader reader = new FileReader(file)) {
                     model = new MavenXpp3Reader().read(reader);
                     model.setPomFile(file);
-                } finally {
-                    IOUtil.close(reader);
                 }
             }
         }

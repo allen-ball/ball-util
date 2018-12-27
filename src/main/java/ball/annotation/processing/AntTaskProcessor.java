@@ -88,13 +88,8 @@ public class AntTaskProcessor extends AbstractAnnotationProcessor
                         FileObject file =
                             filer.createResource(CLASS_OUTPUT,
                                                  NIL, entry.getKey());
-                        OutputStream out = null;
-
-                        try {
-                            out = file.openOutputStream();
+                        try (OutputStream out = file.openOutputStream()) {
                             entry.getValue().store(out, entry.getKey());
-                        } finally {
-                            IOUtil.close(out);
                         }
                     }
 
@@ -103,13 +98,9 @@ public class AntTaskProcessor extends AbstractAnnotationProcessor
                         FileObject file =
                             filer.createResource(CLASS_OUTPUT,
                                                  NIL, xml.getPath());
-                        OutputStream out = null;
 
-                        try {
-                            out = file.openOutputStream();
+                        try (OutputStream out = file.openOutputStream()) {
                             xml.writeTo(out);
-                        } finally {
-                            IOUtil.close(out);
                         }
                     }
                 }
@@ -225,13 +216,8 @@ public class AntTaskProcessor extends AbstractAnnotationProcessor
 
             IOUtil.mkdirs(file.getParentFile());
 
-            OutputStream out = null;
-
-            try {
-                out = new FileOutputStream(file);
+            try (OutputStream out = new FileOutputStream(file)) {
                 entry.getValue().store(out, entry.getKey());
-            } finally {
-                IOUtil.close(out);
             }
         }
 
@@ -241,13 +227,8 @@ public class AntTaskProcessor extends AbstractAnnotationProcessor
 
             IOUtil.mkdirs(file.getParentFile());
 
-            OutputStream out = null;
-
-            try {
-                out = new FileOutputStream(file);
+            try (OutputStream out = new FileOutputStream(file)) {
                 xml.writeTo(out);
-            } finally {
-                IOUtil.close(out);
             }
         }
     }

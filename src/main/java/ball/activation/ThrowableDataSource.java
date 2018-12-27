@@ -1,11 +1,10 @@
 /*
  * $Id$
  *
- * Copyright 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2014 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.activation;
 
-import ball.io.IOUtil;
 import java.io.PrintWriter;
 
 /**
@@ -24,15 +23,10 @@ public class ThrowableDataSource extends ReaderWriterDataSource {
     public ThrowableDataSource(Throwable throwable) {
         super(throwable.getClass().getSimpleName(), TEXT_PLAIN);
 
-        PrintWriter out = null;
-
-        try {
-            out = getPrintWriter();
+        try (PrintWriter out = getPrintWriter()) {
             throwable.printStackTrace(out);
         } catch (Exception exception) {
             throw new ExceptionInInitializerError(exception);
-        } finally {
-            IOUtil.close(out);
         }
     }
 }
