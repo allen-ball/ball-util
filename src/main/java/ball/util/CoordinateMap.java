@@ -27,7 +27,7 @@ import javax.swing.table.TableModel;
  */
 public class CoordinateMap<V> extends MapView<Coordinate,V>
                               implements TableModel {
-    private static final long serialVersionUID = -8666646030783369361L;
+    private static final long serialVersionUID = 3624494946392432945L;
 
     /** @serial */ private final Class<? extends V> type;
     /** @serial */ private Coordinate min = null;
@@ -108,6 +108,19 @@ public class CoordinateMap<V> extends MapView<Coordinate,V>
         resize(y0.intValue(), x0.intValue(), yN.intValue(), xN.intValue());
 
         return this;
+    }
+
+    /**
+     * Method to specify new limits for the {@link CoordinateMap} with
+     * {@code [y0, x0] = [0, 0]}.
+     *
+     * @param   yN              {@code MAX(y) + 1}
+     * @param   xN              {@code MAX(x) + 1}
+     *
+     * @return  {@code this} {@link CoordinateMap}.
+     */
+    public CoordinateMap<V> resize(Number yN, Number xN) {
+        return resize(0, 0, yN, xN);
     }
 
     private void resize(int y0, int x0, int yN, int xN) {
