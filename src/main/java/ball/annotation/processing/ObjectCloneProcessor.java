@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2013, 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2013 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.annotation.processing;
 
@@ -94,7 +94,7 @@ public class ObjectCloneProcessor extends AbstractNoAnnotationProcessor {
                   + type.getSimpleName());
         }
 
-        ArrayList<TypeMirror> throwables = new ArrayList<TypeMirror>();
+        ArrayList<TypeMirror> throwables = new ArrayList<>();
 
         throwables.addAll(METHOD.getThrownTypes());
         throwables.retainAll(overrides(method).getThrownTypes());

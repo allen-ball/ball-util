@@ -41,7 +41,7 @@ public class CoordinateMap<V> extends MapView<Coordinate,V>
      *                          {@link Class}.
      */
     public CoordinateMap(Class<? extends V> type) {
-        super(new TreeMap<Coordinate,V>());
+        super(new TreeMap<>());
 
         this.type = type;
     }
@@ -148,8 +148,7 @@ public class CoordinateMap<V> extends MapView<Coordinate,V>
      * @return  The {@link List} of columns.
      */
     public List<CoordinateMap<V>> columns() {
-        ArrayList<CoordinateMap<V>> list =
-            new ArrayList<CoordinateMap<V>>(getColumnCount());
+        ArrayList<CoordinateMap<V>> list = new ArrayList<>(getColumnCount());
 
         if (getColumnCount() > 0) {
             for (int x = getMinX(), xN = getMaxX(); x < xN; x += 1) {
@@ -166,8 +165,7 @@ public class CoordinateMap<V> extends MapView<Coordinate,V>
      * @return  The {@link List} of rows.
      */
     public List<CoordinateMap<V>> rows() {
-        ArrayList<CoordinateMap<V>> list =
-            new ArrayList<CoordinateMap<V>>(getRowCount());
+        ArrayList<CoordinateMap<V>> list = new ArrayList<>(getRowCount());
 
         if (getRowCount() > 0) {
             for (int y = getMinY(), yN = getMaxY(); y < yN; y += 1) {
@@ -215,7 +213,7 @@ public class CoordinateMap<V> extends MapView<Coordinate,V>
      */
     public CoordinateMap<V> subMap(Number y0, Number x0,
                                    Number yN, Number xN) {
-        return new Sub<V>(this, y0, x0, yN, xN);
+        return new Sub<>(this, y0, x0, yN, xN);
     }
 
     /**
@@ -444,7 +442,7 @@ public class CoordinateMap<V> extends MapView<Coordinate,V>
     }
 
     private class BackedList extends AbstractList<V> {
-        private ArrayList<Coordinate> list = new ArrayList<Coordinate>();
+        private ArrayList<Coordinate> list = new ArrayList<>();
 
         public BackedList() {
             super();

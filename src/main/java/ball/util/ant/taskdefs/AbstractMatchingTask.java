@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.taskdefs;
 
@@ -110,7 +110,7 @@ public abstract class AbstractMatchingTask extends MatchingTask
      * @return  The {@link Set} of matching {@link File}s.
      */
     protected Set<File> getMatchingFileSet() {
-        TreeSet<File> set = new TreeSet<File>();
+        TreeSet<File> set = new TreeSet<>();
         File base = getBasedir();
 
         if (base != null) {

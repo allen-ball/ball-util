@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2014 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.annotation.processing;
 
@@ -88,7 +88,7 @@ public class ResourceFileProcessor extends AbstractAnnotationProcessor {
 
         if (! isNil(path)) {
             if (lines != null) {
-                ArrayList<String> list = new ArrayList<String>(lines.length);
+                ArrayList<String> list = new ArrayList<>(lines.length);
                 Parameters parameters = new Parameters((TypeElement) element);
 
                 for (String line : lines) {
@@ -119,7 +119,7 @@ public class ResourceFileProcessor extends AbstractAnnotationProcessor {
 
         public boolean add(String path, Collection<String> collection) {
             if (! containsKey(path)) {
-                put(path, new ArrayList<String>());
+                put(path, new ArrayList<>());
             }
 
             return get(path).addAll(collection);

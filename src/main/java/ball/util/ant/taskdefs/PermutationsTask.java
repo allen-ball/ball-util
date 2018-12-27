@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2010 - 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2010 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.taskdefs;
 
@@ -51,7 +51,7 @@ public abstract class PermutationsTask extends InstanceOfTask {
                 Collection<?> collection = Collection.class.cast(instance);
                 long count = 0;
 
-                for (List<?> list : new Permutations<Object>(collection)) {
+                for (List<?> list : new Permutations<>(collection)) {
                     count += 1;
                 }
 
@@ -89,7 +89,7 @@ public abstract class PermutationsTask extends InstanceOfTask {
 
                 log(NIL);
 
-                for (List<?> list : new Permutations<Object>(collection)) {
+                for (List<?> list : new Permutations<>(collection)) {
                     log(String.valueOf(list));
                 }
             } catch (BuildException exception) {

@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2013 - 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2013 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.util;
 
@@ -33,7 +33,7 @@ public abstract class NetworkInterfaceUtil {
      *                                  cannot be determined.
      */
     public static List<InterfaceAddress> getInterfaceAddressList() throws SocketException {
-        ArrayList<InterfaceAddress> list = new ArrayList<InterfaceAddress>();
+        ArrayList<InterfaceAddress> list = new ArrayList<>();
 
         for (NetworkInterface ni :
                  list(NetworkInterface.getNetworkInterfaces())) {
@@ -53,7 +53,7 @@ public abstract class NetworkInterfaceUtil {
      *                                  cannot be determined.
      */
     public static List<InetAddress> getInterfaceInetAddressList() throws SocketException {
-        ArrayList<InetAddress> list = new ArrayList<InetAddress>();
+        ArrayList<InetAddress> list = new ArrayList<>();
 
         for (InterfaceAddress address : getInterfaceAddressList()) {
             list.add(address.getAddress());

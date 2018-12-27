@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2012 - 2017 Allen D. Ball.  All rights reserved.
+ * Copyright 2012 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.annotation.processing;
 
@@ -722,7 +722,7 @@ public abstract class AbstractProcessor
      * @return  The {@link EnumSet} of {@link Modifier}s.
      */
     protected EnumSet<Modifier> asModifierSet(int modifiers) {
-        TreeMap<String,Modifier> map = new TreeMap<String,Modifier>();
+        TreeMap<String,Modifier> map = new TreeMap<>();
 
         if (modifiers != 0) {
             for (Modifier modifier : Modifier.values()) {
@@ -819,7 +819,7 @@ public abstract class AbstractProcessor
      * @return  The {@link Set} of bean property names.
      */
     protected Set<String> getPropertyNames(TypeElement type) {
-        TreeSet<String> set = new TreeSet<String>();
+        TreeSet<String> set = new TreeSet<>();
 
         getPropertyNames(set, type);
 

@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2013 - 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2013 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.annotation.processing;
 
@@ -72,7 +72,7 @@ public class ManifestProcessor extends AbstractAnnotationProcessor
     private static final Method MAIN = MAIN.class.getDeclaredMethods()[0];
 
     private ManifestImpl manifest = null;
-    private HashSet<Element> processed = new HashSet<Element>();
+    private HashSet<Element> processed = new HashSet<>();
 
     /**
      * Sole constructor.

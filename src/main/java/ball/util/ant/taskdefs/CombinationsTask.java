@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2010 - 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2010 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.taskdefs;
 
@@ -57,7 +57,7 @@ public abstract class CombinationsTask extends InstanceOfTask {
                 long count = 0;
 
                 for (List<?> list :
-                         new Combinations<Object>(collection, getCount())) {
+                         new Combinations<>(collection, getCount())) {
                     count += 1;
                 }
 
@@ -96,7 +96,7 @@ public abstract class CombinationsTask extends InstanceOfTask {
                 log(NIL);
 
                 for (List<?> list :
-                         new Combinations<Object>(collection, getCount())) {
+                         new Combinations<>(collection, getCount())) {
                     log(String.valueOf(list));
                 }
             } catch (BuildException exception) {

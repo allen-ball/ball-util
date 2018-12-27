@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2013 - 2017 Allen D. Ball.  All rights reserved.
+ * Copyright 2013 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.tools.javadoc;
 
@@ -48,8 +48,7 @@ public class LinkURITaglet extends AbstractInlineTaglet {
 
             text = (argv.length > 1) ? argv[1] : null;
 
-            LinkedHashMap<String,String> map =
-                new LinkedHashMap<String,String>();
+            LinkedHashMap<String,String> map = new LinkedHashMap<>();
 
             for (;;) {
                 argv = text.split(SPACES, 2);

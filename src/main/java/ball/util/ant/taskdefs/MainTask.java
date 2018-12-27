@@ -30,8 +30,7 @@ import static ball.util.StringUtil.isNil;
  */
 @AntTask("main")
 public class MainTask extends TypeTask {
-    private final ArrayList<OptionalTextType> list =
-        new ArrayList<OptionalTextType>();
+    private final ArrayList<OptionalTextType> list = new ArrayList<>();
 
     /**
      * Sole constructor.
@@ -47,7 +46,7 @@ public class MainTask extends TypeTask {
         super.execute();
 
         try {
-            ArrayList<String> argv = new ArrayList<String>(list.size());
+            ArrayList<String> argv = new ArrayList<>(list.size());
 
             for (OptionalTextType argument : list) {
                 if (argument.isActive(getProject())) {

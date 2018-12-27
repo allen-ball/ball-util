@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2009 - 2017 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.taskdefs;
 
@@ -40,7 +40,7 @@ public class ServiceListTask extends TypeTask {
                 ServiceLoader.load(service, service.getClassLoader());
 
             log(NIL);
-            log(new ServiceTableModel<Object>(loader));
+            log(new ServiceTableModel<>(loader));
         } catch (BuildException exception) {
             throw exception;
         } catch (Throwable throwable) {

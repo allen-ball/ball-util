@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.taskdefs;
 
@@ -60,7 +60,7 @@ public class ResourceListTask extends AbstractClasspathTask {
         }
 
         private TableModelImpl(Collection<URL> collection, String name) {
-            super(new LinkedHashSet<URL>(collection), name);
+            super(new LinkedHashSet<>(collection), name);
         }
 
         @Override

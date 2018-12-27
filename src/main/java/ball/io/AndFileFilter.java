@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2009 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.io;
 
@@ -19,7 +19,7 @@ import java.util.List;
  * @version $Revision$
  */
 public class AndFileFilter extends AbstractFileFilter {
-    private final List<FileFilter> list = new ArrayList<FileFilter>();
+    private final List<FileFilter> list = new ArrayList<>();
 
     /**
      * @param   collection      The {@link Collection} of

@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2012 - 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2012 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.util;
 
@@ -28,7 +28,7 @@ public abstract class IterableUtil {
      * @return  An {@link Iterable} that wraps the {@link Iterator}.
      */
     public static <E> Iterable<E> asIterable(Iterator<E> iterator) {
-        return new FromIterator<E>(iterator);
+        return new FromIterator<>(iterator);
     }
 
     /**
@@ -40,7 +40,7 @@ public abstract class IterableUtil {
      * @return  An {@link Iterable} that wraps the {@link Enumeration}.
      */
     public static <E> Iterable<E> asIterable(Enumeration<E> enumeration) {
-        return new FromEnumeration<E>(enumeration);
+        return new FromEnumeration<>(enumeration);
     }
 
     private static class FromEnumeration<E> extends AbstractIterator<E> {

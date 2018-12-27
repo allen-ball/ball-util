@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2010 - 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2010 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.beans;
 
@@ -102,7 +102,7 @@ public abstract class ConverterUtil {
 
                         try {
                             subtype = ((Class<?>) key).asSubclass(supertype);
-                            value = new BeanFactory<T>(subtype).getInstance();
+                            value = new BeanFactory<>(subtype).getInstance();
                         } catch (Exception exception) {
                         } finally {
                             if (subtype != null) {

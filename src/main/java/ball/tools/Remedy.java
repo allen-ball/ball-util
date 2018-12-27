@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2011 - 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2011 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.tools;
 
@@ -25,7 +25,7 @@ public abstract class Remedy {
         public static final SortedMap<String,Remedy> MAP;
 
         static {
-            TreeMap<String,Remedy> map = new TreeMap<String,Remedy>();
+            TreeMap<String,Remedy> map = new TreeMap<>();
 
             for (Remedy remedy : ServiceLoader.load(Remedy.class)) {
                 for (String code : remedy.getCodes()) {

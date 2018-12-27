@@ -115,7 +115,7 @@ public class Coordinate implements Comparable<Coordinate>, Serializable {
      */
     public static SortedSet<Coordinate> generate(int y0, int x0,
                                                  int yN, int xN) {
-        TreeSet<Coordinate> set = new TreeSet<Coordinate>();
+        TreeSet<Coordinate> set = new TreeSet<>();
 
         for (int y = y0; y < yN; y += 1) {
             for (int x = x0; x < xN; x += 1) {

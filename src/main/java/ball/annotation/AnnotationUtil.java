@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2016 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.annotation;
 
@@ -90,7 +90,7 @@ public abstract class AnnotationUtil {
 
     private static <T extends AnnotatedElement> List<T> annotatedWith(Iterable<T> elements,
                                                                       Class<? extends Annotation> annotation) {
-        ArrayList<T> list = new ArrayList<T>();
+        ArrayList<T> list = new ArrayList<>();
 
         for (T element : elements) {
             if (element.getAnnotation(annotation) != null) {

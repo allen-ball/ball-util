@@ -63,7 +63,7 @@ public class Factory<T> extends TreeMap<Class<?>[],Member>
      */
     @ConstructorProperties({ "type", "factory" })
     protected Factory(Class<? extends T> type, Object factory) {
-        super(new ArrayOrder<Class<?>>(ClassOrder.NAME));
+        super(new ArrayOrder<>(ClassOrder.NAME));
 
         this.type = type;
         this.factory = factory;

@@ -66,7 +66,7 @@ public class AntTaskProcessor extends AbstractAnnotationProcessor
     private static final String ANTLIB_XML = "antlib.xml";
 
     private ResourceMap map = new ResourceMap();
-    private LinkedHashSet<String> packages = new LinkedHashSet<String>();
+    private LinkedHashSet<String> packages = new LinkedHashSet<>();
 
     /**
      * Sole constructor.
@@ -312,7 +312,7 @@ public class AntTaskProcessor extends AbstractAnnotationProcessor
 
         @XmlElement(name = "taskdef")
         public Taskdef[] getTaskdef() {
-            ArrayList<Taskdef> list = new ArrayList<Taskdef>(size());
+            ArrayList<Taskdef> list = new ArrayList<>(size());
 
             for (Map.Entry<String,String> entry : entrySet()) {
                 list.add(new Taskdef(entry.getKey(), entry.getValue()));

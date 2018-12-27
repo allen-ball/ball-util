@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.taskdefs;
 
@@ -49,7 +49,7 @@ public class JNIClassesTask extends AbstractClassFileTask {
     public void execute() throws BuildException {
         super.execute();
 
-        Set<Class<?>> set = new TreeSet<Class<?>>(NAME);
+        Set<Class<?>> set = new TreeSet<>(NAME);
 
         for (Class<?> type : getClassSet()) {
             boolean hasNative = false;

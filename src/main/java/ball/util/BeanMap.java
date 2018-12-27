@@ -57,7 +57,7 @@ public class BeanMap extends AbstractMap<String,Object>
         this.bean = (bean != null) ? bean : this;
 
         LinkedHashSet<Map.Entry<String,Object>> entrySet =
-            new LinkedHashSet<Map.Entry<String,Object>>();
+            new LinkedHashSet<>();
 
         for (PropertyDescriptor descriptor :
                  PropertyDescriptorMap.forClass(type).values()) {

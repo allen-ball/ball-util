@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.util;
 
@@ -27,12 +27,12 @@ public abstract class Order<T> implements Comparator<T>, Serializable {
     /**
      * @see Null
      */
-    public static final Null<Object> NULL = new Null<Object>();
+    public static final Null<Object> NULL = new Null<>();
 
     /**
      * @see NonNull
      */
-    public static final NonNull<Object> NONNULL = new NonNull<Object>();
+    public static final NonNull<Object> NONNULL = new NonNull<>();
 
     /**
      * Sole constructor.
@@ -52,7 +52,7 @@ public abstract class Order<T> implements Comparator<T>, Serializable {
      *          this {@link Order}.
      */
     public List<T> asList(Collection<? extends T> collection) {
-        List<T> list = new ArrayList<T>(collection);
+        List<T> list = new ArrayList<>(collection);
 
         sort(list);
 

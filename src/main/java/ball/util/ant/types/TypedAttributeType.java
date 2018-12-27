@@ -47,7 +47,7 @@ public class TypedAttributeType extends StringAttributeType {
 
         try {
             Class<?> type = Class.forName(getType(), false, loader);
-            Factory<?> factory = new Factory<Object>(type);
+            Factory<?> factory = new Factory<>(type);
 
             object = factory.getInstance(getValue());
         } catch (BuildException exception) {

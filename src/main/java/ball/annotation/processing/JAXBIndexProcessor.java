@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2013, 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2013 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.annotation.processing;
 
@@ -157,7 +157,7 @@ public class JAXBIndexProcessor extends AbstractAnnotationProcessor
         @Override
         public Set<String> get(Object key) {
             if (! super.containsKey(key)) {
-                super.put((String) key, new TreeSet<String>());
+                super.put((String) key, new TreeSet<>());
             }
 
             return super.get(key);

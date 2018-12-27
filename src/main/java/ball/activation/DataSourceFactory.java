@@ -80,7 +80,7 @@ public abstract class DataSourceFactory extends Factory<DataSource> {
 
         /** @serial */
         private TreeMap<String,DataSourceFactory> map =
-            new TreeMap<String,DataSourceFactory>(String.CASE_INSENSITIVE_ORDER);
+            new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 
         /**
          * Sole constructor.

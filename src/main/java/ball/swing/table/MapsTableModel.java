@@ -19,7 +19,7 @@ public class MapsTableModel extends MapTableModel {
     private static final long serialVersionUID = -2742452353623299139L;
 
     /** @serial */
-    private final ArrayList<Map<?,?>> list = new ArrayList<Map<?,?>>();;
+    private final ArrayList<Map<?,?>> list = new ArrayList<>();
 
     /**
      * @see MapTableModel#MapTableModel(Map,String...)

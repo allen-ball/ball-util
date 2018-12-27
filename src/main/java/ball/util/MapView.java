@@ -97,7 +97,7 @@ public class MapView<K,V> extends AbstractMap<K,V> implements Serializable {
 
         @Override
         public Iterator<Entry<K,V>> iterator() {
-            ArrayList<Entry<K,V>> list = new ArrayList<Entry<K,V>>();
+            ArrayList<Entry<K,V>> list = new ArrayList<>();
             Iterator<Entry<K,V>> iterator = super.iterator();
 
             while (iterator.hasNext()) {

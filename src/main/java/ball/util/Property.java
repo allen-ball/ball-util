@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.util;
 
@@ -271,7 +271,7 @@ public abstract class Property<T> implements Comparable<Property<?>> {
      *          {@link Property} and {@link Iterable} fields.
      */
     public static Set<Property<?>> getStaticPropertyFields(Class<?>... types) {
-        LinkedHashSet<Property<?>> set = new LinkedHashSet<Property<?>>();
+        LinkedHashSet<Property<?>> set = new LinkedHashSet<>();
 
         for (Class<?> type : types) {
             for (Field field : type.getDeclaredFields()) {

@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2013 - 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2013 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.tools.javadoc;
 
@@ -54,7 +54,7 @@ public class BeanInfoTaglet extends AbstractInlineTaglet {
                                    TagletWriter writer) throws IllegalArgumentException {
         setConfiguration(writer.configuration());
 
-        LinkedList<Object> list = new LinkedList<Object>();
+        LinkedList<Object> list = new LinkedList<>();
 
         try {
             ClassDoc start = null;

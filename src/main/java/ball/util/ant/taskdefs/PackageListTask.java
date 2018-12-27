@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2009 - 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.taskdefs;
 
@@ -48,7 +48,7 @@ public class PackageListTask extends AbstractClassFileTask {
     public void execute() throws BuildException {
         super.execute();
 
-        Set<String> set = new TreeSet<String>();
+        Set<String> set = new TreeSet<>();
 
         for (Class<?> type : getClassSet()) {
             set.add(type.getPackage().getName());

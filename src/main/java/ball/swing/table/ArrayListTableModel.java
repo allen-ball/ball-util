@@ -20,7 +20,7 @@ import java.util.Collection;
 public abstract class ArrayListTableModel<R> extends AbstractTableModelImpl {
     private static final long serialVersionUID = -7927458440773401575L;
 
-    /** @serial */ private final ArrayList<R> list = new ArrayList<R>();
+    /** @serial */ private final ArrayList<R> list = new ArrayList<>();
 
     /**
      * @see AbstractTableModelImpl#AbstractTableModelImpl(String...)

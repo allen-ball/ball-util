@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2009 - 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.taskdefs;
 
@@ -62,7 +62,7 @@ public class SubclassesOfTask extends AbstractClassFileTask {
         try {
             Class<?> supertype =
                 Class.forName(getType(), false, getClassLoader());
-            TreeSet<Class<?>> set = new TreeSet<Class<?>>(ClassOrder.NAME);
+            TreeSet<Class<?>> set = new TreeSet<>(ClassOrder.NAME);
 
             for (Class<?> type : getClassSet()) {
                 if ((! isAbstract(type)) || getIncludeAbstract()) {

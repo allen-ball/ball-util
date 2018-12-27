@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2013 - 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2013 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.annotation.processing;
 
@@ -193,7 +193,7 @@ public class ServiceProviderForProcessor extends AbstractAnnotationProcessor
 
         public boolean add(String service, String provider) {
             if (! containsKey(service)) {
-                put(service, new TreeSet<String>());
+                put(service, new TreeSet<>());
             }
 
             return get(service).add(provider);

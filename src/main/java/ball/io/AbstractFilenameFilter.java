@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2009 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.io;
 
@@ -42,7 +42,7 @@ public abstract class AbstractFilenameFilter implements FilenameFilter {
      * @see File#list(FilenameFilter)
      */
     public String[] list(File... parents) {
-        HashSet<String> set = new HashSet<String>();
+        HashSet<String> set = new HashSet<>();
 
         for (File parent : parents) {
             if (parent != null) {

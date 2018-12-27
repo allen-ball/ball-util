@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.taskdefs;
 
@@ -36,8 +36,7 @@ import static ball.util.StringUtil.isNil;
  */
 @AntTask("instance-of")
 public class InstanceOfTask extends TypeTask {
-    private final List<TypedAttributeType> list =
-        new ArrayList<TypedAttributeType>();
+    private final List<TypedAttributeType> list = new ArrayList<>();
     protected Object instance = null;
 
     /**
@@ -69,13 +68,13 @@ public class InstanceOfTask extends TypeTask {
             log(type.getName());
 
             ClassList parameters = new ClassList();
-            List<Object> arguments = new ArrayList<Object>();
+            List<Object> arguments = new ArrayList<>();
 
             for (TypedAttributeType argument : list) {
                 Factory<?> factory =
-                    new Factory<Object>(Class.forName(argument.getType(),
-                                                      false,
-                                                      type.getClassLoader()));
+                    new Factory<>(Class.forName(argument.getType(),
+                                                false,
+                                                type.getClassLoader()));
 
                 parameters.add(factory.getType());
 
@@ -88,7 +87,7 @@ public class InstanceOfTask extends TypeTask {
             log(String.valueOf(parameters));
             log(String.valueOf(arguments));
 
-            Factory<?> factory = new Factory<Object>(type);
+            Factory<?> factory = new Factory<>(type);
             Member member = factory.getFactoryMethod(parameters.toArray());
 
             log(String.valueOf(member));

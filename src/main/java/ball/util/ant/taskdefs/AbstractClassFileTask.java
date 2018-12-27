@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.taskdefs;
 
@@ -66,7 +66,7 @@ public abstract class AbstractClassFileTask extends AbstractClasspathTask {
     }
 
     protected Set<Class<?>> getClassSet() throws BuildException {
-        TreeSet<Class<?>> set = new TreeSet<Class<?>>(ClassOrder.NAME);
+        TreeSet<Class<?>> set = new TreeSet<>(ClassOrder.NAME);
 
         try {
             DirectoryIterator iterator =

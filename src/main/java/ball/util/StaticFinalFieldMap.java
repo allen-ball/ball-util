@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2010 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2010 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.util;
 
@@ -78,7 +78,7 @@ public class StaticFinalFieldMap<T> extends TreeMap<String,T> {
      * @return  The reverse {@link Map}.
      */
     public SortedMap<T,String> reverseMap() {
-        TreeMap<T,String> map = new TreeMap<T,String>();
+        TreeMap<T,String> map = new TreeMap<>();
 
         for (Map.Entry<String,T> entry : entrySet()) {
             map.put(entry.getValue(), entry.getKey());

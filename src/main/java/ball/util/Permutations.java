@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2010 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2010 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.util;
 
@@ -32,7 +32,7 @@ public class Permutations<E> implements Iterable<List<E>> {
      * @param   collection      The superset {@link Collection}.
      */
     public Permutations(Collection<? extends E> collection) {
-        this.list = Collections.unmodifiableList(new ArrayList<E>(collection));
+        this.list = Collections.unmodifiableList(new ArrayList<>(collection));
     }
 
     @Override
@@ -77,8 +77,7 @@ public class Permutations<E> implements Iterable<List<E>> {
 
         @Override
         public Iterator<List<E>> iterator() {
-            Collection<Iterable<List<E>>> collection =
-                new LinkedList<Iterable<List<E>>>();
+            Collection<Iterable<List<E>>> collection = new LinkedList<>();
 
             if (! list.isEmpty()) {
                 for (int i = 0, n = list.size(); i < n; i += 1) {
@@ -105,7 +104,7 @@ public class Permutations<E> implements Iterable<List<E>> {
                 collection.add(Collections.singleton(prefix));
             }
 
-            return new SequenceIterator<List<E>>(collection);
+            return new SequenceIterator<>(collection);
         }
     }
 }
