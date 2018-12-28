@@ -300,9 +300,6 @@
 	* src/main/java/ball/tools/javadoc/LinkThisTaglet.java:
 	Initial writing.
 
-	* src/main/java/ball/io/Directory.java:
-	Added JAVA_HOME, USER_DIR, and USER_HOME static final members.
-
 2015-06-05  Allen D. Ball  <ball@sol.local>
 
 	* Specify <javac/> source and target as 1.6.  Revert java source
@@ -594,8 +591,6 @@
 	* src/main/java/iprotium/util/InetAddressUtil.java:
 	Initial writing (from NetworkInterfaceUtil).
 
-	* src/main/java/iprotium/io/Directory.java: Added TMPDIR member.
-
 2013-12-01  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* src/main/java/iprotium/util/InetAddressOrder.java,
@@ -703,12 +698,6 @@
 	* src/main/java/iprotium/activation/DataSourceFactory.java:
 	Initial writing.
 
-2013-07-27  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/io/FileImpl.java:
-	Provide toURI() implementation provides leading "//" and NIL
-	host.
-
 2013-07-14  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* src/main/java/iprotium/io/IOUtil.java:
@@ -769,14 +758,6 @@
 
 	* src/main/java/iprotium/annotation/processing/AbstractProcessor.java:
 	Analyze interfaces in isAssignable(Element,Element).
-
-2013-05-18  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/io/Directory.java:
-	Added asDirectory(File) static method.
-
-	* src/main/java/iprotium/io/FileImpl.java:
-	Added asFileImpl(File) static method.
 
 2013-04-06  Allen D. Ball  <ball@10-0-1-2.lan>
 
@@ -1014,14 +995,6 @@
 	wrap(OutputStream,Class<?>...) methods and added optional
 	"filters" parameter to to copy(File,File), copy(InputStream,File),
 	and copy(InputStream,OutputStream) methods.
-
-2011-05-01  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/io/FileImpl.java,
-	src/main/java/iprotium/io/Directory.java:
-	Added FileImpl.getChildFile() and Directory.getChildDirectory()
-	methods.  Accept CharSequence parameters wherever the
-	corresponding File constructor accepts String parameters.
 
 2011-04-25  Allen D. Ball  <ball@10-0-1-2.lan>
 
@@ -1292,10 +1265,6 @@
 	Return new ByteArrayOutputStream with each invocation of
 	getOutputStream().
 
-	* src/main/java/iprotium/io/FileImpl.java,
-	src/main/java/iprotium/io/Directory.java:
-	Initial writing.
-
 	* src/main/java/iprotium/util/Order.java:
 	Added Natural inner class and NATURAL member.
 
@@ -1343,10 +1312,6 @@
 	Initial writing.
 
 2009-11-14  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/io/DirectoryFileFilter.java,
-	src/main/java/iprotium/io/FileFileFilter.java:
-	Initial writing.
 
 	* src/main/java/iprotium/io/PatternFilenameFilter.java:
 	Initial writing.
