@@ -12,7 +12,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.Flushable;
-import java.io.Flushable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -23,6 +22,9 @@ import java.nio.CharBuffer;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.WritableByteChannel;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.attribute.FileTime;
 import javax.activation.DataSource;
 
 /**
@@ -151,7 +153,7 @@ public abstract class IOUtil {
         for (Class<?> filter : filters) {
             if (InputStream.class.isAssignableFrom(filter)) {
                 in = wrap(in, filter.asSubclass(InputStream.class));
-            } else /*if (OutputStream.class.isAssignableFrom(filter)) */ {
+            } else /* if (OutputStream.class.isAssignableFrom(filter)) */ {
                 out = wrap(out, filter.asSubclass(OutputStream.class));
             }
         }
@@ -427,19 +429,7 @@ public abstract class IOUtil {
     public static void mkdirs(File... files) throws IOException {
         for (File file : files) {
             if (file != null) {
-                if (! file.exists()) {
-                    mkdirs(file.getParentFile());
-                    file.mkdir();
-
-                    if (! file.exists()) {
-                        throw new IOException("Cannot create directory "
-                                              + file);
-                    }
-                } else {
-                    if (! file.isDirectory()) {
-                        throw new IOException(file + " is not a directory");
-                    }
-                }
+                Files.createDirectories(file.toPath());
             }
         }
     }
@@ -457,9 +447,14 @@ public abstract class IOUtil {
      */
     public static void touch(long dtcm, File... files) throws IOException {
         for (File file : files) {
-            mkdirs(file.getParentFile());
-            file.createNewFile();
-            file.setLastModified(dtcm);
+            Path path = file.toPath();
+
+            if (Files.notExists(path)) {
+                Files.createDirectories(path.getParent());
+                Files.createFile(path);
+            }
+
+            Files.setLastModifiedTime(path, FileTime.fromMillis(dtcm));
         }
     }
 
