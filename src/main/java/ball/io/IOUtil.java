@@ -23,7 +23,6 @@ import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.WritableByteChannel;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.attribute.FileTime;
 import javax.activation.DataSource;
 
@@ -432,43 +431,5 @@ public abstract class IOUtil {
                 Files.createDirectories(file.toPath());
             }
         }
-    }
-
-    /**
-     * Static method to "touch" {@link File}s.  Creates the files and any
-     * containing ancestor directories if they do not exist.
-     *
-     * @param   dtcm            The DTCM for the files.
-     * @param   files           The {@link File}s to be "touched."
-     *
-     * @throws  IOException     If a file cannot be created.
-     * @throws  NullPointerException
-     *                          If any argument is null.
-     */
-    public static void touch(long dtcm, File... files) throws IOException {
-        for (File file : files) {
-            Path path = file.toPath();
-
-            if (Files.notExists(path)) {
-                Files.createDirectories(path.getParent());
-                Files.createFile(path);
-            }
-
-            Files.setLastModifiedTime(path, FileTime.fromMillis(dtcm));
-        }
-    }
-
-    /**
-     * Static method to "touch" {@link File}s.  Creates the files and any
-     * containing ancestor directories if they do not exist.
-     *
-     * @param   files           The {@link File}s to be "touched."
-     *
-     * @throws  IOException     If a file cannot be created.
-     * @throws  NullPointerException
-     *                          If any argument is null.
-     */
-    public static void touch(File... files) throws IOException {
-        touch(System.currentTimeMillis(), files);
     }
 }
