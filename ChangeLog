@@ -1,5 +1,7 @@
 2018-12-28  Allen D. Ball  <ball@sol.local>
 
+	* Released 2.0.0.
+
 	* src/main/java/ball/util/ant/taskdefs/AnnotatedTask.java:
 	Use interface "default" methods instead of helper inner-class.
 
