@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.taskdefs;
 
@@ -150,12 +150,6 @@ public abstract class AbstractClasspathTask extends Task
             log(iterator.next(), msgLevel);
         }
     }
-
-    @Override
-    public String getAntTaskName() { return DELEGATE.getAntTaskName(this); }
-
-    @Override
-    public void validate() throws BuildException { DELEGATE.validate(this); }
 
     @Override
     public String toString() { return getClass().getSimpleName(); }

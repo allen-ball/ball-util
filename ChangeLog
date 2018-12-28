@@ -1,3 +1,8 @@
+2018-12-28  Allen D. Ball  <ball@sol.local>
+
+	* src/main/java/ball/util/ant/taskdefs/AnnotatedTask.java:
+	Use interface "default" methods instead of helper inner-class.
+
 2018-12-27  Allen D. Ball  <ball@sol.local>
 
 	* Start development of 2.0-SNAPSHOT.

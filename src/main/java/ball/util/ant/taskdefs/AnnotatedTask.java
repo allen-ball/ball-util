@@ -27,21 +27,16 @@ import static ball.util.BeanPropertyMethodEnum.getPropertyName;
 public interface AnnotatedTask {
 
     /**
-     * {@link Delegate} class instance.
-     *
-     * @see Delegate
-     */
-    public static final Delegate DELEGATE = new Delegate();
-
-    /**
      * Method to get {@link AntTask#value()}.
      *
      * @return  {@link AntTask#value()} if {@code this} {@link Task} is
      *          annotated; {@code null} otherwise.
-     *
-     * @see Delegate#getAntTaskName(Task)
      */
-    public String getAntTaskName();
+    public default String getAntTaskName() {
+        AntTask annotation = getClass().getAnnotation(AntTask.class);
+
+        return (annotation != null) ? annotation.value() : null;
+    }
 
     /**
      * Method to get check attributes annotated with
@@ -49,85 +44,45 @@ public interface AnnotatedTask {
      *
      * @throws  BuildException  If a {@link AntTaskAttributeConstraint}
      *                          {@link AntTaskAttributeValidator} fails.
-     *
-     * @see Delegate#validate(Task)
      */
-    public void validate() throws BuildException;
+    public default void validate() throws BuildException {
+        for (Class<?> type : new SuperclassSet(getClass())) {
+            ArrayList<AnnotatedElement> list = new ArrayList<>();
 
-    /**
-     * {@link AnnotatedTask} delegate helper class.
-     */
-    public static class Delegate {
-        private Delegate() { }
+            Collections.addAll(list, type.getDeclaredFields());
+            Collections.addAll(list, type.getDeclaredMethods());
 
-        /**
-         * See {@link AnnotatedTask#getAntTaskName()}.
-         *
-         * @param       task    The {@link Task}.
-         *
-         * @return      {@link AntTask#value()} if the {@link Task} is
-         *              annotated; {@code null} otherwise.
-         */
-        public String getAntTaskName(Task task) {
-            AntTask annotation = task.getClass().getAnnotation(AntTask.class);
+            for (AnnotatedElement element : list) {
+                for (Annotation annotation : element.getAnnotations()) {
+                    AntTaskAttributeConstraint constraint =
+                        annotation.annotationType()
+                        .getAnnotation(AntTaskAttributeConstraint.class);
 
-            return (annotation != null) ? annotation.value() : null;
-        }
+                    if (constraint != null) {
+                        try {
+                            String name = null;
+                            Object value = null;
 
-        /**
-         * See {@link AnnotatedTask#validate()}.
-         *
-         * @param       task    The {@link Task} to validate.
-         *
-         * @throws      BuildException
-         *                      If a {@link AntTaskAttributeConstraint}
-         *                      {@link AntTaskAttributeValidator} fails.
-         */
-        public void validate(Task task) throws BuildException {
-            for (Class<?> type : new SuperclassSet(task.getClass())) {
-                ArrayList<AnnotatedElement> list = new ArrayList<>();
+                            if (element instanceof Field) {
+                                name = ((Field) element).getName();
+                                value = ((Field) element).get((Task) this);
+                            } else if (element instanceof Method) {
+                                name = getPropertyName((Method) element);
+                                value = ((Method) element).invoke((Task) this);
+                            } else {
+                                throw new IllegalStateException();
+                            }
 
-                Collections.addAll(list, type.getDeclaredFields());
-                Collections.addAll(list, type.getDeclaredMethods());
-
-                for (AnnotatedElement element : list) {
-                    validate(task, element, element.getAnnotations());
-                }
-            }
-        }
-
-        private void validate(Task task,
-                              AnnotatedElement element,
-                              Annotation... annotations) throws BuildException {
-            for (Annotation annotation : annotations) {
-                AntTaskAttributeConstraint constraint =
-                    annotation.annotationType()
-                    .getAnnotation(AntTaskAttributeConstraint.class);
-
-                if (constraint != null) {
-                    try {
-                        String name = null;
-                        Object value = null;
-
-                        if (element instanceof Field) {
-                            name = ((Field) element).getName();
-                            value = ((Field) element).get(task);
-                        } else if (element instanceof Method) {
-                            name = getPropertyName((Method) element);
-                            value = ((Method) element).invoke(task);
-                        } else {
-                            throw new IllegalStateException();
+                            constraint
+                                .value().newInstance()
+                                .validate((Task) this, name, value);
+                        } catch (BuildException exception) {
+                            throw exception;
+                        } catch (RuntimeException exception) {
+                            throw exception;
+                        } catch (Exception exception) {
+                            throw new RuntimeException(exception);
                         }
-
-                        constraint
-                            .value().newInstance()
-                            .validate(task, name, value);
-                    } catch (BuildException exception) {
-                        throw exception;
-                    } catch (RuntimeException exception) {
-                        throw exception;
-                    } catch (Exception exception) {
-                        throw new RuntimeException(exception);
                     }
                 }
             }
