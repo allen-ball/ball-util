@@ -1299,33 +1299,7 @@
 
 2009-11-21  Allen D. Ball  <ball@10-0-1-2.lan>
 
-	* src/main/java/iprotium/io/AbstractFileFilter.java,
-	src/main/java/iprotium/io/AbstractFilenameFilter.java:
-	Added list(File...) method.
-
-	* src/main/java/iprotium/io/PatternFilenameFilter.java:
-	Added PatternFilenameFilter(String) constructor.
-
 	* src/main/java/iprotium/util/FileOrder.java: Initial writing.
-
-2009-11-15  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/io/AndFileFilter.java,
-	src/main/java/iprotium/io/AndFilenameFilter.java,
-	src/main/java/iprotium/io/OrFileFilter.java,
-	src/main/java/iprotium/io/OrFilenameFilter.java:
-	Initial writing.
-
-2009-11-14  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/io/PatternFilenameFilter.java:
-	Initial writing.
-
-2009-11-13  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/io/AbstractFileFilter.java,
-	src/main/java/iprotium/io/AbstractFilenameFilter.java:
-	Initial writing.
 
 2009-10-24  Allen D. Ball  <ball@10-0-1-2.lan>
 
