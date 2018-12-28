@@ -883,7 +883,7 @@
 
 2012-12-25  Allen D. Ball  <ball@mecury.local>
 
-	* Re-factored Factory of a subclass of TreeMap<Class<?>[],Member>.
+	* Re-factored Factory as a subclass of TreeMap<Class<?>[],Member>.
 
 2012-12-22  Allen D. Ball  <ball@10-0-1-2.lan>
 
@@ -1072,10 +1072,6 @@
 	Add protected constructor which allows an actual factory (e.g.,
 	SocketFactory) to be specified.
 
-	* src/main/java/iprotium/util/ByteFactory.java,
-	src/main/java/iprotium/util/ShortFactory.java:
-	Override convert(Object) to use static decode(String) method.
-
 2010-11-11  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* Replaced CombinationIterable with Combinations.
@@ -1106,27 +1102,10 @@
 	Reordered discovery heuristics to perfer first-found static
 	factory methods.  Added "decode" to static factory method names.
 
-	* src/main/java/iprotium/util/IntegerFactory.java,
-	src/main/java/iprotium/util/LongFactory.java:
-	Override convert(Object) to use static decode(String) method.
-
 	* src/main/java/iprotium/util/ant/taskdefs/InstanceOfTask.java:
 	Track changes to the Factory API.
 
 2010-11-03  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/util/BigDecimalFactory.java,
-	src/main/java/iprotium/util/BigIntegerFactory.java,
-	src/main/java/iprotium/util/BooleanFactory.java,
-	src/main/java/iprotium/util/ByteFactory.java,
-	src/main/java/iprotium/util/CharacterFactory.java,
-	src/main/java/iprotium/util/DoubleFactory.java,
-	src/main/java/iprotium/util/FloatFactory.java,
-	src/main/java/iprotium/util/IntegerFactory.java,
-	src/main/java/iprotium/util/LongFactory.java,
-	src/main/java/iprotium/util/ShortFactory.java,
-	src/main/java/iprotium/util/StringFactory.java:
-	Initial writing.
 
 	* src/main/java/iprotium/beans/PropertyDescriptorMap.java:
 	Added the getIndexedReadMethod(String) and
