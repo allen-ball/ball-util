@@ -369,53 +369,6 @@ public abstract class IOUtil {
     }
 
     /**
-     * Static method to delete a {@link File}.  Throws an
-     * {@link IOException} if the {@link File} cannot be deleted.
-     *
-     * @param   file            The file to be deleted.
-     *
-     * @throws  IOException     If the file cannot be deleted.
-     * @throws  NullPointerException
-     *                          If file is null.
-     */
-    public static void delete(File file) throws IOException {
-        if (file.exists()) {
-            file.delete();
-
-            if (file.exists()) {
-                throw new IOException("Cannot delete " + file);
-            }
-        }
-    }
-
-    /**
-     * Static method to delete a file and all its containing ancestor
-     * directories back to a specified directory if those directories are
-     * empty.  Throws an {@link IOException} if the {@link File} cannot be
-     * deleted.
-     *
-     * @param   directory       The containing directory ({@link File}); not
-     *                          normally deleted.
-     * @param   file            The {@link File} to be deleted.
-     *
-     * @throws  IOException     If the file cannot be deleted.
-     * @throws  NullPointerException
-     *                          If file is null.
-     */
-    public static void delete(File directory, File file) throws IOException {
-        delete(file);
-
-        if (directory != null) {
-            File parent = file.getParentFile();
-
-            while ((! parent.equals(directory))
-                   && (parent.delete() || (! parent.exists()))) {
-                parent = parent.getParentFile();
-            }
-        }
-    }
-
-    /**
      * Static method to create directories (and containing ancestor
      * directories) specified by the arguments.
      *
