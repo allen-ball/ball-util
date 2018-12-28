@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2012 - 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2012 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.beans;
 

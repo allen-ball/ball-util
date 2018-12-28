@@ -5,16 +5,13 @@
  */
 package ball.util;
 
-import ball.beans.Converter;
 import java.beans.ConstructorProperties;
-import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -31,9 +28,8 @@ import static ball.util.ClassUtil.isStatic;
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
-public class Factory<T> extends TreeMap<Class<?>[],Member>
-                        implements Converter<T> {
-    private static final long serialVersionUID = 7215172252790252847L;
+public class Factory<T> extends TreeMap<Class<?>[],Member> {
+    private static final long serialVersionUID = -5733222257965875050L;
 
     /** @serial */ private final Class<? extends T> type;
     /** @serial */ private final Object factory;
@@ -333,24 +329,6 @@ public class Factory<T> extends TreeMap<Class<?>[],Member>
         }
 
         return value;
-    }
-
-    @Override
-    public T convert(Object in) throws IllegalAccessException,
-                                       InstantiationException,
-                                       InvocationTargetException,
-                                       NoSuchMethodException {
-        T out = null;
-
-        if (in != null) {
-            if (getType().isAssignableFrom(in.getClass())) {
-                out = getType().cast(in);
-            } else {
-                out = getInstance(in);
-            }
-        }
-
-        return out;
     }
 
     /**

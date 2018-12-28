@@ -20,7 +20,7 @@ import org.fusesource.hawtjni.runtime.Library;
  */
 @JniClass
 public class UUIDFactory extends Factory<UUID> {
-    private static final long serialVersionUID = 2636388251268998745L;
+    private static final long serialVersionUID = -6414252017964333776L;
 
     static { new Library("ball-util", UUIDFactory.class).load(); }
 

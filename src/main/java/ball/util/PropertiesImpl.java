@@ -5,7 +5,6 @@
  */
 package ball.util;
 
-import ball.beans.ConverterUtil;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -133,14 +132,11 @@ public class PropertiesImpl extends Properties {
     public static Object configure(Properties properties, Object object) {
         for (String key : properties.stringPropertyNames()) {
             String value = properties.getProperty(key);
-            Method method =
-                getSetMethod(object,
-                             key, (value != null) ? value.getClass() : null);
+            Method method = getSetMethod(object, key, String.class);
 
             if (method != null) {
                 try {
-                    method.invoke(object,
-                                  ConverterUtil.convert(method, 0, value));
+                    method.invoke(object, value);
                 } catch (Exception exception) {
                 }
             }

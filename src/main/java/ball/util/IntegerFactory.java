@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2010 - 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2010 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.util;
 
@@ -14,7 +14,7 @@ import java.lang.reflect.InvocationTargetException;
  * @version $Revision$
  */
 public class IntegerFactory extends Factory<Integer> {
-    private static final long serialVersionUID = 7513510276209324479L;
+    private static final long serialVersionUID = -6875650947612227173L;
 
     private static final IntegerFactory DEFAULT = new IntegerFactory();
 
@@ -31,18 +31,4 @@ public class IntegerFactory extends Factory<Integer> {
      * @see #getDefault()
      */
     protected IntegerFactory() { super(Integer.class); }
-
-    /**
-     * {@inheritDoc}
-     * @see Integer#decode(String)
-     */
-    @Override
-    public Integer convert(Object in) throws IllegalAccessException,
-                                             InstantiationException,
-                                             InvocationTargetException,
-                                             NoSuchMethodException {
-        return ((in instanceof CharSequence)
-                    ? Integer.decode(in.toString())
-                    : super.convert(in));
-    }
 }

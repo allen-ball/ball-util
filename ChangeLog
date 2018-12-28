@@ -173,9 +173,6 @@
 
 2016-09-10  Allen D. Ball  <ball@sol.local>
 
-	* src/main/java/ball/util/BeanUtil.java:
-	Added getPropertyName(Method) method.
-
 	* src/main/java/ball/annotation/AnnotationUtil.java:
 	Initial writing.
 
@@ -700,9 +697,6 @@
 	Simplified implementation and avoid unnecessary copies between
 	getOutputStream() and getInputStream() invocations.
 
-	* src/main/java/iprotium/activation/DataSourceFactory.java:
-	Initial writing.
-
 2013-07-14  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* src/main/java/iprotium/io/IOUtil.java:
@@ -875,9 +869,8 @@
 	Added LOCAL_VARIABLE to @Target.
 
 	* src/main/java/iprotium/annotation/processing/
-	        AbstractAnnotationProcessor.java,
-	        ConstructorPropertiesProcessor.java,
-	        ConvertWithProcessor.java:
+		AbstractAnnotationProcessor.java,
+	        ConstructorPropertiesProcessor.java:
 	Initial writing.
 
 	* src/main/java/iprotium/annotation/processing/RegexProcessor.java:
@@ -885,9 +878,6 @@
 	Verify constant value is a String.
 
 2012-12-26  Allen D. Ball  <ball@mecury.local>
-
-	* src/main/java/iprotium/util/BeanUtil.java:
-	Do not require source or destination Map keys to be Strings.
 
 	* src/main/java/iprotium/util/IterableUtil.java: Initial writing.
 
@@ -1086,13 +1076,6 @@
 	src/main/java/iprotium/util/ShortFactory.java:
 	Override convert(Object) to use static decode(String) method.
 
-2010-11-13  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/util/BeanUtil.java:
-	Added indexed-property get(Class<?>,Object,String,int),
-	get(Object,String,int), set(Class<?>,Object,String,int,Object),
-	and set(Object,String,int,Object) methods.
-
 2010-11-11  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* Replaced CombinationIterable with Combinations.
@@ -1116,13 +1099,6 @@
 
 2010-11-07  Allen D. Ball  <ball@10-0-1-2.lan>
 
-	* src/main/java/iprotium/beans/ConverterUtil.java:
-	Initial writing.
-
-	* src/main/java/iprotium/util/BeanUtil.java:
-	Propagate PropertyVetoException in set() methods.
-	Honor @ConvertWith annotations when invoking setter methods.
-
 	* src/main/java/iprotium/util/Factory.java:
 	Made hasFactoryMemberFor(Class<?>...),
 	getFactoryMember(Class<?>...), and apply(Member,Object[]) members
@@ -1139,8 +1115,6 @@
 
 2010-11-03  Allen D. Ball  <ball@10-0-1-2.lan>
 
-	* src/main/java/iprotium/util/Factory.java: Implement Converter.
-
 	* src/main/java/iprotium/util/BigDecimalFactory.java,
 	src/main/java/iprotium/util/BigIntegerFactory.java,
 	src/main/java/iprotium/util/BooleanFactory.java,
@@ -1154,10 +1128,6 @@
 	src/main/java/iprotium/util/StringFactory.java:
 	Initial writing.
 
-	* src/main/java/iprotium/beans/Converter.java,
-	src/main/java/iprotium/beans/ConvertWith.java:
-	Initial writing.
-
 	* src/main/java/iprotium/beans/PropertyDescriptorMap.java:
 	Added the getIndexedReadMethod(String) and
 	getIndexedWriteMethod(String) methods.
@@ -1169,8 +1139,6 @@
 	and copy(Readable,CharBuffer,Appendable).
 
 2010-10-23  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/util/BeanUtil.java: Initial writing.
 
 	* src/main/java/iprotium/activation/ByteArrayDataSource.java,
 	src/main/java/iprotium/activation/TempFileDataSource.java:

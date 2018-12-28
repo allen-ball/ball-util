@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2010 - 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2010 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.util;
 
@@ -14,7 +14,7 @@ import java.lang.reflect.InvocationTargetException;
  * @version $Revision$
  */
 public class LongFactory extends Factory<Long> {
-    private static final long serialVersionUID = 7467283336591304877L;
+    private static final long serialVersionUID = -3535636443213283831L;
 
     private static final LongFactory DEFAULT = new LongFactory();
 
@@ -31,18 +31,4 @@ public class LongFactory extends Factory<Long> {
      * @see #getDefault()
      */
     protected LongFactory() { super(Long.class); }
-
-    /**
-     * {@inheritDoc}
-     * @see Long#decode(String)
-     */
-    @Override
-    public Long convert(Object in) throws IllegalAccessException,
-                                          InstantiationException,
-                                          InvocationTargetException,
-                                          NoSuchMethodException {
-        return ((in instanceof CharSequence)
-                    ? Long.decode(in.toString())
-                    : super.convert(in));
-    }
 }

@@ -1,11 +1,10 @@
 /*
  * $Id$
  *
- * Copyright 2010 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2010 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.activation;
 
-import ball.util.BeanUtil;
 import java.beans.ConstructorProperties;
 import java.io.IOException;
 import java.io.InputStream;
@@ -54,7 +53,11 @@ public abstract class FilterDataSource extends AbstractDataSource {
     @Override
     public void setName(String name) {
         try {
-            BeanUtil.set(getDataSource(), "name", name);
+            DataSource ds = getDataSource();
+
+            ds.getClass()
+                .getMethod("setName", String.class)
+                .invoke(ds, name);
         } catch (Exception exception) {
             throw new UnsupportedOperationException(exception);
         }
@@ -66,7 +69,11 @@ public abstract class FilterDataSource extends AbstractDataSource {
     @Override
     public void setContentType(String type) {
         try {
-            BeanUtil.set(getDataSource(), "contentType", type);
+            DataSource ds = getDataSource();
+
+            ds.getClass()
+                .getMethod("setContentType", String.class)
+                .invoke(ds, type);
         } catch (Exception exception) {
             throw new UnsupportedOperationException(exception);
         }

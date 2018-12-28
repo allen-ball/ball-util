@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2010 - 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2010 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.util;
 
@@ -14,7 +14,7 @@ import java.lang.reflect.InvocationTargetException;
  * @version $Revision$
  */
 public class ByteFactory extends Factory<Byte> {
-    private static final long serialVersionUID = -8297231946213248897L;
+    private static final long serialVersionUID = -6597416566981634018L;
 
     private static final ByteFactory DEFAULT = new ByteFactory();
 
@@ -31,18 +31,4 @@ public class ByteFactory extends Factory<Byte> {
      * @see #getDefault()
      */
     protected ByteFactory() { super(Byte.class); }
-
-    /**
-     * {@inheritDoc}
-     * @see Byte#decode(String)
-     */
-    @Override
-    public Byte convert(Object in) throws IllegalAccessException,
-                                          InstantiationException,
-                                          InvocationTargetException,
-                                          NoSuchMethodException {
-        return ((in instanceof CharSequence)
-                    ? Byte.decode(in.toString())
-                    : super.convert(in));
-    }
 }
