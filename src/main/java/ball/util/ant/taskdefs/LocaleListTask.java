@@ -1,17 +1,16 @@
 /*
  * $Id$
  *
- * Copyright 2009 - 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.taskdefs;
 
 import java.util.Locale;
 import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Task;
 
 /**
- * {@link.uri http://ant.apache.org/ Ant} {@link Task} to list the available
- * {@link Locale}s.
+ * {@link.uri http://ant.apache.org/ Ant} {@link org.apache.tools.ant.Task}
+ * to list the available {@link Locale}s.
  *
  * {@bean.info}
  *
@@ -21,7 +20,7 @@ import org.apache.tools.ant.Task;
  * @version $Revision$
  */
 @AntTask("locale-list")
-public class LocaleListTask extends Task {
+public class LocaleListTask extends AbstractClasspathTask {
 
     /**
      * Sole constructor.
@@ -30,6 +29,8 @@ public class LocaleListTask extends Task {
 
     @Override
     public void execute() throws BuildException {
+        super.execute();
+
         try {
             for (Locale locale : Locale.getAvailableLocales()) {
                 log(String.valueOf(locale));
@@ -41,7 +42,4 @@ public class LocaleListTask extends Task {
             throw new BuildException(throwable);
         }
     }
-
-    @Override
-    public String toString() { return getClass().getSimpleName(); }
 }

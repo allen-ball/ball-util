@@ -1,19 +1,18 @@
 /*
  * $Id$
  *
- * Copyright 2009 - 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.taskdefs;
 
 import java.nio.charset.Charset;
 import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Task;
 
 import static ball.util.StringUtil.NIL;
 
 /**
- * {@link.uri http://ant.apache.org/ Ant} {@link Task} to list the available
- * {@link Charset}s.
+ * {@link.uri http://ant.apache.org/ Ant} {@link org.apache.tools.ant.Task}
+ * to list the available {@link Charset}s.
  *
  * {@bean.info}
  *
@@ -23,7 +22,7 @@ import static ball.util.StringUtil.NIL;
  * @version $Revision$
  */
 @AntTask("charset-list")
-public class CharsetListTask extends Task {
+public class CharsetListTask extends AbstractClasspathTask {
 
     /**
      * Sole constructor.
@@ -32,6 +31,8 @@ public class CharsetListTask extends Task {
 
     @Override
     public void execute() throws BuildException {
+        super.execute();
+
         try {
             log(NIL);
 
@@ -45,7 +46,4 @@ public class CharsetListTask extends Task {
             throw new BuildException(throwable);
         }
     }
-
-    @Override
-    public String toString() { return getClass().getSimpleName(); }
 }

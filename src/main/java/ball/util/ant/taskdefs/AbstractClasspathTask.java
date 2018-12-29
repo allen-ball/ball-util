@@ -22,7 +22,7 @@ import org.apache.tools.ant.util.ClasspathUtils;
  * @version $Revision$
  */
 public abstract class AbstractClasspathTask extends Task
-                                            implements AnnotatedTask,
+                                            implements AnnotatedAntTask,
                                                        AntTaskLogMethods {
     private ClasspathUtils.Delegate delegate = null;
 
@@ -37,6 +37,12 @@ public abstract class AbstractClasspathTask extends Task
 
     public Path createClasspath() { return delegate.createClasspath(); }
 
+    /**
+     * {@inheritDoc}
+     *
+     * Invokes {@link ConfigurableAntTask#configure()} if {@code this}
+     * implements {@link ConfigurableAntTask}.
+     */
     @Override
     public void init() throws BuildException {
         super.init();
@@ -44,11 +50,25 @@ public abstract class AbstractClasspathTask extends Task
         if (delegate == null) {
             delegate = ClasspathUtils.getDelegate(this);
         }
+
+        if (this instanceof ConfigurableAntTask) {
+            ((ConfigurableAntTask) this).configure();
+        }
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * Invokes {@link AnnotatedAntTask#validate()} if {@code this}
+     * implements {@link AnnotatedAntTask}.
+     */
     @Override
     public void execute() throws BuildException {
-        validate();
+        super.execute();
+
+        if (this instanceof AnnotatedAntTask) {
+            ((AnnotatedAntTask) this).validate();
+        }
     }
 
     /**

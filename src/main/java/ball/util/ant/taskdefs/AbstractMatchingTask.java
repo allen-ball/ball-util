@@ -25,7 +25,7 @@ import org.apache.tools.ant.util.ClasspathUtils;
  * @version $Revision$
  */
 public abstract class AbstractMatchingTask extends MatchingTask
-                                           implements AnnotatedTask,
+                                           implements AnnotatedAntTask,
                                                       AntTaskLogMethods {
     private ClasspathUtils.Delegate delegate = null;
     private File basedir = null;
@@ -48,6 +48,12 @@ public abstract class AbstractMatchingTask extends MatchingTask
 
     public Path createClasspath() { return delegate.createClasspath(); }
 
+    /**
+     * {@inheritDoc}
+     *
+     * Invokes {@link ConfigurableAntTask#configure()} if {@code this}
+     * implements {@link ConfigurableAntTask}.
+     */
     @Override
     public void init() throws BuildException {
         super.init();
@@ -55,11 +61,25 @@ public abstract class AbstractMatchingTask extends MatchingTask
         if (delegate == null) {
             delegate = ClasspathUtils.getDelegate(this);
         }
+
+        if (this instanceof ConfigurableAntTask) {
+            ((ConfigurableAntTask) this).configure();
+        }
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * Invokes {@link AnnotatedAntTask#validate()} if {@code this}
+     * implements {@link AnnotatedAntTask}.
+     */
     @Override
     public void execute() throws BuildException {
-        validate();
+        super.execute();
+
+        if (this instanceof AnnotatedAntTask) {
+            ((AnnotatedAntTask) this).validate();
+        }
 
         if (getBasedir() == null && getFile() == null) {
             setBasedir(getProject().resolveFile("."));

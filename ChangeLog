@@ -5,11 +5,15 @@
 	* src/main/java/ball/util/ant/taskdefs/AntTaskLogMethods.java:
 	Initial writing; collected common log() methods.
 
+	* src/main/java/ball/util/ant/taskdefs/ConfigurableAntTask.java:
+	Initial writing; Supported in AbstractClasspathTask and
+	AbstractMatchingTask init() methods.
+
 2018-12-28  Allen D. Ball  <ball@sol.local>
 
 	* Released 2.0.0.
 
-	* src/main/java/ball/util/ant/taskdefs/AnnotatedTask.java:
+	* src/main/java/ball/util/ant/taskdefs/AnnotatedAntTask.java:
 	Use interface "default" methods instead of helper inner-class.
 
 2018-12-27  Allen D. Ball  <ball@sol.local>
@@ -49,7 +53,7 @@
 
 2018-04-01  Allen D. Ball  <ball@sol.local>
 
-	* src/main/java/ball/util/ant/taskdefs/AnnotatedTask.java:
+	* src/main/java/ball/util/ant/taskdefs/AnnotatedAntTask.java:
 	Fixed stack overflow bug (tickled by Apache Ant 1.10.3).
 
 2018-03-31  Allen D. Ball  <ball@sol.local>
@@ -423,11 +427,11 @@
 2014-07-29  Allen D. Ball  <ball@sol.local>
 
 	* Changed all Ant Task implementations to call
-	AnnotatedTask.validate() in execute() and applied
+	AnnotatedAntTask.validate() in execute() and applied
 	AntTaskAttributeConstraint annotations.
 
 	* Added AntTaskAttributeConstraint framework.  Added
-	AnnotatedTask.validate() callback (with delegate implementation)
+	AnnotatedAntTask.validate() callback (with delegate implementation)
 	to evaluate constraints.
 
 	* src/main/java/ball/annotation/processing/AbstractProcessor.java:
@@ -458,7 +462,7 @@
 
 	* Moved @AntTask to ball.util.ant.taskdefs.
 
-	* src/main/java/ball/util/ant/taskdefs/AnnotatedTask.java:
+	* src/main/java/ball/util/ant/taskdefs/AnnotatedAntTask.java:
 	Initial writing.
 
 2014-07-24  Allen D. Ball  <ball@sol.local>

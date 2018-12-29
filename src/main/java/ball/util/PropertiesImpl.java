@@ -131,8 +131,10 @@ public class PropertiesImpl extends Properties {
      */
     public static Object configure(Properties properties, Object object) {
         for (String key : properties.stringPropertyNames()) {
-            String value = properties.getProperty(key);
-            Method method = getSetMethod(object, key, String.class);
+            Object value = properties.get(key);
+            Method method =
+                getSetMethod(object,
+                             key, (value != null) ? value.getClass() : null);
 
             if (method != null) {
                 try {

@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2011 - 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2011 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.taskdefs;
 
@@ -9,7 +9,6 @@ import java.net.NetworkInterface;
 import java.util.Collections;
 import java.util.List;
 import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Task;
 
 /**
  * {@link.uri http://ant.apache.org/ Ant} {@link org.apache.tools.ant.Task}
@@ -21,7 +20,7 @@ import org.apache.tools.ant.Task;
  * @version $Revision$
  */
 @AntTask("network-interfaces")
-public class NetworkInterfacesTask extends Task {
+public class NetworkInterfacesTask extends AbstractClasspathTask {
 
     /**
      * Sole constructor.
@@ -30,6 +29,8 @@ public class NetworkInterfacesTask extends Task {
 
     @Override
     public void execute() throws BuildException {
+        super.execute();
+
         try {
             List<NetworkInterface> list =
                 Collections.list(NetworkInterface.getNetworkInterfaces());
@@ -44,7 +45,4 @@ public class NetworkInterfacesTask extends Task {
             throw new BuildException(throwable);
         }
     }
-
-    @Override
-    public String toString() { return getClass().getSimpleName(); }
 }

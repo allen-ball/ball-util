@@ -1,14 +1,13 @@
 /*
  * $Id$
  *
- * Copyright 2011 - 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2011 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.taskdefs;
 
 import java.net.InetAddress;
 import java.util.Arrays;
 import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Task;
 
 /**
  * {@link.uri http://ant.apache.org/ Ant} {@link org.apache.tools.ant.Task}
@@ -20,7 +19,7 @@ import org.apache.tools.ant.Task;
  * @version $Revision$
  */
 @AntTask("inet-addresses-for")
-public class InetAddressesForTask extends Task {
+public class InetAddressesForTask extends AbstractClasspathTask {
     private String string = null;
 
     /**
@@ -34,6 +33,8 @@ public class InetAddressesForTask extends Task {
 
     @Override
     public void execute() throws BuildException {
+        super.execute();
+
         try {
             log(Arrays.toString(InetAddress.getAllByName(getString())));
         } catch (BuildException exception) {
@@ -43,7 +44,4 @@ public class InetAddressesForTask extends Task {
             throw new BuildException(throwable);
         }
     }
-
-    @Override
-    public String toString() { return getClass().getSimpleName(); }
 }

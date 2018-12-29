@@ -24,7 +24,7 @@ import static ball.util.BeanPropertyMethodEnum.getPropertyName;
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
-public interface AnnotatedTask {
+public interface AnnotatedAntTask {
 
     /**
      * Method to get {@link AntTask#value()}.
@@ -32,7 +32,7 @@ public interface AnnotatedTask {
      * @return  {@link AntTask#value()} if {@code this} {@link Task} is
      *          annotated; {@code null} otherwise.
      */
-    public default String getAntTaskName() {
+    default String getAntTaskName() {
         AntTask annotation = getClass().getAnnotation(AntTask.class);
 
         return (annotation != null) ? annotation.value() : null;
@@ -45,7 +45,7 @@ public interface AnnotatedTask {
      * @throws  BuildException  If a {@link AntTaskAttributeConstraint}
      *                          {@link AntTaskAttributeValidator} fails.
      */
-    public default void validate() throws BuildException {
+    default void validate() throws BuildException {
         for (Class<?> type : new SuperclassSet(getClass())) {
             ArrayList<AnnotatedElement> list = new ArrayList<>();
 
