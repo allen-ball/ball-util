@@ -116,9 +116,4 @@ public abstract class AbstractClassFileTask extends AbstractClasspathTask {
 
         return file;
     }
-
-    protected void log(File file, int lineno, String message) {
-        super.log(String.valueOf(file) + ":" + String.valueOf(lineno)
-                  + ": " + message);
-    }
 }
