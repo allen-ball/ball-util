@@ -11,6 +11,10 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import static java.nio.charset.StandardCharsets.UTF_16BE;
+import static java.nio.charset.StandardCharsets.UTF_16LE;
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 /**
  * Byte order mark to {@link Charset} {@link Map} implementation.
  *
@@ -37,10 +41,10 @@ public class BOMCharsetMap extends LinkedHashMap<byte[],Charset> {
         put(bytes(0x00, 0x00, 0xFE, 0xFF), Charset.forName("UTF-32BE"));
         put(bytes(0xFF, 0xFE, 0x00, 0x00), Charset.forName("UTF-32LE"));
 
-        put(bytes(0xEF, 0xBB, 0xBF), Charset.forName("UTF-8"));
+        put(bytes(0xEF, 0xBB, 0xBF), UTF_8);
 
-        put(bytes(0xFE, 0xFF), Charset.forName("UTF-16BE"));
-        put(bytes(0xFF, 0xFE), Charset.forName("UTF-16LE"));
+        put(bytes(0xFE, 0xFF), UTF_16BE);
+        put(bytes(0xFF, 0xFE), UTF_16LE);
     }
 
     private static byte[] bytes(int... elements) {

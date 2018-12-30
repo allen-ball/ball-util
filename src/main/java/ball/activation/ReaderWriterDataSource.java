@@ -24,6 +24,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import static ball.util.StringUtil.NIL;
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
  * {@link javax.activation.DataSource} implementation that provides a
@@ -36,7 +37,7 @@ import static ball.util.StringUtil.NIL;
  */
 public class ReaderWriterDataSource extends FilterDataSource
                                     implements Iterable<String> {
-    protected static final Charset CHARSET = Charset.forName("UTF-8");
+    protected static final Charset CHARSET = UTF_8;
 
     private final Charset charset;
 

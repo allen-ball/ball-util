@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2014 - 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2014 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.io;
 
@@ -16,6 +16,8 @@ import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.Map;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 /**
  * {@link java.io.BufferedReader} implementation which analyzes the
  * underlying {@link InputStream} for byte order marks and selects the
@@ -27,7 +29,7 @@ import java.util.Map;
  * @version $Revision$
  */
 public class UnicodeReader extends LineNumberReader {
-    private static final Charset DEFAULT = Charset.forName("UTF-8");
+    private static final Charset DEFAULT = UTF_8;
 
     /**
      * @param   file            The {@link File} to open.
