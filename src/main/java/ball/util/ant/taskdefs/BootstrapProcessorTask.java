@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2011 - 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2011 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.taskdefs;
 
@@ -35,10 +35,6 @@ public class BootstrapProcessorTask extends AbstractClassFileTask {
     @Override
     public void execute() throws BuildException {
         super.execute();
-
-        if (getBasedir() == null) {
-            setBasedir(getProject().resolveFile("."));
-        }
 
         if (getDestdir() == null) {
             setDestdir(getBasedir());
