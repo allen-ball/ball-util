@@ -62,14 +62,10 @@ public class ObjectCloneProcessor extends AbstractNoAnnotationProcessor {
 
     @Override
     protected void process(Element element) {
-        TypeElement type = (TypeElement) element;
-
-        for (ExecutableElement method :
-                 methodsIn(type.getEnclosedElements())) {
-            if (overrides(method, METHOD)) {
-                check(method);
-            }
-        }
+        methodsIn(((TypeElement) element).getEnclosedElements())
+            .stream()
+            .filter(t -> overrides(t, METHOD))
+            .forEach(t -> check(t));
     }
 
     private void check(ExecutableElement method) {

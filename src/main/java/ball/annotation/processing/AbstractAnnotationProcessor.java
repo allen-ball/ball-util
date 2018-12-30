@@ -8,9 +8,9 @@ package ball.annotation.processing;
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
@@ -75,12 +75,11 @@ public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
 
     @Override
     public Set<String> getSupportedAnnotationTypes() {
-        Set<String> set = new LinkedHashSet<>();
-
-        for (Class<? extends Annotation> type :
-                 getSupportedAnnotationTypeList()) {
-            set.add(type.getCanonicalName());
-        }
+        Set<String> set =
+            getSupportedAnnotationTypeList()
+            .stream()
+            .map(t -> t.getCanonicalName())
+            .collect(Collectors.toSet());
 
         return Collections.unmodifiableSet(set);
     }

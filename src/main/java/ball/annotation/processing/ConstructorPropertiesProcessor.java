@@ -1,14 +1,13 @@
 /*
  * $Id$
  *
- * Copyright 2012 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2012 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.annotation.processing;
 
 import ball.annotation.ServiceProviderFor;
 import ball.util.StringUtil;
 import java.beans.ConstructorProperties;
-import java.lang.annotation.Annotation;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
@@ -18,12 +17,7 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
-import javax.lang.model.type.DeclaredType;
-import javax.lang.model.type.TypeMirror;
 
-import static javax.lang.model.element.ElementKind.CONSTRUCTOR;
-import static javax.lang.model.element.Modifier.PRIVATE;
-import static javax.lang.model.util.ElementFilter.methodsIn;
 import static javax.tools.Diagnostic.Kind.ERROR;
 import static javax.tools.Diagnostic.Kind.WARNING;
 
@@ -56,26 +50,22 @@ public class ConstructorPropertiesProcessor
             List<? extends VariableElement> parameters =
                 ((ExecutableElement) element).getParameters();
 
-            if (value.length == parameters.size()) {
-                TypeElement type = (TypeElement) element.getEnclosingElement();
-                Set<String> properties = getPropertyNames(type);
-
-                for (String property : value) {
-                    if (! StringUtil.isNil(property)) {
-                        if (! properties.contains(property)) {
-                            print(WARNING,
-                                  element,
-                                  "bean property `"
-                                  + property + "' not defined");
-                        }
-                    }
-                }
-            } else {
+            if (value.length != parameters.size()) {
                 print(WARNING,
                       element,
                       Arrays.asList(value) + " does not match "
                       + element.getKind() + " parameters");
             }
+
+            TypeElement type = (TypeElement) element.getEnclosingElement();
+            Set<String> properties = getPropertyNames(type);
+
+            Arrays.stream(value)
+                .filter(t -> (! StringUtil.isNil(t)))
+                .filter(t -> (! properties.contains(t)))
+                .forEach(t -> print(WARNING,
+                                    element,
+                                    "bean property `" + t + "' not defined"));
             break;
 
         default:

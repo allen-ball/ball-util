@@ -1,14 +1,13 @@
 /*
  * $Id$
  *
- * Copyright 2013, 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2013 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.annotation.processing;
 
 import ball.annotation.ServiceProviderFor;
 import javax.annotation.processing.Processor;
 import javax.lang.model.element.Element;
-import javax.lang.model.element.ExecutableElement;
 
 import static javax.lang.model.element.ElementKind.CLASS;
 import static javax.lang.model.element.Modifier.ABSTRACT;
@@ -42,17 +41,14 @@ public class ConstructorProcessor extends AbstractNoAnnotationProcessor {
 
     @Override
     protected void process(Element element) {
-        for (ExecutableElement constructor :
-                 constructorsIn(element.getEnclosedElements())) {
-            if (element.getModifiers().contains(ABSTRACT)) {
-                if (constructor.getModifiers().contains(PUBLIC)) {
-                    print(WARNING,
-                          constructor,
-                          constructor.getKind() + " is declared "
-                          + constructor.getModifiers()
-                          + "; suggest non-" + PUBLIC);
-                }
-            }
-        }
+        constructorsIn(element.getEnclosedElements())
+            .stream()
+            .filter(t -> element.getModifiers().contains(ABSTRACT))
+            .filter(t -> t.getModifiers().contains(PUBLIC))
+            .forEach(t -> print(WARNING,
+                                t,
+                                t.getKind() + " is declared "
+                                + t.getModifiers()
+                                + "; suggest non-" + PUBLIC));
     }
 }

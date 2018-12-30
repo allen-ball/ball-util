@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2013, 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2013 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.annotation.processing;
 
@@ -48,12 +48,10 @@ public class CollectionToArrayProcessor extends AbstractNoAnnotationProcessor {
 
     @Override
     protected void process(Element element) {
-        for (ExecutableElement method :
-                 methodsIn(element.getEnclosedElements())) {
-            if (overrides(method, METHOD)) {
-                check(method);
-            }
-        }
+        methodsIn(element.getEnclosedElements())
+            .stream()
+            .filter(t -> overrides(t, METHOD))
+            .forEach(t -> check(t));
     }
 
     private void check(ExecutableElement method) {

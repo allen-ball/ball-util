@@ -5,7 +5,6 @@
  */
 package ball.annotation.processing;
 
-import ball.util.BeanPropertyMethodEnum;
 import ball.activation.ThrowableDataSource;
 import ball.util.BeanPropertyMethodEnum;
 import java.io.File;
@@ -23,23 +22,22 @@ import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import javax.annotation.processing.Filer;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.AnnotationMirror;
-import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
-import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.ArrayType;
 import javax.lang.model.type.PrimitiveType;
 import javax.lang.model.type.TypeKind;
@@ -49,13 +47,11 @@ import javax.lang.model.util.Types;
 import javax.tools.Diagnostic;
 import javax.tools.FileObject;
 
-import static ball.lang.PrimitiveTypeMap.asBoxedType;
-import static java.util.Arrays.asList;
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Collections.disjoint;
 import static javax.lang.model.element.Modifier.PRIVATE;
 import static javax.lang.model.element.Modifier.PUBLIC;
 import static javax.lang.model.element.Modifier.STATIC;
-import static javax.lang.model.type.TypeKind.BOOLEAN;
 import static javax.lang.model.util.ElementFilter.constructorsIn;
 import static javax.lang.model.util.ElementFilter.methodsIn;
 import static javax.tools.Diagnostic.Kind.ERROR;
@@ -89,7 +85,7 @@ public abstract class AbstractProcessor
     protected static final String SPACE = " ";
 
     /** UTF-8 */
-    protected static final Charset CHARSET = Charset.forName("UTF-8");
+    protected static final Charset CHARSET = UTF_8;
 
     /** See {@link ProcessingEnvironment#getFiler()}. */
     protected Filer filer = null;
@@ -195,20 +191,14 @@ public abstract class AbstractProcessor
      *          constructor; {@code false} otherwise.
      */
     protected boolean hasPublicNoArgumentConstructor(Element element) {
-        boolean found = false;
+        Optional<ExecutableElement> optional =
+            constructorsIn(element.getEnclosedElements())
+            .stream()
+            .filter(t -> t.getModifiers().contains(PUBLIC))
+            .filter(t -> t.getParameters().isEmpty())
+            .findFirst();
 
-        for (ExecutableElement constructor :
-                 constructorsIn(element.getEnclosedElements())) {
-            found |=
-                (constructor.getModifiers().contains(PUBLIC)
-                 && constructor.getParameters().isEmpty());
-
-            if (found) {
-                break;
-            }
-        }
-
-        return found;
+        return optional.isPresent();
     }
 
     /**
@@ -223,35 +213,30 @@ public abstract class AbstractProcessor
      * @see Elements#overrides(ExecutableElement,ExecutableElement,TypeElement)
      */
     protected ExecutableElement overrides(ExecutableElement overrider) {
-        ExecutableElement overridden = null;
         TypeElement type = (TypeElement) overrider.getEnclosingElement();
+        Optional<ExecutableElement> optional =
+            types.directSupertypes(type.asType())
+            .stream()
+            .map(t -> overrides(overrider, types.asElement(t)))
+            .filter(t -> t != null)
+            .findFirst();
 
-        for (TypeMirror supertype : types.directSupertypes(type.asType())) {
-            overridden = overrides(overrider, types.asElement(supertype));
-
-            if (overridden != null) {
-                break;
-            }
-        }
-
-        return overridden;
+        return optional.orElse(null);
     }
 
     private ExecutableElement overrides(ExecutableElement overrider,
                                         Element type) {
         ExecutableElement overridden = null;
 
-        if (overridden == null) {
-            if (type != null) {
-                switch (type.getKind()) {
-                case CLASS:
-                case INTERFACE:
-                    overridden = overridden(overrider, (TypeElement) type);
-                    break;
+        if (type != null) {
+            switch (type.getKind()) {
+            case CLASS:
+            case INTERFACE:
+                overridden = overridden(overrider, (TypeElement) type);
+                break;
 
-                default:
-                    break;
-                }
+            default:
+                break;
             }
         }
 
@@ -260,26 +245,21 @@ public abstract class AbstractProcessor
 
     private ExecutableElement overridden(ExecutableElement overrider,
                                          TypeElement type) {
-        ExecutableElement overridden = null;
+        Optional<ExecutableElement> optional =
+            methodsIn(type.getEnclosedElements())
+            .stream()
+            .filter(t -> disjoint(t.getModifiers(),
+                                  Arrays.asList(PRIVATE, STATIC)))
+            .filter(t -> elements.overrides(overrider, t, type))
+            .findFirst();
 
-        if (overridden == null) {
-            for (ExecutableElement method :
-                     methodsIn(type.getEnclosedElements())) {
-                if (disjoint(method.getModifiers(), asList(PRIVATE, STATIC))) {
-                    if (elements.overrides(overrider, method, type)) {
-                        overridden = method;
-                        break;
-                    }
-                }
-            }
+        if (! optional.isPresent()) {
+            optional =
+                Optional.ofNullable(overrides(overrider,
+                                              types.asElement(type.getSuperclass())));
         }
 
-        if (overridden == null) {
-            overridden =
-                overrides(overrider, types.asElement(type.getSuperclass()));
-        }
-
-        return overridden;
+        return optional.orElse(null);
     }
 
     /**
@@ -316,32 +296,25 @@ public abstract class AbstractProcessor
      */
     protected ExecutableElement implementationOf(ExecutableElement overridden,
                                                  TypeElement type) {
-        ExecutableElement overrider = null;
+        Optional<ExecutableElement> optional = Optional.empty();
 
         if (type != null) {
-            for (ExecutableElement method :
-                     methodsIn(type.getEnclosedElements())) {
-                if (overrides(method, overridden)) {
-                    overrider = method;
-                    break;
-                }
+            optional =
+                methodsIn(type.getEnclosedElements())
+                .stream()
+                .filter(t -> overrides(t, overridden))
+                .findFirst();
+
+            if (! optional.isPresent()) {
+                optional =
+                    Optional.ofNullable(type.getSuperclass())
+                    .map(t -> (TypeElement) types.asElement(t))
+                    .filter(t -> t != null)
+                    .map(t -> implementationOf(overridden, t));
             }
         }
 
-        if (overrider == null) {
-            if (type != null) {
-                TypeMirror mirror = type.getSuperclass();
-
-                if (mirror != null) {
-                    TypeElement supertype =
-                        (TypeElement) types.asElement(mirror);
-
-                    overrider = implementationOf(overridden, supertype);
-                }
-            }
-        }
-
-        return overrider;
+        return optional.orElse(null);
     }
 
     /**
@@ -549,24 +522,22 @@ public abstract class AbstractProcessor
      */
     protected ExecutableElement getExecutableElementFor(TypeElement type,
                                                         Method method) {
-        ExecutableElement executable = null;
+        Optional<ExecutableElement> optional = Optional.empty();
 
         if (type != null) {
-            for (ExecutableElement element :
-                     methodsIn(type.getEnclosedElements())) {
-                if (element.getSimpleName().contentEquals(method.getName())
-                    && (element.isVarArgs() == method.isVarArgs())
-                    && isSameType(element.getReturnType(),
-                                  method.getReturnType())
-                    && isSameType(element.getParameters(),
-                                  method.getParameterTypes())) {
-                    executable = element;
-                    break;
-                }
-            }
+            optional =
+                methodsIn(type.getEnclosedElements())
+                .stream()
+                .filter(t -> t.getSimpleName().contentEquals(method.getName()))
+                .filter(t -> t.isVarArgs() == method.isVarArgs())
+                .filter(t -> isSameType(t.getReturnType(),
+                                        method.getReturnType()))
+                .filter(t -> isSameType(t.getParameters(),
+                                        method.getParameterTypes()))
+                .findFirst();
         }
 
-        return executable;
+        return optional.orElse(null);
     }
 
     /**
@@ -644,13 +615,9 @@ public abstract class AbstractProcessor
      *          {@link Class}es.
      */
     protected List<TypeMirror> getTypeMirrorsFor(Class<?>... types) {
-        TypeMirror[] array = new TypeMirror[types.length];
-
-        for (int i = 0; i < array.length; i += 1) {
-            array[i] = getTypeMirrorFor(types[i]);
-        }
-
-        return Arrays.asList(array);
+        return (Arrays.stream(types)
+                .map(t -> getTypeMirrorFor(t))
+                .collect(Collectors.toList()));
     }
 
     /**
@@ -662,26 +629,17 @@ public abstract class AbstractProcessor
      *          is a getter or setter method; {@code null} otherwise.
      */
     protected String getPropertyName(ExecutableElement element) {
-        String name = null;
+        Optional<String> optional =
+            Arrays.stream(BeanPropertyMethodEnum.values())
+            .filter(t -> t.getPropertyName(element.getSimpleName().toString()) != null)
+            .filter(t -> isAssignable(element.getReturnType(),
+                                      t.getReturnType()))
+            .filter(t -> isAssignable(element.getParameters(),
+                                      t.getParameterTypes()))
+            .map(t -> t.getPropertyName(element.getSimpleName().toString()))
+            .findFirst();
 
-        if (! element.getModifiers().contains(PRIVATE)) {
-            for (BeanPropertyMethodEnum methodEnum :
-                     BeanPropertyMethodEnum.values()) {
-                String string =
-                    methodEnum.getPropertyName(element.getSimpleName().toString());
-
-                if (string != null
-                    && isAssignable(element.getReturnType(),
-                                    methodEnum.getReturnType())
-                    && isAssignable(element.getParameters(),
-                                    methodEnum.getParameterTypes())) {
-                    name = string;
-                    break;
-                }
-            }
-        }
-
-        return name;
+        return optional.orElse(null);
     }
 
     /**
@@ -693,24 +651,19 @@ public abstract class AbstractProcessor
      *          method; {@code false} otherwise.
      */
     protected boolean isGetterMethod(ExecutableElement element) {
-        boolean isGetterMethod = false;
+        Optional <BeanPropertyMethodEnum> optional =
+            Arrays.asList(BeanPropertyMethodEnum.GET,
+                          BeanPropertyMethodEnum.IS)
+            .stream()
+            .filter(t -> (! element.getModifiers().contains(PRIVATE)))
+            .filter(t -> t.getPropertyName(element.getSimpleName().toString()) != null)
+            .filter(t -> isAssignable(element.getReturnType(),
+                                      t.getReturnType()))
+            .filter(t -> isAssignable(element.getParameters(),
+                                      t.getParameterTypes()))
+            .findFirst();
 
-        if (! element.getModifiers().contains(PRIVATE)) {
-            for (BeanPropertyMethodEnum methodEnum :
-                     Arrays.asList(BeanPropertyMethodEnum.GET,
-                                   BeanPropertyMethodEnum.IS)) {
-                if (methodEnum.getPropertyName(element.getSimpleName().toString()) != null
-                    && isAssignable(element.getReturnType(),
-                                    methodEnum.getReturnType())
-                    && isAssignable(element.getParameters(),
-                                    methodEnum.getParameterTypes())) {
-                    isGetterMethod |= true;
-                    break;
-                }
-            }
-        }
-
-        return isGetterMethod;
+        return optional.isPresent();
     }
 
     /**
@@ -798,16 +751,14 @@ public abstract class AbstractProcessor
 
     private AnnotationMirror getAnnotationMirror(Element element,
                                                  String name) {
-        AnnotationMirror annotation = null;
+        Optional<AnnotationMirror> optional =
+            element.getAnnotationMirrors()
+            .stream()
+            .filter(t -> t.getAnnotationType().toString().equals(name))
+            .map(t -> (AnnotationMirror) t)
+            .findFirst();
 
-        for (AnnotationMirror mirror : element.getAnnotationMirrors()) {
-            if (mirror.getAnnotationType().toString().equals(name)) {
-                annotation = mirror;
-                break;
-            }
-        }
-
-        return annotation;
+        return optional.orElse(null);
     }
 
     /**
@@ -819,31 +770,22 @@ public abstract class AbstractProcessor
      * @return  The {@link Set} of bean property names.
      */
     protected Set<String> getPropertyNames(TypeElement type) {
-        TreeSet<String> set = new TreeSet<>();
-
-        getPropertyNames(set, type);
-
-        return set;
+        return getPropertyNames(new TreeSet<>(), type);
     }
 
-    private void getPropertyNames(Set<String> set, TypeElement type) {
+    private Set<String> getPropertyNames(Set<String> set, TypeElement type) {
         for (ExecutableElement element :
                  methodsIn(type.getEnclosedElements())) {
             if (element.getModifiers().contains(PUBLIC)) {
-                for (BeanPropertyMethodEnum methodEnum :
-                         BeanPropertyMethodEnum.values()) {
-                    String name =
-                        methodEnum.getPropertyName(element.getSimpleName().toString());
-
-                    if (name != null
-                        && isAssignable(element.getReturnType(),
-                                        methodEnum.getReturnType())
-                        && isAssignable(element.getParameters(),
-                                        methodEnum.getParameterTypes())) {
-                        set.add(name);
-                        break;
-                    }
-                }
+                Arrays.stream(BeanPropertyMethodEnum.values())
+                    .filter(t -> t.getPropertyName(element.getSimpleName().toString()) != null)
+                    .filter(t -> isAssignable(element.getReturnType(),
+                                              t.getReturnType()))
+                    .filter(t -> isAssignable(element.getParameters(),
+                                              t.getParameterTypes()))
+                    .map(t -> t.getPropertyName(element.getSimpleName().toString()))
+                    .findFirst()
+                    .ifPresent(t -> set.add(t));
             }
         }
 
@@ -858,6 +800,8 @@ public abstract class AbstractProcessor
             default:
                 break;
         }
+
+        return set;
     }
 
     /**
