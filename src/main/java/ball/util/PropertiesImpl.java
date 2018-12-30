@@ -16,6 +16,8 @@ import java.lang.reflect.Method;
 import java.nio.charset.Charset;
 import java.util.Properties;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 /**
  * {@link Properties} implementation that overrides
  * {@link #load(InputStream)} and {@link #store(OutputStream,String)}
@@ -30,7 +32,7 @@ public class PropertiesImpl extends Properties {
     /**
      * UTF-8
      */
-    protected static final Charset CHARSET = Charset.forName("UTF-8");
+    protected static final Charset CHARSET = UTF_8;
 
     /**
      * See {@link Properties#Properties()}.
