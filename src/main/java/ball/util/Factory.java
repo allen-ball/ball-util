@@ -52,7 +52,7 @@ public class Factory<T> extends TreeMap<Class<?>[],Member> {
      * @param   type            The {@link Class} of {@link Object} this
      *                          {@link Factory} will produce.
      * @param   factory         An {@link Object} factory for this
-     *                          {@code type} (may be {@code null}.
+     *                          {@code type} (may be {@code null}).
      *
      * @throws  NullPointerException
      *                          If {@code type} is {@code null}.
@@ -67,44 +67,22 @@ public class Factory<T> extends TreeMap<Class<?>[],Member> {
         CandidateSet set = new CandidateSet(type);
 
         if (factory != null) {
-            for (Method method : factory.getClass().getMethods()) {
-                if (isPublic(method)) {
-                    if (type.isAssignableFrom(method.getReturnType())) {
-                        if (set.contains(method.getName())) {
-                            Class<?>[] key = method.getParameterTypes();
-
-                            if (! containsKey(key)) {
-                                put(key, method);
-                            }
-                        }
-                    }
-                }
-            }
+            Arrays.stream(factory.getClass().getMethods())
+                .filter(t -> isPublic(t))
+                .filter(t -> type.isAssignableFrom(t.getReturnType()))
+                .filter(t -> set.contains(t.getName()))
+                .forEach(t -> putIfAbsent(t.getParameterTypes(), t));
         }
 
-        for (Method method : type.getMethods()) {
-            if (isPublic(method) && isStatic(method)) {
-                if (type.isAssignableFrom(method.getReturnType())) {
-                    if (set.contains(method.getName())) {
-                        Class<?>[] key = method.getParameterTypes();
+        Arrays.stream(type.getMethods())
+            .filter(t -> isPublic(t) && isStatic(t))
+            .filter(t -> type.isAssignableFrom(t.getReturnType()))
+            .filter(t -> (set.contains(t.getName())))
+            .forEach(t -> putIfAbsent(t.getParameterTypes(), t));
 
-                        if (! containsKey(key)) {
-                            put(key, method);
-                        }
-                    }
-                }
-            }
-        }
-
-        for (Constructor<?> constructor : type.getConstructors()) {
-            if (isPublic(constructor)) {
-                Class<?>[] key = constructor.getParameterTypes();
-
-                if (! containsKey(key)) {
-                    put(key, constructor);
-                }
-            }
-        }
+        Arrays.stream(type.getConstructors())
+            .filter(t -> isPublic(t))
+            .forEach(t -> putIfAbsent(t.getParameterTypes(), t));
     }
 
     /**

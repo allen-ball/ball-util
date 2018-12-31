@@ -1,3 +1,9 @@
+2018-12-31  Allen D. Ball  <ball@sol.local>
+
+	* src/main/java/ball/util/PropertiesImpl.java:
+	In configure(Object), attempt to convert value to target method
+	parameter type.
+
 2018-12-30  Allen D. Ball  <ball@sol.local>
 
 	* src/main/java/ball/util/ant/taskdefs/AntTaskMixIn.java,

@@ -5,6 +5,7 @@
  */
 package ball.util;
 
+import ball.lang.PrimitiveTypeMap;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -14,7 +15,10 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.lang.reflect.Method;
 import java.nio.charset.Charset;
+import java.util.Collections;
+import java.util.Map;
 import java.util.Properties;
+import java.util.TreeMap;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
@@ -27,12 +31,26 @@ import static java.nio.charset.StandardCharsets.UTF_8;
  * @version $Revision$
  */
 public class PropertiesImpl extends Properties {
-    private static final long serialVersionUID = -4305031333446153770L;
+    private static final long serialVersionUID = -5034894719756448226L;
 
     /**
      * UTF-8
      */
     protected static final Charset CHARSET = UTF_8;
+
+    private static final Map<Class<?>,Factory<?>> FACTORY_TYPE_MAP;
+
+    static {
+        TreeMap<Class<?>,Factory<?>> map = new TreeMap<>(ClassOrder.NAME);
+
+        map.put(String.class, new Factory<>(String.class));
+
+        for (Class<?> type : PrimitiveTypeMap.INSTANCE.values()) {
+            map.put(type, new Factory<>(type));
+        }
+
+        FACTORY_TYPE_MAP = Collections.unmodifiableMap(map);
+    }
 
     /**
      * See {@link Properties#Properties()}.
@@ -139,6 +157,8 @@ public class PropertiesImpl extends Properties {
                              key, (value != null) ? value.getClass() : null);
 
             if (method != null) {
+                value = convertTo(value, method.getParameterTypes()[0]);
+
                 try {
                     method.invoke(object, value);
                 } catch (Exception exception) {
@@ -178,5 +198,33 @@ public class PropertiesImpl extends Properties {
         }
 
         return method;
+    }
+
+    private static <T> T convertTo(Object from, Class<T> type) {
+        Object to = null;
+
+        try {
+            if (from == null || type.isAssignableFrom(from.getClass())) {
+                to = from;
+            } else {
+                Factory<?> factory = FACTORY_TYPE_MAP.get(type);
+
+                if (factory == null) {
+                    factory =
+                        FACTORY_TYPE_MAP.values()
+                        .stream()
+                        .filter(t -> type.isAssignableFrom(t.getType()))
+                        .findFirst().orElse(FACTORY_TYPE_MAP.get(String.class));
+                }
+
+                to = factory.getInstance(from);
+            }
+        } catch (RuntimeException exception) {
+            throw exception;
+        } catch (Exception exception) {
+            throw new IllegalArgumentException(exception);
+        }
+
+        return type.cast(to);
     }
 }
