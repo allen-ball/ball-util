@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2011 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2011 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.util;
 
@@ -15,7 +15,9 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
  * Annotation to specify a field constant value is a well-formed regular
- * expression {@link String}.
+ * expression {@link String} which may be passed to
+ * {@link java.util.regex.Pattern#compile(String)} without throwing
+ * {@link java.util.regex.PatternSyntaxException}.
  *
  * @see ball.annotation.processing.RegexProcessor
  *
