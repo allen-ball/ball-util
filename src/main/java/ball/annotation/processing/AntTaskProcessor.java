@@ -155,11 +155,9 @@ public class AntTaskProcessor extends AbstractAnnotationProcessor
                               + " but is " + ABSTRACT);
                     }
                 } else {
-                    print(ERROR,
-                          element,
-                          element.getKind() + " annotated with "
-                          + " but is not a subclass of "
-                          + Task.class.getName());
+                    /*
+                     * See AntTaskMixInProcessor.
+                     */
                 }
             } else {
                 print(ERROR,
