@@ -10,6 +10,7 @@ import ball.io.IOUtil;
 import ball.util.ant.taskdefs.BootstrapProcessorTask;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -77,11 +78,13 @@ public class ServiceProviderForProcessor extends AbstractAnnotationProcessor
                         FileObject file =
                             filer.createResource(CLASS_OUTPUT, NIL,
                                                  String.format(PATH, service));
+                        ArrayList<String> lines = new ArrayList<>();
 
-                        try (PrintWriterImpl writer =
-                                 new PrintWriterImpl(file)) {
-                            writer.write(service, entry.getValue());
-                        }
+                        lines.add("# " + service);
+                        lines.addAll(entry.getValue());
+
+                        Files.createDirectories(toPath(file).getParent());
+                        Files.write(toPath(file), lines, CHARSET);
                     }
                 }
             }
@@ -172,9 +175,12 @@ public class ServiceProviderForProcessor extends AbstractAnnotationProcessor
 
             IOUtil.mkdirs(file.getParentFile());
 
-            try (PrintWriterImpl writer = new PrintWriterImpl(file)) {
-                writer.write(service, entry.getValue());
-            }
+            ArrayList<String> lines = new ArrayList<>();
+
+            lines.add("# " + service);
+            lines.addAll(entry.getValue());
+
+            Files.write(file.toPath(), lines, CHARSET);
         }
     }
 

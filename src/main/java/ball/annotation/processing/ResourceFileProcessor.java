@@ -7,6 +7,7 @@ package ball.annotation.processing;
 
 import ball.annotation.ResourceFile;
 import ball.annotation.ServiceProviderFor;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -60,11 +61,13 @@ public class ResourceFileProcessor extends AbstractAnnotationProcessor {
                         String path = entry.getKey();
                         FileObject file =
                             filer.createResource(CLASS_OUTPUT, NIL, path);
+                        ArrayList<String> lines = new ArrayList<>();
 
-                        try (PrintWriterImpl writer =
-                                 new PrintWriterImpl(file)) {
-                            writer.write(path, entry.getValue());
-                        }
+                        lines.add("# " + path);
+                        lines.addAll(entry.getValue());
+
+                        Files.createDirectories(toPath(file).getParent());
+                        Files.write(toPath(file), lines, CHARSET);
                     }
                 }
             }

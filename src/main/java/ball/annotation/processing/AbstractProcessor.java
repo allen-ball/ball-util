@@ -7,18 +7,14 @@ package ball.annotation.processing;
 
 import ball.activation.ThrowableDataSource;
 import ball.util.BeanPropertyMethodEnum;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.lang.annotation.Annotation;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Target;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.nio.charset.Charset;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
@@ -865,53 +861,13 @@ public abstract class AbstractProcessor
     }
 
     /**
-     * {@link PrintWriter} implementation suitable for creating Java file
-     * artifacts such as service provider files.
+     * Method to translate a {@link FileObject} to a {@link Path}.
+     *
+     * @param   file            The {@link FileObject}.
+     *
+     * @return  The corresponding {@link Path}.
      */
-    protected class PrintWriterImpl extends PrintWriter {
-
-        /**
-         * Construct a {@link PrintWriter} for a {@link File}.
-         *
-         * @param       file    The {@link File}.
-         * @throws      IOException
-         *                      If the underlying stream cannot be created.
-         */
-        public PrintWriterImpl(File file) throws IOException {
-            this(new FileOutputStream(file));
-        }
-
-        /**
-         * Construct a {@link PrintWriter} for a {@link FileObject}.
-         *
-         * @param       file    The {@link FileObject}.
-         * @throws      IOException
-         *                      If the underlying stream cannot be created.
-         */
-        public PrintWriterImpl(FileObject file) throws IOException {
-            this(file.openOutputStream());
-        }
-
-        private PrintWriterImpl(OutputStream out) throws IOException {
-            super(new OutputStreamWriter(out, CHARSET));
-        }
-
-        /**
-         * Method to write a complete file.
-         *
-         * @param       comment         The first line {@link String}.
-         * @param       iterable        The {@link Iterable} of line
-         *                              {@link String}s.
-         */
-        public void write(String comment, Iterable<String> iterable) {
-            println("# " + comment);
-
-            for (String line : iterable) {
-                println(line);
-            }
-        }
-
-        @Override
-        public String toString() { return super.toString(); }
+    protected static Path toPath(FileObject file) {
+        return Paths.get(file.toUri());
     }
 }

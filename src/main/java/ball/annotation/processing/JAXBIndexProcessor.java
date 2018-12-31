@@ -11,6 +11,8 @@ import ball.util.ant.taskdefs.BootstrapProcessorTask;
 import java.io.File;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
+import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -65,11 +67,13 @@ public class JAXBIndexProcessor extends AbstractAnnotationProcessor
                         FileObject file =
                             filer.createResource(CLASS_OUTPUT,
                                                  entry.getKey(), JAXB_INDEX);
+                        ArrayList<String> lines = new ArrayList<>();
 
-                        try (PrintWriterImpl writer =
-                                 new PrintWriterImpl(file)) {
-                            writer.write(JAXB_INDEX, entry.getValue());
-                        }
+                        lines.add("# " + JAXB_INDEX);
+                        lines.addAll(entry.getValue());
+
+                        Files.createDirectories(toPath(file).getParent());
+                        Files.write(toPath(file), lines, CHARSET);
                     }
                 }
             }
@@ -113,9 +117,12 @@ public class JAXBIndexProcessor extends AbstractAnnotationProcessor
 
             IOUtil.mkdirs(file.getParentFile());
 
-            try (PrintWriterImpl writer = new PrintWriterImpl(file)) {
-                writer.write(JAXB_INDEX, entry.getValue());
-            }
+            ArrayList<String> lines = new ArrayList<>();
+
+            lines.add("# " + JAXB_INDEX);
+            lines.addAll(entry.getValue());
+
+            Files.write(file.toPath(), lines, CHARSET);
         }
     }
 
