@@ -16,7 +16,7 @@ import org.apache.tools.ant.Task;
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
-public interface ConfigurableAntTask {
+public interface ConfigurableAntTask extends AntTaskMixIn {
 
     /**
      * Default method to configure {@link Task} attributes.

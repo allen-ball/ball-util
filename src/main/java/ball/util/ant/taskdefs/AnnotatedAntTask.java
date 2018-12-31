@@ -24,7 +24,7 @@ import static ball.util.BeanPropertyMethodEnum.getPropertyName;
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
-public interface AnnotatedAntTask {
+public interface AnnotatedAntTask extends AntTaskMixIn {
 
     /**
      * Method to get {@link AntTask#value()}.

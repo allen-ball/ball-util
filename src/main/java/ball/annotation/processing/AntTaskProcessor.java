@@ -158,8 +158,8 @@ public class AntTaskProcessor extends AbstractAnnotationProcessor
                     print(ERROR,
                           element,
                           element.getKind() + " annotated with "
-                          + AT + annotation.getSimpleName()
-                          + " but does not implement" + Task.class.getName());
+                          + " but is not a subclass of "
+                          + Task.class.getName());
                 }
             } else {
                 print(ERROR,

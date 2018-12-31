@@ -18,7 +18,7 @@ import org.apache.tools.ant.Project;
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
-public interface AntTaskLogMethods {
+public interface AntTaskLogMethods extends AntTaskMixIn {
     void log(String message);
     void log(String message, int messageLevel);
     void log(String message, Throwable throwable, int messageLevel);
