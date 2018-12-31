@@ -15,8 +15,6 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.lang.reflect.Method;
 import java.nio.charset.Charset;
-import java.util.Collections;
-import java.util.Map;
 import java.util.Properties;
 import java.util.TreeMap;
 
@@ -38,18 +36,15 @@ public class PropertiesImpl extends Properties {
      */
     protected static final Charset CHARSET = UTF_8;
 
-    private static final Map<Class<?>,Factory<?>> FACTORY_TYPE_MAP;
+    private static final TreeMap<Class<?>,Factory<?>> FACTORY_TYPE_MAP =
+        new TreeMap<>(ClassOrder.NAME);
 
     static {
-        TreeMap<Class<?>,Factory<?>> map = new TreeMap<>(ClassOrder.NAME);
+        FACTORY_TYPE_MAP.put(String.class, new Factory<>(String.class));
 
-        map.put(String.class, new Factory<>(String.class));
-
-        for (Class<?> type : PrimitiveTypeMap.INSTANCE.values()) {
-            map.put(type, new Factory<>(type));
-        }
-
-        FACTORY_TYPE_MAP = Collections.unmodifiableMap(map);
+        PrimitiveTypeMap.INSTANCE.values()
+            .stream()
+            .forEach(t -> FACTORY_TYPE_MAP.put(t, new Factory<>(t)));
     }
 
     /**
@@ -207,17 +202,15 @@ public class PropertiesImpl extends Properties {
             if (from == null || type.isAssignableFrom(from.getClass())) {
                 to = from;
             } else {
-                Factory<?> factory = FACTORY_TYPE_MAP.get(type);
-
-                if (factory == null) {
-                    factory =
-                        FACTORY_TYPE_MAP.values()
-                        .stream()
-                        .filter(t -> type.isAssignableFrom(t.getType()))
-                        .findFirst().orElse(FACTORY_TYPE_MAP.get(String.class));
-                }
-
-                to = factory.getInstance(from);
+                to =
+                    FACTORY_TYPE_MAP
+                    .computeIfAbsent(type,
+                                     k -> (FACTORY_TYPE_MAP.values()
+                                           .stream()
+                                           .filter(t -> k.isAssignableFrom(t.getType()))
+                                           .findFirst()
+                                           .orElse(new Factory<>(k))))
+                    .getInstance(from);
             }
         } catch (RuntimeException exception) {
             throw exception;
