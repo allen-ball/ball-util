@@ -4,6 +4,10 @@
 	In configure(Object), attempt to convert value to target method
 	parameter type.
 
+	* src/main/java/ball/util/ant/taskdefs/ClasspathDelegateAntTask.java:
+	Initial writing; refactored AbstractClasspathTask and
+	AbstractMatchingTask.
+
 2018-12-30  Allen D. Ball  <ball@sol.local>
 
 	* src/main/java/ball/util/ant/taskdefs/AntTaskMixIn.java,

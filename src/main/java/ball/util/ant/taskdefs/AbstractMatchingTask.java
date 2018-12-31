@@ -8,11 +8,8 @@ package ball.util.ant.taskdefs;
 import java.io.File;
 import java.util.Set;
 import java.util.TreeSet;
-import org.apache.tools.ant.AntClassLoader;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.taskdefs.MatchingTask;
-import org.apache.tools.ant.types.Path;
-import org.apache.tools.ant.types.Reference;
 import org.apache.tools.ant.util.ClasspathUtils;
 
 /**
@@ -26,6 +23,7 @@ import org.apache.tools.ant.util.ClasspathUtils;
  */
 public abstract class AbstractMatchingTask extends MatchingTask
                                            implements AnnotatedAntTask,
+                                                      ClasspathDelegateAntTask,
                                                       AntTaskLogMethods {
     private ClasspathUtils.Delegate delegate = null;
     private File basedir = null;
@@ -42,11 +40,8 @@ public abstract class AbstractMatchingTask extends MatchingTask
     public File getFile() { return file; }
     public void setFile(File file) { this.file = file; }
 
-    public void setClasspathRef(Reference reference) {
-        delegate.setClasspathref(reference);
-    }
-
-    public Path createClasspath() { return delegate.createClasspath(); }
+    @Override
+    public ClasspathUtils.Delegate delegate() { return delegate; }
 
     /**
      * {@inheritDoc}
@@ -58,8 +53,10 @@ public abstract class AbstractMatchingTask extends MatchingTask
     public void init() throws BuildException {
         super.init();
 
-        if (delegate == null) {
-            delegate = ClasspathUtils.getDelegate(this);
+        if (this instanceof ClasspathDelegateAntTask) {
+            if (delegate == null) {
+                delegate = ClasspathUtils.getDelegate(this);
+            }
         }
 
         if (this instanceof ConfigurableAntTask) {
@@ -84,40 +81,6 @@ public abstract class AbstractMatchingTask extends MatchingTask
         if (getBasedir() == null && getFile() == null) {
             setBasedir(getProject().resolveFile("."));
         }
-    }
-
-    /**
-     * Method to get the {@link AntClassLoader} specified by this
-     * {@link org.apache.tools.ant.Task}.
-     *
-     * @return  The {@link AntClassLoader}.
-     */
-    protected AntClassLoader getClassLoader() {
-        if (delegate.getClasspath() == null) {
-            delegate.createClasspath();
-        }
-
-        AntClassLoader loader = (AntClassLoader) delegate.getClassLoader();
-
-        loader.setParent(getClass().getClassLoader());
-
-        return loader;
-    }
-
-    /**
-     * Method to get the {@link Class} associated with the argument name
-     * using the {@link ClassLoader} provided by {@link #getClassLoader()}.
-     *
-     * @param   name            The fully qualified name of the desired
-     *                          class.
-     *
-     * @return  The {@link Class} for the specified name.
-     *
-     * @throws  ClassNotFoundException
-     *                          If the {@link Class} is not found.
-     */
-    protected Class<?> getClassForName(String name) throws ClassNotFoundException {
-        return Class.forName(name, false, getClassLoader());
     }
 
     /**
