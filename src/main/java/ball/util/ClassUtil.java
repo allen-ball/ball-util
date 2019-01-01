@@ -1,16 +1,27 @@
 /*
  * $Id$
  *
- * Copyright 2010 - 2018 Allen D. Ball.  All rights reserved.
+ * Copyright 2010 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.util;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Array;
+import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.Member;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.jar.Manifest;
 
 /**
@@ -23,6 +34,93 @@ public abstract class ClassUtil {
     private static final String _CLASS = ".class";
 
     private ClassUtil() { }
+
+    /**
+     * Static method to get a {@link Class} for a {@link Type}.
+     *
+     * @param   type            The {@link Type}.
+     *
+     * @return  The corresponding {@link Class}.
+     */
+    public static Class<?> getClass(Type type) {
+        Class<?> cls = null;
+
+        if (type instanceof Class) {
+            cls = (Class) type;
+        } else if (type instanceof ParameterizedType) {
+            cls = getClass(((ParameterizedType) type).getRawType());
+        } else if (type instanceof GenericArrayType) {
+            cls =
+                getClass(((GenericArrayType) type).getGenericComponentType());
+
+            if (cls != null ) {
+                cls = Array.newInstance(cls, 0).getClass();
+            }
+        }
+
+        return cls;
+    }
+
+    /**
+     * Static method to get the type arguments ({@link Class}es) for a
+     * sub-{@link Class} specified by the type parameters of a
+     * super-{@link Class}.
+     *
+     * @param   superclass      The super-{@link Class}.
+     * @param   subclass        The sub-{@link Class}.
+     *
+     * @param   <T>             The super-{@link Class} type.
+     *
+     * @return  The {@link List} of resolved types.
+     */
+    public static <T> List<Class<?>> getTypeArguments(Class<T> superclass,
+                                                      Class<? extends T> subclass) {
+        ArrayList<Class<?>> list = new ArrayList<Class<?>>();
+        Map<Type,Type> map = getResolvedTypeMap(superclass, subclass);
+System.out.println(map);
+        Type type = superclass;
+        Type[] arguments =
+            (type instanceof Class)
+                ? ((Class) type).getTypeParameters()
+                : ((ParameterizedType) type).getActualTypeArguments();
+System.out.println(java.util.Arrays.asList(arguments));
+        for (Type argument: arguments) {
+            while (map.containsKey(argument)) {
+                argument = map.get(argument);
+            }
+
+            list.add(getClass(argument));
+        }
+
+        return list;
+    }
+
+    private static <T> Map<Type,Type> getResolvedTypeMap(Class<T> superclass,
+                                                         Class<? extends T> subclass) {
+        HashMap<Type,Type> map = new HashMap<Type,Type>();
+        Type type = subclass;
+
+        while (! getClass(type).equals(superclass)) {
+            if (type instanceof Class) {
+                type = ((Class) type).getGenericSuperclass();
+            } else {
+                ParameterizedType parameterized = (ParameterizedType) type;
+                Class<?> raw = (Class) parameterized.getRawType();
+                TypeVariable<?>[] parameters = raw.getTypeParameters();
+                Type[] arguments = parameterized.getActualTypeArguments();
+
+                for (int i = 0; i < arguments.length; i += 1) {
+                    map.put(parameters[i], arguments[i]);
+                }
+
+                if (! raw.equals(superclass)) {
+                    type = raw.getGenericSuperclass();
+                }
+            }
+        }
+
+        return map;
+    }
 
     /**
      * Method to get {@link Manifest} for a {@link Class}.
