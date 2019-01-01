@@ -1430,19 +1430,6 @@
 
 	* Added <list-resources/> build target and Ant Task.
 
-	* src/main/java/iprotium/util/MissingPropertyException.java:
-	Initial writing.
-
-2008-11-01  Allen D. Ball  <ball@10-0-1-4.lan>
-
-	* src/main/java/iprotium/util/Property.java:
-	Added getDefaultValueAsString() method.
-	Added static getStaticPropertyFields(Class<?>... types) method.
-
-	* src/main/java/iprotium/util/ant/taskdefs/ShowPropertiesTask.java:
-	Use Property.getStaticPropertyFields(Class<?>... types) to get
-	Class Property objects.
-
 2008-10-30  Allen D. Ball  <ball@10-0-1-4.lan>
 
 	* src/main/java/iprotium/util/ant/taskdefs/AbstractClassFileTask.java,
@@ -1472,8 +1459,8 @@
 
 2008-10-26  Allen D. Ball  <ball@10-0-1-4.lan>
 
-	* Added <jni-classes/>, <members-of/>, <show-properties/>, and
-	<superclasses-of> targets and Ant Tasks.
+	* Added <jni-classes/>, <members-of/>, and <superclasses-of>
+	targets and Ant Tasks.
 
 	* build.xml, pom.xml: Initial writing.
 
@@ -1482,10 +1469,6 @@
 	* src/main/java/iprotium/util/Order.java,
 	src/main/java/iprotium/util/ArrayOrder.java,
 	src/main/java/iprotium/util/ClassOrder.java:
-	Initial writing.
-
-	* src/main/java/iprotium/util/Property.java,
-	src/main/java/iprotium/util/StringProperty.java:
 	Initial writing.
 
 	* src/main/java/iprotium/util/ant/taskdefs/AbstractClassFileTask.java,

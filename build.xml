@@ -248,17 +248,6 @@
     <service-list classpathref="build.classpath" type="${type}"/>
   </target>
 
-  <target name="show-properties"
-          description="--> Invokes &lt;show-properties/&gt; task."
-          depends="jar-classes">
-    <taskdef classpathref="build.classpath" onerror="ignore"
-             resource="ball/util/ant/defaults.properties"/>
-    <show-properties classpathref="build.classpath"
-                     basedir="${target.classes.dir}">
-      <src path="${src.dir}/main/java"/>
-    </show-properties>
-  </target>
-
   <target name="subclasses-of"
           description="--> Invokes &lt;subclasses-of/&gt; task."
           depends="jar-classes">
