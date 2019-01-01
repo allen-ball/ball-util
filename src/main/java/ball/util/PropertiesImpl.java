@@ -1,11 +1,10 @@
 /*
  * $Id$
  *
- * Copyright 2010 - 2018 Allen D. Ball.  All rights reserved.
+ * Copyright 2010 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.util;
 
-import ball.lang.PrimitiveTypeMap;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -16,7 +15,6 @@ import java.io.OutputStreamWriter;
 import java.lang.reflect.Method;
 import java.nio.charset.Charset;
 import java.util.Properties;
-import java.util.TreeMap;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
@@ -35,17 +33,6 @@ public class PropertiesImpl extends Properties {
      * UTF-8
      */
     protected static final Charset CHARSET = UTF_8;
-
-    private static final TreeMap<Class<?>,Factory<?>> FACTORY_TYPE_MAP =
-        new TreeMap<>(ClassOrder.NAME);
-
-    static {
-        FACTORY_TYPE_MAP.put(String.class, new Factory<>(String.class));
-
-        PrimitiveTypeMap.INSTANCE.values()
-            .stream()
-            .forEach(t -> FACTORY_TYPE_MAP.put(t, new Factory<>(t)));
-    }
 
     /**
      * See {@link Properties#Properties()}.
@@ -152,7 +139,8 @@ public class PropertiesImpl extends Properties {
                              key, (value != null) ? value.getClass() : null);
 
             if (method != null) {
-                value = convertTo(value, method.getParameterTypes()[0]);
+                value =
+                    Converter.convertTo(value, method.getParameterTypes()[0]);
 
                 try {
                     method.invoke(object, value);
@@ -193,31 +181,5 @@ public class PropertiesImpl extends Properties {
         }
 
         return method;
-    }
-
-    private static <T> T convertTo(Object from, Class<T> type) {
-        Object to = null;
-
-        try {
-            if (from == null || type.isAssignableFrom(from.getClass())) {
-                to = from;
-            } else {
-                to =
-                    FACTORY_TYPE_MAP
-                    .computeIfAbsent(type,
-                                     k -> (FACTORY_TYPE_MAP.values()
-                                           .stream()
-                                           .filter(t -> k.isAssignableFrom(t.getType()))
-                                           .findFirst()
-                                           .orElse(new Factory<>(k))))
-                    .getInstance(from);
-            }
-        } catch (RuntimeException exception) {
-            throw exception;
-        } catch (Exception exception) {
-            throw new IllegalArgumentException(exception);
-        }
-
-        return type.cast(to);
     }
 }
