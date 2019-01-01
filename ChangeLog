@@ -203,9 +203,6 @@
 
 2016-09-10  Allen D. Ball  <ball@sol.local>
 
-	* src/main/java/ball/annotation/AnnotationUtil.java:
-	Initial writing.
-
 	* src/main/java/ball/annotation/processing/AbstractProcessor.java;
 	Added getPropertyName(ExecutableElement) and
 	isGetterMethod(ExecutableElement) methods.
