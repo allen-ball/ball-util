@@ -1,15 +1,12 @@
 /*
  * $Id$
  *
- * Copyright 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2016 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.util;
 
 import java.util.Map;
 import java.util.Properties;
-
-import static ball.util.StringUtil.NIL;
-import static ball.util.StringUtil.isNil;
 
 /**
  * {@code Map} utility methods.

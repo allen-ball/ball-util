@@ -1,14 +1,14 @@
 /*
  * $Id$
  *
- * Copyright 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2016 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.types;
 
 import java.beans.ConstructorProperties;
 
-import static ball.util.StringUtil.NIL;
-import static ball.util.StringUtil.isNil;
+import static org.apache.commons.lang3.StringUtils.EMPTY;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 /**
  * Class to provide a {@link String} value type for
@@ -49,7 +49,7 @@ public class StringValueType extends OptionalTextType {
 
     @Override
     public void addText(String text) {
-        setValue((isNil(getValue()) ? NIL : getValue()) + text);
+        setValue((isEmpty(getValue()) ? EMPTY : getValue()) + text);
     }
 
     @Override

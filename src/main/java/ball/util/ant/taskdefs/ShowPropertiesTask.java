@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.taskdefs;
 
@@ -10,7 +10,7 @@ import ball.util.Property;
 import java.util.Collection;
 import org.apache.tools.ant.BuildException;
 
-import static ball.util.StringUtil.NIL;
+import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 /**
  * {@link.uri http://ant.apache.org/ Ant} {@link org.apache.tools.ant.Task}
@@ -39,7 +39,7 @@ public class ShowPropertiesTask extends AbstractClassFileTask {
                     Property.getStaticPropertyFields(type);
 
                 if (! collection.isEmpty()) {
-                    log(NIL);
+                    log(EMPTY);
                     log(type.getName());
                     log(new PropertyTableModel(collection));
                 }

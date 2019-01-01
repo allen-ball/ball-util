@@ -9,7 +9,6 @@ import ball.activation.JAXBDataSource;
 import ball.annotation.ServiceProviderFor;
 import ball.io.IOUtil;
 import ball.util.PropertiesImpl;
-import ball.util.StringUtil;
 import ball.util.ant.taskdefs.AntLib;
 import ball.util.ant.taskdefs.AntTask;
 import ball.util.ant.taskdefs.BootstrapProcessorTask;
@@ -37,12 +36,13 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import org.apache.tools.ant.Task;
 
-import static ball.util.StringUtil.NIL;
 import static java.lang.reflect.Modifier.isAbstract;
 import static javax.lang.model.element.Modifier.ABSTRACT;
 import static javax.lang.model.element.Modifier.PUBLIC;
 import static javax.tools.Diagnostic.Kind.ERROR;
 import static javax.tools.StandardLocation.CLASS_OUTPUT;
+import static org.apache.commons.lang3.StringUtils.EMPTY;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 /**
  * {@link Processor} implementation to check {@link Class}es annotated with
@@ -87,7 +87,7 @@ public class AntTaskProcessor extends AbstractAnnotationProcessor
                              map.entrySet()) {
                         FileObject file =
                             filer.createResource(CLASS_OUTPUT,
-                                                 NIL, entry.getKey());
+                                                 EMPTY, entry.getKey());
                         try (OutputStream out = file.openOutputStream()) {
                             entry.getValue().store(out, entry.getKey());
                         }
@@ -97,7 +97,7 @@ public class AntTaskProcessor extends AbstractAnnotationProcessor
                         AntLibXML xml = new AntLibXML(pkg, map);
                         FileObject file =
                             filer.createResource(CLASS_OUTPUT,
-                                                 NIL, xml.getPath());
+                                                 EMPTY, xml.getPath());
 
                         try (OutputStream out = file.openOutputStream()) {
                             xml.writeTo(out);
@@ -134,7 +134,7 @@ public class AntTaskProcessor extends AbstractAnnotationProcessor
                     .toString();
             }
 
-            if (! StringUtil.isNil(name)) {
+            if (! isEmpty(name)) {
                 if (isAssignable(element.asType(), Task.class)) {
                     if (! element.getModifiers().contains(ABSTRACT)) {
                         if (hasPublicNoArgumentConstructor(element)) {

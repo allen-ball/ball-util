@@ -1,14 +1,14 @@
 /*
  * $Id$
  *
- * Copyright 2009 - 2018 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.taskdefs;
 
 import java.nio.charset.Charset;
 import org.apache.tools.ant.BuildException;
 
-import static ball.util.StringUtil.NIL;
+import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 /**
  * {@link.uri http://ant.apache.org/ Ant} {@link org.apache.tools.ant.Task}
@@ -34,7 +34,7 @@ public class CharsetListTask extends AbstractClasspathTask {
         super.execute();
 
         try {
-            log(NIL);
+            log(EMPTY);
 
             for (String key : Charset.availableCharsets().keySet()) {
                 log(key);

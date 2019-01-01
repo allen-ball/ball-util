@@ -27,7 +27,6 @@ import javax.tools.FileObject;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-import static ball.util.StringUtil.NIL;
 import static java.lang.reflect.Modifier.isAbstract;
 import static javax.tools.Diagnostic.Kind.ERROR;
 import static javax.tools.StandardLocation.CLASS_OUTPUT;

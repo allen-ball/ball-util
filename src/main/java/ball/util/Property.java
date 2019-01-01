@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2018 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.util;
 
@@ -14,7 +14,7 @@ import java.util.MissingResourceException;
 import java.util.Properties;
 import java.util.Set;
 
-import static ball.util.StringUtil.NIL;
+import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 /**
  * Abstract Property base class.
@@ -339,6 +339,6 @@ public abstract class Property<T> implements Comparable<Property<?>> {
             }
         }
 
-        return (prefix != null) ? prefix : NIL;
+        return (prefix != null) ? prefix : EMPTY;
     }
 }

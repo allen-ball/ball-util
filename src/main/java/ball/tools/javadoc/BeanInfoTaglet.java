@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2013 - 2018 Allen D. Ball.  All rights reserved.
+ * Copyright 2013 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.tools.javadoc;
 
@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Map;
 import org.w3c.dom.Element;
 
-import static ball.util.StringUtil.isNil;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 /**
  * Inline {@link Taglet} to provide a table of bean properties.
@@ -61,7 +61,7 @@ public class BeanInfoTaglet extends AbstractInlineTaglet {
             ClassDoc stop = null;
             String[] argv = tag.text().trim().split("[\\p{Space}]+", 2);
 
-            if (! isNil(argv[0])) {
+            if (! isEmpty(argv[0])) {
                 start = getClassDoc(tag.holder(), argv[0]);
             } else {
                 start = getContainingClassDoc(tag.holder());

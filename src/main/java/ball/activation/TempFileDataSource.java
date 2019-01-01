@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2010 - 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2010 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.activation;
 
@@ -11,7 +11,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import static ball.util.StringUtil.NIL;
+import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 /**
  * {@link javax.activation.DataSource} backed by a temporary {@link File}
@@ -35,7 +35,7 @@ public class TempFileDataSource extends AbstractDataSource {
      *
      * @see File#createTempFile(String,String,File)
      */
-    @ConstructorProperties({ NIL, NIL, NIL, "contentType" })
+    @ConstructorProperties({ EMPTY, EMPTY, EMPTY, "contentType" })
     public TempFileDataSource(String prefix, String suffix, File parent,
                               String type) {
         super();

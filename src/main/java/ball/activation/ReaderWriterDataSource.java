@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2009 - 2018 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.activation;
 
@@ -23,8 +23,8 @@ import java.nio.charset.Charset;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import static ball.util.StringUtil.NIL;
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 /**
  * {@link javax.activation.DataSource} implementation that provides a
@@ -71,7 +71,7 @@ public class ReaderWriterDataSource extends FilterDataSource
      *                          {@link OutputStream}.
      * @param   content         The initial content {@link String}.
      */
-    @ConstructorProperties({ "name", "contentType", "charset", NIL })
+    @ConstructorProperties({ "name", "contentType", "charset", EMPTY })
     public ReaderWriterDataSource(String name, String type,
                                   Charset charset, String content) {
         super(new ByteArrayDataSource(name, type));

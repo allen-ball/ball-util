@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2012 - 2018 Allen D. Ball.  All rights reserved.
+ * Copyright 2012 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.tools.javadoc;
 
@@ -28,10 +28,10 @@ import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
-import static ball.util.StringUtil.NIL;
-import static ball.util.StringUtil.isNil;
 import static javax.xml.transform.OutputKeys.INDENT;
 import static javax.xml.transform.OutputKeys.OMIT_XML_DECLARATION;
+import static org.apache.commons.lang3.StringUtils.EMPTY;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 /**
  * Abstract {@link Taglet} base class.
@@ -286,7 +286,7 @@ public abstract class AbstractTaglet implements Taglet {
      */
     protected ClassDoc getClassDoc(ClassDoc context, String name) {
         return ((context != null)
-                    ? (isNil(name)
+                    ? (isEmpty(name)
                            ? context
                            : context.findClass(name))
                     : null);
@@ -306,7 +306,7 @@ public abstract class AbstractTaglet implements Taglet {
      *          {@link Class} name otherwise.
      */
     protected Object getClassDocLink(Doc context, Class<?> type) {
-        String brackets = NIL;
+        String brackets = EMPTY;
 
         while (type.isArray()) {
             brackets = "[]" + brackets;
@@ -347,7 +347,7 @@ public abstract class AbstractTaglet implements Taglet {
         URI href = null;
 
         if (target.isIncluded()) {
-            String path = NIL;
+            String path = EMPTY;
             String[] names = context.qualifiedName().split("[.]");
 
             for (int i = 0, n = names.length - 1; i < n; i += 1) {
@@ -356,7 +356,7 @@ public abstract class AbstractTaglet implements Taglet {
 
             path += "./";
 
-            if (! isNil(target.containingPackage().name())) {
+            if (! isEmpty(target.containingPackage().name())) {
                 path +=
                     target.containingPackage().name().replaceAll("[.]", "/")
                     + "/";

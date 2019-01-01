@@ -9,8 +9,8 @@ import ball.util.ClassOrder;
 import java.util.TreeSet;
 import org.apache.tools.ant.BuildException;
 
-import static ball.util.StringUtil.NIL;
 import static java.lang.reflect.Modifier.isAbstract;
+import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 /**
  * {@link.uri http://ant.apache.org/ Ant} {@link org.apache.tools.ant.Task}
@@ -90,7 +90,7 @@ public class SubclassesOfTask extends AbstractClassFileTask {
     }
 
     private String toString(Iterable<Class<?>> iterable) {
-        String string = NIL;
+        String string = EMPTY;
 
         for (Class<?> type : iterable) {
             if (string.length() > 0) {

@@ -27,12 +27,12 @@ import javax.lang.model.type.TypeMirror;
 import javax.tools.FileObject;
 
 import static ball.util.MapUtil.getByKeyToString;
-import static ball.util.StringUtil.NIL;
 import static java.lang.reflect.Modifier.isAbstract;
 import static javax.lang.model.element.Modifier.ABSTRACT;
 import static javax.lang.model.element.Modifier.PUBLIC;
 import static javax.tools.Diagnostic.Kind.ERROR;
 import static javax.tools.StandardLocation.CLASS_OUTPUT;
+import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 /**
  * {@link Processor} implementation to check {@link Class}es annotated with
@@ -76,7 +76,7 @@ public class ServiceProviderForProcessor extends AbstractAnnotationProcessor
                              map.entrySet()) {
                         String service = entry.getKey();
                         FileObject file =
-                            filer.createResource(CLASS_OUTPUT, NIL,
+                            filer.createResource(CLASS_OUTPUT, EMPTY,
                                                  String.format(PATH, service));
                         ArrayList<String> lines = new ArrayList<>();
 

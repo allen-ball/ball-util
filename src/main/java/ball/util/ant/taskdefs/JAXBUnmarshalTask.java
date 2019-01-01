@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2013 - 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2013 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.taskdefs;
 
@@ -12,7 +12,7 @@ import java.util.Map;
 import javax.xml.bind.JAXBContext;
 import org.apache.tools.ant.BuildException;
 
-import static ball.util.StringUtil.NIL;
+import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 /**
  * {@link.uri http://ant.apache.org/ Ant} {@link org.apache.tools.ant.Task}
@@ -56,7 +56,7 @@ public class JAXBUnmarshalTask extends AbstractClasspathTask {
             BeanMap map = BeanMap.asBeanMap(object);
 
             if (! map.isEmpty()) {
-                log(NIL);
+                log(EMPTY);
                 log(new MapTableModelImpl(map));
             }
         } catch (BuildException exception) {

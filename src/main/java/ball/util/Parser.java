@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2010 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2010 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.util;
 
@@ -13,7 +13,7 @@ import java.util.NoSuchElementException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static ball.util.StringUtil.NIL;
+import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 /**
  * Parser implementation.
@@ -24,7 +24,7 @@ import static ball.util.StringUtil.NIL;
 public class Parser extends ArrayList<Parser.Lexeme> {
     private static final long serialVersionUID = -4408046262231182942L;
 
-    private static final Pattern FACTORY = Pattern.compile(NIL);
+    private static final Pattern FACTORY = Pattern.compile(EMPTY);
 
     /**
      * @param   collection      The {@link Collection} of parser

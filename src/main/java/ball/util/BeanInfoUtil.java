@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2013, 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2013 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.util;
 
@@ -10,7 +10,7 @@ import java.beans.IndexedPropertyDescriptor;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
 
-import static ball.util.StringUtil.NIL;
+import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 /**
  * {@code BeanInfo} utility methods.
@@ -52,6 +52,6 @@ public abstract class BeanInfoUtil {
     }
 
     private static String getMode(Method read, Method write) {
-        return ((read != null) ? R : NIL) + ((write != null) ? W : NIL);
+        return ((read != null) ? R : EMPTY) + ((write != null) ? W : EMPTY);
     }
 }

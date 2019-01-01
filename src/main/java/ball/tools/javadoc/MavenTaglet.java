@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2015 - 2018 Allen D. Ball.  All rights reserved.
+ * Copyright 2015 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.tools.javadoc;
 
@@ -30,7 +30,7 @@ import org.w3c.dom.Element;
 import static ball.tools.maven.POMProperties.ARTIFACT_ID;
 import static ball.tools.maven.POMProperties.GROUP_ID;
 import static ball.tools.maven.POMProperties.VERSION;
-import static ball.util.StringUtil.isNil;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 /**
  * Abstract base class for inline {@link Taglet}s that load the
@@ -61,7 +61,7 @@ public abstract class MavenTaglet extends AbstractInlineTaglet {
         File file = null;
         String name = tag.text().trim();
 
-        if (! isNil(name)) {
+        if (! isEmpty(name)) {
             file = new File(tag.position().file().getParentFile(), name);
         } else {
             name = POM_XML;
@@ -167,7 +167,7 @@ public abstract class MavenTaglet extends AbstractInlineTaglet {
                 String artifactId = model.getArtifactId();
                 String version = model.getVersion();
 
-                if (isNil(version)) {
+                if (isEmpty(version)) {
                     version =
                         new POMProperties(groupId, artifactId)
                         .getVersion();

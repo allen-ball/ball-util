@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2013 - 2018 Allen D. Ball.  All rights reserved.
+ * Copyright 2013 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.annotation.processing;
 
@@ -40,11 +40,11 @@ import static ball.lang.Keyword.THROWS;
 import static ball.lang.Punctuation.COMMA;
 import static ball.lang.Punctuation.LP;
 import static ball.lang.Punctuation.RP;
-import static ball.util.StringUtil.NIL;
-import static ball.util.StringUtil.concat;
 import static javax.tools.Diagnostic.Kind.ERROR;
 import static javax.tools.Diagnostic.Kind.WARNING;
 import static javax.tools.StandardLocation.CLASS_OUTPUT;
+import static org.apache.commons.lang3.StringUtils.EMPTY;
+import static org.apache.commons.lang3.StringUtils.join;
 
 /**
  * {@link Processor} implementation to scan {@link ball.annotation.Manifest}
@@ -90,7 +90,7 @@ public class ManifestProcessor extends AbstractAnnotationProcessor
             if (manifest == null) {
                 manifest = new ManifestImpl();
 
-                FileObject file = filer.getResource(CLASS_OUTPUT, NIL, path);
+                FileObject file = filer.getResource(CLASS_OUTPUT, EMPTY, path);
 
                 if (file.getLastModified() != 0) {
                     try (InputStream in = file.openInputStream()) {
@@ -107,7 +107,7 @@ public class ManifestProcessor extends AbstractAnnotationProcessor
 
                 if (roundEnv.processingOver()) {
                     FileObject file =
-                        filer.createResource(CLASS_OUTPUT, NIL, path);
+                        filer.createResource(CLASS_OUTPUT, EMPTY, path);
 
                     try (OutputStream out = file.openOutputStream()) {
                         manifest.write(out);
@@ -347,12 +347,12 @@ public class ManifestProcessor extends AbstractAnnotationProcessor
 
             if (depends != null) {
                 attributes.putValue(getAttributeName(depends.getClass()),
-                                    concat(SPACE, depends.value()));
+                                    join(depends.value(), SPACE));
             }
 
             if (design != null) {
                 attributes.putValue(getAttributeName(design.getClass()),
-                                    concat(SPACE, design.value()));
+                                    join(design.value(), SPACE));
             }
         }
 

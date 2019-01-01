@@ -15,8 +15,6 @@ import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.ExitException;
 import org.apache.tools.ant.util.optional.NoExitSecurityManager;
 
-import static ball.util.StringUtil.NIL;
-import static ball.util.StringUtil.isNil;
 import static java.lang.reflect.Modifier.isStatic;
 
 /**

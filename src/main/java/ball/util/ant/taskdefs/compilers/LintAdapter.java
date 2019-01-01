@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2011 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2011 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.taskdefs.compilers;
 
@@ -18,10 +18,10 @@ import javax.tools.Diagnostic;
 import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
 
-import static ball.util.StringUtil.NIL;
 import static javax.tools.JavaFileObject.Kind.CLASS;
 import static javax.tools.StandardLocation.CLASS_OUTPUT;
 import static javax.tools.StandardLocation.CLASS_PATH;
+import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 /**
  * {@link SystemJavaCompilerAdapter} implementation that provides additional
@@ -80,7 +80,7 @@ public class LintAdapter extends SystemJavaCompilerAdapter {
 
             try {
                 iterable =
-                    fm.list(CLASS_OUTPUT, NIL,
+                    fm.list(CLASS_OUTPUT, EMPTY,
                             Collections.singleton(CLASS), true);
             } catch (Throwable throwable) {
                 iterable = Collections.<JavaFileObject>emptyList();

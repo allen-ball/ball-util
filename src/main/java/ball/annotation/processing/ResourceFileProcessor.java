@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2014 - 2018 Allen D. Ball.  All rights reserved.
+ * Copyright 2014 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.annotation.processing;
 
@@ -22,10 +22,10 @@ import javax.lang.model.element.TypeElement;
 import javax.tools.FileObject;
 
 import static ball.text.ParameterizedMessageFormat.format;
-import static ball.util.StringUtil.NIL;
-import static ball.util.StringUtil.isNil;
 import static javax.tools.Diagnostic.Kind.ERROR;
 import static javax.tools.StandardLocation.CLASS_OUTPUT;
+import static org.apache.commons.lang3.StringUtils.EMPTY;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 /**
  * {@link Processor} implementation to check and assemble
@@ -60,7 +60,7 @@ public class ResourceFileProcessor extends AbstractAnnotationProcessor {
                              map.entrySet()) {
                         String path = entry.getKey();
                         FileObject file =
-                            filer.createResource(CLASS_OUTPUT, NIL, path);
+                            filer.createResource(CLASS_OUTPUT, EMPTY, path);
                         ArrayList<String> lines = new ArrayList<>();
 
                         lines.add("# " + path);
@@ -85,7 +85,7 @@ public class ResourceFileProcessor extends AbstractAnnotationProcessor {
         String path = element.getAnnotation(ResourceFile.class).path();
         String[] lines = element.getAnnotation(ResourceFile.class).lines();
 
-        if (! isNil(path)) {
+        if (! isEmpty(path)) {
             if (lines != null) {
                 ArrayList<String> list = new ArrayList<>(lines.length);
                 Parameters parameters = new Parameters((TypeElement) element);
@@ -136,7 +136,7 @@ public class ResourceFileProcessor extends AbstractAnnotationProcessor {
             put(ResourceFile.CLASS,
                 type.getQualifiedName().toString());
             put(ResourceFile.PACKAGE,
-                (pkg != null) ? pkg.getQualifiedName().toString() : NIL);
+                (pkg != null) ? pkg.getQualifiedName().toString() : EMPTY);
         }
     }
 }

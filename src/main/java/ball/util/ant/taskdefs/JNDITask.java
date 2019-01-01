@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2009 - 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.taskdefs;
 
@@ -17,7 +17,7 @@ import javax.naming.NamingException;
 import javax.naming.spi.NamingManager;
 import org.apache.tools.ant.BuildException;
 
-import static ball.util.StringUtil.NIL;
+import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 /**
  * Abstract base class for JNDI {@link.uri http://ant.apache.org/ Ant}
@@ -70,7 +70,7 @@ public abstract class JNDITask extends AbstractClasspathTask {
      *                          loggged.
      */
     protected void log(Context context) throws NamingException {
-        log(NIL);
+        log(EMPTY);
         log(new ContextTableModel(context));
     }
 
@@ -78,7 +78,7 @@ public abstract class JNDITask extends AbstractClasspathTask {
         private static final long serialVersionUID = -9071374026742198331L;
 
         public ContextTableModel(Context context) throws NamingException {
-            super(Collections.list(context.listBindings(NIL)),
+            super(Collections.list(context.listBindings(EMPTY)),
                   context.getNameInNamespace(), null);
         }
 

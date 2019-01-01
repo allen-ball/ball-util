@@ -1,12 +1,11 @@
 /*
  * $Id$
  *
- * Copyright 2012 - 2018 Allen D. Ball.  All rights reserved.
+ * Copyright 2012 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.annotation.processing;
 
 import ball.annotation.ServiceProviderFor;
-import ball.util.StringUtil;
 import java.beans.ConstructorProperties;
 import java.util.Arrays;
 import java.util.List;
@@ -20,6 +19,7 @@ import javax.lang.model.element.VariableElement;
 
 import static javax.tools.Diagnostic.Kind.ERROR;
 import static javax.tools.Diagnostic.Kind.WARNING;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 /**
  * {@link Processor} implementation to verify {@link ConstructorProperties}
@@ -61,7 +61,7 @@ public class ConstructorPropertiesProcessor
             Set<String> properties = getPropertyNames(type);
 
             Arrays.stream(value)
-                .filter(t -> (! StringUtil.isNil(t)))
+                .filter(t -> (! isEmpty(t)))
                 .filter(t -> (! properties.contains(t)))
                 .forEach(t -> print(WARNING,
                                     element,

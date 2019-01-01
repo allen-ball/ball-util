@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2015, 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2015 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.tools.javadoc;
 
@@ -17,7 +17,7 @@ import com.sun.tools.doclets.internal.toolkit.taglets.TagletWriter;
 import java.util.Map;
 import org.w3c.dom.Element;
 
-import static ball.util.StringUtil.isNil;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 /**
  * Inline {@link Taglet} to provide {@link.this} links.
@@ -45,7 +45,7 @@ public class LinkThisTaglet extends AbstractInlineTaglet {
         Element element = HTML.code(document, Keyword.THIS.lexeme());
 
         try {
-            if (! isNil(tag.text().trim())) {
+            if (! isEmpty(tag.text().trim())) {
                 throw new IllegalArgumentException("Invalid argument");
             }
 

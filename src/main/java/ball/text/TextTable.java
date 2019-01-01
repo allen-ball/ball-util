@@ -1,12 +1,11 @@
 /*
  * $Id$
  *
- * Copyright 2009 - 2018 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.text;
 
 import ball.activation.ReaderWriterDataSource;
-import ball.util.StringUtil;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
@@ -15,10 +14,14 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
+import org.apache.commons.lang3.StringUtils;
 
-import static ball.util.StringUtil.NIL;
-import static ball.util.StringUtil.SPACE;
-import static ball.util.StringUtil.rtrim;
+import static org.apache.commons.lang3.StringUtils.EMPTY;
+import static org.apache.commons.lang3.StringUtils.SPACE;
+import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.repeat;
+import static org.apache.commons.lang3.StringUtils.rightPad;
+import static org.apache.commons.lang3.StringUtils.stripEnd;
 
 /**
  * Text-based {@link javax.swing.JTable} implementation.
@@ -79,16 +82,14 @@ public class TextTable extends ReaderWriterDataSource {
 
         try (PrintWriter out = getPrintWriter()) {
             StringBuilder header = line(fill(header()));
-            StringBuilder boundary =
-                StringUtil.fill(new StringBuilder(), header.length(), '-');
 
-            if (rtrim(header).length() > 0) {
-                out.println(rtrim(header));
-                out.println(boundary);
+            if (! isBlank(header)) {
+                out.println(stripEnd(header.toString(), null));
+                out.println(repeat('-', header.length()));
             }
 
             for (int y = 0, n = model.getRowCount(); y < n; y += 1) {
-                out.println(rtrim(line(fill(format(row(y))))));
+                out.println(stripEnd(line(fill(format(row(y)))).toString(), null));
             }
         } catch (IOException exception) {
             throw new IllegalStateException(exception);
@@ -101,7 +102,7 @@ public class TextTable extends ReaderWriterDataSource {
         for (int x = 0; x < header.length; x += 1) {
             String string = getModel().getColumnName(x);
 
-            header[x] = (string != null) ? string : NIL;
+            header[x] = (string != null) ? string : EMPTY;
         }
 
         return header;
@@ -131,7 +132,7 @@ public class TextTable extends ReaderWriterDataSource {
         String[] strings = new String[row.length];
 
         for (int x = 0; x < strings.length; x += 1) {
-            strings[x] = StringUtil.rfill(row[x], widths[x], SPACE);
+            strings[x] = rightPad(row[x], widths[x], SPACE);
         }
 
         return strings;

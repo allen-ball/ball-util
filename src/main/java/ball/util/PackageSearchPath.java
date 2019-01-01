@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2009 - 2018 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.util;
 
@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 
-import static ball.util.StringUtil.NIL;
+import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 /**
  * Package search path mechanism.
@@ -36,7 +36,7 @@ public class PackageSearchPath<T> extends LinkedHashSet<Package> {
      * @param   superclass      The type of {@link Class} to search for.
      * @param   packages        The {@link Package}s to search.
      */
-    @ConstructorProperties({ "superclass", NIL })
+    @ConstructorProperties({ "superclass", EMPTY })
     public PackageSearchPath(Class<? extends T> superclass,
                              Package... packages) {
         this(superclass, Arrays.asList(packages));
@@ -47,7 +47,7 @@ public class PackageSearchPath<T> extends LinkedHashSet<Package> {
      * @param   collection      The {@link Collection} of {@link Package}s
      *                          to search.
      */
-    @ConstructorProperties({ "superclass", NIL })
+    @ConstructorProperties({ "superclass", EMPTY })
     public PackageSearchPath(Class<? extends T> superclass,
                              Collection<Package> collection) {
         super();

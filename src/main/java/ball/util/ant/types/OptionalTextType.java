@@ -1,13 +1,14 @@
 /*
  * $Id$
  *
- * Copyright 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2016 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.types;
 
 import org.apache.tools.ant.Project;
-import static ball.util.StringUtil.NIL;
-import static ball.util.StringUtil.isNil;
+
+import static org.apache.commons.lang3.StringUtils.EMPTY;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 /**
  * Class to provide a {@link String} base text type for
@@ -30,7 +31,7 @@ public class OptionalTextType {
     public OptionalTextType() { }
 
     public void addText(String text) {
-        this.text = (! isNil(this.text) ? this.text : NIL) + text;
+        this.text = (! isEmpty(this.text) ? this.text : EMPTY) + text;
     }
 
     /**

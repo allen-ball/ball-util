@@ -7,7 +7,6 @@ package ball.annotation.processing;
 
 import ball.annotation.ServiceProviderFor;
 import ball.tools.javadoc.TagletName;
-import ball.util.StringUtil;
 import com.sun.tools.doclets.internal.toolkit.taglets.Taglet;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
@@ -17,6 +16,7 @@ import javax.lang.model.element.TypeElement;
 import static javax.lang.model.element.Modifier.ABSTRACT;
 import static javax.lang.model.element.Modifier.PUBLIC;
 import static javax.tools.Diagnostic.Kind.ERROR;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 /**
  * {@link Processor} implementation to check {@link Class}es annotated with
@@ -48,7 +48,7 @@ public class TagletNameProcessor extends AbstractAnnotationProcessor {
                            Element element) throws Exception {
         String name = element.getAnnotation(TagletName.class).value();
 
-        if (! StringUtil.isNil(name)) {
+        if (! isEmpty(name)) {
             if (isAssignable(element.asType(), Taglet.class)) {
                 if (! element.getModifiers().contains(ABSTRACT)) {
                     if (! hasPublicNoArgumentConstructor(element)) {

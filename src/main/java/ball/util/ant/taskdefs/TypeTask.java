@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2015 - 2018 Allen D. Ball.  All rights reserved.
+ * Copyright 2015 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.taskdefs;
 
@@ -24,7 +24,7 @@ import org.apache.tools.ant.BuildException;
 import static ball.lang.Punctuation.GT;
 import static ball.lang.Punctuation.LT;
 import static ball.util.ClassOrder.INHERITANCE;
-import static ball.util.StringUtil.NIL;
+import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 /**
  * Abstract {@link.uri http://ant.apache.org/ Ant}
@@ -80,7 +80,7 @@ public abstract class TypeTask extends AbstractClasspathTask {
 
         private void log(BeanInfo bean) {
             log(new BeanHeaderTableModel(bean.getBeanDescriptor()));
-            log(NIL);
+            log(EMPTY);
             log(new BeanPropertyTableModel(bean.getPropertyDescriptors()));
             log(bean.getAdditionalBeanInfo());
         }
@@ -88,7 +88,7 @@ public abstract class TypeTask extends AbstractClasspathTask {
         private void log(BeanInfo[] beans) {
             if (beans != null) {
                 for (BeanInfo bean : beans) {
-                    log(NIL);
+                    log(EMPTY);
                     log(bean);
                 }
             }
@@ -155,7 +155,7 @@ public abstract class TypeTask extends AbstractClasspathTask {
             }
 
             private String getCanonicalName(Class<?> type) {
-                return (type != null) ? type.getCanonicalName() : NIL;
+                return (type != null) ? type.getCanonicalName() : EMPTY;
             }
         }
     }

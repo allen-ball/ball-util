@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2013 - 2017 Allen D. Ball.  All rights reserved.
+ * Copyright 2013 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.xml;
 
@@ -10,8 +10,6 @@ import java.util.Arrays;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-
-import static ball.util.StringUtil.isNil;
 
 /**
  * Static methods to create {@link HTML} {@link Element}s.

@@ -249,12 +249,6 @@
 	* src/main/java/ball/swing/table/MapsTableModel.java:
 	Initial writing.
 
-2016-02-26  Allen D. Ball  <ball@sol.local>
-
-	* src/main/java/ball/util/StringUtil.java:
-	Added concat(CharSequence,Iterable<?>), concat(Iterable<?>),
-	concat(CharSequence,Object...), and concat(Object...) methods.
-
 2016-02-20  Allen D. Ball  <ball@sol.local>
 
 	* src/main/java/ball/swing/table/SimpleTableModel.java:
@@ -1155,9 +1149,6 @@
 
 2010-10-17  Allen D. Ball  <ball@10-0-1-2.lan>
 
-	* src/main/java/iprotium/util/StringUtil.java:
-	Added fill and trim methods.
-
 	* src/main/java/iprotium/activation/AbstractDataSource.java:
 	Added clear() and length() methods.
 	Made setName(String) and setContentType(String) methods public.
@@ -1165,10 +1156,6 @@
 	* src/main/java/iprotium/io/IOUtil.java:
 	Added copy(Readable,Appendable) method.
 	In copy() methods, flush output after completing the copy.
-
-2010-09-23  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/util/StringUtil.java: Initial writing.
 
 2010-09-12  Allen D. Ball  <ball@10-0-1-2.lan>
 
@@ -1358,13 +1345,6 @@
 
 	* src/main/java/iprotium/activation/AbstractDataSource.java:
 	Added writeTo(OutputStream) method.
-
-	* src/main/java/iprotium/text/FillEnum.java: Initial writing.
-
-	* src/main/java/iprotium/text/FillStringFormat.java,
-	NoFillStringFormat.java, LeftFillStringFormat.java,
-	RightFillStringFormat.java:
-	Initial writing.
 
 2009-03-27  Allen D. Ball  <ball@10-0-1-4.lan>
 

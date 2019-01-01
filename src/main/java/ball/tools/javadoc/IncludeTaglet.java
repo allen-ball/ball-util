@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2014 - 2018 Allen D. Ball.  All rights reserved.
+ * Copyright 2014 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.tools.javadoc;
 
@@ -24,8 +24,8 @@ import java.util.regex.Pattern;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-import static ball.util.StringUtil.NIL;
-import static ball.util.StringUtil.isNil;
+import static org.apache.commons.lang3.StringUtils.EMPTY;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 /**
  * Inline {@link Taglet} to include a static {@link Class} member or
@@ -58,7 +58,7 @@ public class IncludeTaglet extends AbstractInlineTaglet {
 
             if (text.length > 1) {
                 Class<?> type =
-                    getClassFor((! isNil(text[0]))
+                    getClassFor((! isEmpty(text[0]))
                                     ? getClassDoc(doc, text[0])
                                     : doc);
 
@@ -84,7 +84,7 @@ public class IncludeTaglet extends AbstractInlineTaglet {
                         HTML.b(element.getOwnerDocument(), "Element"));
 
                 for (Object object : collection) {
-                    Element tr = HTML.tr(element, NIL);
+                    Element tr = HTML.tr(element, EMPTY);
 
                     renderTo(doc, object, tr.getFirstChild());
                 }
@@ -98,7 +98,7 @@ public class IncludeTaglet extends AbstractInlineTaglet {
                         HTML.b(element.getOwnerDocument(), "Value"));
 
                 for (Map.Entry<?,?> entry : map.entrySet()) {
-                    Element tr = HTML.tr(element, NIL, NIL);
+                    Element tr = HTML.tr(element, EMPTY, EMPTY);
 
                     renderTo(doc, entry.getKey(), tr.getFirstChild());
                     renderTo(doc, entry.getValue(), tr.getLastChild());
