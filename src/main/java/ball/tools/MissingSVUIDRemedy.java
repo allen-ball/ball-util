@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2011 - 2015 Allen D. Ball.  All rights reserved.
+ * Copyright 2011 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.tools;
 
@@ -20,8 +20,6 @@ import javax.tools.StandardLocation;
 import static ball.lang.Punctuation.EQUALS;
 import static ball.lang.Punctuation.SEMICOLON;
 import static ball.lang.Punctuation.SPACE;
-import static ball.util.ClassUtil.isAbstract;
-import static ball.util.ClassUtil.isStatic;
 import static java.lang.reflect.Modifier.FINAL;
 import static java.lang.reflect.Modifier.PRIVATE;
 import static java.lang.reflect.Modifier.STATIC;

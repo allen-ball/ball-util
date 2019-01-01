@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2018 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.taskdefs;
 
@@ -11,8 +11,8 @@ import java.util.TreeSet;
 import org.apache.tools.ant.BuildException;
 
 import static ball.util.ClassOrder.NAME;
-import static ball.util.ClassUtil.isNative;
 import static ball.util.StringUtil.NIL;
+import static java.lang.reflect.Modifier.isNative;
 
 /**
  * {@link.uri http://ant.apache.org/ Ant} {@link org.apache.tools.ant.Task}
@@ -95,7 +95,7 @@ public class JNIClassesTask extends AbstractClassFileTask {
         boolean hasNative = false;
 
         for (Member member : members) {
-            hasNative |= isNative(member);
+            hasNative |= isNative(member.getModifiers());
 
             if (hasNative) {
                 break;

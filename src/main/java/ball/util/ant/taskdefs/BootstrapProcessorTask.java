@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2011 - 2018 Allen D. Ball.  All rights reserved.
+ * Copyright 2011 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.taskdefs;
 
@@ -9,7 +9,7 @@ import java.io.File;
 import java.util.Set;
 import org.apache.tools.ant.BuildException;
 
-import static ball.util.ClassUtil.isAbstract;
+import static java.lang.reflect.Modifier.isAbstract;
 
 /**
  * {@link.uri http://ant.apache.org/ Ant} {@link org.apache.tools.ant.Task}
@@ -43,7 +43,7 @@ public class BootstrapProcessorTask extends AbstractClassFileTask {
         try {
             for (Class<?> type : getClassSet()) {
                 if (Processor.class.isAssignableFrom(type)) {
-                    if (! isAbstract(type)) {
+                    if (! isAbstract(type.getModifiers())) {
                         type.asSubclass(Processor.class).newInstance()
                             .process(getClassSet(), getDestdir());
                     }

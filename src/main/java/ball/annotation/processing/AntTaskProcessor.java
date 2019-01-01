@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2013 - 2018 Allen D. Ball.  All rights reserved.
+ * Copyright 2013 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.annotation.processing;
 
@@ -37,8 +37,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import org.apache.tools.ant.Task;
 
-import static ball.util.ClassUtil.isAbstract;
 import static ball.util.StringUtil.NIL;
+import static java.lang.reflect.Modifier.isAbstract;
 import static javax.lang.model.element.Modifier.ABSTRACT;
 import static javax.lang.model.element.Modifier.PUBLIC;
 import static javax.tools.Diagnostic.Kind.ERROR;
@@ -185,7 +185,7 @@ public class AntTaskProcessor extends AbstractAnnotationProcessor
 
             if (task != null) {
                 if (Task.class.isAssignableFrom(type)) {
-                    if (! isAbstract(type)) {
+                    if (! isAbstract(type.getModifiers())) {
                         String name = task.value();
                         String resource = task.resource();
                         Package pkg = type.getPackage();

@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2015 - 2018 Allen D. Ball.  All rights reserved.
+ * Copyright 2015 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.taskdefs;
 
@@ -15,9 +15,9 @@ import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.ExitException;
 import org.apache.tools.ant.util.optional.NoExitSecurityManager;
 
-import static ball.util.ClassUtil.isStatic;
 import static ball.util.StringUtil.NIL;
 import static ball.util.StringUtil.isNil;
+import static java.lang.reflect.Modifier.isStatic;
 
 /**
  * {@link.uri http://ant.apache.org/ Ant} {@link org.apache.tools.ant.Task}
@@ -60,7 +60,7 @@ public class MainTask extends TypeTask {
 
             log(method.toString());
 
-            if (! isStatic(method)) {
+            if (! isStatic(method.getModifiers())) {
                 throw new BuildException(method + " is not static");
             }
 

@@ -157,12 +157,6 @@
 	* src/main/java/ball/annotation/processing/AbstractProcessor.java:
 	Added getTargetElementTypesFor() methods.
 
-2017-07-12  Allen D. Ball  <ball@sol.local>
-
-	* src/main/java/ball/util/ClassUtil.java:
-	Added isInterface(), isPrivate(), isProtected(), isStrict(),
-	isSynchronized(), isTransient(), and isVolatile() methods.
-
 2017-04-15  Allen D. Ball  <ball@sol.local>
 
 	* src/main/java/ball/tools/javadoc/AbstractTaglet.java:
@@ -296,10 +290,6 @@
 	libraries.
 
 	* Added <manifest-for/> Ant Task and target.
-
-	* src/main/java/ball/util/ClassUtil.java:
-	Added getManifestFor(Class<?>) and getManifestURLFor(Class<?>)
-	methods.
 
 	* src/main/java/ball/util/JNILib.java: Initial writing.
 
@@ -847,9 +837,6 @@
 
 	* Moved iprotium.lang.java to iprotium.lang.
 
-	* src/main/java/iprotium/util/StaticFinalFieldMap.java:
-	Added StaticFinalFieldMap(Class<?>,Class<T>) constructor.
-
 	* src/main/java/iprotium/annotation/processing/AbstractProcessor.java:
 	Added getTypeElement(Class<?>) and
 	overrides(ExecutableElement,ExecutableElement) methods.
@@ -1250,13 +1237,6 @@
 
 	* src/main/java/iprotium/util/Order.java:
 	Added Natural inner class and NATURAL member.
-
-	* src/main/java/iprotium/util/StaticFinalFieldMap.java:
-	Initial writing.
-
-2010-07-26  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/util/ClassUtil.java: Initial writing.
 
 2009-11-29  Allen D. Ball  <ball@10-0-1-2.lan>
 

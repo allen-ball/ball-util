@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2018 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.util;
 
@@ -16,8 +16,8 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import static ball.util.ClassUtil.isPublic;
-import static ball.util.ClassUtil.isStatic;
+import static java.lang.reflect.Modifier.isStatic;
+import static java.lang.reflect.Modifier.isPublic;
 
 /**
  * {@link Factory} base class.
@@ -68,20 +68,21 @@ public class Factory<T> extends TreeMap<Class<?>[],Member> {
 
         if (factory != null) {
             Arrays.stream(factory.getClass().getMethods())
-                .filter(t -> isPublic(t))
+                .filter(t -> isPublic(t.getModifiers()))
                 .filter(t -> type.isAssignableFrom(t.getReturnType()))
                 .filter(t -> set.contains(t.getName()))
                 .forEach(t -> putIfAbsent(t.getParameterTypes(), t));
         }
 
         Arrays.stream(type.getMethods())
-            .filter(t -> isPublic(t) && isStatic(t))
+            .filter(t -> (isPublic(t.getModifiers())
+                          && isStatic(t.getModifiers())))
             .filter(t -> type.isAssignableFrom(t.getReturnType()))
             .filter(t -> (set.contains(t.getName())))
             .forEach(t -> putIfAbsent(t.getParameterTypes(), t));
 
         Arrays.stream(type.getConstructors())
-            .filter(t -> isPublic(t))
+            .filter(t -> isPublic(t.getModifiers()))
             .forEach(t -> putIfAbsent(t.getParameterTypes(), t));
     }
 

@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2013 - 2018 Allen D. Ball.  All rights reserved.
+ * Copyright 2013 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.annotation.processing;
 
@@ -27,8 +27,8 @@ import javax.tools.FileObject;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-import static ball.util.ClassUtil.isAbstract;
 import static ball.util.StringUtil.NIL;
+import static java.lang.reflect.Modifier.isAbstract;
 import static javax.tools.Diagnostic.Kind.ERROR;
 import static javax.tools.StandardLocation.CLASS_OUTPUT;
 
@@ -101,7 +101,7 @@ public class JAXBIndexProcessor extends AbstractAnnotationProcessor
     @Override
     public void process(Set<Class<?>> set, File destdir) throws IOException {
         for (Class<?> type : set) {
-            if (! isAbstract(type)) {
+            if (! isAbstract(type.getModifiers())) {
                 for (Class<? extends Annotation> annotation :
                          getSupportedAnnotationTypeList()) {
                     if (type.getAnnotation(annotation) != null) {

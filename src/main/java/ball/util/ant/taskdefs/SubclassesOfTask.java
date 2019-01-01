@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2009 - 2018 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.taskdefs;
 
@@ -9,8 +9,8 @@ import ball.util.ClassOrder;
 import java.util.TreeSet;
 import org.apache.tools.ant.BuildException;
 
-import static ball.util.ClassUtil.isAbstract;
 import static ball.util.StringUtil.NIL;
+import static java.lang.reflect.Modifier.isAbstract;
 
 /**
  * {@link.uri http://ant.apache.org/ Ant} {@link org.apache.tools.ant.Task}
@@ -65,7 +65,7 @@ public class SubclassesOfTask extends AbstractClassFileTask {
             TreeSet<Class<?>> set = new TreeSet<>(ClassOrder.NAME);
 
             for (Class<?> type : getClassSet()) {
-                if ((! isAbstract(type)) || getIncludeAbstract()) {
+                if ((! isAbstract(type.getModifiers())) || getIncludeAbstract()) {
                     if (supertype.isAssignableFrom(type)) {
                         set.add(type);
                     }

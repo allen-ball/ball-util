@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2013, 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2013 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.annotation.processing;
 
@@ -14,7 +14,6 @@ import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 
-import static ball.util.ClassUtil.isAbstract;
 import static javax.lang.model.element.Modifier.ABSTRACT;
 import static javax.lang.model.element.Modifier.PUBLIC;
 import static javax.tools.Diagnostic.Kind.ERROR;

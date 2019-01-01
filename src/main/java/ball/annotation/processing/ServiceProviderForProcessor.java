@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2013 - 2018 Allen D. Ball.  All rights reserved.
+ * Copyright 2013 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.annotation.processing;
 
@@ -26,9 +26,9 @@ import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.TypeMirror;
 import javax.tools.FileObject;
 
-import static ball.util.ClassUtil.isAbstract;
 import static ball.util.MapUtil.getByKeyToString;
 import static ball.util.StringUtil.NIL;
+import static java.lang.reflect.Modifier.isAbstract;
 import static javax.lang.model.element.Modifier.ABSTRACT;
 import static javax.lang.model.element.Modifier.PUBLIC;
 import static javax.tools.Diagnostic.Kind.ERROR;
@@ -155,7 +155,7 @@ public class ServiceProviderForProcessor extends AbstractAnnotationProcessor
     @Override
     public void process(Set<Class<?>> set, File destdir) throws IOException {
         for (Class<?> provider : set) {
-            if (! isAbstract(provider)) {
+            if (! isAbstract(provider.getModifiers())) {
                 ServiceProviderFor annotation =
                     provider.getAnnotation(ServiceProviderFor.class);
 
