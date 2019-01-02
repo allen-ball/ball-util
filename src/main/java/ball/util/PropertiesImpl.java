@@ -16,6 +16,7 @@ import java.lang.reflect.Method;
 import java.nio.charset.Charset;
 import java.util.Properties;
 
+import static ball.util.Converter.convertTo;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
@@ -139,8 +140,7 @@ public class PropertiesImpl extends Properties {
                              key, (value != null) ? value.getClass() : null);
 
             if (method != null) {
-                value =
-                    Converter.convertTo(value, method.getParameterTypes()[0]);
+                value = convertTo(value, method.getParameterTypes()[0]);
 
                 try {
                     method.invoke(object, value);
