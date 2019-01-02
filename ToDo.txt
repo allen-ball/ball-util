@@ -5,9 +5,6 @@ $Id$
 * CoordinateMap: Calculate getColumnClass(int) (type member) by determining
   parameter V through reflection.
 
-* Reimplement IOUtil.copy(FileChannel,FileChannel) so it respects and updates
-  the FileChannels' positions.
-
 * Add checks to iprotium.tools or iprotium.annotation.processing:
 
         ** CollectionToArrayProcessor: Finish implementation.
