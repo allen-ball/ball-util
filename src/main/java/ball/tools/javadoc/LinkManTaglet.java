@@ -1,12 +1,14 @@
 /*
  * $Id$
  *
- * Copyright 2012 - 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2012 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.tools.javadoc;
 
+import ball.annotation.MatcherGroup;
+import ball.annotation.PatternRegex;
 import ball.annotation.ServiceProviderFor;
-import ball.util.Regex;
+import ball.util.PatternMatcherBean;
 import ball.xml.HTML;
 import com.sun.javadoc.Tag;
 import com.sun.tools.doclets.internal.toolkit.Content;
@@ -14,8 +16,6 @@ import com.sun.tools.doclets.internal.toolkit.taglets.Taglet;
 import com.sun.tools.doclets.internal.toolkit.taglets.TagletWriter;
 import java.io.File;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import org.w3c.dom.Element;
 
 /**
@@ -26,21 +26,26 @@ import org.w3c.dom.Element;
  */
 @ServiceProviderFor({ Taglet.class })
 @TagletName("link.man")
-public class LinkManTaglet extends AbstractInlineTaglet {
+@PatternRegex("(?is)(.+)[(]([\\p{Alnum}])[)]")
+public class LinkManTaglet extends AbstractInlineTaglet
+                           implements PatternMatcherBean {
     public static void register(Map<String,Taglet> map) {
         register(LinkManTaglet.class, map);
     }
 
-    @Regex
-    public static final String REGEX = "(?is)(.+)[(]([\\p{Alnum}])[)]";
-    public static final Pattern PATTERN = Pattern.compile(REGEX);
-    public static final int NAME_GROUP = 1;
-    public static final int SECTION_GROUP = 2;
+    private String name = null;
+    private String section = null;
 
     /**
      * Sole constructor.
      */
     public LinkManTaglet() { super(); }
+
+    @MatcherGroup(1)
+    protected void setName(String string) { name = string; }
+
+    @MatcherGroup(2)
+    protected void setSection(String string) { section = string; }
 
     @Override
     public Content getTagletOutput(Tag tag,
@@ -48,22 +53,18 @@ public class LinkManTaglet extends AbstractInlineTaglet {
         Element element = null;
 
         try {
-            Matcher matcher = PATTERN.matcher(tag.text().trim());
+            PatternMatcherBean.super.initialize(tag.text().trim());
 
-            if (matcher.matches()) {
-                String name = matcher.group(NAME_GROUP).trim();
-                String section = matcher.group(SECTION_GROUP).trim();
-                File path = new File(File.separator);
+            File path = new File(File.separator);
 
-                path = new File(path, "usr");
-                path = new File(path, "share");
-                path = new File(path, "man");
-                path = new File(path, "htmlman" + section);
-                path = new File(path, name + "." + section + ".html");
+            path = new File(path, "usr");
+            path = new File(path, "share");
+            path = new File(path, "man");
+            path = new File(path, "htmlman" + section);
+            path = new File(path, name + "." + section + ".html");
 
-                element =
-                    HTML.a(document, path.toURI(), name + "(" + section + ")");
-            }
+            element =
+                HTML.a(document, path.toURI(), name + "(" + section + ")");
         } catch (Exception exception) {
             throw new IllegalArgumentException(tag.position().toString(),
                                                exception);

@@ -5,12 +5,12 @@
  */
 package ball.util.ant.taskdefs;
 
+import ball.annotation.MatcherGroup;
+import ball.annotation.PatternRegex;
 import ball.swing.table.ArrayListTableModel;
-import ball.util.Regex;
+import ball.util.PatternMatcherBean;
 import java.util.Collections;
 import java.util.Hashtable;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import javax.naming.Binding;
 import javax.naming.Context;
 import javax.naming.NamingException;
@@ -150,15 +150,13 @@ public abstract class JNDITask extends AbstractClasspathTask {
      * @see NamingManager#getInitialContext(Hashtable)
      */
     @AntTask("jndi-lookup")
-    public static class Lookup extends JNDITask {
-        @Regex
-        private static final String REGEX = "(?is)(([^:]+):)?([^:]*)";
-        private static final Pattern PATTERN = Pattern.compile(REGEX);
-        private static final int SCHEME_GROUP = 2;
-        private static final int PATH_GROUP = 3;
-
+    @PatternRegex("(?is)(([^:]+):)?([^:]*)")
+    public static class Lookup extends JNDITask implements PatternMatcherBean {
         private String name = null;
         private String property = null;
+
+        @MatcherGroup(2) protected String scheme = null;
+        @MatcherGroup(3) protected String path = null;
 
         /**
          * Sole constructor.
@@ -182,30 +180,26 @@ public abstract class JNDITask extends AbstractClasspathTask {
             try {
                 Thread.currentThread().setContextClassLoader(getClassLoader());
 
-                Matcher matcher = PATTERN.matcher(getName());
+                PatternMatcherBean.super.initialize(getName());
 
-                if (matcher.matches()) {
-                    Context context = getContext(matcher.group(SCHEME_GROUP));
-                    Object value = null;
+                Context context = getContext(scheme);
+                Object value = null;
 
-                    if (context != null) {
-                        value = context.lookup(matcher.group(PATH_GROUP));
-                    }
+                if (context != null) {
+                    value = context.lookup(path);
+                }
 
-                    String property = getProperty();
+                String property = getProperty();
 
-                    if (property != null && value != null) {
-                        getProject()
-                            .setProperty(property, String.valueOf(value));
-                    } else {
-                        if (value instanceof Context) {
-                            log((Context) value);
-                        } else {
-                            log(getName() + ": " + String.valueOf(value));
-                        }
-                    }
+                if (property != null && value != null) {
+                    getProject()
+                        .setProperty(property, String.valueOf(value));
                 } else {
-                    throw new BuildException(matcher.toString());
+                    if (value instanceof Context) {
+                        log((Context) value);
+                    } else {
+                        log(getName() + ": " + String.valueOf(value));
+                    }
                 }
             } catch (BuildException exception) {
                 throw exception;
