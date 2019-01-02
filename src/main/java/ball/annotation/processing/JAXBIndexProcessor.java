@@ -6,7 +6,6 @@
 package ball.annotation.processing;
 
 import ball.annotation.ServiceProviderFor;
-import ball.io.IOUtil;
 import ball.util.ant.taskdefs.BootstrapProcessorTask;
 import java.io.File;
 import java.io.IOException;
@@ -114,7 +113,7 @@ public class JAXBIndexProcessor extends AbstractAnnotationProcessor
             String pkg = entry.getKey();
             File file = new File(new File(destdir, asPath(pkg)), JAXB_INDEX);
 
-            IOUtil.mkdirs(file.getParentFile());
+            Files.createDirectories(file.toPath().getParent());
 
             ArrayList<String> lines = new ArrayList<>();
 

@@ -7,7 +7,6 @@ package ball.annotation.processing;
 
 import ball.activation.JAXBDataSource;
 import ball.annotation.ServiceProviderFor;
-import ball.io.IOUtil;
 import ball.util.PropertiesImpl;
 import ball.util.ant.taskdefs.AntLib;
 import ball.util.ant.taskdefs.AntTask;
@@ -17,6 +16,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -34,6 +34,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+import org.apache.commons.io.IOUtils;
 import org.apache.tools.ant.Task;
 
 import static java.lang.reflect.Modifier.isAbstract;
@@ -212,7 +213,7 @@ public class AntTaskProcessor extends AbstractAnnotationProcessor
         for (Map.Entry<String,PropertiesImpl> entry : map.entrySet()) {
             File file = new File(destdir, entry.getKey());
 
-            IOUtil.mkdirs(file.getParentFile());
+            Files.createDirectories(file.toPath().getParent());
 
             try (OutputStream out = new FileOutputStream(file)) {
                 entry.getValue().store(out, entry.getKey());
@@ -223,7 +224,7 @@ public class AntTaskProcessor extends AbstractAnnotationProcessor
             AntLibXML xml = new AntLibXML(pkg, map);
             File file = new File(destdir, xml.getPath());
 
-            IOUtil.mkdirs(file.getParentFile());
+            Files.createDirectories(file.toPath().getParent());
 
             try (OutputStream out = new FileOutputStream(file)) {
                 xml.writeTo(out);
@@ -301,7 +302,7 @@ public class AntTaskProcessor extends AbstractAnnotationProcessor
         }
 
         public void writeTo(OutputStream out) throws Exception {
-            IOUtil.copy(new JAXBDataSource(this).getInputStream(), out);
+            IOUtils.copy(new JAXBDataSource(this).getInputStream(), out);
         }
 
         /**

@@ -7,7 +7,6 @@ package ball.tools.javadoc;
 
 import ball.activation.ReaderWriterDataSource;
 import ball.annotation.ServiceProviderFor;
-import ball.io.IOUtil;
 import ball.xml.HTML;
 import com.sun.javadoc.ClassDoc;
 import com.sun.javadoc.Tag;
@@ -17,10 +16,12 @@ import com.sun.tools.doclets.internal.toolkit.taglets.TagletWriter;
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 import java.util.regex.Pattern;
+import org.apache.commons.io.IOUtils;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
@@ -107,7 +108,9 @@ public class IncludeTaglet extends AbstractInlineTaglet {
                 ReaderWriterDataSource ds =
                     new ReaderWriterDataSource(null, null);
 
-                IOUtil.copy((InputStream) resource, ds);
+                try (OutputStream out = ds.getOutputStream()) {
+                    IOUtils.copy((InputStream) resource, out);
+                }
 
                 element = HTML.pre(document, ds.toString());
             } else {

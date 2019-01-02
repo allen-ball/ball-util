@@ -5,7 +5,6 @@
  */
 package ball.activation;
 
-import ball.io.IOUtil;
 import java.beans.ConstructorProperties;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -22,6 +21,7 @@ import java.io.Writer;
 import java.nio.charset.Charset;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import org.apache.commons.io.IOUtils;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
@@ -81,7 +81,7 @@ public class ReaderWriterDataSource extends FilterDataSource
         if (content != null) {
             try (Reader reader = new StringReader(content);
                  Writer writer = getWriter()) {
-                IOUtil.copy(reader, writer);
+                IOUtils.copy(reader, writer);
             } catch (IOException exception) {
                 throw new ExceptionInInitializerError(exception);
             }
@@ -190,7 +190,7 @@ public class ReaderWriterDataSource extends FilterDataSource
      */
     public void writeTo(PrintWriter writer) throws IOException {
         try (BufferedReader reader = getBufferedReader()) {
-            IOUtil.copy(reader, writer);
+            IOUtils.copy(reader, writer);
         }
     }
 
@@ -211,7 +211,7 @@ public class ReaderWriterDataSource extends FilterDataSource
 
         try (Reader reader = getReader();
              StringWriter writer = new StringWriter()) {
-            IOUtil.copy(reader, writer);
+            IOUtils.copy(reader, writer);
             string = writer.toString();
         } catch (IOException exception) {
             string = super.toString();

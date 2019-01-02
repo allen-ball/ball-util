@@ -47,9 +47,6 @@
 
 	* Use try-with-resources.
 
-	* src/main/java/ball/io/IOUtil.java:
-	Removed close(Object) and flush(Object) methods.
-
 	* src/main/java/ball/util/CoordinateMap.java:
 	Added resize(Number,Number) method.
 
@@ -689,9 +686,6 @@
 
 2013-08-10  Allen D. Ball  <ball@10-0-1-2.lan>
 
-	* src/main/java/iprotium/io/IOUtil.java:
-	Added copy(DataSource,File,Class<?>...) method.
-
 	* src/main/java/iprotium/activation/ReaderWriterDataSource.java:
 	Added a constructor to provide content.
 
@@ -713,10 +707,6 @@
 	getOutputStream() and getInputStream() invocations.
 
 2013-07-14  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/io/IOUtil.java:
-	Added copy(DataSource,DataSource,Class<?>...) and
-	copy(InputStream,DataSource,Class<?>...) methods.
 
 	* src/main/java/iprotium/activation/AbstractDataSource.java:
 	Added APPLICATION_XML member.
@@ -997,12 +987,6 @@
 	Added getInputStream(Class<?>...) and getOutputStream(Class<?>...)
 	methods.
 
-	* src/main/java/iprotium/io/IOUtil.java:
-	Added wrap(InputStream,Class<?>...) and
-	wrap(OutputStream,Class<?>...) methods and added optional
-	"filters" parameter to to copy(File,File), copy(InputStream,File),
-	and copy(InputStream,OutputStream) methods.
-
 2011-04-25  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* src/main/java/iprotium/lang/java/Keyword.java,
@@ -1123,12 +1107,6 @@
 	Added the getIndexedReadMethod(String) and
 	getIndexedWriteMethod(String) methods.
 
-2010-10-28  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/io/IOUtil.java:
-	Expose copy(ReadableByteChannel,ByteBuffer,WritableByteChannel)
-	and copy(Readable,CharBuffer,Appendable).
-
 2010-10-23  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* src/main/java/iprotium/activation/ByteArrayDataSource.java,
@@ -1152,10 +1130,6 @@
 	* src/main/java/iprotium/activation/AbstractDataSource.java:
 	Added clear() and length() methods.
 	Made setName(String) and setContentType(String) methods public.
-
-	* src/main/java/iprotium/io/IOUtil.java:
-	Added copy(Readable,Appendable) method.
-	In copy() methods, flush output after completing the copy.
 
 2010-09-12  Allen D. Ball  <ball@10-0-1-2.lan>
 
@@ -1206,12 +1180,6 @@
 	* Added iprotium.lang and iprotium.lang.java packages.
 
 	* src/main/java/iprotium/lang/java/Keyword.java: Initial writing.
-
-2010-08-20  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/io/IOUtil.java:
-	In mkdirs(File...), use File.exists() to verify each directory has
-	been created.
 
 2010-07-27  Allen D. Ball  <ball@10-0-1-2.lan>
 
@@ -1266,9 +1234,6 @@
 	Added "separator" attribute.
 
 2009-09-07  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/io/IOUtil.java:
-	Changed mkdirs(File) signature to mkdirs(File...).
 
 	* src/main/java/iprotium/util/Factory.java:
 	Added hasFactoryMemberFor(Class<?>...) method.
@@ -1333,9 +1298,6 @@
 	* src/main/java/iprotium/activation/ReaderWriterDataSource.java:
 	Initial writing (renamed from PrintWriterDataSource).
 	Added getBufferedReader() and writeTo(PrintWriter) methods.
-
-	* src/main/java/iprotium/io/IOUtil.java:
-	Added static copy(BufferedReader,PrintWriter) method.
 
 	* src/main/java/iprotium/text/Table.java (and subclasses),
 	src/main/java/iprotium/text/TableModel.java (and subclasses):
@@ -1463,8 +1425,6 @@
 	targets and Ant Tasks.
 
 	* build.xml, pom.xml: Initial writing.
-
-	* src/main/java/iprotium/io/IOUtil.java: Initial writing.
 
 	* src/main/java/iprotium/util/Order.java,
 	src/main/java/iprotium/util/ArrayOrder.java,

@@ -1,15 +1,16 @@
 /*
  * $Id$
  *
- * Copyright 2009 - 2018 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.activation;
 
-import ball.io.IOUtil;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.InvocationTargetException;
 import javax.activation.DataSource;
+import org.apache.commons.io.IOUtils;
 
 /**
  * Abstract base class for {@link DataSource} implementations.
@@ -90,7 +91,7 @@ public abstract class AbstractDataSource implements DataSource {
      * @throws  IOException     If an I/O error occurs.
      */
     public InputStream getInputStream(Class<?>... types) throws IOException {
-        return IOUtil.wrap(getInputStream(), types);
+        return wrap(getInputStream(), types);
     }
 
     /**
@@ -105,7 +106,7 @@ public abstract class AbstractDataSource implements DataSource {
      * @throws  IOException     If an I/O error occurs.
      */
     public OutputStream getOutputStream(Class<?>... types) throws IOException {
-        return IOUtil.wrap(getOutputStream(), types);
+        return wrap(getOutputStream(), types);
     }
 
     /**
@@ -122,7 +123,7 @@ public abstract class AbstractDataSource implements DataSource {
      */
     public void writeTo(OutputStream out) throws IOException {
         try (InputStream in = getInputStream()) {
-            IOUtil.copy(in, out);
+            IOUtils.copy(in, out);
         }
     }
 
@@ -156,4 +157,90 @@ public abstract class AbstractDataSource implements DataSource {
 
     @Override
     public String toString() { return super.toString(); }
+
+    /**
+     * Method to "wrap" an {@link InputStream} into {@link InputStream}
+     * instances.
+     *
+     * @param   in              The {@link InputStream}.
+     * @param   types           The {@link InputStream} implementation
+     *                          {@link Class}es.
+     *
+     * @return  The "wrapped" {@link InputStream}.
+     *
+     * @throws  IOException     If any of the wrapping streams throw an
+     *                          {@link IOException}.
+     */
+    protected static InputStream wrap(InputStream in,
+                                      Class<?>... types) throws IOException {
+        try {
+            for (Class<?> type : types) {
+                in =
+                    type.asSubclass(InputStream.class)
+                    .getConstructor(InputStream.class)
+                    .newInstance(in);
+            }
+        } catch (InvocationTargetException exception) {
+            Throwable cause = exception.getCause();
+
+            if (cause instanceof IOException) {
+                throw (IOException) cause;
+            } else if (cause instanceof RuntimeException) {
+                throw (RuntimeException) cause;
+            } else if (cause instanceof Error) {
+                throw (Error) cause;
+            } else {
+                throw new IllegalArgumentException(exception);
+            }
+        } catch (RuntimeException exception) {
+            throw exception;
+        } catch (Exception exception) {
+            throw new IllegalArgumentException(exception);
+        }
+
+        return in;
+    }
+
+    /**
+     * Method to "wrap" an {@link OutputStream} into {@link OutputStream}
+     * instances.
+     *
+     * @param   out             The {@link OutputStream}.
+     * @param   types           The {@link OutputStream} implementation
+     *                          {@link Class}es.
+     *
+     * @return  The "wrapped" {@link OutputStream}.
+     *
+     * @throws  IOException     If any of the wrapping streams throw an
+     *                          {@link IOException}.
+     */
+    protected static OutputStream wrap(OutputStream out,
+                                       Class<?>... types) throws IOException {
+        try {
+            for (Class<?> type : types) {
+                out =
+                    type.asSubclass(OutputStream.class)
+                    .getConstructor(OutputStream.class)
+                    .newInstance(out);
+            }
+        } catch (InvocationTargetException exception) {
+            Throwable cause = exception.getCause();
+
+            if (cause instanceof IOException) {
+                throw (IOException) cause;
+            } else if (cause instanceof RuntimeException) {
+                throw (RuntimeException) cause;
+            } else if (cause instanceof Error) {
+                throw (Error) cause;
+            } else {
+                throw new IllegalArgumentException(exception);
+            }
+        } catch (RuntimeException exception) {
+            throw exception;
+        } catch (Exception exception) {
+            throw new IllegalArgumentException(exception);
+        }
+
+        return out;
+    }
 }

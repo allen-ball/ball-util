@@ -12,7 +12,6 @@ import ball.annotation.Manifest.JavaBean;
 import ball.annotation.Manifest.MainClass;
 import ball.annotation.Manifest.Section;
 import ball.annotation.ServiceProviderFor;
-import ball.io.IOUtil;
 import ball.util.ant.taskdefs.BootstrapProcessorTask;
 import java.io.File;
 import java.io.FileInputStream;
@@ -22,6 +21,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -241,7 +241,7 @@ public class ManifestProcessor extends AbstractAnnotationProcessor
             }
         }
 
-        IOUtil.mkdirs(file.getParentFile());
+        Files.createDirectories(file.toPath().getParent());
 
         try (OutputStream out = new FileOutputStream(file)) {
             manifest.write(out);

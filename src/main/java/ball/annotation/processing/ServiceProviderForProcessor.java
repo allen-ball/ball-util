@@ -6,7 +6,6 @@
 package ball.annotation.processing;
 
 import ball.annotation.ServiceProviderFor;
-import ball.io.IOUtil;
 import ball.util.ant.taskdefs.BootstrapProcessorTask;
 import java.io.File;
 import java.io.IOException;
@@ -173,7 +172,7 @@ public class ServiceProviderForProcessor extends AbstractAnnotationProcessor
             String service = entry.getKey();
             File file = new File(destdir, String.format(PATH, service));
 
-            IOUtil.mkdirs(file.getParentFile());
+            Files.createDirectories(file.toPath().getParent());
 
             ArrayList<String> lines = new ArrayList<>();
 
