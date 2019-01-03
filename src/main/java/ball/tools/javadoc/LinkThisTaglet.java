@@ -11,8 +11,8 @@ import ball.xml.HTML;
 import com.sun.javadoc.ClassDoc;
 import com.sun.javadoc.Doc;
 import com.sun.javadoc.Tag;
+import com.sun.tools.doclets.Taglet;
 import com.sun.tools.doclets.internal.toolkit.Content;
-import com.sun.tools.doclets.internal.toolkit.taglets.Taglet;
 import com.sun.tools.doclets.internal.toolkit.taglets.TagletWriter;
 import java.util.Map;
 import org.w3c.dom.Element;
@@ -27,9 +27,12 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
  */
 @ServiceProviderFor({ Taglet.class })
 @TagletName("link.this")
-public class LinkThisTaglet extends AbstractInlineTaglet {
+public class LinkThisTaglet extends AbstractInlineTaglet
+                            implements SunToolsInternalToolkitTaglet {
+    private static final LinkThisTaglet INSTANCE = new LinkThisTaglet();
+
     public static void register(Map<String,Taglet> map) {
-        register(LinkThisTaglet.class, map);
+        map.putIfAbsent(INSTANCE.getName(), INSTANCE);
     }
 
     /**
@@ -40,9 +43,9 @@ public class LinkThisTaglet extends AbstractInlineTaglet {
     @Override
     public Content getTagletOutput(Tag tag,
                                    TagletWriter writer) throws IllegalArgumentException {
-        setConfiguration(writer.configuration());
+        this.configuration = writer.configuration();
 
-        Element element = HTML.code(document, Keyword.THIS.lexeme());
+        Element element = HTML.code(DOCUMENT, Keyword.THIS.lexeme());
 
         try {
             if (! isEmpty(tag.text().trim())) {

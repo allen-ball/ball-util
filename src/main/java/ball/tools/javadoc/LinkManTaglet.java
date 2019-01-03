@@ -11,8 +11,8 @@ import ball.annotation.ServiceProviderFor;
 import ball.util.PatternMatcherBean;
 import ball.xml.HTML;
 import com.sun.javadoc.Tag;
+import com.sun.tools.doclets.Taglet;
 import com.sun.tools.doclets.internal.toolkit.Content;
-import com.sun.tools.doclets.internal.toolkit.taglets.Taglet;
 import com.sun.tools.doclets.internal.toolkit.taglets.TagletWriter;
 import java.io.File;
 import java.util.Map;
@@ -28,9 +28,12 @@ import org.w3c.dom.Element;
 @TagletName("link.man")
 @PatternRegex("(?is)(.+)[(]([\\p{Alnum}])[)]")
 public class LinkManTaglet extends AbstractInlineTaglet
-                           implements PatternMatcherBean {
+                           implements SunToolsInternalToolkitTaglet,
+                                      PatternMatcherBean {
+    private static final LinkManTaglet INSTANCE = new LinkManTaglet();
+
     public static void register(Map<String,Taglet> map) {
-        register(LinkManTaglet.class, map);
+        map.putIfAbsent(INSTANCE.getName(), INSTANCE);
     }
 
     private String name = null;
@@ -64,7 +67,7 @@ public class LinkManTaglet extends AbstractInlineTaglet
             path = new File(path, name + "." + section + ".html");
 
             element =
-                HTML.a(document, path.toURI(), name + "(" + section + ")");
+                HTML.a(DOCUMENT, path.toURI(), name + "(" + section + ")");
         } catch (Exception exception) {
             throw new IllegalArgumentException(tag.position().toString(),
                                                exception);

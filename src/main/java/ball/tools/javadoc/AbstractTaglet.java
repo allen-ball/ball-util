@@ -11,11 +11,8 @@ import com.sun.javadoc.ClassDoc;
 import com.sun.javadoc.Doc;
 import com.sun.javadoc.ProgramElementDoc;
 import com.sun.javadoc.Tag;
-import com.sun.tools.doclets.formats.html.markup.RawHtml;
+import com.sun.tools.doclets.Taglet;
 import com.sun.tools.doclets.internal.toolkit.Configuration;
-import com.sun.tools.doclets.internal.toolkit.Content;
-import com.sun.tools.doclets.internal.toolkit.taglets.Taglet;
-import com.sun.tools.doclets.internal.toolkit.taglets.TagletWriter;
 import java.io.Writer;
 import java.net.URI;
 import java.util.Arrays;
@@ -49,27 +46,20 @@ public abstract class AbstractTaglet implements Taglet {
     private static final String NO = "no";
     private static final String YES = "yes";
 
-    private static final String DOLLAR = "$";
+    protected static final Document DOCUMENT;
+    protected static final Transformer TRANSFORMER;
 
-    /**
-     * Helper method to implement {@link Taglet} static
-     * {@code register(Map)} method.
-     *
-     * @param   type            The {@link AbstractTaglet} implementation
-     *                          {@link Class}.
-     * @param   map             The javadoc {@link Taglet} {@link Map}.
-     */
-    protected static void register(Class<? extends AbstractTaglet> type,
-                                   Map<String,Taglet> map) {
+    static {
         try {
-            AbstractTaglet value = type.newInstance();
-            String key = value.getName();
+            DOCUMENT =
+                HTML.init(DocumentBuilderFactory.newInstance()
+                          .newDocumentBuilder()
+                          .newDocument());
 
-            if (map.containsKey(key)) {
-                map.remove(key);
-            }
-
-            map.put(key, value);
+            TRANSFORMER = TransformerFactory.newInstance().newTransformer();
+            TRANSFORMER.setOutputProperty(OMIT_XML_DECLARATION, YES);
+            TRANSFORMER.setOutputProperty(INDENT, YES);
+            TRANSFORMER.setOutputProperty(INDENT_AMOUNT, String.valueOf(2));
         } catch (Exception exception) {
             throw new ExceptionInInitializerError(exception);
         }
@@ -82,9 +72,7 @@ public abstract class AbstractTaglet implements Taglet {
     private final boolean inConstructor;
     private final boolean inMethod;
     private final boolean inType;
-    protected final Document document;
-    protected final Transformer transformer;
-    private transient Configuration configuration = null;
+    protected Configuration configuration = null;
 
     /**
      * Sole constructor.
@@ -110,33 +98,6 @@ public abstract class AbstractTaglet implements Taglet {
         this.inType = isInlineTag | inType;
     }
 
-    {
-        try {
-            document =
-                HTML.init(DocumentBuilderFactory.newInstance()
-                          .newDocumentBuilder()
-                          .newDocument());
-
-            transformer = TransformerFactory.newInstance().newTransformer();
-            transformer.setOutputProperty(OMIT_XML_DECLARATION, YES);
-            transformer.setOutputProperty(INDENT, YES);
-            transformer.setOutputProperty(INDENT_AMOUNT, String.valueOf(2));
-        } catch (Exception exception) {
-            throw new ExceptionInInitializerError(exception);
-        }
-    }
-
-    /**
-     * Method to set the {@link Configuration}.
-     * See {@link TagletWriter#configuration()}.  Some methods'
-     * functionality may depend on the availability of this value.
-     *
-     * @param   configuration           The {@link Configuration}.
-     */
-    protected void setConfiguration(Configuration configuration) {
-        this.configuration = configuration;
-    }
-
     @Override
     public String getName() {
         String name = null;
@@ -153,92 +114,23 @@ public abstract class AbstractTaglet implements Taglet {
         return name;
     }
 
-    @Override
-    public boolean isInlineTag() { return isInlineTag; }
+    @Override public boolean isInlineTag() { return isInlineTag; }
+    @Override public boolean inPackage() { return inPackage; }
+    @Override public boolean inOverview() { return inOverview; }
+    @Override public boolean inField() { return inField; }
+    @Override public boolean inConstructor() { return inConstructor; }
+    @Override public boolean inMethod() { return inMethod; }
+    @Override public boolean inType() { return inType; }
+
+    public Document document() { return DOCUMENT; }
+    public Transformer transformer() { return TRANSFORMER; }
+    public Configuration configuration() { return configuration; }
 
     @Override
-    public boolean inPackage() { return inPackage; }
+    public String toString(Tag[] tags) { throw new IllegalStateException(); }
 
     @Override
-    public boolean inOverview() { return inOverview; }
-
-    @Override
-    public boolean inField() { return inField; }
-
-    @Override
-    public boolean inConstructor() { return inConstructor; }
-
-    @Override
-    public boolean inMethod() { return inMethod; }
-
-    @Override
-    public boolean inType() { return inType; }
-
-    @Override
-    public Content getTagletOutput(Tag tag,
-                                   TagletWriter writer) throws IllegalArgumentException {
-        throw new IllegalArgumentException(tag.position().toString());
-    }
-
-    @Override
-    public Content getTagletOutput(Doc doc,
-                                   TagletWriter writer) throws IllegalArgumentException {
-        throw new IllegalArgumentException(doc.position().toString());
-    }
-
-    /**
-     * Method to produce {@link Taglet} content.
-     *
-     * See {@link #getTagletOutput(Tag,TagletWriter)} and
-     * {@link #getTagletOutput(Doc,TagletWriter)}.
-     *
-     * @param   writer          The {@link TagletWriter}.
-     * @param   iterable        The {@link Iterable} of {@link Object}s to
-     *                          translate to content.
-     *
-     * @return  The {@link Content}.
-     */
-    protected Content content(TagletWriter writer, Iterable<?> iterable) {
-        ReaderWriterDataSource ds = new ReaderWriterDataSource(null, null);
-
-        try (Writer out = ds.getWriter()) {
-            for (Object object : iterable) {
-                if (object instanceof Node) {
-                    transformer.transform(new DOMSource((Node) object),
-                                          new StreamResult(out));
-                } else {
-                    out.write(String.valueOf(object));
-                }
-            }
-
-            out.flush();
-        } catch (RuntimeException exception) {
-            throw exception;
-        } catch (Exception exception) {
-            throw new IllegalStateException(exception);
-        }
-
-        Content content = writer.getOutputInstance();
-
-        content.addContent(new RawHtml(ds.toString()));
-
-        return content;
-    }
-
-    /**
-     * Method to produce {@link Taglet} content.
-     *
-     * See {@link #getTagletOutput(Tag,TagletWriter)} and
-     * {@link #getTagletOutput(Doc,TagletWriter)}.
-     *
-     * @param   writer          The {@link TagletWriter}.
-     * @param   objects         The {@link Object}s to translate to content.
-     *
-     * @return  The {@link Content}.
-     */
-    protected Content content(TagletWriter writer, Object... objects) {
-        return content(writer, Arrays.asList(objects));
-    }
+    public String toString(Tag tag) { throw new IllegalStateException(); }
 
     /**
      * Convenience method to get the containing {@link ClassDoc}.
@@ -294,8 +186,8 @@ public abstract class AbstractTaglet implements Taglet {
 
     /**
      * Method to attempt to get a link to a javadoc document describing the
-     * argument {@link Class}.  {@link #setConfiguration(Configuration)}
-     * should be called first to allow external links to be calculated.
+     * argument {@link Class}.  {@link #configuration} should be
+     * non-{@code null} to allow external links to be calculated.
      *
      * @param   context         The context {@link Doc} for calculating a
      *                          relative {@link URI}.
@@ -325,8 +217,8 @@ public abstract class AbstractTaglet implements Taglet {
 
     /**
      * Method to create a link to a {@link ClassDoc}.
-     * {@link #setConfiguration(Configuration)} should be called first to
-     * allow external links to be calculated.
+     * {@link #configuration} should be non-{@code null} to allow
+     * external links to be calculated.
      *
      * @param   context         The context {@link Doc} for calculating a
      *                          relative {@link URI}.
@@ -340,7 +232,7 @@ public abstract class AbstractTaglet implements Taglet {
                                      Object value, ClassDoc target) {
         URI href = getHref(getContainingClassDoc(context), target);
 
-        return (href != null) ? HTML.a(document, href, value) : value;
+        return (href != null) ? HTML.a(DOCUMENT, href, value) : value;
     }
 
     private URI getHref(ClassDoc context, ClassDoc target) {
@@ -384,9 +276,8 @@ public abstract class AbstractTaglet implements Taglet {
 
     /**
      * Method to attempt to get a link to a javadoc document describing the
-     * argument {@link Enum} constant.
-     * {@link #setConfiguration(Configuration)} should be called first to
-     * allow external links to be calculated.
+     * argument {@link Enum} constant.  {@link #configuration} should
+     * be non-{@code null} to allow external links to be calculated.
      *
      * @param   context         The context {@link Doc} for calculating a
      *                          relative {@link URI}.
@@ -407,7 +298,7 @@ public abstract class AbstractTaglet implements Taglet {
                 getHref(getContainingClassDoc(context), target)
                 .resolve("#" + constant.name());
 
-            link = HTML.a(document, href, constant.name());
+            link = HTML.a(DOCUMENT, href, constant.name());
         }
 
         return link;
@@ -445,7 +336,7 @@ public abstract class AbstractTaglet implements Taglet {
             if (doc.containingClass() != null) {
                 name =
                     doc.containingClass().qualifiedName()
-                    + DOLLAR + doc.simpleTypeName();
+                    + "$" + doc.simpleTypeName();
             } else {
                 name = doc.qualifiedName();
             }

@@ -1,3 +1,11 @@
+2019-01-02  Allen D. Ball  <ball@sol.local>
+
+	* src/main/java/ball/tools/javadoc/SunToolsInternalToolkitTaglet.java:
+	Re-factored Taglet implementations to always implement
+	com.sun.tools.doclets.Taglet by extending AbstractTaglet and
+	implement com.sun.tools.doclets.internal.toolkit.taglets.Taglet by
+	implementing SunToolsInternalToolkitTaglet.
+
 2019-01-01  Allen D. Ball  <ball@sol.local>
 
 	* src/main/java/ball/annotation/MatcherGroup.java,

@@ -1,15 +1,15 @@
 /*
  * $Id$
  *
- * Copyright 2013 - 2018 Allen D. Ball.  All rights reserved.
+ * Copyright 2013 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.tools.javadoc;
 
 import ball.annotation.ServiceProviderFor;
 import ball.xml.HTML;
 import com.sun.javadoc.Tag;
+import com.sun.tools.doclets.Taglet;
 import com.sun.tools.doclets.internal.toolkit.Content;
-import com.sun.tools.doclets.internal.toolkit.taglets.Taglet;
 import com.sun.tools.doclets.internal.toolkit.taglets.TagletWriter;
 import java.net.URI;
 import java.util.LinkedHashMap;
@@ -24,9 +24,12 @@ import org.w3c.dom.Element;
  */
 @ServiceProviderFor({ Taglet.class })
 @TagletName("link.uri")
-public class LinkURITaglet extends AbstractInlineTaglet {
+public class LinkURITaglet extends AbstractInlineTaglet
+                           implements SunToolsInternalToolkitTaglet {
+    private static final LinkURITaglet INSTANCE = new LinkURITaglet();
+
     public static void register(Map<String,Taglet> map) {
-        register(LinkURITaglet.class, map);
+        map.putIfAbsent(INSTANCE.getName(), INSTANCE);
     }
 
     private static final String SPACES = "[\\p{Space}]+";
@@ -63,7 +66,7 @@ public class LinkURITaglet extends AbstractInlineTaglet {
                 }
             }
 
-            element = HTML.a(document, href, text);
+            element = HTML.a(DOCUMENT, href, text);
 
             for (Map.Entry<String,String> entry : map.entrySet()) {
                 element.setAttribute(entry.getKey(), entry.getValue());

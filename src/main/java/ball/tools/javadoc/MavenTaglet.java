@@ -11,8 +11,8 @@ import ball.annotation.ServiceProviderFor;
 import ball.tools.maven.POMProperties;
 import ball.xml.HTML;
 import com.sun.javadoc.Tag;
+import com.sun.tools.doclets.Taglet;
 import com.sun.tools.doclets.internal.toolkit.Content;
-import com.sun.tools.doclets.internal.toolkit.taglets.Taglet;
 import com.sun.tools.doclets.internal.toolkit.taglets.TagletWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -39,7 +39,8 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
-public abstract class MavenTaglet extends AbstractInlineTaglet {
+public abstract class MavenTaglet extends AbstractInlineTaglet
+                                  implements SunToolsInternalToolkitTaglet {
     private static final String POM_XML = "pom.xml";
     private static final String DEPENDENCY = "dependency";
 
@@ -145,8 +146,10 @@ public abstract class MavenTaglet extends AbstractInlineTaglet {
     @ServiceProviderFor({ Taglet.class })
     @TagletName("pom.coordinates")
     public static class Coordinates extends MavenTaglet {
+        private static final Coordinates INSTANCE = new Coordinates();
+
         public static void register(Map<String,Taglet> map) {
-            register(Coordinates.class, map);
+            map.putIfAbsent(INSTANCE.getName(), INSTANCE);
         }
 
         /**
@@ -157,7 +160,7 @@ public abstract class MavenTaglet extends AbstractInlineTaglet {
         @Override
         public Content getTagletOutput(Tag tag,
                                        TagletWriter writer) throws IllegalArgumentException {
-            setConfiguration(writer.configuration());
+            this.configuration = writer.configuration();
 
             Element element = null;
 
@@ -179,13 +182,13 @@ public abstract class MavenTaglet extends AbstractInlineTaglet {
                     new ReaderWriterDataSource(null, null);
                 Writer out = ds.getWriter();
 
-                transformer.transform(new DOMSource(element),
+                TRANSFORMER.transform(new DOMSource(element),
                                       new StreamResult(out));
 
                 out.flush();
                 out.close();
 
-                element = HTML.pre(document, ds.toString());
+                element = HTML.pre(DOCUMENT, ds.toString());
             } catch (Exception exception) {
                 throw new IllegalArgumentException(tag.position().toString(),
                                                    exception);
@@ -196,11 +199,11 @@ public abstract class MavenTaglet extends AbstractInlineTaglet {
 
         private Element dependency(String groupId,
                                    String artifactId, String version) {
-            Element element = HTML.element(document, DEPENDENCY);
+            Element element = HTML.element(DOCUMENT, DEPENDENCY);
 
-            element.appendChild(HTML.element(document, GROUP_ID, groupId));
-            element.appendChild(HTML.element(document, ARTIFACT_ID, artifactId));
-            element.appendChild(HTML.element(document, VERSION, version));
+            element.appendChild(HTML.element(DOCUMENT, GROUP_ID, groupId));
+            element.appendChild(HTML.element(DOCUMENT, ARTIFACT_ID, artifactId));
+            element.appendChild(HTML.element(DOCUMENT, VERSION, version));
 
             return element;
         }

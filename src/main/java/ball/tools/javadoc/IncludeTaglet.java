@@ -10,8 +10,8 @@ import ball.annotation.ServiceProviderFor;
 import ball.xml.HTML;
 import com.sun.javadoc.ClassDoc;
 import com.sun.javadoc.Tag;
+import com.sun.tools.doclets.Taglet;
 import com.sun.tools.doclets.internal.toolkit.Content;
-import com.sun.tools.doclets.internal.toolkit.taglets.Taglet;
 import com.sun.tools.doclets.internal.toolkit.taglets.TagletWriter;
 import java.io.Closeable;
 import java.io.IOException;
@@ -37,9 +37,12 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
  */
 @ServiceProviderFor({ Taglet.class })
 @TagletName("include")
-public class IncludeTaglet extends AbstractInlineTaglet {
+public class IncludeTaglet extends AbstractInlineTaglet
+                           implements SunToolsInternalToolkitTaglet {
+    private static final IncludeTaglet INSTANCE = new IncludeTaglet();
+
     public static void register(Map<String,Taglet> map) {
-        register(IncludeTaglet.class, map);
+        map.putIfAbsent(INSTANCE.getName(), INSTANCE);
     }
 
     /**
@@ -79,7 +82,7 @@ public class IncludeTaglet extends AbstractInlineTaglet {
             if (resource instanceof Collection) {
                 Collection<?> collection = (Collection<?>) resource;
 
-                element = HTML.table(document);
+                element = HTML.table(DOCUMENT);
 
                 HTML.tr(element,
                         HTML.b(element.getOwnerDocument(), "Element"));
@@ -92,7 +95,7 @@ public class IncludeTaglet extends AbstractInlineTaglet {
             } else if (resource instanceof Map) {
                 Map<?,?> map = (Map<?,?>) resource;
 
-                element = HTML.table(document);
+                element = HTML.table(DOCUMENT);
 
                 HTML.tr(element,
                         HTML.b(element.getOwnerDocument(), "Key"),
@@ -112,9 +115,9 @@ public class IncludeTaglet extends AbstractInlineTaglet {
                     IOUtils.copy((InputStream) resource, out);
                 }
 
-                element = HTML.pre(document, ds.toString());
+                element = HTML.pre(DOCUMENT, ds.toString());
             } else {
-                element = HTML.pre(document, String.valueOf(resource));
+                element = HTML.pre(DOCUMENT, String.valueOf(resource));
             }
         } catch (Exception exception) {
             throw new IllegalArgumentException(tag.position().toString(),

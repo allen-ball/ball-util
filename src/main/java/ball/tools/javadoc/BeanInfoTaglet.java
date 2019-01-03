@@ -11,8 +11,8 @@ import ball.xml.HTML;
 import com.sun.javadoc.ClassDoc;
 import com.sun.javadoc.Doc;
 import com.sun.javadoc.Tag;
+import com.sun.tools.doclets.Taglet;
 import com.sun.tools.doclets.internal.toolkit.Content;
-import com.sun.tools.doclets.internal.toolkit.taglets.Taglet;
 import com.sun.tools.doclets.internal.toolkit.taglets.TagletWriter;
 import java.beans.BeanDescriptor;
 import java.beans.BeanInfo;
@@ -39,9 +39,12 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
  */
 @ServiceProviderFor({ Taglet.class })
 @TagletName("bean.info")
-public class BeanInfoTaglet extends AbstractInlineTaglet {
+public class BeanInfoTaglet extends AbstractInlineTaglet
+                            implements SunToolsInternalToolkitTaglet {
+    private static final BeanInfoTaglet INSTANCE = new BeanInfoTaglet();
+
     public static void register(Map<String,Taglet> map) {
-        register(BeanInfoTaglet.class, map);
+        map.putIfAbsent(INSTANCE.getName(), INSTANCE);
     }
 
     /**
@@ -52,7 +55,7 @@ public class BeanInfoTaglet extends AbstractInlineTaglet {
     @Override
     public Content getTagletOutput(Tag tag,
                                    TagletWriter writer) throws IllegalArgumentException {
-        setConfiguration(writer.configuration());
+        this.configuration = writer.configuration();
 
         LinkedList<Object> list = new LinkedList<>();
 
@@ -98,7 +101,7 @@ public class BeanInfoTaglet extends AbstractInlineTaglet {
 
     private void output(Doc doc,
                         List<Object> list, BeanDescriptor descriptor) {
-        Element table = HTML.table(document);
+        Element table = HTML.table(DOCUMENT);
 
         HTML.tr(table,
                 HTML.b(table.getOwnerDocument(), "Bean Class:"),
@@ -115,7 +118,7 @@ public class BeanInfoTaglet extends AbstractInlineTaglet {
 
     private void output(Doc doc,
                         List<Object> list, PropertyDescriptor[] descriptors) {
-        Element table = HTML.table(document);
+        Element table = HTML.table(DOCUMENT);
 
         Object[] headers = new String[] {
             "Property", "Mode", "Type",
