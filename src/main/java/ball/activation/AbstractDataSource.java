@@ -71,10 +71,10 @@ public abstract class AbstractDataSource implements DataSource {
     }
 
     /**
-     * Method to get the number of bytes stored in {@code this}
+     * Method to get the number of bytes stored in {@link.this}
      * {@link DataSource}.  Default implementation returns {@code -1}.
      *
-     * @return  The number of bytes stored in {@code this}
+     * @return  The number of bytes stored in {@link.this}
      *          {@link DataSource}; {@code -1} if the count is unknown.
      */
     public long length() { return -1; }

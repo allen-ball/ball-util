@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2018 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.util;
 
@@ -44,7 +44,7 @@ public class BeanMap extends AbstractMap<String,Object>
      * Construct a {@link BeanMap} from a {@code bean}.
      *
      * @param   bean            The Java {@code bean} to wrap (if {@code
-     *                          null} then {@code this} will be used).
+     *                          null} then {@link.this} will be used).
      * @param   type            The {@link Class} describing the
      *                          {@code bean}.
      *

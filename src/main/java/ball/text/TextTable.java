@@ -49,7 +49,7 @@ public class TextTable extends ReaderWriterDataSource {
     }
 
     /**
-     * Method to get {@code this} {@link TextTable}'s {@link TableModel}.
+     * Method to get {@link.this} {@link TextTable}'s {@link TableModel}.
      *
      * @return  The {@link TableModel}.
      */

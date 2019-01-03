@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2018 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.taskdefs;
 
@@ -35,7 +35,7 @@ public abstract class AbstractClasspathTask extends Task
     /**
      * {@inheritDoc}
      *
-     * Invokes {@link ConfigurableAntTask#configure()} if {@code this}
+     * Invokes {@link ConfigurableAntTask#configure()} if {@link.this}
      * implements {@link ConfigurableAntTask}.
      */
     @Override
@@ -56,7 +56,7 @@ public abstract class AbstractClasspathTask extends Task
     /**
      * {@inheritDoc}
      *
-     * Invokes {@link AnnotatedAntTask#validate()} if {@code this}
+     * Invokes {@link AnnotatedAntTask#validate()} if {@link.this}
      * implements {@link AnnotatedAntTask}.
      */
     @Override

@@ -92,7 +92,7 @@ public class PropertiesImpl extends Properties {
 
     /**
      * Method to configure an {@link Object} properties with values in
-     * {@code this} {@link PropertiesImpl}.  (An {@link Object} "setter"
+     * {@link.this} {@link PropertiesImpl}.  (An {@link Object} "setter"
      * does not have to return {@code void} to be invoked.)
      *
      * @param   object          The {@link Object} to configure.

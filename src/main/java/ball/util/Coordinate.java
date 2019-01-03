@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2016 - 2018 Allen D. Ball.  All rights reserved.
+ * Copyright 2016 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.util;
 
@@ -42,7 +42,7 @@ public class Coordinate implements Comparable<Coordinate>, Serializable {
     public int getX() { return x; }
 
     /**
-     * Method to determine if {@code this} {@link Coordinate} is within the
+     * Method to determine if {@link.this} {@link Coordinate} is within the
      * area described by the argument {@link Coordinate}s.
      *
      * @param   min             The minimum {@link Coordinate}.

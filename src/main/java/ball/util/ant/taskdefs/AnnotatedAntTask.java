@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2014 - 2018 Allen D. Ball.  All rights reserved.
+ * Copyright 2014 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.taskdefs;
 
@@ -29,7 +29,7 @@ public interface AnnotatedAntTask extends AntTaskMixIn {
     /**
      * Method to get {@link AntTask#value()}.
      *
-     * @return  {@link AntTask#value()} if {@code this} {@link Task} is
+     * @return  {@link AntTask#value()} if {@link.this} {@link Task} is
      *          annotated; {@code null} otherwise.
      */
     default String getAntTaskName() {

@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2016 - 2018 Allen D. Ball.  All rights reserved.
+ * Copyright 2016 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.util;
 
@@ -87,7 +87,7 @@ public class CoordinateMap<V> extends MapView<Coordinate,V>
     }
 
     /**
-     * Method to get the value type of {@code this} {@link CoordinateMap}.
+     * Method to get the value type of {@link.this} {@link CoordinateMap}.
      *
      * @return  The value type {@link Class}.
      */
@@ -101,7 +101,7 @@ public class CoordinateMap<V> extends MapView<Coordinate,V>
      * @param   yN              {@code MAX(y) + 1}
      * @param   xN              {@code MAX(x) + 1}
      *
-     * @return  {@code this} {@link CoordinateMap}.
+     * @return  {@link.this} {@link CoordinateMap}.
      */
     public CoordinateMap<V> resize(Number y0, Number x0,
                                    Number yN, Number xN) {
@@ -117,7 +117,7 @@ public class CoordinateMap<V> extends MapView<Coordinate,V>
      * @param   yN              {@code MAX(y) + 1}
      * @param   xN              {@code MAX(x) + 1}
      *
-     * @return  {@code this} {@link CoordinateMap}.
+     * @return  {@link.this} {@link CoordinateMap}.
      */
     public CoordinateMap<V> resize(Number yN, Number xN) {
         return resize(0, 0, yN, xN);
@@ -201,8 +201,8 @@ public class CoordinateMap<V> extends MapView<Coordinate,V>
     }
 
     /**
-     * Method to get a sub-{@link Map} of {@code this} {@link Map} also
-     * backed by {@code this} {@link Map}.
+     * Method to get a sub-{@link Map} of {@link.this} {@link Map} also
+     * backed by {@link.this} {@link Map}.
      *
      * @param   y0              {@code MIN(y)}
      * @param   x0              {@code MIN(x)}
@@ -217,9 +217,9 @@ public class CoordinateMap<V> extends MapView<Coordinate,V>
     }
 
     /**
-     * Method to get {@code this} {@link CoordinateMap} values as a
+     * Method to get {@link.this} {@link CoordinateMap} values as a
      * {@link List}.  Updates made through {@link List#set(int,Object)} will
-     * be made to {@code this} {@link CoordinateMap}.
+     * be made to {@link.this} {@link CoordinateMap}.
      *
      * @return  The {@link List} of {@link CoordinateMap} values.
      */

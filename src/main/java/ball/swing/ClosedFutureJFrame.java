@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2014 - 2018 Allen D. Ball.  All rights reserved.
+ * Copyright 2014 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.swing;
 
@@ -53,7 +53,7 @@ public class ClosedFutureJFrame extends JFrame {
     }
 
     /**
-     * Method to get {@link Future} indicating when {@code this}
+     * Method to get {@link Future} indicating when {@link.this}
      * {@link JFrame} is closed.
      *
      * @return  The closed {@link Future}.

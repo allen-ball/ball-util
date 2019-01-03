@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2013, 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2013 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.util;
 
@@ -74,7 +74,7 @@ public class Histogram<K> extends TreeMap<K,Long> {
 
     /**
      * Method to get the {@link java.util.Map.Entry} corresponding to the
-     * minimum value in {@code this} {@link Histogram}.
+     * minimum value in {@link.this} {@link Histogram}.
      *
      * @return  The {@link java.util.Map.Entry} corresponding to the minimum
      *          value.
@@ -99,7 +99,7 @@ public class Histogram<K> extends TreeMap<K,Long> {
 
     /**
      * Method to get the {@link java.util.Map.Entry} corresponding to the
-     * maximum value in {@code this} {@link Histogram}.
+     * maximum value in {@link.this} {@link Histogram}.
      *
      * @return  The {@link java.util.Map.Entry} corresponding to the maximum
      *          value.
@@ -147,7 +147,7 @@ public class Histogram<K> extends TreeMap<K,Long> {
     }
 
     /**
-     * Method to get the total of the {@link Map#values()} of {@code this}
+     * Method to get the total of the {@link Map#values()} of {@link.this}
      * {@link Histogram}.
      *
      * @return  The total of {@link #values()}.

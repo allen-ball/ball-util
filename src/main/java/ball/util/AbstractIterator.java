@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2010 - 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2010 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.util;
 
@@ -37,7 +37,7 @@ public abstract class AbstractIterator<E> implements Iterator<E>,
     public void remove() { throw new UnsupportedOperationException(); }
 
     /**
-     * @return  {@code this} {@link Iterator}
+     * @return  {@link.this} {@link Iterator}
      */
     @Override
     public final Iterator<E> iterator() { return this; }

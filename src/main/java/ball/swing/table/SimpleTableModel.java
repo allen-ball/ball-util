@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2009 - 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2018 Allen D. Ball.  All rights reserved.
  */
 package ball.swing.table;
 
@@ -43,7 +43,7 @@ public class SimpleTableModel extends ArrayListTableModel<Object[]> {
      * @param   row             The array of {@link Object}s that make up
      *                          the row to be added.
      *
-     * @return  {@code this} {@link SimpleTableModel}.
+     * @return  {@link.this} {@link SimpleTableModel}.
      */
     public SimpleTableModel row(Object... row) {
         list().add(row);
