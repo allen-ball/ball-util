@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2018 Allen D. Ball.  All rights reserved.
+ * Copyright 2018, 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.annotation.processing;
 
@@ -11,6 +11,7 @@ import javax.annotation.processing.Processor;
 import javax.lang.model.element.Element;
 import org.apache.tools.ant.Task;
 
+import static javax.lang.model.element.ElementKind.CLASS;
 import static javax.lang.model.element.Modifier.ABSTRACT;
 import static javax.tools.Diagnostic.Kind.ERROR;
 
@@ -22,6 +23,7 @@ import static javax.tools.Diagnostic.Kind.ERROR;
  * @version $Revision$
  */
 @ServiceProviderFor({ Processor.class })
+@ForElementKinds({ CLASS })
 @ForSubclassesOf(AntTaskMixIn.class)
 public class AntTaskMixInProcessor extends AbstractNoAnnotationProcessor {
 
@@ -32,22 +34,14 @@ public class AntTaskMixInProcessor extends AbstractNoAnnotationProcessor {
 
     @Override
     protected void process(Element element) {
-        switch (element.getKind()) {
-        case CLASS:
-            if (! element.getModifiers().contains(ABSTRACT)) {
-                if (! isAssignable(element.asType(), Task.class)) {
-                    print(ERROR,
-                          element,
-                          element.getKind() + " implements "
-                          + AntTaskMixIn.class.getName()
-                          + " but is not a subclass of "
-                          + Task.class.getName());
-                }
+        if (! element.getModifiers().contains(ABSTRACT)) {
+            if (! isAssignable(element.asType(), Task.class)) {
+                print(ERROR,
+                      element,
+                      element.getKind()
+                      + " implements " + AntTaskMixIn.class.getName()
+                      + " but is not a subclass of " + Task.class.getName());
             }
-            break;
-
-        default:
-            break;
         }
     }
 }

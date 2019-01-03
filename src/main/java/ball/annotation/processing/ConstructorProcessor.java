@@ -41,14 +41,15 @@ public class ConstructorProcessor extends AbstractNoAnnotationProcessor {
 
     @Override
     protected void process(Element element) {
-        constructorsIn(element.getEnclosedElements())
-            .stream()
-            .filter(t -> element.getModifiers().contains(ABSTRACT))
-            .filter(t -> t.getModifiers().contains(PUBLIC))
-            .forEach(t -> print(WARNING,
-                                t,
-                                t.getKind() + " is declared "
-                                + t.getModifiers()
-                                + "; suggest non-" + PUBLIC));
+        if (element.getModifiers().contains(ABSTRACT)) {
+            constructorsIn(element.getEnclosedElements())
+                .stream()
+                .filter(t -> t.getModifiers().contains(PUBLIC))
+                .forEach(t -> print(WARNING,
+                                    t,
+                                    t.getKind() + " is declared "
+                                    + t.getModifiers()
+                                    + "; suggest non-" + PUBLIC));
+        }
     }
 }

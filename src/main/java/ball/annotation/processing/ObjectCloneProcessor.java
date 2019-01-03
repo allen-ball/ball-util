@@ -14,6 +14,7 @@ import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.TypeMirror;
 
+import static javax.lang.model.element.ElementKind.CLASS;
 import static javax.lang.model.util.ElementFilter.methodsIn;
 import static javax.tools.Diagnostic.Kind.ERROR;
 import static javax.tools.Diagnostic.Kind.WARNING;
@@ -38,6 +39,7 @@ import static javax.tools.Diagnostic.Kind.WARNING;
  * @version $Revision$
  */
 @ServiceProviderFor({ Processor.class })
+@ForElementKinds({ CLASS })
 @ForSubclassesOf(Object.class)
 public class ObjectCloneProcessor extends AbstractNoAnnotationProcessor {
     private ExecutableElement METHOD = null;

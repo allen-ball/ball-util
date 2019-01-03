@@ -43,7 +43,8 @@
     <dependency>
       <groupId>jdk</groupId>
       <artifactId>tools</artifactId>
-      <optional>true</optional>
+      <scope>system</scope>
+      <systemPath>${tools.jar}</systemPath>
     </dependency>
     <dependency>
       <groupId>org.apache.ant</groupId>

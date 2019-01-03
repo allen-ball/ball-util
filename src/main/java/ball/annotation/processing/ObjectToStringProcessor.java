@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2013 - 2018 Allen D. Ball.  All rights reserved.
+ * Copyright 2013 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.annotation.processing;
 
@@ -32,7 +32,6 @@ import static javax.tools.Diagnostic.Kind.WARNING;
  */
 @ServiceProviderFor({ Processor.class })
 @ForElementKinds({ CLASS })
-@ForModifiers(exclude = true, value = { ABSTRACT })
 @ForSubclassesOf(Object.class)
 public class ObjectToStringProcessor extends AbstractNoAnnotationProcessor {
     private ExecutableElement METHOD = null;
@@ -55,17 +54,19 @@ public class ObjectToStringProcessor extends AbstractNoAnnotationProcessor {
 
     @Override
     protected void process(Element element) {
-        TypeElement type = (TypeElement) element;
+        if (! element.getModifiers().contains(ABSTRACT)) {
+            TypeElement type = (TypeElement) element;
 
-        if (type.getAnnotation(ToString.class) == null) {
-            ExecutableElement method = implementationOf(METHOD, type);
+            if (type.getAnnotation(ToString.class) == null) {
+                ExecutableElement method = implementationOf(METHOD, type);
 
-            if (method == null || METHOD.equals(method)) {
-                print(WARNING,
-                      type,
-                      type.getKind() + " does not override "
-                      + METHOD.getEnclosingElement().getSimpleName()
-                      + DOT + METHOD.toString());
+                if (method == null || METHOD.equals(method)) {
+                    print(WARNING,
+                          type,
+                          type.getKind() + " does not override "
+                          + METHOD.getEnclosingElement().getSimpleName()
+                          + DOT + METHOD.toString());
+                }
             }
         }
     }

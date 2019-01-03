@@ -1,12 +1,14 @@
 /*
  * $Id$
  *
- * Copyright 2012 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2012 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.annotation.processing;
 
 import java.lang.annotation.Annotation;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -17,9 +19,6 @@ import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 
-import static java.util.Arrays.asList;
-import static java.util.Collections.disjoint;
-import static java.util.Collections.singleton;
 import static javax.tools.Diagnostic.Kind.ERROR;
 
 /**
@@ -27,7 +26,6 @@ import static javax.tools.Diagnostic.Kind.ERROR;
  * processing "no" {@link java.lang.annotation.Annotation} ({@code "*"}).
  *
  * @see ForElementKinds
- * @see ForModifiers
  * @see ForSubclassesOf
  *
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
@@ -35,9 +33,7 @@ import static javax.tools.Diagnostic.Kind.ERROR;
  */
 public abstract class AbstractNoAnnotationProcessor extends AbstractProcessor {
     private List<ElementKind> kinds = null;
-    private boolean exclude = false;
-    private List<Modifier> modifiers = null;
-    private TypeElement supertype = null;
+    private Class<?> superclass = null;
 
     /**
      * Sole constructor.
@@ -45,7 +41,9 @@ public abstract class AbstractNoAnnotationProcessor extends AbstractProcessor {
     protected AbstractNoAnnotationProcessor() { super(); }
 
     @Override
-    public Set<String> getSupportedAnnotationTypes() { return singleton("*"); }
+    public Set<String> getSupportedAnnotationTypes() {
+        return Collections.singleton("*");
+    }
 
     @Override
     public void init(ProcessingEnvironment processingEnv) {
@@ -53,7 +51,6 @@ public abstract class AbstractNoAnnotationProcessor extends AbstractProcessor {
 
         try {
             setElementKinds(getAnnotation(ForElementKinds.class));
-            setModifiers(getAnnotation(ForModifiers.class));
             setSubclassesOf(getAnnotation(ForSubclassesOf.class));
         } catch (Exception exception) {
             print(ERROR, null, exception);
@@ -62,20 +59,15 @@ public abstract class AbstractNoAnnotationProcessor extends AbstractProcessor {
 
     private void setElementKinds(ForElementKinds annotation) {
         if (annotation != null) {
-            kinds = asList(annotation.value());
-        }
-    }
-
-    private void setModifiers(ForModifiers annotation) {
-        if (annotation != null) {
-            exclude = annotation.exclude();
-            modifiers = asList(annotation.value());
+            kinds = Arrays.asList(annotation.value());
+        } else {
+            kinds = Collections.emptyList();
         }
     }
 
     private void setSubclassesOf(ForSubclassesOf annotation) {
         if (annotation != null) {
-            supertype = getTypeElementFor(annotation.value());
+            superclass = annotation.value();
         }
     }
 
@@ -89,45 +81,15 @@ public abstract class AbstractNoAnnotationProcessor extends AbstractProcessor {
     @Override
     public boolean process(Set<? extends TypeElement> annotations,
                            RoundEnvironment roundEnv) {
-        for (Element element : new IterableImpl(roundEnv.getRootElements())) {
-            try {
-                if (kinds != null) {
-                    if (! kinds.contains(element.getKind())) {
-                        continue;
-                    }
-                }
-
-                if (modifiers != null) {
-                    if (! exclude) {
-                        if (! element.getModifiers().containsAll(modifiers)) {
-                            continue;
-                        }
-                    } else {
-                        if (! disjoint(element.getModifiers(), modifiers)) {
-                            continue;
-                        }
-                    }
-                }
-
-                if (supertype != null) {
-                    switch (element.getKind()) {
-                    case CLASS:
-                    case INTERFACE:
-                        if (! isAssignable(element.asType(), supertype.asType())) {
-                            continue;
-                        }
-                        break;
-
-                    default:
-                        continue;
-                        /* break; */
-                    }
-                }
-
-                process(element);
-            } catch (Exception exception) {
-                print(ERROR, element, exception);
-            }
+        try {
+            new IterableImpl(roundEnv.getRootElements())
+                .stream()
+                .filter(t -> (kinds.isEmpty() || kinds.contains(t.getKind())))
+                .filter(t -> (superclass == null
+                              || isAssignable(t.asType(), superclass)))
+                .forEach(t -> process(t));
+        } catch (Exception exception) {
+            print(ERROR, null, exception);
         }
 
         return false;

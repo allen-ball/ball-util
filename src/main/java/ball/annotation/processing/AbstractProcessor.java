@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2012 - 2018 Allen D. Ball.  All rights reserved.
+ * Copyright 2012 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.annotation.processing;
 
@@ -43,6 +43,10 @@ import javax.lang.model.util.Types;
 import javax.tools.Diagnostic;
 import javax.tools.FileObject;
 
+import static ball.lang.Keyword.THROWS;
+import static ball.lang.Punctuation.COMMA;
+import static ball.lang.Punctuation.LP;
+import static ball.lang.Punctuation.RP;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Collections.disjoint;
 import static javax.lang.model.element.Modifier.PRIVATE;
@@ -832,6 +836,49 @@ public abstract class AbstractProcessor
      */
     protected String asPath(PackageElement element) {
         return asPath(element.getQualifiedName().toString()) + SLASH;
+    }
+
+    protected String toString(Method method) {
+        StringBuilder buffer = new StringBuilder();
+        int modifiers = method.getModifiers();
+
+        if (modifiers != 0) {
+            buffer
+                .append(java.lang.reflect.Modifier.toString(modifiers))
+                .append(SPACE);
+        }
+
+        buffer
+            .append(method.getReturnType().getSimpleName())
+            .append(SPACE)
+            .append(method.getName())
+            .append(LP.lexeme());
+
+        Class<?>[] types = method.getParameterTypes();
+
+        for (int i = 0; i < types.length; i += 1) {
+            if (i > 0) {
+                buffer.append(COMMA.lexeme());
+            }
+
+            buffer.append(types[i].getSimpleName());
+        }
+
+        buffer.append(RP.lexeme());
+
+        Class<?>[] exceptions = method.getExceptionTypes();
+
+        for (int i = 0; i < exceptions.length; i += 1) {
+            if (i == 0) {
+                buffer.append(THROWS.lexeme());
+            } else {
+                buffer.append(COMMA.lexeme());
+            }
+
+            buffer.append(SPACE).append(exceptions[i].getSimpleName());
+        }
+
+        return buffer.toString().trim();
     }
 
     @Override

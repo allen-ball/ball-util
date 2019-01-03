@@ -36,10 +36,6 @@ import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
 import javax.tools.FileObject;
 
-import static ball.lang.Keyword.THROWS;
-import static ball.lang.Punctuation.COMMA;
-import static ball.lang.Punctuation.LP;
-import static ball.lang.Punctuation.RP;
 import static javax.tools.Diagnostic.Kind.ERROR;
 import static javax.tools.Diagnostic.Kind.WARNING;
 import static javax.tools.StandardLocation.CLASS_OUTPUT;
@@ -65,11 +61,12 @@ public class ManifestProcessor extends AbstractAnnotationProcessor
 
     private static final String _CLASS = ".class";
 
-    private static abstract class MAIN {
+    private static abstract class PROTOTYPE {
         public static void main(String[] argv) { }
     }
 
-    private static final Method MAIN = MAIN.class.getDeclaredMethods()[0];
+    private static final Method METHOD =
+        PROTOTYPE.class.getDeclaredMethods()[0];
 
     private ManifestImpl manifest = null;
     private HashSet<Element> processed = new HashSet<>();
@@ -138,11 +135,11 @@ public class ManifestProcessor extends AbstractAnnotationProcessor
                 case INTERFACE:
                     TypeElement type = (TypeElement) element;
                     ExecutableElement method =
-                        getExecutableElementFor(type, MAIN);
+                        getExecutableElementFor(type, METHOD);
 
                     if (method != null
                         && (method.getModifiers()
-                            .containsAll(getModifierSetFor(MAIN)))) {
+                            .containsAll(getModifierSetFor(METHOD)))) {
                         String name = elements.getBinaryName(type).toString();
                         String old = manifest.put(main, name);
 
@@ -160,7 +157,7 @@ public class ManifestProcessor extends AbstractAnnotationProcessor
                               element.getKind() + " annotated with "
                               + AT + main.annotationType().getSimpleName()
                               + " but does not implement `"
-                              + toString(MAIN) + "'");
+                              + toString(METHOD) + "'");
                     }
                     break;
 
@@ -256,49 +253,6 @@ public class ManifestProcessor extends AbstractAnnotationProcessor
     @Override
     protected String asPath(Class<?> type) {
         return super.asPath(type) + _CLASS;
-    }
-
-    private String toString(Method method) {
-        StringBuilder buffer = new StringBuilder();
-        int modifiers = method.getModifiers();
-
-        if (modifiers != 0) {
-            buffer
-                .append(java.lang.reflect.Modifier.toString(modifiers))
-                .append(SPACE);
-        }
-
-        buffer
-            .append(method.getReturnType().getSimpleName())
-            .append(SPACE)
-            .append(method.getName())
-            .append(LP.lexeme());
-
-        Class<?>[] types = method.getParameterTypes();
-
-        for (int i = 0; i < types.length; i += 1) {
-            if (i > 0) {
-                buffer.append(COMMA.lexeme());
-            }
-
-            buffer.append(types[i].getSimpleName());
-        }
-
-        buffer.append(RP.lexeme());
-
-        Class<?>[] exceptions = method.getExceptionTypes();
-
-        for (int i = 0; i < exceptions.length; i += 1) {
-            if (i == 0) {
-                buffer.append(THROWS.lexeme());
-            } else {
-                buffer.append(COMMA.lexeme());
-            }
-
-            buffer.append(SPACE).append(exceptions[i].getSimpleName());
-        }
-
-        return buffer.toString().trim();
     }
 
     private class ManifestImpl extends Manifest {
