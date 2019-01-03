@@ -42,6 +42,19 @@ public interface DataSourceDefaultMethods extends DataSource {
     public static final String TEXT_PLAIN = "text/plain";
 
     /**
+     * {@link.rfc 2045} {@value #TEXT_HTML}
+     */
+    public static final String TEXT_HTML = "text/html";
+
+    default void setName(String name) {
+        throw new UnsupportedOperationException();
+    }
+
+    default void setContentType(String type) {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
      * @throws  UnsupportedOperationException
      *                          Unless overridden by subclass
      *                          implementation.
@@ -60,11 +73,6 @@ public interface DataSourceDefaultMethods extends DataSource {
     default OutputStream getOutputStream() throws IOException {
         throw new UnsupportedOperationException();
     }
-
-    /**
-     * {@link.rfc 2045} {@value #TEXT_HTML}
-     */
-    public static final String TEXT_HTML = "text/html";
 
     /**
      * Method to clear the {@link DataSource} and discard any input on any

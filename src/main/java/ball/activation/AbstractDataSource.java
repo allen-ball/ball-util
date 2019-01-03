@@ -21,13 +21,11 @@ public abstract class AbstractDataSource implements DataSourceDefaultMethods {
      */
     protected AbstractDataSource() { }
 
-    @Override
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    @Override public String getName() { return name; }
+    @Override public void setName(String name) { this.name = name; }
 
-    @Override
-    public String getContentType() { return type; }
-    public void setContentType(String type) { this.type = type; }
+    @Override public String getContentType() { return type; }
+    @Override public void setContentType(String type) { this.type = type; }
 
     @Override
     public String toString() { return super.toString(); }
