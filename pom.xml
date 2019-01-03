@@ -19,26 +19,6 @@
   <properties>
     <jre.version>1.8</jre.version>
   </properties>
-  <profiles>
-    <profile>
-      <id>javadoc</id>
-      <activation>
-        <file><exists>${basedir}/src/main/javadoc</exists></file>
-      </activation>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-javadoc-plugin</artifactId>
-            <configuration>
-              <tagletpath>${project.build.outputDirectory}:${dependency.runtime.classpath}</tagletpath>
-              <tagletArtifacts combine.self="override"/>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-  </profiles>
   <dependencies verbose="true">
     <dependency>
       <groupId>jdk</groupId>
