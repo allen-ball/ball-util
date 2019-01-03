@@ -838,6 +838,14 @@ public abstract class AbstractProcessor
         return asPath(element.getQualifiedName().toString()) + SLASH;
     }
 
+    /**
+     * Method to get {@link String} representation of a {@link Method} for
+     * use in diagnostic messages.
+     *
+     * @param   method          The {@link Method}.
+     *
+     * @return  The {@link String} representation.
+     */
     protected String toString(Method method) {
         StringBuilder buffer = new StringBuilder();
         int modifiers = method.getModifiers();
