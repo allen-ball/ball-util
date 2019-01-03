@@ -11,7 +11,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -22,7 +21,6 @@ import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
-import javax.lang.model.type.TypeMirror;
 import javax.tools.FileObject;
 
 import static ball.util.MapUtil.getByKeyToString;
@@ -203,23 +201,6 @@ public class ServiceProviderForProcessor extends AbstractAnnotationProcessor
         public boolean add(TypeElement service, TypeElement provider) {
             return add(elements.getBinaryName(service).toString(),
                        elements.getBinaryName(provider).toString());
-        }
-    }
-
-    private class TypeElementList extends ArrayList<TypeElement> {
-        private static final long serialVersionUID = 7466610173670377111L;
-
-        public TypeElementList(AnnotationValue value) {
-            super();
-
-            if (value != null) {
-                for (Object object : (List<?>) value.getValue()) {
-                    TypeMirror mirror =
-                        (TypeMirror) ((AnnotationValue) object).getValue();
-
-                    add((TypeElement) types.asElement(mirror));
-                }
-            }
         }
     }
 }

@@ -1,16 +1,18 @@
 /*
  * $Id$
  *
- * Copyright 2012 - 2018 Allen D. Ball.  All rights reserved.
+ * Copyright 2012 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.annotation.processing;
 
+import ball.annotation.ServiceProviderFor;
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
@@ -30,8 +32,8 @@ public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
     private transient TypeElement annotation = null;
 
     /**
-     * Sole non-deprecated costructor.  Implementing class must be annotated
-     * with {@link For}.
+     * Sole costructor.  Implementing class must be annotated with
+     * {@link For}.
      */
     protected AbstractAnnotationProcessor() {
         super();
@@ -40,25 +42,6 @@ public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
             list = Arrays.asList(getClass().getAnnotation(For.class).value());
         } catch (Exception exception) {
             throw new ExceptionInInitializerError(exception);
-        }
-    }
-
-    /**
-     * Use {@link #AbstractAnnotationProcessor()} with {@link For}
-     * {@link Annotation} instead.
-     *
-     * @param   type            The {@link Annotation} {@link Class} to
-     *                          process.
-     */
-    @Deprecated
-    protected AbstractAnnotationProcessor(Class<? extends Annotation> type) {
-        super();
-
-        if (type != null) {
-            list =
-                Collections.<Class<? extends Annotation>>singletonList(type);
-        } else {
-            throw new NullPointerException("type");
         }
     }
 
@@ -137,5 +120,42 @@ public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
         }
 
         return sequence;
+    }
+
+    /**
+     * {@link Processor} implementation.
+     */
+    @ServiceProviderFor({ Processor.class })
+    @For({ For.class })
+    public static class AnnotationProcessor
+                        extends AbstractAnnotationProcessor {
+        private static final Class<?> SUPERCLASS =
+            AbstractAnnotationProcessor.class;
+
+        /**
+         * Sole constructor.
+         */
+        public AnnotationProcessor() { super(); }
+
+        @Override
+        public void process(RoundEnvironment roundEnv,
+                            TypeElement annotation,
+                            Element element) throws Exception {
+            switch (element.getKind()) {
+            case CLASS:
+                if (! isAssignable(element.asType(), SUPERCLASS)) {
+                    print(ERROR,
+                          element,
+                          element.getKind() + " annotated with "
+                          + AT + annotation.getSimpleName()
+                          + " but is not a subclass of "
+                          + SUPERCLASS.getCanonicalName());
+                }
+                break;
+
+            default:
+                break;
+            }
+        }
     }
 }

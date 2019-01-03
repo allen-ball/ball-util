@@ -15,6 +15,7 @@ import java.lang.reflect.Method;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
@@ -29,6 +30,7 @@ import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.AnnotationMirror;
+import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.Modifier;
@@ -924,5 +926,30 @@ public abstract class AbstractProcessor
      */
     protected static Path toPath(FileObject file) {
         return Paths.get(file.toUri());
+    }
+
+    /**
+     * {@link TypeElement} {@link List} from {@link AnnotationValue}.
+     */
+    protected class TypeElementList extends ArrayList<TypeElement> {
+        private static final long serialVersionUID = -6613114921805902827L;
+
+        /**
+         * Sole constructor.
+         *
+         * @param       value   The {link AnnotationValue}.
+         */
+        public TypeElementList(AnnotationValue value) {
+            super();
+
+            if (value != null) {
+                for (Object object : (List<?>) value.getValue()) {
+                    TypeMirror mirror =
+                        (TypeMirror) ((AnnotationValue) object).getValue();
+
+                    add((TypeElement) types.asElement(mirror));
+                }
+            }
+        }
     }
 }

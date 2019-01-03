@@ -1,3 +1,10 @@
+2019-01-03  Allen D. Ball  <ball@sol.local>
+
+	* src/main/java/ball/annotation/processing/AbstractProcessor.java,
+	AbstractAnnotationProcessor.java, AbstractNoAnnotationProcessor.java:
+	Made respective Annotation Processors inner classes of the
+	Processor abstract base class.
+
 2019-01-02  Allen D. Ball  <ball@sol.local>
 
 	* src/main/java/ball/tools/javadoc/SunToolsInternalToolkitTaglet.java:
