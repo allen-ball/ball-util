@@ -34,8 +34,8 @@ public class LinkRFCTaglet extends AbstractInlineTaglet
     }
 
     private static final String TEXT = "RFC%d";
-    private static final String PROTOCOL = "http";
-    private static final String HOST = "www.ietf.org";
+    private static final String PROTOCOL = "https";
+    private static final String HOST = "www.rfc-editor.org";
     private static final String PATH = "/rfc/rfc%d.txt";
 
     /**
