@@ -55,8 +55,11 @@ public interface PatternMatcherBean {
 
             for (Field field : fields) {
                 MatcherGroup group = field.getAnnotation(MatcherGroup.class);
+                String string = matcher.group(group.value());
                 Object value =
-                    convertTo(matcher.group(group.value()), field.getType());
+                    (string != null)
+                        ? convertTo(string, field.getType())
+                        : null;
 
                 FieldUtils.writeField(field, this, value, true);
             }
