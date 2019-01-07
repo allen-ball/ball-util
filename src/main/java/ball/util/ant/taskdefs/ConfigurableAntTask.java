@@ -19,6 +19,11 @@ import org.apache.tools.ant.Task;
 public interface ConfigurableAntTask extends AntTaskMixIn {
 
     /**
+     * Default implementation for {@link Task} subclasses.
+     */
+    default void init() throws BuildException { configure(); }
+
+    /**
      * Default method to configure {@link Task} attributes.
      */
     default void configure() throws BuildException {

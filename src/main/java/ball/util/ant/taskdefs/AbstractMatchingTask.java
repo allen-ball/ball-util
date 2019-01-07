@@ -43,6 +43,13 @@ public abstract class AbstractMatchingTask extends MatchingTask
     @Override
     public ClasspathUtils.Delegate delegate() { return delegate; }
 
+    @Override
+    public AbstractMatchingTask delegate(ClasspathUtils.Delegate delegate) {
+        this.delegate = delegate;
+
+        return this;
+    }
+
     /**
      * {@inheritDoc}
      *
@@ -53,12 +60,14 @@ public abstract class AbstractMatchingTask extends MatchingTask
     public void init() throws BuildException {
         super.init();
 
+        /* ClasspathDelegateAntTask.super.init(); */
         if (this instanceof ClasspathDelegateAntTask) {
-            if (delegate == null) {
-                delegate = ClasspathUtils.getDelegate(this);
+            if (delegate() == null) {
+                delegate(ClasspathUtils.getDelegate(this));
             }
         }
 
+        /* ConfigurableAntTask.super.init(); */
         if (this instanceof ConfigurableAntTask) {
             ((ConfigurableAntTask) this).configure();
         }
@@ -74,6 +83,7 @@ public abstract class AbstractMatchingTask extends MatchingTask
     public void execute() throws BuildException {
         super.execute();
 
+        /* AnnotatedAntTask.super.execute(); */
         if (this instanceof AnnotatedAntTask) {
             ((AnnotatedAntTask) this).validate();
         }

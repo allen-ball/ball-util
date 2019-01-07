@@ -39,6 +39,11 @@ public interface AnnotatedAntTask extends AntTaskMixIn {
     }
 
     /**
+     * Default implementation for {@link Task} subclasses.
+     */
+    default void execute() throws BuildException { validate(); }
+
+    /**
      * Method to get check attributes annotated with
      * {@link AntTaskAttributeConstraint}.
      *

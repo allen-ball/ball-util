@@ -6,6 +6,8 @@
 package ball.util.ant.taskdefs;
 
 import org.apache.tools.ant.AntClassLoader;
+import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.ProjectComponent;
 import org.apache.tools.ant.types.Path;
 import org.apache.tools.ant.types.Reference;
 import org.apache.tools.ant.util.ClasspathUtils;
@@ -29,6 +31,27 @@ public interface ClasspathDelegateAntTask extends AntTaskMixIn {
      *          {@link org.apache.tools.ant.Task#init()} method.
      */
     ClasspathUtils.Delegate delegate();
+
+    /**
+     * Required state for implementing {@link org.apache.tools.ant.Task}s.
+     * Refer to the discussion in {@link ClasspathUtils}.
+     *
+     * @param   delegate        The
+     *                          {@link org.apache.tools.ant.util.ClasspathUtils.Delegate}.
+     *
+     * @return  The {@link.this}.
+     */
+    ClasspathDelegateAntTask delegate(ClasspathUtils.Delegate delegate);
+
+    /**
+     * Default implementation for {@link org.apache.tools.ant.Task}
+     * subclasses.
+     */
+    default void init() throws BuildException {
+        if (delegate() == null) {
+            delegate(ClasspathUtils.getDelegate((ProjectComponent) this));
+        }
+    }
 
     /**
      * See
