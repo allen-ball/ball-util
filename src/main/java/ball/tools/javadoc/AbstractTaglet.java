@@ -124,7 +124,6 @@ public abstract class AbstractTaglet implements Taglet {
 
     public Document document() { return DOCUMENT; }
     public Transformer transformer() { return TRANSFORMER; }
-    public Configuration configuration() { return configuration; }
 
     @Override
     public String toString(Tag[] tags) { throw new IllegalStateException(); }
@@ -232,7 +231,7 @@ public abstract class AbstractTaglet implements Taglet {
                                      Object value, ClassDoc target) {
         URI href = getHref(getContainingClassDoc(context), target);
 
-        return (href != null) ? HTML.a(DOCUMENT, href, value) : value;
+        return (href != null) ? HTML.a(document(), href, value) : value;
     }
 
     private URI getHref(ClassDoc context, ClassDoc target) {
@@ -298,7 +297,7 @@ public abstract class AbstractTaglet implements Taglet {
                 getHref(getContainingClassDoc(context), target)
                 .resolve("#" + constant.name());
 
-            link = HTML.a(DOCUMENT, href, constant.name());
+            link = HTML.a(document(), href, constant.name());
         }
 
         return link;
@@ -343,6 +342,29 @@ public abstract class AbstractTaglet implements Taglet {
         }
 
         return (name != null) ? Class.forName(name) : null;
+    }
+
+    /**
+     * Method to get the {@link String} representation of a {@link Node}
+     * (suitable for output).
+     *
+     * @param   node            The {@link Node}.
+     *
+     * @return  The {@link String} representation.
+     */
+    protected String toString(Node node) {
+        ReaderWriterDataSource ds = new ReaderWriterDataSource(null, null);
+
+        try (Writer out = ds.getWriter()) {
+            transformer()
+                .transform(new DOMSource(node), new StreamResult(out));
+        } catch (RuntimeException exception) {
+            throw exception;
+        } catch (Exception exception) {
+            throw new IllegalStateException(exception);
+        }
+
+        return ds.toString();
     }
 
     @Override
