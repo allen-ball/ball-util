@@ -53,6 +53,8 @@ public class IncludeTaglet extends AbstractInlineTaglet
     @Override
     public Content getTagletOutput(Tag tag,
                                    TagletWriter writer) throws IllegalArgumentException {
+        this.configuration = writer.configuration();
+
         Element element = null;
         Object resource = null;
 
