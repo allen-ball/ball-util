@@ -21,11 +21,13 @@ import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.TypeElement;
+import lombok.NoArgsConstructor;
 
 import static javax.lang.model.element.ElementKind.CLASS;
 import static javax.lang.model.element.ElementKind.INTERFACE;
 import static javax.tools.Diagnostic.Kind.ERROR;
 import static javax.tools.Diagnostic.Kind.WARNING;
+import static lombok.AccessLevel.PROTECTED;
 
 /**
  * Abstract {@link javax.annotation.processing.Processor} base class for
@@ -37,6 +39,7 @@ import static javax.tools.Diagnostic.Kind.WARNING;
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
+@NoArgsConstructor(access = PROTECTED)
 public abstract class AbstractNoAnnotationProcessor extends AbstractProcessor {
     private static final List<ElementKind> REQUIRED_FOR_SUBCLASSES_OF =
         Arrays.asList(CLASS, INTERFACE);
@@ -44,11 +47,6 @@ public abstract class AbstractNoAnnotationProcessor extends AbstractProcessor {
     private TreeSet<ElementKind> kinds =
         new TreeSet<>(EnumSet.allOf(ElementKind.class));
     private Class<?> superclass = null;
-
-    /**
-     * Sole constructor.
-     */
-    protected AbstractNoAnnotationProcessor() { super(); }
 
     @Override
     public Set<String> getSupportedAnnotationTypes() {
@@ -144,15 +142,11 @@ public abstract class AbstractNoAnnotationProcessor extends AbstractProcessor {
      */
     @ServiceProviderFor({ Processor.class })
     @For({ ForElementKinds.class, ForSubclassesOf.class })
+    @NoArgsConstructor
     public static class AnnotationProcessor
                         extends AbstractAnnotationProcessor {
         private static final Class<?> SUPERCLASS =
             AbstractNoAnnotationProcessor.class;
-
-        /**
-         * Sole constructor.
-         */
-        public AnnotationProcessor() { super(); }
 
         @Override
         public void process(RoundEnvironment roundEnv,

@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2013, 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2013 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.annotation.processing;
 
@@ -12,6 +12,8 @@ import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import static javax.tools.Diagnostic.Kind.WARNING;
 
@@ -25,13 +27,8 @@ import static javax.tools.Diagnostic.Kind.WARNING;
  */
 @ServiceProviderFor({ Processor.class })
 @For({ ConstantInitializer.class })
+@NoArgsConstructor @ToString
 public class ConstantInitializerProcessor extends AbstractAnnotationProcessor {
-
-    /**
-     * Sole constructor.
-     */
-    public ConstantInitializerProcessor() { super(); }
-
     @Override
     public void process(RoundEnvironment roundEnv,
                         TypeElement annotation,

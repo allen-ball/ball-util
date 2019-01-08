@@ -11,6 +11,7 @@ import javax.annotation.processing.Processor;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import static javax.lang.model.element.ElementKind.CLASS;
@@ -33,13 +34,9 @@ import static javax.tools.Diagnostic.Kind.WARNING;
 @ServiceProviderFor({ Processor.class })
 @ForElementKinds({ CLASS })
 @ForSubclassesOf(Object.class)
+@NoArgsConstructor @ToString
 public class ObjectToStringProcessor extends AbstractNoAnnotationProcessor {
     private ExecutableElement METHOD = null;
-
-    /**
-     * Sole constructor.
-     */
-    public ObjectToStringProcessor() { super(); }
 
     @Override
     public void init(ProcessingEnvironment processingEnv) {

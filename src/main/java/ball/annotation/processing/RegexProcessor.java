@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2011 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2011 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.annotation.processing;
 
@@ -13,6 +13,8 @@ import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import static javax.tools.Diagnostic.Kind.ERROR;
 
@@ -26,13 +28,8 @@ import static javax.tools.Diagnostic.Kind.ERROR;
  */
 @ServiceProviderFor({ Processor.class })
 @For({ Regex.class })
+@NoArgsConstructor @ToString
 public class RegexProcessor extends AbstractAnnotationProcessor {
-
-    /**
-     * Sole constructor.
-     */
-    public RegexProcessor() { super(); }
-
     @Override
     public void process(RoundEnvironment roundEnv,
                         TypeElement annotation,

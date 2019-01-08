@@ -16,6 +16,8 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import static javax.tools.Diagnostic.Kind.ERROR;
 import static javax.tools.Diagnostic.Kind.WARNING;
@@ -31,14 +33,9 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
  */
 @ServiceProviderFor({ Processor.class })
 @For({ ConstructorProperties.class })
+@NoArgsConstructor @ToString
 public class ConstructorPropertiesProcessor
              extends AbstractAnnotationProcessor {
-
-    /**
-     * Sole constructor.
-     */
-    public ConstructorPropertiesProcessor() { super(); }
-
     @Override
     public void process(RoundEnvironment roundEnv,
                         TypeElement annotation,

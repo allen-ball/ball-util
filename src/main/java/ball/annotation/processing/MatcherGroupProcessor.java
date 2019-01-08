@@ -12,6 +12,8 @@ import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import static javax.lang.model.element.Modifier.PRIVATE;
 import static javax.tools.Diagnostic.Kind.ERROR;
@@ -25,13 +27,8 @@ import static javax.tools.Diagnostic.Kind.ERROR;
  */
 @ServiceProviderFor({ Processor.class })
 @For({ MatcherGroup.class })
+@NoArgsConstructor @ToString
 public class MatcherGroupProcessor extends AbstractAnnotationProcessor {
-
-    /**
-     * Sole constructor.
-     */
-    public MatcherGroupProcessor() { super(); }
-
     @Override
     protected void process(RoundEnvironment env,
                            TypeElement annotation,

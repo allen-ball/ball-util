@@ -20,6 +20,8 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
 import javax.tools.FileObject;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import static ball.text.ParameterizedMessageFormat.format;
 import static javax.tools.Diagnostic.Kind.ERROR;
@@ -38,13 +40,9 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
  */
 @ServiceProviderFor({ Processor.class })
 @For({ ResourceFile.class })
+@NoArgsConstructor @ToString
 public class ResourceFileProcessor extends AbstractAnnotationProcessor {
     private MapImpl map = new MapImpl();
-
-    /**
-     * Sole constructor.
-     */
-    public ResourceFileProcessor() { super(); }
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations,

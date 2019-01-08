@@ -12,6 +12,8 @@ import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  * {@link Processor} implementation to check {@link PatternRegex}
@@ -22,13 +24,8 @@ import javax.lang.model.element.TypeElement;
  */
 @ServiceProviderFor({ Processor.class })
 @For({ PatternRegex.class })
+@NoArgsConstructor @ToString
 public class PatternRegexProcessor extends AbstractAnnotationProcessor {
-
-    /**
-     * Sole constructor.
-     */
-    public PatternRegexProcessor() { super(); }
-
     @Override
     protected void process(RoundEnvironment env,
                            TypeElement annotation,

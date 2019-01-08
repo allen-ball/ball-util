@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2013 - 2018 Allen D. Ball.  All rights reserved.
+ * Copyright 2013 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.annotation.processing;
 
@@ -13,6 +13,8 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.TypeMirror;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import static javax.lang.model.element.ElementKind.CLASS;
 import static javax.lang.model.util.ElementFilter.methodsIn;
@@ -41,14 +43,10 @@ import static javax.tools.Diagnostic.Kind.WARNING;
 @ServiceProviderFor({ Processor.class })
 @ForElementKinds({ CLASS })
 @ForSubclassesOf(Object.class)
+@NoArgsConstructor @ToString
 public class ObjectCloneProcessor extends AbstractNoAnnotationProcessor {
     private ExecutableElement METHOD = null;
     private TypeElement THROWABLE = null;
-
-    /**
-     * Sole constructor.
-     */
-    public ObjectCloneProcessor() { super(); }
 
     @Override
     public void init(ProcessingEnvironment processingEnv) {

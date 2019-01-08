@@ -17,8 +17,10 @@ import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import javax.tools.Diagnostic;
+import lombok.NoArgsConstructor;
 
 import static javax.tools.Diagnostic.Kind.ERROR;
+import static lombok.AccessLevel.PROTECTED;
 
 /**
  * Abstract {@link javax.annotation.processing.Processor} base class for
@@ -27,17 +29,12 @@ import static javax.tools.Diagnostic.Kind.ERROR;
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
+@NoArgsConstructor(access = PROTECTED)
 public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
     private final List<Class<? extends Annotation>> list;
     private transient TypeElement annotation = null;
 
-    /**
-     * Sole costructor.  Implementing class must be annotated with
-     * {@link For}.
-     */
-    protected AbstractAnnotationProcessor() {
-        super();
-
+    {
         try {
             list = Arrays.asList(getClass().getAnnotation(For.class).value());
         } catch (Exception exception) {
@@ -127,15 +124,11 @@ public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
      */
     @ServiceProviderFor({ Processor.class })
     @For({ For.class })
+    @NoArgsConstructor
     public static class AnnotationProcessor
                         extends AbstractAnnotationProcessor {
         private static final Class<?> SUPERCLASS =
             AbstractAnnotationProcessor.class;
-
-        /**
-         * Sole constructor.
-         */
-        public AnnotationProcessor() { super(); }
 
         @Override
         public void process(RoundEnvironment roundEnv,

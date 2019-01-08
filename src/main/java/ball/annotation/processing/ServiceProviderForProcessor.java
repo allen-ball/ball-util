@@ -22,6 +22,8 @@ import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import javax.tools.FileObject;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import static ball.util.MapUtil.getByKeyToString;
 import static java.lang.reflect.Modifier.isAbstract;
@@ -48,16 +50,12 @@ import static org.apache.commons.lang3.StringUtils.EMPTY;
  */
 @ServiceProviderFor({ Processor.class })
 @For({ ServiceProviderFor.class })
+@NoArgsConstructor @ToString
 public class ServiceProviderForProcessor extends AbstractAnnotationProcessor
                                          implements BootstrapProcessorTask.Processor {
     private static final String PATH = META_INF + "/services/%s";
 
     private MapImpl map = new MapImpl();
-
-    /**
-     * Sole constructor.
-     */
-    public ServiceProviderForProcessor() { super(); }
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations,

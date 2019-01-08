@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2013 - 2018 Allen D. Ball.  All rights reserved.
+ * Copyright 2013 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.annotation.processing;
 
@@ -12,6 +12,8 @@ import javax.annotation.processing.Processor;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import static javax.lang.model.element.ElementKind.CLASS;
 import static javax.lang.model.util.ElementFilter.methodsIn;
@@ -27,13 +29,9 @@ import static javax.tools.Diagnostic.Kind.ERROR;
 @ServiceProviderFor({ Processor.class })
 @ForElementKinds({ CLASS })
 @ForSubclassesOf(Collection.class)
+@NoArgsConstructor @ToString
 public class CollectionToArrayProcessor extends AbstractNoAnnotationProcessor {
     private ExecutableElement METHOD = null;
-
-    /**
-     * Sole constructor.
-     */
-    public CollectionToArrayProcessor() { super(); }
 
     @Override
     public void init(ProcessingEnvironment processingEnv) {

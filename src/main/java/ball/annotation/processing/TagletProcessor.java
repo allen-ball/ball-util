@@ -1,11 +1,10 @@
 /*
  * $Id$
  *
- * Copyright 2018 Allen D. Ball.  All rights reserved.
+ * Copyright 2018, 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.annotation.processing;
 
-import javax.lang.model.element.TypeElement;
 import ball.annotation.ServiceProviderFor;
 import com.sun.tools.doclets.Taglet;
 import java.lang.reflect.Method;
@@ -13,6 +12,9 @@ import java.util.Map;
 import javax.annotation.processing.Processor;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
+import javax.lang.model.element.TypeElement;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import static javax.lang.model.element.ElementKind.CLASS;
 import static javax.lang.model.element.Modifier.ABSTRACT;
@@ -32,6 +34,7 @@ import static javax.tools.Diagnostic.Kind.WARNING;
 @ServiceProviderFor({ Processor.class })
 @ForElementKinds({ CLASS })
 @ForSubclassesOf(Taglet.class)
+@NoArgsConstructor @ToString
 public class TagletProcessor extends AbstractNoAnnotationProcessor {
     private static abstract class PROTOTYPE {
         public static void register(Map<String,Taglet> map) { }
@@ -39,11 +42,6 @@ public class TagletProcessor extends AbstractNoAnnotationProcessor {
 
     private static final Method METHOD =
         PROTOTYPE.class.getDeclaredMethods()[0];
-
-    /**
-     * Sole constructor.
-     */
-    public TagletProcessor() { super(); }
 
     @Override
     protected void process(Element element) {

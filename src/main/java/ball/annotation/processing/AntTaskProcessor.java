@@ -34,6 +34,8 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.apache.commons.io.IOUtils;
 import org.apache.tools.ant.Task;
 
@@ -62,17 +64,13 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
  */
 @ServiceProviderFor({ Processor.class })
 @For({ AntLib.class, AntTask.class })
+@NoArgsConstructor @ToString
 public class AntTaskProcessor extends AbstractAnnotationProcessor
                               implements BootstrapProcessorTask.Processor {
     private static final String ANTLIB_XML = "antlib.xml";
 
     private ResourceMap map = new ResourceMap();
     private LinkedHashSet<String> packages = new LinkedHashSet<>();
-
-    /**
-     * Sole constructor.
-     */
-    public AntTaskProcessor() { super(); }
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations,

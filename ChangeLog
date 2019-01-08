@@ -1,3 +1,12 @@
+2019-01-08  Allen D. Ball  <ball@sol.local>
+
+	* src/main/java/ball/annotation/processing/*Processor.java:
+	Use Project Lombok annotations.
+
+	* src/main/java/ball/annotation/processing/ConstructorProcessor.java:
+	Make aware of Project Lombok @NoArgsConstructor,
+	@RequiredArgsConstructor, and @AllArgsConstructor annotations.
+
 2019-01-07  Allen D. Ball  <ball@sol.local>
 
 	* src/main/java/ball/tools/javadoc/AnnotatedTaglet.java,

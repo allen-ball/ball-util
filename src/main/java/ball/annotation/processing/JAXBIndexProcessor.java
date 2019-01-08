@@ -25,6 +25,8 @@ import javax.lang.model.element.TypeElement;
 import javax.tools.FileObject;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import static java.lang.reflect.Modifier.isAbstract;
 import static javax.tools.Diagnostic.Kind.ERROR;
@@ -39,16 +41,12 @@ import static javax.tools.StandardLocation.CLASS_OUTPUT;
  */
 @ServiceProviderFor({ Processor.class })
 @For({ XmlRootElement.class, XmlType.class })
+@NoArgsConstructor @ToString
 public class JAXBIndexProcessor extends AbstractAnnotationProcessor
                                 implements BootstrapProcessorTask.Processor {
     private static final String JAXB_INDEX = "jaxb.index";
 
     private MapImpl map = new MapImpl();
-
-    /**
-     * Sole constructor.
-     */
-    public JAXBIndexProcessor() { super(); }
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations,

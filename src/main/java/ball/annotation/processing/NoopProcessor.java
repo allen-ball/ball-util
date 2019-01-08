@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2014 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.annotation.processing;
 
@@ -12,6 +12,8 @@ import java.util.Set;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.TypeElement;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  * No-op {@link Processor} to silence compilation warnings for 3rd-party
@@ -23,14 +25,10 @@ import javax.lang.model.element.TypeElement;
  * @version $Revision$
  */
 @ServiceProviderFor({ Processor.class })
+@NoArgsConstructor @ToString
 public class NoopProcessor extends AbstractProcessor {
     private static final ResourceBundle BUNDLE =
         ResourceBundle.getBundle(NoopProcessor.class.getName());
-
-    /**
-     * Sole costructor.
-     */
-    public NoopProcessor() { super(); }
 
     @Override
     public Set<String> getSupportedAnnotationTypes() {

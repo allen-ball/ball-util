@@ -1,13 +1,18 @@
 /*
  * $Id$
  *
- * Copyright 2013 - 2018 Allen D. Ball.  All rights reserved.
+ * Copyright 2013 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.annotation.processing;
 
 import ball.annotation.ServiceProviderFor;
 import javax.annotation.processing.Processor;
 import javax.lang.model.element.Element;
+import javax.lang.model.element.TypeElement;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 
 import static javax.lang.model.element.ElementKind.CLASS;
 import static javax.lang.model.element.Modifier.ABSTRACT;
@@ -32,19 +37,19 @@ import static javax.tools.Diagnostic.Kind.WARNING;
  */
 @ServiceProviderFor({ Processor.class })
 @ForElementKinds({ CLASS })
+@NoArgsConstructor @ToString
 public class ConstructorProcessor extends AbstractNoAnnotationProcessor {
-
-    /**
-     * Sole constructor.
-     */
-    public ConstructorProcessor() { super(); }
-
     @Override
     protected void process(Element element) {
         if (element.getModifiers().contains(ABSTRACT)) {
+            TypeElement type = (TypeElement) element;
+
             constructorsIn(element.getEnclosedElements())
                 .stream()
                 .filter(t -> t.getModifiers().contains(PUBLIC))
+                .filter(t -> type.getAnnotation(AllArgsConstructor.class) == null)
+                .filter(t -> type.getAnnotation(NoArgsConstructor.class) == null)
+                .filter(t -> type.getAnnotation(RequiredArgsConstructor.class) == null)
                 .forEach(t -> print(WARNING,
                                     t,
                                     t.getKind() + " is declared "

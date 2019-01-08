@@ -12,6 +12,8 @@ import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import static javax.lang.model.element.Modifier.ABSTRACT;
 import static javax.lang.model.element.Modifier.PUBLIC;
@@ -35,13 +37,8 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
  */
 @ServiceProviderFor({ Processor.class })
 @For({ TagletName.class })
+@NoArgsConstructor @ToString
 public class TagletNameProcessor extends AbstractAnnotationProcessor {
-
-    /**
-     * Sole constructor.
-     */
-    public TagletNameProcessor() { super(); }
-
     @Override
     protected void process(RoundEnvironment env,
                            TypeElement annotation,

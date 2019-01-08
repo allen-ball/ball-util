@@ -35,6 +35,8 @@ import javax.lang.model.element.Modifier;
 import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
 import javax.tools.FileObject;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import static javax.tools.Diagnostic.Kind.ERROR;
 import static javax.tools.Diagnostic.Kind.WARNING;
@@ -55,6 +57,7 @@ import static org.apache.commons.lang3.StringUtils.join;
         Attribute.class, MainClass.class, Section.class,
             JavaBean.class, DependsOn.class, DesignTimeOnly.class
      })
+@NoArgsConstructor @ToString
 public class ManifestProcessor extends AbstractAnnotationProcessor
                                implements BootstrapProcessorTask.Processor {
     private static final String MANIFEST_MF = "MANIFEST.MF";
@@ -70,11 +73,6 @@ public class ManifestProcessor extends AbstractAnnotationProcessor
 
     private ManifestImpl manifest = null;
     private HashSet<Element> processed = new HashSet<>();
-
-    /**
-     * Sole constructor.
-     */
-    public ManifestProcessor() { super(); }
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations,

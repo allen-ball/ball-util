@@ -44,6 +44,7 @@ import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
 import javax.tools.Diagnostic;
 import javax.tools.FileObject;
+import lombok.NoArgsConstructor;
 
 import static ball.lang.Keyword.THROWS;
 import static ball.lang.Punctuation.COMMA;
@@ -57,6 +58,7 @@ import static javax.lang.model.element.Modifier.STATIC;
 import static javax.lang.model.util.ElementFilter.constructorsIn;
 import static javax.lang.model.util.ElementFilter.methodsIn;
 import static javax.tools.Diagnostic.Kind.ERROR;
+import static lombok.AccessLevel.PROTECTED;
 
 /**
  * Extends {@link javax.annotation.processing.AbstractProcessor} by
@@ -70,6 +72,7 @@ import static javax.tools.Diagnostic.Kind.ERROR;
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
+@NoArgsConstructor(access = PROTECTED)
 public abstract class AbstractProcessor
                       extends javax.annotation.processing.AbstractProcessor {
     /** {@link #META_INF} = {@value #META_INF} */
@@ -95,11 +98,6 @@ public abstract class AbstractProcessor
     protected Elements elements = null;
     /** See {@link ProcessingEnvironment#getTypeUtils()}. */
     protected Types types = null;
-
-    /**
-     * Sole constructor.
-     */
-    protected AbstractProcessor() { super(); }
 
     @Override
     public SourceVersion getSupportedSourceVersion() {
@@ -890,9 +888,6 @@ public abstract class AbstractProcessor
 
         return buffer.toString().trim();
     }
-
-    @Override
-    public String toString() { return super.toString(); }
 
     /**
      * Static method to get the argument {@link Package} name as a path

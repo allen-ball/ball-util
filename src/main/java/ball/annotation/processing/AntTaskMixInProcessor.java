@@ -9,6 +9,8 @@ import ball.annotation.ServiceProviderFor;
 import ball.util.ant.taskdefs.AntTaskMixIn;
 import javax.annotation.processing.Processor;
 import javax.lang.model.element.Element;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.apache.tools.ant.Task;
 
 import static javax.lang.model.element.ElementKind.CLASS;
@@ -25,13 +27,8 @@ import static javax.tools.Diagnostic.Kind.ERROR;
 @ServiceProviderFor({ Processor.class })
 @ForElementKinds({ CLASS })
 @ForSubclassesOf(AntTaskMixIn.class)
+@NoArgsConstructor @ToString
 public class AntTaskMixInProcessor extends AbstractNoAnnotationProcessor {
-
-    /**
-     * Sole constructor.
-     */
-    public AntTaskMixInProcessor() { super(); }
-
     @Override
     protected void process(Element element) {
         if (! element.getModifiers().contains(ABSTRACT)) {

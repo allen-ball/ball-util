@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2012 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2012 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.annotation.processing;
 
@@ -9,6 +9,8 @@ import ball.annotation.ServiceProviderFor;
 import javax.annotation.processing.Processor;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.disjoint;
@@ -27,13 +29,8 @@ import static javax.tools.Diagnostic.Kind.WARNING;
  */
 @ServiceProviderFor({ Processor.class })
 @ForElementKinds({ METHOD })
+@NoArgsConstructor @ToString
 public class NoOverrideProcessor extends AbstractNoAnnotationProcessor {
-
-    /**
-     * Sole constructor.
-     */
-    public NoOverrideProcessor() { super(); }
-
     @Override
     protected void process(Element element) {
         ExecutableElement method = (ExecutableElement) element;
