@@ -11,7 +11,6 @@ import com.sun.javadoc.ClassDoc;
 import com.sun.javadoc.Doc;
 import com.sun.javadoc.ProgramElementDoc;
 import com.sun.javadoc.Tag;
-import com.sun.tools.doclets.Taglet;
 import com.sun.tools.doclets.internal.toolkit.Configuration;
 import java.io.Writer;
 import java.net.URI;
@@ -31,7 +30,7 @@ import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 /**
- * Abstract {@link Taglet} base class.
+ * Abstract {@link com.sun.tools.doclets.Taglet} base class.
  *
  * <p>Note: {@link #getName()} implementation requires the subclass is
  * annotated with {@link TagletName}.
@@ -39,7 +38,7 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
-public abstract class AbstractTaglet implements Taglet {
+public abstract class AbstractTaglet implements AnnotatedTaglet {
     private static final String INDENT_AMOUNT =
         "{http://xml.apache.org/xslt}indent-amount";
 
@@ -100,12 +99,7 @@ public abstract class AbstractTaglet implements Taglet {
 
     @Override
     public String getName() {
-        String name = null;
-        TagletName annotation = getClass().getAnnotation(TagletName.class);
-
-        if (annotation != null) {
-            name = annotation.value();
-        }
+        String name = AnnotatedTaglet.super.getName();
 
         if (name == null) {
             name = getClass().getSimpleName().toLowerCase();

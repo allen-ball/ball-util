@@ -1,3 +1,9 @@
+2019-01-07  Allen D. Ball  <ball@sol.local>
+
+	* src/main/java/ball/tools/javadoc/AnnotatedTaglet.java,
+	src/main/java/ball/annotation/processing/AnnotatedTagletProcessor.java:
+	Initial writing.
+
 2019-01-03  Allen D. Ball  <ball@sol.local>
 
 	* src/main/java/ball/activation/DataSourceDefaultMethods.java:
