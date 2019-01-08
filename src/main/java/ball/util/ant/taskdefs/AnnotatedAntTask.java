@@ -15,8 +15,6 @@ import java.util.Collections;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 
-import static ball.util.BeanPropertyMethodEnum.getPropertyName;
-
 /**
  * Interface indicating {@link Task} is annotated with {@link AntTask} and
  * related annotations.
@@ -65,22 +63,18 @@ public interface AnnotatedAntTask extends AntTaskMixIn {
 
                     if (constraint != null) {
                         try {
-                            String name = null;
-                            Object value = null;
+                            AntTaskAttributeValidator validator =
+                                constraint.value().newInstance();
 
                             if (element instanceof Field) {
-                                name = ((Field) element).getName();
-                                value = ((Field) element).get((Task) this);
+                                validator
+                                    .validate((Task) this, (Field) element);
                             } else if (element instanceof Method) {
-                                name = getPropertyName((Method) element);
-                                value = ((Method) element).invoke((Task) this);
+                                validator
+                                    .validate((Task) this, (Method) element);
                             } else {
                                 throw new IllegalStateException();
                             }
-
-                            constraint
-                                .value().newInstance()
-                                .validate((Task) this, name, value);
                         } catch (BuildException exception) {
                             throw exception;
                         } catch (RuntimeException exception) {

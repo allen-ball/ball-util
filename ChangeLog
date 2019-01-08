@@ -1,5 +1,8 @@
 2019-01-08  Allen D. Ball  <ball@sol.local>
 
+	* src/main/java/ball/util/ant/taskdefs/AntTaskAttributeValidator.java:
+	Allow validators to force access to annotated Fields and Methods.
+
 	* src/main/java/ball/annotation/processing/*Processor.java:
 	Use Project Lombok annotations.
 
