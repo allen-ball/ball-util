@@ -5,7 +5,10 @@
  */
 package ball.util.ant.taskdefs;
 
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 import org.apache.tools.ant.util.ClasspathUtils;
@@ -26,17 +29,8 @@ public abstract class AbstractClasspathTask extends Task
                                             implements AnnotatedAntTask,
                                                        ClasspathDelegateAntTask,
                                                        AntTaskLogMethods {
+    @Getter @Setter @Accessors(chain = true, fluent = true)
     private ClasspathUtils.Delegate delegate = null;
-
-    @Override
-    public ClasspathUtils.Delegate delegate() { return delegate; }
-
-    @Override
-    public AbstractClasspathTask delegate(ClasspathUtils.Delegate delegate) {
-        this.delegate = delegate;
-
-        return this;
-    }
 
     /**
      * {@inheritDoc}

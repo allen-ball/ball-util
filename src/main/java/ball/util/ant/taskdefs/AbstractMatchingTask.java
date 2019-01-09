@@ -11,6 +11,7 @@ import java.util.TreeSet;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.taskdefs.MatchingTask;
 import org.apache.tools.ant.util.ClasspathUtils;
@@ -31,21 +32,12 @@ public abstract class AbstractMatchingTask extends MatchingTask
                                            implements AnnotatedAntTask,
                                                       ClasspathDelegateAntTask,
                                                       AntTaskLogMethods {
+    @Getter @Setter @Accessors(chain = true, fluent = true)
     private ClasspathUtils.Delegate delegate = null;
     @Getter @Setter
     private File basedir = null;
     @Getter @Setter
     private File file = null;
-
-    @Override
-    public ClasspathUtils.Delegate delegate() { return delegate; }
-
-    @Override
-    public AbstractMatchingTask delegate(ClasspathUtils.Delegate delegate) {
-        this.delegate = delegate;
-
-        return this;
-    }
 
     /**
      * {@inheritDoc}
