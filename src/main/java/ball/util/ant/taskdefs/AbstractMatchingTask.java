@@ -8,9 +8,14 @@ package ball.util.ant.taskdefs;
 import java.io.File;
 import java.util.Set;
 import java.util.TreeSet;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.taskdefs.MatchingTask;
 import org.apache.tools.ant.util.ClasspathUtils;
+
+import static lombok.AccessLevel.PROTECTED;
 
 /**
  * Abstract base class for {@link.uri http://ant.apache.org/ Ant}
@@ -21,24 +26,16 @@ import org.apache.tools.ant.util.ClasspathUtils;
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
+@NoArgsConstructor(access = PROTECTED)
 public abstract class AbstractMatchingTask extends MatchingTask
                                            implements AnnotatedAntTask,
                                                       ClasspathDelegateAntTask,
                                                       AntTaskLogMethods {
     private ClasspathUtils.Delegate delegate = null;
+    @Getter @Setter
     private File basedir = null;
+    @Getter @Setter
     private File file = null;
-
-    /**
-     * Sole constructor.
-     */
-    protected AbstractMatchingTask() { super(); }
-
-    public File getBasedir() { return basedir; }
-    public void setBasedir(File basedir) { this.basedir = basedir; }
-
-    public File getFile() { return file; }
-    public void setFile(File file) { this.file = file; }
 
     @Override
     public ClasspathUtils.Delegate delegate() { return delegate; }
@@ -117,7 +114,4 @@ public abstract class AbstractMatchingTask extends MatchingTask
 
         return set;
     }
-
-    @Override
-    public String toString() { return getClass().getSimpleName(); }
 }

@@ -1,13 +1,15 @@
 /*
  * $Id$
  *
- * Copyright 2011 - 2018 Allen D. Ball.  All rights reserved.
+ * Copyright 2011 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.taskdefs;
 
 import java.net.NetworkInterface;
 import java.util.Collections;
 import java.util.List;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.apache.tools.ant.BuildException;
 
 /**
@@ -20,13 +22,8 @@ import org.apache.tools.ant.BuildException;
  * @version $Revision$
  */
 @AntTask("network-interfaces")
+@NoArgsConstructor @ToString
 public class NetworkInterfacesTask extends AbstractClasspathTask {
-
-    /**
-     * Sole constructor.
-     */
-    public NetworkInterfacesTask() { super(); }
-
     @Override
     public void execute() throws BuildException {
         super.execute();

@@ -19,11 +19,16 @@ import java.lang.reflect.Method;
 import java.lang.reflect.TypeVariable;
 import java.net.URL;
 import java.util.Arrays;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import org.apache.tools.ant.BuildException;
 
 import static ball.lang.Punctuation.GT;
 import static ball.lang.Punctuation.LT;
 import static ball.util.ClassOrder.INHERITANCE;
+import static lombok.AccessLevel.PROTECTED;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 /**
@@ -35,17 +40,10 @@ import static org.apache.commons.lang3.StringUtils.EMPTY;
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
+@NoArgsConstructor(access = PROTECTED)
 public abstract class TypeTask extends AbstractClasspathTask {
+    @NotNull @Getter @Setter
     private String type = null;
-
-    /**
-     * Sole constructor.
-     */
-    protected TypeTask() { super(); }
-
-    @NotNull
-    public String getType() { return type; }
-    public void setType(String type) { this.type = type; }
 
     /**
      * {@link.uri http://ant.apache.org/ Ant}
@@ -55,13 +53,8 @@ public abstract class TypeTask extends AbstractClasspathTask {
      * {@bean.info}
      */
     @AntTask("bean-info-for")
+    @NoArgsConstructor @ToString
     public static class BeanInfoFor extends TypeTask {
-
-        /**
-         * Sole constructor.
-         */
-        public BeanInfoFor() { super(); }
-
         @Override
         public void execute() throws BuildException {
             super.execute();
@@ -168,17 +161,10 @@ public abstract class TypeTask extends AbstractClasspathTask {
      * {@bean.info}
      */
     @AntTask("is-assignable-from")
+    @NoArgsConstructor @ToString
     public static class IsAssignableFrom extends TypeTask {
+        @NotNull @Getter @Setter
         private String subtype = null;
-
-        /**
-         * Sole constructor.
-         */
-        public IsAssignableFrom() { super(); }
-
-        @NotNull
-        public String getSubtype() { return subtype; }
-        public void setSubtype(String subtype) { this.subtype = subtype; }
 
         @Override
         public void execute() throws BuildException {
@@ -211,13 +197,8 @@ public abstract class TypeTask extends AbstractClasspathTask {
      * {@bean.info}
      */
     @AntTask("members-of")
+    @NoArgsConstructor @ToString
     public static class MembersOf extends TypeTask {
-
-        /**
-         * Sole constructor.
-         */
-        public MembersOf() { super(); }
-
         @Override
         public void execute() throws BuildException {
             super.execute();
@@ -261,13 +242,8 @@ public abstract class TypeTask extends AbstractClasspathTask {
      * {@bean.info}
      */
     @AntTask("resource-path-to")
+    @NoArgsConstructor @ToString
     public static class ResourcePathTo extends TypeTask {
-
-        /**
-         * Sole constructor.
-         */
-        public ResourcePathTo() { super(); }
-
         @Override
         public void execute() throws BuildException {
             super.execute();
@@ -300,13 +276,8 @@ public abstract class TypeTask extends AbstractClasspathTask {
      * {@bean.info}
      */
     @AntTask("superclasses-of")
+    @NoArgsConstructor @ToString
     public static class SuperclassesOf extends TypeTask {
-
-        /**
-         * Sole constructor.
-         */
-        public SuperclassesOf() { super(); }
-
         @Override
         public void execute() throws BuildException {
             super.execute();

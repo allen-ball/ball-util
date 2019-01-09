@@ -1,13 +1,17 @@
 /*
  * $Id$
  *
- * Copyright 2013 - 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2013 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.taskdefs;
 
 import ball.activation.JAXBDataSource;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import org.apache.tools.ant.BuildException;
 
 /**
@@ -21,16 +25,10 @@ import org.apache.tools.ant.BuildException;
  * @version $Revision$
  */
 @AntTask("jaxb-marshal")
+@NoArgsConstructor @ToString
 public class JAXBMarshalTask extends InstanceOfTask {
+    @Getter @Setter
     private String context = null;
-
-    /**
-     * Sole constructor.
-     */
-    public JAXBMarshalTask() { super(); }
-
-    public String getContext() { return context; }
-    public void setContext(String context) { this.context = context; }
 
     @Override
     public void execute() throws BuildException {

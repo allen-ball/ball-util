@@ -1,12 +1,16 @@
 /*
  * $Id$
  *
- * Copyright 2011 - 2018 Allen D. Ball.  All rights reserved.
+ * Copyright 2011 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.taskdefs;
 
 import java.net.InetAddress;
 import java.util.Arrays;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import org.apache.tools.ant.BuildException;
 
 /**
@@ -19,17 +23,10 @@ import org.apache.tools.ant.BuildException;
  * @version $Revision$
  */
 @AntTask("inet-addresses-for")
+@NoArgsConstructor @ToString
 public class InetAddressesForTask extends AbstractClasspathTask {
+    @NotNull @Getter @Setter
     private String string = null;
-
-    /**
-     * Sole constructor.
-     */
-    public InetAddressesForTask() { super(); }
-
-    @NotNull
-    public String getString() { return string; }
-    public void setString(String string) { this.string = string; }
 
     @Override
     public void execute() throws BuildException {

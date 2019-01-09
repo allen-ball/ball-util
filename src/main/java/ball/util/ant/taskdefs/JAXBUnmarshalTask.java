@@ -10,6 +10,10 @@ import ball.util.BeanMap;
 import java.io.File;
 import java.util.Map;
 import javax.xml.bind.JAXBContext;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import org.apache.tools.ant.BuildException;
 
 import static org.apache.commons.lang3.StringUtils.EMPTY;
@@ -24,22 +28,12 @@ import static org.apache.commons.lang3.StringUtils.EMPTY;
  * @version $Revision$
  */
 @AntTask("jaxb-unmarshal")
+@NoArgsConstructor @ToString
 public class JAXBUnmarshalTask extends AbstractClasspathTask {
+    @NotNull @Getter @Setter
     private String context = null;
+    @NotNull @Getter @Setter
     private File file = null;
-
-    /**
-     * Sole constructor.
-     */
-    public JAXBUnmarshalTask() { super(); }
-
-    @NotNull
-    public String getContext() { return context; }
-    public void setContext(String context) { this.context = context; }
-
-    @NotNull
-    public File getFile() { return file; }
-    public void setFile(File file) { this.file = file; }
 
     @Override
     public void execute() throws BuildException {

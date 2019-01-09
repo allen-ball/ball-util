@@ -5,9 +5,12 @@
  */
 package ball.util.ant.taskdefs;
 
+import lombok.NoArgsConstructor;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 import org.apache.tools.ant.util.ClasspathUtils;
+
+import static lombok.AccessLevel.PROTECTED;
 
 /**
  * Abstract base class for {@link.uri http://ant.apache.org/ Ant}
@@ -18,16 +21,12 @@ import org.apache.tools.ant.util.ClasspathUtils;
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
+@NoArgsConstructor(access = PROTECTED)
 public abstract class AbstractClasspathTask extends Task
                                             implements AnnotatedAntTask,
                                                        ClasspathDelegateAntTask,
                                                        AntTaskLogMethods {
     private ClasspathUtils.Delegate delegate = null;
-
-    /**
-     * Sole constructor.
-     */
-    protected AbstractClasspathTask() { super(); }
 
     @Override
     public ClasspathUtils.Delegate delegate() { return delegate; }
@@ -77,7 +76,4 @@ public abstract class AbstractClasspathTask extends Task
             ((AnnotatedAntTask) this).validate();
         }
     }
-
-    @Override
-    public String toString() { return getClass().getSimpleName(); }
 }

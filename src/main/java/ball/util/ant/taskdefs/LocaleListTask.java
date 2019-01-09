@@ -1,12 +1,14 @@
 /*
  * $Id$
  *
- * Copyright 2009 - 2018 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.taskdefs;
 
 import java.util.Locale;
 import org.apache.tools.ant.BuildException;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  * {@link.uri http://ant.apache.org/ Ant} {@link org.apache.tools.ant.Task}
@@ -20,13 +22,8 @@ import org.apache.tools.ant.BuildException;
  * @version $Revision$
  */
 @AntTask("locale-list")
+@NoArgsConstructor @ToString
 public class LocaleListTask extends AbstractClasspathTask {
-
-    /**
-     * Sole constructor.
-     */
-    public LocaleListTask() { super(); }
-
     @Override
     public void execute() throws BuildException {
         super.execute();

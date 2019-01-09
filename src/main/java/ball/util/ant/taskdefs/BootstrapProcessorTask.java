@@ -7,6 +7,10 @@ package ball.util.ant.taskdefs;
 
 import java.io.File;
 import java.util.Set;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import org.apache.tools.ant.BuildException;
 
 import static java.lang.reflect.Modifier.isAbstract;
@@ -21,16 +25,10 @@ import static java.lang.reflect.Modifier.isAbstract;
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
+@NoArgsConstructor @ToString
 public class BootstrapProcessorTask extends AbstractClassFileTask {
+    @Getter @Setter
     private File destdir = null;
-
-    /**
-     * Sole constructor.
-     */
-    public BootstrapProcessorTask() { super(); }
-
-    public File getDestdir() { return destdir; }
-    public void setDestdir(File destdir) { this.destdir = destdir; }
 
     @Override
     public void execute() throws BuildException {

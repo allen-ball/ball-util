@@ -8,8 +8,13 @@ package ball.util.ant.taskdefs;
 import ball.util.Combinations;
 import java.util.Collection;
 import java.util.List;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import org.apache.tools.ant.BuildException;
 
+import static lombok.AccessLevel.PROTECTED;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 /**
@@ -22,17 +27,10 @@ import static org.apache.commons.lang3.StringUtils.EMPTY;
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
+@NoArgsConstructor(access = PROTECTED)
 public abstract class CombinationsTask extends InstanceOfTask {
+    @NotNull @Getter @Setter
     private Integer count = null;
-
-    /**
-     * Sole constructor.
-     */
-    protected CombinationsTask() { super(); }
-
-    @NotNull
-    public Integer getCount() { return count; }
-    public void setCount(Integer count) { this.count = count; }
 
     /**
      * {@link.uri http://ant.apache.org/ Ant}
@@ -41,13 +39,8 @@ public abstract class CombinationsTask extends InstanceOfTask {
      * {@bean.info}
      */
     @AntTask("combinations-count")
+    @NoArgsConstructor @ToString
     public static class Count extends CombinationsTask {
-
-        /**
-         * Sole constructor.
-         */
-        public Count() { super(); }
-
         @Override
         public void execute() throws BuildException {
             super.execute();
@@ -79,13 +72,8 @@ public abstract class CombinationsTask extends InstanceOfTask {
      * {@bean.info}
      */
     @AntTask("combinations-of")
+    @NoArgsConstructor @ToString
     public static class Of extends CombinationsTask {
-
-        /**
-         * Sole constructor.
-         */
-        public Of() { super(); }
-
         @Override
         public void execute() throws BuildException {
             super.execute();

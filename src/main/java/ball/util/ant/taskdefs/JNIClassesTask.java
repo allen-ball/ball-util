@@ -8,6 +8,10 @@ package ball.util.ant.taskdefs;
 import java.lang.reflect.Member;
 import java.util.Set;
 import java.util.TreeSet;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import org.apache.tools.ant.BuildException;
 
 import static ball.util.ClassOrder.NAME;
@@ -24,26 +28,16 @@ import static org.apache.commons.lang3.StringUtils.EMPTY;
  * @version $Revision$
  */
 @AntTask("jni-classes")
+@NoArgsConstructor @ToString
 public class JNIClassesTask extends AbstractClassFileTask {
     private static final String COMMA = ",";
 
+    @Getter @Setter
     private String property = null;
+    @Getter @Setter
     private String separator = null;
 
-    /**
-     * Sole constructor.
-     */
-    public JNIClassesTask() {
-        super();
-
-        setSeparator(COMMA);
-    }
-
-    public String getProperty() { return property; }
-    public void setProperty(String property) { this.property = property; }
-
-    public String getSeparator() { return separator; }
-    public void setSeparator(String separator) { this.separator = separator; }
+    { setSeparator(COMMA); }
 
     @Override
     public void execute() throws BuildException {

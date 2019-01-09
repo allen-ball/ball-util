@@ -8,8 +8,11 @@ package ball.util.ant.taskdefs;
 import ball.util.Permutations;
 import java.util.Collection;
 import java.util.List;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.apache.tools.ant.BuildException;
 
+import static lombok.AccessLevel.PROTECTED;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 /**
@@ -22,12 +25,8 @@ import static org.apache.commons.lang3.StringUtils.EMPTY;
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
+@NoArgsConstructor(access = PROTECTED)
 public abstract class PermutationsTask extends InstanceOfTask {
-
-    /**
-     * Sole constructor.
-     */
-    protected PermutationsTask() { super(); }
 
     /**
      * {@link.uri http://ant.apache.org/ Ant}
@@ -36,13 +35,8 @@ public abstract class PermutationsTask extends InstanceOfTask {
      * {@bean.info}
      */
     @AntTask("permutations-count")
+    @NoArgsConstructor @ToString
     public static class Count extends PermutationsTask {
-
-        /**
-         * Sole constructor.
-         */
-        public Count() { super(); }
-
         @Override
         public void execute() throws BuildException {
             super.execute();
@@ -73,13 +67,8 @@ public abstract class PermutationsTask extends InstanceOfTask {
      * {@bean.info}
      */
     @AntTask("permutations-of")
+    @NoArgsConstructor @ToString
     public static class Of extends PermutationsTask {
-
-        /**
-         * Sole constructor.
-         */
-        public Of() { super(); }
-
         @Override
         public void execute() throws BuildException {
             super.execute();

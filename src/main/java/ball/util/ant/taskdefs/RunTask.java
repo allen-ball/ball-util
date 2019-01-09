@@ -1,10 +1,12 @@
 /*
  * $Id$
  *
- * Copyright 2010 - 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2010 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.taskdefs;
 
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.apache.tools.ant.BuildException;
 
 /**
@@ -18,13 +20,8 @@ import org.apache.tools.ant.BuildException;
  * @version $Revision$
  */
 @AntTask("run")
+@NoArgsConstructor @ToString
 public class RunTask extends InstanceOfTask {
-
-    /**
-     * Sole constructor.
-     */
-    public RunTask() { super(); }
-
     @Override
     public void execute() throws BuildException {
         super.execute();

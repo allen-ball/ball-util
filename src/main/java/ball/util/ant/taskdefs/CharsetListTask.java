@@ -7,6 +7,8 @@ package ball.util.ant.taskdefs;
 
 import java.nio.charset.Charset;
 import org.apache.tools.ant.BuildException;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 
@@ -22,13 +24,8 @@ import static org.apache.commons.lang3.StringUtils.EMPTY;
  * @version $Revision$
  */
 @AntTask("charset-list")
+@NoArgsConstructor @ToString
 public class CharsetListTask extends AbstractClasspathTask {
-
-    /**
-     * Sole constructor.
-     */
-    public CharsetListTask() { super(); }
-
     @Override
     public void execute() throws BuildException {
         super.execute();

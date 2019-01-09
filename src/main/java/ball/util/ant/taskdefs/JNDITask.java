@@ -15,8 +15,13 @@ import javax.naming.Binding;
 import javax.naming.Context;
 import javax.naming.NamingException;
 import javax.naming.spi.NamingManager;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import org.apache.tools.ant.BuildException;
 
+import static lombok.AccessLevel.PROTECTED;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 /**
@@ -28,12 +33,8 @@ import static org.apache.commons.lang3.StringUtils.EMPTY;
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
+@NoArgsConstructor(access = PROTECTED)
 public abstract class JNDITask extends AbstractClasspathTask {
-
-    /**
-     * Sole constructor.
-     */
-    protected JNDITask() { super(); }
 
     /**
      * Method to get a {@link Context} for the named scheme.
@@ -111,13 +112,8 @@ public abstract class JNDITask extends AbstractClasspathTask {
      * @see NamingManager#getInitialContext(Hashtable)
      */
     @AntTask("jndi-list")
+    @NoArgsConstructor @ToString
     public static class List extends JNDITask {
-
-        /**
-         * Sole constructor.
-         */
-        public List() { super(); }
-
         @Override
         public void execute() throws BuildException {
             super.execute();
@@ -151,24 +147,15 @@ public abstract class JNDITask extends AbstractClasspathTask {
      */
     @AntTask("jndi-lookup")
     @PatternRegex("(?is)(([^:]+):)?([^:]*)")
+    @NoArgsConstructor @ToString
     public static class Lookup extends JNDITask implements PatternMatcherBean {
+        @NotNull @Getter @Setter
         private String name = null;
+        @Getter @Setter
         private String property = null;
 
         @MatcherGroup(2) protected String scheme = null;
         @MatcherGroup(3) protected String path = null;
-
-        /**
-         * Sole constructor.
-         */
-        public Lookup() { super(); }
-
-        @NotNull
-        public String getName() { return name; }
-        public void setName(String name) { this.name = name; }
-
-        public String getProperty() { return property; }
-        public void setProperty(String property) { this.property = property; }
 
         @Override
         public void execute() throws BuildException {

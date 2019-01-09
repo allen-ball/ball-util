@@ -11,6 +11,10 @@ import java.net.URL;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashSet;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import org.apache.tools.ant.BuildException;
 
 import static org.apache.commons.lang3.StringUtils.EMPTY;
@@ -25,17 +29,10 @@ import static org.apache.commons.lang3.StringUtils.EMPTY;
  * @version $Revision$
  */
 @AntTask("resource-list")
+@NoArgsConstructor @ToString
 public class ResourceListTask extends AbstractClasspathTask {
+    @NotNull @Getter @Setter
     private String name = null;
-
-    /**
-     * Sole constructor.
-     */
-    public ResourceListTask() { super(); }
-
-    @NotNull
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
 
     @Override
     public void execute() throws BuildException {

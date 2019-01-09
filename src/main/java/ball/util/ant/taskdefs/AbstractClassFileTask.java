@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2018 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.taskdefs;
 
@@ -9,11 +9,16 @@ import ball.util.ClassOrder;
 import java.io.File;
 import java.util.Set;
 import java.util.TreeSet;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.taskdefs.optional.depend.ClassFile;
 import org.apache.tools.ant.taskdefs.optional.depend.ClassFileUtils;
 import org.apache.tools.ant.taskdefs.optional.depend.DirectoryIterator;
 import org.apache.tools.ant.types.Path;
+
+import static lombok.AccessLevel.PROTECTED;
 
 /**
  * Abstract base class for {@link.uri http://ant.apache.org/ Ant}
@@ -25,21 +30,15 @@ import org.apache.tools.ant.types.Path;
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
+@NoArgsConstructor(access = PROTECTED)
 public abstract class AbstractClassFileTask extends AbstractClasspathTask {
     private static final String _JAVA = ".java";
 
+    @Getter @Setter
     private File basedir = null;
+    @Getter
     private Path srcPath = null;
 
-    /**
-     * Sole constructor.
-     */
-    protected AbstractClassFileTask() { super(); }
-
-    public File getBasedir() { return basedir; }
-    public void setBasedir(File basedir) { this.basedir = basedir; }
-
-    public Path getSrcdir() { return srcPath; }
     public void setSrcdir(Path srcdir) {
         if (srcPath == null) {
             srcPath = srcdir;

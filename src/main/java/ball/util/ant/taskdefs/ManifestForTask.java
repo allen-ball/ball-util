@@ -10,6 +10,8 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.jar.Manifest;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.apache.tools.ant.BuildException;
 
 /**
@@ -22,13 +24,9 @@ import org.apache.tools.ant.BuildException;
  * @version $Revision$
  */
 @AntTask("manifest-for")
+@NoArgsConstructor @ToString
 public class ManifestForTask extends TypeTask {
     private static final String _CLASS = ".class";
-
-    /**
-     * Sole constructor.
-     */
-    public ManifestForTask() { super(); }
 
     @Override
     public void execute() throws BuildException {

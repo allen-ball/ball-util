@@ -1,13 +1,17 @@
 /*
  * $Id$
  *
- * Copyright 2011 - 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2011 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.taskdefs;
 
 import ball.util.UUIDFactory;
 import java.util.UUID;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.apache.tools.ant.Task;
+
+import static lombok.AccessLevel.PROTECTED;
 
 /**
  * {@link.uri http://ant.apache.org/ Ant} {@link Task} to generate new
@@ -22,13 +26,8 @@ import org.apache.tools.ant.Task;
  * @version $Revision$
  */
 @AntTask("uuid-generate")
+@NoArgsConstructor(access = PROTECTED)
 public class UUIDGenerateTask extends AbstractPropertyTask {
-
-    /**
-     * Sole constructor.
-     */
-    public UUIDGenerateTask() { super(); }
-
     protected UUID generate() { return UUIDFactory.getDefault().generate(); }
 
     @Override
@@ -43,13 +42,8 @@ public class UUIDGenerateTask extends AbstractPropertyTask {
      * {@bean.info}
      */
     @AntTask("uuid-generate-random")
+    @NoArgsConstructor @ToString
     public static class Random extends UUIDGenerateTask {
-
-        /**
-         * Sole constructor.
-         */
-        public Random() { super(); }
-
         @Override
         protected UUID generate() {
             return UUIDFactory.getDefault().generateRandom();
@@ -63,13 +57,8 @@ public class UUIDGenerateTask extends AbstractPropertyTask {
      * {@bean.info}
      */
     @AntTask("uuid-generate-time")
+    @NoArgsConstructor @ToString
     public static class Time extends UUIDGenerateTask {
-
-        /**
-         * Sole constructor.
-         */
-        public Time() { super(); }
-
         @Override
         protected UUID generate() {
             return UUIDFactory.getDefault().generateTime();

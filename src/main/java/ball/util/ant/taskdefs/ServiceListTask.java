@@ -7,6 +7,8 @@ package ball.util.ant.taskdefs;
 
 import ball.swing.table.ArrayListTableModel;
 import java.util.ServiceLoader;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.apache.tools.ant.BuildException;
 
 import static org.apache.commons.lang3.StringUtils.EMPTY;
@@ -21,13 +23,8 @@ import static org.apache.commons.lang3.StringUtils.EMPTY;
  * @version $Revision$
  */
 @AntTask("service-list")
+@NoArgsConstructor @ToString
 public class ServiceListTask extends TypeTask {
-
-    /**
-     * Sole constructor.
-     */
-    public ServiceListTask() { super(); }
-
     @Override
     public void execute() throws BuildException {
         super.execute();

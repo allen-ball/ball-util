@@ -1,11 +1,16 @@
 /*
  * $Id$
  *
- * Copyright 2011 - 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2011 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.taskdefs;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.apache.tools.ant.BuildException;
+
+import static lombok.AccessLevel.PROTECTED;
 
 /**
  * Abstract {@link.uri http://ant.apache.org/ Ant} base class for
@@ -16,16 +21,10 @@ import org.apache.tools.ant.BuildException;
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
+@NoArgsConstructor(access = PROTECTED)
 public abstract class AbstractPropertyTask extends AbstractClasspathTask {
+    @Getter @Setter
     private String property = null;
-
-    /**
-     * Sole constructor.
-     */
-    protected AbstractPropertyTask() { super(); }
-
-    public String getProperty() { return property; }
-    public void setProperty(String property) { this.property = property; }
 
     /**
      * Method to get the value to assign to the property.

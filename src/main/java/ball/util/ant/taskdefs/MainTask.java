@@ -11,6 +11,8 @@ import java.lang.reflect.Method;
 import java.security.Permission;
 import java.util.ArrayList;
 import java.util.Arrays;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.ExitException;
 import org.apache.tools.ant.util.optional.NoExitSecurityManager;
@@ -27,13 +29,9 @@ import static java.lang.reflect.Modifier.isStatic;
  * @version $Revision$
  */
 @AntTask("main")
+@NoArgsConstructor @ToString
 public class MainTask extends TypeTask {
     private final ArrayList<OptionalTextType> list = new ArrayList<>();
-
-    /**
-     * Sole constructor.
-     */
-    public MainTask() { super(); }
 
     public void addConfiguredArgument(OptionalTextType argument) {
         list.add(argument);

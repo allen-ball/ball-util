@@ -7,6 +7,10 @@ package ball.util.ant.taskdefs;
 
 import java.util.Set;
 import java.util.TreeSet;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import org.apache.tools.ant.BuildException;
 
 import static org.apache.commons.lang3.StringUtils.EMPTY;
@@ -22,27 +26,16 @@ import static org.apache.commons.lang3.StringUtils.EMPTY;
  * @version $Revision$
  */
 @AntTask("package-list")
+@NoArgsConstructor @ToString
 public class PackageListTask extends AbstractClassFileTask {
     private static final String COMMA = ",";
 
+    @Getter @Setter
     private String property = null;
+    @NotNull @Getter @Setter
     private String separator = null;
 
-    /**
-     * Sole constructor.
-     */
-    public PackageListTask() {
-        super();
-
-        setSeparator(COMMA);
-    }
-
-    public String getProperty() { return property; }
-    public void setProperty(String property) { this.property = property; }
-
-    @NotNull
-    public String getSeparator() { return separator; }
-    public void setSeparator(String separator) { this.separator = separator; }
+    { setSeparator(COMMA); }
 
     @Override
     public void execute() throws BuildException {
