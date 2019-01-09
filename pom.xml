@@ -16,6 +16,29 @@
     <version>3</version>
     <relativePath>../ball/parent/pom.xml</relativePath>
   </parent>
+  <profiles>
+    <profile>
+      <id>linux</id>
+      <activation>
+        <os><name>linux</name></os>
+      </activation>
+      <build>
+        <pluginManagement>
+          <plugins>
+            <plugin>
+              <groupId>org.fusesource.hawtjni</groupId>
+              <artifactId>hawtjni-maven-plugin</artifactId>
+              <configuration>
+                <configureArgs>
+                  <configureArg>LDFLAGS="-luuid"</configureArg>
+                </configureArgs>
+              </configuration>
+            </plugin>
+          </plugins>
+        </pluginManagement>
+      </build>
+    </profile>
+  </profiles>
   <properties>
     <jre.version>1.8</jre.version>
   </properties>

@@ -1,5 +1,7 @@
 2019-01-09  Allen D. Ball  <ball@sol.local>
 
+	* pom.xml: Added support for JNI compilation on Linux.
+
 	* src/main/java/ball/util/JNI.java:
 	Initial writing (moved native methods from UUIDFactory).
 
