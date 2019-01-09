@@ -11,8 +11,6 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.apache.tools.ant.Task;
 
-import static lombok.AccessLevel.PROTECTED;
-
 /**
  * {@link.uri http://ant.apache.org/ Ant} {@link Task} to generate new
  * unique {@link UUID}s.
@@ -26,7 +24,7 @@ import static lombok.AccessLevel.PROTECTED;
  * @version $Revision$
  */
 @AntTask("uuid-generate")
-@NoArgsConstructor(access = PROTECTED)
+@NoArgsConstructor @ToString
 public class UUIDGenerateTask extends AbstractPropertyTask {
     protected UUID generate() { return UUIDFactory.getDefault().generate(); }
 

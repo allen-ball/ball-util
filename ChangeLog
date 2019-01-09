@@ -1,3 +1,8 @@
+2019-01-09  Allen D. Ball  <ball@sol.local>
+
+	* src/main/java/ball/util/JNI.java:
+	Initial writing (moved native methods from UUIDFactory).
+
 2019-01-08  Allen D. Ball  <ball@sol.local>
 
 	* src/main/java/ball/util/ant/taskdefs/AntTaskAttributeValidator.java:
