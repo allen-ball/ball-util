@@ -45,6 +45,10 @@ import static org.apache.commons.lang3.StringUtils.EMPTY;
  *   </li>
  * </ol>
  *
+ * Note: Google offers a similar
+ * {@link.uri https://github.com/google/auto/tree/master/service target=newtab AutoService}
+ * library.
+ *
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
