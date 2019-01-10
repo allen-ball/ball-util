@@ -6,7 +6,12 @@
 package ball.util;
 
 import org.fusesource.hawtjni.runtime.JniClass;
+import org.fusesource.hawtjni.runtime.JniField;
+import org.fusesource.hawtjni.runtime.JniMethod;
 import org.fusesource.hawtjni.runtime.Library;
+
+import static org.fusesource.hawtjni.runtime.FieldFlag.CONSTANT;
+import static org.fusesource.hawtjni.runtime.MethodFlag.CONSTANT_INITIALIZER;
 
 /**
  * Platform interfaces.
@@ -16,9 +21,16 @@ import org.fusesource.hawtjni.runtime.Library;
  */
 @JniClass
 public abstract class JNI {
-    static { new Library("ball-util", JNI.class).load(); }
+    static { new Library("ball-util", JNI.class).load(); init(); }
 
     private JNI() { }
+
+    @JniMethod(flags = { CONSTANT_INITIALIZER })
+    private static final native void init();
+
+    /** See discussion in Darwin {@link.man stat(2)}. */
+    @JniField(flags = { CONSTANT })
+    public static int _DARWIN_FEATURE_64_BIT_INODE;
 
     /**
      * {@link.man uuid_generate(3)}

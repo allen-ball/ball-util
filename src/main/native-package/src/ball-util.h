@@ -8,4 +8,8 @@
 
 #include <uuid/uuid.h>
 
+#ifndef _DARWIN_FEATURE_64_BIT_INODE
+#define _DARWIN_FEATURE_64_BIT_INODE 0
+#endif
+
 #endif
