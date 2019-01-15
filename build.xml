@@ -35,12 +35,6 @@
              classname="ball.util.ant.taskdefs.BootstrapProcessorTask"/>
     <bootstrap-processor classpathref="build.classpath"
                          basedir="${target.classes.dir}"/>
-    <taskdef classpathref="build.classpath" onerror="ignore"
-             resource="ball/util/ant/defaults.properties"/>
-    <jni-classes classpathref="build.classpath"
-                 basedir="${target.classes.dir}" property="jni.classes">
-      <src path="${src.dir}/main/java"/>
-    </jni-classes>
   </target>
 
   <target name="bean-info-for"
