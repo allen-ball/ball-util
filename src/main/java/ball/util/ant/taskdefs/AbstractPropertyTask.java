@@ -8,13 +8,16 @@ package ball.util.ant.taskdefs;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.Task;
+import org.apache.tools.ant.util.ClasspathUtils;
 
 import static lombok.AccessLevel.PROTECTED;
 
 /**
  * Abstract {@link.uri http://ant.apache.org/ Ant} base class for
- * {@link org.apache.tools.ant.Task}s that may assign property values.
+ * {@link Task}s that may assign property values.
  *
  * {@bean.info}
  *
@@ -22,7 +25,13 @@ import static lombok.AccessLevel.PROTECTED;
  * @version $Revision$
  */
 @NoArgsConstructor(access = PROTECTED)
-public abstract class AbstractPropertyTask extends AbstractClasspathTask {
+public abstract class AbstractPropertyTask extends Task
+                                           implements AnnotatedAntTask,
+                                                      ClasspathDelegateAntTask,
+                                                      ConfigurableAntTask,
+                                                      AntTaskLogMethods {
+    @Getter @Setter @Accessors(chain = true, fluent = true)
+    private ClasspathUtils.Delegate delegate = null;
     @Getter @Setter
     private String property = null;
 
@@ -36,8 +45,16 @@ public abstract class AbstractPropertyTask extends AbstractClasspathTask {
     protected abstract String getPropertyValue() throws Throwable;
 
     @Override
+    public void init() throws BuildException {
+        super.init();
+        ClasspathDelegateAntTask.super.init();
+        ConfigurableAntTask.super.init();
+    }
+
+    @Override
     public void execute() throws BuildException {
         super.execute();
+        AnnotatedAntTask.super.execute();
 
         String key = getProperty();
         String value = null;
