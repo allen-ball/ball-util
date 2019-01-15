@@ -30,8 +30,7 @@ import static lombok.AccessLevel.PROTECTED;
 @NoArgsConstructor(access = PROTECTED)
 public abstract class AbstractMatchingTask extends MatchingTask
                                            implements AnnotatedAntTask,
-                                                      ClasspathDelegateAntTask,
-                                                      AntTaskLogMethods {
+                                                      ClasspathDelegateAntTask {
     @Getter @Setter @Accessors(chain = true, fluent = true)
     private ClasspathUtils.Delegate delegate = null;
     @Getter @Setter

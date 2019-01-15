@@ -27,8 +27,7 @@ import static lombok.AccessLevel.PROTECTED;
 @NoArgsConstructor(access = PROTECTED)
 public abstract class AbstractClasspathTask extends Task
                                             implements AnnotatedAntTask,
-                                                       ClasspathDelegateAntTask,
-                                                       AntTaskLogMethods {
+                                                       ClasspathDelegateAntTask {
     @Getter @Setter @Accessors(chain = true, fluent = true)
     private ClasspathUtils.Delegate delegate = null;
 

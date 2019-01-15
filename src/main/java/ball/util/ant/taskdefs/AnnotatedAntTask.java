@@ -22,7 +22,7 @@ import org.apache.tools.ant.Task;
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
-public interface AnnotatedAntTask extends AntTaskMixIn {
+public interface AnnotatedAntTask extends AntTaskLogMethods {
 
     /**
      * Method to get {@link AntTask#value()}.
