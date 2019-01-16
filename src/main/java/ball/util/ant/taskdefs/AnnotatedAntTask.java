@@ -80,7 +80,7 @@ public interface AnnotatedAntTask extends AntTaskLogMethods {
                         } catch (RuntimeException exception) {
                             throw exception;
                         } catch (Exception exception) {
-                            throw new RuntimeException(exception);
+                            throw new BuildException(exception);
                         }
                     }
                 }

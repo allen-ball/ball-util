@@ -14,7 +14,7 @@ import static org.fusesource.hawtjni.runtime.FieldFlag.CONSTANT;
 import static org.fusesource.hawtjni.runtime.MethodFlag.CONSTANT_INITIALIZER;
 
 /**
- * Platform interfaces.
+ * Platform native interfaces.
  *
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
@@ -33,18 +33,23 @@ public abstract class JNI {
     public static int _DARWIN_FEATURE_64_BIT_INODE;
 
     /**
+     * {@link.man uuid_clear(3)}
+     * @param   out             {@code uuid_t}
+     */
+    public static native void uuid_clear(long[] out);
+    /**
      * {@link.man uuid_generate(3)}
      * @param   out             {@code uuid_t}
      */
-    public static native void uuid_generate(byte[] out);
+    public static native void uuid_generate(long[] out);
     /**
      * {@link.man uuid_generate_random(3)}
      * @param   out             {@code uuid_t}
      */
-    public static native void uuid_generate_random(byte[] out);
+    public static native void uuid_generate_random(long[] out);
     /**
      * {@link.man uuid_generate_time(3)}
      * @param   out             {@code uuid_t}
      */
-    public static native void uuid_generate_time(byte[] out);
+    public static native void uuid_generate_time(long[] out);
 }

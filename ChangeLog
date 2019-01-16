@@ -1,3 +1,15 @@
+2019-01-15  Allen D. Ball  <ball@sol.local>
+
+	* src/main/java/ball/util/JNI.java:
+	Pass long[] instead of byte[] to uuid_generate* to guarantee
+	alignment.
+
+	* src/main/java/ball/util/ant/taskdefs/PropertySetterAntTask.java:
+	Re-factored from AbstractPropertyTask.
+
+	* src/main/java/ball/util/ant/taskdefs/UUIDTask.java:
+	Re-factored from UUIDGenerateTask.
+
 2019-01-09  Allen D. Ball  <ball@sol.local>
 
 	* pom.xml: Added support for JNI compilation on Linux.

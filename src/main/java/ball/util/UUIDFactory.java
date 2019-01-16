@@ -5,7 +5,7 @@
  */
 package ball.util;
 
-import java.nio.ByteBuffer;
+import java.nio.LongBuffer;
 import java.util.UUID;
 
 /**
@@ -37,51 +37,59 @@ public class UUIDFactory extends Factory<UUID> {
 
     /**
      * Method to generate a new {@link UUID} with the
-     * {@link.man uuid_generate(3)} function.
+     * {@link UUID#randomUUID()} function.
      *
      * @return  A new unique {@link UUID}.
      */
-    public UUID generate() {
-        byte[] bytes = new byte[16];
+    public UUID generate() { return UUID.randomUUID(); }
 
-        JNI.uuid_generate(bytes);
+    /**
+     * Method to generate a {@code null} {@link UUID} with the
+     * {@link.man uuid_clear(3)} function.
+     *
+     * @return  A new unique {@link UUID}.
+     */
+    public UUID generateNull() {
+        long[] out = new long[2];
 
-        return toUUID(bytes);
-    }
+        JNI.uuid_clear(out);
 
-    private UUID toUUID(byte[] bytes) {
-        ByteBuffer buffer = ByteBuffer.wrap(bytes);
-        long msb = buffer.getLong();
-        long lsb = buffer.getLong();
-
-        return new UUID(msb, lsb);
+        return toUUID(out);
     }
 
     /**
      * Method to generate a new {@link UUID} with the
-     * {@link.man uuid_generate_random(3)} function.
+     * {@link JNI#uuid_generate_random(long[])} function.
      *
      * @return  A new unique {@link UUID}.
      */
     public UUID generateRandom() {
-        byte[] bytes = new byte[16];
+        long[] out = new long[2];
 
-        JNI.uuid_generate_random(bytes);
+        JNI.uuid_generate_random(out);
 
-        return toUUID(bytes);
+        return toUUID(out);
     }
 
     /**
      * Method to generate a new {@link UUID} with the
-     * {@link.man uuid_generate_time(3)} function.
+     * {@link JNI#uuid_generate_time(long[])} function.
      *
      * @return  A new unique {@link UUID}.
      */
     public UUID generateTime() {
-        byte[] bytes = new byte[16];
+        long[] out = new long[2];
 
-        JNI.uuid_generate_time(bytes);
+        JNI.uuid_generate_time(out);
 
-        return toUUID(bytes);
+        return toUUID(out);
+    }
+
+    private UUID toUUID(long[] out) {
+        LongBuffer buffer = LongBuffer.wrap(out);
+        long msb = buffer.get();
+        long lsb = buffer.get();
+
+        return new UUID(msb, lsb);
     }
 }
