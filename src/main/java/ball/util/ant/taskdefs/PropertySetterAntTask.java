@@ -35,7 +35,9 @@ public interface PropertySetterAntTask extends AntTaskMixIn {
             Object value = getPropertyValue();
 
             if (key != null) {
-                task.getProject().setNewProperty(key, value.toString());
+                if (value != null) {
+                    task.getProject().setNewProperty(key, value.toString());
+                }
             } else {
                 task.log(String.valueOf(value));
             }

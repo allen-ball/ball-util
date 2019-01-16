@@ -82,7 +82,7 @@ public interface ClasspathDelegateAntTask extends AntTaskMixIn {
     }
 
     /**
-     * Method to get the {@link AntClassLoader} specified by this
+     * Method to get the {@link AntClassLoader} specified by {@link.this}
      * {@link org.apache.tools.ant.Task}.
      *
      * @return  The {@link AntClassLoader}.

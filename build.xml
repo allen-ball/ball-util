@@ -86,16 +86,6 @@
                         type="${type}" subtype="${subtype}"/>
   </target>
 
-  <target name="jni-classes"
-          description="--> Invokes &lt;jni-classes/&gt; task."
-          depends="jar-classes">
-    <taskdef classpathref="build.classpath" onerror="ignore"
-             resource="ball/util/ant/defaults.properties"/>
-    <jni-classes classpathref="build.classpath" basedir="${build.class.dir}">
-      <src path="${src.dir}/main/java"/>
-    </jni-classes>
-  </target>
-
   <target name="manifest-for"
           description="--> Invokes &lt;manifest-for/&gt; task."
           depends="jar-classes">
