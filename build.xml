@@ -86,14 +86,6 @@
                         type="${type}" subtype="${subtype}"/>
   </target>
 
-  <target name="manifest-for"
-          description="--> Invokes &lt;manifest-for/&gt; task."
-          depends="jar-classes">
-    <taskdef classpathref="build.classpath" onerror="ignore"
-             resource="ball/util/ant/defaults.properties"/>
-    <manifest-for classpathref="build.classpath" type="${type}"/>
-  </target>
-
   <target name="members-of"
           description="--> Invokes &lt;members-of/&gt; task."
           depends="jar-classes">
