@@ -72,6 +72,16 @@ public interface ClasspathDelegateAntTask extends AntTaskMixIn {
     default Path createClasspath() { return delegate().createClasspath(); }
 
     /**
+     * See
+     * {@link org.apache.tools.ant.util.ClasspathUtils.Delegate#setClassname(String)}.
+     *
+     * @param   name            The class name ({@link String}).
+     */
+    default void setClassname(String name) {
+        delegate().setClassname(name);
+    }
+
+    /**
      * Method to get the {@link AntClassLoader} specified by this
      * {@link org.apache.tools.ant.Task}.
      *
