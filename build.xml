@@ -45,14 +45,6 @@
     <bean-info-for classpathref="build.classpath" type="${type}"/>
   </target>
 
-  <target name="charset-list"
-          description="--> Invokes &lt;charset-list/&gt; task."
-          depends="jar-classes">
-    <taskdef classpathref="build.classpath" onerror="ignore"
-             resource="ball/util/ant/defaults.properties"/>
-    <charset-list/>
-  </target>
-
   <target name="combinations-count"
           description="--> Invokes &lt;combinations-count/&gt; task."
           depends="jar-classes">
@@ -75,14 +67,6 @@
     </combinations-of>
   </target>
 
-  <target name="inet-addresses-for"
-          description="--> Invokes &lt;inet-addresses-for/&gt; task."
-          depends="jar-classes">
-    <taskdef classpathref="build.classpath" onerror="ignore"
-             resource="ball/util/ant/defaults.properties"/>
-    <inet-addresses-for string="${string}"/>
-  </target>
-
   <target name="instance-of"
           description="--> Invokes &lt;instance-of/&gt; task."
           depends="jar-classes">
@@ -102,41 +86,6 @@
                         type="${type}" subtype="${subtype}"/>
   </target>
 
-  <target name="jaxb-marshal"
-          description="--> Invokes &lt;jaxb-marshal/&gt; task."
-          depends="jar-classes">
-    <taskdef classpathref="build.classpath" onerror="ignore"
-             resource="ball/util/ant/defaults.properties"/>
-    <jaxb-marshal classpathref="build.classpath" type="${type}">
-      <argument value="${argument}"/>
-    </jaxb-marshal>
-  </target>
-
-  <target name="jaxb-unmarshal"
-          description="--> Invokes &lt;jaxb-unmarshal/&gt; task."
-          depends="jar-classes">
-    <taskdef classpathref="build.classpath" onerror="ignore"
-             resource="ball/util/ant/defaults.properties"/>
-    <jaxb-unmarshal classpathref="build.classpath"
-                    context="${context}" file="${file}"/>
-  </target>
-
-  <target name="jndi-list"
-          description="--> Invokes &lt;jndi-list/&gt; task."
-          depends="jar-classes">
-    <taskdef classpathref="build.classpath" onerror="ignore"
-             resource="ball/util/ant/defaults.properties"/>
-    <jndi-list classpathref="build.classpath"/>
-  </target>
-
-  <target name="jndi-lookup"
-          description="--> Invokes &lt;jndi-lookup/&gt; task."
-          depends="jar-classes">
-    <taskdef classpathref="build.classpath" onerror="ignore"
-             resource="ball/util/ant/defaults.properties"/>
-    <jndi-lookup classpathref="build.classpath" name="${name}"/>
-  </target>
-
   <target name="jni-classes"
           description="--> Invokes &lt;jni-classes/&gt; task."
           depends="jar-classes">
@@ -145,14 +94,6 @@
     <jni-classes classpathref="build.classpath" basedir="${build.class.dir}">
       <src path="${src.dir}/main/java"/>
     </jni-classes>
-  </target>
-
-  <target name="locale-list"
-          description="--> Invokes &lt;locale-list/&gt; task."
-          depends="jar-classes">
-    <taskdef classpathref="build.classpath" onerror="ignore"
-             resource="ball/util/ant/defaults.properties"/>
-    <locale-list/>
   </target>
 
   <target name="manifest-for"
@@ -179,25 +120,6 @@
     <resource-path-to classpathref="build.classpath" type="${type}"/>
   </target>
 
-  <target name="network-interfaces"
-          description="--> Invokes &lt;network-interfaces/&gt; task."
-          depends="jar-classes">
-    <taskdef classpathref="build.classpath" onerror="ignore"
-             resource="ball/util/ant/defaults.properties"/>
-    <network-interfaces/>
-  </target>
-
-  <target name="package-list"
-          description="--> Invokes &lt;package-list/&gt; task."
-          depends="jar-classes">
-    <taskdef classpathref="build.classpath" onerror="ignore"
-             resource="ball/util/ant/defaults.properties"/>
-    <package-list classpathref="build.classpath"
-                  basedir="${target.classes.dir}">
-      <src path="${src.dir}/main/java"/>
-    </package-list>
-  </target>
-
   <target name="permutations-count"
           description="--> Invokes &lt;permutations-count/&gt; task."
           depends="jar-classes">
@@ -216,30 +138,6 @@
     <permutations-of classpathref="build.classpath" type="${type}">
       <argument type="${argument.type}" value="${argument.value}"/>
     </permutations-of>
-  </target>
-
-  <target name="resource-list"
-          description="--> Invokes &lt;resource-list/&gt; task."
-          depends="jar-classes">
-    <taskdef classpathref="build.classpath" onerror="ignore"
-             resource="ball/util/ant/defaults.properties"/>
-    <resource-list classpathref="build.classpath" name="${name}"/>
-  </target>
-
-  <target name="run"
-          description="--> Invokes &lt;run/&gt; task."
-          depends="jar-classes">
-    <taskdef classpathref="build.classpath" onerror="ignore"
-             resource="ball/util/ant/defaults.properties"/>
-    <run classpathref="build.classpath" type="${type}"/>
-  </target>
-
-  <target name="service-list"
-          description="--> Invokes &lt;service-list/&gt; task."
-          depends="jar-classes">
-    <taskdef classpathref="build.classpath" onerror="ignore"
-             resource="ball/util/ant/defaults.properties"/>
-    <service-list classpathref="build.classpath" type="${type}"/>
   </target>
 
   <target name="subclasses-of"

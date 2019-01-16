@@ -350,19 +350,10 @@
 
 2015-08-04  Allen D. Ball  <ball@sol.local>
 
-	* src/main/java/ball/util/ant/taskdefs/InstanceOfTask.java,
-	src/main/java/ball/util/ant/taskdefs/MainTask.java:
+	* src/main/java/ball/util/ant/taskdefs/InstanceOfTask.java:
 	Allow <argument/> value to be set in element text.
 
-2015-08-03  Allen D. Ball  <ball@sol.local>
-
-	* src/main/java/ball/util/ant/taskdefs/MainTask.java:
-	Extend NoExitSecurityManager to override
-	checkPermission(Permission,Object) to not enforce any checks.
-
 2015-08-02  Allen D. Ball  <ball@sol.local>
-
-	* Added <main/> Ant Task.
 
 	* src/main/java/ball/util/ant/taskdefs/InstanceOfTask.java:
 	Re-factored as a subclass of TypeTask.
@@ -1063,21 +1054,9 @@
 	* src/main/java/iprotium/util/Shell.java:
 	Initial (trivial) implementation.
 
-2011-02-12  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* Added <network-interfaces/> build target and Ant Task.
-
-2011-02-10  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* Added <inet-addresses-for/> build target and Ant Task.
-
 2010-12-23  Allen D. Ball  <ball@mercury.local>
 
 	* src/main/java/iprotium/util/Parser.java: Initial writing.
-
-2010-12-21  Allen D. Ball  <ball@mercury.local>
-
-	* Added <run/> build target and Ant Task.
 
 2010-12-07  Allen D. Ball  <ball@10-0-1-2.lan>
 
@@ -1248,8 +1227,6 @@
 
 2009-11-26  Allen D. Ball  <ball@10-0-1-2.lan>
 
-	* Added <service-list/> build target and Ant Task.
-
 	* src/main/java/iprotium/text/ArrayListTableModel.java:
 	Changed constructors to Iterable parameters (instead of
 	Collection).
@@ -1270,13 +1247,6 @@
 	* src/main/java/iprotium/util/ant/taskdefs/BeanInfoForTask.java:
 	Changed mode to indicate if the property is an indexed property.
 
-2009-09-22  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* Added <package-list/> build target and Ant Task.
-
-	* src/main/java/iprotium/util/ant/taskdefs/PackageListTask.java:
-	Initial writing.
-
 2009-09-20  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* src/main/java/iprotium/util/ant/taskdefs/JNIClassesTask.java:
@@ -1291,20 +1261,12 @@
 
 	* Improved javadoc comments.
 
-	* Added <charset-list/> and <locale-list/> Ant Tasks and build
-	targets.
-
-	* Renamed <list-resources/> Ant Task and build target to
-	<resource-list/>.
-
 2009-08-23  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* src/main/java/iprotium/util/ISO8601DateFormat.java:
 	Initial writing.
 
 2009-08-14  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* Added <jndi-lookup/> build target and Ant Task.
 
 	* src/main/java/iprotium/util/ant/taskdefs/AbstractClassFileTask.java,
 	src/main/java/iprotium/util/ant/taskdefs/AbstractClasspathTask.java:
@@ -1321,13 +1283,6 @@
 
 	* src/main/java/iprotium/util/ant/taskdefs/ListResourcesTask.java:
 	Use a Table to format output.
-
-2009-06-17  Allen D. Ball  <ball@10-0-1-4.lan>
-
-	* Added <jndi-list/> build target and Ant Task.
-
-	* src/main/java/iprotium/util/ant/taskdefs/JNDIListTask.java:
-	Initial writing.
 
 2009-05-26  Allen D. Ball  <ball@10-0-1-4.lan>
 
@@ -1435,10 +1390,6 @@
 
 	* src/main/java/iprotium/util/TimeUnitEnum.java: Initial writing.
 
-2008-11-03  Allen D. Ball  <ball@10-0-1-4.lan>
-
-	* Added <list-resources/> build target and Ant Task.
-
 2008-10-30  Allen D. Ball  <ball@10-0-1-4.lan>
 
 	* src/main/java/iprotium/util/ant/taskdefs/AbstractClassFileTask.java,
@@ -1479,9 +1430,6 @@
 	Initial writing.
 
 2013-07-14  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* Added <jaxb-marshal/> and <jaxb-unmarshal/> build targets and
-	Ant Tasks.
 
 	* src/main/java/iprotium/xml/bind/JAXBDataSource.java:
 	Initial writing.
