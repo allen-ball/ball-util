@@ -58,7 +58,7 @@ public class InstanceOfTask extends TypeTask {
         super.execute();
 
         try {
-            Class<?> type = Class.forName(getType(), false, getClassLoader());
+            Class<?> type = getClassForName(getType());
 
             log(type.getName());
 
@@ -67,9 +67,7 @@ public class InstanceOfTask extends TypeTask {
 
             for (TypedAttributeType argument : list) {
                 Factory<?> factory =
-                    new Factory<>(Class.forName(argument.getType(),
-                                                false,
-                                                type.getClassLoader()));
+                    new Factory<>(getClassForName(argument.getType()));
 
                 parameters.add(factory.getType());
 

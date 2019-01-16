@@ -70,11 +70,10 @@ public abstract class AbstractClassFileTask extends AbstractClasspathTask {
         try {
             DirectoryIterator iterator =
                 new DirectoryIterator(getBasedir(), true);
-            ClassLoader loader = getClassLoader();
             ClassFile file = null;
 
             while ((file = iterator.getNextClassFile()) != null) {
-                set.add(Class.forName(file.getFullClassName(), false, loader));
+                set.add(getClassForName(file.getFullClassName()));
             }
         } catch (BuildException exception) {
             throw exception;

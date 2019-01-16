@@ -42,8 +42,16 @@ import static org.apache.commons.lang3.StringUtils.EMPTY;
  */
 @NoArgsConstructor(access = PROTECTED)
 public abstract class TypeTask extends AbstractClasspathTask {
-    @NotNull @Getter @Setter
+    @NotNull @Getter
     private String type = null;
+
+    public void setType(String string) {
+        type = string;
+        super.setClassname(type);
+    }
+
+    @Override
+    public void setClassname(String string) { setType(string); }
 
     /**
      * {@link.uri http://ant.apache.org/ Ant}
@@ -60,9 +68,7 @@ public abstract class TypeTask extends AbstractClasspathTask {
             super.execute();
 
             try {
-                log(Introspector.getBeanInfo(Class.forName(getType(),
-                                                           false,
-                                                           getClassLoader())));
+                log(Introspector.getBeanInfo(getClassForName(getType())));
             } catch (BuildException exception) {
                 throw exception;
             } catch (Throwable throwable) {
@@ -171,11 +177,8 @@ public abstract class TypeTask extends AbstractClasspathTask {
             super.execute();
 
             try {
-                Class<?> supertype =
-                    Class.forName(getType(), false, getClassLoader());
-                Class<?> subtype =
-                    Class.forName(getSubtype(),
-                                  false, supertype.getClassLoader());
+                Class<?> supertype = getClassForName(getType());
+                Class<?> subtype = getClassForName(getSubtype());
 
                 log(supertype.getName() + " is "
                     + (supertype.isAssignableFrom(subtype) ? "" : "not ")
@@ -204,8 +207,7 @@ public abstract class TypeTask extends AbstractClasspathTask {
             super.execute();
 
             try {
-                Class<?> type =
-                    Class.forName(getType(), false, getClassLoader());
+                Class<?> type = getClassForName(getType());
 
                 log(String.valueOf(type));
 
@@ -249,8 +251,7 @@ public abstract class TypeTask extends AbstractClasspathTask {
             super.execute();
 
             try {
-                Class<?> type =
-                    Class.forName(getType(), false, getClassLoader());
+                Class<?> type = getClassForName(getType());
 
                 log(String.valueOf(type));
 
@@ -283,8 +284,7 @@ public abstract class TypeTask extends AbstractClasspathTask {
             super.execute();
 
             try {
-                Class<?> type =
-                    Class.forName(getType(), false, getClassLoader());
+                Class<?> type = getClassForName(getType());
 
                 for (Class<?> superclass :
                          INHERITANCE.asList(new SuperclassSet(type))) {

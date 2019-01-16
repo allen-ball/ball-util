@@ -33,7 +33,7 @@ public class ManifestForTask extends TypeTask {
         super.execute();
 
         try {
-            Class<?> type = Class.forName(getType(), false, getClassLoader());
+            Class<?> type = getClassForName(getType());
 
             log(type.getCanonicalName());
 

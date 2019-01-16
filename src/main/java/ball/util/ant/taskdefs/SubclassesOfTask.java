@@ -46,8 +46,7 @@ public class SubclassesOfTask extends AbstractClassFileTask {
         super.execute();
 
         try {
-            Class<?> supertype =
-                Class.forName(getType(), false, getClassLoader());
+            Class<?> supertype = getClassForName(getType());
             TreeSet<Class<?>> set = new TreeSet<>(ClassOrder.NAME);
 
             for (Class<?> type : getClassSet()) {
