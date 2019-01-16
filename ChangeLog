@@ -77,8 +77,7 @@
 	parameter type.
 
 	* src/main/java/ball/util/ant/taskdefs/ClasspathDelegateAntTask.java:
-	Initial writing; refactored AbstractClasspathTask and
-	AbstractMatchingTask.
+	Initial writing; refactored AbstractClasspathTask.
 
 2018-12-30  Allen D. Ball  <ball@sol.local>
 
@@ -95,8 +94,8 @@
 	Initial writing; collected common log() methods.
 
 	* src/main/java/ball/util/ant/taskdefs/ConfigurableAntTask.java:
-	Initial writing; Supported in AbstractClasspathTask and
-	AbstractMatchingTask init() methods.
+	Initial writing; Supported in AbstractClasspathTask init()
+	methods.
 
 2018-12-28  Allen D. Ball  <ball@sol.local>
 
@@ -239,9 +238,6 @@
 2016-11-22  Allen D. Ball  <ball@sol.local>
 
 	* src/main/java/ball/util/MapView.java: Initial writing.
-
-	* src/main/java/ball/util/ant/taskdefs/AbstractMatchingTask.java:
-	Added AbstractClasspathTask functionality.
 
 2016-11-21  Allen D. Ball  <ball@sol.local>
 
@@ -469,8 +465,7 @@
 	* Moved TableModel implementations to ball.swing.table and removed
 	text-specific logic.
 
-	* src/main/java/ball/util/ant/taskdefs/AbstractClasspathTask.java,
-	src/main/java/ball/util/ant/taskdefs/AbstractMatchingTask.java:
+	* src/main/java/ball/util/ant/taskdefs/AbstractClasspathTask.java:
 	Added log(TableModel) and log(TableModel,int) methods.
 
 	* src/main/java/ball/swing/table/AbstractTableModelImpl.java:
@@ -539,8 +534,7 @@
 
 2014-07-23  Allen D. Ball  <ball@sol.local>
 
-	* src/main/java/ball/util/ant/taskdefs/AbstractClasspathTask.java,
-	src/main/java/ball/util/ant/taskdefs/AbstractMatchingTask.java:
+	* src/main/java/ball/util/ant/taskdefs/AbstractClasspathTask.java:
 	Implemented the getAntTaskName() method.
 
 2014-07-21  Allen D. Ball  <ball@sol.local>
@@ -1452,10 +1446,6 @@
 	Added `initialize' Task attribute.
 	Set the parent of the ClassLoader to the Task's ClassLoader.
 
-	* src/main/java/iprotium/util/ant/taskdefs/AbstractMatchingTask.java:
-	Added concrete execute() implementation to set the Task basedir
-	attribute (if not explicitly set).
-
 2008-10-28  Allen D. Ball  <ball@10-0-1-4.lan>
 
 	* Added <is-assignable-from/> target and Ant Task.
@@ -1485,8 +1475,7 @@
 	Initial writing.
 
 	* src/main/java/iprotium/util/ant/taskdefs/AbstractClassFileTask.java,
-	src/main/java/iprotium/util/ant/taskdefs/AbstractClasspathTask.java,
-	src/main/java/iprotium/util/ant/taskdefs/AbstractMatchingTask.java:
+	src/main/java/iprotium/util/ant/taskdefs/AbstractClasspathTask.java:
 	Initial writing.
 
 2013-07-14  Allen D. Ball  <ball@10-0-1-2.lan>
