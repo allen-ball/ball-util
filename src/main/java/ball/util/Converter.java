@@ -27,19 +27,21 @@ public class Converter extends TreeMap<Class<?>,Factory<?>> {
         PrimitiveTypeMap.INSTANCE.values()
             .stream()
             .forEach(t -> put(t, new Factory<>(t)));
+        PrimitiveTypeMap.INSTANCE.keySet()
+            .stream()
+            .forEach(t -> put(t, get(PrimitiveTypeMap.INSTANCE.get(t))));
     }
 
     /**
      * Static method to convert the argument to the specified type
      * ({@link Class}).
      *
-     * @param   <T>             The target type.
      * @param   from            The source value.
      * @param   type            The target type ({@link Class}).
      *
      * @return  The converted value.
      */
-    public static <T> T convertTo(Object from, Class<T> type) {
+    public static Object convertTo(Object from, Class<?> type) {
         Object to = null;
 
         try {
@@ -62,6 +64,6 @@ public class Converter extends TreeMap<Class<?>,Factory<?>> {
             throw new IllegalArgumentException(exception);
         }
 
-        return type.cast(to);
+        return to;
     }
 }
