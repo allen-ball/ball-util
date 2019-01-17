@@ -13,18 +13,21 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.Accessors;
 import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.Task;
 import org.apache.tools.ant.taskdefs.optional.depend.ClassFile;
 import org.apache.tools.ant.taskdefs.optional.depend.ClassFileUtils;
 import org.apache.tools.ant.taskdefs.optional.depend.DirectoryIterator;
 import org.apache.tools.ant.types.Path;
+import org.apache.tools.ant.util.ClasspathUtils;
 
 import static java.lang.reflect.Modifier.isAbstract;
 
 /**
- * {@link.uri http://ant.apache.org/ Ant} {@link org.apache.tools.ant.Task}
- * to bootstrap {@link javax.annotation.processing.Processor}s.  Creates and
- * invokes {@link Processor}s found on the class path.
+ * {@link.uri http://ant.apache.org/ Ant} {@link Task} to bootstrap
+ * {@link javax.annotation.processing.Processor}s.  Creates and invokes
+ * {@link Processor}s found on the class path.
  *
  * {@bean.info}
  *
@@ -32,9 +35,13 @@ import static java.lang.reflect.Modifier.isAbstract;
  * @version $Revision$
  */
 @NoArgsConstructor @ToString
-public class BootstrapProcessorTask extends AbstractClasspathTask {
+public class BootstrapProcessorTask extends Task
+                                    implements AnnotatedAntTask,
+                                               ClasspathDelegateAntTask {
     private static final String _JAVA = ".java";
 
+    @Getter @Setter @Accessors(chain = true, fluent = true)
+    private ClasspathUtils.Delegate delegate = null;
     @Getter @Setter
     private File basedir = null;
     @Getter
@@ -59,8 +66,15 @@ public class BootstrapProcessorTask extends AbstractClasspathTask {
     }
 
     @Override
+    public void init() throws BuildException {
+        super.init();
+        ClasspathDelegateAntTask.super.init();
+    }
+
+    @Override
     public void execute() throws BuildException {
         super.execute();
+        AnnotatedAntTask.super.execute();
 
         if (getBasedir() == null) {
             setBasedir(getProject().resolveFile("."));

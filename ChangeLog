@@ -77,7 +77,7 @@
 	parameter type.
 
 	* src/main/java/ball/util/ant/taskdefs/ClasspathDelegateAntTask.java:
-	Initial writing; refactored AbstractClasspathTask.
+	Initial writing.
 
 2018-12-30  Allen D. Ball  <ball@sol.local>
 
@@ -94,8 +94,7 @@
 	Initial writing; collected common log() methods.
 
 	* src/main/java/ball/util/ant/taskdefs/ConfigurableAntTask.java:
-	Initial writing; Supported in AbstractClasspathTask init()
-	methods.
+	Initial writing.
 
 2018-12-28  Allen D. Ball  <ball@sol.local>
 
@@ -249,11 +248,6 @@
 
 	* src/main/java/ball/util/BeanPropertyMethodEnum.java:
 	Support single-character property names.
-
-2016-10-29  Allen D. Ball  <ball@sol.local>
-
-	* src/main/java/ball/util/ant/taskdefs/AbstractClasspathTask.java:
-	Added getClassForName(String) method.
 
 2016-10-22  Allen D. Ball  <ball@sol.local>
 
@@ -454,9 +448,6 @@
 	* Moved TableModel implementations to ball.swing.table and removed
 	text-specific logic.
 
-	* src/main/java/ball/util/ant/taskdefs/AbstractClasspathTask.java:
-	Added log(TableModel) and log(TableModel,int) methods.
-
 	* src/main/java/ball/swing/table/AbstractTableModelImpl.java:
 	Initial writing.
 
@@ -520,11 +511,6 @@
 
 	* src/main/java/ball/swing/ClosedFutureJFrame.java:
 	Initial writing.
-
-2014-07-23  Allen D. Ball  <ball@sol.local>
-
-	* src/main/java/ball/util/ant/taskdefs/AbstractClasspathTask.java:
-	Implemented the getAntTaskName() method.
 
 2014-07-21  Allen D. Ball  <ball@sol.local>
 
@@ -948,12 +934,6 @@
 
 	* Silence JDK 1.7 compilation warnings.
 
-2012-11-24  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/util/ant/taskdefs/AbstractClasspathTask.java:
-	Removed support for `initialize' attribute and getClass(String)
-	and getClass(String,boolean,ClassLoader) methods.
-
 2012-11-23  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* Use link.man and link.rfc javadoc annotations.
@@ -1260,14 +1240,6 @@
 	* src/main/java/iprotium/util/ISO8601DateFormat.java:
 	Initial writing.
 
-2009-08-14  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/util/ant/taskdefs/AbstractClasspathTask.java:
-	Removed execute() method implementation.
-	Changed getClassLoader() to set the parent ClassLoader
-	of the returned ClassLoader to
-	Thread.currentThread().getContextClassLoader().
-
 2009-06-20  Allen D. Ball  <ball@10-0-1-4.lan>
 
 	* src/main/java/iprotium/util/Order.java:
@@ -1339,12 +1311,6 @@
 
 	* src/main/java/iprotium/util/BeanMap.java: Initial writing.
 
-	* src/main/java/iprotium/util/ant/taskdefs/AbstractClasspathTask.java:
-	Added log(Object...) method.
-
-	* src/main/java/iprotium/util/ant/taskdefs/BeanInfoForTask.java:
-	Moved log(Object...) method to AbstractClasspathTask.
-
 	* src/main/java/iprotium/util/ant/taskdefs/InstanceOfTask.java:
 	Display instance bean property names and values.
 
@@ -1357,9 +1323,6 @@
 2008-11-19  Allen D. Ball  <ball@10-0-1-4.lan>
 
 	* Added <bean-info-for/> build target and Ant Task.
-
-	* src/main/java/iprotium/util/ant/taskdefs/AbstractClasspathTask.java:
-	Added static getName(Class<?>) method.
 
 	* src/main/java/iprotium/util/ant/taskdefs/JNIClassesTask.java:
 	Do not call log() if the `property' attribute is set.
@@ -1374,19 +1337,9 @@
 
 	* src/main/java/iprotium/util/TimeUnitEnum.java: Initial writing.
 
-2008-10-30  Allen D. Ball  <ball@10-0-1-4.lan>
-
-	* src/main/java/iprotium/util/ant/taskdefs/AbstractClasspathTask.java:
-	Added `initialize' Task attribute.
-	Set the parent of the ClassLoader to the Task's ClassLoader.
-
 2008-10-28  Allen D. Ball  <ball@10-0-1-4.lan>
 
 	* Added <is-assignable-from/> target and Ant Task.
-
-	* src/main/java/iprotium/util/ant/taskdefs/AbstractClasspathTask.java:
-	Made ClasspathUtils.Delegate member private.
-	Added protected getClass(String) method.
 
 2008-10-27  Allen D. Ball  <ball@10-0-1-4.lan>
 
@@ -1405,9 +1358,6 @@
 	* src/main/java/iprotium/util/Order.java,
 	src/main/java/iprotium/util/ArrayOrder.java,
 	src/main/java/iprotium/util/ClassOrder.java:
-	Initial writing.
-
-	* src/main/java/iprotium/util/ant/taskdefs/AbstractClasspathTask.java:
 	Initial writing.
 
 2013-07-14  Allen D. Ball  <ball@10-0-1-2.lan>

@@ -23,7 +23,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.Accessors;
 import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.Task;
+import org.apache.tools.ant.util.ClasspathUtils;
 
 import static ball.lang.Punctuation.GT;
 import static ball.lang.Punctuation.LT;
@@ -32,8 +35,8 @@ import static lombok.AccessLevel.PROTECTED;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 /**
- * Abstract {@link.uri http://ant.apache.org/ Ant}
- * {@link org.apache.tools.ant.Task} to specify a type ({@link Class}).
+ * Abstract {@link.uri http://ant.apache.org/ Ant} {@link Task} to specify a
+ * type ({@link Class}).
  *
  * {@bean.info}
  *
@@ -41,17 +44,33 @@ import static org.apache.commons.lang3.StringUtils.EMPTY;
  * @version $Revision$
  */
 @NoArgsConstructor(access = PROTECTED)
-public abstract class TypeTask extends AbstractClasspathTask {
+public abstract class TypeTask extends Task
+                               implements AnnotatedAntTask,
+                                          ClasspathDelegateAntTask {
+    @Getter @Setter @Accessors(chain = true, fluent = true)
+    private ClasspathUtils.Delegate delegate = null;
     @NotNull @Getter
     private String type = null;
 
     public void setType(String string) {
         type = string;
-        super.setClassname(type);
+        ClasspathDelegateAntTask.super.setClassname(type);
     }
 
     @Override
     public void setClassname(String string) { setType(string); }
+
+    @Override
+    public void init() throws BuildException {
+        super.init();
+        ClasspathDelegateAntTask.super.init();
+    }
+
+    @Override
+    public void execute() throws BuildException {
+        super.execute();
+        AnnotatedAntTask.super.execute();
+    }
 
     /**
      * {@link.uri http://ant.apache.org/ Ant}
