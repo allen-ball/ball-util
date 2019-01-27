@@ -26,6 +26,7 @@ import java.util.Map;
 import org.w3c.dom.Element;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 /**
  * Inline {@link Taglet} to provide a table of bean properties.
@@ -122,7 +123,8 @@ public class BeanInfoTaglet extends AbstractInlineTaglet
 
         Object[] headers = new String[] {
             "Property", "Mode", "Type",
-            "isIndexed", "isHidden", "isBound", "isConstrained"
+            "isIndexed", "isHidden", "isBound", "isConstrained",
+            "Description"
         };
 
         headers = HTML.b(table.getOwnerDocument(), headers);
@@ -139,11 +141,19 @@ public class BeanInfoTaglet extends AbstractInlineTaglet
                     ((IndexedPropertyDescriptor) row).getIndexedPropertyType();
             }
 
+            String description = "";
+
+            if (isNotEmpty(row.getShortDescription())
+                && (! row.getShortDescription().equals(row.getDisplayName()))) {
+                description = row.getShortDescription();
+            }
+
             HTML.tr(table,
                     row.getName(), BeanInfoUtil.getMode(row),
                     getClassDocLink(doc, type),
                     isIndexed,
-                    row.isHidden(), row.isBound(), row.isConstrained());
+                    row.isHidden(), row.isBound(), row.isConstrained(),
+                    description);
         }
 
         list.add(table);
