@@ -309,12 +309,12 @@ public class CoordinateMap<V> extends MapView<Coordinate,V>
 
     @Override
     public int getRowCount() {
-        return (getMax() != null) ? (getMaxX() - getMinX()) : 0;
+        return (getMax() != null) ? (getMaxY() - getMinY()) : 0;
     }
 
     @Override
     public int getColumnCount() {
-        return (getMax() != null) ? (getMaxY() - getMinY()) : 0;
+        return (getMax() != null) ? (getMaxX() - getMinX()) : 0;
     }
 
     @Override
