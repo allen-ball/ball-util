@@ -67,6 +67,14 @@
     </combinations-of>
   </target>
 
+  <target name="download"
+          description="--> Invokes &lt;download/&gt; task."
+          depends="jar-classes">
+    <taskdef classpathref="build.classpath" onerror="ignore"
+             resource="ball/util/ant/defaults.properties"/>
+    <download classpathref="build.classpath"/>
+  </target>
+
   <target name="instance-of"
           description="--> Invokes &lt;instance-of/&gt; task."
           depends="jar-classes">

@@ -1,3 +1,9 @@
+2019-01-30  Allen D. Ball  <ball@sol.local>
+
+	* Added <download/> Ant Task and target.
+
+	* src/main/java/ball/net/ResponseCacheImpl.java: Initial writing.
+
 2019-01-27  Allen D. Ball  <ball@sol.local>
 
 	* src/main/java/ball/tools/javadoc/BeanInfoTaglet.java:
