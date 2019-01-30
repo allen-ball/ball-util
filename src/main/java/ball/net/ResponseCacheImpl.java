@@ -77,7 +77,7 @@ public class ResponseCacheImpl extends ResponseCache {
     public CacheRequest put(URI uri, URLConnection connection) {
         CacheRequestImpl request = null;
 
-        if (isCachable(uri)) {
+        if (isCacheable(uri)) {
             if (! connection.getAllowUserInteraction()) {
                 request =
                     new CacheRequestImpl(cache(uri),
@@ -113,10 +113,10 @@ public class ResponseCacheImpl extends ResponseCache {
     }
 
     private boolean isCached(URI uri) {
-        return isCachable(uri) && Files.exists(cache(uri).resolve(BODY));
+        return isCacheable(uri) && Files.exists(cache(uri).resolve(BODY));
     }
 
-    private boolean isCachable(URI uri) {
+    private boolean isCacheable(URI uri) {
         return (uri.isAbsolute()
                 && (! uri.isOpaque())
                 && uri.getUserInfo() == null
