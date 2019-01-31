@@ -1,13 +1,14 @@
 /*
  * $Id$
  *
- * Copyright 2011 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2011 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.io;
 
 import java.io.IOException;
 import java.io.LineNumberReader;
 import java.io.Reader;
+import java.util.Objects;
 
 /**
  * {@link CharSequence} {@link Reader} implementation.
@@ -35,12 +36,8 @@ public class CharSequenceReader extends LineNumberReader {
         public ReaderImpl(CharSequence sequence) {
             super();
 
-            if (sequence != null) {
-                this.sequence = sequence;
-                this.length = sequence.length();
-            } else {
-                throw new NullPointerException("sequence");
-            }
+            this.sequence = Objects.requireNonNull(sequence);
+            this.length = sequence.length();
         }
 
         @Override

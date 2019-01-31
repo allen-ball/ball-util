@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2011 - 2018 Allen D. Ball.  All rights reserved.
+ * Copyright 2011 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.taskdefs.compilers;
 
@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import javax.tools.Diagnostic;
 import javax.tools.JavaCompiler;
 import javax.tools.JavaFileObject;
@@ -68,11 +69,9 @@ public class SystemJavaCompilerAdapter implements CompilerAdapter,
         boolean success = false;
         DiagnosticMap map = new DiagnosticMap();
 
-        compiler = ToolProvider.getSystemJavaCompiler();
-
-        if (compiler == null) {
-            throw new NullPointerException("No system Java compiler");
-        }
+        compiler =
+            Objects.requireNonNull(ToolProvider.getSystemJavaCompiler(),
+                                   "No system Java compiler");
 
         Locale locale = null;
         Charset charset = null;

@@ -9,6 +9,7 @@ import java.beans.ConstructorProperties;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashSet;
+import java.util.Objects;
 
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 
@@ -52,11 +53,7 @@ public class PackageSearchPath<T> extends LinkedHashSet<Package> {
                              Collection<Package> collection) {
         super();
 
-        if (superclass != null) {
-            this.superclass = superclass;
-        } else {
-            throw new NullPointerException("superclass");
-        }
+        this.superclass = Objects.requireNonNull(superclass);
 
         addAll(collection);
     }

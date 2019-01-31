@@ -1,11 +1,12 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2018 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.util;
 
 import java.util.Comparator;
+import java.util.Objects;
 
 /**
  * {@link Order} implementation to order arrays.
@@ -32,11 +33,7 @@ public class ArrayOrder<T> extends Order<T[]> {
     public ArrayOrder(Comparator<? super T> comparator) {
         super();
 
-        if (comparator != null) {
-            this.comparator = comparator;
-        } else {
-            throw new NullPointerException("comparator");
-        }
+        this.comparator = Objects.requireNonNull(comparator);
     }
 
     @Override

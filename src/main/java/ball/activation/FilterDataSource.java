@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2010 - 2018 Allen D. Ball.  All rights reserved.
+ * Copyright 2010 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.activation;
 
@@ -9,6 +9,7 @@ import java.beans.ConstructorProperties;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Objects;
 import javax.activation.DataSource;
 
 /**
@@ -28,11 +29,7 @@ public abstract class FilterDataSource extends AbstractDataSource {
     protected FilterDataSource(DataSource ds) {
         super();
 
-        if (ds != null) {
-            this.ds = ds;
-        } else {
-            throw new NullPointerException("ds");
-        }
+        this.ds = Objects.requireNonNull(ds);
     }
 
     /**

@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2014 - 2018 Allen D. Ball.  All rights reserved.
+ * Copyright 2014 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.io;
 
@@ -15,6 +15,7 @@ import java.io.PushbackInputStream;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Objects;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
@@ -84,11 +85,7 @@ public class UnicodeReader extends LineNumberReader {
                     }
                 }
 
-                if (charset != null) {
-                    this.charset = charset;
-                } else {
-                    throw new NullPointerException("charset");
-                }
+                this.charset = Objects.requireNonNull(charset);
             } catch (Exception exception) {
                 throw new ExceptionInInitializerError(exception);
             }
