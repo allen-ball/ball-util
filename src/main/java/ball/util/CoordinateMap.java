@@ -8,9 +8,11 @@ package ball.util;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedMap;
 import java.util.TreeMap;
 import javax.swing.event.EventListenerList;
 import javax.swing.event.TableModelEvent;
@@ -26,8 +28,8 @@ import javax.swing.table.TableModel;
  * @version $Revision$
  */
 public class CoordinateMap<V> extends MapView<Coordinate,V>
-                              implements TableModel {
-    private static final long serialVersionUID = 3624494946392432945L;
+                              implements SortedMap<Coordinate,V>, TableModel {
+    private static final long serialVersionUID = -3402174026222674597L;
 
     /** @serial */ private final Class<? extends V> type;
     /** @serial */ private Coordinate min = null;
@@ -84,6 +86,11 @@ public class CoordinateMap<V> extends MapView<Coordinate,V>
         this.type = type;
 
         resize(y0, x0, yN, xN);
+    }
+
+    @Override
+    protected SortedMap<Coordinate,V> map() {
+        return (SortedMap<Coordinate,V>) super.map();
     }
 
     /**
@@ -302,6 +309,32 @@ public class CoordinateMap<V> extends MapView<Coordinate,V>
     }
 
     @Override
+    public Comparator<? super Coordinate> comparator() {
+        return map().comparator();
+    }
+
+    @Override
+    public CoordinateMap<V> subMap(Coordinate from, Coordinate to) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public CoordinateMap<V> headMap(Coordinate key) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public CoordinateMap<V> tailMap(Coordinate key) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Coordinate firstKey() { return map().firstKey(); }
+
+    @Override
+    public Coordinate lastKey() { return map().lastKey(); }
+
+    @Override
     public void clear() {
         super.clear();
         fireTableDataChanged();
@@ -390,7 +423,7 @@ public class CoordinateMap<V> extends MapView<Coordinate,V>
     }
 
     private static class Sub<V> extends CoordinateMap<V> {
-        private static final long serialVersionUID = -8955440257770431164L;
+        private static final long serialVersionUID = -7614329296625073237L;
 
         public Sub(CoordinateMap<V> map,
                    Number y0, Number x0, Number yN, Number xN) {
