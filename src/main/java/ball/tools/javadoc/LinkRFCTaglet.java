@@ -13,6 +13,8 @@ import com.sun.tools.doclets.internal.toolkit.Content;
 import com.sun.tools.doclets.internal.toolkit.taglets.TagletWriter;
 import java.net.URI;
 import java.util.Map;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.w3c.dom.Element;
 
 import static java.lang.String.format;
@@ -25,6 +27,7 @@ import static java.lang.String.format;
  */
 @ServiceProviderFor({ Taglet.class })
 @TagletName("link.rfc")
+@NoArgsConstructor @ToString
 public class LinkRFCTaglet extends AbstractInlineTaglet
                            implements SunToolsInternalToolkitTaglet {
     private static final LinkRFCTaglet INSTANCE = new LinkRFCTaglet();
@@ -37,11 +40,6 @@ public class LinkRFCTaglet extends AbstractInlineTaglet
     private static final String PROTOCOL = "https";
     private static final String HOST = "www.rfc-editor.org";
     private static final String PATH = "/rfc/rfc%d.txt";
-
-    /**
-     * Sole constructor.
-     */
-    public LinkRFCTaglet() { super(); }
 
     @Override
     public Content getTagletOutput(Tag tag,

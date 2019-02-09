@@ -15,6 +15,8 @@ import com.sun.tools.doclets.Taglet;
 import com.sun.tools.doclets.internal.toolkit.Content;
 import com.sun.tools.doclets.internal.toolkit.taglets.TagletWriter;
 import java.util.Map;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.w3c.dom.Element;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
@@ -27,6 +29,7 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
  */
 @ServiceProviderFor({ Taglet.class })
 @TagletName("link.this")
+@NoArgsConstructor @ToString
 public class LinkThisTaglet extends AbstractInlineTaglet
                             implements SunToolsInternalToolkitTaglet {
     private static final LinkThisTaglet INSTANCE = new LinkThisTaglet();
@@ -34,11 +37,6 @@ public class LinkThisTaglet extends AbstractInlineTaglet
     public static void register(Map<String,Taglet> map) {
         map.putIfAbsent(INSTANCE.getName(), INSTANCE);
     }
-
-    /**
-     * Sole constructor.
-     */
-    public LinkThisTaglet() { super(); }
 
     @Override
     public Content getTagletOutput(Tag tag,

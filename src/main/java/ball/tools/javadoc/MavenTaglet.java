@@ -22,6 +22,8 @@ import java.io.Writer;
 import java.util.Map;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.apache.maven.project.MavenProject;
@@ -30,6 +32,7 @@ import org.w3c.dom.Element;
 import static ball.tools.maven.POMProperties.ARTIFACT_ID;
 import static ball.tools.maven.POMProperties.GROUP_ID;
 import static ball.tools.maven.POMProperties.VERSION;
+import static lombok.AccessLevel.PROTECTED;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 /**
@@ -39,15 +42,11 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
+@NoArgsConstructor(access = PROTECTED)
 public abstract class MavenTaglet extends AbstractInlineTaglet
                                   implements SunToolsInternalToolkitTaglet {
     private static final String POM_XML = "pom.xml";
     private static final String DEPENDENCY = "dependency";
-
-    /**
-     * Sole constructor.
-     */
-    protected MavenTaglet() { super(); }
 
     /**
      * Method to locate the POM from a {@link Tag}.
@@ -145,17 +144,13 @@ public abstract class MavenTaglet extends AbstractInlineTaglet
      */
     @ServiceProviderFor({ Taglet.class })
     @TagletName("pom.coordinates")
+    @NoArgsConstructor @ToString
     public static class Coordinates extends MavenTaglet {
         private static final Coordinates INSTANCE = new Coordinates();
 
         public static void register(Map<String,Taglet> map) {
             map.putIfAbsent(INSTANCE.getName(), INSTANCE);
         }
-
-        /**
-         * Sole constructor.
-         */
-        public Coordinates() { super(); }
 
         @Override
         public Content getTagletOutput(Tag tag,

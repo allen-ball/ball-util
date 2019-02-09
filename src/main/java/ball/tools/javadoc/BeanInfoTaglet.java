@@ -23,6 +23,8 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.w3c.dom.Element;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
@@ -40,6 +42,7 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
  */
 @ServiceProviderFor({ Taglet.class })
 @TagletName("bean.info")
+@NoArgsConstructor @ToString
 public class BeanInfoTaglet extends AbstractInlineTaglet
                             implements SunToolsInternalToolkitTaglet {
     private static final BeanInfoTaglet INSTANCE = new BeanInfoTaglet();
@@ -47,11 +50,6 @@ public class BeanInfoTaglet extends AbstractInlineTaglet
     public static void register(Map<String,Taglet> map) {
         map.putIfAbsent(INSTANCE.getName(), INSTANCE);
     }
-
-    /**
-     * Sole constructor.
-     */
-    public BeanInfoTaglet() { super(); }
 
     @Override
     public Content getTagletOutput(Tag tag,

@@ -21,6 +21,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 import java.util.regex.Pattern;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.apache.commons.io.IOUtils;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -37,6 +39,7 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
  */
 @ServiceProviderFor({ Taglet.class })
 @TagletName("include")
+@NoArgsConstructor @ToString
 public class IncludeTaglet extends AbstractInlineTaglet
                            implements SunToolsInternalToolkitTaglet {
     private static final IncludeTaglet INSTANCE = new IncludeTaglet();
@@ -44,11 +47,6 @@ public class IncludeTaglet extends AbstractInlineTaglet
     public static void register(Map<String,Taglet> map) {
         map.putIfAbsent(INSTANCE.getName(), INSTANCE);
     }
-
-    /**
-     * Sole constructor.
-     */
-    public IncludeTaglet() { super(); }
 
     @Override
     public Content getTagletOutput(Tag tag,

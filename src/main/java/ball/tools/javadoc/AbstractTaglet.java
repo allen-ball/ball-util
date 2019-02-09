@@ -360,7 +360,4 @@ public abstract class AbstractTaglet implements AnnotatedTaglet {
 
         return ds.toString();
     }
-
-    @Override
-    public String toString() { return super.toString(); }
 }

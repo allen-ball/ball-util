@@ -16,6 +16,8 @@ import com.sun.tools.doclets.internal.toolkit.Content;
 import com.sun.tools.doclets.internal.toolkit.taglets.TagletWriter;
 import java.io.File;
 import java.util.Map;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.w3c.dom.Element;
 
 /**
@@ -26,6 +28,7 @@ import org.w3c.dom.Element;
  */
 @ServiceProviderFor({ Taglet.class })
 @TagletName("link.man")
+@NoArgsConstructor @ToString
 @PatternRegex("(?is)(.+)[(]([\\p{Alnum}])[)]")
 public class LinkManTaglet extends AbstractInlineTaglet
                            implements SunToolsInternalToolkitTaglet,
@@ -38,11 +41,6 @@ public class LinkManTaglet extends AbstractInlineTaglet
 
     private String name = null;
     private String section = null;
-
-    /**
-     * Sole constructor.
-     */
-    public LinkManTaglet() { super(); }
 
     @MatcherGroup(1)
     protected void setName(String string) { name = string; }

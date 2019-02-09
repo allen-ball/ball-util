@@ -14,6 +14,8 @@ import com.sun.tools.doclets.internal.toolkit.taglets.TagletWriter;
 import java.net.URI;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.w3c.dom.Element;
 
 /**
@@ -24,6 +26,7 @@ import org.w3c.dom.Element;
  */
 @ServiceProviderFor({ Taglet.class })
 @TagletName("link.uri")
+@NoArgsConstructor @ToString
 public class LinkURITaglet extends AbstractInlineTaglet
                            implements SunToolsInternalToolkitTaglet {
     private static final LinkURITaglet INSTANCE = new LinkURITaglet();
@@ -33,11 +36,6 @@ public class LinkURITaglet extends AbstractInlineTaglet
     }
 
     private static final String SPACES = "[\\p{Space}]+";
-
-    /**
-     * Sole constructor.
-     */
-    public LinkURITaglet() { super(); }
 
     @Override
     public Content getTagletOutput(Tag tag,
