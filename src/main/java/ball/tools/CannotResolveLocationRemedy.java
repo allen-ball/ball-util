@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2011 - 2015 Allen D. Ball.  All rights reserved.
+ * Copyright 2011 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.tools;
 
@@ -14,6 +14,8 @@ import java.util.regex.Pattern;
 import javax.tools.Diagnostic;
 import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import static ball.lang.Keyword.IMPORT;
 import static ball.lang.Punctuation.SEMICOLON;
@@ -25,18 +27,13 @@ import static ball.lang.Punctuation.SPACE;
  */
 @ServiceProviderFor({ Remedy.class })
 @Codes({ "compiler.err.cant.resolve.location" })
+@NoArgsConstructor @ToString
 public class CannotResolveLocationRemedy extends Remedy {
-
     @Regex
     private static final String REGEX =
         "(?m)^symbol[\\p{Space}]*:[\\p{Space}]*class[\\p{Space}]+([\\p{Graph}]+)$";
     private static final Pattern PATTERN = Pattern.compile(REGEX);
     private static final int CLASS = 1;
-
-    /**
-     * Sole constructor.
-     */
-    public CannotResolveLocationRemedy() { super(); }
 
     @Override
     public String getRx(Diagnostic<? extends JavaFileObject> diagnostic,

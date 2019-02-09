@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2013 - 2015 Allen D. Ball.  All rights reserved.
+ * Copyright 2013 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.tools;
 
@@ -18,6 +18,8 @@ import java.util.regex.Pattern;
 import javax.tools.Diagnostic;
 import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import static ball.lang.Keyword.THROWS;
 import static ball.lang.Punctuation.AT;
@@ -38,8 +40,8 @@ import static java.lang.reflect.Modifier.ABSTRACT;
  */
 @ServiceProviderFor({ Remedy.class })
 @Codes({ "compiler.err.does.not.override.abstract" })
+@NoArgsConstructor @ToString
 public class DoesNotOverrideAbstractRemedy extends Remedy {
-
     @Regex
     private static final String REGEX =
         "(?m)^.*does not override abstract method ([\\p{Graph}]+[(][\\p{Graph}]*[)])[\\p{Space}]+in[\\p{Space}]+([\\p{Graph}]+)$";
@@ -48,11 +50,6 @@ public class DoesNotOverrideAbstractRemedy extends Remedy {
     private static final int CLASS = 2;
 
     private static final String NL = "\n";
-
-    /**
-     * Sole constructor.
-     */
-    public DoesNotOverrideAbstractRemedy() { super(); }
 
     @Override
     public String getRx(Diagnostic<? extends JavaFileObject> diagnostic,

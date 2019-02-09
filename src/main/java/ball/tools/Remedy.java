@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2011 - 2018 Allen D. Ball.  All rights reserved.
+ * Copyright 2011 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.tools;
 
@@ -13,6 +13,9 @@ import java.util.TreeMap;
 import javax.tools.Diagnostic;
 import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
+import lombok.NoArgsConstructor;
+
+import static lombok.AccessLevel.PROTECTED;
 
 /**
  * Abstract base class for {@link Diagnostic} remedies.
@@ -20,6 +23,7 @@ import javax.tools.StandardJavaFileManager;
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
+@NoArgsConstructor(access = PROTECTED)
 public abstract class Remedy {
     private static class Lazy {
         public static final SortedMap<String,Remedy> MAP;
@@ -44,11 +48,6 @@ public abstract class Remedy {
      * @return  The {@link SortedMap}.
      */
     public static SortedMap<String,Remedy> getRemedyMap() { return Lazy.MAP; }
-
-    /**
-     * Sole constructor.
-     */
-    protected Remedy() { }
 
     /**
      * See {@link Codes} and {@link Diagnostic#getCode()}.

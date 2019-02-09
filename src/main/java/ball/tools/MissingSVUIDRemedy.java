@@ -16,6 +16,8 @@ import javax.tools.Diagnostic;
 import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.StandardLocation;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import static ball.lang.Punctuation.EQUALS;
 import static ball.lang.Punctuation.SEMICOLON;
@@ -30,18 +32,14 @@ import static java.lang.reflect.Modifier.STATIC;
  */
 @ServiceProviderFor({ Remedy.class })
 @Codes({ "compiler.warn.missing.SVUID" })
+@NoArgsConstructor @ToString
 public class MissingSVUIDRemedy extends Remedy implements Serializable {
-    private static final long serialVersionUID = 4284917790386692392L;
+    private static final long serialVersionUID = -6900234880629237267L;
 
     private static final int MODIFIERS = PRIVATE | STATIC | FINAL;
     private static final Class<?> TYPE = Long.TYPE;
     private static final String SVUID = "serialVersionUID";
     private static final String L = "L";
-
-    /**
-     * Sole constructor.
-     */
-    public MissingSVUIDRemedy() { super(); }
 
     @Override
     public String getRx(Diagnostic<? extends JavaFileObject> diagnostic,
