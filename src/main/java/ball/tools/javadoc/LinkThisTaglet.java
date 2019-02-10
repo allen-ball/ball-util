@@ -43,7 +43,7 @@ public class LinkThisTaglet extends AbstractInlineTaglet
                                    TagletWriter writer) throws IllegalArgumentException {
         this.configuration = writer.configuration();
 
-        Element element = HTML.code(DOCUMENT, Keyword.THIS.lexeme());
+        Element element = HTML.code(document(), Keyword.THIS.lexeme());
 
         try {
             if (! isEmpty(tag.text().trim())) {

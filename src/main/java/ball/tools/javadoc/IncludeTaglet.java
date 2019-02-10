@@ -82,7 +82,7 @@ public class IncludeTaglet extends AbstractInlineTaglet
             if (resource instanceof Collection) {
                 Collection<?> collection = (Collection<?>) resource;
 
-                element = HTML.table(DOCUMENT);
+                element = HTML.table(document());
 
                 HTML.tr(element,
                         HTML.b(element.getOwnerDocument(), "Element"));
@@ -95,7 +95,7 @@ public class IncludeTaglet extends AbstractInlineTaglet
             } else if (resource instanceof Map) {
                 Map<?,?> map = (Map<?,?>) resource;
 
-                element = HTML.table(DOCUMENT);
+                element = HTML.table(document());
 
                 HTML.tr(element,
                         HTML.b(element.getOwnerDocument(), "Key"),
@@ -115,9 +115,9 @@ public class IncludeTaglet extends AbstractInlineTaglet
                     IOUtils.copy((InputStream) resource, out);
                 }
 
-                element = HTML.pre(DOCUMENT, ds.toString());
+                element = HTML.pre(document(), ds.toString());
             } else {
-                element = HTML.pre(DOCUMENT, String.valueOf(resource));
+                element = HTML.pre(document(), String.valueOf(resource));
             }
         } catch (Exception exception) {
             throw new IllegalArgumentException(tag.position().toString(),

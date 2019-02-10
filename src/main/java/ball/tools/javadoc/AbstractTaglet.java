@@ -45,25 +45,6 @@ public abstract class AbstractTaglet implements AnnotatedTaglet {
     private static final String NO = "no";
     private static final String YES = "yes";
 
-    protected static final Document DOCUMENT;
-    protected static final Transformer TRANSFORMER;
-
-    static {
-        try {
-            DOCUMENT =
-                HTML.init(DocumentBuilderFactory.newInstance()
-                          .newDocumentBuilder()
-                          .newDocument());
-
-            TRANSFORMER = TransformerFactory.newInstance().newTransformer();
-            TRANSFORMER.setOutputProperty(OMIT_XML_DECLARATION, YES);
-            TRANSFORMER.setOutputProperty(INDENT, YES);
-            TRANSFORMER.setOutputProperty(INDENT_AMOUNT, String.valueOf(2));
-        } catch (Exception exception) {
-            throw new ExceptionInInitializerError(exception);
-        }
-    }
-
     private final boolean isInlineTag;
     private final boolean inPackage;
     private final boolean inOverview;
@@ -71,6 +52,8 @@ public abstract class AbstractTaglet implements AnnotatedTaglet {
     private final boolean inConstructor;
     private final boolean inMethod;
     private final boolean inType;
+    private final Document document;
+    private final Transformer transformer;
     protected Configuration configuration = null;
 
     /**
@@ -95,6 +78,20 @@ public abstract class AbstractTaglet implements AnnotatedTaglet {
         this.inConstructor = isInlineTag | inConstructor;
         this.inMethod = isInlineTag | inMethod;
         this.inType = isInlineTag | inType;
+
+        try {
+            document =
+                HTML.init(DocumentBuilderFactory.newInstance()
+                          .newDocumentBuilder()
+                          .newDocument());
+
+            transformer = TransformerFactory.newInstance().newTransformer();
+            transformer.setOutputProperty(OMIT_XML_DECLARATION, YES);
+            transformer.setOutputProperty(INDENT, YES);
+            transformer.setOutputProperty(INDENT_AMOUNT, String.valueOf(2));
+        } catch (Exception exception) {
+            throw new ExceptionInInitializerError(exception);
+        }
     }
 
     @Override
@@ -116,8 +113,8 @@ public abstract class AbstractTaglet implements AnnotatedTaglet {
     @Override public boolean inMethod() { return inMethod; }
     @Override public boolean inType() { return inType; }
 
-    public Document document() { return DOCUMENT; }
-    public Transformer transformer() { return TRANSFORMER; }
+    public Document document() { return document; }
+    public Transformer transformer() { return transformer; }
 
     @Override
     public String toString(Tag[] tags) { throw new IllegalStateException(); }

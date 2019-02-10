@@ -100,7 +100,7 @@ public class BeanInfoTaglet extends AbstractInlineTaglet
 
     private void output(Doc doc,
                         List<Object> list, BeanDescriptor descriptor) {
-        Element table = HTML.table(DOCUMENT);
+        Element table = HTML.table(document());
 
         HTML.tr(table,
                 HTML.b(table.getOwnerDocument(), "Bean Class:"),
@@ -117,7 +117,7 @@ public class BeanInfoTaglet extends AbstractInlineTaglet
 
     private void output(Doc doc,
                         List<Object> list, PropertyDescriptor[] descriptors) {
-        Element table = HTML.table(DOCUMENT);
+        Element table = HTML.table(document());
 
         Object[] headers = new String[] {
             "Property", "Mode", "Type",

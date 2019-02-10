@@ -177,13 +177,14 @@ public abstract class MavenTaglet extends AbstractInlineTaglet
                     new ReaderWriterDataSource(null, null);
                 Writer out = ds.getWriter();
 
-                TRANSFORMER.transform(new DOMSource(element),
-                                      new StreamResult(out));
+                transformer()
+                    .transform(new DOMSource(element),
+                               new StreamResult(out));
 
                 out.flush();
                 out.close();
 
-                element = HTML.pre(DOCUMENT, ds.toString());
+                element = HTML.pre(document(), ds.toString());
             } catch (Exception exception) {
                 throw new IllegalArgumentException(tag.position().toString(),
                                                    exception);
@@ -194,11 +195,11 @@ public abstract class MavenTaglet extends AbstractInlineTaglet
 
         private Element dependency(String groupId,
                                    String artifactId, String version) {
-            Element element = HTML.element(DOCUMENT, DEPENDENCY);
+            Element element = HTML.element(document(), DEPENDENCY);
 
-            element.appendChild(HTML.element(DOCUMENT, GROUP_ID, groupId));
-            element.appendChild(HTML.element(DOCUMENT, ARTIFACT_ID, artifactId));
-            element.appendChild(HTML.element(DOCUMENT, VERSION, version));
+            element.appendChild(HTML.element(document(), GROUP_ID, groupId));
+            element.appendChild(HTML.element(document(), ARTIFACT_ID, artifactId));
+            element.appendChild(HTML.element(document(), VERSION, version));
 
             return element;
         }

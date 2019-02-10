@@ -66,7 +66,7 @@ public class LinkURITaglet extends AbstractInlineTaglet
                 }
             }
 
-            element = HTML.a(DOCUMENT, href, text);
+            element = HTML.a(document(), href, text);
 
             for (Map.Entry<String,String> entry : map.entrySet()) {
                 element.setAttribute(entry.getKey(), entry.getValue());

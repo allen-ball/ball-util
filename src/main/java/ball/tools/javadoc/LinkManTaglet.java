@@ -67,7 +67,7 @@ public class LinkManTaglet extends AbstractInlineTaglet
             path = new File(path, name + "." + section + ".html");
 
             element =
-                HTML.a(DOCUMENT, path.toURI(), name + "(" + section + ")");
+                HTML.a(document(), path.toURI(), name + "(" + section + ")");
         } catch (Exception exception) {
             throw new IllegalArgumentException(tag.position().toString(),
                                                exception);

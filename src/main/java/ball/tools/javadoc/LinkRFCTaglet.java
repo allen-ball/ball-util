@@ -52,7 +52,7 @@ public class LinkRFCTaglet extends AbstractInlineTaglet
             int rfc = Integer.valueOf(tag.text().trim());
 
             element =
-                HTML.a(DOCUMENT,
+                HTML.a(document(),
                        new URI(PROTOCOL, HOST, format(PATH, rfc), null),
                        format(TEXT, rfc));
         } catch (Exception exception) {
