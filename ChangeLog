@@ -1,5 +1,9 @@
 2019-02-10  Allen D. Ball  <ball@sol.local>
 
+	* src/main/java/ball/tools/javadoc/MavenBootstrapTaglet.java:
+	Throwable.printStackTrace(System.err) and throw Error if there is
+	a problem in register(Map<String,Taglet>).
+
 	* src/main/java/ball/tools/javadoc/AbstractTaglet.java:
 	Replace protected static DOCUMENT and TRANSFORMER fields with
 	document() and transformer() methods.

@@ -25,10 +25,20 @@ public abstract class MavenBootstrapTaglet extends AbstractTaglet {
      * @param   map             The {@link Map} of {@link Taglet}s.
      */
     public static void register(Map<String,Taglet> map) {
-        ServiceLoader.load(Taglet.class,
-                           MavenBootstrapTaglet.class.getClassLoader())
-            .iterator()
-            .forEachRemaining(t -> map.putIfAbsent(t.getName(), t));
+        try {
+            ServiceLoader.load(Taglet.class,
+                               MavenBootstrapTaglet.class.getClassLoader())
+                .iterator()
+                .forEachRemaining(t -> map.putIfAbsent(t.getName(), t));
+        } catch (Throwable throwable) {
+            throwable.printStackTrace(System.err);
+
+            if (throwable instanceof Error) {
+                throw (Error) throwable;
+            } else {
+                throw new ExceptionInInitializerError(throwable);
+            }
+        }
     }
 
     private MavenBootstrapTaglet() {
