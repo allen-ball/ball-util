@@ -6,7 +6,6 @@
 package ball.xml;
 
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 
 /**
  * Fluent {@link Document} interface
