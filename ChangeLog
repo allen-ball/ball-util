@@ -520,9 +520,6 @@
 	AbstractProcessor.java, ConstructorPropertiesProcessor.java:
 	Re-factored getPropertyNames(TypeElement) to base class.
 
-	* src/main/java/ball/util/SuperclassSet.java:
-	Re-factored as a subclass of LinkedHashSet.
-
 2014-07-27  Allen D. Ball  <ball@sol.local>
 
 	* src/main/java/ball/annotation/processing/NoopProcessor.java:
@@ -951,10 +948,6 @@
 
 2012-12-08  Allen D. Ball  <ball@10-0-1-2.lan>
 
-	* src/main/java/iprotium/util/PackageSearchPath.java:
-	Use getSuperclass().getClassLoader() to load subclass
-	implementations.
-
 	* src/main/java/iprotium/tools/CannotResolveLocationRemedy.java:
 	Provide a suggested import based on Package.getPackages().
 
@@ -1078,7 +1071,7 @@
 	Include type variables in output.
 
 	* src/main/java/iprotium/util/ant/taskdefs/lint/SerializableCheck.java:
-	Use iprotium.util.SuperclassSet and iprotium.lang.java.Punctuation.
+	Use iprotium.lang.java.Punctuation.
 
 2010-11-26  Allen D. Ball  <ball@10-0-1-2.lan>
 
@@ -1368,13 +1361,6 @@
 2008-10-28  Allen D. Ball  <ball@10-0-1-4.lan>
 
 	* Added <is-assignable-from/> target and Ant Task.
-
-2008-10-27  Allen D. Ball  <ball@10-0-1-4.lan>
-
-	* src/main/java/iprotium/util/SuperclassSet.java: Initial writing.
-
-	* src/main/java/iprotium/util/ant/taskdefs/SuperclassesOfTask.java:
-	Moved SuperclassSet to iprotium.util.
 
 2008-10-26  Allen D. Ball  <ball@10-0-1-4.lan>
 

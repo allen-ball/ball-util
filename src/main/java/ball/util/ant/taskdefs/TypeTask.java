@@ -8,7 +8,6 @@ package ball.util.ant.taskdefs;
 import ball.swing.table.ArrayListTableModel;
 import ball.swing.table.SimpleTableModel;
 import ball.util.BeanInfoUtil;
-import ball.util.SuperclassSet;
 import java.beans.BeanDescriptor;
 import java.beans.BeanInfo;
 import java.beans.Introspector;
@@ -19,11 +18,13 @@ import java.lang.reflect.Method;
 import java.lang.reflect.TypeVariable;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.ArrayList;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import org.apache.commons.lang3.ClassUtils;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 import org.apache.tools.ant.util.ClasspathUtils;
@@ -303,10 +304,14 @@ public abstract class TypeTask extends Task
             super.execute();
 
             try {
+                ArrayList<Class<?>> list = new ArrayList<>();
                 Class<?> type = getClassForName(getType());
 
-                for (Class<?> superclass :
-                         INHERITANCE.asList(new SuperclassSet(type))) {
+                list.add(type);
+                list.addAll(ClassUtils.getAllSuperclasses(type));
+                list.addAll(ClassUtils.getAllInterfaces(type));
+
+                for (Class<?> superclass : INHERITANCE.asList(list)) {
                     log(toString(superclass));
                 }
             } catch (BuildException exception) {

@@ -5,13 +5,14 @@
  */
 package ball.util.ant.taskdefs;
 
-import ball.util.SuperclassSet;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
+import org.apache.commons.lang3.ClassUtils;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 
@@ -49,7 +50,13 @@ public interface AnnotatedAntTask extends AntTaskLogMethods {
      *                          {@link AntTaskAttributeValidator} fails.
      */
     default void validate() throws BuildException {
-        for (Class<?> type : new SuperclassSet(getClass())) {
+        HashSet<Class<?>> set = new HashSet<>();
+
+        set.add(getClass());
+        set.addAll(ClassUtils.getAllSuperclasses(getClass()));
+        set.addAll(ClassUtils.getAllInterfaces(getClass()));
+
+        for (Class<?> type : set) {
             ArrayList<AnnotatedElement> list = new ArrayList<>();
 
             Collections.addAll(list, type.getDeclaredFields());
