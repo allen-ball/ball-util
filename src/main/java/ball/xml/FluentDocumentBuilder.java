@@ -45,7 +45,7 @@ public abstract class FluentDocumentBuilder {
     private FluentDocumentBuilder() { }
 
     private static Class<?>[] getProxyInterfaces(Node node) {
-        Class<? extends Node> intf =
+        Class<? extends Node> spec =
             NODE_TYPE_MAP.getOrDefault(node.getNodeType(), Node.class);
         Class<? extends Node> impl = node.getClass();
         /*
@@ -53,8 +53,8 @@ public abstract class FluentDocumentBuilder {
          * in org.w3c.dom package, ...
          */
         Set<Class<? extends Node>> implemented =
-            Stream.concat(Stream.concat(Stream.of(intf),
-                                        getAllInterfaces(intf).stream()),
+            Stream.concat(Stream.concat(Stream.of(spec),
+                                        getAllInterfaces(spec).stream()),
                           Stream.concat(Stream.of(impl),
                                         getAllInterfaces(impl).stream()))
             .filter(t -> t.isInterface())
@@ -63,8 +63,8 @@ public abstract class FluentDocumentBuilder {
             .map(t -> t.asSubclass(Node.class))
             .collect(Collectors.toSet());
         /*
-         * ... get the corresponding FluentNode subclasses to be implemented
-         * through reflection, and, ...
+         * ... find any corresponding FluentNode subclasses through
+         * reflection, and, ...
          */
         Set<Class<? extends Node>> interfaces =
             implemented.stream()
@@ -82,7 +82,7 @@ public abstract class FluentDocumentBuilder {
         new ArrayList<>(interfaces)
             .stream()
             .forEach(t -> interfaces.removeAll(Arrays.asList(t.getInterfaces())));
-        return interfaces.toArray(new Class<? /* extends Node */>[] { });
+        return interfaces.toArray(new Class<?>[] { });
     }
 
     private static Class<? extends FluentNode> fluentNodeType(Class<? extends Node> nodeType) {
