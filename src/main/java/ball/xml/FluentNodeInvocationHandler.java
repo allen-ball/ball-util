@@ -13,12 +13,12 @@ import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.IdentityHashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.apache.commons.lang3.ClassUtils;
 import org.w3c.dom.Attr;
 import org.w3c.dom.CDATASection;
 import org.w3c.dom.Comment;
@@ -145,9 +145,16 @@ public class FluentNodeInvocationHandler implements InvocationHandler {
     }
 
     private FluentNode newProxyFor(Node node) {
+        ArrayList<Class<?>> list = new ArrayList<>();
+
+        list.add(getClassForNode(node));
+        list.addAll(ClassUtils.getAllInterfaces(getClassForNode(node)));
+        list.add(node.getClass());
+        list.addAll(ClassUtils.getAllInterfaces(node.getClass()));
+
         Set<Class<? extends Node>> set =
-            interfacesOf(getClassForNode(node), node.getClass())
-            .stream()
+            list.stream()
+            .filter(t -> t.isInterface())
             .filter(t -> t.getPackage().equals(Node.class.getPackage()))
             .filter(t -> Node.class.isAssignableFrom(t))
             .map(t -> t.asSubclass(Node.class))
@@ -164,25 +171,6 @@ public class FluentNodeInvocationHandler implements InvocationHandler {
                                    set.toArray(new Class<?>[] { }), this);
 
         return (FluentNode) proxy;
-    }
-
-    private Set<Class<?>> interfacesOf(Class<?>... types) {
-        Set<Class<?>> set = new HashSet<>();
-
-        for (Class<?> type : types) {
-            if (type != null) {
-                if (type.isInterface()) {
-                    set.add(type);
-                }
-
-                for (Class<?> supertype : type.getInterfaces()) {
-                    set.add(supertype);
-                    set.addAll(interfacesOf(supertype));
-                }
-            }
-        }
-
-        return set;
     }
 
     private static final Map<Short,Class<? extends Node>> NODE_TYPE_MAP =
