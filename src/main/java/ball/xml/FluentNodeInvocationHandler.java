@@ -33,16 +33,16 @@ import static ball.xml.FluentNode.NODE_TYPE_MAP;
 public class FluentNodeInvocationHandler implements InvocationHandler {
 
     /**
-     * Static method to add a {@link FluentDocument} facade to a
-     * {@link Document}.  Sole entrypoint to {@link FluentNode}.
+     * Static method to wrap a {@link Document} in a {@link FluentDocument}.
+     * Sole entry-point to {@link FluentNode}.
      *
      * @param   document        The {@link Document}.
      *
      * @return  The {@link FluentDocument} facade.
      */
-    public static FluentDocument asFluentDocument(Document document) {
+    public static FluentDocument wrap(Document document) {
         FluentNode node =
-            new FluentNodeInvocationHandler().asFluentNode((Node) document);
+            new FluentNodeInvocationHandler().wrap((Node) document);
 
         return (FluentDocument) node;
     }
@@ -85,39 +85,13 @@ public class FluentNodeInvocationHandler implements InvocationHandler {
         }
 
         if (result instanceof Node && (! (result instanceof FluentNode))) {
-            result = asFluentNode((Node) result);
+            result = wrap((Node) result);
         }
 
         return result;
     }
 
-    private Object underlying(Object argument) {
-        if (argument instanceof FluentNode) {
-            argument =
-                ((FluentNodeInvocationHandler)
-                     Proxy.getInvocationHandler(argument))
-                .realMap
-                .getOrDefault(argument, (Node) argument);
-        }
-
-        return argument;
-    }
-
-    private Object[] underlying(Object[] argv) {
-        Object[] result = null;
-
-        if (argv != null) {
-            result = new Object[argv.length];
-
-            for (int i = 0; i < result.length; i += 1) {
-                result[i] = underlying(argv[i]);
-            }
-        }
-
-        return result;
-    }
-
-    private FluentNode asFluentNode(Node node) {
+    private FluentNode wrap(Node node) {
         FluentNode proxy = null;
 
         if (! (node instanceof FluentNode)) {
@@ -133,13 +107,25 @@ public class FluentNodeInvocationHandler implements InvocationHandler {
         return proxy;
     }
 
+    private Node unwrap(FluentNode proxy) {
+        Node node =
+            ((FluentNodeInvocationHandler) Proxy.getInvocationHandler(proxy))
+            .realMap.getOrDefault(proxy, proxy);
+
+        return node;
+    }
+
     private FluentNode newProxyFor(Node node) {
         ArrayList<Class<?>> list = new ArrayList<>();
 
-        list.add(getClassForNode(node));
-        list.addAll(ClassUtils.getAllInterfaces(getClassForNode(node)));
         list.add(node.getClass());
         list.addAll(ClassUtils.getAllInterfaces(node.getClass()));
+
+        Class<? extends Node> type =
+            NODE_TYPE_MAP.getOrDefault(node.getNodeType(), Node.class);
+
+        list.add(type);
+        list.addAll(ClassUtils.getAllInterfaces(type));
 
         Set<Class<? extends Node>> set =
             list.stream()
@@ -160,10 +146,6 @@ public class FluentNodeInvocationHandler implements InvocationHandler {
                                    set.toArray(new Class<?>[] { }), this);
 
         return (FluentNode) proxy;
-    }
-
-    private Class<? extends Node> getClassForNode(Node node) {
-        return NODE_TYPE_MAP.getOrDefault(node.getNodeType(), Node.class);
     }
 
     private Set<Class<? extends FluentNode>> fluentTypes(Collection<Class<? extends Node>> collection) {
@@ -189,5 +171,23 @@ public class FluentNodeInvocationHandler implements InvocationHandler {
         }
 
         return fluent;
+    }
+
+    private Object[] underlying(Object[] argv) {
+        Object[] result = null;
+
+        if (argv != null) {
+            result = new Object[argv.length];
+
+            for (int i = 0; i < result.length; i += 1) {
+                if (argv[i] instanceof FluentNode) {
+                    result[i] = unwrap((FluentNode) argv[i]);
+                } else {
+                    result[i] = argv[i];
+                }
+            }
+        }
+
+        return result;
     }
 }
