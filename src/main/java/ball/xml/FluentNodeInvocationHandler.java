@@ -14,24 +14,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.IdentityHashMap;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import org.apache.commons.lang3.ClassUtils;
-import org.w3c.dom.Attr;
-import org.w3c.dom.CDATASection;
-import org.w3c.dom.Comment;
 import org.w3c.dom.Document;
-import org.w3c.dom.DocumentFragment;
-import org.w3c.dom.DocumentType;
-import org.w3c.dom.Element;
-import org.w3c.dom.Entity;
-import org.w3c.dom.EntityReference;
 import org.w3c.dom.Node;
-import org.w3c.dom.Notation;
-import org.w3c.dom.ProcessingInstruction;
-import org.w3c.dom.Text;
+
+import static ball.xml.FluentNode.NODE_TYPE_MAP;
 
 /**
  * Protocol {@link InvocationHandler} for fluent {@link Node}s.  The same
@@ -173,32 +162,13 @@ public class FluentNodeInvocationHandler implements InvocationHandler {
         return (FluentNode) proxy;
     }
 
-    private static final Map<Short,Class<? extends Node>> NODE_TYPE_MAP =
-        Stream.of(new Object[][] {
-            { Node.ATTRIBUTE_NODE, Attr.class },
-            { Node.CDATA_SECTION_NODE, CDATASection.class },
-            { Node.COMMENT_NODE, Comment.class },
-            { Node.DOCUMENT_FRAGMENT_NODE, DocumentFragment.class },
-            { Node.DOCUMENT_NODE, Document.class },
-            { Node.DOCUMENT_TYPE_NODE, DocumentType.class },
-            { Node.ELEMENT_NODE, Element.class },
-            { Node.ENTITY_NODE, Entity.class },
-            { Node.ENTITY_REFERENCE_NODE, EntityReference.class },
-            { Node.NOTATION_NODE, Notation.class },
-            { Node.PROCESSING_INSTRUCTION_NODE, ProcessingInstruction.class },
-            { Node.TEXT_NODE, Text.class }
-        }).collect(Collectors.toMap(t -> (Short) t[0],
-                                    t -> ((Class<?>) t[1])
-                                             .asSubclass(Node.class)));
-
     private Class<? extends Node> getClassForNode(Node node) {
         return NODE_TYPE_MAP.getOrDefault(node.getNodeType(), Node.class);
     }
 
     private Set<Class<? extends FluentNode>> fluentTypes(Collection<Class<? extends Node>> collection) {
         Set<Class<? extends FluentNode>> set =
-            collection
-            .stream()
+            collection.stream()
             .map(t -> fluentType(t))
             .filter(t -> t != null)
             .collect(Collectors.toSet());
