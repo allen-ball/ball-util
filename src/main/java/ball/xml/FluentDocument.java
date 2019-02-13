@@ -19,6 +19,11 @@ public interface FluentDocument extends FluentNode, Document {
     default FluentDocument owner() { return this; }
 
     @Override
+    default FluentDocument add(Iterable<Node> nodes) {
+        return (FluentDocument) FluentNode.super.add(nodes);
+    }
+
+    @Override
     default FluentDocument add(Node... nodes) {
         return (FluentDocument) FluentNode.super.add(nodes);
     }
