@@ -58,7 +58,160 @@ public interface FluentNode extends Node {
      *
      * @return  The owner {@link FluentDocument}.
      */
-    default FluentDocument document() {
+    default FluentDocument owner() {
         return (FluentDocument) getOwnerDocument();
+    }
+
+    /**
+     * See {@link #getNodeName()}.
+     *
+     * @return  {@link #getNodeName()}
+     */
+    default String name() { return getNodeName(); }
+
+    /**
+     * See {@link #getNodeValue()}.
+     *
+     * @return  {@link #getNodeValue()}
+     */
+    default String value() { return getNodeValue(); }
+
+    /**
+     * See {@link #setNodeValue(String)}.
+     *
+     * @param   value           The {@link Node} value.
+     *
+     * @return  {@link.this}
+     */
+    default FluentNode value(String value) {
+        setNodeValue(value);
+
+        return this;
+    }
+
+    /**
+     * See {@link #getTextContent()}.
+     *
+     * @return  {@link #getTextContent()}
+     */
+    default String text() { return getTextContent(); }
+
+    /**
+     * See {@link #setTextContent(String)}.
+     *
+     * @param   text           The {@link Node} text.
+     *
+     * @return  {@link.this}
+     */
+    default FluentNode text(String text) {
+        setTextContent(text);
+
+        return this;
+    }
+
+    /**
+     * Method to add {@link Node}s to {@link.this} {@link FluentNode}.
+     *
+     * @param   nodes           The {@link Node}s to add.
+     *
+     * @return  {@link.this}
+     */
+    default FluentNode add(Node... nodes) {
+        for (Node node : nodes) {
+            switch (node.getNodeType()) {
+            case ATTRIBUTE_NODE:
+                getAttributes().setNamedItem(node);
+                break;
+
+            default:
+                appendChild(node);
+                break;
+            }
+        }
+
+        return this;
+    }
+
+    /**
+     * Create {@link Attr} {@link Node}.
+     *
+     * @param   name            The {@link Attr} name.
+     *
+     * @return  The newly created {@link Attr}.
+     */
+    default FluentNode attribute(String name) {
+        return (FluentNode) owner().createAttribute(name);
+    }
+
+    /**
+     * Create {@link Attr} {@link Node}.
+     *
+     * @param   name            The {@link Attr} name.
+     * @param   value           The {@link Attr} value.
+     *
+     * @return  The newly created {@link Attr}.
+     */
+    default FluentNode attribute(String name, String value) {
+        FluentNode node = attribute(name);
+
+        ((Attr) node).setValue(value);
+
+        return node;
+    }
+
+    /**
+     * Create {@link Attr} {@link Node}.
+     *
+     * @param   ns              The {@link Attr} namespace.
+     * @param   qn              The {@link Attr} qualified name.
+     *
+     * @return  The newly created {@link Attr}.
+     */
+    default FluentNode attributeNS(String ns, String qn) {
+        return (FluentNode) owner().createAttributeNS(ns, qn);
+    }
+
+    /**
+     * Create {@link Attr} {@link Node}.
+     *
+     * @param   ns              The {@link Attr} namespace.
+     * @param   qn              The {@link Attr} qualified name.
+     * @param   value           The {@link Attr} value.
+     *
+     * @return  The newly created {@link Attr}.
+     */
+    default FluentNode attributeNS(String ns, String qn, String value) {
+        FluentNode node = attributeNS(ns, qn);
+
+        ((Attr) node).setValue(value);
+
+        return node;
+    }
+
+    /**
+     * Create {@link Element} {@link Node}.
+     *
+     * @param   name            The {@link Element} name.
+     * @param   nodes           The {@link Node}s to append to the newly
+     *                          created {@link Element}.
+     *
+     * @return  The newly created {@link Element}.
+     */
+    default FluentNode element(String name, Node... nodes) {
+        return ((FluentNode) owner().createElement(name)).add(nodes);
+    }
+
+    /**
+     * Create {@link Element} {@link Node}.
+     *
+     * @param   ns              The {@link Element} namespace.
+     * @param   qn              The {@link Element} qualified name.
+     * @param   nodes           The {@link Node}s to append to the newly
+     *                          created {@link Element}.
+     *
+     * @return  The newly created {@link Element}.
+     */
+    default FluentNode elementNS(String ns, String qn, Node... nodes) {
+        return ((FluentNode) owner().createElementNS(ns, qn)).add(nodes);
     }
 }

@@ -1,9 +1,9 @@
-2019-02-11  Allen D. Ball  <ball@sol.local>
+2019-02-12  Allen D. Ball  <ball@sol.local>
 
 	* src/main/java/ball/xml/FluentDocument.java,
 	src/main/java/ball/xml/FluentDocumentBuilder.java,
 	src/main/java/ball/xml/FluentNode.java:
-	Initial writing (interim check-in).
+	Interim check-in: Minimum fluent interface implementation.
 
 2019-02-10  Allen D. Ball  <ball@sol.local>
 

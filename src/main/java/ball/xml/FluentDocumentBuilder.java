@@ -6,6 +6,7 @@
 package ball.xml;
 
 import java.lang.invoke.MethodHandles;
+import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -82,6 +83,7 @@ public abstract class FluentDocumentBuilder {
         new ArrayList<>(interfaces)
             .stream()
             .forEach(t -> interfaces.removeAll(Arrays.asList(t.getInterfaces())));
+
         return interfaces.toArray(new Class<?>[] { });
     }
 
@@ -104,7 +106,7 @@ public abstract class FluentDocumentBuilder {
     private static class InvocationHandlerImpl implements InvocationHandler {
         private final IdentityHashMap<Node,Node> proxyMap =
             new IdentityHashMap<>();
-        private final IdentityHashMap<Node,Node> reverseMap =
+        private final IdentityHashMap<Node,Node> realMap =
             new IdentityHashMap<>();
 
         protected InvocationHandlerImpl() { }
@@ -129,7 +131,7 @@ public abstract class FluentDocumentBuilder {
                 Proxy.newProxyInstance(FluentNode.class.getClassLoader(),
                                        getProxyInterfaces(node), this);
 
-            reverseMap.put(proxy, node);
+            realMap.put(proxy, node);
 
             return proxy;
         }
@@ -137,9 +139,51 @@ public abstract class FluentDocumentBuilder {
         protected Node unwrap(FluentNode proxy) {
             Node node =
                 ((InvocationHandlerImpl) Proxy.getInvocationHandler(proxy))
-                .reverseMap.getOrDefault(proxy, proxy);
+                .realMap.get(proxy);
 
             return node;
+        }
+
+        private Object unwrap(Class<?> type, Object in) {
+            Object out = in;
+
+            if (in instanceof FluentNode) {
+                if (! FluentNode.class.isAssignableFrom(type)) {
+                    out = unwrap((FluentNode) in);
+                }
+            } else if (in instanceof Object[]) {
+                if (type.isArray()) {
+                    int length = ((Object[]) in).length;
+
+                    out = Array.newInstance(type.getComponentType(), length);
+
+                    for (int i = 0; i < length; i += 1) {
+                        ((Object[]) out)[i] =
+                            unwrap(type.getComponentType(),
+                                   ((Object[]) in)[i]);
+                    }
+                }
+            }
+
+            return out;
+        }
+
+        private Object[] unwrap(Method method, Object[] in) {
+            return unwrap(method.getParameterTypes(), in);
+        }
+
+        private Object[] unwrap(Class<?>[] types, Object[] in) {
+            Object[] out = in;
+
+            if (in != null) {
+                out = new Object[in.length];
+
+                for (int i = 0; i < out.length; i += 1) {
+                    out[i] = unwrap(types[i], in[i]);
+                }
+            }
+
+            return out;
         }
 
         @Override
@@ -147,54 +191,36 @@ public abstract class FluentDocumentBuilder {
                              Method method, Object[] argv) throws Throwable {
             Object result = null;
             Class<?> declarer = method.getDeclaringClass();
+            Object that = unwrap(declarer, proxy);
 
-            if (method.isDefault()) {
-                Constructor<MethodHandles.Lookup> constructor =
-                    MethodHandles.Lookup.class
-                    .getDeclaredConstructor(Class.class);
+            if (FluentNode.class.isAssignableFrom(declarer)) {
+                if (method.isDefault()) {
+                    Constructor<MethodHandles.Lookup> constructor =
+                        MethodHandles.Lookup.class
+                        .getDeclaredConstructor(Class.class);
 
-                constructor.setAccessible(true);
+                    constructor.setAccessible(true);
 
-                result =
-                    constructor.newInstance(declarer)
-                    .in(declarer)
-                    .unreflectSpecial(method, declarer)
-                    .bindTo(proxy)
-                    .invokeWithArguments(argv);
-            } else if (FluentNode.class.isAssignableFrom(declarer)) {
-                throw new IllegalStateException(method
-                                                + " / "
-                                                + Arrays.toString(argv));
-            } else if (Node.class.getPackage().equals(declarer.getPackage())) {
-                result = method.invoke(reverseMap.get(proxy), underlying(argv));
-            } else if (declarer.equals(Object.class)) {
-                result = method.invoke(reverseMap.get(proxy), argv);
-            } else {
-                throw new IllegalStateException(method
-                                                + " / "
-                                                + Arrays.toString(argv));
-            }
-
-            if (result instanceof Node && (! (result instanceof FluentNode))) {
-                result = wrap((Node) result);
-            }
-
-            return result;
-        }
-
-        private Object[] underlying(Object[] argv) {
-            Object[] result = null;
-
-            if (argv != null) {
-                result = new Object[argv.length];
-
-                for (int i = 0; i < result.length; i += 1) {
-                    if (argv[i] instanceof FluentNode) {
-                        result[i] = unwrap((FluentNode) argv[i]);
-                    } else {
-                        result[i] = argv[i];
-                    }
+                    result =
+                        constructor.newInstance(declarer)
+                        .in(declarer)
+                        .unreflectSpecial(method, declarer)
+                        .bindTo(proxy)
+                        .invokeWithArguments(unwrap(method, argv));
+                } else {
+                    throw new IllegalStateException(method + " in " + declarer
+                                                    + " is not default");
                 }
+            } else if (Node.class.getPackage().equals(declarer.getPackage())) {
+                result =
+                    method.invoke(unwrap(declarer, proxy),
+                                  unwrap(method, argv));
+            } else /* if (declarer.equals(Object.class)) */ {
+                result = method.invoke(unwrap(declarer, proxy), argv);
+            }
+
+            if (result instanceof Node) {
+                result = wrap((Node) result);
             }
 
             return result;
