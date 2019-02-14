@@ -78,7 +78,7 @@ public class IncludeTaglet extends AbstractInlineTaglet
         return content(writer, node);
     }
 
-    private FluentNode node(ClassDoc doc, Field field) throws Throwable {
+    private FluentNode node(ClassDoc doc, Field field) throws Exception {
         Object object = field.get(null);
         FluentNode node = null;
 
@@ -104,7 +104,7 @@ public class IncludeTaglet extends AbstractInlineTaglet
         return node;
     }
 
-    private FluentNode node(ClassDoc doc, InputStream in) throws Throwable {
+    private FluentNode node(ClassDoc doc, InputStream in) throws Exception {
         ReaderWriterDataSource ds =
             new ReaderWriterDataSource(null, null);
 
