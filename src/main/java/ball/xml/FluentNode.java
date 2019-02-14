@@ -26,7 +26,9 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 
 /**
- * Fluent {@link Node} interface
+ * Fluent {@link Node} interface Note: This interface is an implementation
+ * detail of {@link FluentDocumentBuilder} and should not be implemented or
+ * subclass directly.
  *
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$

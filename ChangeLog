@@ -3,7 +3,9 @@
 	* src/main/java/ball/xml/FluentDocument.java,
 	src/main/java/ball/xml/FluentDocumentBuilder.java,
 	src/main/java/ball/xml/FluentNode.java:
-	Interim check-in: Minimum fluent interface implementation.
+	src/main/java/ball/xml/HTMLTemplates.java,
+	src/main/java/ball/xml/XMLServices.java,
+	Released FluentDocument implementation.
 
 2019-02-10  Allen D. Ball  <ball@sol.local>
 

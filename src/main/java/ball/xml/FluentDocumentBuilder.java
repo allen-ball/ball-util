@@ -191,7 +191,6 @@ public abstract class FluentDocumentBuilder {
                              Method method, Object[] argv) throws Throwable {
             Object result = null;
             Class<?> declarer = method.getDeclaringClass();
-            Object that = unwrap(declarer, proxy);
 
             if (FluentNode.class.isAssignableFrom(declarer)) {
                 if (method.isDefault()) {
