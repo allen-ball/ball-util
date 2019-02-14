@@ -11,7 +11,7 @@ import org.w3c.dom.Node;
 /**
  * Fluent {@link Document} interface.  Note: This interface is an
  * implementation detail of {@link FluentDocumentBuilder} and should not be
- * implemented or subclass directly.
+ * extended directly.
  *
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$

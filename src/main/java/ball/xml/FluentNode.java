@@ -5,9 +5,12 @@
  */
 package ball.xml;
 
+import java.util.Collections;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 import org.w3c.dom.Attr;
 import org.w3c.dom.CDATASection;
 import org.w3c.dom.Comment;
@@ -22,13 +25,10 @@ import org.w3c.dom.Notation;
 import org.w3c.dom.ProcessingInstruction;
 import org.w3c.dom.Text;
 
-import static java.util.Arrays.asList;
-import static java.util.Collections.emptyList;
-
 /**
  * Fluent {@link Node} interface Note: This interface is an implementation
  * detail of {@link FluentDocumentBuilder} and should not be implemented or
- * subclass directly.
+ * extended directly.
  *
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
@@ -57,6 +57,17 @@ public interface FluentNode extends Node {
         }).collect(Collectors.toMap(t -> (Short) t[0],
                                     t -> ((Class<?>) t[1])
                                              .asSubclass(Node.class)));
+
+    default Node[] toArray(Iterable<Node> nodes) {
+        return(StreamSupport
+               .stream(Optional
+                       .ofNullable(nodes)
+                       .orElse(Collections.emptyList())
+                       .spliterator(),
+                       false)
+               .collect(Collectors.toList())
+               .toArray(new Node[] { }));
+    }
 
     /**
      * See {@link Node#getOwnerDocument()}.
@@ -123,6 +134,17 @@ public interface FluentNode extends Node {
      * @return  {@link.this}
      */
     default FluentNode add(Iterable<Node> nodes) {
+        return add(toArray(nodes));
+    }
+
+    /**
+     * Method to add {@link Node}s to {@link.this} {@link FluentNode}.
+     *
+     * @param   nodes           The {@link Node}s to add.
+     *
+     * @return  {@link.this}
+     */
+    default FluentNode add(Node... nodes) {
         for (Node node : nodes) {
             switch (node.getNodeType()) {
             case ATTRIBUTE_NODE:
@@ -139,17 +161,6 @@ public interface FluentNode extends Node {
     }
 
     /**
-     * Method to add {@link Node}s to {@link.this} {@link FluentNode}.
-     *
-     * @param   nodes           The {@link Node}s to add.
-     *
-     * @return  {@link.this}
-     */
-    default FluentNode add(Node... nodes) {
-        return add((nodes != null) ? asList(nodes) : emptyList());
-    }
-
-    /**
      * Create an {@link DocumentFragment} {@link Node}.
      *
      * @param   nodes           The {@link Iterable} of {@link Node}s to
@@ -159,7 +170,7 @@ public interface FluentNode extends Node {
      * @return  The newly created {@link DocumentFragment}.
      */
     default FluentNode fragment(Iterable<Node> nodes) {
-        return ((FluentNode) owner().createDocumentFragment()).add(nodes);
+        return fragment(toArray(nodes));
     }
 
     /**
@@ -171,7 +182,7 @@ public interface FluentNode extends Node {
      * @return  The newly created {@link DocumentFragment}.
      */
     default FluentNode fragment(Node... nodes) {
-        return fragment((nodes != null) ? asList(nodes) : emptyList());
+        return ((FluentNode) owner().createDocumentFragment()).add(nodes);
     }
 
     /**
@@ -184,7 +195,7 @@ public interface FluentNode extends Node {
      * @return  The newly created {@link Element}.
      */
     default FluentNode element(String name, Iterable<Node> nodes) {
-        return ((FluentNode) owner().createElement(name)).add(nodes);
+        return element(name, toArray(nodes));
     }
 
     /**
@@ -197,7 +208,7 @@ public interface FluentNode extends Node {
      * @return  The newly created {@link Element}.
      */
     default FluentNode element(String name, Node... nodes) {
-        return element(name, (nodes != null) ? asList(nodes) : emptyList());
+        return ((FluentNode) owner().createElement(name)).add(nodes);
     }
 
     /**
@@ -211,7 +222,7 @@ public interface FluentNode extends Node {
      * @return  The newly created {@link Element}.
      */
     default FluentNode elementNS(String ns, String qn, Iterable<Node> nodes) {
-        return ((FluentNode) owner().createElementNS(ns, qn)).add(nodes);
+        return elementNS(ns, qn, toArray(nodes));
     }
 
     /**
@@ -225,8 +236,7 @@ public interface FluentNode extends Node {
      * @return  The newly created {@link Element}.
      */
     default FluentNode elementNS(String ns, String qn, Node... nodes) {
-        return elementNS(ns, qn,
-                         (nodes != null) ? asList(nodes) : emptyList());
+        return ((FluentNode) owner().createElementNS(ns, qn)).add(nodes);
     }
 
     /**
