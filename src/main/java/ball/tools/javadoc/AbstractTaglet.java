@@ -14,6 +14,7 @@ import com.sun.javadoc.Doc;
 import com.sun.javadoc.ProgramElementDoc;
 import com.sun.javadoc.Tag;
 import com.sun.tools.doclets.internal.toolkit.Configuration;
+import com.sun.tools.doclets.internal.toolkit.util.DocLink;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.Collection;
@@ -264,14 +265,15 @@ public abstract class AbstractTaglet implements AnnotatedTaglet,
             href = URI.create(path).normalize();
         } else {
             if (configuration != null) {
-                String path =
+                DocLink link =
                     configuration.extern
                     .getExternalLink(target.containingPackage().name(),
-                                     null, target.name() + ".html")
-                    .toString();
-
-                if (path != null) {
-                    href = URI.create(path);
+                                     null, target.name() + ".html");
+                /*
+                 * link might be null because the class cannot be loaded
+                 */
+                if (link != null) {
+                    href = URI.create(link.toString());
                 }
             }
         }
