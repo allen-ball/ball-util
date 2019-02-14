@@ -233,9 +233,6 @@
 	* src/main/java/ball/tools/javadoc/IncludeMapTaglet.java:
 	Render Class values as javadoc links.
 
-	* src/main/java/ball/xml/HTML.java:
-	Added P member and p(Document,Object...) method.
-
 2017-09-13  Allen D. Ball  <ball@sol>
 
 	* src/main/java/ball/util/EnumLookupMap.java: Initial writing.
@@ -355,10 +352,6 @@
 
 	* src/main/java/ball/tools/javadoc/POMTaglet.java:
 	Initial writing (interim check-in).
-
-	* src/main/java/ball/xml/HTML.java:
-	Made element(Document,String) and element(Document,String,Object)
-	methods public.
 
 	* src/main/java/ball/util/ant/taskdefs/JNIClassesTask.java:
 	Catch and ignore NoClassDefFoundError.
@@ -560,9 +553,6 @@
 	* src/main/java/iprotium/tools/javadoc/IncludeTaglet.java:
 	Initial writing.
 
-	* src/main/java/iprotium/xml/HTML.java:
-	Added pre(Document,Object) method.
-
 2014-01-02  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* src/main/java/iprotium/text/ParameterizedMessageFormat.java:
@@ -615,16 +605,9 @@
 	* src/main/java/iprotium/tools/javadoc/BeanInfoTaglet.java:
 	Initial writing.
 
-	* src/main/java/iprotium/xml/HTML.java:
-	Added init(Dcoument), code(Dcoument,Object), and
-	code(Dcoument,Object...) methods.
-
 2013-12-24  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* src/main/java/iprotium/util/BeanInfoUtil.java: Initial writing.
-
-	* src/main/java/iprotium/xml/HTML.java:
-	Added methods to create <b/> and <u/> elements.
 
 2013-12-23  Allen D. Ball  <ball@10-0-1-2.lan>
 
@@ -637,8 +620,6 @@
 	Replaced error(Element,CharSequence) and
 	warning(Element,CharSequence) methods with
 	print(Diagnostic.Kind,Element,CharSequence) method.
-
-	* src/main/java/iprotium/xml/HTML.java: Initial writing.
 
 2013-12-09  Allen D. Ball  <ball@10-0-1-2.lan>
 
