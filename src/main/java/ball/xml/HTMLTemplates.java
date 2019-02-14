@@ -98,6 +98,41 @@ public interface HTMLTemplates extends XMLServices {
     }
 
     /**
+     * {@code <p><node/>...</p>}
+     *
+     * @param   nodes           The {@link Iterable} of {@link Node}s to
+     *                          append to the newly created
+     *                          {@link org.w3c.dom.Element}.
+     *
+     * @return  {@code <p><node/>...</p>}
+     *          {@link org.w3c.dom.Element}
+     */
+    default FluentNode p(Iterable<Node> nodes) { return element("p", nodes); }
+
+    /**
+     * {@code <p><node/>...</p>}
+     *
+     * @param   nodes           The {@link Node}s to append to the newly
+     *                          created
+     *                          {@link org.w3c.dom.Element}.
+     *
+     * @return  {@code <p><node/>...</p>}
+     *          {@link org.w3c.dom.Element}
+     */
+    default FluentNode p(Node... nodes) {
+        return p((nodes != null) ? asList(nodes) : emptyList());
+    }
+
+    /**
+     * {@code <p>content</p>}
+     *
+     * @param   content         {@link org.w3c.dom.Text} content
+     *
+     * @return  {@code <p/>} {@link org.w3c.dom.Element}
+     */
+    default FluentNode p(String content) { return p(text(content)); }
+
+    /**
      * {@code <pre}{@code >content<}{@code /pre>}
      *
      * @param   content         {@link org.w3c.dom.Text} content
