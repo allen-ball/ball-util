@@ -20,16 +20,14 @@ import java.beans.IndexedPropertyDescriptor;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
-import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 /**
  * Inline {@link Taglet} to provide a table of bean properties.
@@ -57,7 +55,7 @@ public class BeanInfoTaglet extends AbstractInlineTaglet
                                    TagletWriter writer) throws IllegalArgumentException {
         this.configuration = writer.configuration();
 
-        LinkedList<Object> list = new LinkedList<>();
+        FluentNode node = fragment();
 
         try {
             ClassDoc start = null;
@@ -82,26 +80,34 @@ public class BeanInfoTaglet extends AbstractInlineTaglet
                 stop = getClassDoc(tag.holder(), Object.class.getName());
             }
 
-            output(tag.holder(), list,
-                   Introspector.getBeanInfo(getClassFor(start),
-                                            getClassFor(stop)));
+            node =
+                fragment(tag.holder(),
+                         Introspector.getBeanInfo(getClassFor(start),
+                                                  getClassFor(stop)));
         } catch (Exception exception) {
             throw new IllegalArgumentException(tag.position().toString(),
                                                exception);
         }
 
-        return content(writer, list);
+        return content(writer, node);
     }
 
-    private void output(Doc doc, List<Object> list, BeanInfo info) {
-        output(doc, list, info.getBeanDescriptor());
-        output(doc, list, info.getPropertyDescriptors());
-        output(doc, list, info.getAdditionalBeanInfo());
+    private FluentNode fragment(Doc doc, BeanInfo info) {
+        FluentNode node = fragment();
+
+        append(node, doc, info);
+
+        return node;
     }
 
-    private void output(Doc doc,
-                        List<Object> list, BeanDescriptor descriptor) {
-        list.add(table(doc, descriptor));
+    private void append(FluentNode node, Doc doc, BeanInfo info) {
+        node.add(table(doc, info.getBeanDescriptor()));
+        node.add(table(doc, info.getPropertyDescriptors()));
+
+        Arrays.stream(Optional
+                      .ofNullable(info.getAdditionalBeanInfo())
+                      .orElse(new BeanInfo[] { }))
+            .forEach(t -> append(node, doc, t));
     }
 
     private FluentNode table(Doc doc, BeanDescriptor descriptor) {
@@ -115,11 +121,6 @@ public class BeanInfoTaglet extends AbstractInlineTaglet
                  .collect(Collectors.toList()));
 
         return node;
-    }
-
-    private void output(Doc doc,
-                        List<Object> list, PropertyDescriptor[] descriptors) {
-        list.add(table(doc, descriptors));
     }
 
     private FluentNode table(Doc doc, PropertyDescriptor[] rows) {
@@ -153,13 +154,5 @@ public class BeanInfoTaglet extends AbstractInlineTaglet
                   td(code(row.isBound())),
                   td(code(row.isConstrained())),
                   td(row.getShortDescription()));
-    }
-
-    private void output(Doc doc, List<Object> list, BeanInfo[] infos) {
-        if (infos != null) {
-            for (BeanInfo info : infos) {
-                output(doc, list, info);
-            }
-        }
     }
 }

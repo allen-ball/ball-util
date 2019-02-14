@@ -5,7 +5,6 @@
  */
 package ball.tools.javadoc;
 
-import ball.activation.ReaderWriterDataSource;
 import ball.xml.XMLServices;
 import com.sun.javadoc.Doc;
 import com.sun.javadoc.Tag;
@@ -13,7 +12,6 @@ import com.sun.tools.doclets.formats.html.markup.RawHtml;
 import com.sun.tools.doclets.internal.toolkit.Content;
 import com.sun.tools.doclets.internal.toolkit.taglets.Taglet;
 import com.sun.tools.doclets.internal.toolkit.taglets.TagletWriter;
-import java.io.Writer;
 import java.util.Arrays;
 import org.w3c.dom.Node;
 
@@ -43,33 +41,15 @@ public interface SunToolsInternalToolkitTaglet extends Taglet, XMLServices {
      * {@link #getTagletOutput(Doc,TagletWriter)}.
      *
      * @param   writer          The {@link TagletWriter}.
-     * @param   iterable        The {@link Iterable} of {@link Object}s to
+     * @param   iterable        The {@link Iterable} of {@link Node}s to
      *                          translate to content.
      *
      * @return  The {@link Content}.
      */
-    default Content content(TagletWriter writer, Iterable<?> iterable) {
-        ReaderWriterDataSource ds = new ReaderWriterDataSource(null, null);
-
-        try (Writer out = ds.getWriter()) {
-            for (Object object : iterable) {
-                if (object instanceof Node) {
-                    out.write(render((Node) object));
-                } else {
-                    out.write(String.valueOf(object));
-                }
-            }
-
-            out.flush();
-        } catch (RuntimeException exception) {
-            throw exception;
-        } catch (Exception exception) {
-            throw new IllegalStateException(exception);
-        }
-
+    default Content content(TagletWriter writer, Iterable<Node> iterable) {
         Content content = writer.getOutputInstance();
 
-        content.addContent(new RawHtml(ds.toString()));
+        iterable.forEach(t -> content.addContent(new RawHtml(render(t))));
 
         return content;
     }
@@ -81,11 +61,11 @@ public interface SunToolsInternalToolkitTaglet extends Taglet, XMLServices {
      * {@link #getTagletOutput(Doc,TagletWriter)}.
      *
      * @param   writer          The {@link TagletWriter}.
-     * @param   objects         The {@link Object}s to translate to content.
+     * @param   nodes           The {@link Node}s to translate to content.
      *
      * @return  The {@link Content}.
      */
-    default Content content(TagletWriter writer, Object... objects) {
-        return content(writer, Arrays.asList(objects));
+    default Content content(TagletWriter writer, Node... nodes) {
+        return content(writer, Arrays.asList(nodes));
     }
 }

@@ -65,10 +65,7 @@ public class LinkManTaglet extends AbstractInlineTaglet
             path = new File(path, "htmlman" + section);
             path = new File(path, name + "." + section + ".html");
 
-            node =
-                element("a",
-                        attribute("href", path.toURI().toASCIIString()))
-                .text(name + "(" + section + ")");
+            node = a(path.toURI(), code(name + "(" + section + ")"));
         } catch (Exception exception) {
             throw new IllegalArgumentException(tag.position().toString(),
                                                exception);

@@ -5,7 +5,6 @@
  */
 package ball.tools.javadoc;
 
-import ball.activation.ReaderWriterDataSource;
 import ball.annotation.ServiceProviderFor;
 import ball.xml.FluentNode;
 import com.sun.javadoc.ClassDoc;
@@ -14,8 +13,6 @@ import com.sun.tools.doclets.Taglet;
 import com.sun.tools.doclets.internal.toolkit.Content;
 import com.sun.tools.doclets.internal.toolkit.taglets.TagletWriter;
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -24,11 +21,11 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.apache.commons.io.IOUtils;
 
-import static org.apache.commons.lang3.StringUtils.isEmpty;
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 /**
- * Inline {@link Taglet} to include a static {@link Class} {@link Field} or
- * resource in the Javadoc output.
+ * Inline {@link Taglet} to include a static {@link Class}
+ * {@link java.lang.reflect.Field} or resource in the Javadoc output.
  *
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
@@ -56,19 +53,11 @@ public class IncludeTaglet extends AbstractInlineTaglet
             String[] text = tag.text().trim().split(Pattern.quote("#"), 2);
 
             if (text.length > 1) {
-                Class<?> type =
-                    getClassFor((! isEmpty(text[0]))
-                                    ? getClassDoc(doc, text[0])
-                                    : doc);
-
-                node = node(doc, type.getField(text[1]));
-            } else {
-                Class<?> type = getClassFor(doc);
-
                 node =
-                    node(doc,
-                         ((type != null) ? type : getClass())
-                         .getResourceAsStream(text[0]));
+                    field(isNotEmpty(text[0]) ? getClassDoc(doc, text[0]) : doc,
+                          text[1]);
+            } else {
+                node = resource(doc, text[0]);
             }
         } catch (Exception exception) {
             throw new IllegalArgumentException(tag.position().toString(),
@@ -78,8 +67,8 @@ public class IncludeTaglet extends AbstractInlineTaglet
         return content(writer, node);
     }
 
-    private FluentNode node(ClassDoc doc, Field field) throws Exception {
-        Object object = field.get(null);
+    private FluentNode field(ClassDoc doc, String name) throws Exception {
+        Object object = getClassFor(doc).getField(name).get(null);
         FluentNode node = null;
 
         if (object instanceof Collection) {
@@ -104,14 +93,18 @@ public class IncludeTaglet extends AbstractInlineTaglet
         return node;
     }
 
-    private FluentNode node(ClassDoc doc, InputStream in) throws Exception {
-        ReaderWriterDataSource ds =
-            new ReaderWriterDataSource(null, null);
+    private FluentNode resource(ClassDoc doc, String name) throws Exception {
+        String string = null;
+        Class<?> type = getClassFor(doc);
 
-        try (OutputStream out = ds.getOutputStream()) {
-            IOUtils.copy(in, out);
+        if (type == null) {
+            type = getClass();
         }
 
-        return pre(ds.toString());
+        try (InputStream in = type.getResourceAsStream(name)) {
+            string = IOUtils.toString(in, "UTF-8");
+        }
+
+        return pre(string);
     }
 }

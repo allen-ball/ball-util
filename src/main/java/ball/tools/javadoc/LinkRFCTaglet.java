@@ -51,12 +51,9 @@ public class LinkRFCTaglet extends AbstractInlineTaglet
             int rfc = Integer.valueOf(tag.text().trim());
 
             node =
-                element("a",
-                        attribute("href",
-                                  new URI(PROTOCOL, HOST,
-                                          format(PATH, rfc), null)
-                                  .toASCIIString()))
-                .content(format(TEXT, rfc));
+                a(new URI(PROTOCOL, HOST, format(PATH, rfc), null),
+                  format(TEXT, rfc))
+                .add(attribute("target", "newtab"));
         } catch (Exception exception) {
             throw new IllegalArgumentException(tag.position().toString(),
                                                exception);

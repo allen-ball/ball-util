@@ -6,9 +6,9 @@
 package ball.tools.javadoc;
 
 import ball.annotation.ServiceProviderFor;
-import ball.xml.FluentNode;
 /* import ball.tools.maven.EmbeddedMaven; */
 import ball.tools.maven.POMProperties;
+import ball.xml.FluentNode;
 import com.sun.javadoc.Tag;
 import com.sun.tools.doclets.Taglet;
 import com.sun.tools.doclets.internal.toolkit.Content;
@@ -28,6 +28,7 @@ import static ball.tools.maven.POMProperties.GROUP_ID;
 import static ball.tools.maven.POMProperties.VERSION;
 import static lombok.AccessLevel.PROTECTED;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 /**
  * Abstract base class for inline {@link Taglet}s that load the
@@ -55,7 +56,7 @@ public abstract class MavenTaglet extends AbstractInlineTaglet
         File file = null;
         String name = tag.text().trim();
 
-        if (! isEmpty(name)) {
+        if (isNotEmpty(name)) {
             file = new File(tag.position().file().getParentFile(), name);
         } else {
             name = POM_XML;
