@@ -6,7 +6,7 @@
 package ball.tools.javadoc;
 
 import ball.annotation.ServiceProviderFor;
-import ball.xml.HTML;
+import ball.xml.FluentNode;
 import com.sun.javadoc.Tag;
 import com.sun.tools.doclets.Taglet;
 import com.sun.tools.doclets.internal.toolkit.Content;
@@ -15,7 +15,6 @@ import java.net.URI;
 import java.util.Map;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.w3c.dom.Element;
 
 import static java.lang.String.format;
 
@@ -46,20 +45,23 @@ public class LinkRFCTaglet extends AbstractInlineTaglet
                                    TagletWriter writer) throws IllegalArgumentException {
         this.configuration = writer.configuration();
 
-        Element element = null;
+        FluentNode node = null;
 
         try {
             int rfc = Integer.valueOf(tag.text().trim());
 
-            element =
-                HTML.a(document(),
-                       new URI(PROTOCOL, HOST, format(PATH, rfc), null),
-                       format(TEXT, rfc));
+            node =
+                element("a",
+                        attribute("href",
+                                  new URI(PROTOCOL, HOST,
+                                          format(PATH, rfc), null)
+                                  .toASCIIString()))
+                .content(format(TEXT, rfc));
         } catch (Exception exception) {
             throw new IllegalArgumentException(tag.position().toString(),
                                                exception);
         }
 
-        return content(writer, element);
+        return content(writer, node);
     }
 }

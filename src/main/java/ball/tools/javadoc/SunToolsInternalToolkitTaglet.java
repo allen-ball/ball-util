@@ -6,6 +6,7 @@
 package ball.tools.javadoc;
 
 import ball.activation.ReaderWriterDataSource;
+import ball.xml.XMLServices;
 import com.sun.javadoc.Doc;
 import com.sun.javadoc.Tag;
 import com.sun.tools.doclets.formats.html.markup.RawHtml;
@@ -14,10 +15,6 @@ import com.sun.tools.doclets.internal.toolkit.taglets.Taglet;
 import com.sun.tools.doclets.internal.toolkit.taglets.TagletWriter;
 import java.io.Writer;
 import java.util.Arrays;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
 /**
@@ -26,10 +23,7 @@ import org.w3c.dom.Node;
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
-public interface SunToolsInternalToolkitTaglet extends Taglet {
-    Document document();
-    Transformer transformer();
-
+public interface SunToolsInternalToolkitTaglet extends Taglet, XMLServices {
     @Override
     default Content getTagletOutput(Tag tag,
                                     TagletWriter writer) throws IllegalArgumentException {
@@ -60,9 +54,7 @@ public interface SunToolsInternalToolkitTaglet extends Taglet {
         try (Writer out = ds.getWriter()) {
             for (Object object : iterable) {
                 if (object instanceof Node) {
-                    transformer()
-                        .transform(new DOMSource((Node) object),
-                                   new StreamResult(out));
+                    out.write(render((Node) object));
                 } else {
                     out.write(String.valueOf(object));
                 }

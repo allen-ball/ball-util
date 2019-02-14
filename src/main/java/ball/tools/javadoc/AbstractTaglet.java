@@ -5,23 +5,24 @@
  */
 package ball.tools.javadoc;
 
-import ball.activation.ReaderWriterDataSource;
-import ball.xml.HTML;
+import ball.xml.FluentDocument;
+import ball.xml.FluentDocumentBuilder;
+import ball.xml.FluentNode;
+import ball.xml.HTMLTemplates;
 import com.sun.javadoc.ClassDoc;
 import com.sun.javadoc.Doc;
 import com.sun.javadoc.ProgramElementDoc;
 import com.sun.javadoc.Tag;
 import com.sun.tools.doclets.internal.toolkit.Configuration;
-import java.io.Writer;
 import java.net.URI;
 import java.util.Arrays;
-import java.util.Map;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-import org.w3c.dom.Document;
+import org.apache.commons.lang3.ArrayUtils;
 import org.w3c.dom.Node;
 
 import static javax.xml.transform.OutputKeys.INDENT;
@@ -38,7 +39,8 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
-public abstract class AbstractTaglet implements AnnotatedTaglet {
+public abstract class AbstractTaglet implements AnnotatedTaglet,
+                                                HTMLTemplates {
     private static final String INDENT_AMOUNT =
         "{http://xml.apache.org/xslt}indent-amount";
 
@@ -52,8 +54,8 @@ public abstract class AbstractTaglet implements AnnotatedTaglet {
     private final boolean inConstructor;
     private final boolean inMethod;
     private final boolean inType;
-    private final Document document;
     private final Transformer transformer;
+    private final FluentDocument document;
     protected Configuration configuration = null;
 
     /**
@@ -80,15 +82,22 @@ public abstract class AbstractTaglet implements AnnotatedTaglet {
         this.inType = isInlineTag | inType;
 
         try {
-            document =
-                HTML.init(DocumentBuilderFactory.newInstance()
-                          .newDocumentBuilder()
-                          .newDocument());
-
             transformer = TransformerFactory.newInstance().newTransformer();
             transformer.setOutputProperty(OMIT_XML_DECLARATION, YES);
             transformer.setOutputProperty(INDENT, YES);
             transformer.setOutputProperty(INDENT_AMOUNT, String.valueOf(2));
+
+            document =
+                FluentDocumentBuilder
+                .wrap(DocumentBuilderFactory.newInstance()
+                      .newDocumentBuilder()
+                      .newDocument());
+            document
+                .add(element("html",
+                             element("head",
+                                     element("meta",
+                                             attribute("charset", "utf-8"))),
+                             element("body")));
         } catch (Exception exception) {
             throw new ExceptionInInitializerError(exception);
         }
@@ -113,8 +122,11 @@ public abstract class AbstractTaglet implements AnnotatedTaglet {
     @Override public boolean inMethod() { return inMethod; }
     @Override public boolean inType() { return inType; }
 
-    public Document document() { return document; }
+    @Override
     public Transformer transformer() { return transformer; }
+
+    @Override
+    public FluentDocument document() { return document; }
 
     @Override
     public String toString(Tag[] tags) { throw new IllegalStateException(); }
@@ -175,126 +187,6 @@ public abstract class AbstractTaglet implements AnnotatedTaglet {
     }
 
     /**
-     * Method to attempt to get a link to a javadoc document describing the
-     * argument {@link Class}.  {@link #configuration} should be
-     * non-{@code null} to allow external links to be calculated.
-     *
-     * @param   context         The context {@link Doc} for calculating a
-     *                          relative {@link URI}.
-     * @param   type            The target {@link Class}.
-     *
-     * @return  The {@code <a/>} {@link org.w3c.dom.Element} if the link
-     *          could be calculated; a {@link String} containing the
-     *          {@link Class} name otherwise.
-     */
-    protected Object getClassDocLink(Doc context, Class<?> type) {
-        String brackets = EMPTY;
-
-        while (type.isArray()) {
-            brackets = "[]" + brackets;
-            type = type.getComponentType();
-        }
-
-        Object link = type.getCanonicalName() + brackets;
-        ClassDoc target = getClassDoc(context, type.getCanonicalName());
-
-        if (target != null) {
-            link = getClassDocLink(context, target.name() + brackets, target);
-        }
-
-        return link;
-    }
-
-    /**
-     * Method to create a link to a {@link ClassDoc}.
-     * {@link #configuration} should be non-{@code null} to allow
-     * external links to be calculated.
-     *
-     * @param   context         The context {@link Doc} for calculating a
-     *                          relative {@link URI}.
-     * @param   value           The value of the created link.
-     * @param   target          The target {@link ClassDoc}.
-     *
-     * @return  The {@code <a/>} {@link org.w3c.dom.Element} if the link
-     *          could be calculated; the {@code value} otherwise.
-     */
-    protected Object getClassDocLink(Doc context,
-                                     Object value, ClassDoc target) {
-        URI href = getHref(getContainingClassDoc(context), target);
-
-        return (href != null) ? HTML.a(document(), href, value) : value;
-    }
-
-    private URI getHref(ClassDoc context, ClassDoc target) {
-        URI href = null;
-
-        if (target.isIncluded()) {
-            String path = EMPTY;
-            String[] names = context.qualifiedName().split("[.]");
-
-            for (int i = 0, n = names.length - 1; i < n; i += 1) {
-                path += "../";
-            }
-
-            path += "./";
-
-            if (! isEmpty(target.containingPackage().name())) {
-                path +=
-                    target.containingPackage().name().replaceAll("[.]", "/")
-                    + "/";
-            }
-
-            path += target.name() + ".html";
-
-            href = URI.create(path).normalize();
-        } else {
-            if (configuration != null) {
-                String path =
-                    configuration.extern
-                    .getExternalLink(target.containingPackage().name(),
-                                     null, target.name() + ".html")
-                    .toString();
-
-                if (path != null) {
-                    href = URI.create(path);
-                }
-            }
-        }
-
-        return href;
-    }
-
-    /**
-     * Method to attempt to get a link to a javadoc document describing the
-     * argument {@link Enum} constant.  {@link #configuration} should
-     * be non-{@code null} to allow external links to be calculated.
-     *
-     * @param   context         The context {@link Doc} for calculating a
-     *                          relative {@link URI}.
-     * @param   constant        The target {@link Enum} constant.
-     *
-     * @return  The {@code <a/>} {@link org.w3c.dom.Element} if the link
-     *          could be calculated; a {@link String} containing the
-     *          {@link Enum} name otherwise.
-     */
-    protected Object getEnumDocLink(Doc context, Enum<?> constant) {
-        Object link = constant.name();
-        ClassDoc target =
-            getClassDoc(context,
-                        constant.getDeclaringClass().getCanonicalName());
-
-        if (target != null) {
-            URI href =
-                getHref(getContainingClassDoc(context), target)
-                .resolve("#" + constant.name());
-
-            link = HTML.a(document(), href, constant.name());
-        }
-
-        return link;
-    }
-
-    /**
      * Convenience method to attempt to qualify a class name.
      *
      * @param   context         The context {@link Doc}.
@@ -336,25 +228,196 @@ public abstract class AbstractTaglet implements AnnotatedTaglet {
     }
 
     /**
-     * Method to get the {@link String} representation of a {@link Node}
-     * (suitable for output).
+     * Method to get a "href" attribute {@link URI} to a
+     * {@link ClassDoc target} from a {@link ClassDoc context}.
+     * {@link #configuration} must be non-{@code null} to allow external
+     * links to be calculated.
      *
-     * @param   node            The {@link Node}.
+     * @param   context         The context {@link Doc} for calculating a
+     *                          relative {@link URI}.
+     * @param   target          The target {@link ClassDoc}.
      *
-     * @return  The {@link String} representation.
+     * @return  The {@link URI} if the "href" could be calculated;
+     *          {@code null} otherwise.
      */
-    protected String toString(Node node) {
-        ReaderWriterDataSource ds = new ReaderWriterDataSource(null, null);
+    protected URI href(ClassDoc context, ClassDoc target) {
+        URI href = null;
 
-        try (Writer out = ds.getWriter()) {
-            transformer()
-                .transform(new DOMSource(node), new StreamResult(out));
-        } catch (RuntimeException exception) {
-            throw exception;
-        } catch (Exception exception) {
-            throw new IllegalStateException(exception);
+        if (target.isIncluded()) {
+            String path = EMPTY;
+            String[] names = context.qualifiedName().split("[.]");
+
+            for (int i = 0, n = names.length - 1; i < n; i += 1) {
+                path += "../";
+            }
+
+            path += "./";
+
+            if (! isEmpty(target.containingPackage().name())) {
+                path +=
+                    target.containingPackage().name().replaceAll("[.]", "/")
+                    + "/";
+            }
+
+            path += target.name() + ".html";
+
+            href = URI.create(path).normalize();
+        } else {
+            if (configuration != null) {
+                String path =
+                    configuration.extern
+                    .getExternalLink(target.containingPackage().name(),
+                                     null, target.name() + ".html")
+                    .toString();
+
+                if (path != null) {
+                    href = URI.create(path);
+                }
+            }
         }
 
-        return ds.toString();
+        return href;
+    }
+
+    /**
+     * Method to get a "href" attribute {@link URI} to a
+     * {@link Enum} constant from a {@link ClassDoc context}.
+     * {@link #configuration} must be non-{@code null} to allow external
+     * links to be calculated.
+     *
+     * @param   context         The context {@link Doc} for calculating a
+     *                          relative {@link URI}.
+     * @param   constant        The target {@link Enum} constant.
+     *
+     * @return  The {@link URI} if the "href" could be calculated;
+     *          {@code null} otherwise.
+     */
+    protected URI href(Doc context, Enum<?> constant) {
+        URI href = null;
+        ClassDoc target =
+            getClassDoc(context,
+                        constant.getDeclaringClass().getCanonicalName());
+
+        if (target != null) {
+            href =
+                href(getContainingClassDoc(context), target)
+                .resolve("#" + constant.name());
+        }
+
+        return href;
+    }
+
+    /**
+     * See {@link #a(URI,Node)}.
+     *
+     * @param   context         The context {@link Doc} for calculating a
+     *                          relative {@link URI}.
+     * @param   target          The target {@link ClassDoc}.
+     * @param   node            The child {@link Node} (may be
+     *                          {@code null}).
+     *
+     * @return  The {@code <a/>} {@link org.w3c.dom.Element}.
+     */
+    protected FluentNode a(Doc context, ClassDoc target, Node node) {
+        return a(href(getContainingClassDoc(context), target),
+                 (node != null) ? node : code(target.name()));
+    }
+
+    /**
+     * See {@link #a(URI,Node)}.
+     *
+     * @param   context         The context {@link Doc} for calculating a
+     *                          relative {@link URI}.
+     * @param   type            The target {@link Class}.
+     *
+     * @return  The {@code <a/>} {@link org.w3c.dom.Element}.
+     */
+    protected FluentNode a(Doc context, Class<?> type) {
+        String brackets = EMPTY;
+
+        while (type.isArray()) {
+            brackets = "[]" + brackets;
+            type = type.getComponentType();
+        }
+
+        ClassDoc target =
+            getClassDoc(getContainingClassDoc(context),
+                        type.getCanonicalName());
+        URI href = null;
+
+        if (target != null) {
+            href = href(getContainingClassDoc(context), target);
+        }
+
+        return a(href,
+                 code(((target != null)
+                           ? target.name()
+                           : type.getCanonicalName())
+                      + brackets));
+    }
+
+    /**
+     * See {@link #a(URI,Node)}.
+     *
+     * @param   context         The context {@link Doc} for calculating a
+     *                          relative {@link URI}.
+     * @param   constant        The target {@link Enum} constant.
+     * @param   node            The child {@link Node} (may be
+     *                          {@code null}).
+     *
+     * @return  The {@code <a/>} {@link org.w3c.dom.Element}.
+     */
+    protected FluentNode a(Doc context, Enum<?> constant, Node node) {
+        return a(href(context, constant),
+                 (node != null) ? node : code(constant.name()));
+    }
+
+    protected FluentNode node(Doc context, Object object) {
+        FluentNode node = null;
+
+        if (object instanceof byte[]) {
+            node =
+                text(Arrays.stream(ArrayUtils.toObject((byte[]) object))
+                     .map (t -> String.format("0x%02X", t))
+                     .collect(Collectors.joining(", ", "[", "]")));
+        } else if (object instanceof boolean[]) {
+            node = text(Arrays.toString((boolean[]) object));
+        } else if (object instanceof double[]) {
+            node = text(Arrays.toString((double[]) object));
+        } else if (object instanceof float[]) {
+            node = text(Arrays.toString((float[]) object));
+        } else if (object instanceof int[]) {
+            node = text(Arrays.toString((int[]) object));
+        } else if (object instanceof long[]) {
+            node = text(Arrays.toString((long[]) object));
+        } else if (object instanceof Object[]) {
+            node = node(context, Arrays.asList((Object[]) object));
+        } else if (object instanceof Class<?>) {
+            node = a(context, (Class<?>) object);
+        } else if (object instanceof Enum<?>) {
+            node = a(context, ((Enum<?>) object), null);
+        } else if (object instanceof Collection<?>) {
+            List<Node> nodes =
+                ((Collection<?>) object)
+                .stream()
+                .map(t -> node(context, t))
+                .collect(Collectors.toList());
+
+            for (int i = nodes.size() - 1; i > 0; i -= 1) {
+                nodes.add(i, text(", "));
+            }
+
+            node =
+                fragment()
+                .add(text("["))
+                .add(nodes)
+                .add(text("]"));
+        }
+
+        if (node == null) {
+            node = text(String.valueOf(object));
+        }
+
+        return node;
     }
 }

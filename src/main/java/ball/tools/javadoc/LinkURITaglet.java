@@ -6,7 +6,7 @@
 package ball.tools.javadoc;
 
 import ball.annotation.ServiceProviderFor;
-import ball.xml.HTML;
+import ball.xml.FluentNode;
 import com.sun.javadoc.Tag;
 import com.sun.tools.doclets.Taglet;
 import com.sun.tools.doclets.internal.toolkit.Content;
@@ -16,7 +16,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.w3c.dom.Element;
 
 /**
  * Inline {@link Taglet} to provide external links.
@@ -42,7 +41,7 @@ public class LinkURITaglet extends AbstractInlineTaglet
                                    TagletWriter writer) throws IllegalArgumentException {
         this.configuration = writer.configuration();
 
-        Element element = null;
+        FluentNode node = null;
 
         try {
             String text = tag.text().trim();
@@ -66,16 +65,19 @@ public class LinkURITaglet extends AbstractInlineTaglet
                 }
             }
 
-            element = HTML.a(document(), href, text);
+            node =
+                element("a",
+                        attribute("href", href.toASCIIString()))
+                .content(text);
 
             for (Map.Entry<String,String> entry : map.entrySet()) {
-                element.setAttribute(entry.getKey(), entry.getValue());
+                node.add(attribute(entry.getKey(), entry.getValue()));
             }
         } catch (Exception exception) {
             throw new IllegalArgumentException(tag.position().toString(),
                                                exception);
         }
 
-        return content(writer, element);
+        return content(writer, node);
     }
 }

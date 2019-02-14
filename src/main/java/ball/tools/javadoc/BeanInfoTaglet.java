@@ -7,7 +7,7 @@ package ball.tools.javadoc;
 
 import ball.annotation.ServiceProviderFor;
 import ball.util.BeanInfoUtil;
-import ball.xml.HTML;
+import ball.xml.FluentNode;
 import com.sun.javadoc.ClassDoc;
 import com.sun.javadoc.Doc;
 import com.sun.javadoc.Tag;
@@ -23,9 +23,10 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.w3c.dom.Element;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
@@ -100,61 +101,58 @@ public class BeanInfoTaglet extends AbstractInlineTaglet
 
     private void output(Doc doc,
                         List<Object> list, BeanDescriptor descriptor) {
-        Element table = HTML.table(document());
+        list.add(table(doc, descriptor));
+    }
 
-        HTML.tr(table,
-                HTML.b(table.getOwnerDocument(), "Bean Class:"),
-                getClassDocLink(doc, descriptor.getBeanClass()));
+    private FluentNode table(Doc doc, BeanDescriptor descriptor) {
+        FluentNode node =
+            table(tr(td(b("Bean Class:")),
+                     td(a(doc, descriptor.getBeanClass()))))
+            .add(Stream.of(descriptor.getCustomizerClass())
+                 .filter(t -> t != null)
+                 .map(t -> tr(td(b("Customizer Class:")),
+                              td(a(doc, t))))
+                 .collect(Collectors.toList()));
 
-        if (descriptor.getCustomizerClass() != null) {
-            HTML.tr(table,
-                    HTML.b(table.getOwnerDocument(), "Customizer Class:"),
-                    getClassDocLink(doc, descriptor.getCustomizerClass()));
-        }
-
-        list.add(table);
+        return node;
     }
 
     private void output(Doc doc,
                         List<Object> list, PropertyDescriptor[] descriptors) {
-        Element table = HTML.table(document());
+        list.add(table(doc, descriptors));
+    }
 
-        Object[] headers = new String[] {
-            "Property", "Mode", "Type",
-            "isIndexed", "isHidden", "isBound", "isConstrained",
-            "Description"
-        };
+    private FluentNode table(Doc doc, PropertyDescriptor[] rows) {
+        FluentNode table =
+            table(tr(Arrays.asList("Property", "Mode", "Type",
+                                   "isIndexed", "isHidden", "isBound",
+                                   "isConstrained", "Description")
+                     .stream()
+                     .map(t -> th(t))
+                     .collect(Collectors.toList())))
+            .add(Arrays.stream(rows)
+                 .map(t -> tr(doc, t))
+                 .collect(Collectors.toList()));
 
-        headers = HTML.b(table.getOwnerDocument(), headers);
-        headers = HTML.u(table.getOwnerDocument(), headers);
+        return table;
+    }
 
-        HTML.tr(table, headers);
+    private FluentNode tr(Doc doc, PropertyDescriptor row) {
+        boolean isIndexed = (row instanceof IndexedPropertyDescriptor);
+        Class<?> type = row.getPropertyType();
 
-        for (PropertyDescriptor row : descriptors) {
-            boolean isIndexed = (row instanceof IndexedPropertyDescriptor);
-            Class<?> type = row.getPropertyType();
-
-            if (isIndexed) {
-                type =
-                    ((IndexedPropertyDescriptor) row).getIndexedPropertyType();
-            }
-
-            String description = "";
-
-            if (isNotEmpty(row.getShortDescription())
-                && (! row.getShortDescription().equals(row.getDisplayName()))) {
-                description = row.getShortDescription();
-            }
-
-            HTML.tr(table,
-                    row.getName(), BeanInfoUtil.getMode(row),
-                    getClassDocLink(doc, type),
-                    isIndexed,
-                    row.isHidden(), row.isBound(), row.isConstrained(),
-                    description);
+        if (isIndexed) {
+            type = ((IndexedPropertyDescriptor) row).getIndexedPropertyType();
         }
 
-        list.add(table);
+        return tr(td(row.getName()),
+                  td(BeanInfoUtil.getMode(row)),
+                  td(a(doc, type)),
+                  td(code(isIndexed)),
+                  td(code(row.isHidden())),
+                  td(code(row.isBound())),
+                  td(code(row.isConstrained())),
+                  td(row.getShortDescription()));
     }
 
     private void output(Doc doc, List<Object> list, BeanInfo[] infos) {

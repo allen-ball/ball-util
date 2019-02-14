@@ -9,7 +9,7 @@ import ball.annotation.MatcherGroup;
 import ball.annotation.PatternRegex;
 import ball.annotation.ServiceProviderFor;
 import ball.util.PatternMatcherBean;
-import ball.xml.HTML;
+import ball.xml.FluentNode;
 import com.sun.javadoc.Tag;
 import com.sun.tools.doclets.Taglet;
 import com.sun.tools.doclets.internal.toolkit.Content;
@@ -18,7 +18,6 @@ import java.io.File;
 import java.util.Map;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.w3c.dom.Element;
 
 /**
  * Inline {@link Taglet} providing links to {@link.man man(1)} pages.
@@ -53,7 +52,7 @@ public class LinkManTaglet extends AbstractInlineTaglet
                                    TagletWriter writer) throws IllegalArgumentException {
         this.configuration = writer.configuration();
 
-        Element element = null;
+        FluentNode node = null;
 
         try {
             PatternMatcherBean.super.initialize(tag.text().trim());
@@ -66,13 +65,15 @@ public class LinkManTaglet extends AbstractInlineTaglet
             path = new File(path, "htmlman" + section);
             path = new File(path, name + "." + section + ".html");
 
-            element =
-                HTML.a(document(), path.toURI(), name + "(" + section + ")");
+            node =
+                element("a",
+                        attribute("href", path.toURI().toASCIIString()))
+                .text(name + "(" + section + ")");
         } catch (Exception exception) {
             throw new IllegalArgumentException(tag.position().toString(),
                                                exception);
         }
 
-        return content(writer, element);
+        return content(writer, node);
     }
 }

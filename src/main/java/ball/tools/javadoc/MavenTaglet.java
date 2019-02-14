@@ -5,11 +5,10 @@
  */
 package ball.tools.javadoc;
 
-import ball.activation.ReaderWriterDataSource;
 import ball.annotation.ServiceProviderFor;
+import ball.xml.FluentNode;
 /* import ball.tools.maven.EmbeddedMaven; */
 import ball.tools.maven.POMProperties;
-import ball.xml.HTML;
 import com.sun.javadoc.Tag;
 import com.sun.tools.doclets.Taglet;
 import com.sun.tools.doclets.internal.toolkit.Content;
@@ -17,17 +16,12 @@ import com.sun.tools.doclets.internal.toolkit.taglets.TagletWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
-import java.io.Writer;
 import java.util.Map;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.apache.maven.project.MavenProject;
-import org.w3c.dom.Element;
 
 import static ball.tools.maven.POMProperties.ARTIFACT_ID;
 import static ball.tools.maven.POMProperties.GROUP_ID;
@@ -157,7 +151,7 @@ public abstract class MavenTaglet extends AbstractInlineTaglet
                                        TagletWriter writer) throws IllegalArgumentException {
             this.configuration = writer.configuration();
 
-            Element element = null;
+            FluentNode node = null;
 
             try {
                 Model model = getModelFor(tag);
@@ -171,37 +165,19 @@ public abstract class MavenTaglet extends AbstractInlineTaglet
                         .getVersion();
                 }
 
-                element = dependency(groupId, artifactId, version);
+                node =
+                    element(DEPENDENCY,
+                            element(GROUP_ID).content(groupId),
+                            element(ARTIFACT_ID).content(artifactId),
+                            element(VERSION).content(version));
 
-                ReaderWriterDataSource ds =
-                    new ReaderWriterDataSource(null, null);
-                Writer out = ds.getWriter();
-
-                transformer()
-                    .transform(new DOMSource(element),
-                               new StreamResult(out));
-
-                out.flush();
-                out.close();
-
-                element = HTML.pre(document(), ds.toString());
+                node = pre(render(node));
             } catch (Exception exception) {
                 throw new IllegalArgumentException(tag.position().toString(),
                                                    exception);
             }
 
-            return content(writer, element);
-        }
-
-        private Element dependency(String groupId,
-                                   String artifactId, String version) {
-            Element element = HTML.element(document(), DEPENDENCY);
-
-            element.appendChild(HTML.element(document(), GROUP_ID, groupId));
-            element.appendChild(HTML.element(document(), ARTIFACT_ID, artifactId));
-            element.appendChild(HTML.element(document(), VERSION, version));
-
-            return element;
+            return content(writer, node);
         }
     }
 }

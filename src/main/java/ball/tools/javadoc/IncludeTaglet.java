@@ -7,7 +7,7 @@ package ball.tools.javadoc;
 
 import ball.activation.ReaderWriterDataSource;
 import ball.annotation.ServiceProviderFor;
-import ball.xml.HTML;
+import ball.xml.FluentNode;
 import com.sun.javadoc.ClassDoc;
 import com.sun.javadoc.Tag;
 import com.sun.tools.doclets.Taglet;
@@ -21,10 +21,10 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.apache.commons.io.IOUtils;
-import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import static org.apache.commons.lang3.StringUtils.EMPTY;
@@ -53,7 +53,7 @@ public class IncludeTaglet extends AbstractInlineTaglet
                                    TagletWriter writer) throws IllegalArgumentException {
         /* this.configuration = writer.configuration(); */
 
-        Element element = null;
+        FluentNode node = null;
         Object resource = null;
 
         try {
@@ -80,33 +80,20 @@ public class IncludeTaglet extends AbstractInlineTaglet
             }
 
             if (resource instanceof Collection) {
-                Collection<?> collection = (Collection<?>) resource;
-
-                element = HTML.table(document());
-
-                HTML.tr(element,
-                        HTML.b(element.getOwnerDocument(), "Element"));
-
-                for (Object object : collection) {
-                    Element tr = HTML.tr(element, EMPTY);
-
-                    renderTo(doc, object, tr.getFirstChild());
-                }
+                node =
+                    table(tr(th("Element")))
+                    .add(((Collection<?>) resource)
+                         .stream()
+                         .map(t -> tr(td(node(doc, t))))
+                         .collect(Collectors.toList()));
             } else if (resource instanceof Map) {
-                Map<?,?> map = (Map<?,?>) resource;
-
-                element = HTML.table(document());
-
-                HTML.tr(element,
-                        HTML.b(element.getOwnerDocument(), "Key"),
-                        HTML.b(element.getOwnerDocument(), "Value"));
-
-                for (Map.Entry<?,?> entry : map.entrySet()) {
-                    Element tr = HTML.tr(element, EMPTY, EMPTY);
-
-                    renderTo(doc, entry.getKey(), tr.getFirstChild());
-                    renderTo(doc, entry.getValue(), tr.getLastChild());
-                }
+                node =
+                    table(tr(th("Key"), th("Value")))
+                    .add(((Map<?,?>) resource).entrySet()
+                         .stream()
+                         .map(t -> tr(td(node(doc, t.getKey())),
+                                      td(node(doc, t.getValue()))))
+                         .collect(Collectors.toList()));
             } else if (resource instanceof InputStream) {
                 ReaderWriterDataSource ds =
                     new ReaderWriterDataSource(null, null);
@@ -115,9 +102,9 @@ public class IncludeTaglet extends AbstractInlineTaglet
                     IOUtils.copy((InputStream) resource, out);
                 }
 
-                element = HTML.pre(document(), ds.toString());
+                node = pre(ds.toString());
             } else {
-                element = HTML.pre(document(), String.valueOf(resource));
+                node = pre(String.valueOf(resource));
             }
         } catch (Exception exception) {
             throw new IllegalArgumentException(tag.position().toString(),
@@ -131,80 +118,6 @@ public class IncludeTaglet extends AbstractInlineTaglet
             }
         }
 
-        return content(writer, element);
-    }
-
-    private void renderTo(ClassDoc doc, Object object, Node node) {
-        if (object instanceof byte[]) {
-            append(node, toString((byte[]) object));
-        } else if (object instanceof boolean[]) {
-            append(node, Arrays.toString((boolean[]) object));
-        } else if (object instanceof double[]) {
-            append(node, Arrays.toString((double[]) object));
-        } else if (object instanceof float[]) {
-            append(node, Arrays.toString((float[]) object));
-        } else if (object instanceof int[]) {
-            append(node, Arrays.toString((int[]) object));
-        } else if (object instanceof long[]) {
-            append(node, Arrays.toString((long[]) object));
-        } else if (object instanceof Object[]) {
-            append(node, "[");
-
-            Object[] array = (Object[]) object;
-
-            for (int i = 0; i < array.length; i += 1) {
-                if (i > 0) {
-                    append(node, ", ");
-                }
-
-                renderTo(doc, array[i], node);
-            }
-
-            append(node, "]");
-        } else if (object instanceof Class<?>) {
-            Class<?> type = (Class<?>) object;
-            Object link = getClassDocLink(doc, type);
-
-            if (link instanceof Node) {
-                node.appendChild((Node) link);
-            } else {
-                append(node, type.getCanonicalName());
-            }
-        } else if (object instanceof Enum<?>) {
-            Object link = getEnumDocLink(doc, (Enum<?>) object);
-
-            if (link instanceof Node) {
-                node.appendChild((Node) link);
-            } else {
-                append(node, String.valueOf(link));
-            }
-        } else if (object instanceof Collection<?>) {
-            renderTo(doc, ((Collection<?>) object).toArray(new Object[] { }),
-                     node);
-        } else {
-            append(node, String.valueOf(object));
-        }
-    }
-
-    private void append(Node node, String string) {
-        node.appendChild(node.getOwnerDocument().createTextNode(string));
-    }
-
-    private String toString(byte[] bytes) {
-        StringBuilder buffer = new StringBuilder();
-
-        buffer.append("[");
-
-        for (int i = 0; i < bytes.length; i += 1) {
-            if (i > 0) {
-                buffer.append(", ");
-            }
-
-            buffer.append(String.format("0x%02X", bytes[i]));
-        }
-
-        buffer.append("]");
-
-        return buffer.toString();
+        return content(writer, node);
     }
 }

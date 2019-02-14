@@ -7,7 +7,7 @@ package ball.tools.javadoc;
 
 import ball.annotation.ServiceProviderFor;
 import ball.lang.Keyword;
-import ball.xml.HTML;
+import ball.xml.FluentNode;
 import com.sun.javadoc.ClassDoc;
 import com.sun.javadoc.Doc;
 import com.sun.javadoc.Tag;
@@ -17,7 +17,6 @@ import com.sun.tools.doclets.internal.toolkit.taglets.TagletWriter;
 import java.util.Map;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.w3c.dom.Element;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
@@ -43,7 +42,7 @@ public class LinkThisTaglet extends AbstractInlineTaglet
                                    TagletWriter writer) throws IllegalArgumentException {
         this.configuration = writer.configuration();
 
-        Element element = HTML.code(document(), Keyword.THIS.lexeme());
+        FluentNode node = code(Keyword.THIS.lexeme());
 
         try {
             if (! isEmpty(tag.text().trim())) {
@@ -53,14 +52,13 @@ public class LinkThisTaglet extends AbstractInlineTaglet
             ClassDoc target = getContainingClassDoc(tag.holder());
 
             if (target != null) {
-                element =
-                    (Element) getClassDocLink(tag.holder(), element, target);
+                node = a(tag.holder(), target, node);
             }
         } catch (Exception exception) {
             throw new IllegalArgumentException(tag.position().toString(),
                                                exception);
         }
 
-        return content(writer, element);
+        return content(writer, node);
     }
 }
