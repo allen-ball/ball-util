@@ -143,7 +143,7 @@ public abstract class MavenTaglet extends AbstractInlineTaglet
     public static class Coordinates extends MavenTaglet {
         private static final Coordinates INSTANCE = new Coordinates();
 
-        public static void register(Map<String,Taglet> map) {
+        public static void register(Map<Object,Object> map) {
             map.putIfAbsent(INSTANCE.getName(), INSTANCE);
         }
 

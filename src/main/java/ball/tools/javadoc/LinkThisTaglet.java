@@ -33,7 +33,7 @@ public class LinkThisTaglet extends AbstractInlineTaglet
                             implements SunToolsInternalToolkitTaglet {
     private static final LinkThisTaglet INSTANCE = new LinkThisTaglet();
 
-    public static void register(Map<String,Taglet> map) {
+    public static void register(Map<Object,Object> map) {
         map.putIfAbsent(INSTANCE.getName(), INSTANCE);
     }
 

@@ -25,13 +25,17 @@ public interface SunToolsInternalToolkitTaglet extends Taglet, XMLServices {
     @Override
     default Content getTagletOutput(Tag tag,
                                     TagletWriter writer) throws IllegalArgumentException {
-        throw new IllegalArgumentException(tag.position().toString());
+        throw new IllegalArgumentException(tag.position() + ": "
+                                           + "Method not supported in taglet "
+                                           + getName() + ".");
     }
 
     @Override
     default Content getTagletOutput(Doc doc,
                                     TagletWriter writer) throws IllegalArgumentException {
-        throw new IllegalArgumentException(doc.position().toString());
+        throw new IllegalArgumentException(doc.position() + ": "
+                                           + "Method not supported in taglet "
+                                           + getName() + ".");
     }
 
     /**

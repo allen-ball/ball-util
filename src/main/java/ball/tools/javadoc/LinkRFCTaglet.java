@@ -31,7 +31,7 @@ public class LinkRFCTaglet extends AbstractInlineTaglet
                            implements SunToolsInternalToolkitTaglet {
     private static final LinkRFCTaglet INSTANCE = new LinkRFCTaglet();
 
-    public static void register(Map<String,Taglet> map) {
+    public static void register(Map<Object,Object> map) {
         map.putIfAbsent(INSTANCE.getName(), INSTANCE);
     }
 

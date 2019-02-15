@@ -46,7 +46,7 @@ public class BeanInfoTaglet extends AbstractInlineTaglet
                             implements SunToolsInternalToolkitTaglet {
     private static final BeanInfoTaglet INSTANCE = new BeanInfoTaglet();
 
-    public static void register(Map<String,Taglet> map) {
+    public static void register(Map<Object,Object> map) {
         map.putIfAbsent(INSTANCE.getName(), INSTANCE);
     }
 

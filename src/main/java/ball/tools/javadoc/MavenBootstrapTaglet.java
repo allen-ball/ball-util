@@ -24,7 +24,7 @@ public abstract class MavenBootstrapTaglet extends AbstractTaglet {
      *
      * @param   map             The {@link Map} of {@link Taglet}s.
      */
-    public static void register(Map<String,Taglet> map) {
+    public static void register(Map<Object,Object> map) {
         try {
             ServiceLoader.load(Taglet.class,
                                MavenBootstrapTaglet.class.getClassLoader())
