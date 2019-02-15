@@ -105,14 +105,25 @@ public interface XMLServices {
 
     /**
      * Create an {@link org.w3c.dom.Attr} {@link Node}
-     * (see {@link FluentNode#attribute(String)}.
+     * (see {@link FluentNode#attr(String)}.
      *
      * @param   name            The {@link org.w3c.dom.Attr} name.
      *
      * @return  The newly created {@link org.w3c.dom.Attr}.
      */
-    default FluentNode attribute(String name) {
-        return document().attribute(name);
+    default FluentNode attr(String name) { return document().attr(name); }
+
+    /**
+     * Create an {@link org.w3c.dom.Attr} {@link Node}
+     * (see {@link FluentNode#attr(String,String)}.
+     *
+     * @param   name            The {@link org.w3c.dom.Attr} name.
+     * @param   value           The {@link org.w3c.dom.Attr} value.
+     *
+     * @return  The newly created {@link org.w3c.dom.Attr}.
+     */
+    default FluentNode attr(String name, String value) {
+        return document().attr(name, value);
     }
 
     /**
@@ -128,15 +139,26 @@ public interface XMLServices {
     }
 
     /**
-     * Create an {@link org.w3c.dom.Attr} {@link Node}
-     * (see {@link FluentNode#attribute(String,String)}.
+     * Create an {@link org.w3c.dom.CDATASection} {@link Node}
+     * (see {@link FluentNode#cdata(String)}.
      *
-     * @param   name            The {@link org.w3c.dom.Attr} name.
-     * @param   value           The {@link org.w3c.dom.Attr} value.
+     * @param   data            The {@link org.w3c.dom.CDATASection} data.
      *
-     * @return  The newly created {@link org.w3c.dom.Attr}.
+     * @return  The newly created {@link org.w3c.dom.CDATASection}.
      */
-    default FluentNode attribute(String name, String value) {
-        return document().attribute(name, value);
+    default FluentNode cdata(String data) {
+        return document().cdata(data);
+    }
+
+    /**
+     * Create an {@link org.w3c.dom.Comment} {@link Node}
+     * (see {@link FluentNode#comment(String)}.
+     *
+     * @param   data            The {@link org.w3c.dom.Comment} data.
+     *
+     * @return  The newly created {@link org.w3c.dom.Comment}.
+     */
+    default FluentNode comment(String data) {
+        return document().comment(data);
     }
 }

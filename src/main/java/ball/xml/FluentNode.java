@@ -246,7 +246,7 @@ public interface FluentNode extends Node {
      *
      * @return  The newly created {@link Attr}.
      */
-    default FluentNode attribute(String name) {
+    default FluentNode attr(String name) {
         return (FluentNode) owner().createAttribute(name);
     }
 
@@ -258,8 +258,8 @@ public interface FluentNode extends Node {
      *
      * @return  The newly created {@link Attr}.
      */
-    default FluentNode attribute(String name, String value) {
-        FluentNode node = attribute(name);
+    default FluentNode attr(String name, String value) {
+        FluentNode node = attr(name);
 
         ((Attr) node).setValue(value);
 
@@ -274,7 +274,7 @@ public interface FluentNode extends Node {
      *
      * @return  The newly created {@link Attr}.
      */
-    default FluentNode attributeNS(String ns, String qn) {
+    default FluentNode attrNS(String ns, String qn) {
         return (FluentNode) owner().createAttributeNS(ns, qn);
     }
 
@@ -287,8 +287,8 @@ public interface FluentNode extends Node {
      *
      * @return  The newly created {@link Attr}.
      */
-    default FluentNode attributeNS(String ns, String qn, String value) {
-        FluentNode node = attributeNS(ns, qn);
+    default FluentNode attrNS(String ns, String qn, String value) {
+        FluentNode node = attrNS(ns, qn);
 
         ((Attr) node).setValue(value);
 
@@ -304,5 +304,27 @@ public interface FluentNode extends Node {
      */
     default FluentNode text(String content) {
         return (FluentNode) owner().createTextNode(content);
+    }
+
+    /**
+     * Create a {@link CDATASection} {@link Node}.
+     *
+     * @param   data            The {@link CDATASection} data.
+     *
+     * @return  The newly created {@link CDATASection}.
+     */
+    default FluentNode cdata(String data) {
+        return (FluentNode) owner().createCDATASection(data);
+    }
+
+    /**
+     * Create a {@link Comment} {@link Node}.
+     *
+     * @param   data            The {@link Comment} data.
+     *
+     * @return  The newly created {@link Comment}.
+     */
+    default FluentNode comment(String data) {
+        return (FluentNode) owner().createComment(data);
     }
 }

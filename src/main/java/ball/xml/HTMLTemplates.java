@@ -38,8 +38,8 @@ public interface HTMLTemplates extends XMLServices {
      */
     default FluentNode a(URI href, Node node) {
         return element("a",
-                       attribute("href",
-                                 (href != null) ? href.toASCIIString() : null),
+                       attr("href",
+                            (href != null) ? href.toASCIIString() : null),
                        node);
     }
 
