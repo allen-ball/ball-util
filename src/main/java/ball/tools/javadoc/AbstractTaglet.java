@@ -24,6 +24,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.w3c.dom.Node;
 
 import static javax.xml.transform.OutputKeys.INDENT;
@@ -97,7 +98,7 @@ public abstract class AbstractTaglet implements AnnotatedTaglet,
                 .add(element("html",
                              element("head",
                                      element("meta",
-                                             attribute("charset", "utf-8"))),
+                                             attr("charset", "utf-8"))),
                              element("body")));
         } catch (Exception exception) {
             throw new ExceptionInInitializerError(exception);
@@ -134,6 +135,29 @@ public abstract class AbstractTaglet implements AnnotatedTaglet,
 
     @Override
     public String toString(Tag tag) { throw new IllegalStateException(); }
+
+    /**
+     * Method to print a warning and create a {@link Node} including the
+     * input and the {@link Throwable} stack trace (as a comment) to include
+     * in the javadoc output.
+     *
+     * @param   tag             The offending {@link Tag}.
+     * @param   throwable       The {@link Throwable}.
+     *
+     * @return  A {@link FluentNode} to include in javadoc output.
+     */
+    protected FluentNode warning(Tag tag, Throwable throwable) {
+        System.err.println(tag.position() + ": " + throwable);
+
+        String string = "@" + getName() + " " + tag.text();
+
+        if (isInlineTag()) {
+            string = "{" + string + "}";
+        }
+
+        return fragment(p(b(u(string))),
+                        comment(ExceptionUtils.getStackTrace(throwable)));
+    }
 
     /**
      * Convenience method to get the containing {@link ClassDoc}.

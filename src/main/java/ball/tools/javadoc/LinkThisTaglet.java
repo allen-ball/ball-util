@@ -55,8 +55,11 @@ public class LinkThisTaglet extends AbstractInlineTaglet
                 node = a(tag.holder(), target, node);
             }
         } catch (Exception exception) {
-            throw new IllegalArgumentException(tag.position().toString(),
-                                               exception);
+            node = warning(tag, exception);
+
+            if (exception instanceof IllegalArgumentException) {
+                throw (IllegalArgumentException) exception;
+            }
         }
 
         return content(writer, node);

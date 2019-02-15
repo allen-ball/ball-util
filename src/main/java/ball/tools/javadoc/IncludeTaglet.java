@@ -60,8 +60,11 @@ public class IncludeTaglet extends AbstractInlineTaglet
                 node = resource(doc, text[0]);
             }
         } catch (Exception exception) {
-            throw new IllegalArgumentException(tag.position().toString(),
-                                               exception);
+            node = warning(tag, exception);
+
+            if (exception instanceof IllegalArgumentException) {
+                throw (IllegalArgumentException) exception;
+            }
         }
 
         return content(writer, node);

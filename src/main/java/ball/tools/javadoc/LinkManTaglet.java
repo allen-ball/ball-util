@@ -67,8 +67,11 @@ public class LinkManTaglet extends AbstractInlineTaglet
 
             node = a(path.toURI(), code(name + "(" + section + ")"));
         } catch (Exception exception) {
-            throw new IllegalArgumentException(tag.position().toString(),
-                                               exception);
+            node = warning(tag, exception);
+
+            if (exception instanceof IllegalArgumentException) {
+                throw (IllegalArgumentException) exception;
+            }
         }
 
         return content(writer, node);

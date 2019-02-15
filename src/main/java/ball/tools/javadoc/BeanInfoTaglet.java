@@ -85,8 +85,11 @@ public class BeanInfoTaglet extends AbstractInlineTaglet
                          Introspector.getBeanInfo(getClassFor(start),
                                                   getClassFor(stop)));
         } catch (Exception exception) {
-            throw new IllegalArgumentException(tag.position().toString(),
-                                               exception);
+            node = warning(tag, exception);
+
+            if (exception instanceof IllegalArgumentException) {
+                throw (IllegalArgumentException) exception;
+            }
         }
 
         return content(writer, node);

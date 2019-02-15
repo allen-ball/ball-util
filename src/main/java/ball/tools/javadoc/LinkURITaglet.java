@@ -70,11 +70,14 @@ public class LinkURITaglet extends AbstractInlineTaglet
                 a(href, text)
                 .add(map.entrySet()
                      .stream()
-                     .map(t -> attribute(t.getKey(), t.getValue()))
+                     .map(t -> attr(t.getKey(), t.getValue()))
                      .collect(Collectors.toList()));
         } catch (Exception exception) {
-            throw new IllegalArgumentException(tag.position().toString(),
-                                               exception);
+            node = warning(tag, exception);
+
+            if (exception instanceof IllegalArgumentException) {
+                throw (IllegalArgumentException) exception;
+            }
         }
 
         return content(writer, node);
