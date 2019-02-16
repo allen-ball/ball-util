@@ -5,19 +5,21 @@
  */
 package ball.xml;
 
+import ball.lang.reflect.DefaultInvocationHandler;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
+import java.util.Collections;
 import java.util.IdentityHashMap;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
@@ -40,84 +42,24 @@ public abstract class FluentDocumentBuilder {
      * @return  The {@link FluentDocument} facade.
      */
     public static FluentDocument wrap(Document document) {
-        return (FluentDocument) new InvocationHandlerImpl().wrap(document);
+        return (FluentDocument) new InvocationHandler().proxy(document);
     }
 
     private FluentDocumentBuilder() { }
 
-    private static Class<?>[] getProxyInterfaces(Node node) {
-        Class<? extends Node> spec =
-            NODE_TYPE_MAP.getOrDefault(node.getNodeType(), Node.class);
-        Class<? extends Node> impl = node.getClass();
-        /*
-         * Get all implemented org.w3c.dom.Node interfaces (and subclasses)
-         * in org.w3c.dom package, ...
-         */
-        Set<Class<? extends Node>> implemented =
-            Stream.concat(Stream.concat(Stream.of(spec),
-                                        getAllInterfaces(spec).stream()),
-                          Stream.concat(Stream.of(impl),
-                                        getAllInterfaces(impl).stream()))
-            .filter(t -> t.isInterface())
-            .filter(t -> t.getPackage().equals(Node.class.getPackage()))
-            .filter(t -> Node.class.isAssignableFrom(t))
-            .map(t -> t.asSubclass(Node.class))
-            .collect(Collectors.toSet());
-        /*
-         * ... find any corresponding FluentNode subclasses through
-         * reflection, and, ...
-         */
-        Set<Class<? extends Node>> interfaces =
-            implemented.stream()
-            .map(t -> fluentNodeType(t))
-            .filter(t -> t != null)
-            .collect(Collectors.toSet());
-        /*
-         * ... combine.
-         */
-        interfaces.addAll(implemented);
-        /*
-         * Remove redundant super-interfaces implemented by sub-interfaces
-         * in the set.
-         */
-        new ArrayList<>(interfaces)
-            .stream()
-            .forEach(t -> interfaces.removeAll(Arrays.asList(t.getInterfaces())));
+    private static class InvocationHandler extends DefaultInvocationHandler {
+        private final ProxyMap map = new ProxyMap();
 
-        return interfaces.toArray(new Class<?>[] { });
-    }
+        protected InvocationHandler() { super(); }
 
-    private static Class<? extends FluentNode> fluentNodeType(Class<? extends Node> nodeType) {
-        Class<? extends FluentNode> fluentType = null;
-
-        try {
-            String name =
-                String.format("%s.Fluent%s",
-                              FluentNode.class.getPackage().getName(),
-                              nodeType.getSimpleName());
-
-            fluentType = Class.forName(name).asSubclass(FluentNode.class);
-        } catch (Exception exception) {
-        }
-
-        return fluentType;
-    }
-
-    private static class InvocationHandlerImpl implements InvocationHandler {
-        private final IdentityHashMap<Node,Node> proxyMap =
-            new IdentityHashMap<>();
-        private final IdentityHashMap<Node,Node> realMap =
-            new IdentityHashMap<>();
-
-        protected InvocationHandlerImpl() { }
-
-        protected FluentNode wrap(Node node) {
+        protected FluentNode proxy(Node node) {
             FluentNode proxy = null;
 
             if (! (node instanceof FluentNode)) {
                 proxy =
                     (FluentNode)
-                    proxyMap.computeIfAbsent(node, k -> compute(k));
+                    map.computeIfAbsent(node,
+                                        k -> newProxyInstance(getProxyInterfaces(k)));
             } else {
                 proxy = (FluentNode) node;
             }
@@ -125,31 +67,81 @@ public abstract class FluentDocumentBuilder {
             return proxy;
         }
 
-        private FluentNode compute(Node node) {
-            FluentNode proxy =
-                (FluentNode)
-                Proxy.newProxyInstance(FluentNode.class.getClassLoader(),
-                                       getProxyInterfaces(node), this);
+        private Class<?>[] getProxyInterfaces(Object object) {
+            Class<? extends Node> spec =
+                NODE_TYPE_MAP
+                .getOrDefault(((Node) object).getNodeType(), Node.class);
+            Class<? extends Node> impl =
+                ((Node) object).getClass().asSubclass(Node.class);
+            /*
+             * Get all implemented org.w3c.dom.Node interfaces (and
+             * subclasses) in org.w3c.dom package, ...
+             */
+            Set<Class<? extends Node>> implemented =
+                Stream.concat(Stream.concat(Stream.of(spec),
+                                            getAllInterfaces(spec).stream()),
+                              Stream.concat(Stream.of(impl),
+                                            getAllInterfaces(impl).stream()))
+                .filter(t -> t.isInterface())
+                .filter(t -> t.getPackage().equals(Node.class.getPackage()))
+                .filter(t -> Node.class.isAssignableFrom(t))
+                .map(t -> t.asSubclass(Node.class))
+                .collect(Collectors.toSet());
+            /*
+             * ... find any corresponding FluentNode subclasses through
+             * reflection, and, ...
+             */
+            Set<Class<? extends Node>> interfaces =
+                implemented.stream()
+                .map(t -> fluentNodeType(t))
+                .filter(t -> t != null)
+                .collect(Collectors.toSet());
+            /*
+             * ... combine.
+             */
+            interfaces.addAll(implemented);
+            /*
+             * Remove redundant super-interfaces implemented by
+             * sub-interfaces in the set.
+             */
+            new ArrayList<>(interfaces)
+                .stream()
+                .forEach(t -> interfaces.removeAll(Arrays.asList(t.getInterfaces())));
 
-            realMap.put(proxy, node);
-
-            return proxy;
+            return interfaces.toArray(new Class<?>[] { });
         }
 
-        protected Node unwrap(FluentNode proxy) {
+        private Class<? extends FluentNode> fluentNodeType(Class<? extends Node> nodeType) {
+            Class<? extends FluentNode> fluentType = null;
+
+            try {
+                String name =
+                    String.format("%s.Fluent%s",
+                                  FluentNode.class.getPackage().getName(),
+                                  nodeType.getSimpleName());
+
+                fluentType = Class.forName(name).asSubclass(FluentNode.class);
+            } catch (Exception exception) {
+            }
+
+            return fluentType;
+        }
+
+        protected Node unproxy(FluentNode proxy) {
             Node node =
-                ((InvocationHandlerImpl) Proxy.getInvocationHandler(proxy))
-                .realMap.get(proxy);
+                (Node)
+                ((InvocationHandler) Proxy.getInvocationHandler(proxy))
+                .map.reverse().get(proxy);
 
             return node;
         }
 
-        private Object unwrap(Class<?> type, Object in) {
+        private Object unproxy(Class<?> type, Object in) {
             Object out = in;
 
             if (in instanceof FluentNode) {
                 if (! FluentNode.class.isAssignableFrom(type)) {
-                    out = unwrap((FluentNode) in);
+                    out = unproxy((FluentNode) in);
                 }
             } else if (in instanceof Object[]) {
                 if (type.isArray()) {
@@ -159,7 +151,7 @@ public abstract class FluentDocumentBuilder {
 
                     for (int i = 0; i < length; i += 1) {
                         ((Object[]) out)[i] =
-                            unwrap(type.getComponentType(),
+                            unproxy(type.getComponentType(),
                                    ((Object[]) in)[i]);
                     }
                 }
@@ -168,18 +160,18 @@ public abstract class FluentDocumentBuilder {
             return out;
         }
 
-        private Object[] unwrap(Method method, Object[] in) {
-            return unwrap(method.getParameterTypes(), in);
+        private Object[] unproxy(Method method, Object[] in) {
+            return unproxy(method.getParameterTypes(), in);
         }
 
-        private Object[] unwrap(Class<?>[] types, Object[] in) {
+        private Object[] unproxy(Class<?>[] types, Object[] in) {
             Object[] out = in;
 
             if (in != null) {
                 out = new Object[in.length];
 
                 for (int i = 0; i < out.length; i += 1) {
-                    out[i] = unwrap(types[i], in[i]);
+                    out[i] = unproxy(types[i], in[i]);
                 }
             }
 
@@ -193,36 +185,51 @@ public abstract class FluentDocumentBuilder {
             Class<?> declarer = method.getDeclaringClass();
 
             if (FluentNode.class.isAssignableFrom(declarer)) {
-                if (method.isDefault()) {
-                    Constructor<MethodHandles.Lookup> constructor =
-                        MethodHandles.Lookup.class
-                        .getDeclaredConstructor(Class.class);
-
-                    constructor.setAccessible(true);
-
-                    result =
-                        constructor.newInstance(declarer)
-                        .in(declarer)
-                        .unreflectSpecial(method, declarer)
-                        .bindTo(proxy)
-                        .invokeWithArguments(unwrap(method, argv));
-                } else {
-                    throw new IllegalStateException(method + " in " + declarer
-                                                    + " is not default");
-                }
+                result = super.invoke(proxy, method, unproxy(method, argv));
             } else if (Node.class.getPackage().equals(declarer.getPackage())) {
                 result =
-                    method.invoke(unwrap(declarer, proxy),
-                                  unwrap(method, argv));
-            } else /* if (declarer.equals(Object.class)) */ {
-                result = method.invoke(unwrap(declarer, proxy), argv);
+                    method.invoke(unproxy(declarer, proxy),
+                                  unproxy(method, argv));
+            } else if (declarer.equals(Object.class)) {
+                result = method.invoke(unproxy(declarer, proxy), argv);
+            } else {
+                result = super.invoke(proxy, method, argv);
             }
 
             if (result instanceof Node) {
-                result = wrap((Node) result);
+                result = proxy((Node) result);
             }
 
             return result;
+        }
+
+        private Node[] toArray(Iterable<Node> nodes) {
+            return(StreamSupport
+                   .stream(Optional
+                           .ofNullable(nodes)
+                           .orElse(Collections.emptyList())
+                           .spliterator(),
+                           false)
+                   .collect(Collectors.toList())
+                   .toArray(new Node[] { }));
+        }
+
+        private class ProxyMap extends IdentityHashMap<Object,Object> {
+            private static final long serialVersionUID = 9122828186943671155L;
+
+            private final IdentityHashMap<Object,Object> reverse =
+                new IdentityHashMap<>();
+
+            public ProxyMap() { super(); }
+
+            public IdentityHashMap<Object,Object> reverse() { return reverse; }
+
+            @Override
+            public Object put(Object key, Object value) {
+                reverse().put(value, key);
+
+                return super.put(key, value);
+            }
         }
     }
 }
