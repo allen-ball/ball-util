@@ -51,48 +51,32 @@ public class BeanInfoTaglet extends AbstractInlineTaglet
     }
 
     @Override
-    public Content getTagletOutput(Tag tag,
-                                   TagletWriter writer) throws IllegalArgumentException {
-        this.configuration = writer.configuration();
+    public FluentNode toNode(Tag tag) throws Throwable {
+        ClassDoc start = null;
+        ClassDoc stop = null;
+        String[] argv = tag.text().trim().split("[\\p{Space}]+", 2);
 
-        FluentNode node = fragment();
-
-        try {
-            ClassDoc start = null;
-            ClassDoc stop = null;
-            String[] argv = tag.text().trim().split("[\\p{Space}]+", 2);
-
-            if (! isEmpty(argv[0])) {
-                start = getClassDoc(tag.holder(), argv[0]);
-            } else {
-                start = getContainingClassDoc(tag.holder());
-            }
-
-            if (start == null) {
-                throw new IllegalArgumentException("Class not specified");
-            }
-
-            if (argv.length > 1) {
-                if (! Void.TYPE.getName().equals(argv[1])) {
-                    stop = getClassDoc(tag.holder(), argv[1]);
-                }
-            } else {
-                stop = getClassDoc(tag.holder(), Object.class.getName());
-            }
-
-            node =
-                fragment(tag.holder(),
-                         Introspector.getBeanInfo(getClassFor(start),
-                                                  getClassFor(stop)));
-        } catch (Exception exception) {
-            node = warning(tag, exception);
-
-            if (exception instanceof IllegalArgumentException) {
-                throw (IllegalArgumentException) exception;
-            }
+        if (! isEmpty(argv[0])) {
+            start = getClassDoc(tag.holder(), argv[0]);
+        } else {
+            start = getContainingClassDoc(tag.holder());
         }
 
-        return content(writer, node);
+        if (start == null) {
+            throw new IllegalArgumentException("Class not specified");
+        }
+
+        if (argv.length > 1) {
+            if (! Void.TYPE.getName().equals(argv[1])) {
+                stop = getClassDoc(tag.holder(), argv[1]);
+            }
+        } else {
+            stop = getClassDoc(tag.holder(), Object.class.getName());
+        }
+
+        return fragment(tag.holder(),
+                        Introspector.getBeanInfo(getClassFor(start),
+                                                 getClassFor(stop)));
     }
 
     private FluentNode fragment(Doc doc, BeanInfo info) {

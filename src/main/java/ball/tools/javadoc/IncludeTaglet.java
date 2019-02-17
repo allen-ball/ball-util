@@ -10,8 +10,6 @@ import ball.xml.FluentNode;
 import com.sun.javadoc.ClassDoc;
 import com.sun.javadoc.Tag;
 import com.sun.tools.doclets.Taglet;
-import com.sun.tools.doclets.internal.toolkit.Content;
-import com.sun.tools.doclets.internal.toolkit.taglets.TagletWriter;
 import java.io.InputStream;
 import java.util.Collection;
 import java.util.Map;
@@ -42,32 +40,20 @@ public class IncludeTaglet extends AbstractInlineTaglet
     }
 
     @Override
-    public Content getTagletOutput(Tag tag,
-                                   TagletWriter writer) throws IllegalArgumentException {
-        this.configuration = writer.configuration();
-
+    public FluentNode toNode(Tag tag) throws Throwable {
         FluentNode node = null;
+        ClassDoc doc = getContainingClassDoc(tag.holder());
+        String[] text = tag.text().trim().split(Pattern.quote("#"), 2);
 
-        try {
-            ClassDoc doc = getContainingClassDoc(tag.holder());
-            String[] text = tag.text().trim().split(Pattern.quote("#"), 2);
-
-            if (text.length > 1) {
-                node =
-                    field(isNotEmpty(text[0]) ? getClassDoc(doc, text[0]) : doc,
-                          text[1]);
-            } else {
-                node = resource(doc, text[0]);
-            }
-        } catch (Exception exception) {
-            node = warning(tag, exception);
-
-            if (exception instanceof IllegalArgumentException) {
-                throw (IllegalArgumentException) exception;
-            }
+        if (text.length > 1) {
+            node =
+                field(isNotEmpty(text[0]) ? getClassDoc(doc, text[0]) : doc,
+                      text[1]);
+        } else {
+            node = resource(doc, text[0]);
         }
 
-        return content(writer, node);
+        return node;
     }
 
     private FluentNode field(ClassDoc doc, String name) throws Exception {

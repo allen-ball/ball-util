@@ -12,8 +12,6 @@ import ball.util.PatternMatcherBean;
 import ball.xml.FluentNode;
 import com.sun.javadoc.Tag;
 import com.sun.tools.doclets.Taglet;
-import com.sun.tools.doclets.internal.toolkit.Content;
-import com.sun.tools.doclets.internal.toolkit.taglets.TagletWriter;
 import java.io.File;
 import java.util.Map;
 import lombok.NoArgsConstructor;
@@ -48,32 +46,17 @@ public class LinkManTaglet extends AbstractInlineTaglet
     protected void setSection(String string) { section = string; }
 
     @Override
-    public Content getTagletOutput(Tag tag,
-                                   TagletWriter writer) throws IllegalArgumentException {
-        this.configuration = writer.configuration();
+    public FluentNode toNode(Tag tag) throws Throwable {
+        PatternMatcherBean.super.initialize(tag.text().trim());
 
-        FluentNode node = null;
+        File path = new File(File.separator);
 
-        try {
-            PatternMatcherBean.super.initialize(tag.text().trim());
+        path = new File(path, "usr");
+        path = new File(path, "share");
+        path = new File(path, "man");
+        path = new File(path, "htmlman" + section);
+        path = new File(path, name + "." + section + ".html");
 
-            File path = new File(File.separator);
-
-            path = new File(path, "usr");
-            path = new File(path, "share");
-            path = new File(path, "man");
-            path = new File(path, "htmlman" + section);
-            path = new File(path, name + "." + section + ".html");
-
-            node = a(path.toURI(), code(name + "(" + section + ")"));
-        } catch (Exception exception) {
-            node = warning(tag, exception);
-
-            if (exception instanceof IllegalArgumentException) {
-                throw (IllegalArgumentException) exception;
-            }
-        }
-
-        return content(writer, node);
+        return a(path.toURI(), code(name + "(" + section + ")"));
     }
 }

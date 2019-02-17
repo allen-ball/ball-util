@@ -9,8 +9,6 @@ import ball.annotation.ServiceProviderFor;
 import ball.xml.FluentNode;
 import com.sun.javadoc.Tag;
 import com.sun.tools.doclets.Taglet;
-import com.sun.tools.doclets.internal.toolkit.Content;
-import com.sun.tools.doclets.internal.toolkit.taglets.TagletWriter;
 import java.net.URI;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -38,48 +36,32 @@ public class LinkURITaglet extends AbstractInlineTaglet
     private static final String SPACES = "[\\p{Space}]+";
 
     @Override
-    public Content getTagletOutput(Tag tag,
-                                   TagletWriter writer) throws IllegalArgumentException {
-        this.configuration = writer.configuration();
+    public FluentNode toNode(Tag tag) throws Throwable {
+        String text = tag.text().trim();
+        String[] argv = text.split(SPACES, 2);
+        URI href = new URI(argv[0]);
 
-        FluentNode node = null;
+        text = (argv.length > 1) ? argv[1] : null;
 
-        try {
-            String text = tag.text().trim();
-            String[] argv = text.split(SPACES, 2);
-            URI href = new URI(argv[0]);
+        LinkedHashMap<String,String> map = new LinkedHashMap<>();
 
-            text = (argv.length > 1) ? argv[1] : null;
+        for (;;) {
+            argv = text.split(SPACES, 2);
 
-            LinkedHashMap<String,String> map = new LinkedHashMap<>();
+            String[] nvp = argv[0].split("=", 2);
 
-            for (;;) {
-                argv = text.split(SPACES, 2);
-
-                String[] nvp = argv[0].split("=", 2);
-
-                if (argv.length > 1 && nvp.length > 1) {
-                    map.put(nvp[0], nvp[1]);
-                    text = argv[1];
-                } else {
-                    break;
-                }
-            }
-
-            node =
-                a(href, text)
-                .add(map.entrySet()
-                     .stream()
-                     .map(t -> attr(t.getKey(), t.getValue()))
-                     .collect(Collectors.toList()));
-        } catch (Exception exception) {
-            node = warning(tag, exception);
-
-            if (exception instanceof IllegalArgumentException) {
-                throw (IllegalArgumentException) exception;
+            if (argv.length > 1 && nvp.length > 1) {
+                map.put(nvp[0], nvp[1]);
+                text = argv[1];
+            } else {
+                break;
             }
         }
 
-        return content(writer, node);
+        return a(href, text)
+                   .add(map.entrySet()
+                        .stream()
+                        .map(t -> attr(t.getKey(), t.getValue()))
+                        .collect(Collectors.toList()));
     }
 }

@@ -12,8 +12,6 @@ import com.sun.javadoc.ClassDoc;
 import com.sun.javadoc.Doc;
 import com.sun.javadoc.Tag;
 import com.sun.tools.doclets.Taglet;
-import com.sun.tools.doclets.internal.toolkit.Content;
-import com.sun.tools.doclets.internal.toolkit.taglets.TagletWriter;
 import java.util.Map;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -38,30 +36,18 @@ public class LinkThisTaglet extends AbstractInlineTaglet
     }
 
     @Override
-    public Content getTagletOutput(Tag tag,
-                                   TagletWriter writer) throws IllegalArgumentException {
-        this.configuration = writer.configuration();
-
-        FluentNode node = code(Keyword.THIS.lexeme());
-
-        try {
-            if (! isEmpty(tag.text().trim())) {
-                throw new IllegalArgumentException("Invalid argument");
-            }
-
-            ClassDoc target = getContainingClassDoc(tag.holder());
-
-            if (target != null) {
-                node = a(tag.holder(), target, node);
-            }
-        } catch (Exception exception) {
-            node = warning(tag, exception);
-
-            if (exception instanceof IllegalArgumentException) {
-                throw (IllegalArgumentException) exception;
-            }
+    public FluentNode toNode(Tag tag) throws Throwable {
+        if (! isEmpty(tag.text().trim())) {
+            throw new IllegalArgumentException("Invalid argument");
         }
 
-        return content(writer, node);
+        FluentNode node = code(Keyword.THIS.lexeme());
+        ClassDoc target = getContainingClassDoc(tag.holder());
+
+        if (target != null) {
+            node = a(tag.holder(), target, node);
+        }
+
+        return node;
     }
 }

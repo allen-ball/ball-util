@@ -9,14 +9,10 @@ import ball.annotation.ServiceProviderFor;
 import ball.xml.FluentNode;
 import com.sun.javadoc.Tag;
 import com.sun.tools.doclets.Taglet;
-import com.sun.tools.doclets.internal.toolkit.Content;
-import com.sun.tools.doclets.internal.toolkit.taglets.TagletWriter;
 import java.net.URI;
 import java.util.Map;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-
-import static java.lang.String.format;
 
 /**
  * Inline {@link Taglet} providing links to external RFCs.
@@ -41,27 +37,15 @@ public class LinkRFCTaglet extends AbstractInlineTaglet
     private static final String PATH = "/rfc/rfc%d.txt";
 
     @Override
-    public Content getTagletOutput(Tag tag,
-                                   TagletWriter writer) throws IllegalArgumentException {
-        this.configuration = writer.configuration();
+    public FluentNode toNode(Tag tag) throws Throwable {
+        FluentNode node = fragment();
+        int rfc = Integer.valueOf(tag.text().trim());
 
-        FluentNode node = null;
+        node =
+            a(new URI(PROTOCOL, HOST, String.format(PATH, rfc), null),
+              String.format(TEXT, rfc))
+            .add(attr("target", "newtab"));
 
-        try {
-            int rfc = Integer.valueOf(tag.text().trim());
-
-            node =
-                a(new URI(PROTOCOL, HOST, format(PATH, rfc), null),
-                  format(TEXT, rfc))
-                .add(attr("target", "newtab"));
-        } catch (Exception exception) {
-            node = warning(tag, exception);
-
-            if (exception instanceof IllegalArgumentException) {
-                throw (IllegalArgumentException) exception;
-            }
-        }
-
-        return content(writer, node);
+        return node;
     }
 }

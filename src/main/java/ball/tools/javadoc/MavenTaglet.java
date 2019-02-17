@@ -11,8 +11,6 @@ import ball.tools.maven.POMProperties;
 import ball.xml.FluentNode;
 import com.sun.javadoc.Tag;
 import com.sun.tools.doclets.Taglet;
-import com.sun.tools.doclets.internal.toolkit.Content;
-import com.sun.tools.doclets.internal.toolkit.taglets.TagletWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -148,40 +146,22 @@ public abstract class MavenTaglet extends AbstractInlineTaglet
         }
 
         @Override
-        public Content getTagletOutput(Tag tag,
-                                       TagletWriter writer) throws IllegalArgumentException {
-            this.configuration = writer.configuration();
+        public FluentNode toNode(Tag tag) throws Throwable {
+            Model model = getModelFor(tag);
+            String groupId = model.getGroupId();
+            String artifactId = model.getArtifactId();
+            String version = model.getVersion();
 
-            FluentNode node = null;
-
-            try {
-                Model model = getModelFor(tag);
-                String groupId = model.getGroupId();
-                String artifactId = model.getArtifactId();
-                String version = model.getVersion();
-
-                if (isEmpty(version)) {
-                    version =
-                        new POMProperties(groupId, artifactId)
-                        .getVersion();
-                }
-
-                node =
-                    element(DEPENDENCY,
-                            element(GROUP_ID).content(groupId),
-                            element(ARTIFACT_ID).content(artifactId),
-                            element(VERSION).content(version));
-
-                node = pre(render(node));
-            } catch (Exception exception) {
-                node = warning(tag, exception);
-
-                if (exception instanceof IllegalArgumentException) {
-                    throw (IllegalArgumentException) exception;
-                }
+            if (isEmpty(version)) {
+                version =
+                    new POMProperties(groupId, artifactId)
+                    .getVersion();
             }
 
-            return content(writer, node);
+            return pre(render(element(DEPENDENCY,
+                                      element(GROUP_ID).content(groupId),
+                                      element(ARTIFACT_ID).content(artifactId),
+                                      element(VERSION).content(version))));
         }
     }
 }

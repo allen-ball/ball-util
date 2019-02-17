@@ -8,7 +8,6 @@ package ball.tools.javadoc;
 import ball.xml.FluentDocument;
 import ball.xml.FluentDocumentBuilder;
 import ball.xml.FluentNode;
-import ball.xml.HTMLTemplates;
 import com.sun.javadoc.ClassDoc;
 import com.sun.javadoc.Doc;
 import com.sun.javadoc.ProgramElementDoc;
@@ -24,7 +23,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.w3c.dom.Node;
 
 import static javax.xml.transform.OutputKeys.INDENT;
@@ -42,7 +40,7 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
  * @version $Revision$
  */
 public abstract class AbstractTaglet implements AnnotatedTaglet,
-                                                HTMLTemplates {
+                                                JavadocTemplates {
     private static final String INDENT_AMOUNT =
         "{http://xml.apache.org/xslt}indent-amount";
 
@@ -58,7 +56,7 @@ public abstract class AbstractTaglet implements AnnotatedTaglet,
     private final boolean inType;
     private final Transformer transformer;
     private final FluentDocument document;
-    protected Configuration configuration = null;
+    private Configuration configuration = null;
 
     /**
      * Sole constructor.
@@ -131,33 +129,32 @@ public abstract class AbstractTaglet implements AnnotatedTaglet,
     public FluentDocument document() { return document; }
 
     @Override
-    public String toString(Tag[] tags) { throw new IllegalStateException(); }
+    public void set(Configuration configuration) {
+        this.configuration = configuration;
+    }
 
     @Override
-    public String toString(Tag tag) { throw new IllegalStateException(); }
+    public String toString(Tag[] tags) throws IllegalStateException {
+        throw new IllegalStateException();
+    }
 
-    /**
-     * Method to print a warning and create a {@link Node} including the
-     * input and the {@link Throwable} stack trace (as a comment) to include
-     * in the javadoc output.
-     *
-     * @param   tag             The offending {@link Tag}.
-     * @param   throwable       The {@link Throwable}.
-     *
-     * @return  A {@link FluentNode} to include in javadoc output.
-     */
-    protected FluentNode warning(Tag tag, Throwable throwable) {
-        System.err.println(tag.position() + ": " + throwable);
+    @Override
+    public String toString(Tag tag) throws IllegalStateException {
+        Node node = null;
 
-        String string = "@" + getName() + " " + tag.text();
-
-        if (isInlineTag()) {
-            string = "{" + string + "}";
+        try {
+            node = toNode(tag);
+        } catch (IllegalStateException exception) {
+            throw exception;
+        } catch (Throwable throwable) {
+            node = warning(tag, throwable);
         }
 
-        return fragment(p(b(u(string))),
-                        comment(ExceptionUtils.getStackTrace(throwable)));
+        return render(node);
     }
+
+    @Override
+    public abstract Node toNode(Tag tag) throws Throwable;
 
     /**
      * Convenience method to get the containing {@link ClassDoc}.
