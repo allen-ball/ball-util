@@ -1,6 +1,6 @@
 2019-02-17  Allen D. Ball  <ball@sol.local>
 
-	* src/main/java/ball/tools/javadoc/InjectedValuesTaglet.java:
+	* src/main/java/ball/tools/javadoc/InjectedFieldsTaglet.java:
 	Initial writing.
 
 2019-02-16  Allen D. Ball  <ball@sol.local>

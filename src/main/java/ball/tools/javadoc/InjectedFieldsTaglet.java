@@ -32,12 +32,12 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
  * @version $Revision$
  */
 @ServiceProviderFor({ Taglet.class })
-@TagletName("injected.values")
+@TagletName("injected.fields")
 @NoArgsConstructor @ToString
-public class InjectedValuesTaglet extends AbstractInlineTaglet
+public class InjectedFieldsTaglet extends AbstractInlineTaglet
                                   implements SunToolsInternalToolkitTaglet {
-    private static final InjectedValuesTaglet INSTANCE =
-        new InjectedValuesTaglet();
+    private static final InjectedFieldsTaglet INSTANCE =
+        new InjectedFieldsTaglet();
 
     public static void register(Map<Object,Object> map) {
         map.putIfAbsent(INSTANCE.getName(), INSTANCE);
