@@ -46,10 +46,12 @@ public class DefaultInvocationHandler implements InvocationHandler {
      * {@inheritDoc}
      *
      * If the {@link Method#isDefault() method.isDefault()}, that
-     * {@link Method} will be invoked directly.  Otherwise, the call will
-     * be dispatched to a declared {@link Method} on {@link.this}
-     * {@link InvocationHandler} with the same name and compatible parameter
-     * types (forcing access if necessary).
+     * {@link Method} will be invoked directly.  If the {@link Method} is
+     * declared in {@link Object}, it is applied to {@link.this}
+     * {@link InvocationHandler}.  Otherwise, the call will be dispatched to
+     * a declared {@link Method} on {@link.this} {@link InvocationHandler}
+     * with the same name and compatible parameter types (forcing access if
+     * necessary).
      *
      * @throws  Exception       If no compatible {@link Method} is found or
      *                          the {@link Method} cannot be invoked.
@@ -58,9 +60,9 @@ public class DefaultInvocationHandler implements InvocationHandler {
     public Object invoke(Object proxy,
                          Method method, Object[] argv) throws Throwable {
         Object result = null;
+        Class<?> declarer = method.getDeclaringClass();
 
         if (method.isDefault()) {
-            Class<?> declarer = method.getDeclaringClass();
             Constructor<MethodHandles.Lookup> constructor =
                 MethodHandles.Lookup.class
                 .getDeclaredConstructor(Class.class);
@@ -73,9 +75,12 @@ public class DefaultInvocationHandler implements InvocationHandler {
                 .unreflectSpecial(method, declarer)
                 .bindTo(proxy)
                 .invokeWithArguments(argv);
+        } else if (declarer.equals(Object.class)) {
+            result = method.invoke(this, argv);
         } else {
             result =
-                invokeMethod(this, true, method.getName(),
+                invokeMethod(this, true,
+                             method.getName(),
                              argv, method.getParameterTypes());
         }
 
