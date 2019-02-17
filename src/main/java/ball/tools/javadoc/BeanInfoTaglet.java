@@ -98,31 +98,25 @@ public class BeanInfoTaglet extends AbstractInlineTaglet
     }
 
     private FluentNode table(Doc doc, BeanDescriptor descriptor) {
-        FluentNode node =
-            table(tr(td(b("Bean Class:")),
-                     td(a(doc, descriptor.getBeanClass()))))
-            .add(Stream.of(descriptor.getCustomizerClass())
-                 .filter(t -> t != null)
-                 .map(t -> tr(td(b("Customizer Class:")),
-                              td(a(doc, t))))
-                 .collect(Collectors.toList()));
-
-        return node;
+        return table(tr(td(b("Bean Class:")),
+                        td(a(doc, descriptor.getBeanClass(), null))),
+                     fragment(Stream.of(descriptor.getCustomizerClass())
+                              .filter(t -> t != null)
+                              .map(t -> tr(td(b("Customizer Class:")),
+                                           td(a(doc, t, null))))
+                              .collect(Collectors.toList())));
     }
 
     private FluentNode table(Doc doc, PropertyDescriptor[] rows) {
-        FluentNode table =
-            table(tr(Arrays.asList("Property", "Mode", "Type",
-                                   "isIndexed", "isHidden", "isBound",
-                                   "isConstrained", "Description")
-                     .stream()
-                     .map(t -> th(t))
-                     .collect(Collectors.toList())))
-            .add(Arrays.stream(rows)
-                 .map(t -> tr(doc, t))
-                 .collect(Collectors.toList()));
-
-        return table;
+        return table(tr(Arrays.asList("Property", "Mode", "Type",
+                                      "isIndexed", "isHidden", "isBound",
+                                      "isConstrained", "Description")
+                        .stream()
+                        .map(t -> th(t))
+                        .collect(Collectors.toList())),
+                     fragment(Arrays.stream(rows)
+                              .map(t -> tr(doc, t))
+                              .collect(Collectors.toList())));
     }
 
     private FluentNode tr(Doc doc, PropertyDescriptor row) {
@@ -135,7 +129,7 @@ public class BeanInfoTaglet extends AbstractInlineTaglet
 
         return tr(td(row.getName()),
                   td(BeanInfoUtil.getMode(row)),
-                  td(a(doc, type)),
+                  td(a(doc, type, null)),
                   td(code(isIndexed)),
                   td(code(row.isHidden())),
                   td(code(row.isBound())),

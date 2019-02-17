@@ -62,19 +62,19 @@ public class IncludeTaglet extends AbstractInlineTaglet
 
         if (object instanceof Collection) {
             node =
-                table(tr(th("Element")))
-                .add(((Collection<?>) object)
-                     .stream()
-                     .map(t -> tr(td(node(doc, t))))
-                     .collect(Collectors.toList()));
+                table(tr(th("Element")),
+                      fragment(((Collection<?>) object)
+                               .stream()
+                               .map(t -> tr(td(node(doc, t))))
+                               .collect(Collectors.toList())));
         } else if (object instanceof Map) {
             node =
-                table(tr(th("Key"), th("Value")))
-                .add(((Map<?,?>) object).entrySet()
-                     .stream()
-                     .map(t -> tr(td(node(doc, t.getKey())),
-                                  td(node(doc, t.getValue()))))
-                     .collect(Collectors.toList()));
+                table(tr(th("Key"), th("Value")),
+                      fragment(((Map<?,?>) object).entrySet()
+                               .stream()
+                               .map(t -> tr(td(node(doc, t.getKey())),
+                                            td(node(doc, t.getValue()))))
+                               .collect(Collectors.toList())));
         } else {
             node = pre(String.valueOf(object));
         }

@@ -14,6 +14,9 @@ import com.sun.javadoc.ProgramElementDoc;
 import com.sun.javadoc.Tag;
 import com.sun.tools.doclets.internal.toolkit.Configuration;
 import com.sun.tools.doclets.internal.toolkit.util.DocLink;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.Collection;
@@ -304,27 +307,25 @@ public abstract class AbstractTaglet implements AnnotatedTaglet,
 
     /**
      * Method to get a "href" attribute {@link URI} to a
-     * {@link Enum} constant from a {@link ClassDoc context}.
+     * {@link Annotation} type from a {@link ClassDoc context}.
      * {@link #configuration} must be non-{@code null} to allow external
      * links to be calculated.
      *
      * @param   context         The context {@link Doc} for calculating a
      *                          relative {@link URI}.
-     * @param   constant        The target {@link Enum} constant.
+     * @param   type            The target {@link Class}.
      *
      * @return  The {@link URI} if the "href" could be calculated;
      *          {@code null} otherwise.
      */
-    protected URI href(Doc context, Enum<?> constant) {
+    protected URI href(Doc context, Class<?> type) {
         URI href = null;
         ClassDoc target =
-            getClassDoc(context,
-                        constant.getDeclaringClass().getCanonicalName());
+            getClassDoc(getContainingClassDoc(context),
+                        type.getCanonicalName());
 
         if (target != null) {
-            href =
-                href(getContainingClassDoc(context), target)
-                .resolve("#" + constant.name());
+            href = href(getContainingClassDoc(context), target);
         }
 
         return href;
@@ -352,10 +353,12 @@ public abstract class AbstractTaglet implements AnnotatedTaglet,
      * @param   context         The context {@link Doc} for calculating a
      *                          relative {@link URI}.
      * @param   type            The target {@link Class}.
+     * @param   node            The child {@link Node} (may be
+     *                          {@code null}).
      *
      * @return  The {@code <a/>} {@link org.w3c.dom.Element}.
      */
-    protected FluentNode a(Doc context, Class<?> type) {
+    protected FluentNode a(Doc context, Class<?> type, Node node) {
         String brackets = EMPTY;
 
         while (type.isArray()) {
@@ -373,10 +376,21 @@ public abstract class AbstractTaglet implements AnnotatedTaglet,
         }
 
         return a(href,
-                 code(((target != null)
-                           ? target.name()
-                           : type.getCanonicalName())
-                      + brackets));
+                 (node != null)
+                     ? node
+                     : code(((target != null)
+                                 ? target.name()
+                                 : type.getCanonicalName())
+                            + brackets));
+    }
+
+    protected FluentNode a(Doc context, Annotation annotation, Node node) {
+        return a(href(context, annotation.annotationType()),
+                 (node != null)
+                     ? node
+                     : code(String.valueOf(annotation)
+                            .replace(annotation.annotationType().getCanonicalName(),
+                                     annotation.annotationType().getSimpleName())));
     }
 
     /**
@@ -391,8 +405,14 @@ public abstract class AbstractTaglet implements AnnotatedTaglet,
      * @return  The {@code <a/>} {@link org.w3c.dom.Element}.
      */
     protected FluentNode a(Doc context, Enum<?> constant, Node node) {
-        return a(href(context, constant),
+        return a(href(context, constant.getDeclaringClass()),
                  (node != null) ? node : code(constant.name()));
+    }
+
+    protected Node code(Doc doc, Field field) {
+        return fragment(code(Modifier.toString(field.getModifiers())),
+                        a(doc, field.getType(), null),
+                        code(field.getName()));
     }
 
     protected FluentNode node(Doc context, Object object) {
@@ -416,7 +436,7 @@ public abstract class AbstractTaglet implements AnnotatedTaglet,
         } else if (object instanceof Object[]) {
             node = node(context, Arrays.asList((Object[]) object));
         } else if (object instanceof Class<?>) {
-            node = a(context, (Class<?>) object);
+            node = a(context, (Class<?>) object, null);
         } else if (object instanceof Enum<?>) {
             node = a(context, ((Enum<?>) object), null);
         } else if (object instanceof Collection<?>) {
