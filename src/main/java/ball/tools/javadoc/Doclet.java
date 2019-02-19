@@ -30,7 +30,7 @@ public interface Doclet {
      * Check {@code options} have correct arguments.
      *
      * The {@link com.sun.tools.doclets.standard.Standard} supplies an
-     * instance of {@link com.sun.tools.javadoc.Messager} {@link Doclet} for
+     * instance of {@code com.sun.tools.javadoc.Messager} {@link Doclet} for
      * {@link DocErrorReporter}.
      *
      * @param   options         The {@code options} and their arguments.
@@ -56,7 +56,7 @@ public interface Doclet {
      * Starting point for document generation.
      *
      * The {@link com.sun.tools.doclets.standard.Standard} supplies an
-     * instance of {@link com.sun.tools.javadoc.RootDocImpl} {@link Doclet}
+     * instance of {@code com.sun.tools.javadoc.RootDocImpl} {@link Doclet}
      * for {@link RootDoc}.
      *
      * @param   root            The {@link RootDoc}.

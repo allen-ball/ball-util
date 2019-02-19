@@ -169,10 +169,10 @@ public interface JavadocHTMLTemplates extends HTMLTemplates {
                 .add(text("["))
                 .add(nodes)
                 .add(text("]"));
-        }
-
-        if (node == null) {
-            node = text(String.valueOf(object));
+        } else if (object != null) {
+            node = a(tag, object.getClass(), String.valueOf(object));
+        } else {
+            node = code(String.valueOf(object));
         }
 
         return node;
