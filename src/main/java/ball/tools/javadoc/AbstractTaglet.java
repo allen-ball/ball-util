@@ -335,6 +335,27 @@ public abstract class AbstractTaglet implements AnnotatedTaglet,
         return a(tag, target, (node != null) ? node : code(name + brackets));
     }
 
+    /**
+     * {@code <a href="}{@link ClassDoc type}{@code ">}{@link Node node}{@code </a>}
+     *
+     * @param   tag             The {@link Tag}.
+     * @param   name            The target {@link Class} name.
+     * @param   node            The child {@link Node} (may be
+     *                          {@code null}).
+     *
+     * @return  {@link org.w3c.dom.Element}
+     */
+    @Override
+    public FluentNode a(Tag tag, String name, Node node) {
+        ClassDoc target = getClassDocFor(tag, name);
+
+        if (target != null) {
+            name = target.name();
+        }
+
+        return a(tag, target, (node != null) ? node : code(name));
+    }
+
     private FluentNode a(Tag tag, ClassDoc target, Node node) {
         return a((target != null) ? href(tag, target) : null,
                  (node != null) ? node : code(target.name()));
