@@ -57,9 +57,9 @@ public class BeanInfoTaglet extends AbstractInlineTaglet
         String[] argv = tag.text().trim().split("[\\p{Space}]+", 2);
 
         if (! isEmpty(argv[0])) {
-            start = getClassDoc(tag.holder(), argv[0]);
+            start = getClassDocFor(tag, argv[0]);
         } else {
-            start = getContainingClassDoc(tag.holder());
+            start = getContainingClassDocFor(tag);
         }
 
         if (start == null) {
@@ -68,46 +68,46 @@ public class BeanInfoTaglet extends AbstractInlineTaglet
 
         if (argv.length > 1) {
             if (! Void.TYPE.getName().equals(argv[1])) {
-                stop = getClassDoc(tag.holder(), argv[1]);
+                stop = getClassDocFor(tag, argv[1]);
             }
         } else {
-            stop = getClassDoc(tag.holder(), Object.class.getName());
+            stop = getClassDocFor(tag, Object.class.getName());
         }
 
-        return fragment(tag.holder(),
+        return fragment(tag,
                         Introspector.getBeanInfo(getClassFor(start),
                                                  getClassFor(stop)));
     }
 
-    private FluentNode fragment(Doc doc, BeanInfo info) {
+    private FluentNode fragment(Tag tag, BeanInfo info) {
         FluentNode node = fragment();
 
-        append(node, doc, info);
+        append(node, tag, info);
 
         return node;
     }
 
-    private void append(FluentNode node, Doc doc, BeanInfo info) {
-        node.add(table(doc, info.getBeanDescriptor()));
-        node.add(table(doc, info.getPropertyDescriptors()));
+    private void append(FluentNode node, Tag tag, BeanInfo info) {
+        node.add(table(tag, info.getBeanDescriptor()));
+        node.add(table(tag, info.getPropertyDescriptors()));
 
         Arrays.stream(Optional
                       .ofNullable(info.getAdditionalBeanInfo())
                       .orElse(new BeanInfo[] { }))
-            .forEach(t -> append(node, doc, t));
+            .forEach(t -> append(node, tag, t));
     }
 
-    private FluentNode table(Doc doc, BeanDescriptor descriptor) {
+    private FluentNode table(Tag tag, BeanDescriptor descriptor) {
         return table(tr(td(b("Bean Class:")),
-                        td(a(doc, descriptor.getBeanClass(), null))),
+                        td(a(tag, descriptor.getBeanClass()))),
                      fragment(Stream.of(descriptor.getCustomizerClass())
                               .filter(t -> t != null)
                               .map(t -> tr(td(b("Customizer Class:")),
-                                           td(a(doc, t, null))))
+                                           td(a(tag, t))))
                               .collect(Collectors.toList())));
     }
 
-    private FluentNode table(Doc doc, PropertyDescriptor[] rows) {
+    private FluentNode table(Tag tag, PropertyDescriptor[] rows) {
         return table(tr(Arrays.asList("Property", "Mode", "Type",
                                       "isIndexed", "isHidden", "isBound",
                                       "isConstrained", "Description")
@@ -115,11 +115,11 @@ public class BeanInfoTaglet extends AbstractInlineTaglet
                         .map(t -> th(t))
                         .collect(Collectors.toList())),
                      fragment(Arrays.stream(rows)
-                              .map(t -> tr(doc, t))
+                              .map(t -> tr(tag, t))
                               .collect(Collectors.toList())));
     }
 
-    private FluentNode tr(Doc doc, PropertyDescriptor row) {
+    private FluentNode tr(Tag tag, PropertyDescriptor row) {
         boolean isIndexed = (row instanceof IndexedPropertyDescriptor);
         Class<?> type = row.getPropertyType();
 
@@ -129,7 +129,7 @@ public class BeanInfoTaglet extends AbstractInlineTaglet
 
         return tr(td(row.getName()),
                   td(BeanInfoUtil.getMode(row)),
-                  td(a(doc, type, null)),
+                  td(a(tag, type)),
                   td(code(isIndexed)),
                   td(code(row.isHidden())),
                   td(code(row.isBound())),

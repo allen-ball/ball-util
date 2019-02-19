@@ -42,22 +42,28 @@ public class IncludeTaglet extends AbstractInlineTaglet
     @Override
     public FluentNode toNode(Tag tag) throws Throwable {
         FluentNode node = null;
-        ClassDoc doc = getContainingClassDoc(tag.holder());
         String[] text = tag.text().trim().split(Pattern.quote("#"), 2);
 
         if (text.length > 1) {
             node =
-                field(isNotEmpty(text[0]) ? getClassDoc(doc, text[0]) : doc,
+                field(tag,
+                      getClassFor(isNotEmpty(text[0])
+                                      ? getClassDocFor(tag, text[0])
+                                      : getContainingClassDocFor(tag)),
                       text[1]);
         } else {
-            node = resource(doc, text[0]);
+            node =
+                resource(tag,
+                         getClassFor(getContainingClassDocFor(tag)),
+                         text[0]);
         }
 
         return node;
     }
 
-    private FluentNode field(ClassDoc doc, String name) throws Exception {
-        Object object = getClassFor(doc).getField(name).get(null);
+    private FluentNode field(Tag tag,
+                             Class<?> type, String name) throws Exception {
+        Object object = type.getField(name).get(null);
         FluentNode node = null;
 
         if (object instanceof Collection) {
@@ -65,15 +71,15 @@ public class IncludeTaglet extends AbstractInlineTaglet
                 table(tr(th("Element")),
                       fragment(((Collection<?>) object)
                                .stream()
-                               .map(t -> tr(td(node(doc, t))))
+                               .map(t -> tr(td(node(tag, t))))
                                .collect(Collectors.toList())));
         } else if (object instanceof Map) {
             node =
                 table(tr(th("Key"), th("Value")),
                       fragment(((Map<?,?>) object).entrySet()
                                .stream()
-                               .map(t -> tr(td(node(doc, t.getKey())),
-                                            td(node(doc, t.getValue()))))
+                               .map(t -> tr(td(node(tag, t.getKey())),
+                                            td(node(tag, t.getValue()))))
                                .collect(Collectors.toList())));
         } else {
             node = pre(String.valueOf(object));
@@ -82,9 +88,9 @@ public class IncludeTaglet extends AbstractInlineTaglet
         return node;
     }
 
-    private FluentNode resource(ClassDoc doc, String name) throws Exception {
+    private FluentNode resource(Tag tag,
+                                Class<?> type, String name) throws Exception {
         String string = null;
-        Class<?> type = getClassFor(doc);
 
         if (type == null) {
             type = getClass();

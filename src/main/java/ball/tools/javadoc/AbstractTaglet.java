@@ -14,18 +14,10 @@ import com.sun.javadoc.ProgramElementDoc;
 import com.sun.javadoc.Tag;
 import com.sun.tools.doclets.internal.toolkit.Configuration;
 import com.sun.tools.doclets.internal.toolkit.util.DocLink;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.net.URI;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
-import org.apache.commons.lang3.ArrayUtils;
 import org.w3c.dom.Node;
 
 import static javax.xml.transform.OutputKeys.INDENT;
@@ -43,7 +35,7 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
  * @version $Revision$
  */
 public abstract class AbstractTaglet implements AnnotatedTaglet,
-                                                JavadocTemplates {
+                                                JavadocHTMLTemplates {
     private static final String INDENT_AMOUNT =
         "{http://xml.apache.org/xslt}indent-amount";
 
@@ -132,11 +124,6 @@ public abstract class AbstractTaglet implements AnnotatedTaglet,
     public FluentDocument document() { return document; }
 
     @Override
-    public void set(Configuration configuration) {
-        this.configuration = configuration;
-    }
-
-    @Override
     public String toString(Tag[] tags) throws IllegalStateException {
         throw new IllegalStateException();
     }
@@ -156,54 +143,48 @@ public abstract class AbstractTaglet implements AnnotatedTaglet,
         return render(node);
     }
 
-    @Override
-    public abstract Node toNode(Tag tag) throws Throwable;
+    /**
+     * Implementation for {@link SunToolsInternalToolkitTaglet}.
+     *
+     * @param   configuration   The {@link Configuration}.
+     */
+    public void set(Configuration configuration) {
+        this.configuration = configuration;
+    }
+
+    protected abstract Node toNode(Tag tag) throws Throwable;
 
     /**
-     * Convenience method to get the containing {@link ClassDoc}.
+     * Convenience method to attempt to find a {@link ClassDoc}.
      *
-     * @param   doc             The {@link Doc}.
+     * @param   tag             The {@link Tag}.
+     * @param   type            The {@link Class}.
      *
-     * @return  The containing {@link ClassDoc} or {@code null} if there is
-     *          none.
+     * @return  The {@link ClassDoc} if it can be found; {@code null}
+     *          otherwise.
      */
-    protected ClassDoc getContainingClassDoc(Doc doc) {
-        ClassDoc container = null;
-
-        if (doc instanceof ClassDoc) {
-            container = (ClassDoc) doc;
-        } else if (doc instanceof ProgramElementDoc) {
-            container =
-                getContainingClassDoc(((ProgramElementDoc) doc)
-                                      .containingClass());
-        }
-
-        return container;
+    protected ClassDoc getClassDocFor(Tag tag, Class<?> type) {
+        return getClassDocFor(tag.holder(), type.getCanonicalName());
     }
 
     /**
      * Convenience method to attempt to find a {@link ClassDoc}.
      *
-     * @param   context         The context {@link Doc}.
+     * @param   tag             The {@link Tag}.
      * @param   name            The name to qualify.
      *
      * @return  The {@link ClassDoc} if it can be found; {@code null}
      *          otherwise.
      */
-    protected ClassDoc getClassDoc(Doc context, String name) {
-        return getClassDoc(getContainingClassDoc(context), name);
+    protected ClassDoc getClassDocFor(Tag tag, String name) {
+        return getClassDocFor(tag.holder(), name);
     }
 
-    /**
-     * Convenience method to attempt to find a {@link ClassDoc}.
-     *
-     * @param   context         The context {@link ClassDoc}.
-     * @param   name            The name to qualify.
-     *
-     * @return  The {@link ClassDoc} if it can be found; {@code null}
-     *          otherwise.
-     */
-    protected ClassDoc getClassDoc(ClassDoc context, String name) {
+    private ClassDoc getClassDocFor(Doc context, String name) {
+        return getClassDocFor(getContainingClassDocFor(context), name);
+    }
+
+    private ClassDoc getClassDocFor(ClassDoc context, String name) {
         return ((context != null)
                     ? (isEmpty(name)
                            ? context
@@ -212,16 +193,33 @@ public abstract class AbstractTaglet implements AnnotatedTaglet,
     }
 
     /**
-     * Convenience method to attempt to qualify a class name.
+     * Convenience method to get the containing {@link ClassDoc}.
      *
-     * @param   context         The context {@link Doc}.
-     * @param   name            The name to qualify.
+     * @param   tag             The {@link Tag}.
      *
-     * @return  The qualified name if the argument name can be qualified;
-     *          the argument name otherwise.
+     * @return  The containing {@link ClassDoc} or {@code null} if there is
+     *          none.
      */
-    protected String getQualifiedName(Doc context, String name) {
-        ClassDoc doc = getClassDoc(context, name);
+    protected ClassDoc getContainingClassDocFor(Tag tag) {
+        return getContainingClassDocFor(tag.holder());
+    }
+
+    private ClassDoc getContainingClassDocFor(Doc doc) {
+        ClassDoc container = null;
+
+        if (doc instanceof ClassDoc) {
+            container = (ClassDoc) doc;
+        } else if (doc instanceof ProgramElementDoc) {
+            container =
+                getContainingClassDocFor(((ProgramElementDoc) doc)
+                                         .containingClass());
+        }
+
+        return container;
+    }
+
+    private String getQualifiedName(Doc context, String name) {
+        ClassDoc doc = getClassDocFor(context, name);
 
         return (doc != null) ? doc.qualifiedName() : name;
     }
@@ -252,52 +250,45 @@ public abstract class AbstractTaglet implements AnnotatedTaglet,
         return (name != null) ? Class.forName(name) : null;
     }
 
-    /**
-     * Method to get a "href" attribute {@link URI} to a
-     * {@link ClassDoc target} from a {@link ClassDoc context}.
-     * {@link #configuration} must be non-{@code null} to allow external
-     * links to be calculated.
-     *
-     * @param   context         The context {@link Doc} for calculating a
-     *                          relative {@link URI}.
-     * @param   target          The target {@link ClassDoc}.
-     *
-     * @return  The {@link URI} if the "href" could be calculated;
-     *          {@code null} otherwise.
-     */
-    protected URI href(ClassDoc context, ClassDoc target) {
+    private URI href(Tag tag, ClassDoc target) {
+        return href(getContainingClassDocFor(tag.holder()), target);
+    }
+
+    private URI href(ClassDoc source, ClassDoc target) {
         URI href = null;
 
-        if (target.isIncluded()) {
-            String path = EMPTY;
-            String[] names = context.qualifiedName().split("[.]");
+        if (target != null) {
+            if (target.isIncluded()) {
+                String path = EMPTY;
+                String[] names = source.qualifiedName().split("[.]");
 
-            for (int i = 0, n = names.length - 1; i < n; i += 1) {
-                path += "../";
-            }
+                for (int i = 0, n = names.length - 1; i < n; i += 1) {
+                    path += "../";
+                }
 
-            path += "./";
+                path += "./";
 
-            if (! isEmpty(target.containingPackage().name())) {
-                path +=
-                    target.containingPackage().name().replaceAll("[.]", "/")
-                    + "/";
-            }
+                if (! isEmpty(target.containingPackage().name())) {
+                    path +=
+                        target.containingPackage().name().replaceAll("[.]", "/")
+                        + "/";
+                }
 
-            path += target.name() + ".html";
+                path += target.name() + ".html";
 
-            href = URI.create(path).normalize();
-        } else {
-            if (configuration != null) {
-                DocLink link =
-                    configuration.extern
-                    .getExternalLink(target.containingPackage().name(),
-                                     null, target.name() + ".html");
-                /*
-                 * link might be null because the class cannot be loaded
-                 */
-                if (link != null) {
-                    href = URI.create(link.toString());
+                href = URI.create(path).normalize();
+            } else {
+                if (configuration != null) {
+                    DocLink link =
+                        configuration.extern
+                        .getExternalLink(target.containingPackage().name(),
+                                         null, target.name() + ".html");
+                    /*
+                     * link might be null because the class cannot be loaded
+                     */
+                    if (link != null) {
+                        href = URI.create(link.toString());
+                    }
                 }
             }
         }
@@ -305,60 +296,31 @@ public abstract class AbstractTaglet implements AnnotatedTaglet,
         return href;
     }
 
-    /**
-     * Method to get a "href" attribute {@link URI} to a
-     * {@link Annotation} type from a {@link ClassDoc context}.
-     * {@link #configuration} must be non-{@code null} to allow external
-     * links to be calculated.
-     *
-     * @param   context         The context {@link Doc} for calculating a
-     *                          relative {@link URI}.
-     * @param   type            The target {@link Class}.
-     *
-     * @return  The {@link URI} if the "href" could be calculated;
-     *          {@code null} otherwise.
-     */
-    protected URI href(Doc context, Class<?> type) {
+    private URI href(Tag tag, Class<?> type) {
         URI href = null;
-        ClassDoc target =
-            getClassDoc(getContainingClassDoc(context),
-                        type.getCanonicalName());
+        Doc context = tag.holder();
+        ClassDoc source = getContainingClassDocFor(context);
+        ClassDoc target = getClassDocFor(source, type.getCanonicalName());
 
         if (target != null) {
-            href = href(getContainingClassDoc(context), target);
+            href = href(source, target);
         }
 
         return href;
     }
 
     /**
-     * See {@link #a(URI,Node)}.
+     * {@code <a href="}{@link ClassDoc type}{@code ">}{@link Node node}{@code </a>}
      *
-     * @param   context         The context {@link Doc} for calculating a
-     *                          relative {@link URI}.
-     * @param   target          The target {@link ClassDoc}.
-     * @param   node            The child {@link Node} (may be
-     *                          {@code null}).
-     *
-     * @return  The {@code <a/>} {@link org.w3c.dom.Element}.
-     */
-    protected FluentNode a(Doc context, ClassDoc target, Node node) {
-        return a(href(getContainingClassDoc(context), target),
-                 (node != null) ? node : code(target.name()));
-    }
-
-    /**
-     * See {@link #a(URI,Node)}.
-     *
-     * @param   context         The context {@link Doc} for calculating a
-     *                          relative {@link URI}.
+     * @param   tag             The {@link Tag}.
      * @param   type            The target {@link Class}.
      * @param   node            The child {@link Node} (may be
      *                          {@code null}).
      *
-     * @return  The {@code <a/>} {@link org.w3c.dom.Element}.
+     * @return  {@link org.w3c.dom.Element}
      */
-    protected FluentNode a(Doc context, Class<?> type, Node node) {
+    @Override
+    public FluentNode a(Tag tag, Class<?> type, Node node) {
         String brackets = EMPTY;
 
         while (type.isArray()) {
@@ -366,101 +328,15 @@ public abstract class AbstractTaglet implements AnnotatedTaglet,
             type = type.getComponentType();
         }
 
-        ClassDoc target =
-            getClassDoc(getContainingClassDoc(context),
-                        type.getCanonicalName());
-        URI href = null;
+        ClassDoc target = getClassDocFor(tag, type);
+        String name =
+            ((target != null) ? target.name() : type.getCanonicalName());
 
-        if (target != null) {
-            href = href(getContainingClassDoc(context), target);
-        }
-
-        return a(href,
-                 (node != null)
-                     ? node
-                     : code(((target != null)
-                                 ? target.name()
-                                 : type.getCanonicalName())
-                            + brackets));
+        return a(tag, target, (node != null) ? node : code(name + brackets));
     }
 
-    protected FluentNode a(Doc context, Annotation annotation, Node node) {
-        return a(href(context, annotation.annotationType()),
-                 (node != null)
-                     ? node
-                     : code(String.valueOf(annotation)
-                            .replace(annotation.annotationType().getCanonicalName(),
-                                     annotation.annotationType().getSimpleName())));
-    }
-
-    /**
-     * See {@link #a(URI,Node)}.
-     *
-     * @param   context         The context {@link Doc} for calculating a
-     *                          relative {@link URI}.
-     * @param   constant        The target {@link Enum} constant.
-     * @param   node            The child {@link Node} (may be
-     *                          {@code null}).
-     *
-     * @return  The {@code <a/>} {@link org.w3c.dom.Element}.
-     */
-    protected FluentNode a(Doc context, Enum<?> constant, Node node) {
-        return a(href(context, constant.getDeclaringClass()),
-                 (node != null) ? node : code(constant.name()));
-    }
-
-    protected Node code(Doc doc, Field field) {
-        return fragment(code(Modifier.toString(field.getModifiers())),
-                        a(doc, field.getType(), null),
-                        code(field.getName()));
-    }
-
-    protected FluentNode node(Doc context, Object object) {
-        FluentNode node = null;
-
-        if (object instanceof byte[]) {
-            node =
-                text(Arrays.stream(ArrayUtils.toObject((byte[]) object))
-                     .map (t -> String.format("0x%02X", t))
-                     .collect(Collectors.joining(", ", "[", "]")));
-        } else if (object instanceof boolean[]) {
-            node = text(Arrays.toString((boolean[]) object));
-        } else if (object instanceof double[]) {
-            node = text(Arrays.toString((double[]) object));
-        } else if (object instanceof float[]) {
-            node = text(Arrays.toString((float[]) object));
-        } else if (object instanceof int[]) {
-            node = text(Arrays.toString((int[]) object));
-        } else if (object instanceof long[]) {
-            node = text(Arrays.toString((long[]) object));
-        } else if (object instanceof Object[]) {
-            node = node(context, Arrays.asList((Object[]) object));
-        } else if (object instanceof Class<?>) {
-            node = a(context, (Class<?>) object, null);
-        } else if (object instanceof Enum<?>) {
-            node = a(context, ((Enum<?>) object), null);
-        } else if (object instanceof Collection<?>) {
-            List<Node> nodes =
-                ((Collection<?>) object)
-                .stream()
-                .map(t -> node(context, t))
-                .collect(Collectors.toList());
-
-            for (int i = nodes.size() - 1; i > 0; i -= 1) {
-                nodes.add(i, text(", "));
-            }
-
-            node =
-                fragment()
-                .add(text("["))
-                .add(nodes)
-                .add(text("]"));
-        }
-
-        if (node == null) {
-            node = text(String.valueOf(object));
-        }
-
-        return node;
+    private FluentNode a(Tag tag, ClassDoc target, Node node) {
+        return a((target != null) ? href(tag, target) : null,
+                 (node != null) ? node : code(target.name()));
     }
 }

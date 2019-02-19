@@ -8,6 +8,7 @@ package ball.tools.javadoc;
 import com.sun.javadoc.Doc;
 import com.sun.javadoc.Tag;
 import com.sun.tools.doclets.formats.html.markup.RawHtml;
+import com.sun.tools.doclets.internal.toolkit.Configuration;
 import com.sun.tools.doclets.internal.toolkit.Content;
 import com.sun.tools.doclets.internal.toolkit.taglets.Taglet;
 import com.sun.tools.doclets.internal.toolkit.taglets.TagletWriter;
@@ -19,10 +20,14 @@ import com.sun.tools.doclets.internal.toolkit.taglets.TagletWriter;
  * @version $Revision$
  */
 public interface SunToolsInternalToolkitTaglet extends Taglet,
-                                                       JavadocTemplates {
+                                                       JavadocHTMLTemplates {
+    void set(Configuration configuration);
+
     @Override
     default Content getTagletOutput(Doc doc,
                                     TagletWriter writer) throws IllegalArgumentException {
+        set(writer.configuration());
+
         throw new IllegalArgumentException(doc.position() + ": "
                                            + "Method not supported in taglet "
                                            + getName() + ".");

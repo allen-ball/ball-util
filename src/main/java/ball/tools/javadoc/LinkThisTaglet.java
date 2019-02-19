@@ -8,8 +8,6 @@ package ball.tools.javadoc;
 import ball.annotation.ServiceProviderFor;
 import ball.lang.Keyword;
 import ball.xml.FluentNode;
-import com.sun.javadoc.ClassDoc;
-import com.sun.javadoc.Doc;
 import com.sun.javadoc.Tag;
 import com.sun.tools.doclets.Taglet;
 import java.util.Map;
@@ -41,13 +39,8 @@ public class LinkThisTaglet extends AbstractInlineTaglet
             throw new IllegalArgumentException("Invalid argument");
         }
 
-        FluentNode node = code(Keyword.THIS.lexeme());
-        ClassDoc target = getContainingClassDoc(tag.holder());
-
-        if (target != null) {
-            node = a(tag.holder(), target, node);
-        }
-
-        return node;
+        return a(tag,
+                 getClassFor(getContainingClassDocFor(tag)),
+                 Keyword.THIS.lexeme());
     }
 }

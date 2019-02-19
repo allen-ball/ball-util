@@ -203,6 +203,10 @@ public abstract class FluentDocumentBuilder {
             return result;
         }
 
+        /**
+         * {@link DefaultInvocationHandler} for
+         * {@link FluentNode#toArray(Iterable)}.
+         */
         private Node[] toArray(Iterable<Node> nodes) {
             return(StreamSupport
                    .stream(Optional

@@ -75,29 +75,29 @@ public class InjectedFieldsTaglet extends AbstractInlineTaglet
         String[] argv = tag.text().trim().split("[\\p{Space}]+", 2);
 
         if (! isEmpty(argv[0])) {
-            doc = getClassDoc(tag.holder(), argv[0]);
+            doc = getClassDocFor(tag, argv[0]);
         } else {
-            doc = getContainingClassDoc(tag.holder());
+            doc = getContainingClassDocFor(tag);
         }
 
-        return table(doc, getClassFor(doc));
+        return table(tag, getClassFor(doc));
     }
 
-    private FluentNode table(Doc doc, Class<?> type) {
+    private FluentNode table(Tag tag, Class<?> type) {
         return table(tr(th("Annotation(s)"), th("Field")),
                      fragment(Arrays.stream(type.getDeclaredFields())
                               .filter(t -> (Arrays.stream(t.getAnnotations())
                                             .filter(a -> ANNOTATIONS.contains(a.annotationType()))
                                             .findFirst().isPresent()))
-                              .map(t -> tr(doc, t))
+                              .map(t -> tr(tag, t))
                               .collect(Collectors.toList())));
     }
 
-    private FluentNode tr(Doc doc, Field field) {
+    private FluentNode tr(Tag tag, Field field) {
         return tr(td(fragment(Arrays.stream(field.getAnnotations())
                               .filter(t -> ANNOTATIONS.contains(t.annotationType()))
-                              .map(t -> a(doc, t, null))
+                              .map(t -> a(tag, t))
                               .collect(Collectors.toList()))),
-                  td(code(doc, field)));
+                  td(code(tag, field)));
     }
 }
