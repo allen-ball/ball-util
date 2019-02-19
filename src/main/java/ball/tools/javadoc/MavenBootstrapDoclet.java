@@ -24,7 +24,7 @@ import lombok.ToString;
  * @version $Revision$
  */
 @NoArgsConstructor @ToString
-public class MavenAwareStandardDoclet extends Standard {
+public class MavenBootstrapDoclet extends Standard {
 
     /**
      * See {@link Doclet#validOptions(String[][],DocErrorReporter)}.
@@ -56,13 +56,17 @@ public class MavenAwareStandardDoclet extends Standard {
         Boolean result = null;
 
         ArrayList<String[]> list = new ArrayList<>(Arrays.asList(options));
-
+/*
         for (Taglet taglet :
                  ServiceLoader.load(Taglet.class,
-                                    MavenAwareStandardDoclet.class
+                                    MavenBootstrapDoclet.class
                                     .getClassLoader())) {
             list.add(new String[] { "-taglet", taglet.getClass().getName() });
         }
+*/
+        list.add(new String[] {
+                     "-taglet", MavenBootstrapTaglet.class.getName()
+                 });
 
         options = list.toArray(new String[][] { });
 
