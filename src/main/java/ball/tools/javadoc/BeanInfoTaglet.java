@@ -24,7 +24,6 @@ import java.util.stream.Stream;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import static java.beans.Introspector.getBeanInfo;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 /**
@@ -50,27 +49,18 @@ public class BeanInfoTaglet extends AbstractInlineTaglet
 
     @Override
     public FluentNode toNode(Tag tag) throws Throwable {
-        ClassDoc start = getContainingClassDocFor(tag);
-        Class<?> stop = null;
-        String[] argv = tag.text().trim().split("[\\p{Space}]+", 2);
+        ClassDoc doc = null;
+        String name = tag.text().trim();
 
-        if (! isEmpty(argv[0])) {
-            start = getClassDocFor(tag, argv[0]);
-        }
-
-        if (start == null) {
-            throw new IllegalArgumentException("Class not specified");
-        }
-
-        if (argv.length > 1) {
-            if (! Void.TYPE.getName().equals(argv[1])) {
-                stop = getClassFor(getClassDocFor(tag, argv[1]));
-            }
+        if (! isEmpty(name)) {
+            doc = getClassDocFor(tag, name);
         } else {
-            stop = Object.class;
+            doc = getContainingClassDocFor(tag);
         }
 
-        return fragment(tag, getBeanInfo(getClassFor(start), stop));
+        Class<?> type = getClassFor(doc);
+
+        return fragment(tag, getBeanInfo(type));
     }
 
     private FluentNode fragment(Tag tag, BeanInfo info) {

@@ -14,6 +14,8 @@ import com.sun.javadoc.ProgramElementDoc;
 import com.sun.javadoc.Tag;
 import com.sun.tools.doclets.internal.toolkit.Configuration;
 import com.sun.tools.doclets.internal.toolkit.util.DocLink;
+import java.beans.BeanInfo;
+import java.beans.Introspector;
 import java.net.URI;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
@@ -248,6 +250,48 @@ public abstract class AbstractTaglet implements AnnotatedTaglet,
         }
 
         return (name != null) ? Class.forName(name) : null;
+    }
+
+
+    /**
+     * See {@link Introspector#getBeanInfo(Class,Class)}.
+     *
+     * @param   start           The start {@link Class}.
+     * @param   stop            The stop {@link Class}.
+     *
+     * @return  {@link BeanInfo}
+     *
+     * @throws  RuntimeException
+     *                          Instead of checked {@link Exception}.
+     */
+    protected BeanInfo getBeanInfo(Class<?> start, Class<?> stop) {
+        BeanInfo info = null;
+
+        try {
+            info = Introspector.getBeanInfo(start, stop);
+        } catch (RuntimeException exception) {
+            throw exception;
+        } catch (Error error) {
+            throw error;
+        } catch (Exception exception) {
+            throw new RuntimeException(exception);
+        }
+
+        return info;
+    }
+
+    /**
+     * See {@link #getBeanInfo(Class,Class)}.
+     *
+     * @param   start           The start {@link Class}.
+     *
+     * @return  {@link BeanInfo}
+     *
+     * @throws  RuntimeException
+     *                          Instead of checked {@link Exception}.
+     */
+    protected BeanInfo getBeanInfo(Class<?> start) {
+        return getBeanInfo(start, Object.class);
     }
 
     private URI href(Tag tag, ClassDoc target) {

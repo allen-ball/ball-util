@@ -12,9 +12,7 @@ import com.sun.javadoc.ClassDoc;
 import com.sun.javadoc.Doc;
 import com.sun.javadoc.Tag;
 import com.sun.tools.doclets.Taglet;
-import java.beans.BeanInfo;
 import java.beans.IndexedPropertyDescriptor;
-import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -27,6 +25,7 @@ import lombok.ToString;
 import org.apache.tools.ant.Task;
 import org.w3c.dom.Node;
 
+import static java.beans.Introspector.decapitalize;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
@@ -62,10 +61,10 @@ public class AntTaskTaglet extends AbstractInlineTaglet
     @Override
     public FluentNode toNode(Tag tag) throws Throwable {
         ClassDoc doc = null;
-        String[] argv = tag.text().trim().split("[\\p{Space}]+", 2);
+        String name = tag.text().trim();
 
-        if (! isEmpty(argv[0])) {
-            doc = getClassDocFor(tag, argv[0]);
+        if (! isEmpty(name)) {
+            doc = getClassDocFor(tag, name);
         } else {
             doc = getContainingClassDocFor(tag);
         }
@@ -133,8 +132,7 @@ public class AntTaskTaglet extends AbstractInlineTaglet
 
     private FluentNode configured(Tag tag, Method method) {
         String name =
-            Introspector
-            .decapitalize(method.getName().substring(ADD_CONFIGURED.length()));
+            decapitalize(method.getName().substring(ADD_CONFIGURED.length()));
         Class<?> type = method.getParameterTypes()[0];
 
         return fragment(element(encode(type.getCanonicalName(), name),
@@ -172,25 +170,5 @@ public class AntTaskTaglet extends AbstractInlineTaglet
         String[] tokens = string.split(String.valueOf(COLON), 2);
 
         return (tokens.length > 1) ? tokens : new String[] { tokens[0], null };
-    }
-
-    private BeanInfo getBeanInfo(Class<?> start, Class<?> stop) {
-        BeanInfo info = null;
-
-        try {
-            info = Introspector.getBeanInfo(start, stop);
-        } catch (RuntimeException exception) {
-            throw exception;
-        } catch (Error error) {
-            throw error;
-        } catch (Exception exception) {
-            throw new RuntimeException(exception);
-        }
-
-        return info;
-    }
-
-    private BeanInfo getBeanInfo(Class<?> start) {
-        return getBeanInfo(start, null);
     }
 }
