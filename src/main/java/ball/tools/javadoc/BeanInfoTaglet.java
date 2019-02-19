@@ -12,12 +12,9 @@ import com.sun.javadoc.ClassDoc;
 import com.sun.javadoc.Doc;
 import com.sun.javadoc.Tag;
 import com.sun.tools.doclets.Taglet;
-import com.sun.tools.doclets.internal.toolkit.Content;
-import com.sun.tools.doclets.internal.toolkit.taglets.TagletWriter;
 import java.beans.BeanDescriptor;
 import java.beans.BeanInfo;
 import java.beans.IndexedPropertyDescriptor;
-import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.util.Arrays;
 import java.util.Map;
@@ -27,6 +24,7 @@ import java.util.stream.Stream;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import static java.beans.Introspector.getBeanInfo;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 /**
@@ -52,14 +50,12 @@ public class BeanInfoTaglet extends AbstractInlineTaglet
 
     @Override
     public FluentNode toNode(Tag tag) throws Throwable {
-        ClassDoc start = null;
-        ClassDoc stop = null;
+        ClassDoc start = getContainingClassDocFor(tag);
+        Class<?> stop = null;
         String[] argv = tag.text().trim().split("[\\p{Space}]+", 2);
 
         if (! isEmpty(argv[0])) {
             start = getClassDocFor(tag, argv[0]);
-        } else {
-            start = getContainingClassDocFor(tag);
         }
 
         if (start == null) {
@@ -68,15 +64,13 @@ public class BeanInfoTaglet extends AbstractInlineTaglet
 
         if (argv.length > 1) {
             if (! Void.TYPE.getName().equals(argv[1])) {
-                stop = getClassDocFor(tag, argv[1]);
+                stop = getClassFor(getClassDocFor(tag, argv[1]));
             }
         } else {
-            stop = getClassDocFor(tag, Object.class.getName());
+            stop = Object.class;
         }
 
-        return fragment(tag,
-                        Introspector.getBeanInfo(getClassFor(start),
-                                                 getClassFor(stop)));
+        return fragment(tag, getBeanInfo(getClassFor(start), stop));
     }
 
     private FluentNode fragment(Tag tag, BeanInfo info) {
