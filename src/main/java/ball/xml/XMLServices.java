@@ -5,8 +5,7 @@
  */
 package ball.xml;
 
-import ball.activation.ReaderWriterDataSource;
-import java.io.Writer;
+import java.io.StringWriter;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
@@ -31,19 +30,19 @@ public interface XMLServices {
      * @return  The {@link String} representation.
      */
     default String render(Node node) {
-        ReaderWriterDataSource ds = new ReaderWriterDataSource(null, null);
+        StringWriter writer = new StringWriter();
 
-        try (Writer out = ds.getWriter()) {
+        try {
             transformer()
                 .transform(new DOMSource(node),
-                           new StreamResult(out));
+                           new StreamResult(writer));
         } catch (RuntimeException exception) {
             throw exception;
         } catch (Exception exception) {
             throw new IllegalStateException(exception);
         }
 
-        return ds.toString();
+        return writer.toString();
     }
 
     /**
