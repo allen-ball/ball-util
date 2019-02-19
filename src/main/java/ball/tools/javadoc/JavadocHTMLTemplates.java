@@ -29,6 +29,7 @@ import org.w3c.dom.Node;
  */
 public interface JavadocHTMLTemplates extends HTMLTemplates {
     FluentNode a(Tag tag, Class<?> type, Node node);
+    FluentNode a(Tag tag, String name, Node node);
 
     /**
      * {@code <}{@code p><b><u>}{@link Tag tag}{@code </p}{@code ></b></u>}
