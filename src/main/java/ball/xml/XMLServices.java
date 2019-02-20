@@ -126,7 +126,7 @@ public interface XMLServices {
     }
 
     /**
-     * Create an {@link org.w3c.dom.Text} {@link Node}
+     * Create a {@link org.w3c.dom.Text} {@link Node}
      * (see {@link FluentNode#text(String)}).
      *
      * @param   content         The {@link org.w3c.dom.Text} content.
@@ -138,7 +138,7 @@ public interface XMLServices {
     }
 
     /**
-     * Create an {@link org.w3c.dom.CDATASection} {@link Node}
+     * Create a {@link org.w3c.dom.CDATASection} {@link Node}
      * (see {@link FluentNode#cdata(String)}).
      *
      * @param   data            The {@link org.w3c.dom.CDATASection} data.
@@ -150,7 +150,7 @@ public interface XMLServices {
     }
 
     /**
-     * Create an {@link org.w3c.dom.Comment} {@link Node}
+     * Create a {@link org.w3c.dom.Comment} {@link Node}
      * (see {@link FluentNode#comment(String)}).
      *
      * @param   data            The {@link org.w3c.dom.Comment} data.

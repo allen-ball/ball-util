@@ -6,10 +6,8 @@
 package ball.xml;
 
 import java.net.URI;
+import javax.swing.table.TableModel;
 import org.w3c.dom.Node;
-
-import static java.util.Arrays.asList;
-import static java.util.Collections.emptyList;
 
 /**
  * Common HTML templates
@@ -99,6 +97,30 @@ public interface HTMLTemplates extends XMLServices {
     }
 
     /**
+     * {@code <div>}{@link Node nodes...}{@code </div>}
+     *
+     * @param   nodes           The {@link Iterable} of {@link Node}s to
+     *                          append to the newly created
+     *                          {@link org.w3c.dom.Element}.
+     *
+     * @return  {@link org.w3c.dom.Element}
+     */
+    default FluentNode div(Iterable<Node> nodes) {
+        return div(document().toArray(nodes));
+    }
+
+    /**
+     * {@code <div>}{@link Node nodes...}{@code </div>}
+     *
+     * @param   nodes           The {@link Node}s to append to the newly
+     *                          created
+     *                          {@link org.w3c.dom.Element}.
+     *
+     * @return  {@link org.w3c.dom.Element}
+     */
+    default FluentNode div(Node... nodes) { return element("div", nodes); }
+
+    /**
      * {@code <p>}{@link Node nodes...}{@code </p>}
      *
      * @param   nodes           The {@link Iterable} of {@link Node}s to
@@ -107,7 +129,9 @@ public interface HTMLTemplates extends XMLServices {
      *
      * @return  {@link org.w3c.dom.Element}
      */
-    default FluentNode p(Iterable<Node> nodes) { return element("p", nodes); }
+    default FluentNode p(Iterable<Node> nodes) {
+        return p(document().toArray(nodes));
+    }
 
     /**
      * {@code <p>}{@link Node nodes...}{@code </p>}
@@ -118,9 +142,7 @@ public interface HTMLTemplates extends XMLServices {
      *
      * @return  {@link org.w3c.dom.Element}
      */
-    default FluentNode p(Node... nodes) {
-        return p((nodes != null) ? asList(nodes) : emptyList());
-    }
+    default FluentNode p(Node... nodes) { return element("p", nodes); }
 
     /**
      * {@code <p>}{@link #text(String) text(content)}{@code </p>}
@@ -152,7 +174,7 @@ public interface HTMLTemplates extends XMLServices {
      * @return  {@link org.w3c.dom.Element}
      */
     default FluentNode table(Iterable<Node> nodes) {
-        return element("table", nodes);
+        return table(document().toArray(nodes));
     }
 
     /**
@@ -165,7 +187,19 @@ public interface HTMLTemplates extends XMLServices {
      * @return  {@link org.w3c.dom.Element}
      */
     default FluentNode table(Node... nodes) {
-        return table((nodes != null) ? asList(nodes) : emptyList());
+        return element("table", nodes);
+    }
+
+    /**
+     * {@code <table>}{@link TableModel model}{@code </table>}
+     *
+     * @param   model           The {@link TableModel} to use to create the
+     *                          new table {@link org.w3c.dom.Element}.
+     *
+     * @return  {@link org.w3c.dom.Element}
+     */
+    default FluentNode table(TableModel model) {
+        throw new UnsupportedOperationException();
     }
 
     /**
@@ -178,7 +212,7 @@ public interface HTMLTemplates extends XMLServices {
      * @return  {@link org.w3c.dom.Element}
      */
     default FluentNode tr(Iterable<Node> nodes) {
-        return element("tr", nodes);
+        return tr(document().toArray(nodes));
     }
 
     /**
@@ -190,9 +224,7 @@ public interface HTMLTemplates extends XMLServices {
      *
      * @return  {@link org.w3c.dom.Element}
      */
-    default FluentNode tr(Node... nodes) {
-        return tr((nodes != null) ? asList(nodes) : emptyList());
-    }
+    default FluentNode tr(Node... nodes) { return element("tr", nodes); }
 
     /**
      * {@code <th>}{@link Node node}{@code </th>}
