@@ -22,7 +22,7 @@ import static org.apache.commons.lang3.StringUtils.EMPTY;
  * {@link org.apache.tools.ant.Task} to analyze {@link Combinations} of a
  * {@link Collection}.
  *
- * {@bean.info}
+ * {@ant.task}
  *
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
@@ -36,7 +36,7 @@ public abstract class CombinationsTask extends InstanceOfTask {
      * {@link.uri http://ant.apache.org/ Ant}
      * {@link org.apache.tools.ant.Task} to count {@link Combinations}.
      *
-     * {@bean.info}
+     * {@ant.task}
      */
     @AntTask("combinations-count")
     @NoArgsConstructor @ToString
@@ -69,7 +69,7 @@ public abstract class CombinationsTask extends InstanceOfTask {
      * {@link.uri http://ant.apache.org/ Ant}
      * {@link org.apache.tools.ant.Task} to show the {@link Combinations}.
      *
-     * {@bean.info}
+     * {@ant.task}
      */
     @AntTask("combinations-of")
     @NoArgsConstructor @ToString

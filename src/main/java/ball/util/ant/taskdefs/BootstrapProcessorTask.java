@@ -29,7 +29,7 @@ import static java.lang.reflect.Modifier.isAbstract;
  * {@link javax.annotation.processing.Processor}s.  Creates and invokes
  * {@link Processor}s found on the class path.
  *
- * {@bean.info}
+ * {@ant.task}
  *
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$

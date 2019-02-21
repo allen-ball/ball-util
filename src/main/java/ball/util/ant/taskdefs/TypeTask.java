@@ -39,7 +39,7 @@ import static org.apache.commons.lang3.StringUtils.EMPTY;
  * Abstract {@link.uri http://ant.apache.org/ Ant} {@link Task} to specify a
  * type ({@link Class}).
  *
- * {@bean.info}
+ * {@ant.task}
  *
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
@@ -78,7 +78,7 @@ public abstract class TypeTask extends Task
      * {@link org.apache.tools.ant.Task} to display {@link BeanInfo}
      * for a specified {@link Class}.
      *
-     * {@bean.info}
+     * {@ant.task}
      */
     @AntTask("bean-info-for")
     @NoArgsConstructor @ToString
@@ -184,7 +184,7 @@ public abstract class TypeTask extends Task
      * {@link org.apache.tools.ant.Task} to display superclasses of a
      * specified {@link Class}.
      *
-     * {@bean.info}
+     * {@ant.task}
      */
     @AntTask("is-assignable-from")
     @NoArgsConstructor @ToString
@@ -217,7 +217,7 @@ public abstract class TypeTask extends Task
      * {@link org.apache.tools.ant.Task} to display members of a specified
      * {@link Class}.
      *
-     * {@bean.info}
+     * {@ant.task}
      */
     @AntTask("members-of")
     @NoArgsConstructor @ToString
@@ -261,7 +261,7 @@ public abstract class TypeTask extends Task
      * {@link org.apache.tools.ant.Task} to display resource path to a
      * specified {@link Class}.
      *
-     * {@bean.info}
+     * {@ant.task}
      */
     @AntTask("resource-path-to")
     @NoArgsConstructor @ToString
@@ -294,7 +294,7 @@ public abstract class TypeTask extends Task
      * {@link org.apache.tools.ant.Task} to display superclasses of a
      * specified {@link Class}.
      *
-     * {@bean.info}
+     * {@ant.task}
      */
     @AntTask("superclasses-of")
     @NoArgsConstructor @ToString

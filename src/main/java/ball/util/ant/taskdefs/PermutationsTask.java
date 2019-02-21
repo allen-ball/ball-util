@@ -20,7 +20,7 @@ import static org.apache.commons.lang3.StringUtils.EMPTY;
  * {@link org.apache.tools.ant.Task} to analyze {@link Permutations} of a
  * {@link Collection}.
  *
- * {@bean.info}
+ * {@ant.task}
  *
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
@@ -32,7 +32,7 @@ public abstract class PermutationsTask extends InstanceOfTask {
      * {@link.uri http://ant.apache.org/ Ant}
      * {@link org.apache.tools.ant.Task} to count {@link Permutations}.
      *
-     * {@bean.info}
+     * {@ant.task}
      */
     @AntTask("permutations-count")
     @NoArgsConstructor @ToString
@@ -64,7 +64,7 @@ public abstract class PermutationsTask extends InstanceOfTask {
      * {@link.uri http://ant.apache.org/ Ant}
      * {@link org.apache.tools.ant.Task} to show the {@link Permutations}.
      *
-     * {@bean.info}
+     * {@ant.task}
      */
     @AntTask("permutations-of")
     @NoArgsConstructor @ToString

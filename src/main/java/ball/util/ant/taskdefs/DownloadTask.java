@@ -25,7 +25,7 @@ import org.apache.tools.ant.util.ClasspathUtils;
  * {@link.uri http://ant.apache.org/ Ant} {@link Task} to download resources
  * using {@link URLConnection} and {@link ResponseCacheImpl}.
  *
- * {@bean.info}
+ * {@ant.task}
  *
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$

@@ -22,7 +22,7 @@ import static lombok.AccessLevel.PROTECTED;
  * {@link.uri http://ant.apache.org/ Ant} {@link Task} to generate new
  * unique {@link UUID}s.
  *
- * {@bean.info}
+ * {@ant.task}
  *
  * @see Generate
  * @see GenerateRandom
@@ -63,7 +63,7 @@ public abstract class UUIDTask extends Task
      * {@link.uri http://ant.apache.org/ Ant} {@link Task} to generate a
      * {@link UUID} with {@link UUID#fromString(String)}.
      *
-     * {@bean.info}
+     * {@ant.task}
      */
     @AntTask("uuid-from")
     @NoArgsConstructor @ToString
@@ -81,7 +81,7 @@ public abstract class UUIDTask extends Task
      * {@link.uri http://ant.apache.org/ Ant} {@link Task} to generate a new
      * {@link UUID} with {@link UUIDFactory#generate()}.
      *
-     * {@bean.info}
+     * {@ant.task}
      */
     @AntTask("uuid-generate")
     @NoArgsConstructor @ToString
@@ -96,7 +96,7 @@ public abstract class UUIDTask extends Task
      * {@link.uri http://ant.apache.org/ Ant} {@link Task} to generate a new
      * {@link UUID} with {@link UUIDFactory#generateRandom()}.
      *
-     * {@bean.info}
+     * {@ant.task}
      */
     @AntTask("uuid-generate-random")
     @NoArgsConstructor @ToString
@@ -111,7 +111,7 @@ public abstract class UUIDTask extends Task
      * {@link.uri http://ant.apache.org/ Ant} {@link Task} to generate a new
      * {@link UUID} with {@link UUIDFactory#generateTime()}.
      *
-     * {@bean.info}
+     * {@ant.task}
      */
     @AntTask("uuid-generate-time")
     @NoArgsConstructor @ToString
@@ -126,7 +126,7 @@ public abstract class UUIDTask extends Task
      * {@link.uri http://ant.apache.org/ Ant} {@link Task} to generate a
      * {@code null} {@link UUID} with {@link UUIDFactory#generateNull()}.
      *
-     * {@bean.info}
+     * {@ant.task}
      */
     @AntTask("uuid-null")
     @NoArgsConstructor @ToString

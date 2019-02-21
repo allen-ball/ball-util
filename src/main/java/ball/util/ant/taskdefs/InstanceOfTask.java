@@ -28,7 +28,7 @@ import static org.apache.commons.lang3.StringUtils.EMPTY;
  * {@link.uri http://ant.apache.org/ Ant} {@link org.apache.tools.ant.Task}
  * to get an instance of a specified {@link Class}.
  *
- * {@bean.info}
+ * {@ant.task}
  *
  * @see Factory
  *
