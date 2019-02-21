@@ -16,10 +16,13 @@ import com.sun.tools.doclets.internal.toolkit.Configuration;
 import com.sun.tools.doclets.internal.toolkit.util.DocLink;
 import java.beans.BeanInfo;
 import java.beans.Introspector;
+import java.io.StringWriter;
 import java.net.URI;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Node;
 
 import static javax.xml.transform.OutputKeys.INDENT;
@@ -120,9 +123,6 @@ public abstract class AbstractTaglet implements AnnotatedTaglet,
     @Override public boolean inType() { return inType; }
 
     @Override
-    public Transformer transformer() { return transformer; }
-
-    @Override
     public FluentDocument document() { return document; }
 
     @Override
@@ -155,6 +155,30 @@ public abstract class AbstractTaglet implements AnnotatedTaglet,
     }
 
     protected abstract Node toNode(Tag tag) throws Throwable;
+
+    /**
+     * Method to render a {@link Node} to a {@link String} (suitable for
+     * output).
+     *
+     * @param   node            The {@link Node}.
+     *
+     * @return  The {@link String} representation.
+     */
+    protected String render(Node node) {
+        StringWriter writer = new StringWriter();
+
+        try {
+            transformer
+                .transform(new DOMSource(node),
+                           new StreamResult(writer));
+        } catch (RuntimeException exception) {
+            throw exception;
+        } catch (Exception exception) {
+            throw new IllegalStateException(exception);
+        }
+
+        return writer.toString();
+    }
 
     /**
      * Convenience method to attempt to find a {@link ClassDoc}.

@@ -5,10 +5,6 @@
  */
 package ball.xml;
 
-import java.io.StringWriter;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Node;
 
 /**
@@ -18,32 +14,7 @@ import org.w3c.dom.Node;
  * @version $Revision$
  */
 public interface XMLServices {
-    Transformer transformer();
     FluentDocument document();
-
-    /**
-     * Method to render a {@link Node} with the {@link #transformer()} to a
-     * {@link String} (suitable for output).
-     *
-     * @param   node            The {@link Node}.
-     *
-     * @return  The {@link String} representation.
-     */
-    default String render(Node node) {
-        StringWriter writer = new StringWriter();
-
-        try {
-            transformer()
-                .transform(new DOMSource(node),
-                           new StreamResult(writer));
-        } catch (RuntimeException exception) {
-            throw exception;
-        } catch (Exception exception) {
-            throw new IllegalStateException(exception);
-        }
-
-        return writer.toString();
-    }
 
     /**
      * Create a {@link org.w3c.dom.DocumentFragment} {@link Node}
