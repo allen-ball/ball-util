@@ -12,20 +12,19 @@ import com.sun.javadoc.ClassDoc;
 import com.sun.javadoc.Doc;
 import com.sun.javadoc.Tag;
 import com.sun.tools.doclets.Taglet;
-import java.beans.IndexedPropertyDescriptor;
-import java.beans.PropertyDescriptor;
-import java.lang.reflect.Method;
-import java.util.Arrays;
+import java.util.AbstractMap.SimpleEntry;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.apache.tools.ant.IntrospectionHelper;
 import org.apache.tools.ant.Task;
 import org.w3c.dom.Node;
 
-import static java.beans.Introspector.decapitalize;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
@@ -55,9 +54,6 @@ public class AntTaskTaglet extends AbstractInlineTaglet
         { '$', "-DOLLAR-" }
     };
 
-    private static final String ADD_CONFIGURED = "addConfigured";
-    private static final String ADD_TEXT = "addText";
-
     @Override
     public FluentNode toNode(Tag tag) throws Throwable {
         ClassDoc doc = null;
@@ -86,9 +82,7 @@ public class AntTaskTaglet extends AbstractInlineTaglet
             } else {
                 String[] subtokens = decode(tokens[i]);
 
-                node.add(a(tag,
-                           subtokens[0],
-                           isNotEmpty(subtokens[1]) ? code(subtokens[1]) : null));
+                node.add(a(tag, subtokens[0], subtokens[1]));
             }
         }
 
@@ -97,53 +91,58 @@ public class AntTaskTaglet extends AbstractInlineTaglet
 
     private FluentNode template(Tag tag, Class<?> type) {
         AntTask annotation = type.getAnnotation(AntTask.class);
-        FluentNode node =
-            element(encode(type.getCanonicalName(),
-                           (annotation != null) ? annotation.value() : null))
-            .add(attributes(tag,
-                            getBeanInfo(type, Task.class)
-                            .getPropertyDescriptors()))
-            .add(Arrays.stream(type.getMethods())
-                 .filter(t -> t.getName().startsWith(ADD_CONFIGURED))
-                 .filter(t -> t.getParameterTypes().length == 1)
-                 .map(t -> configured(tag, t))
-                 .collect(Collectors.toList()));
+        String name =
+            (annotation != null) ? annotation.value() : type.getSimpleName();
 
-        Arrays.stream(type.getMethods())
-            .filter(t -> t.getName().equals(ADD_TEXT))
-            .filter(t -> t.getParameterTypes().length == 1)
-            .findFirst()
-            .ifPresent(t -> node.add(text("text")));
+        return type(0, new HashSet<>(), tag, new SimpleEntry<>(name, type));
+    }
+
+    private Node a(Tag tag, String name, String content) {
+        return a(tag, name, isNotEmpty(content) ? code(content) : null);
+    }
+
+    private FluentNode type(int depth, Set<Map.Entry<?,?>> set,
+                            Tag tag, Map.Entry<String,Class<?>> entry) {
+        IntrospectionHelper helper =
+            IntrospectionHelper.getHelper(entry.getValue());
+        FluentNode node =
+            element(encode(entry.getValue(), entry.getKey()))
+            .add(attributes(tag, helper))
+            .add(content(depth + 1, set, tag, helper));
 
         return node;
     }
 
-    private Node[] attributes(Tag tag, PropertyDescriptor[] descriptors) {
+    private Node[] attributes(Tag tag, IntrospectionHelper helper) {
         List<Node> list =
-            Arrays.stream(descriptors)
-            .filter(t -> (! (t instanceof IndexedPropertyDescriptor)))
-            .filter(t -> t.getWriteMethod() != null)
-            .map(t -> attr(t.getName(),
-                           ____ + t.getPropertyType().getName() + ____))
+            helper.getAttributeMap().entrySet()
+            .stream()
+            .map(t -> attr(t.getKey(), encode(t.getValue(), null)))
             .collect(Collectors.toList());
 
         return list.toArray(new Node[] { });
     }
 
-    private FluentNode configured(Tag tag, Method method) {
-        String name =
-            decapitalize(method.getName().substring(ADD_CONFIGURED.length()));
-        Class<?> type = method.getParameterTypes()[0];
+    private FluentNode content(int depth, Set<Map.Entry<?,?>> set,
+                               Tag tag, IntrospectionHelper helper) {
+        FluentNode node =
+            fragment(helper.getNestedElementMap().entrySet()
+                     .stream()
+                     .map(t -> ((set.add(t) && depth < 3)
+                                ? type(depth, set, tag, t)
+                                : element(encode(t.getValue(),
+                                                 t.getKey())).value("...")))
+                     .collect(Collectors.toList()));
 
-        return fragment(element(encode(type.getCanonicalName(), name),
-                                attributes(tag,
-                                           getBeanInfo(type)
-                                           .getPropertyDescriptors())),
-                        text("..."));
+        if (helper.supportsCharacters()) {
+            node.add(text("text"));
+        }
+
+        return node;
     }
 
-    private String encode(String type, String name) {
-        String string = type;
+    private String encode(Class<?> type, String name) {
+        String string = type.getCanonicalName();
 
         if (isNotEmpty(name)) {
             string += String.valueOf(COLON) + name;
@@ -155,9 +154,7 @@ public class AntTaskTaglet extends AbstractInlineTaglet
                                   codec[1].toString());
         }
 
-        string = ____ + string + ____;
-
-        return string;
+        return ____ + string + ____;
     }
 
     private String[] decode(String string) {
