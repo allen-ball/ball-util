@@ -220,12 +220,6 @@ public abstract class AbstractTaglet implements AnnotatedTaglet,
         return container;
     }
 
-    private String getQualifiedName(Doc context, String name) {
-        ClassDoc doc = getClassDocFor(context, name);
-
-        return (doc != null) ? doc.qualifiedName() : name;
-    }
-
     /**
      * Method to get the corresponding {@link Class} for a {@link ClassDoc}.
      *
@@ -233,25 +227,38 @@ public abstract class AbstractTaglet implements AnnotatedTaglet,
      *
      * @return  The corresponding {@link Class}.
      *
-     * @throws  ClassNotFoundException
-     *                          If the {@link Class} is not found.
+     * @throws  RuntimeException
+     *                          Instead of checked {@link Exception}.
      */
-    protected Class<?> getClassFor(ClassDoc doc) throws ClassNotFoundException {
+    protected Class<?> getClassFor(ClassDoc doc) {
+        Class<?> type = null;
+
+        try {
+            type = (doc != null) ? Class.forName(getClassNameFor(doc)) : null;
+        } catch (RuntimeException exception) {
+            throw exception;
+        } catch (Error error) {
+            throw error;
+        } catch (Exception exception) {
+            throw new RuntimeException(exception);
+        }
+
+        return type;
+    }
+
+    private String getClassNameFor(ClassDoc doc) {
         String name = null;
 
         if (doc != null) {
-            if (doc.containingClass() != null) {
-                name =
-                    doc.containingClass().qualifiedName()
-                    + "$" + doc.simpleTypeName();
-            } else {
-                name = doc.qualifiedName();
-            }
+            name =
+                (doc.containingClass() != null)
+                    ? (getClassNameFor(doc.containingClass())
+                       + "$" + doc.simpleTypeName())
+                    : doc.qualifiedName();
         }
 
-        return (name != null) ? Class.forName(name) : null;
+        return name;
     }
-
 
     /**
      * See {@link Introspector#getBeanInfo(Class,Class)}.
