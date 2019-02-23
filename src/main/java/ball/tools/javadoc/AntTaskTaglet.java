@@ -9,7 +9,6 @@ import ball.annotation.ServiceProviderFor;
 import ball.util.ant.taskdefs.AntTask;
 import ball.xml.FluentNode;
 import com.sun.javadoc.ClassDoc;
-import com.sun.javadoc.Doc;
 import com.sun.javadoc.Tag;
 import com.sun.tools.doclets.Taglet;
 import java.io.StringWriter;
@@ -33,7 +32,7 @@ import org.w3c.dom.Node;
 import static javax.xml.transform.OutputKeys.INDENT;
 import static javax.xml.transform.OutputKeys.OMIT_XML_DECLARATION;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
-import static org.apache.commons.lang3.StringUtils.isNotEmpty;
+import static org.apache.commons.lang3.StringUtils.repeat;
 
 /**
  * Inline {@link Taglet} to document {@link.uri http://ant.apache.org/ Ant}
@@ -53,19 +52,12 @@ public class AntTaskTaglet extends AbstractInlineTaglet
         map.putIfAbsent(INSTANCE.getName(), INSTANCE);
     }
 
-    private static final String INDENT_AMOUNT =
-        "{http://xml.apache.org/xslt}indent-amount";
-
     private static final String NO = "no";
     private static final String YES = "yes";
 
-    private static final String ____ = "____";
-    private static final char COLON = ':';
-
-    private static final Object[][] CODEC = new Object[][] {
-        { COLON, "-COLON-" },
-        { '$', "-DOLLAR-" }
-    };
+    private static final String INDENT_AMOUNT =
+        "{http://xml.apache.org/xslt}indent-amount";
+    private static final String INDENTATION = "  ";
 
     private final Transformer transformer;
 
@@ -74,38 +66,32 @@ public class AntTaskTaglet extends AbstractInlineTaglet
             transformer = TransformerFactory.newInstance().newTransformer();
             transformer.setOutputProperty(OMIT_XML_DECLARATION, YES);
             transformer.setOutputProperty(INDENT, YES);
-            transformer.setOutputProperty(INDENT_AMOUNT, String.valueOf(2));
+            transformer.setOutputProperty(INDENT_AMOUNT, String.valueOf(INDENTATION.length()));
         } catch (Exception exception) {
             throw new ExceptionInInitializerError(exception);
         }
     }
+
+    private static final String DOCUMENTED = "DOCUMENTED";
 
     @Override
     public String toString(Tag tag) throws IllegalStateException {
         String string = null;
 
         try {
-            FluentNode node = div(attr("class", "block"));
             StringWriter writer = new StringWriter();
 
             transformer
                 .transform(new DOMSource(toNode(tag)),
                            new StreamResult(writer));
 
-            String template = writer.toString();
-            String[] tokens = template.split(____);
+            String template =
+                writer.toString()
+                .replaceAll(Pattern.quote(DOCUMENTED + "=\"\""), "...");
 
-            for (int i = 0; i < tokens.length; i += 1) {
-                if ((i % 2) == 0) {
-                    node.add(code(tokens[i]));
-                } else {
-                    String[] subtokens = decode(tokens[i]);
-
-                    node.add(a(tag, subtokens[0], subtokens[1]));
-                }
-            }
-
-            string = render(node);
+            string =
+                render(div(attr("class", "block"),
+                           pre("xml", template)));
         } catch (IllegalStateException exception) {
             throw exception;
         } catch (Throwable throwable) {
@@ -145,18 +131,32 @@ public class AntTaskTaglet extends AbstractInlineTaglet
         return type(0, new HashSet<>(), tag, new SimpleEntry<>(name, type));
     }
 
-    private Node a(Tag tag, String name, String content) {
-        return a(tag, name, isNotEmpty(content) ? code(content) : null);
-    }
-
     private FluentNode type(int depth, Set<Map.Entry<?,?>> set,
                             Tag tag, Map.Entry<String,Class<?>> entry) {
         IntrospectionHelper helper =
             IntrospectionHelper.getHelper(entry.getValue());
-        FluentNode node =
-            element(encode(entry.getValue(), entry.getKey()))
-            .add(attributes(tag, helper))
-            .add(content(depth + 1, set, tag, helper));
+        FluentNode node = element(entry.getKey());
+
+        if (set.add(entry)
+            && (! entry.getValue().getName()
+                  .startsWith(Task.class.getPackage().getName()))) {
+            node
+                .add(attributes(tag, helper))
+                .add(content(depth + 1, set, tag, helper));
+
+            if (helper.supportsCharacters()) {
+                String content = "... text ...";
+
+                if (node.hasChildNodes()) {
+                    content =
+                        "\n" + repeat(INDENTATION, depth + 1) + content + "\n";
+                }
+
+                node.add(text(content));
+            }
+        } else {
+            node.add(attr(DOCUMENTED));
+        }
 
         return node;
     }
@@ -165,7 +165,7 @@ public class AntTaskTaglet extends AbstractInlineTaglet
         List<Node> list =
             helper.getAttributeMap().entrySet()
             .stream()
-            .map(t -> attr(t.getKey(), encode(t.getValue(), null)))
+            .map(t -> attr(t.getKey(), t.getValue().getSimpleName()))
             .collect(Collectors.toList());
 
         return list.toArray(new Node[] { });
@@ -176,44 +176,9 @@ public class AntTaskTaglet extends AbstractInlineTaglet
         FluentNode node =
             fragment(helper.getNestedElementMap().entrySet()
                      .stream()
-                     .map(t -> ((set.add(t) && depth < 3)
-                                ? type(depth, set, tag, t)
-                                : element(encode(t.getValue(),
-                                                 t.getKey())).value("...")))
+                     .map(t -> type(depth, set, tag, t))
                      .collect(Collectors.toList()));
 
-        if (helper.supportsCharacters()) {
-            node.add(text("text"));
-        }
-
         return node;
-    }
-
-    private String encode(Class<?> type, String name) {
-        String string = type.getCanonicalName();
-
-        if (isNotEmpty(name)) {
-            string += String.valueOf(COLON) + name;
-        }
-
-        for (Object[] codec : CODEC) {
-            string =
-                string.replaceAll(Pattern.quote(codec[0].toString()),
-                                  codec[1].toString());
-        }
-
-        return ____ + string + ____;
-    }
-
-    private String[] decode(String string) {
-        for (Object[] codec : CODEC) {
-            string =
-                string.replaceAll(Pattern.quote(codec[1].toString()),
-                                  codec[0].toString());
-        }
-
-        String[] tokens = string.split(String.valueOf(COLON), 2);
-
-        return (tokens.length > 1) ? tokens : new String[] { tokens[0], null };
     }
 }

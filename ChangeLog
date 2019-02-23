@@ -1,8 +1,7 @@
 2019-02-23  Allen D. Ball  <ball@sol.local>
 
 	* src/main/java/ball/tools/javadoc/AntTaskTaglet.java:
-	Interim check-in: Attempt to provide formatted HTML output with
-	embedded javadoc links.
+	Initial writing.
 
 2019-02-17  Allen D. Ball  <ball@sol.local>
 
