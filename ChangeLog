@@ -3,6 +3,9 @@
 	* src/main/java/ball/tools/javadoc/AntTaskTaglet.java:
 	Initial writing.
 
+	* src/main/java/ball/tools/javadoc/JavadocHTMLTemplates.java:
+	Added table(Tag,TableModel,Node...) method.
+
 2019-02-17  Allen D. Ball  <ball@sol.local>
 
 	* src/main/java/ball/tools/javadoc/InjectedFieldsTaglet.java:

@@ -17,9 +17,14 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
+import javax.swing.table.TableModel;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.w3c.dom.Node;
+
+import static org.apache.commons.lang3.StringUtils.isAllBlank;
 
 /**
  * Javadoc {@link HTMLTemplates}
@@ -177,5 +182,41 @@ public interface JavadocHTMLTemplates extends HTMLTemplates {
         }
 
         return node;
+    }
+
+    /**
+     * {@code <table>}{@link TableModel model}{@code </table>}
+     *
+     * @param   tag             The {@link Tag}.
+     * @param   model           The {@link TableModel} to use to create the
+     *                          new table {@link org.w3c.dom.Element}.
+     * @param   nodes           The {@link Node}s to append to the newly
+     *                          created
+     *                          {@link org.w3c.dom.Element}.
+     *
+     * @return  {@link org.w3c.dom.Element}
+     */
+    default FluentNode table(Tag tag, TableModel model, Node... nodes) {
+        String[] names =
+            IntStream.range(0, model.getColumnCount())
+            .boxed()
+            .map(x -> model.getColumnName(x))
+            .collect(Collectors.toList())
+            .toArray(new String[] { });
+        FluentNode table =
+            table()
+            .add(tr(Stream.of(names)
+                    .map(t -> th(t))
+                    .filter(t -> ! isAllBlank(names))
+                    .collect(Collectors.toList())))
+            .add(IntStream.range(0, model.getRowCount())
+                 .boxed()
+                 .map(y -> tr(IntStream.range(0, names.length)
+                              .boxed()
+                              .map(x -> td(node(tag, model.getValueAt(y, x))))
+                              .collect(Collectors.toList())))
+                 .collect(Collectors.toList()));
+
+        return table.add(nodes);
     }
 }
