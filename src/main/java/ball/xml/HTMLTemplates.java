@@ -165,6 +165,18 @@ public interface HTMLTemplates extends XMLServices {
     }
 
     /**
+     * {@code <pre lang="lang"}{@code >}{@link String content}{@code <}{@code /pre>}
+     *
+     * @param   lang            {@link org.w3c.dom.Attr} {@code lang} value
+     * @param   content         {@link org.w3c.dom.Text} content
+     *
+     * @return  {@link org.w3c.dom.Element}
+     */
+    default FluentNode pre(String lang, String content) {
+        return pre(content).add(attr("lang", lang));
+    }
+
+    /**
      * {@code <table>}{@link Node nodes...}{@code </table>}
      *
      * @param   nodes           The {@link Iterable} of {@link Node}s to
