@@ -6,8 +6,6 @@
 package ball.util.ant.taskdefs;
 
 import ball.activation.ReaderWriterDataSource;
-import ball.swing.table.MapTableModel;
-import ball.util.BeanMap;
 import ball.util.Factory;
 import ball.util.ant.types.TypedAttributeType;
 import java.beans.ExceptionListener;
@@ -89,13 +87,6 @@ public class InstanceOfTask extends TypeTask {
 
             log(String.valueOf(instance));
 
-            BeanMap map = BeanMap.asBeanMap(instance);
-
-            if (! map.isEmpty()) {
-                log(EMPTY);
-                log(new MapTableModelImpl(map));
-            }
-
             if (getClass().isAssignableFrom(InstanceOfTask.class)) {
                 ReaderWriterDataSourceImpl ds =
                     new ReaderWriterDataSourceImpl();
@@ -132,19 +123,6 @@ public class InstanceOfTask extends TypeTask {
 
         @Override
         public Class<?>[] toArray() { return toArray(new Class<?>[] { }); }
-    }
-
-    private class MapTableModelImpl extends MapTableModel {
-        private static final long serialVersionUID = 7511150801498311279L;
-
-        public MapTableModelImpl(Map<String,Object> map) {
-            super(map, "Property Name", "Value");
-        }
-
-        @Override
-        protected Object getValueAt(Object row, int x) {
-            return String.valueOf(super.getValueAt(row, x));
-        }
     }
 
     private class ReaderWriterDataSourceImpl extends ReaderWriterDataSource
