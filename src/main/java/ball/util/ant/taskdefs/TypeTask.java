@@ -5,9 +5,8 @@
  */
 package ball.util.ant.taskdefs;
 
-import ball.swing.table.ArrayListTableModel;
+import ball.beans.PropertyDescriptorsTableModel;
 import ball.swing.table.SimpleTableModel;
-import ball.util.BeanInfoUtil;
 import java.beans.BeanDescriptor;
 import java.beans.BeanInfo;
 import java.beans.Introspector;
@@ -17,7 +16,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.TypeVariable;
 import java.net.URL;
-import java.util.Arrays;
 import java.util.ArrayList;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -100,7 +98,7 @@ public abstract class TypeTask extends Task
         private void log(BeanInfo bean) {
             log(new BeanHeaderTableModel(bean.getBeanDescriptor()));
             log(EMPTY);
-            log(new BeanPropertyTableModel(bean.getPropertyDescriptors()));
+            log(new TableModelImpl(bean.getPropertyDescriptors()));
             log(bean.getAdditionalBeanInfo());
         }
 
@@ -129,52 +127,20 @@ public abstract class TypeTask extends Task
             }
         }
 
-        private class BeanPropertyTableModel
-                      extends ArrayListTableModel<PropertyDescriptor> {
-            private static final long serialVersionUID = -5252202218618591258L;
+        private class TableModelImpl extends PropertyDescriptorsTableModel {
+            private static final long serialVersionUID = -5817972183666452609L;
 
-            public BeanPropertyTableModel(PropertyDescriptor[] rows) {
-                super(Arrays.asList(rows),
-                      "Name", "Mode", "Type",
-                      "isHidden", "isBound", "isConstrained");
-            }
+            public TableModelImpl(PropertyDescriptor[] rows) { super(rows); }
 
             @Override
-            protected Object getValueAt(PropertyDescriptor row, int x) {
-                Object value = null;
+            public Object getValueAt(int y, int x) {
+                Object value = super.getValueAt(y, x);
 
-                switch (x) {
-                case 0:
-                default:
-                    value = row.getName();
-                    break;
-
-                case 1:
-                    value = BeanInfoUtil.getMode(row);
-                    break;
-
-                case 2:
-                    value = getCanonicalName(row.getPropertyType());
-                    break;
-
-                case 3:
-                    value = row.isHidden();
-                    break;
-
-                case 4:
-                    value = row.isBound();
-                    break;
-
-                case 5:
-                    value = row.isConstrained();
-                    break;
+                if (value instanceof Class<?>) {
+                    value = ((Class<?>) value).getCanonicalName();
                 }
 
                 return value;
-            }
-
-            private String getCanonicalName(Class<?> type) {
-                return (type != null) ? type.getCanonicalName() : EMPTY;
             }
         }
     }

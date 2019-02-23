@@ -6,6 +6,9 @@
 	* src/main/java/ball/tools/javadoc/JavadocHTMLTemplates.java:
 	Added table(Tag,TableModel,Node...) method.
 
+	* src/main/java/ball/beans/PropertyDescriptorsTableModel.java:
+	Initial writing (retired ball.util.BeanInfoUtil).
+
 2019-02-17  Allen D. Ball  <ball@sol.local>
 
 	* src/main/java/ball/tools/javadoc/InjectedFieldsTaglet.java:
@@ -622,10 +625,6 @@
 
 	* src/main/java/iprotium/tools/javadoc/BeanInfoTaglet.java:
 	Initial writing.
-
-2013-12-24  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/util/BeanInfoUtil.java: Initial writing.
 
 2013-12-23  Allen D. Ball  <ball@10-0-1-2.lan>
 
