@@ -41,9 +41,6 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
  */
 public abstract class AbstractTaglet implements AnnotatedTaglet,
                                                 JavadocHTMLTemplates {
-    private static final String INDENT_AMOUNT =
-        "{http://xml.apache.org/xslt}indent-amount";
-
     private static final String NO = "no";
     private static final String YES = "yes";
 
@@ -84,8 +81,7 @@ public abstract class AbstractTaglet implements AnnotatedTaglet,
         try {
             transformer = TransformerFactory.newInstance().newTransformer();
             transformer.setOutputProperty(OMIT_XML_DECLARATION, YES);
-            transformer.setOutputProperty(INDENT, YES);
-            transformer.setOutputProperty(INDENT_AMOUNT, String.valueOf(2));
+            transformer.setOutputProperty(INDENT, NO);
 
             document =
                 FluentDocumentBuilder
