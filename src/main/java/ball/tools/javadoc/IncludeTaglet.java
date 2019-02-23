@@ -71,15 +71,15 @@ public class IncludeTaglet extends AbstractInlineTaglet
                 table(tr(th("Element")),
                       fragment(((Collection<?>) object)
                                .stream()
-                               .map(t -> tr(td(node(tag, t))))
+                               .map(t -> tr(td(toHTML(tag, t))))
                                .collect(Collectors.toList())));
         } else if (object instanceof Map) {
             node =
                 table(tr(th("Key"), th("Value")),
                       fragment(((Map<?,?>) object).entrySet()
                                .stream()
-                               .map(t -> tr(td(node(tag, t.getKey())),
-                                            td(node(tag, t.getValue()))))
+                               .map(t -> tr(td(toHTML(tag, t.getKey())),
+                                            td(toHTML(tag, t.getValue()))))
                                .collect(Collectors.toList())));
         } else {
             node = pre(String.valueOf(object));

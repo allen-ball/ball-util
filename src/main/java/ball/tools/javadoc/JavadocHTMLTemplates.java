@@ -128,63 +128,6 @@ public interface JavadocHTMLTemplates extends HTMLTemplates {
     }
 
     /**
-     * Method to get a Javadoc HTML representation of an {@link Object}.
-     *
-     * @param   tag             The {@link Tag}.
-     * @param   object          The target {@link Object}.
-     *
-     * @return  {@link org.w3c.dom.Node}
-     */
-    default FluentNode node(Tag tag, Object object) {
-        FluentNode node = null;
-
-        if (object instanceof byte[]) {
-            node =
-                text(Arrays.stream(ArrayUtils.toObject((byte[]) object))
-                     .map (t -> String.format("0x%02X", t))
-                     .collect(Collectors.joining(", ", "[", "]")));
-        } else if (object instanceof boolean[]) {
-            node = text(Arrays.toString((boolean[]) object));
-        } else if (object instanceof double[]) {
-            node = text(Arrays.toString((double[]) object));
-        } else if (object instanceof float[]) {
-            node = text(Arrays.toString((float[]) object));
-        } else if (object instanceof int[]) {
-            node = text(Arrays.toString((int[]) object));
-        } else if (object instanceof long[]) {
-            node = text(Arrays.toString((long[]) object));
-        } else if (object instanceof Object[]) {
-            node = node(tag, Arrays.asList((Object[]) object));
-        } else if (object instanceof Class<?>) {
-            node = a(tag, (Class<?>) object);
-        } else if (object instanceof Enum<?>) {
-            node = a(tag, (Enum<?>) object);
-        } else if (object instanceof Collection<?>) {
-            List<Node> nodes =
-                ((Collection<?>) object)
-                .stream()
-                .map(t -> node(tag, t))
-                .collect(Collectors.toList());
-
-            for (int i = nodes.size() - 1; i > 0; i -= 1) {
-                nodes.add(i, text(", "));
-            }
-
-            node =
-                fragment()
-                .add(text("["))
-                .add(nodes)
-                .add(text("]"));
-        } else if (object != null) {
-            node = a(tag, object.getClass(), String.valueOf(object));
-        } else {
-            node = code(String.valueOf(object));
-        }
-
-        return node;
-    }
-
-    /**
      * {@code <table>}{@link TableModel model}{@code </table>}
      *
      * @param   tag             The {@link Tag}.
@@ -213,10 +156,68 @@ public interface JavadocHTMLTemplates extends HTMLTemplates {
                  .boxed()
                  .map(y -> tr(IntStream.range(0, names.length)
                               .boxed()
-                              .map(x -> td(node(tag, model.getValueAt(y, x))))
+                              .map(x -> td(toHTML(tag,
+                                                  model.getValueAt(y, x))))
                               .collect(Collectors.toList())))
                  .collect(Collectors.toList()));
 
         return table.add(nodes);
+    }
+
+    /**
+     * Method to get a Javadoc HTML representation of an {@link Object}.
+     *
+     * @param   tag             The {@link Tag}.
+     * @param   object          The target {@link Object}.
+     *
+     * @return  {@link org.w3c.dom.Node}
+     */
+    default FluentNode toHTML(Tag tag, Object object) {
+        FluentNode node = null;
+
+        if (object instanceof byte[]) {
+            node =
+                text(Arrays.stream(ArrayUtils.toObject((byte[]) object))
+                     .map (t -> String.format("0x%02X", t))
+                     .collect(Collectors.joining(", ", "[", "]")));
+        } else if (object instanceof boolean[]) {
+            node = text(Arrays.toString((boolean[]) object));
+        } else if (object instanceof double[]) {
+            node = text(Arrays.toString((double[]) object));
+        } else if (object instanceof float[]) {
+            node = text(Arrays.toString((float[]) object));
+        } else if (object instanceof int[]) {
+            node = text(Arrays.toString((int[]) object));
+        } else if (object instanceof long[]) {
+            node = text(Arrays.toString((long[]) object));
+        } else if (object instanceof Object[]) {
+            node = toHTML(tag, Arrays.asList((Object[]) object));
+        } else if (object instanceof Class<?>) {
+            node = a(tag, (Class<?>) object);
+        } else if (object instanceof Enum<?>) {
+            node = a(tag, (Enum<?>) object);
+        } else if (object instanceof Collection<?>) {
+            List<Node> nodes =
+                ((Collection<?>) object)
+                .stream()
+                .map(t -> toHTML(tag, t))
+                .collect(Collectors.toList());
+
+            for (int i = nodes.size() - 1; i > 0; i -= 1) {
+                nodes.add(i, text(", "));
+            }
+
+            node =
+                fragment()
+                .add(text("["))
+                .add(nodes)
+                .add(text("]"));
+        } else if (object != null) {
+            node = a(tag, object.getClass(), String.valueOf(object));
+        } else {
+            node = code(String.valueOf(object));
+        }
+
+        return node;
     }
 }

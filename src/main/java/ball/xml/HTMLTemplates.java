@@ -6,7 +6,6 @@
 package ball.xml;
 
 import java.net.URI;
-import javax.swing.table.TableModel;
 import org.w3c.dom.Node;
 
 /**
@@ -200,18 +199,6 @@ public interface HTMLTemplates extends XMLServices {
      */
     default FluentNode table(Node... nodes) {
         return element("table", nodes);
-    }
-
-    /**
-     * {@code <table>}{@link TableModel model}{@code </table>}
-     *
-     * @param   model           The {@link TableModel} to use to create the
-     *                          new table {@link org.w3c.dom.Element}.
-     *
-     * @return  {@link org.w3c.dom.Element}
-     */
-    default FluentNode table(TableModel model) {
-        throw new UnsupportedOperationException();
     }
 
     /**
