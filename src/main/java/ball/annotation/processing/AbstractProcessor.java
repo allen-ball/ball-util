@@ -6,7 +6,7 @@
 package ball.annotation.processing;
 
 import ball.activation.ThrowableDataSource;
-import ball.util.BeanPropertyMethodEnum;
+import ball.beans.PropertyMethodEnum;
 import java.lang.annotation.Annotation;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Target;
@@ -630,7 +630,7 @@ public abstract class AbstractProcessor
      */
     protected String getPropertyName(ExecutableElement element) {
         Optional<String> optional =
-            Arrays.stream(BeanPropertyMethodEnum.values())
+            Arrays.stream(PropertyMethodEnum.values())
             .filter(t -> t.getPropertyName(element.getSimpleName().toString()) != null)
             .filter(t -> isAssignable(element.getReturnType(),
                                       t.getReturnType()))
@@ -651,9 +651,8 @@ public abstract class AbstractProcessor
      *          method; {@code false} otherwise.
      */
     protected boolean isGetterMethod(ExecutableElement element) {
-        Optional <BeanPropertyMethodEnum> optional =
-            Arrays.asList(BeanPropertyMethodEnum.GET,
-                          BeanPropertyMethodEnum.IS)
+        Optional <PropertyMethodEnum> optional =
+            Arrays.asList(PropertyMethodEnum.GET, PropertyMethodEnum.IS)
             .stream()
             .filter(t -> (! element.getModifiers().contains(PRIVATE)))
             .filter(t -> t.getPropertyName(element.getSimpleName().toString()) != null)
@@ -777,7 +776,7 @@ public abstract class AbstractProcessor
         for (ExecutableElement element :
                  methodsIn(type.getEnclosedElements())) {
             if (element.getModifiers().contains(PUBLIC)) {
-                Arrays.stream(BeanPropertyMethodEnum.values())
+                Arrays.stream(PropertyMethodEnum.values())
                     .filter(t -> t.getPropertyName(element.getSimpleName().toString()) != null)
                     .filter(t -> isAssignable(element.getReturnType(),
                                               t.getReturnType()))

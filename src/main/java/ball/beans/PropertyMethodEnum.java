@@ -1,10 +1,11 @@
 /*
  * $Id$
  *
- * Copyright 2014 - 2016 Allen D. Ball.  All rights reserved.
+ * Copyright 2014 - 2019 Allen D. Ball.  All rights reserved.
  */
-package ball.util;
+package ball.beans;
 
+import ball.util.Regex;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.EnumMap;
@@ -20,10 +21,10 @@ import static java.beans.Introspector.decapitalize;
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
-public enum BeanPropertyMethodEnum {
+public enum PropertyMethodEnum {
     GET, IS, SET;
 
-    private static final Map<BeanPropertyMethodEnum,Method> MAP =
+    private static final Map<PropertyMethodEnum,Method> MAP =
         Collections.unmodifiableMap(new MethodPrototypeMap());
 
     @Regex
@@ -96,7 +97,7 @@ public enum BeanPropertyMethodEnum {
         String name = null;
 
         if (method != null) {
-            for (BeanPropertyMethodEnum methodEnum : values()) {
+            for (PropertyMethodEnum methodEnum : values()) {
                 name = methodEnum.getPropertyName(method.getName());
 
                 if (name != null) {
@@ -109,14 +110,14 @@ public enum BeanPropertyMethodEnum {
     }
 
     private static class MethodPrototypeMap
-                         extends EnumMap<BeanPropertyMethodEnum,Method> {
-        private static final long serialVersionUID = 5606267671777182148L;
+                         extends EnumMap<PropertyMethodEnum,Method> {
+        private static final long serialVersionUID = 6408568606272721794L;
 
         public MethodPrototypeMap() {
-            super(BeanPropertyMethodEnum.class);
+            super(PropertyMethodEnum.class);
 
             for (Method method : Prototypes.class.getDeclaredMethods()) {
-                put(BeanPropertyMethodEnum.valueOf(method.getName()), method);
+                put(PropertyMethodEnum.valueOf(method.getName()), method);
             }
         }
 

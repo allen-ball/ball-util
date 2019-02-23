@@ -13,7 +13,7 @@ import org.apache.commons.lang3.reflect.MethodUtils;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 
-import static ball.util.BeanPropertyMethodEnum.getPropertyName;
+import static ball.beans.PropertyMethodEnum.getPropertyName;
 import static lombok.AccessLevel.PROTECTED;
 
 /**

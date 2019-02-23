@@ -291,7 +291,7 @@
 
 2016-11-19  Allen D. Ball  <ball@sol.local>
 
-	* src/main/java/ball/util/BeanPropertyMethodEnum.java:
+	* src/main/java/ball/beans/PropertyMethodEnum.java:
 	Support single-character property names.
 
 2016-10-22  Allen D. Ball  <ball@sol.local>
@@ -524,7 +524,7 @@
 	Added isAssignable() methods for comparing parameter and argument
 	type lists.
 
-	* src/main/java/ball/util/BeanPropertyMethodEnum.java:
+	* src/main/java/ball/beans/PropertyMethodEnum.java:
 	Initial writing.
 
 2014-07-28  Allen D. Ball  <ball@sol.local>
