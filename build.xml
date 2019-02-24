@@ -52,7 +52,7 @@
              resource="ball/util/ant/defaults.properties"/>
     <combinations-count classpathref="build.classpath"
                         type="${type}" count="${count}">
-      <argument type="${argument.type}" value="${argument.value}"/>
+      <argument type="${argument.type}">${argument.value}</argument>
     </combinations-count>
   </target>
 
@@ -63,7 +63,7 @@
              resource="ball/util/ant/defaults.properties"/>
     <combinations-of classpathref="build.classpath"
                      type="${type}" count="${count}">
-      <argument type="${argument.type}" value="${argument.value}"/>
+      <argument type="${argument.type}">${argument.value}</argument>
     </combinations-of>
   </target>
 
@@ -81,7 +81,7 @@
     <taskdef classpathref="build.classpath" onerror="ignore"
              resource="ball/util/ant/defaults.properties"/>
     <instance-of classpathref="build.classpath" type="${type}">
-      <argument value="${argument}"/>
+      <argument>${argument}"</argument>
     </instance-of>
   </target>
 
@@ -116,7 +116,7 @@
     <taskdef classpathref="build.classpath" onerror="ignore"
              resource="ball/util/ant/defaults.properties"/>
     <permutations-count classpathref="build.classpath" type="${type}">
-      <argument type="${argument.type}" value="${argument.value}"/>
+      <argument type="${argument.type}">${argument.value}</argument>
     </permutations-count>
   </target>
 
@@ -126,7 +126,7 @@
     <taskdef classpathref="build.classpath" onerror="ignore"
              resource="ball/util/ant/defaults.properties"/>
     <permutations-of classpathref="build.classpath" type="${type}">
-      <argument type="${argument.type}" value="${argument.value}"/>
+      <argument type="${argument.type}">${argument.value}</argument>
     </permutations-of>
   </target>
 
