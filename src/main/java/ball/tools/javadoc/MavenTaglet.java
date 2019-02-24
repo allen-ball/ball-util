@@ -14,7 +14,12 @@ import com.sun.tools.doclets.Taglet;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.StringWriter;
 import java.util.Map;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.apache.maven.model.Model;
@@ -24,6 +29,8 @@ import org.apache.maven.project.MavenProject;
 import static ball.tools.maven.POMProperties.ARTIFACT_ID;
 import static ball.tools.maven.POMProperties.GROUP_ID;
 import static ball.tools.maven.POMProperties.VERSION;
+import static javax.xml.transform.OutputKeys.INDENT;
+import static javax.xml.transform.OutputKeys.OMIT_XML_DECLARATION;
 import static lombok.AccessLevel.PROTECTED;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
@@ -40,6 +47,13 @@ public abstract class MavenTaglet extends AbstractInlineTaglet
                                   implements SunToolsInternalToolkitTaglet {
     private static final String POM_XML = "pom.xml";
     private static final String DEPENDENCY = "dependency";
+
+    private static final String NO = "no";
+    private static final String YES = "yes";
+
+    private static final String INDENT_AMOUNT =
+        "{http://xml.apache.org/xslt}indent-amount";
+    private static final String INDENTATION = "  ";
 
     /**
      * Method to locate the POM from a {@link Tag}.
@@ -145,6 +159,19 @@ public abstract class MavenTaglet extends AbstractInlineTaglet
             map.putIfAbsent(INSTANCE.getName(), INSTANCE);
         }
 
+        private final Transformer transformer;
+
+        {
+            try {
+                transformer = TransformerFactory.newInstance().newTransformer();
+                transformer.setOutputProperty(OMIT_XML_DECLARATION, YES);
+                transformer.setOutputProperty(INDENT, YES);
+                transformer.setOutputProperty(INDENT_AMOUNT, String.valueOf(INDENTATION.length()));
+            } catch (Exception exception) {
+                throw new ExceptionInInitializerError(exception);
+            }
+        }
+
         @Override
         public FluentNode toNode(Tag tag) throws Throwable {
             Model model = getModelFor(tag);
@@ -158,10 +185,18 @@ public abstract class MavenTaglet extends AbstractInlineTaglet
                     .getVersion();
             }
 
-            return pre(render(element(DEPENDENCY,
-                                      element(GROUP_ID).content(groupId),
-                                      element(ARTIFACT_ID).content(artifactId),
-                                      element(VERSION).content(version))));
+            FluentNode node =
+                element(DEPENDENCY,
+                        element(GROUP_ID).content(groupId),
+                        element(ARTIFACT_ID).content(artifactId),
+                        element(VERSION).content(version));
+            StringWriter writer = new StringWriter();
+
+            transformer
+                .transform(new DOMSource(node),
+                           new StreamResult(writer));
+
+            return pre("xml", writer.toString());
         }
     }
 }

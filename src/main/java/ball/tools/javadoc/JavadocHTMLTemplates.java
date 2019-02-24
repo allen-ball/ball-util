@@ -24,6 +24,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.w3c.dom.Node;
 
+import static org.apache.commons.lang3.StringUtils.SPACE;
 import static org.apache.commons.lang3.StringUtils.isAllBlank;
 
 /**
@@ -48,7 +49,7 @@ public interface JavadocHTMLTemplates extends HTMLTemplates {
     default FluentNode warning(Tag tag, Throwable throwable) {
         System.err.println(tag.position() + ": " + throwable);
 
-        String string = "@" + ((Taglet) this).getName() + " " + tag.text();
+        String string = "@" + ((Taglet) this).getName() + SPACE + tag.text();
 
         if (((Taglet) this).isInlineTag()) {
             string = "{" + string + "}";
@@ -122,9 +123,9 @@ public interface JavadocHTMLTemplates extends HTMLTemplates {
      * @return  {@link org.w3c.dom.DocumentFragment}
      */
     default FluentNode code(Tag tag, Field field) {
-        return fragment(code(Modifier.toString(field.getModifiers())),
+        return fragment(code(Modifier.toString(field.getModifiers()) + SPACE),
                         a(tag, field.getType()),
-                        code(field.getName()));
+                        code(SPACE + field.getName()));
     }
 
     /**
@@ -212,10 +213,8 @@ public interface JavadocHTMLTemplates extends HTMLTemplates {
                 .add(text("["))
                 .add(nodes)
                 .add(text("]"));
-        } else if (object != null) {
-            node = a(tag, object.getClass(), String.valueOf(object));
         } else {
-            node = code(String.valueOf(object));
+            node = text(String.valueOf(object));
         }
 
         return node;
