@@ -39,8 +39,6 @@ public class InstanceOfTask extends TypeTask {
     private final List<TypedAttributeType> list = new ArrayList<>();
     protected Object instance = null;
 
-    { setType(String.class.getName()); }
-
     public void addConfiguredArgument(TypedAttributeType argument) {
         list.add(argument);
     }
