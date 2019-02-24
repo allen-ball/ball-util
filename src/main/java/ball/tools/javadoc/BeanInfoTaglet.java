@@ -54,6 +54,7 @@ public class BeanInfoTaglet extends AbstractInlineTaglet
             new PropertyDescriptorsTableModel(getBeanInfo(type)
                                               .getPropertyDescriptors());
 
-        return table(tag, model);
+        return div(attr("class", "block"),
+                   table(tag, model));
     }
 }
