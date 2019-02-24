@@ -5,14 +5,6 @@
  */
 package ball.util.ant.taskdefs;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.AnnotatedElement;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import org.apache.commons.lang3.ClassUtils;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 
@@ -38,60 +30,15 @@ public interface AnnotatedAntTask extends AntTaskLogMethods {
     }
 
     /**
-     * Default implementation for {@link Task} subclasses.
-     */
-    default void execute() throws BuildException { validate(); }
-
-    /**
-     * Method to get check attributes annotated with
-     * {@link AntTaskAttributeConstraint}.
+     * Default implementation for {@link Task} subclasses.  Check attributes
+     * annotated with {@link AntTaskAttributeConstraint}.
+     * See {@link AnnotatedAntTaskConfigurationChecker}.
      *
-     * @throws  BuildException  If a {@link AntTaskAttributeConstraint}
-     *                          {@link AntTaskAttributeValidator} fails.
+     * @throws  BuildException  If a
+     *                          {@link AntTaskAttributeConstraint.Checker}
+     *                          fails.
      */
-    default void validate() throws BuildException {
-        HashSet<Class<?>> set = new HashSet<>();
-
-        set.add(getClass());
-        set.addAll(ClassUtils.getAllSuperclasses(getClass()));
-        set.addAll(ClassUtils.getAllInterfaces(getClass()));
-
-        for (Class<?> type : set) {
-            ArrayList<AnnotatedElement> list = new ArrayList<>();
-
-            Collections.addAll(list, type.getDeclaredFields());
-            Collections.addAll(list, type.getDeclaredMethods());
-
-            for (AnnotatedElement element : list) {
-                for (Annotation annotation : element.getAnnotations()) {
-                    AntTaskAttributeConstraint constraint =
-                        annotation.annotationType()
-                        .getAnnotation(AntTaskAttributeConstraint.class);
-
-                    if (constraint != null) {
-                        try {
-                            AntTaskAttributeValidator validator =
-                                constraint.value().newInstance();
-
-                            if (element instanceof Field) {
-                                validator
-                                    .validate((Task) this, (Field) element);
-                            } else if (element instanceof Method) {
-                                validator
-                                    .validate((Task) this, (Method) element);
-                            } else {
-                                throw new IllegalStateException();
-                            }
-                        } catch (BuildException exception) {
-                            throw exception;
-                        } catch (RuntimeException exception) {
-                            throw exception;
-                        } catch (Exception exception) {
-                            throw new BuildException(exception);
-                        }
-                    }
-                }
-            }
-        }
+    default void execute() throws BuildException {
+        new AnnotatedAntTaskConfigurationChecker((Task) this).checkErrors();
     }
 }

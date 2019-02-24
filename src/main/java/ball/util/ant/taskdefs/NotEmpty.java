@@ -1,13 +1,18 @@
 /*
  * $Id$
  *
- * Copyright 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2014 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.taskdefs;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
+import java.util.Collection;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+import org.apache.tools.ant.Task;
+import org.apache.tools.ant.TaskConfigurationChecker;
 
 import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
 import static java.lang.annotation.ElementType.FIELD;
@@ -22,9 +27,22 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * @version $Revision$
  */
 @NotNull
-@AntTaskAttributeConstraint(NotEmptyValidator.class)
+@AntTaskAttributeConstraint(NotEmpty.Checker.class)
 @Documented
 @Retention(RUNTIME)
 @Target({ ANNOTATION_TYPE, FIELD, METHOD })
 public @interface NotEmpty {
+
+    /**
+     * {@link AntTaskAttributeConstraint.Checker}
+     */
+    @NoArgsConstructor @ToString
+    public static class Checker extends AntTaskAttributeConstraint.Checker {
+        @Override
+        protected void check(Task task, TaskConfigurationChecker checker,
+                             String name, Object value) {
+            checker.assertConfig(! (((Collection) value).isEmpty()),
+                                 "`" + name + "' attribute must not be empty");
+        }
+    }
 }
