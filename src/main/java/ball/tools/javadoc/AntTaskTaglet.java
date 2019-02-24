@@ -11,7 +11,6 @@ import ball.xml.FluentNode;
 import com.sun.javadoc.ClassDoc;
 import com.sun.javadoc.Tag;
 import com.sun.tools.doclets.Taglet;
-import java.io.StringWriter;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.HashSet;
 import java.util.List;
@@ -19,18 +18,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.apache.tools.ant.IntrospectionHelper;
 import org.apache.tools.ant.Task;
 import org.w3c.dom.Node;
 
-import static javax.xml.transform.OutputKeys.INDENT;
-import static javax.xml.transform.OutputKeys.OMIT_XML_DECLARATION;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.repeat;
 
@@ -55,22 +48,7 @@ public class AntTaskTaglet extends AbstractInlineTaglet
     private static final String NO = "no";
     private static final String YES = "yes";
 
-    private static final String INDENT_AMOUNT =
-        "{http://xml.apache.org/xslt}indent-amount";
     private static final String INDENTATION = "  ";
-
-    private final Transformer transformer;
-
-    {
-        try {
-            transformer = TransformerFactory.newInstance().newTransformer();
-            transformer.setOutputProperty(OMIT_XML_DECLARATION, YES);
-            transformer.setOutputProperty(INDENT, YES);
-            transformer.setOutputProperty(INDENT_AMOUNT, String.valueOf(INDENTATION.length()));
-        } catch (Exception exception) {
-            throw new ExceptionInInitializerError(exception);
-        }
-    }
 
     private static final String DOCUMENTED = "DOCUMENTED";
 
@@ -79,14 +57,8 @@ public class AntTaskTaglet extends AbstractInlineTaglet
         String string = null;
 
         try {
-            StringWriter writer = new StringWriter();
-
-            transformer
-                .transform(new DOMSource(toNode(tag)),
-                           new StreamResult(writer));
-
             String template =
-                writer.toString()
+                render(toNode(tag), INDENTATION.length())
                 .replaceAll(Pattern.quote(DOCUMENTED + "=\"\""), "...");
 
             string =

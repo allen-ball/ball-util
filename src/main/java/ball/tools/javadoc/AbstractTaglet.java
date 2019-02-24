@@ -34,7 +34,7 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
  * Abstract {@link com.sun.tools.doclets.Taglet} base class.
  *
  * <p>Note: {@link #getName()} implementation requires the subclass is
- * annotated with {@link TagletName}.
+ * annotated with {@link TagletName}.</p>
  *
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
@@ -43,6 +43,9 @@ public abstract class AbstractTaglet implements AnnotatedTaglet,
                                                 JavadocHTMLTemplates {
     private static final String NO = "no";
     private static final String YES = "yes";
+
+    private static final String INDENT_AMOUNT =
+        "{http://xml.apache.org/xslt}indent-amount";
 
     private final boolean isInlineTag;
     private final boolean inPackage;
@@ -153,24 +156,49 @@ public abstract class AbstractTaglet implements AnnotatedTaglet,
     protected abstract Node toNode(Tag tag) throws Throwable;
 
     /**
-     * Method to render a {@link Node} to a {@link String} (suitable for
-     * output).
+     * Method to render a {@link Node} to a {@link String} without
+     * formatting or indentation.
      *
      * @param   node            The {@link Node}.
      *
      * @return  The {@link String} representation.
+     *
+     * @throws  RuntimeException
+     *                          Instead of checked {@link Exception}.
      */
-    protected String render(Node node) {
+    protected String render(Node node) { return render(node, 0); }
+
+    /**
+     * Method to render a {@link Node} to a {@link String} with or without
+     * formatting or indentation.
+     *
+     * @param   node            The {@link Node}.
+     * @param   indent          The amount to indent; {@code <= 0} for no
+     *                          indentation.
+     *
+     * @return  The {@link String} representation.
+     *
+     * @throws  RuntimeException
+     *                          Instead of checked {@link Exception}.
+     */
+    protected String render(Node node, int indent) {
         StringWriter writer = new StringWriter();
 
         try {
+            transformer
+                .setOutputProperty(INDENT, (indent > 0) ? YES : NO);
+            transformer
+                .setOutputProperty(INDENT_AMOUNT,
+                                   String.valueOf(indent > 0 ? indent : 0));
             transformer
                 .transform(new DOMSource(node),
                            new StreamResult(writer));
         } catch (RuntimeException exception) {
             throw exception;
+        } catch (Error error) {
+            throw error;
         } catch (Exception exception) {
-            throw new IllegalStateException(exception);
+            throw new RuntimeException(exception);
         }
 
         return writer.toString();
