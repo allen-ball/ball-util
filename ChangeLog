@@ -672,12 +672,6 @@
 	* src/main/java/iprotium/util/InetAddressUtil.java:
 	Initial writing (from NetworkInterfaceUtil).
 
-2013-12-01  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/util/InetAddressOrder.java,
-	src/main/java/iprotium/util/NetworkInterfaceUtil.java:
-	Initial writing.
-
 2013-11-29  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* src/main/java/iprotium/util/ant/taskdefs/JNDITask.java:
@@ -782,10 +776,6 @@
 	Only produce XMLEncoder output if the implementation is not a
 	subclass of InstanceOfTask.
 
-2013-07-13  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/util/PackageOrder.java: Initial writing.
-
 2013-07-10  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* src/main/java/iprotium/activation/ByteArrayDataSource.java:
@@ -794,15 +784,6 @@
 	* src/main/java/iprotium/activation/FilterDataSource.java,
 	src/main/java/iprotium/activation/ReaderWriterDataSource.java:
 	Provide no-argument constructor for JAXB annotated subclasses.
-
-2013-06-23  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/util/ComparableUtil.java:
-	Initial writing.
-
-	* src/main/java/iprotium/util/Order.java:
-	Removed Order.Natural class and corresponding member.  Added
-	Order.Null and Order.NonNull and corresponding members.
 
 2013-05-28  Allen D. Ball  <ball@10-0-1-2.lan>
 
@@ -1071,11 +1052,6 @@
 	* src/main/java/iprotium/util/ant/taskdefs/lint/SerializableCheck.java:
 	Use iprotium.lang.java.Punctuation.
 
-2010-11-26  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/util/CharSequenceOrder.java:
-	Initial writing.
-
 2010-11-21  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* Added <permutations-of/> and <permutations-count/> build targets
@@ -1164,9 +1140,6 @@
 
 2010-09-08  Allen D. Ball  <ball@10-0-1-2.lan>
 
-	* src/main/java/iprotium/util/ArrayOrder.java:
-	Avoid IndexOutOfBoundsException in compare(T[],T[]).
-
 	* src/main/java/iprotium/activation/ByteArrayDataSource.java:
 	Changed reset() implementation to call getOutputStream().close().
 
@@ -1202,9 +1175,6 @@
 	Return new ByteArrayOutputStream with each invocation of
 	getOutputStream().
 
-	* src/main/java/iprotium/util/Order.java:
-	Added Natural inner class and NATURAL member.
-
 2009-11-29  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* Added <superclasses-of/> build target and Ant Task.
@@ -1214,10 +1184,6 @@
 	* src/main/java/iprotium/text/ArrayListTableModel.java:
 	Changed constructors to Iterable parameters (instead of
 	Collection).
-
-2009-11-21  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/util/FileOrder.java: Initial writing.
 
 2009-10-24  Allen D. Ball  <ball@10-0-1-2.lan>
 
@@ -1246,10 +1212,6 @@
 	Initial writing.
 
 2009-06-20  Allen D. Ball  <ball@10-0-1-4.lan>
-
-	* src/main/java/iprotium/util/Order.java:
-	Changed the sort(T[]) and sort(List<? extends T>) methods to test
-	their argument for null and also return their argument.
 
 	* src/main/java/iprotium/util/ant/taskdefs/ListResourcesTask.java:
 	Use a Table to format output.
@@ -1345,11 +1307,6 @@
 	targets and Ant Tasks.
 
 	* build.xml, pom.xml: Initial writing.
-
-	* src/main/java/iprotium/util/Order.java,
-	src/main/java/iprotium/util/ArrayOrder.java,
-	src/main/java/iprotium/util/ClassOrder.java:
-	Initial writing.
 
 2013-07-14  Allen D. Ball  <ball@10-0-1-2.lan>
 

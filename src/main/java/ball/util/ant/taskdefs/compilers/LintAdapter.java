@@ -7,7 +7,6 @@ package ball.util.ant.taskdefs.compilers;
 
 import ball.tools.DiagnosticMap;
 import ball.tools.Remedy;
-import ball.util.ClassOrder;
 import java.net.URI;
 import java.util.Collections;
 import java.util.Map;
@@ -18,6 +17,7 @@ import javax.tools.Diagnostic;
 import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
 
+import static java.util.Comparator.comparing;
 import static javax.tools.JavaFileObject.Kind.CLASS;
 import static javax.tools.StandardLocation.CLASS_OUTPUT;
 import static javax.tools.StandardLocation.CLASS_PATH;
@@ -72,7 +72,7 @@ public class LintAdapter extends SystemJavaCompilerAdapter {
         private static final long serialVersionUID = 3581687174576253455L;
 
         public OutputClassSet(StandardJavaFileManager fm) {
-            super(ClassOrder.NAME);
+            super(comparing(t -> t.getName()));
 
             URI root = fm.getLocation(CLASS_OUTPUT).iterator().next().toURI();
             ClassLoader loader = fm.getClassLoader(CLASS_PATH);

@@ -8,6 +8,8 @@ package ball.util;
 import ball.lang.PrimitiveTypeMap;
 import java.util.TreeMap;
 
+import static java.util.Comparator.comparing;
+
 /**
  * Conversion utility based on {@link Factory}.
  *
@@ -20,7 +22,7 @@ public class Converter extends TreeMap<Class<?>,Factory<?>> {
     private static final Converter INSTANCE = new Converter();
 
     private Converter() {
-        super(ClassOrder.NAME);
+        super(comparing(t -> t.getName()));
 
         put(String.class, new Factory<>(String.class));
 

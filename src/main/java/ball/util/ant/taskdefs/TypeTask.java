@@ -29,7 +29,6 @@ import org.apache.tools.ant.util.ClasspathUtils;
 
 import static ball.lang.Punctuation.GT;
 import static ball.lang.Punctuation.LT;
-import static ball.util.ClassOrder.INHERITANCE;
 import static lombok.AccessLevel.PROTECTED;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 
@@ -277,7 +276,7 @@ public abstract class TypeTask extends Task
                 list.addAll(ClassUtils.getAllSuperclasses(type));
                 list.addAll(ClassUtils.getAllInterfaces(type));
 
-                for (Class<?> superclass : INHERITANCE.asList(list)) {
+                for (Class<?> superclass : list) {
                     log(toString(superclass));
                 }
             } catch (BuildException exception) {

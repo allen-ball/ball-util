@@ -8,6 +8,7 @@ package ball.util;
 import java.beans.ConstructorProperties;
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -20,7 +21,12 @@ import java.util.TreeSet;
  * @version $Revision$
  */
 public class Coordinate implements Comparable<Coordinate>, Serializable {
-    private static final long serialVersionUID = 4588951577088861983L;
+    private static final long serialVersionUID = 6256053516173263720L;
+
+    private static final Comparator<Coordinate> COMPARATOR =
+        Comparator
+        .<Coordinate>comparingInt(t -> t.y)
+        .thenComparingInt(t -> t.x);
 
     /** @serial */ private final int y;
     /** @serial */ private final int x;
@@ -57,26 +63,14 @@ public class Coordinate implements Comparable<Coordinate>, Serializable {
 
     @Override
     public int compareTo(Coordinate that) {
-        int difference =
-            Integer.valueOf(this.y).compareTo(Integer.valueOf(that.y));
-
-        if (difference < 0) {
-            difference = Integer.MIN_VALUE;
-        } else if (difference > 0) {
-            difference = Integer.MAX_VALUE;
-        } else {
-            difference =
-                Integer.valueOf(this.x).compareTo(Integer.valueOf(that.x));
-        }
-
-        return difference;
+        return COMPARATOR.compare(this, that);
     }
 
     @Override
-    public boolean equals(Object that) {
-        return ((that instanceof Coordinate)
-                    ? (this.compareTo((Coordinate) that) == 0)
-                    : super.equals(that));
+    public boolean equals(Object object) {
+        return ((object instanceof Coordinate)
+                    ? (this.compareTo((Coordinate) object) == 0)
+                    : super.equals(object));
     }
 
     @Override

@@ -5,7 +5,6 @@
  */
 package ball.util.ant.taskdefs;
 
-import ball.util.ClassOrder;
 import java.io.File;
 import java.util.Set;
 import java.util.TreeSet;
@@ -23,6 +22,7 @@ import org.apache.tools.ant.types.Path;
 import org.apache.tools.ant.util.ClasspathUtils;
 
 import static java.lang.reflect.Modifier.isAbstract;
+import static java.util.Comparator.comparing;
 
 /**
  * {@link.uri http://ant.apache.org/ Ant} {@link Task} to bootstrap
@@ -102,7 +102,7 @@ public class BootstrapProcessorTask extends Task
     }
 
     protected Set<Class<?>> getClassSet() throws BuildException {
-        TreeSet<Class<?>> set = new TreeSet<>(ClassOrder.NAME);
+        TreeSet<Class<?>> set = new TreeSet<>(comparing(t -> t.getName()));
 
         try {
             DirectoryIterator iterator =

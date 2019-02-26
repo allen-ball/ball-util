@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import static java.util.Comparator.comparing;
 import static java.lang.reflect.Modifier.isStatic;
 import static java.lang.reflect.Modifier.isPublic;
 
@@ -59,7 +60,7 @@ public class Factory<T> extends TreeMap<Class<?>[],Member> {
      */
     @ConstructorProperties({ "type", "factory" })
     protected Factory(Class<? extends T> type, Object factory) {
-        super(new ArrayOrder<>(ClassOrder.NAME));
+        super(comparing(t -> Arrays.toString(t)));
 
         this.type = type;
         this.factory = factory;
