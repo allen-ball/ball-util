@@ -667,11 +667,6 @@
 	* src/main/java/iprotium/tools/javadoc/LinkURITaglet.java:
 	Initial writing.
 
-2013-12-05  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/util/InetAddressUtil.java:
-	Initial writing (from NetworkInterfaceUtil).
-
 2013-11-29  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* src/main/java/iprotium/util/ant/taskdefs/JNDITask.java:
@@ -916,10 +911,6 @@
 	* src/main/java/iprotium/annotation/processing/RegexProcessor.java:
 	Re-factored as subclass of AbstractAnnotationProcessor.
 	Verify constant value is a String.
-
-2012-12-26  Allen D. Ball  <ball@mecury.local>
-
-	* src/main/java/iprotium/util/IterableUtil.java: Initial writing.
 
 2012-12-25  Allen D. Ball  <ball@mecury.local>
 
