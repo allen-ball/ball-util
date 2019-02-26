@@ -74,9 +74,8 @@ public class CoordinateMap<V> extends MapView<Coordinate,V>
      * @param   yN              {@code MAX(y) + 1}
      * @param   xN              {@code MAX(x) + 1}
      */
-    public CoordinateMap(Class<? extends V> type,
-                         Number yN, Number xN) {
-        this(type, 0, yN, 0, xN);
+    public CoordinateMap(Class<? extends V> type, Number yN, Number xN) {
+        this(type, 0, 0, yN, xN);
     }
 
     private CoordinateMap(Class<? extends V> type, Map<Coordinate,V> map,
