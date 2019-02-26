@@ -25,7 +25,6 @@ import javax.tools.FileObject;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import static ball.util.MapUtil.getByKeyToString;
 import static java.lang.reflect.Modifier.isAbstract;
 import static javax.lang.model.element.Modifier.ABSTRACT;
 import static javax.lang.model.element.Modifier.PUBLIC;
@@ -100,8 +99,11 @@ public class ServiceProviderForProcessor extends AbstractAnnotationProcessor
                            Element element) throws Exception {
         AnnotationMirror mirror = getAnnotationMirror(element, annotation);
         AnnotationValue value =
-            getByKeyToString(elements.getElementValuesWithDefaults(mirror),
-                             "value()");
+            elements.getElementValuesWithDefaults(mirror).entrySet()
+            .stream()
+            .filter(t -> t.getKey().toString().equals("value()"))
+            .map(t -> t.getValue())
+            .findFirst().get();
         TypeElementList list = new TypeElementList(value);
 
         if (! list.isEmpty()) {
