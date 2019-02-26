@@ -5,8 +5,8 @@
  */
 package ball.tools;
 
+import ball.annotation.Regex;
 import ball.annotation.ServiceProviderFor;
-import ball.util.Regex;
 import java.util.Locale;
 import java.util.SortedSet;
 import java.util.regex.Matcher;

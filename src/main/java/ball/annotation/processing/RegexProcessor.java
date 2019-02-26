@@ -5,8 +5,8 @@
  */
 package ball.annotation.processing;
 
+import ball.annotation.Regex;
 import ball.annotation.ServiceProviderFor;
-import ball.util.Regex;
 import java.util.regex.Pattern;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;

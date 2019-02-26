@@ -1,3 +1,7 @@
+2019-02-26  Allen D. Ball  <ball@sol.local>
+
+	* Moved ball.util.Regex to ball.annotation.Regex.
+
 2019-02-24  Allen D. Ball  <ball@sol.local>
 
 	* src/main/java/ball/util/ant/taskdefs/AnnotatedAntTaskConfigurationChecker.java:

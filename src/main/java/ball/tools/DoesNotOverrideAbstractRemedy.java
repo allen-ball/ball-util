@@ -5,8 +5,8 @@
  */
 package ball.tools;
 
+import ball.annotation.Regex;
 import ball.annotation.ServiceProviderFor;
-import ball.util.Regex;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;

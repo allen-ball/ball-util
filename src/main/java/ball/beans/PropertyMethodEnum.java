@@ -5,7 +5,7 @@
  */
 package ball.beans;
 
-import ball.util.Regex;
+import ball.annotation.Regex;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.EnumMap;

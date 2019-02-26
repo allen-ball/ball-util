@@ -1,9 +1,9 @@
 /*
  * $Id$
  *
- * Copyright 2011 - 2018 Allen D. Ball.  All rights reserved.
+ * Copyright 2011 - 2019 Allen D. Ball.  All rights reserved.
  */
-package ball.util;
+package ball.annotation;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
