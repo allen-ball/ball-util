@@ -21,6 +21,7 @@ public interface FluentDocument extends FluentNode, Document {
     @Override
     default FluentDocument owner() { return this; }
 
+    @Override
     default FluentDocument add(Stream<Node> stream) {
         return add(stream.toArray(Node[]::new));
     }
