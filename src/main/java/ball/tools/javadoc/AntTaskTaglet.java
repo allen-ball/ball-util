@@ -13,11 +13,9 @@ import com.sun.javadoc.Tag;
 import com.sun.tools.doclets.Taglet;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.apache.tools.ant.IntrospectionHelper;
@@ -134,23 +132,19 @@ public class AntTaskTaglet extends AbstractInlineTaglet
     }
 
     private Node[] attributes(Tag tag, IntrospectionHelper helper) {
-        List<Node> list =
+        Node[] array =
             helper.getAttributeMap().entrySet()
             .stream()
             .map(t -> attr(t.getKey(), t.getValue().getSimpleName()))
-            .collect(Collectors.toList());
+            .toArray(Node[]::new);
 
-        return list.toArray(new Node[] { });
+        return array;
     }
 
     private FluentNode content(int depth, Set<Map.Entry<?,?>> set,
                                Tag tag, IntrospectionHelper helper) {
-        FluentNode node =
-            fragment(helper.getNestedElementMap().entrySet()
-                     .stream()
-                     .map(t -> type(depth, set, tag, t))
-                     .collect(Collectors.toList()));
-
-        return node;
+        return fragment(helper.getNestedElementMap().entrySet()
+                        .stream()
+                        .map(t -> type(depth, set, tag, t)));
     }
 }

@@ -249,15 +249,14 @@ public class FluentDocumentBuilder extends DocumentBuilder {
          * {@link DefaultInvocationHandler} for
          * {@link FluentNode#toArray(Iterable)}.
          */
-        private Node[] toArray(Iterable<Node> nodes) {
+        private Node[] toArray(Iterable<Node> iterable) {
             return(StreamSupport
                    .stream(Optional
-                           .ofNullable(nodes)
+                           .ofNullable(iterable)
                            .orElse(Collections.emptyList())
                            .spliterator(),
                            false)
-                   .collect(Collectors.toList())
-                   .toArray(new Node[] { }));
+                   .toArray(Node[]::new));
         }
 
         private class ProxyMap extends IdentityHashMap<Object,Object> {

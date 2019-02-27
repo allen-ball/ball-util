@@ -55,7 +55,7 @@ public interface FluentNode extends Node {
                                     t -> ((Class<?>) t[1])
                                              .asSubclass(Node.class)));
 
-    Node[] toArray(Iterable<Node> nodes);
+    Node[] toArray(Iterable<Node> iterable);
 
     /**
      * See {@link Node#getOwnerDocument()}.
@@ -116,13 +116,25 @@ public interface FluentNode extends Node {
     /**
      * Method to add {@link Node}s to {@link.this} {@link FluentNode}.
      *
-     * @param   nodes           The {@link Iterable} of {@link Node}s to
+     * @param   stream          The {@link Stream} of {@link Node}s to
      *                          add.
      *
      * @return  {@link.this}
      */
-    default FluentNode add(Iterable<Node> nodes) {
-        return add(toArray(nodes));
+    default FluentNode add(Stream<Node> stream) {
+        return add(stream.toArray(Node[]::new));
+    }
+
+    /**
+     * Method to add {@link Node}s to {@link.this} {@link FluentNode}.
+     *
+     * @param   iterable        The {@link Iterable} of {@link Node}s to
+     *                          add.
+     *
+     * @return  {@link.this}
+     */
+    default FluentNode add(Iterable<Node> iterable) {
+        return add(toArray(iterable));
     }
 
     /**
@@ -151,14 +163,27 @@ public interface FluentNode extends Node {
     /**
      * Create an {@link DocumentFragment} {@link Node}.
      *
-     * @param   nodes           The {@link Iterable} of {@link Node}s to
+     * @param   stream          The {@link Stream} of {@link Node}s to
      *                          append to the newly created
      *                          {@link DocumentFragment}.
      *
      * @return  The newly created {@link DocumentFragment}.
      */
-    default FluentNode fragment(Iterable<Node> nodes) {
-        return fragment(toArray(nodes));
+    default FluentNode fragment(Stream<Node> stream) {
+        return fragment(stream.toArray(Node[]::new));
+    }
+
+    /**
+     * Create an {@link DocumentFragment} {@link Node}.
+     *
+     * @param   iterable        The {@link Iterable} of {@link Node}s to
+     *                          append to the newly created
+     *                          {@link DocumentFragment}.
+     *
+     * @return  The newly created {@link DocumentFragment}.
+     */
+    default FluentNode fragment(Iterable<Node> iterable) {
+        return fragment(toArray(iterable));
     }
 
     /**
@@ -177,13 +202,26 @@ public interface FluentNode extends Node {
      * Create an {@link Element} {@link Node}.
      *
      * @param   name            The {@link Element} name.
-     * @param   nodes           The {@link Iterable} of {@link Node}s to
+     * @param   stream          The {@link Stream} of {@link Node}s to
      *                          append to the newly created {@link Element}.
      *
      * @return  The newly created {@link Element}.
      */
-    default FluentNode element(String name, Iterable<Node> nodes) {
-        return element(name, toArray(nodes));
+    default FluentNode element(String name, Stream<Node> stream) {
+        return element(name, stream.toArray(Node[]::new));
+    }
+
+    /**
+     * Create an {@link Element} {@link Node}.
+     *
+     * @param   name            The {@link Element} name.
+     * @param   iterable        The {@link Iterable} of {@link Node}s to
+     *                          append to the newly created {@link Element}.
+     *
+     * @return  The newly created {@link Element}.
+     */
+    default FluentNode element(String name, Iterable<Node> iterable) {
+        return element(name, toArray(iterable));
     }
 
     /**
@@ -204,13 +242,28 @@ public interface FluentNode extends Node {
      *
      * @param   ns              The {@link Element} namespace.
      * @param   qn              The {@link Element} qualified name.
-     * @param   nodes           The {@link Iterable} of {@link Node}s to
+     * @param   stream          The {@link Stream} of {@link Node}s to
      *                          append to the newly created {@link Element}.
      *
      * @return  The newly created {@link Element}.
      */
-    default FluentNode elementNS(String ns, String qn, Iterable<Node> nodes) {
-        return elementNS(ns, qn, toArray(nodes));
+    default FluentNode elementNS(String ns, String qn, Stream<Node> stream) {
+        return elementNS(ns, qn, stream.toArray(Node[]::new));
+    }
+
+    /**
+     * Create an {@link Element} {@link Node}.
+     *
+     * @param   ns              The {@link Element} namespace.
+     * @param   qn              The {@link Element} qualified name.
+     * @param   iterable        The {@link Iterable} of {@link Node}s to
+     *                          append to the newly created {@link Element}.
+     *
+     * @return  The newly created {@link Element}.
+     */
+    default FluentNode elementNS(String ns, String qn,
+                                 Iterable<Node> iterable) {
+        return elementNS(ns, qn, toArray(iterable));
     }
 
     /**

@@ -12,7 +12,6 @@ import com.sun.tools.doclets.Taglet;
 import java.net.URI;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
@@ -61,7 +60,6 @@ public class LinkURITaglet extends AbstractInlineTaglet
         return a(href, text)
                    .add(map.entrySet()
                         .stream()
-                        .map(t -> attr(t.getKey(), t.getValue()))
-                        .collect(Collectors.toList()));
+                        .map(t -> attr(t.getKey(), t.getValue())));
     }
 }

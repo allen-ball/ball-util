@@ -6,6 +6,7 @@
 package ball.xml;
 
 import java.net.URI;
+import java.util.stream.Stream;
 import org.w3c.dom.Node;
 
 /**
@@ -98,14 +99,27 @@ public interface HTMLTemplates extends XMLServices {
     /**
      * {@code <div>}{@link Node nodes...}{@code </div>}
      *
-     * @param   nodes           The {@link Iterable} of {@link Node}s to
+     * @param   stream          The {@link Stream} of {@link Node}s to
      *                          append to the newly created
      *                          {@link org.w3c.dom.Element}.
      *
      * @return  {@link org.w3c.dom.Element}
      */
-    default FluentNode div(Iterable<Node> nodes) {
-        return div(document().toArray(nodes));
+    default FluentNode div(Stream<Node> stream) {
+        return div(stream.toArray(Node[]::new));
+    }
+
+    /**
+     * {@code <div>}{@link Node nodes...}{@code </div>}
+     *
+     * @param   iterable        The {@link Iterable} of {@link Node}s to
+     *                          append to the newly created
+     *                          {@link org.w3c.dom.Element}.
+     *
+     * @return  {@link org.w3c.dom.Element}
+     */
+    default FluentNode div(Iterable<Node> iterable) {
+        return div(document().toArray(iterable));
     }
 
     /**
@@ -122,14 +136,27 @@ public interface HTMLTemplates extends XMLServices {
     /**
      * {@code <p>}{@link Node nodes...}{@code </p>}
      *
-     * @param   nodes           The {@link Iterable} of {@link Node}s to
+     * @param   stream          The {@link Stream} of {@link Node}s to
      *                          append to the newly created
      *                          {@link org.w3c.dom.Element}.
      *
      * @return  {@link org.w3c.dom.Element}
      */
-    default FluentNode p(Iterable<Node> nodes) {
-        return p(document().toArray(nodes));
+    default FluentNode p(Stream<Node> stream) {
+        return p(stream.toArray(Node[]::new));
+    }
+
+    /**
+     * {@code <p>}{@link Node nodes...}{@code </p>}
+     *
+     * @param   iterable        The {@link Iterable} of {@link Node}s to
+     *                          append to the newly created
+     *                          {@link org.w3c.dom.Element}.
+     *
+     * @return  {@link org.w3c.dom.Element}
+     */
+    default FluentNode p(Iterable<Node> iterable) {
+        return p(document().toArray(iterable));
     }
 
     /**
@@ -178,14 +205,27 @@ public interface HTMLTemplates extends XMLServices {
     /**
      * {@code <table>}{@link Node nodes...}{@code </table>}
      *
-     * @param   nodes           The {@link Iterable} of {@link Node}s to
+     * @param   stream          The {@link Stream} of {@link Node}s to
      *                          append to the newly created
      *                          {@link org.w3c.dom.Element}.
      *
      * @return  {@link org.w3c.dom.Element}
      */
-    default FluentNode table(Iterable<Node> nodes) {
-        return table(document().toArray(nodes));
+    default FluentNode table(Stream<Node> stream) {
+        return table(stream.toArray(Node[]::new));
+    }
+
+    /**
+     * {@code <table>}{@link Node nodes...}{@code </table>}
+     *
+     * @param   iterable        The {@link Iterable} of {@link Node}s to
+     *                          append to the newly created
+     *                          {@link org.w3c.dom.Element}.
+     *
+     * @return  {@link org.w3c.dom.Element}
+     */
+    default FluentNode table(Iterable<Node> iterable) {
+        return table(document().toArray(iterable));
     }
 
     /**
@@ -204,14 +244,27 @@ public interface HTMLTemplates extends XMLServices {
     /**
      * {@code <tr>}{@link Node nodes...}{@code </tr>}
      *
-     * @param   nodes           The {@link Iterable} of {@link Node}s to
+     * @param   stream          The {@link Stream} of {@link Node}s to
      *                          append to the newly created
      *                          {@link org.w3c.dom.Element}.
      *
      * @return  {@link org.w3c.dom.Element}
      */
-    default FluentNode tr(Iterable<Node> nodes) {
-        return tr(document().toArray(nodes));
+    default FluentNode tr(Stream<Node> stream) {
+        return tr(stream.toArray(Node[]::new));
+    }
+
+    /**
+     * {@code <tr>}{@link Node nodes...}{@code </tr>}
+     *
+     * @param   iterable        The {@link Iterable} of {@link Node}s to
+     *                          append to the newly created
+     *                          {@link org.w3c.dom.Element}.
+     *
+     * @return  {@link org.w3c.dom.Element}
+     */
+    default FluentNode tr(Iterable<Node> iterable) {
+        return tr(document().toArray(iterable));
     }
 
     /**

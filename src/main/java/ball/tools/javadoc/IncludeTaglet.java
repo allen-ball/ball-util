@@ -14,7 +14,6 @@ import java.io.InputStream;
 import java.util.Collection;
 import java.util.Map;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.apache.commons.io.IOUtils;
@@ -71,16 +70,14 @@ public class IncludeTaglet extends AbstractInlineTaglet
                 table(tr(th("Element")),
                       fragment(((Collection<?>) object)
                                .stream()
-                               .map(t -> tr(td(toHTML(tag, t))))
-                               .collect(Collectors.toList())));
+                               .map(t -> tr(td(toHTML(tag, t))))));
         } else if (object instanceof Map) {
             node =
                 table(tr(th("Key"), th("Value")),
                       fragment(((Map<?,?>) object).entrySet()
                                .stream()
                                .map(t -> tr(td(toHTML(tag, t.getKey())),
-                                            td(toHTML(tag, t.getValue()))))
-                               .collect(Collectors.toList())));
+                                            td(toHTML(tag, t.getValue()))))));
         } else {
             node = pre(String.valueOf(object));
         }

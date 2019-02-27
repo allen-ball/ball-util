@@ -18,7 +18,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
@@ -89,15 +88,13 @@ public class InjectedFieldsTaglet extends AbstractInlineTaglet
                               .filter(t -> (Arrays.stream(t.getAnnotations())
                                             .filter(a -> ANNOTATIONS.contains(a.annotationType()))
                                             .findFirst().isPresent()))
-                              .map(t -> tr(tag, t))
-                              .collect(Collectors.toList())));
+                              .map(t -> tr(tag, t))));
     }
 
     private FluentNode tr(Tag tag, Field field) {
         return tr(td(fragment(Arrays.stream(field.getAnnotations())
                               .filter(t -> ANNOTATIONS.contains(t.annotationType()))
-                              .map(t -> a(tag, t))
-                              .collect(Collectors.toList()))),
+                              .map(t -> a(tag, t)))),
                   td(code(tag, field)));
     }
 }

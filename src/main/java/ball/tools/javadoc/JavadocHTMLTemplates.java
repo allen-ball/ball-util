@@ -134,6 +134,39 @@ public interface JavadocHTMLTemplates extends HTMLTemplates {
      * @param   tag             The {@link Tag}.
      * @param   model           The {@link TableModel} to use to create the
      *                          new table {@link org.w3c.dom.Element}.
+     * @param   stream          The {@link Stream} of {@link Node}s to
+     *                          append to the newly created
+     *                          {@link org.w3c.dom.Element}.
+     *
+     * @return  {@link org.w3c.dom.Element}
+     */
+    default FluentNode table(Tag tag, TableModel model, Stream<Node> stream) {
+        return table(tag, model, stream.toArray(Node[]::new));
+    }
+
+    /**
+     * {@code <table>}{@link TableModel model}{@code </table>}
+     *
+     * @param   tag             The {@link Tag}.
+     * @param   model           The {@link TableModel} to use to create the
+     *                          new table {@link org.w3c.dom.Element}.
+     * @param   iterable        The {@link Iterable} of {@link Node}s to
+     *                          append to the newly created
+     *                          {@link org.w3c.dom.Element}.
+     *
+     * @return  {@link org.w3c.dom.Element}
+     */
+    default FluentNode table(Tag tag,
+                             TableModel model, Iterable<Node> iterable) {
+        return table(tag, model, document().toArray(iterable));
+    }
+
+    /**
+     * {@code <table>}{@link TableModel model}{@code </table>}
+     *
+     * @param   tag             The {@link Tag}.
+     * @param   model           The {@link TableModel} to use to create the
+     *                          new table {@link org.w3c.dom.Element}.
      * @param   nodes           The {@link Node}s to append to the newly
      *                          created
      *                          {@link org.w3c.dom.Element}.
@@ -141,26 +174,26 @@ public interface JavadocHTMLTemplates extends HTMLTemplates {
      * @return  {@link org.w3c.dom.Element}
      */
     default FluentNode table(Tag tag, TableModel model, Node... nodes) {
+        FluentNode table = table();
         String[] names =
             IntStream.range(0, model.getColumnCount())
             .boxed()
             .map(x -> model.getColumnName(x))
-            .collect(Collectors.toList())
-            .toArray(new String[] { });
-        FluentNode table =
-            table()
-            .add(tr(Stream.of(names)
-                    .map(t -> th(t))
-                    .filter(t -> ! isAllBlank(names))
-                    .collect(Collectors.toList())))
+            .toArray(String[]::new);
+
+        if (! isAllBlank(names)) {
+            table
+                .add(tr(Stream.of(names)
+                        .map(t -> th(t))));
+        }
+
+        table
             .add(IntStream.range(0, model.getRowCount())
                  .boxed()
                  .map(y -> tr(IntStream.range(0, names.length)
                               .boxed()
                               .map(x -> td(toHTML(tag,
-                                                  model.getValueAt(y, x))))
-                              .collect(Collectors.toList())))
-                 .collect(Collectors.toList()));
+                                                  model.getValueAt(y, x)))))));
 
         return table.add(nodes);
     }
