@@ -26,10 +26,7 @@ public class FluentDocumentBuilderFactory extends DocumentBuilderFactory {
      * @return  {@link FluentDocumentBuilderFactory}
      */
     public static FluentDocumentBuilderFactory newInstance() throws FactoryConfigurationError {
-        DocumentBuilderFactory factory =
-            DocumentBuilderFactory.newInstance();
-
-        return new FluentDocumentBuilderFactory(factory);
+        return new FluentDocumentBuilderFactory();
     }
 
     /**
@@ -42,7 +39,18 @@ public class FluentDocumentBuilderFactory extends DocumentBuilderFactory {
         DocumentBuilderFactory factory =
             DocumentBuilderFactory.newInstance(name, loader);
 
-        return new FluentDocumentBuilderFactory(factory);
+        if (! (factory instanceof FluentDocumentBuilderFactory)) {
+            factory = new FluentDocumentBuilderFactory(factory);
+        }
+
+        return (FluentDocumentBuilderFactory) factory;
+    }
+
+    /**
+     * Sole public constructor.
+     */
+    public FluentDocumentBuilderFactory() throws FactoryConfigurationError {
+        this(DocumentBuilderFactory.newInstance());
     }
 
     private FluentDocumentBuilderFactory(DocumentBuilderFactory factory) {
