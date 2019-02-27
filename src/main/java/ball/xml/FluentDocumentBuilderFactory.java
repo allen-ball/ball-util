@@ -32,6 +32,9 @@ public class FluentDocumentBuilderFactory extends DocumentBuilderFactory {
     /**
      * See {@link DocumentBuilderFactory#newInstance(String,ClassLoader)}.
      *
+     * @param   name            The {@link Class} name.
+     * @param   loader          The {@link ClassLoader}.
+     *
      * @return  {@link FluentDocumentBuilderFactory}
      */
     public static FluentDocumentBuilderFactory newInstance(String name,
