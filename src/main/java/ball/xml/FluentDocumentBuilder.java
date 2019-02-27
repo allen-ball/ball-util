@@ -6,6 +6,7 @@
 package ball.xml;
 
 import ball.lang.reflect.DefaultInvocationHandler;
+import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
@@ -20,34 +21,75 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
+import javax.xml.parsers.DocumentBuilder;
+import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
+import org.xml.sax.EntityResolver;
+import org.xml.sax.ErrorHandler;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 import static ball.xml.FluentNode.NODE_TYPE_MAP;
+import static java.util.Objects.requireNonNull;
 import static org.apache.commons.lang3.ClassUtils.getAllInterfaces;
 
 /**
- * {@link FluentDocument} builder
+ * {@link FluentDocument} {@link DocumentBuilder}
  *
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
-public abstract class FluentDocumentBuilder {
+public class FluentDocumentBuilder extends DocumentBuilder {
+    private final DocumentBuilder builder;
 
     /**
-     * Static method to wrap a {@link Document} in a {@link FluentDocument}.
+     * Sole constructor.
      *
-     * @param   document        The {@link Document}.
-     *
-     * @return  The {@link FluentDocument} facade.
+     * @param   builder         The "wrapped" {@link DocumentBuilder}.
      */
-    public static FluentDocument wrap(Document document) {
+    protected FluentDocumentBuilder(DocumentBuilder builder) {
+        super();
+
+        this.builder = requireNonNull(builder);
+    }
+
+    @Override
+    public FluentDocument newDocument() {
+        Document document = builder.newDocument();
+
         return (FluentDocument) new InvocationHandler().proxy(document);
     }
 
-    private FluentDocumentBuilder() { }
+    @Override
+    public Document parse(InputSource in) throws SAXException, IOException {
+        Document document = builder.parse(in);
 
-    private static class InvocationHandler extends DefaultInvocationHandler {
+        return (FluentDocument) new InvocationHandler().proxy(document);
+    }
+
+    @Override
+    public boolean isNamespaceAware() { return builder.isNamespaceAware(); }
+
+    @Override
+    public boolean isValidating() { return builder.isValidating(); }
+
+    @Override
+    public void setEntityResolver(EntityResolver resolver) {
+        builder.setEntityResolver(resolver);
+    }
+
+    @Override
+    public void setErrorHandler(ErrorHandler handler) {
+        builder.setErrorHandler(handler);
+    }
+
+    @Override
+    public DOMImplementation getDOMImplementation() {
+        return builder.getDOMImplementation();
+    }
+
+    private class InvocationHandler extends DefaultInvocationHandler {
         private final ProxyMap map = new ProxyMap();
 
         protected InvocationHandler() { super(); }

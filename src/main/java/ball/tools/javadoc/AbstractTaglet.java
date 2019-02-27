@@ -6,7 +6,7 @@
 package ball.tools.javadoc;
 
 import ball.xml.FluentDocument;
-import ball.xml.FluentDocumentBuilder;
+import ball.xml.FluentDocumentBuilderFactory;
 import ball.xml.FluentNode;
 import com.sun.javadoc.ClassDoc;
 import com.sun.javadoc.Doc;
@@ -18,7 +18,6 @@ import java.beans.BeanInfo;
 import java.beans.Introspector;
 import java.io.StringWriter;
 import java.net.URI;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -87,10 +86,9 @@ public abstract class AbstractTaglet implements AnnotatedTaglet,
             transformer.setOutputProperty(INDENT, NO);
 
             document =
-                FluentDocumentBuilder
-                .wrap(DocumentBuilderFactory.newInstance()
-                      .newDocumentBuilder()
-                      .newDocument());
+                FluentDocumentBuilderFactory.newInstance()
+                .newDocumentBuilder()
+                .newDocument();
             document
                 .add(element("html",
                              element("head",
