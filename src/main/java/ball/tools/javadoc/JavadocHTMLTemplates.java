@@ -158,7 +158,7 @@ public interface JavadocHTMLTemplates extends HTMLTemplates {
      */
     default FluentNode table(Tag tag,
                              TableModel model, Iterable<Node> iterable) {
-        return table(tag, model, document().toArray(iterable));
+        return table(tag, model, FluentNode.toArray(iterable));
     }
 
     /**

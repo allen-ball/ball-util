@@ -14,14 +14,11 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.IdentityHashMap;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 import javax.xml.parsers.DocumentBuilder;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
@@ -244,20 +241,6 @@ public class FluentDocumentBuilder extends DocumentBuilder {
             }
 
             return result;
-        }
-
-        /**
-         * {@link DefaultInvocationHandler} for
-         * {@link FluentNode#toArray(Iterable)}.
-         */
-        private Node[] toArray(Iterable<Node> iterable) {
-            return(StreamSupport
-                   .stream(Optional
-                           .ofNullable(iterable)
-                           .orElse(Collections.emptyList())
-                           .spliterator(),
-                           false)
-                   .toArray(Node[]::new));
         }
 
         private class ProxyMap extends IdentityHashMap<Object,Object> {

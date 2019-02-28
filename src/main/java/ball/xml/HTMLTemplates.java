@@ -119,7 +119,7 @@ public interface HTMLTemplates extends XMLServices {
      * @return  {@link org.w3c.dom.Element}
      */
     default FluentNode div(Iterable<Node> iterable) {
-        return div(document().toArray(iterable));
+        return div(FluentNode.toArray(iterable));
     }
 
     /**
@@ -156,7 +156,7 @@ public interface HTMLTemplates extends XMLServices {
      * @return  {@link org.w3c.dom.Element}
      */
     default FluentNode p(Iterable<Node> iterable) {
-        return p(document().toArray(iterable));
+        return p(FluentNode.toArray(iterable));
     }
 
     /**
@@ -225,7 +225,7 @@ public interface HTMLTemplates extends XMLServices {
      * @return  {@link org.w3c.dom.Element}
      */
     default FluentNode table(Iterable<Node> iterable) {
-        return table(document().toArray(iterable));
+        return table(FluentNode.toArray(iterable));
     }
 
     /**
@@ -264,7 +264,7 @@ public interface HTMLTemplates extends XMLServices {
      * @return  {@link org.w3c.dom.Element}
      */
     default FluentNode tr(Iterable<Node> iterable) {
-        return tr(document().toArray(iterable));
+        return tr(FluentNode.toArray(iterable));
     }
 
     /**

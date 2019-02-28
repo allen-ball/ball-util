@@ -5,9 +5,12 @@
  */
 package ball.xml;
 
+import java.util.Collections;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 import org.w3c.dom.Attr;
 import org.w3c.dom.CDATASection;
 import org.w3c.dom.Comment;
@@ -55,7 +58,22 @@ public interface FluentNode extends Node {
                                     t -> ((Class<?>) t[1])
                                              .asSubclass(Node.class)));
 
-    Node[] toArray(Iterable<Node> iterable);
+    /**
+     * Method to convert an {@link Iterable} of {@link Node}s to an array.
+     *
+     * @param   iterable        The {@link Iterable} of {@link Node}s.
+     *
+     * @return  The array of {@link Node}s.
+     */
+    public static Node[] toArray(Iterable<Node> iterable) {
+        return(StreamSupport
+               .stream(Optional
+                       .ofNullable(iterable)
+                       .orElse(Collections.emptyList())
+                       .spliterator(),
+                       false)
+               .toArray(Node[]::new));
+    }
 
     /**
      * See {@link Node#getOwnerDocument()}.
