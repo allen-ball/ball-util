@@ -6,6 +6,8 @@
 package ball.tools.javadoc;
 
 import ball.annotation.ServiceProviderFor;
+import ball.swing.table.ListTableModel;
+import ball.swing.table.MapTableModel;
 import ball.xml.FluentNode;
 import com.sun.javadoc.ClassDoc;
 import com.sun.javadoc.Tag;
@@ -14,6 +16,7 @@ import java.io.InputStream;
 import java.util.Collection;
 import java.util.Map;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.apache.commons.io.IOUtils;
@@ -65,19 +68,17 @@ public class IncludeTaglet extends AbstractInlineTaglet
         Object object = type.getField(name).get(null);
         FluentNode node = null;
 
-        if (object instanceof Collection) {
+        if (object instanceof Collection<?>) {
             node =
-                table(tr(th("Element")),
-                      fragment(((Collection<?>) object)
-                               .stream()
-                               .map(t -> tr(td(toHTML(tag, t))))));
-        } else if (object instanceof Map) {
+                table(tag,
+                      new ListTableModel(((Collection<?>) object)
+                                         .stream()
+                                         .collect(Collectors.toList()),
+                                         "Element"));
+        } else if (object instanceof Map<?,?>) {
             node =
-                table(tr(th("Key"), th("Value")),
-                      fragment(((Map<?,?>) object).entrySet()
-                               .stream()
-                               .map(t -> tr(td(toHTML(tag, t.getKey())),
-                                            td(toHTML(tag, t.getValue()))))));
+                table(tag,
+                      new MapTableModel((Map<?,?>) object, "Key", "Value"));
         } else {
             node = pre(String.valueOf(object));
         }
