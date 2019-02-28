@@ -1,3 +1,8 @@
+2019-02-28  Allen D. Ball  <ball@sol.local>
+
+	* src/main/java/ball/swing/table/ListTableModel.java:
+	Initial writing.
+
 2019-02-27  Allen D. Ball  <ball@sol.local>
 
 	* src/main/java/ball/xml/FluentNode.java:
