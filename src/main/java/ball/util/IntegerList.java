@@ -1,11 +1,13 @@
 /*
  * $Id$
  *
- * Copyright 2010 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2010 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.util;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.stream.IntStream;
 
 /**
  * {@link Integer} {@link java.util.List} implementation useful for testing
@@ -15,12 +17,7 @@ import java.util.ArrayList;
  * @version $Revision$
  */
 public class IntegerList extends ArrayList<Integer> {
-    private static final long serialVersionUID = -5778154615905853376L;
-
-    /**
-     * @param   count           The element count.
-     */
-    public IntegerList(Integer count) { this(count.intValue()); }
+    private static final long serialVersionUID = -3133103099144540508L;
 
     /**
      * @param   count           The element count.
@@ -28,9 +25,10 @@ public class IntegerList extends ArrayList<Integer> {
     public IntegerList(int count) {
         super(count);
 
-        for (int i = 0; i < count; i += 1) {
-            add(i);
-        }
+        Collections.addAll(this,
+                           IntStream.range(0, count)
+                           .boxed()
+                           .toArray(Integer[]::new));
     }
 
     @Override

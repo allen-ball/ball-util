@@ -81,7 +81,7 @@
     <taskdef classpathref="build.classpath" onerror="ignore"
              resource="ball/util/ant/defaults.properties"/>
     <instance-of classpathref="build.classpath" type="${type}">
-      <argument>${argument}"</argument>
+      <argument type ="${argument.type}">${argument.value}</argument>
     </instance-of>
   </target>
 
