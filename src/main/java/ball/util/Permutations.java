@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2010 - 2018 Allen D. Ball.  All rights reserved.
+ * Copyright 2010 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.util;
 
@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
  * {@link Iterable} implementation provides an {@link Iterator} for all
@@ -105,6 +106,83 @@ public class Permutations<E> implements Iterable<List<E>> {
             }
 
             return new SequenceIterator<>(collection);
+        }
+    }
+
+    /**
+     * Sequence {@link Iterator} implementation.
+     *
+     * @param   <E>             The type of {@link Object} this
+     *                          {@link Iterator} and the member
+     *                          {@link Iterator}s produces.
+     */
+    protected class SequenceIterator<E> implements Iterator<E> {
+        private final Iterator<Iterable<E>> sequence;
+        private Iterator<E> iterator = null;
+
+        /**
+         * Construct a {@link SequenceIterator} from an {@link Iterable} of
+         * {@link Iterable}s.
+         *
+         * @param   iterable        The {@link Iterable} of {@link Iterable}s.
+         */
+        public SequenceIterator(Iterable<Iterable<E>> iterable) {
+            sequence = iterable.iterator();
+            iterator = sequence.hasNext() ? sequence.next().iterator() : null;
+        }
+
+        /**
+         * Construct a {@link SequenceIterator} from the argument
+         * {@link Iterable}s.
+         *
+         * @param   iterables       The array of {@link Iterable}s.
+         */
+        @SafeVarargs
+        @SuppressWarnings({ "varargs" })
+        public SequenceIterator(Iterable<E>... iterables) {
+            this(Arrays.asList(iterables));
+        }
+
+        @Override
+        public boolean hasNext() {
+            boolean hasNext = false;
+
+            synchronized (this) {
+                while (iterator != null && (! iterator.hasNext())) {
+                    iterator =
+                        sequence.hasNext() ? sequence.next().iterator() : null;
+                }
+
+                hasNext = (iterator != null && iterator.hasNext());
+            }
+
+            return hasNext;
+        }
+
+        @Override
+        public E next() {
+            E next = null;
+
+            synchronized (this) {
+                if (hasNext()) {
+                    next = iterator.next();
+                } else {
+                    throw new NoSuchElementException();
+                }
+            }
+
+            return next;
+        }
+
+        @Override
+        public void remove() {
+            synchronized (this) {
+                if (iterator != null) {
+                    iterator.remove();
+                } else {
+                    throw new IllegalStateException();
+                }
+            }
         }
     }
 }

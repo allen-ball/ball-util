@@ -142,14 +142,10 @@ public class Parser extends ArrayList<Parser.Lexeme> {
         @Override
         public Iterator<Token> iterator() { return new IteratorImpl(); }
 
-        private class IteratorImpl extends AbstractIterator<Token> {
+        private class IteratorImpl implements Iterator<Token> {
             private final Matcher matcher;
 
-            public IteratorImpl() {
-                super();
-
-                this.matcher = FACTORY.matcher(input);
-            }
+            public IteratorImpl() { this.matcher = FACTORY.matcher(input); }
 
             @Override
             public boolean hasNext() {

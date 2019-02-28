@@ -1055,9 +1055,6 @@
 	* Added <permutations-of/> and <permutations-count/> build targets
 	and Ant Tasks.
 
-	* src/main/java/iprotium/util/AbstractIterator.java:
-	Implement Iterable<E>.
-
 	* src/main/java/iprotium/util/Combinations.java:
 	Re-factored as a subclass of Permutations.
 
@@ -1079,10 +1076,6 @@
 
 	* Added <combinations-of/> and <combinations-count/> build targets
 	and Ant Tasks.
-
-	* src/main/java/iprotium/util/AbstractIterator.java,
-	src/main/java/iprotium/util/SequenceIterator.java:
-	Initial writing.
 
 	* src/main/java/iprotium/util/ant/taskdefs/CombinationsTask.java:
 	Initial writing.
