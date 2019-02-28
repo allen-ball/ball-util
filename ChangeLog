@@ -161,7 +161,7 @@
 
 2018-12-29  Allen D. Ball  <ball@sol.local>
 
-	* pom.xml: Started development of 2.1-SNAPSHOT.
+	* pom.xml: Started development of 3.0-SNAPSHOT.
 
 	* src/main/java/ball/util/ant/taskdefs/AntTaskLogMethods.java:
 	Initial writing; collected common log() methods.
