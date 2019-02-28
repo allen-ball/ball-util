@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeMap;
@@ -218,7 +219,7 @@ public abstract class AbstractProcessor
             types.directSupertypes(type.asType())
             .stream()
             .map(t -> overrides(overrider, types.asElement(t)))
-            .filter(t -> t != null)
+            .filter(Objects::nonNull)
             .findFirst();
 
         return optional.orElse(null);
@@ -309,7 +310,7 @@ public abstract class AbstractProcessor
                 optional =
                     Optional.ofNullable(type.getSuperclass())
                     .map(t -> (TypeElement) types.asElement(t))
-                    .filter(t -> t != null)
+                    .filter(Objects::nonNull)
                     .map(t -> implementationOf(overridden, t));
             }
         }

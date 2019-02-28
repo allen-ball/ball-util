@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.IdentityHashMap;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -124,7 +125,7 @@ public class FluentDocumentBuilder extends DocumentBuilder {
                                             getAllInterfaces(spec).stream()),
                               Stream.concat(Stream.of(impl),
                                             getAllInterfaces(impl).stream()))
-                .filter(t -> t.isInterface())
+                .filter(Class::isInterface)
                 .filter(t -> t.getPackage().equals(Node.class.getPackage()))
                 .filter(t -> Node.class.isAssignableFrom(t))
                 .map(t -> t.asSubclass(Node.class))
@@ -136,7 +137,7 @@ public class FluentDocumentBuilder extends DocumentBuilder {
             Set<Class<? extends Node>> interfaces =
                 implemented.stream()
                 .map(t -> fluentNodeType(t))
-                .filter(t -> t != null)
+                .filter(Objects::nonNull)
                 .collect(Collectors.toSet());
             /*
              * ... combine.

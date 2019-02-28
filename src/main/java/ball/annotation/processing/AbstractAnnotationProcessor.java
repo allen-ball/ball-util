@@ -58,7 +58,7 @@ public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
         Set<String> set =
             getSupportedAnnotationTypeList()
             .stream()
-            .map(t -> t.getCanonicalName())
+            .map(Class::getCanonicalName)
             .collect(Collectors.toSet());
 
         return Collections.unmodifiableSet(set);
