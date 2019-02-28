@@ -47,31 +47,31 @@ public class Permutations<E> implements Iterable<List<E>> {
     }
 
     protected class ListImpl extends ArrayList<E> {
-        private static final long serialVersionUID = 622428941474888801L;
+        private static final long serialVersionUID = 4116667862424450040L;
 
-        public ListImpl(Collection<? extends E> collection, E element) {
+        protected ListImpl(Collection<? extends E> collection, E element) {
             this();
 
             addAll(collection);
             add(element);
         }
 
-        public ListImpl(Collection<? extends E> c1,
-                        Collection<? extends E> c2) {
+        protected ListImpl(Collection<? extends E> c1,
+                           Collection<? extends E> c2) {
             this();
 
             addAll(c1);
             addAll(c2);
         }
 
-        public ListImpl() { super(list.size()); }
+        protected ListImpl() { super(list.size()); }
     }
 
     private class IterableImpl implements Iterable<List<E>> {
         private final List<E> prefix;
         private final List<E> list;
 
-        public IterableImpl(List<E> prefix, List<E> list) {
+        protected IterableImpl(List<E> prefix, List<E> list) {
             this.prefix = prefix;
             this.list = list;
         }
