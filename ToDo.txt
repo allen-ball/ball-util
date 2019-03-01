@@ -1,7 +1,5 @@
 $Id$
 
-* Convert Permutations and Combinations to Stream implementations.
-
 * Create a JSR 380 (javax.validation) for AntTask.
 
 * CoordinateMap: Calculate getColumnClass(int) (type member) by determining
