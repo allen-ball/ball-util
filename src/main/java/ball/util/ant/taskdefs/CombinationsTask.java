@@ -5,9 +5,8 @@
  */
 package ball.util.ant.taskdefs;
 
-import ball.util.Combinations;
+import ball.util.stream.Combinations;
 import java.util.Collection;
-import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -47,15 +46,10 @@ public abstract class CombinationsTask extends InstanceOfTask {
 
             try {
                 Collection<?> collection = Collection.class.cast(instance);
-                long count = 0;
-
-                for (List<?> list :
-                         new Combinations<>(collection, getCount())) {
-                    count += 1;
-                }
 
                 log(EMPTY);
-                log(count + " combinations of " + getCount());
+                log(Combinations.of(collection, getCount()).count()
+                    + " combinations of " + getCount());
             } catch (BuildException exception) {
                 throw exception;
             } catch (Throwable throwable) {
@@ -83,10 +77,8 @@ public abstract class CombinationsTask extends InstanceOfTask {
 
                 log(EMPTY);
 
-                for (List<?> list :
-                         new Combinations<>(collection, getCount())) {
-                    log(String.valueOf(list));
-                }
+                Combinations.of(collection, getCount())
+                    .forEach(t -> log(String.valueOf(t)));
             } catch (BuildException exception) {
                 throw exception;
             } catch (Throwable throwable) {

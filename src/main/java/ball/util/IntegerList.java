@@ -11,18 +11,19 @@ import java.util.stream.IntStream;
 
 /**
  * {@link Integer} {@link java.util.List} implementation useful for testing
- * {@link Combinations} and {@link Permutations} {@link Iterable}s.
+ * {@link ball.util.stream.Combinations} and
+ * {@link ball.util.stream.Permutations} {@link java.util.stream.Stream}s.
  *
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
 public class IntegerList extends ArrayList<Integer> {
-    private static final long serialVersionUID = -3133103099144540508L;
+    private static final long serialVersionUID = 5581619270177831511L;
 
     /**
      * @param   count           The element count.
      */
-    public IntegerList(int count) {
+    public IntegerList(Integer count) {
         super(count);
 
         Collections.addAll(this,

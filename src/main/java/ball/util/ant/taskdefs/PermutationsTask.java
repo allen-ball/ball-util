@@ -5,9 +5,8 @@
  */
 package ball.util.ant.taskdefs;
 
-import ball.util.Permutations;
+import ball.util.stream.Permutations;
 import java.util.Collection;
-import java.util.List;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.apache.tools.ant.BuildException;
@@ -43,14 +42,9 @@ public abstract class PermutationsTask extends InstanceOfTask {
 
             try {
                 Collection<?> collection = Collection.class.cast(instance);
-                long count = 0;
-
-                for (List<?> list : new Permutations<>(collection)) {
-                    count += 1;
-                }
 
                 log(EMPTY);
-                log(count + " permutations");
+                log(Permutations.of(collection).count() + " permutations");
             } catch (BuildException exception) {
                 throw exception;
             } catch (Throwable throwable) {
@@ -78,9 +72,8 @@ public abstract class PermutationsTask extends InstanceOfTask {
 
                 log(EMPTY);
 
-                for (List<?> list : new Permutations<>(collection)) {
-                    log(String.valueOf(list));
-                }
+                Permutations.of(collection)
+                    .forEach(t -> log(String.valueOf(t)));
             } catch (BuildException exception) {
                 throw exception;
             } catch (Throwable throwable) {
