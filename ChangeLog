@@ -1,5 +1,7 @@
 2019-03-01  Allen D. Ball  <ball@sol.local>
 
+	* pom.xml: Started development of 3.1-SNAPSHOT.
+
 	* Released 3.0.0.
 
 	* Re-implemented Combinations and Permutations as Streams.
