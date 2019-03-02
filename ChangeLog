@@ -1,5 +1,8 @@
 2019-03-01  Allen D. Ball  <ball@sol.local>
 
+	* src/main/java/ball/util/SupplierSpliterator.java:
+	Initial writing.
+
 	* pom.xml: Started development of 3.1-SNAPSHOT.
 
 	* Released 3.0.0.

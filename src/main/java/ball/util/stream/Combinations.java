@@ -5,14 +5,12 @@
  */
 package ball.util.stream;
 
+import ball.util.SupplierSpliterator;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Spliterator;
-import java.util.Spliterators;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -36,52 +34,46 @@ public interface Combinations<T> extends Stream<List<T>> {
      * @param   collection      The {@link Collection} of elements to
      *                          permute.
      * @param   <T>             The {@link Collection} element type.
-     * @param   take            The number to take in each combination.
+     * @param   group           The number to group in each combination.
      *
      * @return  The {@link Stream} of combinations.
      */
-    public static <T> Stream<List<T>> of(Collection<T> collection, int take) {
+    public static <T> Stream<List<T>> of(Collection<T> collection, int group) {
         SpliteratorImpl<T> spliterator =
-            new SpliteratorImpl<T>(collection, take);
+            new SpliteratorImpl<T>(collection, group);
 
         return StreamSupport.<List<T>>stream(spliterator, false);
     }
 
     /**
-     * {@link Combinations} {@link java.util.Spliterator} implementation
+     * {@link Combinations} {@link Spliterator} implementation
      */
     public static class SpliteratorImpl<T>
-                        extends Spliterators.AbstractSpliterator<List<T>> {
+                        extends SupplierSpliterator<List<T>> {
         protected final List<T> prefix;
         protected final List<T> remaining;
-        private final int take;
-        private Spliterator<List<T>> spliterator = null;
-        private final Iterator<Supplier<Spliterator<List<T>>>> combinations;
+        private final int group;
 
-        /**
-         * {@link Combinations} constructor
-         *
-         * @param       collection      The {@link Collection}.
-         * @param       take            The number to take in each
-         *                              combination.
-         */
-        private SpliteratorImpl(Collection<T> collection, int take) {
-            this(Collections.emptyList(), new LinkedList<>(collection), take);
+        private SpliteratorImpl(Collection<T> collection, int group) {
+            this(Collections.emptyList(), new LinkedList<>(collection), group);
         }
 
-        private SpliteratorImpl(List<T> prefix, List<T> remaining, int take) {
-            super(estimateSize(remaining.size(), take),
+        private SpliteratorImpl(List<T> prefix, List<T> remaining, int group) {
+            super(estimateSize(remaining.size(), group),
                   IMMUTABLE|NONNULL|SIZED|SUBSIZED);
 
             this.prefix = requireNonNull(prefix);
             this.remaining = requireNonNull(remaining);
-            this.take = take;
-            this.spliterator = Spliterators.emptySpliterator();
-            this.combinations = combinations().iterator();
+            this.group = group;
         }
 
-        private List<Supplier<Spliterator<List<T>>>> combinations() {
-            LinkedList<Supplier<Spliterator<List<T>>>> list =
+        @Override
+        protected List<Supplier<Spliterator<List<T>>>> spliterators() {
+            return spliterators(group);
+        }
+
+        private List<Supplier<Spliterator<List<T>>>> spliterators(int group) {
+            LinkedList<Supplier<Spliterator<List<T>>>> spliterators =
                 new LinkedList<>();
             LinkedList<List<T>> combinations = new LinkedList<>();
 
@@ -90,42 +82,26 @@ public interface Combinations<T> extends Stream<List<T>> {
 
                 prefix.add(remaining.get(i));
 
-                if (prefix.size() == take) {
+                if (prefix.size() == group) {
                     combinations.add(prefix);
-                } else if (prefix.size() < take) {
+                } else if (prefix.size() < group) {
                     List<T> remaining = new LinkedList<>(this.remaining);
 
                     remaining.remove(i);
-                    list.add(() -> new SpliteratorImpl<T>(prefix, remaining, take));
+                    spliterators.add(() -> new SpliteratorImpl<T>(prefix, remaining, group));
                 }
             }
 
             if (! combinations.isEmpty()) {
-                list.add(() -> Spliterators
-                               .spliterator(combinations,
-                                            IMMUTABLE|NONNULL|SIZED));
+                spliterators.add(supplier(combinations));
             }
 
-            return list;
+            return spliterators;
         }
 
         @Override
         public long estimateSize() {
-            return estimateSize(remaining.size(), take);
-        }
-
-        @Override
-        public boolean tryAdvance(Consumer<? super List<T>> consumer) {
-            boolean accepted = spliterator.tryAdvance(consumer);
-
-            if (! accepted) {
-                if (combinations.hasNext()) {
-                    spliterator = combinations.next().get();
-                    accepted = tryAdvance(consumer);
-                }
-            }
-
-            return accepted;
+            return estimateSize(remaining.size(), group);
         }
 
         @Override
@@ -136,26 +112,26 @@ public interface Combinations<T> extends Stream<List<T>> {
                 string += ":" + remaining.toString();
             }
 
-            string += "/" + take;
+            string += "/" + group;
 
             return string;
         }
 
-        protected static long estimateSize(long n, long take) {
-            if (n < 0) {
+        protected static long estimateSize(long set, long group) {
+            if (set < 0) {
                 throw new IllegalStateException();
             }
 
             long product = 1;
 
-            if (take > 0) {
-                switch ((int) n) {
+            if (group > 0) {
+                switch ((int) set) {
                 case 1:
                 case 0:
                     break;
 
                 default:
-                    product = n * estimateSize(n - 1, take - 1);
+                    product = set * estimateSize(set - 1, group - 1);
                     break;
                 }
             }
