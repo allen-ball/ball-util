@@ -5,7 +5,6 @@
  */
 package ball.util;
 
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.Spliterator;
 import java.util.Spliterators.AbstractSpliterator;
@@ -15,18 +14,18 @@ import java.util.function.Supplier;
 
 /**
  * {@link Spliterator} abstract base class that dispatches to
- * {@link Spliterator}s supplied through a {@link Collection} of
+ * {@link Spliterator}s supplied through an {@link Iterator} of
  * {@link Spliterator} {@link Supplier}s.
  *
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
-public abstract class SupplierSpliterator<T> extends AbstractSpliterator<T> {
+public abstract class DispatchSpliterator<T> extends AbstractSpliterator<T> {
     private Iterator<Supplier<Spliterator<T>>> spliterators = null;
     private Spliterator<T> spliterator = Spliterators.emptySpliterator();
 
     /**
-     * See {@link AbstractSpliterator} corresponding constructor.
+     * See {@link AbstractSpliterator} constructor.
      *
      * @param   estimate        The estimated size of {@link.this}
      *                          {@link Spliterator} if known, otherwise
@@ -37,41 +36,29 @@ public abstract class SupplierSpliterator<T> extends AbstractSpliterator<T> {
      *                          {@link Spliterator} will additionally report
      *                          {@link #SUBSIZED}.
      */
-    protected SupplierSpliterator(long estimate, int characteristics) {
+    protected DispatchSpliterator(long estimate, int characteristics) {
         super(estimate, characteristics);
     }
 
     /**
-     * Method to provide the {@link Spliterator} {@link Supplier}s.
+     * Method to provide the {@link Spliterator} {@link Supplier}s.  This
+     * method is not called until the first call of
+     * {@link #tryAdvance(Consumer)}.
      *
-     * @return  The {@link Collection} of {@link Spliterator}
+     * @return  The {@link Iterator} of {@link Spliterator}
      *          {@link Supplier}s.
      */
-    protected abstract Collection<Supplier<Spliterator<T>>> spliterators();
-
-    /**
-     * Convenience method to convert a {@link Collection} to a
-     * {@link Spliterator} {@link Supplier}.
-     *
-     * @param   collection      The {@link Collection} to supply.
-     *
-     * @return  The {@link Spliterator} {@link Supplier}.
-     */
-    protected Supplier<Spliterator<T>> supplier(Collection<T> collection) {
-        return () -> Spliterators.spliterator(collection, characteristics());
-    }
+    protected abstract Iterator<Supplier<Spliterator<T>>> spliterators();
 
     @Override
     public boolean tryAdvance(Consumer<? super T> consumer) {
-        synchronized (this) {
-            if (spliterators == null) {
-                spliterators = spliterators().iterator();
-            }
-        }
-
         boolean accepted = spliterator.tryAdvance(consumer);
 
         if (! accepted) {
+            if (spliterators == null) {
+                spliterators = spliterators();
+            }
+
             if (spliterators.hasNext()) {
                 spliterator = spliterators.next().get();
                 accepted = tryAdvance(consumer);
