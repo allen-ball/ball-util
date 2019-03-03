@@ -22,7 +22,7 @@ import java.util.Set;
  * @param       <K>             The key type.
  * @param       <V>             The value type.
  *
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 public class MapView<K,V> extends AbstractMap<K,V> implements Serializable {

@@ -21,7 +21,7 @@ import com.sun.javadoc.LanguageVersion;
  * in-turn dispatches to
  * {@link com.sun.tools.doclets.formats.html.HtmlDoclet}.
  *
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 public interface Doclet {

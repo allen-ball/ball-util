@@ -17,7 +17,7 @@ import lombok.ToString;
 /**
  * Inline {@link Taglet} providing links to external RFCs.
  *
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 @ServiceProviderFor({ Taglet.class })

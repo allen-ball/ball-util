@@ -23,7 +23,7 @@ import static ball.util.Converter.convertTo;
  * {@link PatternRegex} and with methods annoteted with
  * {@link MatcherGroup}.
  *
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 public interface PatternMatcherBean {

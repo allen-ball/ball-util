@@ -13,7 +13,7 @@ import static java.util.Comparator.comparing;
 /**
  * Conversion utility based on {@link Factory}.
  *
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 public class Converter extends TreeMap<Class<?>,Factory<?>> {

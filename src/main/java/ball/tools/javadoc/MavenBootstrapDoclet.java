@@ -20,7 +20,7 @@ import lombok.ToString;
  * WORK IN PROGRESS: {@link Doclet} implementation to intercept calls to the
  * {@link Standard} {@link Doclet}.
  *
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 @NoArgsConstructor @ToString

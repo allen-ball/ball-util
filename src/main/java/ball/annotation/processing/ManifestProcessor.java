@@ -49,7 +49,7 @@ import static org.apache.commons.lang3.StringUtils.join;
  * {@link java.lang.annotation.Annotation}s and generate a
  * {@link java.util.jar.Manifest META-INF/MANIFEST.MF}.
  *
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 @ServiceProviderFor({ Processor.class })

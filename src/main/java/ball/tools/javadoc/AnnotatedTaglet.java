@@ -11,7 +11,7 @@ import com.sun.tools.doclets.Taglet;
  * Interface indicating {@link Taglet} is annotated with {@link TagletName}
  * and related annotations.
  *
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 public interface AnnotatedTaglet extends Taglet {

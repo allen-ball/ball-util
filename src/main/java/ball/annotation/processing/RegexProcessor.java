@@ -23,7 +23,7 @@ import static javax.tools.Diagnostic.Kind.ERROR;
  * {@link String} initializers marked by the {@link Regex} annotation are
  * valid {@link Pattern}s.
  *
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 @ServiceProviderFor({ Processor.class })

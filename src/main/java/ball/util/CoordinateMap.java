@@ -24,7 +24,7 @@ import javax.swing.table.TableModel;
  *
  * @param       <V>             The value type.
  *
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 public class CoordinateMap<V> extends MapView<Coordinate,V>

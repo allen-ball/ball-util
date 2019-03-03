@@ -59,7 +59,7 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
  * And {@link Package}s annotated with {@link AntLib}.  Generates the
  * specified resources at the end of annotation processing.
  *
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 @ServiceProviderFor({ Processor.class })

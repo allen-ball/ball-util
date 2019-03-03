@@ -14,7 +14,7 @@ import java.util.stream.IntStream;
  * {@link ball.util.stream.Combinations} and
  * {@link ball.util.stream.Permutations} {@link java.util.stream.Stream}s.
  *
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 public class IntegerList extends ArrayList<Integer> {

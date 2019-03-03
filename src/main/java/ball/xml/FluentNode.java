@@ -30,7 +30,7 @@ import org.w3c.dom.Text;
  * detail of {@link FluentDocumentBuilder} and should not be implemented or
  * extended directly.
  *
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 public interface FluentNode extends Node {

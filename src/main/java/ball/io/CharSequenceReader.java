@@ -13,7 +13,7 @@ import java.util.Objects;
 /**
  * {@link CharSequence} {@link Reader} implementation.
  *
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 public class CharSequenceReader extends LineNumberReader {

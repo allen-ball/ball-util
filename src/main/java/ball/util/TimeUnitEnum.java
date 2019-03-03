@@ -11,7 +11,7 @@ package ball.util;
  *
  * @see java.util.concurrent.TimeUnit
  *
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 public enum TimeUnitEnum {

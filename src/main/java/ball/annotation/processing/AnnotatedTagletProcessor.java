@@ -21,7 +21,7 @@ import static javax.tools.Diagnostic.Kind.ERROR;
  * {@link Processor} implementation to verify concrete implementations of
  * {@link AnnotatedTaglet} are also subclasses of {@link Taglet}.
  *
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 @ServiceProviderFor({ Processor.class })

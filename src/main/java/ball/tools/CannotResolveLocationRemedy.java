@@ -22,7 +22,7 @@ import static ball.lang.Punctuation.SEMICOLON;
 import static ball.lang.Punctuation.SPACE;
 
 /**
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 @ServiceProviderFor({ Remedy.class })

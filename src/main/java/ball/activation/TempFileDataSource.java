@@ -17,7 +17,7 @@ import static org.apache.commons.lang3.StringUtils.EMPTY;
  * {@link javax.activation.DataSource} backed by a temporary {@link File}
  * and based on {@link FileInputStream} and {@link FileOutputStream}.
  *
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 public class TempFileDataSource extends AbstractDataSource {

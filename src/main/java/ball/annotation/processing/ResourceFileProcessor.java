@@ -35,7 +35,7 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
  *
  * @see ball.text.ParameterizedMessageFormat
  *
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 @ServiceProviderFor({ Processor.class })

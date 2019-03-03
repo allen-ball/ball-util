@@ -14,7 +14,7 @@ import static java.util.Objects.requireNonNull;
 /**
  * {@link FluentDocumentBuilder} {@link DocumentBuilderFactory}
  *
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 public class FluentDocumentBuilderFactory extends DocumentBuilderFactory {

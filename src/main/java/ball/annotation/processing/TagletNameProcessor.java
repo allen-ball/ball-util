@@ -32,7 +32,7 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
  *   <li value="3">Have a public no-argument constructor</li>
  * </ol>
  *
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 @ServiceProviderFor({ Processor.class })

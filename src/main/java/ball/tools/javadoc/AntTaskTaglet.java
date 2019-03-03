@@ -29,7 +29,7 @@ import static org.apache.commons.lang3.StringUtils.repeat;
  * Inline {@link Taglet} to document {@link.uri http://ant.apache.org/ Ant}
  * {@link Task}s.
  *
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 @ServiceProviderFor({ Taglet.class })

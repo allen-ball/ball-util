@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
  * collecting {@link Diagnostic}s as keys and informational/prescriptive
  * messages as values.
  *
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 @NoArgsConstructor

@@ -35,7 +35,7 @@ import static ball.lang.Punctuation.SPACE;
 import static java.lang.reflect.Modifier.ABSTRACT;
 
 /**
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 @ServiceProviderFor({ Remedy.class })

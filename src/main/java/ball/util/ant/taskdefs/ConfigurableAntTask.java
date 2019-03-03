@@ -13,7 +13,7 @@ import org.apache.tools.ant.Task;
  * Provides default {@link Task#init()} method to initialize {@link Task}
  * attributes from project properties.
  *
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 public interface ConfigurableAntTask extends AntTaskMixIn {

@@ -12,7 +12,7 @@ import org.w3c.dom.Node;
 /**
  * Common HTML templates
  *
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 public interface HTMLTemplates extends XMLServices {

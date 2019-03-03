@@ -28,7 +28,7 @@ import static javax.tools.Diagnostic.Kind.WARNING;
  *   </li>
  * </ol>
  *
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 @ServiceProviderFor({ Processor.class })

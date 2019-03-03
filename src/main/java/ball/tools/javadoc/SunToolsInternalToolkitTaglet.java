@@ -16,7 +16,7 @@ import com.sun.tools.doclets.internal.toolkit.taglets.TagletWriter;
 /**
  * Default methods for legacy {@link Taglet} implementations.
  *
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 public interface SunToolsInternalToolkitTaglet extends Taglet,

@@ -17,7 +17,7 @@ import java.util.function.Supplier;
  * {@link Spliterator}s supplied through an {@link Iterator} of
  * {@link Spliterator} {@link Supplier}s.
  *
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 public abstract class DispatchSpliterator<T> extends AbstractSpliterator<T> {

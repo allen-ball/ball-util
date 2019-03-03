@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
  * in the argument {@link Map} to positional parameters for a call to
  * {@link #format(String,Object...)}.
  *
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 public abstract class ParameterizedMessageFormat extends MessageFormat {

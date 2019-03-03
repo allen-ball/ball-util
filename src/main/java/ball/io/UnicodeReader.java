@@ -26,7 +26,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
  *
  * @see BOMCharsetMap
  *
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 public class UnicodeReader extends LineNumberReader {

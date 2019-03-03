@@ -12,7 +12,7 @@ import org.apache.tools.ant.Task;
  * Interface to provide common default methods for {@link Task}s that may
  * assign property values.
  *
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 public interface PropertySetterAntTask extends AntTaskMixIn {

@@ -12,7 +12,7 @@ import java.util.TreeMap;
  * {@link String#CASE_INSENSITIVE_ORDER} look-up by name to the
  * corresponding {@link Enum}.
  *
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 public class EnumLookupMap extends TreeMap<String,Enum<?>> {

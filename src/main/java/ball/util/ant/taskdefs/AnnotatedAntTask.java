@@ -12,7 +12,7 @@ import org.apache.tools.ant.Task;
  * Interface indicating {@link Task} is annotated with {@link AntTask} and
  * related annotations.
  *
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 public interface AnnotatedAntTask extends AntTaskLogMethods {

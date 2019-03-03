@@ -24,7 +24,7 @@ import static javax.tools.Diagnostic.Kind.WARNING;
  * {@link java.lang.reflect.Method}s that are not marked with the
  * {@link Override} {@link java.lang.annotation.Annotation}.
  *
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 @ServiceProviderFor({ Processor.class })

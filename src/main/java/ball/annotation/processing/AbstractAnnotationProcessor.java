@@ -26,7 +26,7 @@ import static lombok.AccessLevel.PROTECTED;
  * Abstract {@link javax.annotation.processing.Processor} base class for
  * processing an {@link Annotation}.
  *
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 @NoArgsConstructor(access = PROTECTED)

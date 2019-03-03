@@ -15,7 +15,7 @@ import java.util.stream.Stream;
  *
  * @param       <T>             The {@link List} element type.
  *
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 public interface Permutations<T> extends Combinations<T> {

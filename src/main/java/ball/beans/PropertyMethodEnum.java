@@ -18,7 +18,7 @@ import static java.beans.Introspector.decapitalize;
 /**
  * Bean property method {@link Enum} type.
  *
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 public enum PropertyMethodEnum {

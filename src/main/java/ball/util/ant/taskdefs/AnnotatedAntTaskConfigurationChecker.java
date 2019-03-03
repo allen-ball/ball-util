@@ -24,7 +24,7 @@ import static ball.beans.PropertyMethodEnum.getPropertyName;
  * {@link TaskConfigurationChecker} implmentation to check
  * {@link AnnotatedAntTask} annotations.
  *
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 public class AnnotatedAntTaskConfigurationChecker

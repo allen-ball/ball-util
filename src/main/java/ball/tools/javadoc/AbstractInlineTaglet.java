@@ -10,7 +10,7 @@ package ball.tools.javadoc;
  * {@link com.sun.tools.doclets.internal.toolkit.taglets.Taglet}
  * implementations.
  *
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 public abstract class AbstractInlineTaglet extends AbstractTaglet {

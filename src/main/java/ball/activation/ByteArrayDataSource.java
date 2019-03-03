@@ -16,7 +16,7 @@ import java.io.OutputStream;
  * {@link javax.activation.DataSource} implementation based on
  * {@link ByteArrayInputStream} and {@link ByteArrayOutputStream}.
  *
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 public class ByteArrayDataSource extends AbstractDataSource {

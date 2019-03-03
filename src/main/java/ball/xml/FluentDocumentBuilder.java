@@ -35,7 +35,7 @@ import static org.apache.commons.lang3.ClassUtils.getAllInterfaces;
 /**
  * {@link FluentDocument} {@link DocumentBuilder}
  *
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 public class FluentDocumentBuilder extends DocumentBuilder {

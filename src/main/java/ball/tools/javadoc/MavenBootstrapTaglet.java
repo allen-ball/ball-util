@@ -14,7 +14,7 @@ import java.util.ServiceLoader;
  * {@link Taglet}s specified through a {@link ServiceLoader}.  Designed to
  * be specified as {@code <tagletClass/>} in a Maven {@code pom.xml}.
  *
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 public abstract class MavenBootstrapTaglet extends AbstractTaglet {

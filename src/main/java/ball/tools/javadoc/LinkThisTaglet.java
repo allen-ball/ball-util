@@ -19,7 +19,7 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
 /**
  * Inline {@link Taglet} to provide {@link.this} links.
  *
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 @ServiceProviderFor({ Taglet.class })

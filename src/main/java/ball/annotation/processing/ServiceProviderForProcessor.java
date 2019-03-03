@@ -48,7 +48,7 @@ import static org.apache.commons.lang3.StringUtils.EMPTY;
  * {@link.uri https://github.com/google/auto/tree/master/service target=newtab AutoService}
  * library.
  *
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 @ServiceProviderFor({ Processor.class })

@@ -23,7 +23,7 @@ import static javax.tools.Diagnostic.Kind.ERROR;
  * {@link Processor} implementation to enforce {@link Collection#toArray()}
  * implementation methods return as narrow an {@link Object} as possible.
  *
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 @ServiceProviderFor({ Processor.class })

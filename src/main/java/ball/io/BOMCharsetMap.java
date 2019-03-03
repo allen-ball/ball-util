@@ -20,7 +20,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
  *
  * {@include #INSTANCE}
  *
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 public class BOMCharsetMap extends LinkedHashMap<byte[],Charset> {

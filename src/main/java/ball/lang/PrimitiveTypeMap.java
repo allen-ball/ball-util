@@ -13,7 +13,7 @@ import java.util.Map;
  * Provides mapping of Java primitive {@link Class}es to their "wrapper"
  * {@link Class}es.
  *
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 public class PrimitiveTypeMap extends HashMap<Class<?>,Class<?>> {

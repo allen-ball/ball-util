@@ -27,7 +27,7 @@ import static java.util.Objects.requireNonNull;
  *
  * @param       <T>             The {@link List} element type.
  *
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 public interface Combinations<T> extends Stream<List<T>> {

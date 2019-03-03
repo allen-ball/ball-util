@@ -17,7 +17,7 @@ import javax.swing.JFrame;
  * {@link JFrame} implementation that provides a {@link Future} indicating
  * when the {@link JFrame} is closed (or made invisible).
  *
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 public class ClosedFutureJFrame extends JFrame {

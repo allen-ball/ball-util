@@ -14,7 +14,7 @@ import java.util.Collection;
  *
  * @param       <R>     The type of table row.
  *
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 public abstract class ArrayListTableModel<R> extends AbstractTableModelImpl {

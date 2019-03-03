@@ -35,7 +35,7 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
  * <p>Note: {@link #getName()} implementation requires the subclass is
  * annotated with {@link TagletName}.</p>
  *
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 public abstract class AbstractTaglet implements AnnotatedTaglet,

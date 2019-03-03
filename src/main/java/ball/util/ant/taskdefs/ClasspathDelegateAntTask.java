@@ -17,7 +17,7 @@ import org.apache.tools.ant.util.ClasspathUtils;
  * {@link org.apache.tools.ant.Task}s that implement the syntax described in
  * {@link org.apache.tools.ant.util.ClasspathUtils.Delegate}.
  *
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 public interface ClasspathDelegateAntTask extends AntTaskMixIn {

@@ -10,7 +10,7 @@ package ball.util.ant.taskdefs;
  * a {@link org.apache.tools.ant.Task}.  Enforced by
  * {@link ball.annotation.processing.AntTaskMixInProcessor}.
  *
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 public interface AntTaskMixIn {

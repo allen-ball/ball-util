@@ -14,7 +14,7 @@ import org.w3c.dom.Node;
  * implementation detail of {@link FluentDocumentBuilder} and should not be
  * extended directly.
  *
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 public interface FluentDocument extends FluentNode, Document {

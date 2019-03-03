@@ -13,7 +13,7 @@ import java.util.UUID;
  * generate new {@link UUID}s with the {@link.man uuid_generate(3)}
  * collection of functions.
  *
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 public class UUIDFactory extends Factory<UUID> {

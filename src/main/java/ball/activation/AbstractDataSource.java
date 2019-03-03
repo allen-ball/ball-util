@@ -14,7 +14,7 @@ import static lombok.AccessLevel.PROTECTED;
  * Abstract base class for {@link javax.activation.DataSource}
  * implementations.
  *
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 @NoArgsConstructor(access = PROTECTED) @ToString

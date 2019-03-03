@@ -26,7 +26,7 @@ import static org.apache.commons.lang3.StringUtils.stripEnd;
 /**
  * Text-based {@link javax.swing.JTable} implementation.
  *
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 public class TextTable extends ReaderWriterDataSource {

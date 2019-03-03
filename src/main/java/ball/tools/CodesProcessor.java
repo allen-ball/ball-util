@@ -19,7 +19,7 @@ import lombok.ToString;
  * {@link javax.annotation.processing.Processor} implementation to check
  * {@link Codes} annotations.
  *
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 @ServiceProviderFor({ Processor.class })

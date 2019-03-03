@@ -27,7 +27,7 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
  * Inline {@link Taglet} to provide a report of members whose values are
  * injected.
  *
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 @ServiceProviderFor({ Taglet.class })

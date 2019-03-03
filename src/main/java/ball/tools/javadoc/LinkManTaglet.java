@@ -20,7 +20,7 @@ import lombok.ToString;
 /**
  * Inline {@link Taglet} providing links to {@link.man man(1)} pages.
  *
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 @ServiceProviderFor({ Taglet.class })

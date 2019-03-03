@@ -21,7 +21,7 @@ import static lombok.AccessLevel.PROTECTED;
 /**
  * JSR303-inspired Ant Task attribute constraint annotation.
  *
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 @Documented

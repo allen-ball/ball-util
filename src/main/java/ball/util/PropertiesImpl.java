@@ -24,7 +24,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
  * {@link #load(InputStream)} and {@link #store(OutputStream,String)}
  * methods to specify the {@link Charset} (as {@code UTF-8}).
  *
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 public class PropertiesImpl extends Properties {

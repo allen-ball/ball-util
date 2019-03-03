@@ -6,7 +6,7 @@
 /**
  * See {@link java.lang.reflect}.
  *
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  */
 @Manifest.Section
 package ball.lang.reflect;

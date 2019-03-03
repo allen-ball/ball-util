@@ -26,7 +26,7 @@ import static java.lang.reflect.Modifier.isPublic;
  * @param       <T>             The type of {@link Object} this
  *                              {@link Factory} will produce.
  *
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 public class Factory<T> extends TreeMap<Class<?>[],Member> {

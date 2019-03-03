@@ -9,7 +9,7 @@
  *
  * @see javax.tools.ToolProvider#getSystemJavaCompiler()
  *
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  */
 @Manifest.Section
 package ball.util.ant.taskdefs.compilers;

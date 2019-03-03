@@ -21,7 +21,7 @@ import static ball.util.TimeUnitEnum.MINUTES;
  * {@link.uri http://www.w3.org/TR/NOTE-datetime ISO 8601}
  * {@link java.text.DateFormat} implementation.
  *
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 public class ISO8601DateFormat extends SimpleDateFormat {

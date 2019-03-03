@@ -22,7 +22,7 @@ import static javax.tools.Diagnostic.Kind.WARNING;
  * marked by the {@link ConstantInitializer} annotation into compile-time
  * constants.
  *
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 @ServiceProviderFor({ Processor.class })

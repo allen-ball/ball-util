@@ -11,7 +11,7 @@ import javax.swing.event.TableModelEvent;
 /**
  * {@link Map} {@link javax.swing.table.TableModel} implementation.
  *
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 public class MapTableModel extends ArrayListTableModel<Object> {

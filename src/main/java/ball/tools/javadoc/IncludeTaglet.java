@@ -27,7 +27,7 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
  * Inline {@link Taglet} to include a static {@link Class}
  * {@link java.lang.reflect.Field} or resource in the Javadoc output.
  *
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 @ServiceProviderFor({ Taglet.class })

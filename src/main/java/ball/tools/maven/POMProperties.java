@@ -12,7 +12,7 @@ import java.io.IOException;
  * {@link java.util.Properties} subclass to load Maven coordinates from a
  * {@value #POM_PROPERTIES} resource.
  *
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 public class POMProperties extends PropertiesImpl {

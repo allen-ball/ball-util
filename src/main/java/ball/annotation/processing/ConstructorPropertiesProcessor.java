@@ -28,7 +28,7 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
  * annotation are actual bean properties of the {@link
  * java.lang.reflect.Constructor}'s {@link Class}.
  *
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 @ServiceProviderFor({ Processor.class })

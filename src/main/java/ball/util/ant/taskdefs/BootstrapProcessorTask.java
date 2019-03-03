@@ -31,7 +31,7 @@ import static java.util.Comparator.comparing;
  *
  * {@ant.task}
  *
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 @NoArgsConstructor @ToString

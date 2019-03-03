@@ -36,7 +36,7 @@ import static javax.tools.StandardLocation.CLASS_OUTPUT;
  * {@link Processor} implementation to generate {@code jaxb.index} files
  * from {@link Class}es annotated with JAXB annotations.
  *
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 @ServiceProviderFor({ Processor.class })

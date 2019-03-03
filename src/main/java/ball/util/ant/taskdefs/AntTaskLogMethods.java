@@ -15,7 +15,7 @@ import org.apache.tools.ant.Project;
  * Interface to provide common default logging methods for
  * {@link org.apache.tools.ant.Task}s.
  *
- * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
+ * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 public interface AntTaskLogMethods extends AntTaskMixIn {
