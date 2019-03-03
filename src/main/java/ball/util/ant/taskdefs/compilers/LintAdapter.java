@@ -16,6 +16,7 @@ import java.util.regex.Pattern;
 import javax.tools.Diagnostic;
 import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
+import lombok.NoArgsConstructor;
 
 import static java.util.Comparator.comparing;
 import static javax.tools.JavaFileObject.Kind.CLASS;
@@ -32,6 +33,7 @@ import static org.apache.commons.lang3.StringUtils.EMPTY;
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
+@NoArgsConstructor
 public class LintAdapter extends SystemJavaCompilerAdapter {
     /** {@link #PERIOD} = {@value #PERIOD} */
     protected static final String PERIOD = ".";
@@ -39,11 +41,6 @@ public class LintAdapter extends SystemJavaCompilerAdapter {
     protected static final String SLASH = "/";
 
     private static final URI FILE = URI.create("file:///");
-
-    /**
-     * Sole constructor.
-     */
-    public LintAdapter() { super(); }
 
     @Override
     protected boolean compile(StandardJavaFileManager fm,

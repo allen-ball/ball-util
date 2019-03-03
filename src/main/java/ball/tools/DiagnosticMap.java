@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2011 - 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2011 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.tools;
 
@@ -12,6 +12,7 @@ import java.util.TreeMap;
 import javax.tools.Diagnostic;
 import javax.tools.DiagnosticListener;
 import javax.tools.JavaFileObject;
+import lombok.NoArgsConstructor;
 
 /**
  * {@link DiagnosticListener} and {@link LinkedHashMap} implementation for
@@ -21,15 +22,11 @@ import javax.tools.JavaFileObject;
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
+@NoArgsConstructor
 public class DiagnosticMap
              extends LinkedHashMap<Diagnostic<? extends JavaFileObject>,String>
              implements DiagnosticListener<JavaFileObject> {
     private static final long serialVersionUID = -5544734926408904555L;
-
-    /**
-     * Sole constructor.
-     */
-    public DiagnosticMap() { super(); }
 
     /**
      * Method to get a map of {@link javax.tools.Diagnostic.Kind} counts.

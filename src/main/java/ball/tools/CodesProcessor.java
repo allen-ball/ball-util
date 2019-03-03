@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2013, 2014 Allen D. Ball.  All rights reserved.
+ * Copyright 2013 - 2019 Allen D. Ball.  All rights reserved.
  */
 package ball.tools;
 
@@ -12,6 +12,8 @@ import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  * {@link javax.annotation.processing.Processor} implementation to check
@@ -22,13 +24,8 @@ import javax.lang.model.element.TypeElement;
  */
 @ServiceProviderFor({ Processor.class })
 @For({ Codes.class })
+@NoArgsConstructor @ToString
 public class CodesProcessor extends AbstractAnnotationProcessor {
-
-    /**
-     * Sole constructor.
-     */
-    public CodesProcessor() { super(); }
-
     @Override
     public void process(RoundEnvironment roundEnv,
                         TypeElement annotation,

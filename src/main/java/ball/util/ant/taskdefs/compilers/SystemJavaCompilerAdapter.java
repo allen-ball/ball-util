@@ -21,6 +21,7 @@ import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.StandardLocation;
 import javax.tools.ToolProvider;
+import lombok.NoArgsConstructor;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.taskdefs.Javac;
 import org.apache.tools.ant.taskdefs.compilers.CompilerAdapter;
@@ -38,6 +39,7 @@ import org.apache.tools.ant.util.FileUtils;
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
+@NoArgsConstructor
 public class SystemJavaCompilerAdapter implements CompilerAdapter,
                                                   CompilerAdapterExtension {
     /** {@link #CARET} = {@value #CARET} */
@@ -48,11 +50,6 @@ public class SystemJavaCompilerAdapter implements CompilerAdapter,
     private Javac javac = null;
     protected JavaCompiler compiler = null;
     protected JavaCompiler.CompilationTask task = null;
-
-    /**
-     * Sole constructor.
-     */
-    public SystemJavaCompilerAdapter() { }
 
     protected Javac getJavac() { return javac; }
 

@@ -5,6 +5,8 @@
  */
 package ball.util.ant.types;
 
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.apache.tools.ant.Project;
 
 import static org.apache.commons.lang3.StringUtils.EMPTY;
@@ -20,15 +22,11 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
+@NoArgsConstructor @ToString
 public class OptionalTextType {
     private String text = null;
     private String ifP = null;
     private String unlessP = null;
-
-    /**
-     * Sole constructor.
-     */
-    public OptionalTextType() { }
 
     public void addText(String text) {
         this.text = (! isEmpty(this.text) ? this.text : EMPTY) + text;
@@ -71,7 +69,4 @@ public class OptionalTextType {
                 && (getUnless() == null
                     || project.getProperty(getUnless()) == null));
     }
-
-    @Override
-    public String toString() { return text; }
 }

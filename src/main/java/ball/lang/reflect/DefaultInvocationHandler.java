@@ -10,6 +10,8 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import static org.apache.commons.lang3.reflect.MethodUtils.invokeMethod;
 
@@ -20,12 +22,8 @@ import static org.apache.commons.lang3.reflect.MethodUtils.invokeMethod;
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
+@NoArgsConstructor @ToString
 public class DefaultInvocationHandler implements InvocationHandler {
-
-    /**
-     * Sole constructor.
-     */
-    public DefaultInvocationHandler() { }
 
     /**
      * Method to call

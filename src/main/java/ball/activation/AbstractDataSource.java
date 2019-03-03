@@ -5,6 +5,11 @@
  */
 package ball.activation;
 
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
+import static lombok.AccessLevel.PROTECTED;
+
 /**
  * Abstract base class for {@link javax.activation.DataSource}
  * implementations.
@@ -12,21 +17,14 @@ package ball.activation;
  * @author {@link.uri mailto:ball@iprotium.com Allen D. Ball}
  * @version $Revision$
  */
+@NoArgsConstructor(access = PROTECTED) @ToString
 public abstract class AbstractDataSource implements DataSourceDefaultMethods {
     private String name = null;
     private String type = APPLICATION_OCTET_STREAM;
-
-    /**
-     * Sole constructor.
-     */
-    protected AbstractDataSource() { }
 
     @Override public String getName() { return name; }
     @Override public void setName(String name) { this.name = name; }
 
     @Override public String getContentType() { return type; }
     @Override public void setContentType(String type) { this.type = type; }
-
-    @Override
-    public String toString() { return super.toString(); }
 }
