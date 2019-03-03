@@ -48,7 +48,7 @@ public abstract class CombinationsTask extends InstanceOfTask {
                 Collection<?> collection = Collection.class.cast(instance);
 
                 log(EMPTY);
-                log(Combinations.of(collection, getCount()).count()
+                log(Combinations.of(getCount(), collection).count()
                     + " combinations of " + getCount());
             } catch (BuildException exception) {
                 throw exception;
@@ -77,7 +77,7 @@ public abstract class CombinationsTask extends InstanceOfTask {
 
                 log(EMPTY);
 
-                Combinations.of(collection, getCount())
+                Combinations.of(getCount(), collection)
                     .forEach(t -> log(String.valueOf(t)));
             } catch (BuildException exception) {
                 throw exception;

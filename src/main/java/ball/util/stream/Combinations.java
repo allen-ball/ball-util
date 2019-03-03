@@ -15,11 +15,16 @@ import java.util.List;
 import java.util.Spliterator;
 import java.util.function.Supplier;
 import java.util.stream.IntStream;
-import java.util.stream.LongStream;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import lombok.experimental.Accessors;
 
 import static java.util.Objects.requireNonNull;
+import static lombok.AccessLevel.PRIVATE;
 
 /**
  * {@link Stream} implementaion that provides all combinations of a
@@ -39,90 +44,118 @@ public interface Combinations<T> extends Stream<List<T>> {
      * stream largest to smallest specify {@code sizeN} that is greater than
      * {@code size0}.
      *
-     * @param   collection      The {@link Collection} of elements to
-     *                          permute.
-     * @param   <T>             The {@link Collection} element type.
      * @param   size0           The combination size range start
      *                          (inclusive).
      * @param   sizeN           The combination size range end (inclusive).
+     * @param   collection      The {@link Collection} of elements to
+     *                          permute.
+     * @param   <T>             The {@link Collection} element type.
      *
      * @return  The {@link Stream} of combinations.
      */
-    public static <T> Stream<List<T>> of(Collection<T> collection,
-                                         int size0, int sizeN) {
-        return StreamSupport.<List<T>>stream(new Of<T>(collection,
-                                                       size0, sizeN),
+    public static <T> Stream<List<T>> of(int size0, int sizeN,
+                                         Collection<T> collection) {
+        SpliteratorSupplier<T> supplier =
+            new SpliteratorSupplier<T>()
+            .collection(collection)
+            .size0(size0).sizeN(sizeN);
+
+        return StreamSupport.<List<T>>stream(supplier,
+                                             supplier.characteristics(),
                                              false);
     }
 
     /**
      * Method to get the {@link Stream} of combinations.
      *
+     * @param   size            The combination size.
      * @param   collection      The {@link Collection} of elements to
      *                          permute.
      * @param   <T>             The {@link Collection} element type.
-     * @param   size            The combination size.
      *
      * @return  The {@link Stream} of combinations.
      */
-    public static <T> Stream<List<T>> of(Collection<T> collection, int size) {
-        return of(collection, size, size);
+    public static <T> Stream<List<T>> of(int size, Collection<T> collection) {
+        return of(size, size, collection);
     }
 
     /**
-     * {@link Combinations} {@link Spliterator} implementation
+     * {@link Combinations} {@link Spliterator} {@link Supplier}
      */
-    public static class Of<T> extends DispatchSpliterator<List<T>> {
-        private final Collection<T> collection;
-        private final int size0;
-        private final int sizeN;
+    @NoArgsConstructor(access = PRIVATE)
+    @ToString
+    public static class SpliteratorSupplier<T>
+                        implements Supplier<Spliterator<List<T>>> {
+        @Getter @Setter @Accessors(chain = true, fluent = true)
+        private int characteristics =
+            Spliterator.IMMUTABLE
+            | Spliterator.NONNULL
+            | Spliterator.SIZED
+            | Spliterator.SUBSIZED;
+        @Getter @Setter @Accessors(chain = true, fluent = true)
+        private Collection<? extends T> collection = null;
+        @Getter @Setter @Accessors(chain = true, fluent = true)
+        private int size0 = -1;
+        @Getter @Setter @Accessors(chain = true, fluent = true)
+        private int sizeN = -1;
 
-        private Of(Collection<T> collection, int size0, int sizeN) {
-            super(estimateSize(collection.size(), size0, sizeN),
-                  IMMUTABLE|NONNULL|SIZED|SUBSIZED);
-
-            this.collection = requireNonNull(collection);
-            this.size0 = size0;
-            this.sizeN = sizeN;
+        public SpliteratorSupplier<T> size(int size) {
+            return size0(size).sizeN(size);
         }
 
         @Override
-        protected Iterator<Supplier<Spliterator<List<T>>>> spliterators() {
-            List<Supplier<Spliterator<List<T>>>> list = new LinkedList<>();
-
-            IntStream.rangeClosed(Math.min(size0, sizeN),
-                                  Math.max(size0, sizeN))
-                .filter(t -> ! (collection.size() < t))
-                .forEach(t -> list.add(() -> new ForSize<T>(collection, t)));
-
-            if (size0 > sizeN) {
-                Collections.reverse(list);
+        public Spliterator<List<T>> get() {
+            if (size0() == -1 && sizeN() == -1) {
+                size(collection.size());
+            } else if (size0() == -1) {
+                size0(sizeN());
+            } else if (sizeN() == -1) {
+                sizeN(size0());
             }
 
-            return list.iterator();
+            return new Start();
         }
 
-        @Override
-        public String toString() {
-            return collection + "/" + Arrays.asList(size0, sizeN);
+        private class Start extends DispatchSpliterator<List<T>> {
+            public Start() {
+                super(choose(collection().size(), size0(), sizeN()),
+                      SpliteratorSupplier.this.characteristics());
+            }
+
+            @Override
+            protected Iterator<Supplier<Spliterator<List<T>>>> spliterators() {
+                List<Supplier<Spliterator<List<T>>>> list = new LinkedList<>();
+
+                IntStream.rangeClosed(Math.min(size0(), sizeN()),
+                                      Math.max(size0(), sizeN()))
+                    .filter(t -> ! (collection.size() < t))
+                    .forEach(t -> list.add(() -> new ForSize(t)));
+
+                if (size0() > sizeN()) {
+                    Collections.reverse(list);
+                }
+
+                return list.iterator();
+            }
+
+            @Override
+            public long estimateSize() {
+                return choose(collection().size(), size0(), sizeN());
+            }
+
+            @Override
+            public String toString() {
+                return collection() + "/" + Arrays.asList(size0(), sizeN());
+            }
         }
 
-        private class ForSize<T> extends DispatchSpliterator<List<T>> {
-            protected final List<T> prefix;
-            protected final List<T> remaining;
+        private class ForSize extends DispatchSpliterator<List<T>> {
             private final int size;
 
-            public ForSize(Collection<T> collection, int size) {
-                this(Collections.emptyList(),
-                     new LinkedList<>(collection), size);
-            }
+            public ForSize(int size) {
+                super(choose(collection().size(), size),
+                      SpliteratorSupplier.this.characteristics());
 
-            private ForSize(List<T> prefix, List<T> remaining, int size) {
-                super(Of.estimateSize(remaining.size(), size),
-                      IMMUTABLE|NONNULL|SIZED|SUBSIZED);
-
-                this.prefix = requireNonNull(prefix);
-                this.remaining = requireNonNull(remaining);
                 this.size = size;
             }
 
@@ -130,9 +163,50 @@ public interface Combinations<T> extends Stream<List<T>> {
             protected Iterator<Supplier<Spliterator<List<T>>>> spliterators() {
                 List<Supplier<Spliterator<List<T>>>> list = new LinkedList<>();
 
+                list.add(() -> new ForPrefix(size,
+                                             Collections.emptyList(),
+                                             new LinkedList<>(collection())));
+
+                return list.iterator();
+            }
+
+            @Override
+            public long estimateSize() {
+                return choose(collection().size(), size);
+            }
+
+            @Override
+            public String toString() {
+                return collection() + "/" + Arrays.asList(size);
+            }
+        }
+
+        private class ForPrefix extends DispatchSpliterator<List<T>> {
+            private final int size;
+            protected final List<T> prefix;
+            protected final List<T> remaining;
+
+            public ForPrefix(int size, List<T> prefix, List<T> remaining) {
+                super(choose(remaining.size(), size),
+                      SpliteratorSupplier.this.characteristics());
+
+                this.size = size;
+                this.prefix = requireNonNull(prefix);
+                this.remaining = requireNonNull(remaining);
+            }
+
+            @Override
+            protected Iterator<Supplier<Spliterator<List<T>>>> spliterators() {
+                List<Supplier<Spliterator<List<T>>>> list = new LinkedList<>();
+
                 if (prefix.size() < size) {
-                    IntStream.range(0, remaining.size())
-                        .forEach(i -> list.add(() -> descend(i)));
+                    for (int i = 0, n = remaining.size(); i < n; i += 1) {
+                        List<T> prefix = new LinkedList<>(this.prefix);
+                        List<T> remaining = new LinkedList<>(this.remaining);
+
+                        prefix.add(remaining.remove(i));
+                        list.add(() -> new ForPrefix(size, prefix, remaining));
+                    }
                 } else if (prefix.size() == size) {
                     list.add(() -> Collections.singleton(prefix).spliterator());
                 } else {
@@ -142,65 +216,15 @@ public interface Combinations<T> extends Stream<List<T>> {
                 return list.iterator();
             }
 
-            private Spliterator<List<T>> descend(int index) {
-                List<T> prefix = new LinkedList<>(this.prefix);
-                List<T> remaining = new LinkedList<>(this.remaining);
-
-                prefix.add(remaining.remove(index));
-
-                return new ForSize<T>(prefix, remaining, size);
-            }
-
             @Override
             public long estimateSize() {
-                return Of.estimateSize(remaining.size(), size);
+                return choose(remaining.size(), size);
             }
 
             @Override
             public String toString() {
-                String string = prefix.toString();
-
-                if (! remaining.isEmpty()) {
-                    string += ":" + remaining.toString();
-                }
-
-                string += "/" + size;
-
-                return string;
+                return prefix + ":" + remaining + "/" + Arrays.asList(size);
             }
-        }
-
-        private static long estimateSize(long set, long group0, long groupN) {
-            long size =
-                LongStream.rangeClosed(Math.min(group0, groupN),
-                                       Math.max(group0, groupN))
-                .filter(t -> ! (set < t))
-                .map(t -> estimateSize(set, t))
-                .sum();
-
-            return size;
-        }
-
-        private static long estimateSize(long set, long group) {
-            if (set < 0) {
-                throw new IllegalStateException();
-            }
-
-            long product = 1;
-
-            if (group > 0) {
-                switch ((int) set) {
-                case 1:
-                case 0:
-                    break;
-
-                default:
-                    product = set * estimateSize(set - 1, group - 1);
-                    break;
-                }
-            }
-
-            return product;
         }
     }
 }

@@ -11,6 +11,7 @@ import java.util.Spliterators.AbstractSpliterator;
 import java.util.Spliterators;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+import java.util.stream.LongStream;
 
 /**
  * {@link Spliterator} abstract base class that dispatches to
@@ -66,5 +67,60 @@ public abstract class DispatchSpliterator<T> extends AbstractSpliterator<T> {
         }
 
         return accepted;
+    }
+
+    /**
+     * Method to count the number of combinations of
+     * {@code [subset0,subsetN]} size  that may be chosen from a set of
+     * {@code set} size.
+     *
+     * @param   set             The size of the set.
+     * @param   subset0         The beginning of interval (inclusive) of
+     *                          size of the subsets to be chosen.
+     * @param   subsetN         The end of interval (inclusive) of size of
+     *                          the subsets to be chosen.
+     *
+     * @return  The total number of combinations.
+     */
+    protected static long choose(long set, long subset0, long subsetN) {
+        long size =
+            LongStream.rangeClosed(Math.min(subset0, subsetN),
+                                   Math.max(subset0, subsetN))
+            .filter(t -> ! (set < t))
+            .map(t -> choose(set, t))
+            .sum();
+
+        return size;
+    }
+
+    /**
+     * Method to count the number of combinations of {@code subset} size
+     * that may be chosen from a set of {@code set} size.
+     *
+     * @param   set             The size of the set.
+     * @param   subset          The size of the subsets to be chosen.
+     *
+     * @return  The total number of combinations.
+     */
+    protected static long choose(long set, long subset) {
+        if (set < 0) {
+            throw new IllegalStateException();
+        }
+
+        long product = 1;
+
+        if (subset > 0) {
+            switch ((int) set) {
+            case 1:
+            case 0:
+                break;
+
+            default:
+                product = set * choose(set - 1, subset - 1);
+                break;
+            }
+        }
+
+        return product;
     }
 }

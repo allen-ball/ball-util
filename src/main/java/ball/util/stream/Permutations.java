@@ -30,6 +30,6 @@ public interface Permutations<T> extends Combinations<T> {
      * @return  The {@link Stream} of permutations.
      */
     public static <T> Stream<List<T>> of(Collection<T> collection) {
-        return Combinations.of(collection, collection.size());
+        return Combinations.of(collection.size(), collection);
     }
 }
