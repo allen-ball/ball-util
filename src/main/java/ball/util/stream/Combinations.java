@@ -9,6 +9,7 @@ import ball.util.DispatchSpliterator;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -60,9 +61,7 @@ public interface Combinations<T> extends Stream<List<T>> {
             .collection(collection)
             .size0(size0).sizeN(sizeN);
 
-        return StreamSupport.<List<T>>stream(supplier,
-                                             supplier.characteristics(),
-                                             false);
+        return supplier.stream();
     }
 
     /**
@@ -82,8 +81,7 @@ public interface Combinations<T> extends Stream<List<T>> {
     /**
      * {@link Combinations} {@link Spliterator} {@link Supplier}
      */
-    @NoArgsConstructor(access = PRIVATE)
-    @ToString
+    @NoArgsConstructor(access = PRIVATE) @ToString
     public static class SpliteratorSupplier<T>
                         implements Supplier<Spliterator<List<T>>> {
         @Getter @Setter @Accessors(chain = true, fluent = true)
@@ -95,6 +93,8 @@ public interface Combinations<T> extends Stream<List<T>> {
         @Getter @Setter @Accessors(chain = true, fluent = true)
         private Collection<? extends T> collection = null;
         @Getter @Setter @Accessors(chain = true, fluent = true)
+        private Comparator<? super T> comparator = null;
+        @Getter @Setter @Accessors(chain = true, fluent = true)
         private int size0 = -1;
         @Getter @Setter @Accessors(chain = true, fluent = true)
         private int sizeN = -1;
@@ -103,8 +103,16 @@ public interface Combinations<T> extends Stream<List<T>> {
             return size0(size).sizeN(size);
         }
 
+        public Stream<List<T>> stream() {
+            return StreamSupport.<List<T>>stream(get(), false);
+        }
+
         @Override
         public Spliterator<List<T>> get() {
+            if (comparator() != null) {
+                characteristics(characteristics() | Spliterator.ORDERED);
+            }
+
             if (size0() == -1 && sizeN() == -1) {
                 size(collection.size());
             } else if (size0() == -1) {
@@ -161,13 +169,17 @@ public interface Combinations<T> extends Stream<List<T>> {
 
             @Override
             protected Iterator<Supplier<Spliterator<List<T>>>> spliterators() {
-                List<Supplier<Spliterator<List<T>>>> list = new LinkedList<>();
+                List<T> prefix = Collections.emptyList();
+                List<T> remaining = new LinkedList<>(collection());
 
-                list.add(() -> new ForPrefix(size,
-                                             Collections.emptyList(),
-                                             new LinkedList<>(collection())));
+                if (comparator() != null) {
+                    Collections.sort(remaining, comparator());
+                }
 
-                return list.iterator();
+                Supplier<Spliterator<List<T>>> supplier =
+                    () -> new ForPrefix(size, prefix, remaining);
+
+                return Collections.singleton(supplier).iterator();
             }
 
             @Override
