@@ -5,13 +5,22 @@
  */
 package ball.xml;
 
+import java.io.IOException;
 import java.util.stream.Stream;
+import javax.xml.parsers.DocumentBuilder;
+import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
+import org.xml.sax.EntityResolver;
+import org.xml.sax.ErrorHandler;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * Fluent {@link Document} interface.  Note: This interface is an
- * implementation detail of {@link FluentDocumentBuilder} and should not be
+ * implementation detail of {@link FluentDocument.Builder} and should not be
  * extended directly.
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
@@ -34,5 +43,58 @@ public interface FluentDocument extends FluentNode, Document {
     @Override
     default FluentDocument add(Node... nodes) {
         return (FluentDocument) FluentNode.super.add(nodes);
+    }
+
+    /**
+     * {@link FluentDocument} {@link DocumentBuilder}
+     */
+    public static class Builder extends DocumentBuilder {
+        private final DocumentBuilder builder;
+
+        /**
+         * Sole constructor.
+         *
+         * @param   builder         The "wrapped" {@link DocumentBuilder}.
+         */
+        protected Builder(DocumentBuilder builder) {
+            super();
+
+            this.builder = requireNonNull(builder);
+        }
+
+        @Override
+        public FluentDocument newDocument() {
+            Document document = builder.newDocument();
+
+            return (FluentDocument) new FluentNodeInvocationHandler().proxy(document);
+        }
+
+        @Override
+        public Document parse(InputSource in) throws SAXException, IOException {
+            Document document = builder.parse(in);
+
+            return (FluentDocument) new FluentNodeInvocationHandler().proxy(document);
+        }
+
+        @Override
+        public boolean isNamespaceAware() { return builder.isNamespaceAware(); }
+
+        @Override
+        public boolean isValidating() { return builder.isValidating(); }
+
+        @Override
+        public void setEntityResolver(EntityResolver resolver) {
+            builder.setEntityResolver(resolver);
+        }
+
+        @Override
+        public void setErrorHandler(ErrorHandler handler) {
+            builder.setErrorHandler(handler);
+        }
+
+        @Override
+        public DOMImplementation getDOMImplementation() {
+            return builder.getDOMImplementation();
+        }
     }
 }

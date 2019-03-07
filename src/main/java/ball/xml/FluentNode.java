@@ -27,7 +27,7 @@ import org.w3c.dom.Text;
 
 /**
  * Fluent {@link Node} interface Note: This interface is an implementation
- * detail of {@link FluentDocumentBuilder} and should not be implemented or
+ * detail of {@link FluentDocument.Builder} and should not be implemented or
  * extended directly.
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}

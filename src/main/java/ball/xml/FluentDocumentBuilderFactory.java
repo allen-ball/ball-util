@@ -12,7 +12,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import static java.util.Objects.requireNonNull;
 
 /**
- * {@link FluentDocumentBuilder} {@link DocumentBuilderFactory}
+ * {@link FluentDocument.Builder} {@link DocumentBuilderFactory}
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
@@ -74,8 +74,8 @@ public class FluentDocumentBuilderFactory extends DocumentBuilderFactory {
     }
 
     @Override
-    public FluentDocumentBuilder newDocumentBuilder() throws ParserConfigurationException {
-        return new FluentDocumentBuilder(factory.newDocumentBuilder());
+    public FluentDocument.Builder newDocumentBuilder() throws ParserConfigurationException {
+        return new FluentDocument.Builder(factory.newDocumentBuilder());
     }
 
     @Override
