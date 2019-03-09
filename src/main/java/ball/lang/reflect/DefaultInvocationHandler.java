@@ -10,9 +10,19 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import static org.apache.commons.lang3.ClassUtils.getAllInterfaces;
 import static org.apache.commons.lang3.reflect.MethodUtils.invokeMethod;
 
 /**
@@ -24,20 +34,47 @@ import static org.apache.commons.lang3.reflect.MethodUtils.invokeMethod;
  */
 @NoArgsConstructor @ToString
 public class DefaultInvocationHandler implements InvocationHandler {
+    private final HashMap<Class<?>,List<Class<?>>> cache = new HashMap<>();
 
     /**
-     * Method to call
-     * {@link Proxy#newProxyInstance(ClassLoader,Class[],InvocationHandler)}
-     * with {@link.this} {@link InvocationHandler}.
+     * See {@link Proxy#getProxyClass(ClassLoader,Class[])}.
      *
      * @param   interfaces      The interface {@link Class}es the
      *                          {@link Proxy} {@link Class} will implement.
      *
      * @return  The {@link Proxy}.
      */
-    public Object newProxyInstance(Class<?>... interfaces) {
-        return Proxy.newProxyInstance(getClass().getClassLoader(),
-                                      interfaces, this);
+    public Class<?> getProxyClass(Class<?>... interfaces) throws IllegalArgumentException {
+        return Proxy.getProxyClass(getClass().getClassLoader(), interfaces);
+    }
+
+    /**
+     * See
+     * {@link Proxy#newProxyInstance(ClassLoader,Class[],InvocationHandler)}.
+     * Default implementation invokes {@link #getProxyClass(Class...)}.
+     *
+     * @param   interfaces      The interface {@link Class}es the
+     *                          {@link Proxy} {@link Class} will implement.
+     *
+     * @return  The {@link Proxy}.
+     */
+    public Object newProxyInstance(Class<?>... interfaces) throws IllegalArgumentException {
+        Object proxy = null;
+
+        try {
+            proxy =
+                getProxyClass(interfaces)
+                .getConstructor(InvocationHandler.class)
+                .newInstance(this);
+        } catch (IllegalArgumentException exception) {
+            throw exception;
+        } catch (RuntimeException exception) {
+            throw exception;
+        } catch (Exception exception) {
+            throw new IllegalStateException(exception);
+        }
+
+        return proxy;
     }
 
     /**
@@ -83,5 +120,35 @@ public class DefaultInvocationHandler implements InvocationHandler {
         }
 
         return result;
+    }
+
+    /**
+     * Method available to subclass implementations to get the implemented
+     * interfaces of the argument {@link Class types}.  The default
+     * implementation caches the results.
+     *
+     * @param   type            The {@link Class} to analyze.
+     * @param   types           Additional {@link Class}es to analyze.
+     *
+     * @return  The {@link List} of interface {@link Class}es.
+     */
+    protected List<Class<?>> getImplementedInterfacesOf(Class<?> type,
+                                                        Class<?>... types) {
+        Set<Class<?>> set =
+            Stream.concat(Stream.of(type), Arrays.stream(types))
+            .filter(Objects::nonNull)
+            .flatMap(t -> cache.computeIfAbsent(t, k -> compute(k)).stream())
+            .collect(Collectors.toCollection(LinkedHashSet::new));
+
+        return new ArrayList<>(set);
+    }
+
+    private List<Class<?>> compute(Class<?> type) {
+        Set<Class<?>> set =
+            Stream.concat(Stream.of(type), getAllInterfaces(type).stream())
+            .filter(Class::isInterface)
+            .collect(Collectors.toCollection(LinkedHashSet::new));
+
+        return new ArrayList<>(set);
     }
 }
