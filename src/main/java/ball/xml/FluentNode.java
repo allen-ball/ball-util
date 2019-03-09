@@ -5,12 +5,21 @@
  */
 package ball.xml;
 
+import ball.lang.reflect.EnhancedProxyInvocationHandler;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.w3c.dom.Attr;
 import org.w3c.dom.CDATASection;
 import org.w3c.dom.Comment;
@@ -24,6 +33,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.Notation;
 import org.w3c.dom.ProcessingInstruction;
 import org.w3c.dom.Text;
+
+import static lombok.AccessLevel.PROTECTED;
 
 /**
  * Fluent {@link Node} interface Note: This interface is an implementation
@@ -385,5 +396,72 @@ public interface FluentNode extends Node {
      */
     default FluentNode comment(String data) {
         return (FluentNode) owner().createComment(data);
+    }
+
+    @NoArgsConstructor(access = PROTECTED)
+    @ToString
+    public static class InvocationHandler
+                        extends EnhancedProxyInvocationHandler {
+        private final HashMap<List<Class<?>>,Class<?>> map =
+            new HashMap<>();
+
+        @Override
+        protected Class<?> getProxyClassFor(Object object) {
+            Class<?> type = null;
+
+            if (object instanceof Node) {
+                Node node = (Node) object;
+                List<Class<?>> key =
+                    Arrays.asList(NODE_TYPE_MAP
+                                  .getOrDefault(node.getNodeType(),
+                                                Node.class),
+                                  node.getClass());
+
+                type = map.computeIfAbsent(key, k -> compute(k));
+            }
+
+            return type;
+        }
+
+        private Class<?> compute(List<Class<?>> key) {
+            LinkedHashSet<Class<?>> implemented =
+                key.stream()
+                .flatMap(t -> getImplementedInterfacesOf(t).stream())
+                .filter(t -> Node.class.isAssignableFrom(t))
+                .filter(t -> Node.class.getPackage().equals(t.getPackage()))
+                .collect(Collectors.toCollection(LinkedHashSet::new));
+            LinkedHashSet<Class<?>> interfaces =
+                implemented.stream()
+                .map(t -> fluent(t))
+                .filter(Objects::nonNull)
+                .collect(Collectors.toCollection(LinkedHashSet::new));
+
+            interfaces.addAll(implemented);
+
+            new ArrayList<>(interfaces)
+                .stream()
+                .forEach(t -> interfaces.removeAll(Arrays.asList(t.getInterfaces())));
+
+            return getProxyClass(interfaces.toArray(new Class<?>[] { }));
+        }
+
+        private Class<?> fluent(Class<?> type) {
+            Class<?> fluent = null;
+
+            if (Node.class.isAssignableFrom(type)
+                && Node.class.getPackage().equals(type.getPackage())) {
+                try {
+                    String name =
+                        String.format("%s.Fluent%s",
+                                      FluentNode.class.getPackage().getName(),
+                                      type.getSimpleName());
+
+                    fluent = Class.forName(name).asSubclass(FluentNode.class);
+                } catch (Exception exception) {
+                }
+            }
+
+            return fluent;
+        }
     }
 }

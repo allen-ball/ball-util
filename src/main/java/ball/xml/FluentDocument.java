@@ -66,18 +66,21 @@ public interface FluentDocument extends FluentNode, Document {
         public FluentDocument newDocument() {
             Document document = builder.newDocument();
 
-            return (FluentDocument) new FluentNodeInvocationHandler().proxy(document);
+            return (FluentDocument) new InvocationHandler().enhance(document);
         }
 
         @Override
-        public Document parse(InputSource in) throws SAXException, IOException {
+        public Document parse(InputSource in) throws SAXException,
+                                                     IOException {
             Document document = builder.parse(in);
 
-            return (FluentDocument) new FluentNodeInvocationHandler().proxy(document);
+            return (FluentDocument) new InvocationHandler().enhance(document);
         }
 
         @Override
-        public boolean isNamespaceAware() { return builder.isNamespaceAware(); }
+        public boolean isNamespaceAware() {
+            return builder.isNamespaceAware();
+        }
 
         @Override
         public boolean isValidating() { return builder.isValidating(); }

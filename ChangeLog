@@ -1,14 +1,11 @@
 2019-03-09  Allen D. Ball  <ball@sol.local>
 
+	* src/main/java/ball/lang/reflect/EnhancedProxyInvocationHandler.java:
+	Initial writing.
+
 	* src/main/java/ball/lang/reflect/DefaultInvocationHandler.java:
 	Added newProxyInstance(Class<?>...) and
 	getImplementedInterfacesOf(Class<?>,Class<?>...) methods.
-
-2019-03-07  Allen D. Ball  <ball@sol.local>
-
-	* src/main/java/ball/xml/FluentNodeInvocationHandler.java:
-	Initial writing: Re-factored in preparation to create abstract
-	base class.
 
 2019-03-02  Allen D. Ball  <ball@sol.local>
 
