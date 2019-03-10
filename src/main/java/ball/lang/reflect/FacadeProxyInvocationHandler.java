@@ -17,23 +17,25 @@ import lombok.ToString;
 import static lombok.AccessLevel.PROTECTED;
 
 /**
- * {@link InvocationHandler} abstract base class to "enhance" concrete
- * implementation {@link Class}es.  See {@link #getProxyClassFor(Object)}.
+ * {@link InvocationHandler} abstract base class to "extend" concrete
+ * implementation {@link Class}es by adding "facade" interfaces.  See
+ * {@link #getProxyClassFor(Object)}.
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 @NoArgsConstructor(access = PROTECTED)
 @ToString
-public abstract class EnhancedProxyInvocationHandler
+public abstract class FacadeProxyInvocationHandler
                       extends DefaultInvocationHandler {
     private final ProxyMap map = new ProxyMap();
 
     /**
-     * Method to return an enhanced {@link Proxy} for {@code in} if
-     * {@link #getProxyClassFor(Object)} returns non-{@code null}.
+     * Method to return an extended {@link Proxy} implementing "facade"
+     * interfaces for {@code in} if {@link #getProxyClassFor(Object)}
+     * returns non-{@code null}.
      *
-     * @param   in              The {@link Object} to enhance.
+     * @param   in              The {@link Object} to extend.
      *
      * @return  A {@link Proxy} if {@link #getProxyClassFor(Object)} returns
      *          non-{@code null}; {@code in} otherwise.
@@ -41,7 +43,7 @@ public abstract class EnhancedProxyInvocationHandler
     public Object enhance(Object in) {
         Object out = null;
 
-        if (! isEnhanced(in)) {
+        if (! hasFacade(in)) {
             Class<?> type = getProxyClassFor(in);
 
             if (type != null) {
@@ -71,29 +73,29 @@ public abstract class EnhancedProxyInvocationHandler
 
     /**
      * Method provided by subclasses to provide the {@link Proxy}
-     * {@link Class} if the input {@link Object} should be enhanced.
+     * {@link Class} if the input {@link Object} should be extended.
      *
      * @param   object          The {@link Object} that may or may not be
-     *                          enhanced.
+     *                          extended.
      *
      * @return  A {@link Proxy} {@link Class} if the {@link Object} should
-     *          be enhanced; {@code null} otherwise.
+     *          be extended; {@code null} otherwise.
      */
     protected abstract Class<?> getProxyClassFor(Object object);
 
-    private boolean isEnhanced(Object object) {
-        return unenhanced(object) != null;
+    private boolean hasFacade(Object object) {
+        return reverseOf(object) != null;
     }
 
-    private Object unenhanced(Object in) {
+    private Object reverseOf(Object in) {
         Object out = null;
 
         if (in instanceof Proxy && Proxy.isProxyClass(in.getClass())) {
             InvocationHandler handler = Proxy.getInvocationHandler(in);
 
-            if (handler instanceof EnhancedProxyInvocationHandler) {
+            if (handler instanceof FacadeProxyInvocationHandler) {
                 out =
-                    ((EnhancedProxyInvocationHandler) handler)
+                    ((FacadeProxyInvocationHandler) handler)
                     .map.reverse().get(in);
             }
         }
@@ -101,11 +103,11 @@ public abstract class EnhancedProxyInvocationHandler
         return out;
     }
 
-    private Object underlying(Class<?> type, Object in) {
+    private Object reverseFor(Class<?> type, Object in) {
         Object out = null;
 
         if (out == null) {
-            Object object = unenhanced(in);
+            Object object = reverseOf(in);
 
             if (object != null && type.isAssignableFrom(object.getClass())) {
                 out = object;
@@ -121,7 +123,7 @@ public abstract class EnhancedProxyInvocationHandler
 
                     for (int i = 0; i < length; i += 1) {
                         ((Object[]) out)[i] =
-                            underlying(type.getComponentType(),
+                            reverseFor(type.getComponentType(),
                                        ((Object[]) in)[i]);
                     }
                 }
@@ -131,14 +133,14 @@ public abstract class EnhancedProxyInvocationHandler
         return (out != null) ? out : in;
     }
 
-    private Object[] underlying(Class<?>[] types, Object[] in) {
+    private Object[] reverseFor(Class<?>[] types, Object[] in) {
         Object[] out = null;
 
         if (in != null) {
             out = new Object[in.length];
 
             for (int i = 0; i < out.length; i += 1) {
-                out[i] = underlying(types[i], in[i]);
+                out[i] = reverseFor(types[i], in[i]);
             }
         }
 
@@ -155,7 +157,7 @@ public abstract class EnhancedProxyInvocationHandler
         if (declarer.isAssignableFrom(Object.class)) {
             result = method.invoke(that, argv);
         } else {
-            argv = underlying(method.getParameterTypes(), argv);
+            argv = reverseFor(method.getParameterTypes(), argv);
 
             if (declarer.isAssignableFrom(that.getClass())) {
                 result = method.invoke(that, argv);
@@ -169,7 +171,7 @@ public abstract class EnhancedProxyInvocationHandler
 
     @NoArgsConstructor
     private class ProxyMap extends IdentityHashMap<Object,Object> {
-        private static final long serialVersionUID = -5556574612792727402L;
+        private static final long serialVersionUID = 6708505296087349421L;
 
         private final IdentityHashMap<Object,Object> reverse =
             new IdentityHashMap<>();

@@ -5,7 +5,7 @@
  */
 package ball.xml;
 
-import ball.lang.reflect.EnhancedProxyInvocationHandler;
+import ball.lang.reflect.FacadeProxyInvocationHandler;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -398,18 +398,27 @@ public interface FluentNode extends Node {
         return (FluentNode) owner().createComment(data);
     }
 
+    /**
+     * {@link FluentNode} {@link java.lang.reflect.InvocationHandler}
+     */
     @NoArgsConstructor(access = PROTECTED)
     @ToString
-    public static class InvocationHandler
-                        extends EnhancedProxyInvocationHandler {
+    public class InvocationHandler extends FacadeProxyInvocationHandler {
         private final HashMap<List<Class<?>>,Class<?>> map =
             new HashMap<>();
 
+        /**
+         * Implementation provides {@link java.lang.reflect.Proxy} class if
+         * {@link Object} implements {@link Node} with the corresponding
+         * {@link FluentNode} sub-interface(s).
+         *
+         * {@inheritDoc}
+         */
         @Override
         protected Class<?> getProxyClassFor(Object object) {
             Class<?> type = null;
 
-            if (object instanceof Node) {
+            if (object instanceof Node && (! (object instanceof FluentNode))) {
                 Node node = (Node) object;
                 List<Class<?>> key =
                     Arrays.asList(NODE_TYPE_MAP

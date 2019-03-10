@@ -1,6 +1,6 @@
 2019-03-09  Allen D. Ball  <ball@sol.local>
 
-	* src/main/java/ball/lang/reflect/EnhancedProxyInvocationHandler.java:
+	* src/main/java/ball/lang/reflect/FacadeProxyInvocationHandler.java:
 	Initial writing.
 
 	* src/main/java/ball/lang/reflect/DefaultInvocationHandler.java:

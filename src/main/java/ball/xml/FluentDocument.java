@@ -48,7 +48,7 @@ public interface FluentDocument extends FluentNode, Document {
     /**
      * {@link FluentDocument} {@link DocumentBuilder}
      */
-    public static class Builder extends DocumentBuilder {
+    public class Builder extends DocumentBuilder {
         private final DocumentBuilder builder;
 
         /**
@@ -99,5 +99,8 @@ public interface FluentDocument extends FluentNode, Document {
         public DOMImplementation getDOMImplementation() {
             return builder.getDOMImplementation();
         }
+
+        @Override
+        public String toString() { return super.toString(); }
     }
 }
