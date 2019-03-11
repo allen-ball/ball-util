@@ -1,3 +1,8 @@
+2019-03-11  Allen D. Ball  <ball@sol.local>
+
+	* src/main/java/ball/util/stream/Combinations.java:
+	Added support for prerequisite Predicate to apply to prefix.
+
 2019-03-09  Allen D. Ball  <ball@sol.local>
 
 	* src/main/java/ball/lang/reflect/FacadeProxyInvocationHandler.java:
