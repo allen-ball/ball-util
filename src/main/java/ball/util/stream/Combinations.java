@@ -49,7 +49,7 @@ public interface Combinations<T> extends Stream<List<T>> {
      * @param   size0           The combination size range start
      *                          (inclusive).
      * @param   sizeN           The combination size range end (inclusive).
-     * @param   prerequisite    The optional {@link Predicate} (may be
+     * @param   predicate       The optional {@link Predicate} (may be
      *                          {@code null}) specifying prerequisite
      *                          requirement(s) for the combinations.  Any
      *                          path that does not match will be pruned.
@@ -60,13 +60,13 @@ public interface Combinations<T> extends Stream<List<T>> {
      * @return  The {@link Stream} of combinations.
      */
     public static <T> Stream<List<T>> of(int size0, int sizeN,
-                                         Predicate<List<T>> prerequisite,
+                                         Predicate<List<T>> predicate,
                                          Collection<T> collection) {
         SpliteratorSupplier<T> supplier =
             new SpliteratorSupplier<T>()
             .collection(collection)
             .size0(size0).sizeN(sizeN)
-            .prerequisite(prerequisite);
+            .predicate(predicate);
 
         return supplier.stream();
     }
@@ -106,7 +106,7 @@ public interface Combinations<T> extends Stream<List<T>> {
         @Getter @Setter @Accessors(chain = true, fluent = true)
         private int sizeN = -1;
         @Getter @Setter @Accessors(chain = true, fluent = true)
-        private Predicate<List<T>> prerequisite = null;
+        private Predicate<List<T>> predicate = null;
 
         public SpliteratorSupplier<T> size(int size) {
             return size0(size).sizeN(size);
@@ -146,7 +146,7 @@ public interface Combinations<T> extends Stream<List<T>> {
                 IntStream.rangeClosed(Math.min(size0(), sizeN()),
                                       Math.max(size0(), sizeN()))
                     .filter(t -> ! (collection.size() < t))
-                    .forEach(t -> list.add(() -> new ForSize(t, prerequisite())));
+                    .forEach(t -> list.add(() -> new ForSize(t, predicate())));
 
                 if (size0() > sizeN()) {
                     Collections.reverse(list);
@@ -168,14 +168,14 @@ public interface Combinations<T> extends Stream<List<T>> {
 
         private class ForSize extends DispatchSpliterator<List<T>> {
             private final int size;
-            protected final Predicate<List<T>> prerequisite;
+            protected final Predicate<List<T>> predicate;
 
-            public ForSize(int size, Predicate<List<T>> prerequisite) {
+            public ForSize(int size, Predicate<List<T>> predicate) {
                 super(choose(collection().size(), size),
                       SpliteratorSupplier.this.characteristics());
 
                 this.size = size;
-                this.prerequisite = prerequisite;
+                this.predicate = predicate;
             }
 
             @Override
@@ -188,7 +188,7 @@ public interface Combinations<T> extends Stream<List<T>> {
                 }
 
                 Supplier<Spliterator<List<T>>> supplier =
-                    () -> new ForPrefix(size, prerequisite, prefix, remaining);
+                    () -> new ForPrefix(size, predicate, prefix, remaining);
 
                 return Collections.singleton(supplier).iterator();
             }
@@ -206,17 +206,17 @@ public interface Combinations<T> extends Stream<List<T>> {
 
         private class ForPrefix extends DispatchSpliterator<List<T>> {
             private final int size;
-            protected final Predicate<List<T>> prerequisite;
+            protected final Predicate<List<T>> predicate;
             protected final List<T> prefix;
             protected final List<T> remaining;
 
-            public ForPrefix(int size, Predicate<List<T>> prerequisite,
+            public ForPrefix(int size, Predicate<List<T>> predicate,
                              List<T> prefix, List<T> remaining) {
                 super(choose(remaining.size(), size),
                       SpliteratorSupplier.this.characteristics());
 
                 this.size = size;
-                this.prerequisite = prerequisite;
+                this.predicate = predicate;
                 this.prefix = requireNonNull(prefix);
                 this.remaining = requireNonNull(remaining);
             }
@@ -232,8 +232,8 @@ public interface Combinations<T> extends Stream<List<T>> {
 
                         prefix.add(remaining.remove(i));
 
-                        if (prerequisite == null || prerequisite.test(prefix)) {
-                            list.add(() -> new ForPrefix(size, prerequisite,
+                        if (predicate == null || predicate.test(prefix)) {
+                            list.add(() -> new ForPrefix(size, predicate,
                                                          prefix, remaining));
                         }
                     }
