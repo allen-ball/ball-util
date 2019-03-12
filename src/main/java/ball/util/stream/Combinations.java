@@ -100,7 +100,7 @@ public interface Combinations<T> extends Stream<List<T>> {
         @Getter @Setter @Accessors(chain = true, fluent = true)
         private Collection<? extends T> collection = null;
         @Getter @Setter @Accessors(chain = true, fluent = true)
-        private Comparator<? super T> comparator = null;
+        private Comparator<? super List<T>> comparator = null;
         @Getter @Setter @Accessors(chain = true, fluent = true)
         private int size0 = -1;
         @Getter @Setter @Accessors(chain = true, fluent = true)
@@ -135,7 +135,7 @@ public interface Combinations<T> extends Stream<List<T>> {
 
         private class Start extends DispatchSpliterator<List<T>> {
             public Start() {
-                super(choose(collection().size(), size0(), sizeN()),
+                super(binomial(collection().size(), size0(), sizeN()),
                       SpliteratorSupplier.this.characteristics());
             }
 
@@ -157,7 +157,16 @@ public interface Combinations<T> extends Stream<List<T>> {
 
             @Override
             public long estimateSize() {
-                return choose(collection().size(), size0(), sizeN());
+                return binomial(collection().size(), size0(), sizeN());
+            }
+
+            @Override
+            public Comparator<? super List<T>> getComparator() {
+                if ((characteristics & SORTED) == 0) {
+                    throw new IllegalStateException();
+                }
+
+                return SpliteratorSupplier.this.comparator();
             }
 
             @Override
@@ -171,7 +180,7 @@ public interface Combinations<T> extends Stream<List<T>> {
             protected final Predicate<List<T>> predicate;
 
             public ForSize(int size, Predicate<List<T>> predicate) {
-                super(choose(collection().size(), size),
+                super(binomial(collection().size(), size),
                       SpliteratorSupplier.this.characteristics());
 
                 this.size = size;
@@ -180,22 +189,26 @@ public interface Combinations<T> extends Stream<List<T>> {
 
             @Override
             protected Iterator<Supplier<Spliterator<List<T>>>> spliterators() {
-                List<T> prefix = Collections.emptyList();
-                List<T> remaining = new LinkedList<>(collection());
-
-                if (comparator() != null) {
-                    Collections.sort(remaining, comparator());
-                }
-
                 Supplier<Spliterator<List<T>>> supplier =
-                    () -> new ForPrefix(size, predicate, prefix, remaining);
+                    () -> new ForPrefix(size, predicate,
+                                        Collections.emptyList(),
+                                        new LinkedList<>(collection()));
 
                 return Collections.singleton(supplier).iterator();
             }
 
             @Override
             public long estimateSize() {
-                return choose(collection().size(), size);
+                return binomial(collection().size(), size);
+            }
+
+            @Override
+            public Comparator<? super List<T>> getComparator() {
+                if ((characteristics & SORTED) == 0) {
+                    throw new IllegalStateException();
+                }
+
+                return SpliteratorSupplier.this.comparator();
             }
 
             @Override
@@ -212,7 +225,7 @@ public interface Combinations<T> extends Stream<List<T>> {
 
             public ForPrefix(int size, Predicate<List<T>> predicate,
                              List<T> prefix, List<T> remaining) {
-                super(choose(remaining.size(), size),
+                super(binomial(remaining.size(), size),
                       SpliteratorSupplier.this.characteristics());
 
                 this.size = size;
@@ -237,6 +250,18 @@ public interface Combinations<T> extends Stream<List<T>> {
                                                          prefix, remaining));
                         }
                     }
+/*
+if ((characteristics() & SORTED) != 0) {
+    Comparator<? super List<T>> comparator = getComparator();
+
+    if (comparator != null) {
+        Collections.sort(list,
+                         Comparator.comparing(t -> t.prefix, comparator));
+    } else {
+        Collections.sort(list, Comparator.comparing(t -> t.prefix));
+    }
+}
+*/
                 } else if (prefix.size() == size) {
                     list.add(() -> Collections.singleton(prefix).spliterator());
                 } else {
@@ -248,7 +273,16 @@ public interface Combinations<T> extends Stream<List<T>> {
 
             @Override
             public long estimateSize() {
-                return choose(remaining.size(), size);
+                return binomial(remaining.size(), size);
+            }
+
+            @Override
+            public Comparator<? super List<T>> getComparator() {
+                if ((characteristics() & SORTED) == 0) {
+                    throw new IllegalStateException();
+                }
+
+                return SpliteratorSupplier.this.comparator();
             }
 
             @Override
