@@ -23,7 +23,7 @@ import java.util.TreeSet;
 public class Coordinate implements Comparable<Coordinate>, Serializable {
     private static final long serialVersionUID = 6256053516173263720L;
 
-    private static final Comparator<Coordinate> COMPARATOR =
+    private static final Comparator<? super Coordinate> COMPARATOR =
         Comparator
         .<Coordinate>comparingInt(t -> t.y)
         .thenComparingInt(t -> t.x);
