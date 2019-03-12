@@ -70,53 +70,52 @@ public abstract class DispatchSpliterator<T> extends AbstractSpliterator<T> {
     }
 
     /**
-     * Method to count the number of combinations of
-     * {@code [subset0,subsetN]} size  that may be chosen from a set of
-     * {@code set} size.
+     * Method to count the number of combinations of {@code [k0,kN]} size
+     * that may be chosen from a set of {@code n}-size (binomial
+     * coefficient).
      *
-     * @param   set             The size of the set.
-     * @param   subset0         The beginning of interval (inclusive) of
+     * @param   n               The size of the set.
+     * @param   k0              The beginning of the interval (inclusive) of
      *                          size of the subsets to be chosen.
-     * @param   subsetN         The end of interval (inclusive) of size of
-     *                          the subsets to be chosen.
+     * @param   kN              The end of the interval (inclusive) of size
+     *                          of the subsets to be chosen.
      *
      * @return  The total number of combinations.
      */
-    protected static long choose(long set, long subset0, long subsetN) {
+    protected static long binomial(long n, long k0, long kN) {
         long size =
-            LongStream.rangeClosed(Math.min(subset0, subsetN),
-                                   Math.max(subset0, subsetN))
-            .filter(t -> ! (set < t))
-            .map(t -> choose(set, t))
+            LongStream.rangeClosed(Math.min(k0, kN), Math.max(k0, kN))
+            .filter(t -> ! (n < t))
+            .map(t -> binomial(n, t))
             .sum();
 
         return size;
     }
 
     /**
-     * Method to count the number of combinations of {@code subset} size
-     * that may be chosen from a set of {@code set} size.
+     * Method to count the number of combinations of {@code k}-size that may
+     * be chosen from a set of {@code n}-size (binomial coefficient).
      *
-     * @param   set             The size of the set.
-     * @param   subset          The size of the subsets to be chosen.
+     * @param   n               The size of the set.
+     * @param   k               The size of the subset to be chosen.
      *
-     * @return  The total number of combinations.
+     * @return  The total number of {@code k}-combinations.
      */
-    protected static long choose(long set, long subset) {
-        if (set < 0) {
+    protected static long binomial(long n, long k) {
+        if (n < 0) {
             throw new IllegalStateException();
         }
 
         long product = 1;
 
-        if (subset > 0) {
-            switch ((int) set) {
+        if (k > 0) {
+            switch ((int) n) {
             case 1:
             case 0:
                 break;
 
             default:
-                product = set * choose(set - 1, subset - 1);
+                product = n * binomial(n - 1, k - 1);
                 break;
             }
         }
