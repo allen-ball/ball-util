@@ -7,6 +7,7 @@ package ball.util.stream;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 /**
@@ -30,6 +31,26 @@ public interface Permutations<T> extends Combinations<T> {
      * @return  The {@link Stream} of permutations.
      */
     public static <T> Stream<List<T>> of(Collection<T> collection) {
-        return Combinations.of(collection.size(), collection);
+        return of(null, collection);
+    }
+
+    /**
+     * Method to get the {@link Stream} of permutations.
+     *
+     * @param   predicate       The optional {@link Predicate} (may be
+     *                          {@code null}) specifying prerequisite
+     *                          requirement(s) for the combinations.  Any
+     *                          path that does not match will be pruned.
+     * @param   collection      The {@link Collection} of elements to
+     *                          permute.
+     * @param   <T>             The {@link Collection} element type.
+     *
+     * @return  The {@link Stream} of permutations.
+     */
+    public static <T> Stream<List<T>> of(Predicate<List<T>> predicate,
+                                         Collection<T> collection) {
+        int size = collection.size();
+
+        return Combinations.of(size, size, predicate, collection);
     }
 }
