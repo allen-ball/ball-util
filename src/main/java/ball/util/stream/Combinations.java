@@ -14,6 +14,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Spliterator;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.IntStream;
@@ -245,10 +246,7 @@ public interface Combinations<T> extends Stream<List<T>> {
 
                         prefix.add(remaining.remove(i));
 
-                        if (predicate == null || predicate.test(prefix)) {
-                            list.add(() -> new ForPrefix(size, predicate,
-                                                         prefix, remaining));
-                        }
+                        list.add(() -> new ForPrefix(size, predicate, prefix, remaining));
                     }
 /*
 if ((characteristics() & SORTED) != 0) {
@@ -263,12 +261,20 @@ if ((characteristics() & SORTED) != 0) {
 }
 */
                 } else if (prefix.size() == size) {
-                    list.add(() -> Collections.singleton(prefix).spliterator());
+                    list.add(() -> new ForCombination(predicate, prefix));
                 } else {
                     throw new IllegalStateException();
                 }
 
                 return list.iterator();
+            }
+
+            @Override
+            public boolean tryAdvance(Consumer<? super List<T>> consumer) {
+                return ((prefix.isEmpty()
+                         || predicate == null
+                         || predicate.test(prefix))
+                        && super.tryAdvance(consumer));
             }
 
             @Override
@@ -288,6 +294,35 @@ if ((characteristics() & SORTED) != 0) {
             @Override
             public String toString() {
                 return prefix + ":" + remaining + "/" + Arrays.asList(size);
+            }
+        }
+
+        private class ForCombination extends DispatchSpliterator<List<T>> {
+            protected final Predicate<List<T>> predicate;
+            protected final List<T> combination;
+
+            public ForCombination(Predicate<List<T>> predicate,
+                                  List<T> combination) {
+                super(1, SpliteratorSupplier.this.characteristics());
+
+                this.predicate = predicate;
+                this.combination = requireNonNull(combination);
+            }
+
+            @Override
+            protected Iterator<Supplier<Spliterator<List<T>>>> spliterators() {
+                Supplier<Spliterator<List<T>>> supplier =
+                    () -> Collections.singleton(combination).spliterator();
+
+                return Collections.singleton(supplier).iterator();
+            }
+
+            @Override
+            public boolean tryAdvance(Consumer<? super List<T>> consumer) {
+                return ((combination.isEmpty()
+                         || predicate == null
+                         || predicate.test(combination))
+                        && super.tryAdvance(consumer));
             }
         }
     }
