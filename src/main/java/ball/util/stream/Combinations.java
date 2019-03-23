@@ -9,7 +9,6 @@ import ball.util.DispatchSpliterator;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -101,8 +100,6 @@ public interface Combinations<T> extends Stream<List<T>> {
         @Getter @Setter @Accessors(chain = true, fluent = true)
         private Collection<? extends T> collection = null;
         @Getter @Setter @Accessors(chain = true, fluent = true)
-        private Comparator<? super List<T>> comparator = null;
-        @Getter @Setter @Accessors(chain = true, fluent = true)
         private int size0 = -1;
         @Getter @Setter @Accessors(chain = true, fluent = true)
         private int sizeN = -1;
@@ -119,10 +116,6 @@ public interface Combinations<T> extends Stream<List<T>> {
 
         @Override
         public Spliterator<List<T>> get() {
-            if (comparator() != null) {
-                characteristics(characteristics() | Spliterator.ORDERED);
-            }
-
             if (size0() == -1 && sizeN() == -1) {
                 size(collection.size());
             } else if (size0() == -1) {
@@ -147,7 +140,7 @@ public interface Combinations<T> extends Stream<List<T>> {
                 IntStream.rangeClosed(Math.min(size0(), sizeN()),
                                       Math.max(size0(), sizeN()))
                     .filter(t -> ! (collection.size() < t))
-                    .forEach(t -> list.add(() -> new ForSize(t, predicate())));
+                    .forEach(t -> list.add(() -> new ForSize(t)));
 
                 if (size0() > sizeN()) {
                     Collections.reverse(list);
@@ -162,15 +155,6 @@ public interface Combinations<T> extends Stream<List<T>> {
             }
 
             @Override
-            public Comparator<? super List<T>> getComparator() {
-                if ((characteristics & SORTED) == 0) {
-                    throw new IllegalStateException();
-                }
-
-                return SpliteratorSupplier.this.comparator();
-            }
-
-            @Override
             public String toString() {
                 return collection() + "/" + Arrays.asList(size0(), sizeN());
             }
@@ -178,20 +162,18 @@ public interface Combinations<T> extends Stream<List<T>> {
 
         private class ForSize extends DispatchSpliterator<List<T>> {
             private final int size;
-            protected final Predicate<List<T>> predicate;
 
-            public ForSize(int size, Predicate<List<T>> predicate) {
+            public ForSize(int size) {
                 super(binomial(collection().size(), size),
                       SpliteratorSupplier.this.characteristics());
 
                 this.size = size;
-                this.predicate = predicate;
             }
 
             @Override
             protected Iterator<Supplier<Spliterator<List<T>>>> spliterators() {
                 Supplier<Spliterator<List<T>>> supplier =
-                    () -> new ForPrefix(size, predicate,
+                    () -> new ForPrefix(size,
                                         Collections.emptyList(),
                                         new LinkedList<>(collection()));
 
@@ -204,15 +186,6 @@ public interface Combinations<T> extends Stream<List<T>> {
             }
 
             @Override
-            public Comparator<? super List<T>> getComparator() {
-                if ((characteristics & SORTED) == 0) {
-                    throw new IllegalStateException();
-                }
-
-                return SpliteratorSupplier.this.comparator();
-            }
-
-            @Override
             public String toString() {
                 return collection() + "/" + Arrays.asList(size);
             }
@@ -220,17 +193,14 @@ public interface Combinations<T> extends Stream<List<T>> {
 
         private class ForPrefix extends DispatchSpliterator<List<T>> {
             private final int size;
-            protected final Predicate<List<T>> predicate;
             protected final List<T> prefix;
             protected final List<T> remaining;
 
-            public ForPrefix(int size, Predicate<List<T>> predicate,
-                             List<T> prefix, List<T> remaining) {
+            public ForPrefix(int size, List<T> prefix, List<T> remaining) {
                 super(binomial(remaining.size(), size),
                       SpliteratorSupplier.this.characteristics());
 
                 this.size = size;
-                this.predicate = predicate;
                 this.prefix = requireNonNull(prefix);
                 this.remaining = requireNonNull(remaining);
             }
@@ -246,22 +216,10 @@ public interface Combinations<T> extends Stream<List<T>> {
 
                         prefix.add(remaining.remove(i));
 
-                        list.add(() -> new ForPrefix(size, predicate, prefix, remaining));
+                        list.add(() -> new ForPrefix(size, prefix, remaining));
                     }
-/*
-if ((characteristics() & SORTED) != 0) {
-    Comparator<? super List<T>> comparator = getComparator();
-
-    if (comparator != null) {
-        Collections.sort(list,
-                         Comparator.comparing(t -> t.prefix, comparator));
-    } else {
-        Collections.sort(list, Comparator.comparing(t -> t.prefix));
-    }
-}
-*/
                 } else if (prefix.size() == size) {
-                    list.add(() -> new ForCombination(predicate, prefix));
+                    list.add(() -> new ForCombination(prefix));
                 } else {
                     throw new IllegalStateException();
                 }
@@ -271,9 +229,11 @@ if ((characteristics() & SORTED) != 0) {
 
             @Override
             public boolean tryAdvance(Consumer<? super List<T>> consumer) {
+                Predicate<List<T>> predicate =
+                    SpliteratorSupplier.this.predicate();
+
                 return ((prefix.isEmpty()
-                         || predicate == null
-                         || predicate.test(prefix))
+                         || (predicate == null || predicate.test(prefix)))
                         && super.tryAdvance(consumer));
             }
 
@@ -283,29 +243,17 @@ if ((characteristics() & SORTED) != 0) {
             }
 
             @Override
-            public Comparator<? super List<T>> getComparator() {
-                if ((characteristics() & SORTED) == 0) {
-                    throw new IllegalStateException();
-                }
-
-                return SpliteratorSupplier.this.comparator();
-            }
-
-            @Override
             public String toString() {
                 return prefix + ":" + remaining + "/" + Arrays.asList(size);
             }
         }
 
         private class ForCombination extends DispatchSpliterator<List<T>> {
-            protected final Predicate<List<T>> predicate;
             protected final List<T> combination;
 
-            public ForCombination(Predicate<List<T>> predicate,
-                                  List<T> combination) {
+            public ForCombination(List<T> combination) {
                 super(1, SpliteratorSupplier.this.characteristics());
 
-                this.predicate = predicate;
                 this.combination = requireNonNull(combination);
             }
 
@@ -319,11 +267,16 @@ if ((characteristics() & SORTED) != 0) {
 
             @Override
             public boolean tryAdvance(Consumer<? super List<T>> consumer) {
+                Predicate<List<T>> predicate =
+                    SpliteratorSupplier.this.predicate();
+
                 return ((combination.isEmpty()
-                         || predicate == null
-                         || predicate.test(combination))
+                         || (predicate == null || predicate.test(combination)))
                         && super.tryAdvance(consumer));
             }
+
+            @Override
+            public String toString() { return String.valueOf(combination); }
         }
     }
 }
