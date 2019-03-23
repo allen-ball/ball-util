@@ -193,8 +193,8 @@ public interface Combinations<T> extends Stream<List<T>> {
 
         private class ForPrefix extends DispatchSpliterator<List<T>> {
             private final int size;
-            protected final List<T> prefix;
-            protected final List<T> remaining;
+            private final List<T> prefix;
+            private final List<T> remaining;
 
             public ForPrefix(int size, List<T> prefix, List<T> remaining) {
                 super(binomial(remaining.size(), size),
@@ -249,7 +249,7 @@ public interface Combinations<T> extends Stream<List<T>> {
         }
 
         private class ForCombination extends DispatchSpliterator<List<T>> {
-            protected final List<T> combination;
+            private final List<T> combination;
 
             public ForCombination(List<T> combination) {
                 super(1, SpliteratorSupplier.this.characteristics());
