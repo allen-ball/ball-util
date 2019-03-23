@@ -1,7 +1,5 @@
 $Id$
 
-* ball.util.stream.Combinations: Fully support ORDERED.
-
 * ball.tools.javadoc.AntTaskTaglet: Exhaustively determine Task name.
 
 * Create a JSR 380 (javax.validation) for AntTask.
