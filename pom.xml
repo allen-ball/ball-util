@@ -18,6 +18,21 @@
   </parent>
   <profiles>
     <profile>
+      <id>tools.jar</id>
+      <activation>
+        <file><exists>${java.home}/../lib/tools.jar</exists></file>
+      </activation>
+      <dependencies>
+        <dependency>
+          <groupId>jdk</groupId>
+          <artifactId>tools</artifactId>
+          <version>${java.specification.version}</version>
+          <scope>system</scope>
+          <systemPath>${java.home}/../lib/tools.jar</systemPath>
+        </dependency>
+      </dependencies>
+    </profile>
+    <profile>
       <id>linux</id>
       <activation>
         <os><name>linux</name></os>
@@ -43,12 +58,6 @@
     <jre.version>1.8</jre.version>
   </properties>
   <dependencies verbose="true">
-    <dependency>
-      <groupId>jdk</groupId>
-      <artifactId>tools</artifactId>
-      <scope>system</scope>
-      <systemPath>${tools.jar}</systemPath>
-    </dependency>
     <dependency>
       <groupId>org.apache.ant</groupId>
       <artifactId>ant</artifactId>
