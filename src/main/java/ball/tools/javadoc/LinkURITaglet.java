@@ -44,16 +44,18 @@ public class LinkURITaglet extends AbstractInlineTaglet
 
         LinkedHashMap<String,String> map = new LinkedHashMap<>();
 
-        for (;;) {
-            argv = text.split(SPACES, 2);
+        if (text != null) {
+            for (;;) {
+                argv = text.split(SPACES, 2);
 
-            String[] nvp = argv[0].split("=", 2);
+                String[] nvp = argv[0].split("=", 2);
 
-            if (argv.length > 1 && nvp.length > 1) {
-                map.put(nvp[0], nvp[1]);
-                text = argv[1];
-            } else {
-                break;
+                if (argv.length > 1 && nvp.length > 1) {
+                    map.put(nvp[0], nvp[1]);
+                    text = argv[1];
+                } else {
+                    break;
+                }
             }
         }
 
