@@ -1,3 +1,10 @@
+2019-04-19  Allen D. Ball  <ball@sol.local>
+
+	* pom.xml: Released version 3.1.1.
+
+	* src/main/java/ball/tools/javadoc/LinkURITaglet.java:
+	Avoid NPE if no <a/> text is specified.
+
 2019-03-27  Allen D. Ball  <ball@sol.local>
 
 	* pom.xml: Released version 3.1.0.

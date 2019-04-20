@@ -8,15 +8,27 @@
   <name>Utilities</name>
   <groupId>ball</groupId>
   <artifactId>ball-util</artifactId>
-  <version>3.1.0</version>
+  <version>3.1.1</version>
   <packaging>jar</packaging>
   <parent>
     <groupId>ball</groupId>
     <artifactId>parent</artifactId>
-    <version>4</version>
+    <version>5</version>
     <relativePath>../ball/parent/pom.xml</relativePath>
   </parent>
   <profiles>
+    <profile>
+      <id>tools.jar</id>
+      <activation>
+        <file><exists>${java.home}/../lib/tools.jar</exists></file>
+      </activation>
+      <dependencies>
+        <dependency>
+          <groupId>jdk</groupId>
+          <artifactId>tools</artifactId>
+        </dependency>
+      </dependencies>
+    </profile>
     <profile>
       <id>linux</id>
       <activation>
@@ -43,12 +55,6 @@
     <jre.version>1.8</jre.version>
   </properties>
   <dependencies verbose="true">
-    <dependency>
-      <groupId>jdk</groupId>
-      <artifactId>tools</artifactId>
-      <scope>system</scope>
-      <systemPath>${tools.jar}</systemPath>
-    </dependency>
     <dependency>
       <groupId>org.apache.ant</groupId>
       <artifactId>ant</artifactId>
