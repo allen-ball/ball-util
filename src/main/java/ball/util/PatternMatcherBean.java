@@ -19,8 +19,8 @@ import org.apache.commons.lang3.reflect.MethodUtils;
 import static ball.util.Converter.convertTo;
 
 /**
- * Interface providing default methods for beans annotated with
- * {@link PatternRegex} and with methods annoteted with
+ * Interface providing default methods for beans classes annotated with
+ * {@link PatternRegex} and whose methods are annotated with
  * {@link MatcherGroup}.
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
