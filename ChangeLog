@@ -1,5 +1,9 @@
 2019-04-24  Allen D. Ball  <ball@sol.local>
 
+	* src/main/java/ball/util/ISO8601DateFormat.java
+	src/main/java/ball/util/TimeUnitEnum.java:
+	Removed; Java 8 java.time provides equivalent functionality.
+
 	* pom.xml: Started development of 4.0-SNAPSHOT.
 
 2019-04-19  Allen D. Ball  <ball@sol.local>
@@ -1250,11 +1254,6 @@
 2009-09-04  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* Improved javadoc comments.
-
-2009-08-23  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/util/ISO8601DateFormat.java:
-	Initial writing.
 
 2009-06-20  Allen D. Ball  <ball@10-0-1-4.lan>
 
