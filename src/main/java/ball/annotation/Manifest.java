@@ -36,6 +36,9 @@ public abstract class Manifest {
         String value();
     }
 
+    /**
+     * Main-Class
+     */
     @Documented
     @Retention(RUNTIME)
     @Target({ TYPE })
@@ -53,6 +56,9 @@ public abstract class Manifest {
         boolean sealed() default true;
     }
 
+    /**
+     * Java-Bean
+     */
     @Documented
     @Retention(RUNTIME)
     @Target({ TYPE })
@@ -60,6 +66,9 @@ public abstract class Manifest {
     public @interface JavaBean {
     }
 
+    /**
+     * Depends-On
+     */
     @Documented
     @Retention(RUNTIME)
     @Target({ TYPE })
@@ -68,6 +77,9 @@ public abstract class Manifest {
         String[] value();
     }
 
+    /**
+     * Design-Time-Only
+     */
     @Documented
     @Retention(RUNTIME)
     @Target({ TYPE })
