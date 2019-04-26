@@ -7,7 +7,7 @@ $Id$
 * CoordinateMap: Calculate getColumnClass(int) (type member) by determining
   parameter V through reflection.
 
-* Add checks to iprotium.tools or iprotium.annotation.processing:
+* Add checks to ball.tools or ball.annotation.processing:
 
         ** CollectionToArrayProcessor: Finish implementation.
         ** ConstantInitializerProcessor: Finish implementation.
