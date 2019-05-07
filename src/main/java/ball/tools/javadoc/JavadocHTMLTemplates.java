@@ -12,7 +12,12 @@ import com.sun.javadoc.Tag;
 import com.sun.tools.doclets.Taglet;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.Member;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.Parameter;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -26,6 +31,7 @@ import org.w3c.dom.Node;
 
 import static org.apache.commons.lang3.StringUtils.SPACE;
 import static org.apache.commons.lang3.StringUtils.isAllBlank;
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 /**
  * Javadoc {@link HTMLTemplates}
@@ -38,7 +44,7 @@ public interface JavadocHTMLTemplates extends HTMLTemplates {
     FluentNode a(Tag tag, String name, Node node);
 
     /**
-     * {@code <}{@code p><b><u>}{@link Tag tag}{@code </p}{@code ></b></u>}
+     * {@code <}{@code p><b><u>}{@link Tag tag}{@code </u></b></p}{@code >}
      * {@code <!}{@code -- }{@link Throwable stack trace}{@code --}{@code >}
      *
      * @param   tag             The offending {@link Tag}.
@@ -49,7 +55,11 @@ public interface JavadocHTMLTemplates extends HTMLTemplates {
     default FluentNode warning(Tag tag, Throwable throwable) {
         System.err.println(tag.position() + ": " + throwable);
 
-        String string = "@" + ((Taglet) this).getName() + SPACE + tag.text();
+        String string = "@" + ((Taglet) this).getName();
+
+        if (isNotEmpty(tag.text())) {
+            string += SPACE + tag.text();
+        }
 
         if (((Taglet) this).isInlineTag()) {
             string = "{" + string + "}";
@@ -113,19 +123,146 @@ public interface JavadocHTMLTemplates extends HTMLTemplates {
     }
 
     /**
-     * {@code <code>}{@link Field#getModifiers() field.getModifiers()}{@code </code>}
-     * {@code <a href="}{@link ClassDoc field.getType()}{@code ">}{@link ClassDoc#name() ClassDoc.name()}{@code </a>}
-     * {@code <code>}{@link Field#getName() field.getName()}{@code </code>}
+     * Dispatches call to {@link #declaration(Tag,Field)} or
+     * {@link #declaration(Tag,Method)} as appropriate.
+     *
+     * @param   tag             The {@link Tag}.
+     * @param   member          The target {@link Member}.
+     *
+     * @return  {@link org.w3c.dom.DocumentFragment}
+     */
+    default FluentNode declaration(Tag tag, Member member) {
+        FluentNode node = null;
+
+        if (member instanceof Field) {
+            node = declaration(tag, (Field) member);
+        } else if (member instanceof Method) {
+            node = declaration(tag, (Method) member);
+        } else {
+            throw new IllegalArgumentException(String.valueOf(member));
+        }
+
+        return node;
+    }
+
+    /**
+     * Method to generate a {@link Field} declaration with javadoc
+     * hyperlinks.
      *
      * @param   tag             The {@link Tag}.
      * @param   field           The target {@link Field}.
      *
      * @return  {@link org.w3c.dom.DocumentFragment}
      */
-    default FluentNode code(Tag tag, Field field) {
-        return fragment(code(Modifier.toString(field.getModifiers()) + SPACE),
-                        a(tag, field.getType()),
-                        code(SPACE + field.getName()));
+    default FluentNode declaration(Tag tag, Field field) {
+        return fragment(modifiers(field.getModifiers()),
+                        type(tag, field.getGenericType()),
+                        code(SPACE),
+                        code(field.getName()));
+    }
+
+    /**
+     * Method to generate a {@link Method} declaration with javadoc
+     * hyperlinks.
+     *
+     * @param   tag             The {@link Tag}.
+     * @param   method          The target {@link Method}.
+     *
+     * @return  {@link org.w3c.dom.DocumentFragment}
+     */
+    default FluentNode declaration(Tag tag, Method method) {
+        FluentNode node =
+            fragment(modifiers(method.getModifiers()),
+                     type(tag, method.getGenericReturnType()),
+                     code(SPACE),
+                     code(method.getName()));
+
+        Parameter[] parameters = method.getParameters();
+
+        node.add(code("("));
+
+        for (int i = 0; i < parameters.length; i += 1) {
+            if (i > 0) {
+                node.add(code(", "));
+            }
+
+            node.add(declaration(tag, parameters[i]));
+        }
+
+        node.add(code(")"));
+
+        return node;
+    }
+
+    /**
+     * Method to generate a {@link Parameter} declaration with javadoc
+     * hyperlinks.
+     *
+     * @param   tag             The {@link Tag}.
+     * @param   parameter       The target {@link Parameter}.
+     *
+     * @return  {@link org.w3c.dom.DocumentFragment}
+     */
+    default FluentNode declaration(Tag tag, Parameter parameter) {
+        return fragment(modifiers(parameter.getModifiers()),
+                        type(tag, parameter.getParameterizedType()),
+                        code(SPACE),
+                        code(parameter.getName()));
+    }
+
+    /**
+     * Method to generate modifiers for {@code declaration()} methods.
+     *
+     * @param   modifiers       See {@link Modifier}.
+     *
+     * @return  {@link org.w3c.dom.DocumentFragment}
+     */
+    default FluentNode modifiers(int modifiers) {
+        FluentNode node = fragment();
+        String string = Modifier.toString(modifiers);
+
+        if (isNotEmpty(string)) {
+            node.add(code(string + SPACE));
+        }
+
+        return node;
+    }
+
+    /**
+     * Method to generate types for {@code declaration()} methods.
+     *
+     * @param   tag             The {@link Tag}.
+     * @param   type            The target {@link Type}.
+     *
+     * @return  {@link org.w3c.dom.DocumentFragment}
+     */
+    default <T> FluentNode type(Tag tag, Type type) {
+        FluentNode node = null;
+
+        if (type instanceof ParameterizedType) {
+            node =
+                fragment(type(tag, ((ParameterizedType) type).getRawType()));
+
+            Type[] types = ((ParameterizedType) type).getActualTypeArguments();
+
+            node = node.add(code("<"));
+
+            for (int i = 0; i < types.length; i += 1) {
+                if (i > 0) {
+                    node.add(code(","));
+                }
+
+                node.add(type(tag, types[i]));
+            }
+
+            node.add(code(">"));
+        } else if (type instanceof Class<?>) {
+            node = a(tag, (Class<?>) type);
+        } else {
+            node = code(type.getTypeName());
+        }
+
+        return node;
     }
 
     /**

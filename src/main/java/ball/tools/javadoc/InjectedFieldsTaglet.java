@@ -95,6 +95,6 @@ public class InjectedFieldsTaglet extends AbstractInlineTaglet
         return tr(td(fragment(Arrays.stream(field.getAnnotations())
                               .filter(t -> ANNOTATIONS.contains(t.annotationType()))
                               .map(t -> a(tag, t)))),
-                  td(code(tag, field)));
+                  td(declaration(tag, field)));
     }
 }

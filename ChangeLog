@@ -1,3 +1,9 @@
+2019-05-07  Allen D. Ball  <ball@sol.local>
+
+	* src/main/java/ball/tools/javadoc/JavadocHTMLTemplates.java:
+	Added declaration(Tag,Member), declaration(Tag,Parameter), and
+	related templates.
+
 2019-04-25  Allen D. Ball  <ball@sol.local>
 
 	* pom.xml: Released version 4.0.0.
