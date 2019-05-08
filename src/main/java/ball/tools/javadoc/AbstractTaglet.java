@@ -9,7 +9,13 @@ import ball.xml.FluentDocument;
 import ball.xml.FluentDocumentBuilderFactory;
 import ball.xml.FluentNode;
 import com.sun.javadoc.ClassDoc;
+import com.sun.javadoc.ConstructorDoc;
 import com.sun.javadoc.Doc;
+import com.sun.javadoc.ExecutableMemberDoc;
+import com.sun.javadoc.FieldDoc;
+import com.sun.javadoc.MemberDoc;
+import com.sun.javadoc.MethodDoc;
+import com.sun.javadoc.PackageDoc;
 import com.sun.javadoc.ProgramElementDoc;
 import com.sun.javadoc.Tag;
 import com.sun.tools.doclets.internal.toolkit.Configuration;
@@ -17,10 +23,15 @@ import com.sun.tools.doclets.internal.toolkit.util.DocLink;
 import java.beans.BeanInfo;
 import java.beans.Introspector;
 import java.io.StringWriter;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Executable;
+import java.lang.reflect.Field;
 import java.lang.reflect.Member;
-import java.lang.reflect.Modifier;
+import java.lang.reflect.Method;
 import java.net.URI;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.stream.Collectors;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -30,7 +41,9 @@ import org.w3c.dom.Node;
 import static javax.xml.transform.OutputKeys.INDENT;
 import static javax.xml.transform.OutputKeys.OMIT_XML_DECLARATION;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
+import static org.apache.commons.lang3.StringUtils.countMatches;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 /**
  * Abstract {@link com.sun.tools.doclets.Taglet} base class.
@@ -244,6 +257,87 @@ public abstract class AbstractTaglet implements AnnotatedTaglet,
     }
 
     /**
+     * Convenience method to attempt to find a {@link FieldDoc}.
+     *
+     * @param   tag             The {@link Tag}.
+     * @param   field           The {@link Field}.
+     *
+     * @return  The {@link FieldDoc} if it can be found; {@code null}
+     *          otherwise.
+     */
+    protected FieldDoc getFieldDocFor(Tag tag, Field field) {
+        FieldDoc fieldDoc = null;
+        ClassDoc classDoc = getClassDocFor(tag, field.getDeclaringClass());
+
+        if (classDoc != null) {
+            fieldDoc =
+                Arrays.stream(classDoc.fields(true))
+                .filter(t -> t.name().equals(field.getName()))
+                .findFirst().orElse(null);
+        }
+
+        return fieldDoc;
+    }
+
+    /**
+     * Convenience method to attempt to find a {@link ConstructorDoc}.
+     *
+     * @param   tag             The {@link Tag}.
+     * @param   constructor     The {@link Constructor}.
+     *
+     * @return  The {@link ConstructorDoc} if it can be found; {@code null}
+     *          otherwise.
+     */
+    protected ConstructorDoc getConstructorDocFor(Tag tag,
+                                                  Constructor<?> constructor) {
+        ConstructorDoc constructorDoc = null;
+        ClassDoc classDoc =
+            getClassDocFor(tag, constructor.getDeclaringClass());
+
+        if (classDoc != null) {
+            constructorDoc =
+                Arrays.stream(classDoc.constructors(true))
+                .filter(t -> t.signature().equals(signature(constructor)))
+                .findFirst().orElse(null);
+        }
+
+        return constructorDoc;
+    }
+
+    /**
+     * Convenience method to attempt to find a {@link MethodDoc}.
+     *
+     * @param   tag             The {@link Tag}.
+     * @param   method          The {@link Method}.
+     *
+     * @return  The {@link MethodDoc} if it can be found; {@code null}
+     *          otherwise.
+     */
+    protected MethodDoc getMethodDocFor(Tag tag, Method method) {
+        MethodDoc methodDoc = null;
+        ClassDoc classDoc = getClassDocFor(tag, method.getDeclaringClass());
+
+        if (classDoc != null) {
+            methodDoc =
+                Arrays.stream(classDoc.methods(true))
+                .filter(t -> t.name().equals(method.getName()))
+                .filter(t -> t.signature().equals(signature(method)))
+                .findFirst().orElse(null);
+        }
+
+        return methodDoc;
+    }
+
+    private String signature(Executable executable) {
+        String signature =
+            Arrays.stream(executable.getParameterTypes())
+            .map(t -> t.getCanonicalName())
+            .collect(Collectors.joining(",", "(", ")"));
+
+        return signature;
+    }
+
+    /**
      * Convenience method to get the containing {@link ClassDoc}.
      *
      * @param   tag             The {@link Tag}.
@@ -350,46 +444,60 @@ public abstract class AbstractTaglet implements AnnotatedTaglet,
         return getBeanInfo(start, Object.class);
     }
 
-    private URI href(Tag tag, ClassDoc target) {
+    private URI href(Tag tag, ProgramElementDoc target) {
         return href(getContainingClassDocFor(tag.holder()), target);
     }
 
-    private URI href(ClassDoc source, ClassDoc target) {
+    private URI href(ClassDoc source, ProgramElementDoc target) {
         URI href = null;
 
         if (target != null) {
+            ClassDoc classDoc = getContainingClassDocFor(target);
+            PackageDoc packageDoc = classDoc.containingPackage();
+
             if (target.isIncluded()) {
-                String path = EMPTY;
-                String[] names = source.qualifiedName().split("[.]");
+                String path = "./";
+                int depth = countMatches(source.qualifiedName(), ".");
 
-                for (int i = 0, n = names.length - 1; i < n; i += 1) {
-                    path += "../";
-                }
+                path += String.join(EMPTY, Collections.nCopies(depth, "../"));
 
-                path += "./";
-
-                if (! isEmpty(target.containingPackage().name())) {
+                if (isNotEmpty(packageDoc.name())) {
                     path +=
-                        target.containingPackage().name().replaceAll("[.]", "/")
+                        String.join("/", packageDoc.name().split("[.]"))
                         + "/";
                 }
 
-                path += target.name() + ".html";
+                path += classDoc.name() + ".html";
 
                 href = URI.create(path).normalize();
             } else {
                 if (configuration != null) {
                     DocLink link =
                         configuration.extern
-                        .getExternalLink(target.containingPackage().name(),
-                                         null, target.name() + ".html");
+                        .getExternalLink(packageDoc.name(),
+                                         null, classDoc.name() + ".html");
                     /*
-                     * link might be null because the class cannot be loaded
+                     * Link might be null because the class cannot be
+                     * loaded.
                      */
                     if (link != null) {
                         href = URI.create(link.toString());
                     }
                 }
+            }
+        }
+
+        if (href != null) {
+            if (target instanceof MemberDoc) {
+                String fragment = "#" + target.name();
+
+                if (target instanceof ExecutableMemberDoc) {
+                    fragment +=
+                        ((ExecutableMemberDoc) target).signature()
+                        .replaceAll("[(),]", "-");
+                }
+
+                href = href.resolve(fragment);
             }
         }
 
@@ -411,32 +519,18 @@ public abstract class AbstractTaglet implements AnnotatedTaglet,
 
     private URI href(Tag tag, Member member) {
         URI href = null;
+        ProgramElementDoc target = null;
 
-        if (! Modifier.isPrivate(member.getModifiers())) {
-            href = href(tag, member.getDeclaringClass());
+        if (member instanceof Field) {
+            target = getFieldDocFor(tag, (Field) member);
+        } else if (member instanceof Constructor) {
+            target = getConstructorDocFor(tag, (Constructor) member);
+        } else if (member instanceof Method) {
+            target = getMethodDocFor(tag, (Method) member);
+        }
 
-            if (href != null) {
-                String fragment = "#" + member.getName();
-
-                if (member instanceof Executable) {
-                    fragment += "-";
-
-                    Class<?>[] types =
-                        ((Executable) member).getParameterTypes();
-
-                    for (int i = 0; i < types.length; i += 1) {
-                        if (i > 0) {
-                            fragment += "-";
-                        }
-
-                        fragment += types[i].getCanonicalName();
-                    }
-
-                    fragment += "-";
-                }
-
-                href = href.resolve(fragment);
-            }
+        if (target != null) {
+            href = href(tag, target);
         }
 
         return href;

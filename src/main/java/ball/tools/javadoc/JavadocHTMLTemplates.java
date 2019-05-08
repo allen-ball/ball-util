@@ -11,6 +11,7 @@ import com.sun.javadoc.ClassDoc;
 import com.sun.javadoc.Tag;
 import com.sun.tools.doclets.Taglet;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
@@ -95,6 +96,30 @@ public interface JavadocHTMLTemplates extends HTMLTemplates {
         return a(tag, type, (name != null) ? code(name) : null);
     }
 
+    /**
+     * {@code <a href="}{@link com.sun.javadoc.MemberDoc member}{@code ">}{@link com.sun.javadoc.MemberDoc#name() MemberDoc.name()}{@code </a>}
+     *
+     * @param   tag             The {@link Tag}.
+     * @param   member          The target {@link Member}.
+     *
+     * @return  {@link org.w3c.dom.Element}
+     */
+    default FluentNode a(Tag tag, Member member) {
+        return a(tag, member, (String) null);
+    }
+
+    /**
+     * {@code <a href="}{@link com.sun.javadoc.MemberDoc member}{@code ">}{@link #code(String) code(name)}{@code </a>}
+     *
+     * @param   tag             The {@link Tag}.
+     * @param   member          The target {@link Member}.
+     * @param   name            The link name.
+     *
+     * @return  {@link org.w3c.dom.Element}
+     */
+    default FluentNode a(Tag tag, Member member, String name) {
+        return a(tag, member, (name != null) ? code(name) : null);
+    }
 
     /**
      * {@code <a href="}{@link ClassDoc annotation}{@code ">}{@link #code(String) code(String.valueOf(annotation))}{@code </a>}
@@ -159,7 +184,7 @@ public interface JavadocHTMLTemplates extends HTMLTemplates {
         return fragment(modifiers(field.getModifiers()),
                         type(tag, field.getGenericType()),
                         code(SPACE),
-                        a(tag, field, null));
+                        a(tag, field, (String) null));
     }
 
     /**
@@ -176,7 +201,7 @@ public interface JavadocHTMLTemplates extends HTMLTemplates {
             fragment(modifiers(method.getModifiers()),
                      type(tag, method.getGenericReturnType()),
                      code(SPACE),
-                     a(tag, method, null));
+                     a(tag, method, (String) null));
 
         Parameter[] parameters = method.getParameters();
 
@@ -237,7 +262,7 @@ public interface JavadocHTMLTemplates extends HTMLTemplates {
      *
      * @return  {@link org.w3c.dom.DocumentFragment}
      */
-    default <T> FluentNode type(Tag tag, Type type) {
+    default FluentNode type(Tag tag, Type type) {
         FluentNode node = null;
 
         if (type instanceof ParameterizedType) {
@@ -368,6 +393,12 @@ public interface JavadocHTMLTemplates extends HTMLTemplates {
             node = a(tag, (Class<?>) object);
         } else if (object instanceof Enum<?>) {
             node = a(tag, (Enum<?>) object);
+        } else if (object instanceof Field) {
+            node = a(tag, (Field) object);
+        } else if (object instanceof Constructor) {
+            node = a(tag, (Constructor) object);
+        } else if (object instanceof Method) {
+            node = a(tag, (Method) object);
         } else if (object instanceof Collection<?>) {
             List<Node> nodes =
                 ((Collection<?>) object)
