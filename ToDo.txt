@@ -16,8 +16,6 @@ $Id$
         ** ByteArrayOutputStream: Prefer ByteArrayOutputStream(int)
            constructor with an argument > 32
 
-* Create SSU package.
-
 
 Local Variables:
 mode: auto-fill
