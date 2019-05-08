@@ -1,5 +1,7 @@
 2019-05-07  Allen D. Ball  <ball@sol.local>
 
+	* pom.xml: Released version 4.0.1.
+
 	* src/main/java/ball/tools/javadoc/AbstractTaglet.java:
 	Provide a(Tag,Member,Node) method.
 
