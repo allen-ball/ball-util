@@ -1,5 +1,7 @@
 2019-05-08  Allen D. Ball  <ball@sol.local>
 
+	* pom.xml: Released version 4.0.2.
+
  	* src/main/java/ball/tools/javadoc/AbstractTaglet.java,
 	src/main/java/ball/tools/javadoc/JavadocHTMLTemplates.java:
 	Support creating hyperlinks to all ProgramElementDoc subclasses.
