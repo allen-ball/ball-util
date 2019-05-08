@@ -41,6 +41,7 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
  */
 public interface JavadocHTMLTemplates extends HTMLTemplates {
     FluentNode a(Tag tag, Class<?> type, Node node);
+    FluentNode a(Tag tag, Member member, Node node);
     FluentNode a(Tag tag, String name, Node node);
 
     /**
@@ -158,7 +159,7 @@ public interface JavadocHTMLTemplates extends HTMLTemplates {
         return fragment(modifiers(field.getModifiers()),
                         type(tag, field.getGenericType()),
                         code(SPACE),
-                        code(field.getName()));
+                        a(tag, field, null));
     }
 
     /**
@@ -175,7 +176,7 @@ public interface JavadocHTMLTemplates extends HTMLTemplates {
             fragment(modifiers(method.getModifiers()),
                      type(tag, method.getGenericReturnType()),
                      code(SPACE),
-                     code(method.getName()));
+                     a(tag, method, null));
 
         Parameter[] parameters = method.getParameters();
 

@@ -17,6 +17,9 @@ import com.sun.tools.doclets.internal.toolkit.util.DocLink;
 import java.beans.BeanInfo;
 import java.beans.Introspector;
 import java.io.StringWriter;
+import java.lang.reflect.Executable;
+import java.lang.reflect.Member;
+import java.lang.reflect.Modifier;
 import java.net.URI;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
@@ -406,6 +409,39 @@ public abstract class AbstractTaglet implements AnnotatedTaglet,
         return href;
     }
 
+    private URI href(Tag tag, Member member) {
+        URI href = null;
+
+        if (! Modifier.isPrivate(member.getModifiers())) {
+            href = href(tag, member.getDeclaringClass());
+
+            if (href != null) {
+                String fragment = "#" + member.getName();
+
+                if (member instanceof Executable) {
+                    fragment += "-";
+
+                    Class<?>[] types =
+                        ((Executable) member).getParameterTypes();
+
+                    for (int i = 0; i < types.length; i += 1) {
+                        if (i > 0) {
+                            fragment += "-";
+                        }
+
+                        fragment += types[i].getCanonicalName();
+                    }
+
+                    fragment += "-";
+                }
+
+                href = href.resolve(fragment);
+            }
+        }
+
+        return href;
+    }
+
     /**
      * {@code <a href="}{@link ClassDoc type}{@code ">}{@link Node node}{@code </a>}
      *
@@ -430,6 +466,22 @@ public abstract class AbstractTaglet implements AnnotatedTaglet,
             ((target != null) ? target.name() : type.getCanonicalName());
 
         return a(tag, target, (node != null) ? node : code(name + brackets));
+    }
+
+    /**
+     * {@code <a href="}{@link ClassDoc member}{@code ">}{@link Node node}{@code </a>}
+     *
+     * @param   tag             The {@link Tag}.
+     * @param   member          The target {@link Member}.
+     * @param   node            The child {@link Node} (may be
+     *                          {@code null}).
+     *
+     * @return  {@link org.w3c.dom.Element}
+     */
+    @Override
+    public FluentNode a(Tag tag, Member member, Node node) {
+        return a(href(tag, member),
+                 (node != null) ? node : code(member.getName()));
     }
 
     /**
