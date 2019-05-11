@@ -1,5 +1,7 @@
 2019-05-11  Allen D. Ball  <ball@sol.local>
 
+	* pom.xml: Released version 4.0.3.
+
 	* src/main/java/ball/tools/javadoc/InjectedFieldsTaglet.java,
 	src/main/java/ball/tools/javadoc/JavadocHTMLTemplates.java:
 	Render <thead/> and <tbody/> elements as required.
