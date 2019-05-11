@@ -242,6 +242,134 @@ public interface HTMLTemplates extends XMLServices {
     }
 
     /**
+     * {@code <caption>}{@link String content}{@code </caption>}}
+     *
+     * @param   content         {@link org.w3c.dom.Text} content
+     *
+     * @return  {@link org.w3c.dom.Element}
+     */
+    default FluentNode caption(String content) {
+        return element("caption").content(content);
+    }
+
+    /**
+     * {@code <thead>}{@link Node nodes...}{@code </thead>}
+     *
+     * @param   stream          The {@link Stream} of {@link Node}s to
+     *                          append to the newly created
+     *                          {@link org.w3c.dom.Element}.
+     *
+     * @return  {@link org.w3c.dom.Element}
+     */
+    default FluentNode thead(Stream<Node> stream) {
+        return thead(stream.toArray(Node[]::new));
+    }
+
+    /**
+     * {@code <thead>}{@link Node nodes...}{@code </thead>}
+     *
+     * @param   iterable        The {@link Iterable} of {@link Node}s to
+     *                          append to the newly created
+     *                          {@link org.w3c.dom.Element}.
+     *
+     * @return  {@link org.w3c.dom.Element}
+     */
+    default FluentNode thead(Iterable<Node> iterable) {
+        return thead(FluentNode.toArray(iterable));
+    }
+
+    /**
+     * {@code <thead>}{@link Node nodes...}{@code </thead>}
+     *
+     * @param   nodes           The {@link Node}s to append to the newly
+     *                          created
+     *                          {@link org.w3c.dom.Element}.
+     *
+     * @return  {@link org.w3c.dom.Element}
+     */
+    default FluentNode thead(Node... nodes) {
+        return element("thead", nodes);
+    }
+
+    /**
+     * {@code <tbody>}{@link Node nodes...}{@code </tbody>}
+     *
+     * @param   stream          The {@link Stream} of {@link Node}s to
+     *                          append to the newly created
+     *                          {@link org.w3c.dom.Element}.
+     *
+     * @return  {@link org.w3c.dom.Element}
+     */
+    default FluentNode tbody(Stream<Node> stream) {
+        return tbody(stream.toArray(Node[]::new));
+    }
+
+    /**
+     * {@code <tbody>}{@link Node nodes...}{@code </tbody>}
+     *
+     * @param   iterable        The {@link Iterable} of {@link Node}s to
+     *                          append to the newly created
+     *                          {@link org.w3c.dom.Element}.
+     *
+     * @return  {@link org.w3c.dom.Element}
+     */
+    default FluentNode tbody(Iterable<Node> iterable) {
+        return tbody(FluentNode.toArray(iterable));
+    }
+
+    /**
+     * {@code <tbody>}{@link Node nodes...}{@code </tbody>}
+     *
+     * @param   nodes           The {@link Node}s to append to the newly
+     *                          created
+     *                          {@link org.w3c.dom.Element}.
+     *
+     * @return  {@link org.w3c.dom.Element}
+     */
+    default FluentNode tbody(Node... nodes) {
+        return element("tbody", nodes);
+    }
+
+    /**
+     * {@code <tfoot>}{@link Node nodes...}{@code </tfoot>}
+     *
+     * @param   stream          The {@link Stream} of {@link Node}s to
+     *                          append to the newly created
+     *                          {@link org.w3c.dom.Element}.
+     *
+     * @return  {@link org.w3c.dom.Element}
+     */
+    default FluentNode tfoot(Stream<Node> stream) {
+        return tfoot(stream.toArray(Node[]::new));
+    }
+
+    /**
+     * {@code <tfoot>}{@link Node nodes...}{@code </tfoot>}
+     *
+     * @param   iterable        The {@link Iterable} of {@link Node}s to
+     *                          append to the newly created
+     *                          {@link org.w3c.dom.Element}.
+     *
+     * @return  {@link org.w3c.dom.Element}
+     */
+    default FluentNode tfoot(Iterable<Node> iterable) {
+        return tfoot(FluentNode.toArray(iterable));
+    }
+
+    /**
+     * {@code <tfoot>}{@link Node nodes...}{@code </tfoot>}
+     *
+     * @param   nodes           The {@link Node}s to append to the newly
+     *                          created
+     *                          {@link org.w3c.dom.Element}.
+     *
+     * @return  {@link org.w3c.dom.Element}
+     */
+    default FluentNode tfoot(Node... nodes) {
+        return element("tfoot", nodes);
+    }
+
+    /**
      * {@code <tr>}{@link Node nodes...}{@code </tr>}
      *
      * @param   stream          The {@link Stream} of {@link Node}s to
