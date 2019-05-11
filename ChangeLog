@@ -1,5 +1,9 @@
 2019-05-11  Allen D. Ball  <ball@sol.local>
 
+	* src/main/java/ball/tools/javadoc/InjectedFieldsTaglet.java,
+	src/main/java/ball/tools/javadoc/JavadocHTMLTemplates.java:
+	Render <thead/> and <tbody/> elements as required.
+
 	* src/main/java/ball/xml/HTMLTemplates.java:
 	Added support for <caption/>, <thead/>, <tbody/>, and <tfoot/>
 	elements of <table/>.

@@ -83,12 +83,12 @@ public class InjectedFieldsTaglet extends AbstractInlineTaglet
     }
 
     private FluentNode table(Tag tag, Class<?> type) {
-        return table(tr(th("Annotation(s)"), th("Field")),
-                     fragment(Arrays.stream(type.getDeclaredFields())
-                              .filter(t -> (Arrays.stream(t.getAnnotations())
-                                            .filter(a -> ANNOTATIONS.contains(a.annotationType()))
-                                            .findFirst().isPresent()))
-                              .map(t -> tr(tag, t))));
+        return table(thead(tr(th("Annotation(s)"), th("Field"))),
+                     tbody(Arrays.stream(type.getDeclaredFields())
+                           .filter(t -> (Arrays.stream(t.getAnnotations())
+                                         .filter(a -> ANNOTATIONS.contains(a.annotationType()))
+                                         .findFirst().isPresent()))
+                           .map(t -> tr(tag, t))));
     }
 
     private FluentNode tr(Tag tag, Field field) {

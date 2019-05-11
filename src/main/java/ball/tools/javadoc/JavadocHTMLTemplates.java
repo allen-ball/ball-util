@@ -346,17 +346,17 @@ public interface JavadocHTMLTemplates extends HTMLTemplates {
 
         if (! isAllBlank(names)) {
             table
-                .add(tr(Stream.of(names)
-                        .map(t -> th(t))));
+                .add(thead(tr(Stream.of(names)
+                              .map(t -> th(t)))));
         }
 
         table
-            .add(IntStream.range(0, model.getRowCount())
-                 .boxed()
-                 .map(y -> tr(IntStream.range(0, names.length)
-                              .boxed()
-                              .map(x -> td(toHTML(tag,
-                                                  model.getValueAt(y, x)))))));
+            .add(tbody(IntStream.range(0, model.getRowCount())
+                       .boxed()
+                       .map(y -> tr(IntStream.range(0, names.length)
+                                    .boxed()
+                                    .map(x -> td(toHTML(tag,
+                                                        model.getValueAt(y, x))))))));
 
         return table.add(nodes);
     }
