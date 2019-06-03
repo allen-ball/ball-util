@@ -11,6 +11,7 @@ import ball.xml.FluentNode;
 import com.sun.javadoc.ClassDoc;
 import com.sun.javadoc.Tag;
 import com.sun.tools.doclets.Taglet;
+import java.net.URL;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.HashSet;
 import java.util.Map;
@@ -18,12 +19,16 @@ import java.util.Set;
 import java.util.regex.Pattern;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.apache.tools.ant.ComponentHelper;
 import org.apache.tools.ant.IntrospectionHelper;
+import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
+import org.apache.tools.ant.taskdefs.Antlib;
 import org.w3c.dom.Node;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.repeat;
+import static org.apache.tools.ant.MagicNames.ANTLIB_PREFIX;
 
 /**
  * Inline {@link Taglet} to document {@link.uri http://ant.apache.org/ Ant}
@@ -94,9 +99,55 @@ public class AntTaskTaglet extends AbstractInlineTaglet
     }
 
     private FluentNode template(Tag tag, Class<?> type) {
-        AntTask annotation = type.getAnnotation(AntTask.class);
-        String name =
-            (annotation != null) ? annotation.value() : type.getSimpleName();
+        String name = null;
+
+        if (name == null) {
+            Project project = new Project();
+            String pkg = type.getPackage().getName();
+
+            while (pkg != null) {
+                URL url =
+                    type.getResource("/" + pkg.replaceAll("[.]", "/")
+                                     + "/antlib.xml");
+
+                if (url != null) {
+                    try {
+                        Antlib.createAntlib(project, url, ANTLIB_PREFIX + pkg)
+                            .execute();
+                        break;
+                    } catch (Exception exception) {
+                    }
+                }
+
+                int index = pkg.lastIndexOf(".");
+
+                if (! (index < 0)) {
+                    pkg = pkg.substring(0, index);
+                } else {
+                    pkg = null;
+                }
+            }
+
+            ComponentHelper helper =
+                ComponentHelper.getComponentHelper(project);
+
+            name =
+                helper.getTaskDefinitions().entrySet()
+                .stream()
+                .filter(t -> t.getValue().equals(type))
+                .map(t -> t.getKey())
+                .findFirst().orElse(null);
+        }
+
+        if (name == null) {
+            AntTask annotation = type.getAnnotation(AntTask.class);
+
+            name = (annotation != null) ? annotation.value() : null;
+        }
+
+        if (name == null) {
+            name = type.getSimpleName();
+        }
 
         return type(0, new HashSet<>(), tag, new SimpleEntry<>(name, type));
     }
