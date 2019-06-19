@@ -29,7 +29,7 @@ import javax.swing.table.TableModel;
  */
 public class CoordinateMap<V> extends MapView<Coordinate,V>
                               implements SortedMap<Coordinate,V>, TableModel {
-    private static final long serialVersionUID = -3402174026222674597L;
+    private static final long serialVersionUID = -5722715786710308482L;
 
     /** @serial */ private final Class<? extends V> type;
     /** @serial */ private Coordinate min = null;
@@ -146,6 +146,20 @@ public class CoordinateMap<V> extends MapView<Coordinate,V>
 
     public int getMaxY() { return getMax().getY(); }
     public int getMaxX() { return getMax().getX(); }
+
+    /**
+     * Method to determine if the {@link Coordinate} is included in
+     * {@link.this} {@link CoordinateMap}'s space.  Because the map is
+     * sparse, this method may return {@code true} when
+     * {@link #containsKey(Object)} returns {@code false}.
+     *
+     * @param   coordinate      The {@link Coordinate}.
+     *
+     * @return  {@code true} if within the space; {@code false} otherwise.
+     */
+    public boolean includes(Coordinate coordinate) {
+        return coordinate.within(getMin(), getMax());
+    }
 
     /**
      * Method to get a {@link List} of columns

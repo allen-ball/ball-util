@@ -21,7 +21,7 @@ import java.util.TreeSet;
  * @version $Revision$
  */
 public class Coordinate implements Comparable<Coordinate>, Serializable {
-    private static final long serialVersionUID = 6256053516173263720L;
+    private static final long serialVersionUID = 2544890591619049775L;
 
     private static final Comparator<? super Coordinate> COMPARATOR =
         Comparator
@@ -46,6 +46,19 @@ public class Coordinate implements Comparable<Coordinate>, Serializable {
     public int getY() { return y; }
 
     public int getX() { return x; }
+
+    /**
+     * Method to get the {@link Coordinate} relative to {@link.this}
+     * {@link Coordinate}.
+     *
+     * @param   dy              The change in Y-coordinate.
+     * @param   dx              The change in X-coordinate.
+     *
+     * @return  The relative {@link Coordinate}.
+     */
+    public Coordinate get(Number dy, Number dx) {
+        return new Coordinate(getY() + dy.intValue(), getX() + dx.intValue());
+    }
 
     /**
      * Method to determine if {@link.this} {@link Coordinate} is within the

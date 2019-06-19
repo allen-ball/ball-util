@@ -1,3 +1,11 @@
+2019-06-19  Allen D. Ball  <ball@sol.local>
+
+	* src/main/java/ball/util/Coordinate.java:
+	Added get(Number,Number) method.
+
+	* src/main/java/ball/util/CoordinateMap.java:
+	Added includes(Coordinate) method.
+
 2019-06-03  Allen D. Ball  <ball@sol.local>
 
 	* src/main/java/ball/tools/javadoc/AntTaskTaglet.java:
