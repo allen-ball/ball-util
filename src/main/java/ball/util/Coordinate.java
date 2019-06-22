@@ -5,6 +5,8 @@
  */
 package ball.util;
 
+import java.awt.Point;
+import java.awt.geom.Point2D;
 import java.beans.ConstructorProperties;
 import java.io.Serializable;
 import java.util.Arrays;
@@ -21,7 +23,7 @@ import java.util.TreeSet;
  * @version $Revision$
  */
 public class Coordinate implements Comparable<Coordinate>, Serializable {
-    private static final long serialVersionUID = 2544890591619049775L;
+    private static final long serialVersionUID = -4428900365914120909L;
 
     private static final Comparator<? super Coordinate> COMPARATOR =
         Comparator
@@ -56,19 +58,21 @@ public class Coordinate implements Comparable<Coordinate>, Serializable {
      *
      * @return  The relative {@link Coordinate}.
      */
-    public Coordinate get(Number dy, Number dx) {
+    public Coordinate translate(Number dy, Number dx) {
         return new Coordinate(getY() + dy.intValue(), getX() + dx.intValue());
     }
 
     /**
-     * Method to get the {@link Coordinate} relative to {@link.this}
+     * Method to getthe {@link Coordinate} relative to {@link.this}
      * {@link Coordinate}.
      *
      * @param   ds              The {@link Coordinate} describing the change.
      *
      * @return  The relative {@link Coordinate}.
      */
-    public Coordinate get(Coordinate ds) { return get(ds.getY(), ds.getX()); }
+    public Coordinate translate(Coordinate ds) {
+        return translate(ds.getY(), ds.getX());
+    }
 
     /**
      * Method to determine if {@link.this} {@link Coordinate} is within the
@@ -83,6 +87,13 @@ public class Coordinate implements Comparable<Coordinate>, Serializable {
         return ((min.getY() <= getY() && getY() < max.getY())
                 && (min.getX() <= getX() && getX() < max.getX()));
     }
+
+    /**
+     * Method to translate this {@link Coordinate} to a {@link Point2D}.
+     *
+     * @return  The {@link Point}.
+     */
+    public Point2D asPoint() { return new Point(getX(), getY()); }
 
     @Override
     public int compareTo(Coordinate that) {
