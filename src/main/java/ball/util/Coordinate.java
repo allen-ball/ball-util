@@ -61,6 +61,16 @@ public class Coordinate implements Comparable<Coordinate>, Serializable {
     }
 
     /**
+     * Method to get the {@link Coordinate} relative to {@link.this}
+     * {@link Coordinate}.
+     *
+     * @param   ds              The {@link Coordinate} describing the change.
+     *
+     * @return  The relative {@link Coordinate}.
+     */
+    public Coordinate get(Coordinate ds) { return get(ds.getY(), ds.getX()); }
+
+    /**
      * Method to determine if {@link.this} {@link Coordinate} is within the
      * area described by the argument {@link Coordinate}s.
      *
