@@ -133,7 +133,7 @@ public class CoordinateMap<V> extends MapView<Coordinate,V>
         min = new Coordinate(Math.min(y0, yN), Math.min(x0, xN));
         max = new Coordinate(Math.max(y0, yN), Math.max(x0, xN));
 
-        keySet().retainAll(Coordinate.generate(min, max));
+        keySet().retainAll(Coordinate.range(min, max));
 
         fireTableStructureChanged();
     }
@@ -493,8 +493,8 @@ public class CoordinateMap<V> extends MapView<Coordinate,V>
         public BackedList() {
             super();
 
-            list.addAll(Coordinate.generate(CoordinateMap.this.getMin(),
-                                            CoordinateMap.this.getMax()));
+            list.addAll(Coordinate.range(CoordinateMap.this.getMin(),
+                                         CoordinateMap.this.getMax()));
         }
 
         @Override

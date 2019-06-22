@@ -111,12 +111,11 @@ public class Coordinate implements Comparable<Coordinate>, Serializable {
      *
      * @return  The {@link SortedSet} of {@link Coordinate}s.
      */
-    public static SortedSet<Coordinate> generate(Coordinate min,
-                                                 Coordinate max) {
-        return generate(Math.min(min.getY(), max.getY()),
-                        Math.min(min.getX(), max.getX()),
-                        Math.max(min.getY(), max.getY()),
-                        Math.max(min.getX(), max.getX()));
+    public static SortedSet<Coordinate> range(Coordinate min, Coordinate max) {
+        return range(Math.min(min.getY(), max.getY()),
+                     Math.min(min.getX(), max.getX()),
+                     Math.max(min.getY(), max.getY()),
+                     Math.max(min.getX(), max.getX()));
     }
 
     /**
@@ -130,8 +129,7 @@ public class Coordinate implements Comparable<Coordinate>, Serializable {
      *
      * @return  The {@link SortedSet} of {@link Coordinate}s.
      */
-    public static SortedSet<Coordinate> generate(int y0, int x0,
-                                                 int yN, int xN) {
+    public static SortedSet<Coordinate> range(int y0, int x0, int yN, int xN) {
         TreeSet<Coordinate> set = new TreeSet<>();
 
         for (int y = y0; y < yN; y += 1) {
