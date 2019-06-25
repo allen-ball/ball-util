@@ -174,10 +174,10 @@ public interface Combinations<T> extends Stream<List<T>> {
             protected Iterator<Supplier<Spliterator<List<T>>>> spliterators() {
                 Supplier<Spliterator<List<T>>> supplier =
                     () -> new ForPrefix(size,
-                                        Collections.emptyList(),
+                                        new LinkedList<>(),
                                         new LinkedList<>(collection()));
 
-                return Collections.singleton(supplier).iterator();
+                return Stream.of(supplier).iterator();
             }
 
             @Override
@@ -260,9 +260,9 @@ public interface Combinations<T> extends Stream<List<T>> {
             @Override
             protected Iterator<Supplier<Spliterator<List<T>>>> spliterators() {
                 Supplier<Spliterator<List<T>>> supplier =
-                    () -> Collections.singleton(combination).spliterator();
+                    () -> Stream.of(combination).spliterator();
 
-                return Collections.singleton(supplier).iterator();
+                return Stream.of(supplier).iterator();
             }
 
             @Override
