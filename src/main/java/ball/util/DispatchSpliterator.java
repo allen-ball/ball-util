@@ -15,7 +15,7 @@ import java.util.stream.LongStream;
 
 /**
  * {@link Spliterator} abstract base class that dispatches to
- * {@link Spliterator}s supplied through an {@link Iterator} of
+ * {@link Spliterator}s supplied through an {@link Spliterator} of
  * {@link Spliterator} {@link Supplier}s.
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
@@ -49,7 +49,7 @@ public abstract class DispatchSpliterator<T> extends AbstractSpliterator<T> {
      * @return  The {@link Iterator} of {@link Spliterator}
      *          {@link Supplier}s.
      */
-    protected abstract Iterator<Supplier<Spliterator<T>>> spliterators();
+    protected abstract Spliterator<Supplier<Spliterator<T>>> spliterators();
 
     @Override
     public boolean tryAdvance(Consumer<? super T> consumer) {
@@ -57,7 +57,7 @@ public abstract class DispatchSpliterator<T> extends AbstractSpliterator<T> {
 
         if (! accepted) {
             if (spliterators == null) {
-                spliterators = spliterators();
+                spliterators = Spliterators.iterator(spliterators());
             }
 
             if (spliterators.hasNext()) {

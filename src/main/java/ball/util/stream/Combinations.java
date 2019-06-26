@@ -9,7 +9,6 @@ import ball.util.DispatchSpliterator;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Spliterator;
@@ -134,7 +133,7 @@ public interface Combinations<T> extends Stream<List<T>> {
             }
 
             @Override
-            protected Iterator<Supplier<Spliterator<List<T>>>> spliterators() {
+            protected Spliterator<Supplier<Spliterator<List<T>>>> spliterators() {
                 List<Supplier<Spliterator<List<T>>>> list = new LinkedList<>();
 
                 IntStream.rangeClosed(Math.min(size0(), sizeN()),
@@ -146,7 +145,7 @@ public interface Combinations<T> extends Stream<List<T>> {
                     Collections.reverse(list);
                 }
 
-                return list.iterator();
+                return list.spliterator();
             }
 
             @Override
@@ -171,13 +170,13 @@ public interface Combinations<T> extends Stream<List<T>> {
             }
 
             @Override
-            protected Iterator<Supplier<Spliterator<List<T>>>> spliterators() {
+            protected Spliterator<Supplier<Spliterator<List<T>>>> spliterators() {
                 Supplier<Spliterator<List<T>>> supplier =
                     () -> new ForPrefix(size,
                                         new LinkedList<>(),
                                         new LinkedList<>(collection()));
 
-                return Stream.of(supplier).iterator();
+                return Stream.of(supplier).spliterator();
             }
 
             @Override
@@ -206,7 +205,7 @@ public interface Combinations<T> extends Stream<List<T>> {
             }
 
             @Override
-            protected Iterator<Supplier<Spliterator<List<T>>>> spliterators() {
+            protected Spliterator<Supplier<Spliterator<List<T>>>> spliterators() {
                 List<Supplier<Spliterator<List<T>>>> list = new LinkedList<>();
 
                 if (prefix.size() < size) {
@@ -224,7 +223,7 @@ public interface Combinations<T> extends Stream<List<T>> {
                     throw new IllegalStateException();
                 }
 
-                return list.iterator();
+                return list.spliterator();
             }
 
             @Override
@@ -258,11 +257,11 @@ public interface Combinations<T> extends Stream<List<T>> {
             }
 
             @Override
-            protected Iterator<Supplier<Spliterator<List<T>>>> spliterators() {
+            protected Spliterator<Supplier<Spliterator<List<T>>>> spliterators() {
                 Supplier<Spliterator<List<T>>> supplier =
                     () -> Stream.of(combination).spliterator();
 
-                return Stream.of(supplier).iterator();
+                return Stream.of(supplier).spliterator();
             }
 
             @Override

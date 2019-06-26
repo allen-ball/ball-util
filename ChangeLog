@@ -1,3 +1,9 @@
+2019-06-25  Allen D. Ball  <ball@sol.local>
+
+	* src/main/java/ball/util/DispatchSpliterator.java:
+	Changed spliterators() return type to
+	Spliterator<Supplier<Spliterator<T>>>.
+
 2019-06-22  Allen D. Ball  <ball@sol.local>
 
 	* src/main/java/ball/util/Coordinate.java:
