@@ -42,7 +42,6 @@ import static javax.xml.transform.OutputKeys.INDENT;
 import static javax.xml.transform.OutputKeys.OMIT_XML_DECLARATION;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.apache.commons.lang3.StringUtils.countMatches;
-import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 /**
@@ -250,9 +249,9 @@ public abstract class AbstractTaglet implements AnnotatedTaglet,
 
     private ClassDoc getClassDocFor(ClassDoc context, String name) {
         return ((context != null)
-                    ? (isEmpty(name)
-                           ? context
-                           : context.findClass(name))
+                    ? (isNotEmpty(name)
+                           ? context.findClass(name))
+                           : context
                     : null);
     }
 
@@ -319,7 +318,7 @@ public abstract class AbstractTaglet implements AnnotatedTaglet,
 
         if (classDoc != null) {
             methodDoc =
-                Arrays.stream(classDoc.methods(true))
+'                Arrays.stream(classDoc.methods(true))
                 .filter(t -> t.name().equals(method.getName()))
                 .filter(t -> t.signature().equals(signature(method)))
                 .findFirst().orElse(null);
