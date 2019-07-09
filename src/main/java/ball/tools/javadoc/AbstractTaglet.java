@@ -316,7 +316,7 @@ public abstract class AbstractTaglet implements AnnotatedTaglet,
 
         if (classDoc != null) {
             methodDoc =
-'                Arrays.stream(classDoc.methods(true))
+                Arrays.stream(classDoc.methods(true))
                 .filter(t -> t.name().equals(method.getName()))
                 .filter(t -> t.signature().equals(signature(method)))
                 .findFirst().orElse(null);
