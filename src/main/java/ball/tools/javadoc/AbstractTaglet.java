@@ -249,9 +249,7 @@ public abstract class AbstractTaglet implements AnnotatedTaglet,
 
     private ClassDoc getClassDocFor(ClassDoc context, String name) {
         return ((context != null)
-                    ? (isNotEmpty(name)
-                           ? context.findClass(name))
-                           : context
+                    ? (isNotEmpty(name) ? context.findClass(name) : context)
                     : null);
     }
 
