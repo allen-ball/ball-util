@@ -26,7 +26,7 @@ import org.apache.tools.ant.Task;
 import org.apache.tools.ant.taskdefs.Antlib;
 import org.w3c.dom.Node;
 
-import static org.apache.commons.lang3.StringUtils.isEmpty;
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 import static org.apache.commons.lang3.StringUtils.repeat;
 import static org.apache.tools.ant.MagicNames.ANTLIB_PREFIX;
 
@@ -81,7 +81,7 @@ public class AntTaskTaglet extends AbstractInlineTaglet
         ClassDoc doc = null;
         String name = tag.text().trim();
 
-        if (! isEmpty(name)) {
+        if (isNotEmpty(name)) {
             doc = getClassDocFor(tag, name);
         } else {
             doc = getContainingClassDocFor(tag);

@@ -15,7 +15,7 @@ import java.util.Map;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import static org.apache.commons.lang3.StringUtils.isEmpty;
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 /**
  * Inline {@link Taglet} to provide a table of bean properties.
@@ -43,7 +43,7 @@ public class BeanInfoTaglet extends AbstractInlineTaglet
         ClassDoc doc = null;
         String name = tag.text().trim();
 
-        if (! isEmpty(name)) {
+        if (isNotEmpty(name)) {
             doc = getClassDocFor(tag, name);
         } else {
             doc = getContainingClassDocFor(tag);

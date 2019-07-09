@@ -21,7 +21,7 @@ import java.util.Set;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import static org.apache.commons.lang3.StringUtils.isEmpty;
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 /**
  * Inline {@link Taglet} to provide a report of members whose values are
@@ -73,7 +73,7 @@ public class InjectedFieldsTaglet extends AbstractInlineTaglet
         ClassDoc doc = null;
         String[] argv = tag.text().trim().split("[\\p{Space}]+", 2);
 
-        if (! isEmpty(argv[0])) {
+        if (isNotEmpty(argv[0])) {
             doc = getClassDocFor(tag, argv[0]);
         } else {
             doc = getContainingClassDocFor(tag);

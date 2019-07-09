@@ -14,7 +14,7 @@ import java.util.Map;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import static org.apache.commons.lang3.StringUtils.isEmpty;
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 /**
  * Inline {@link Taglet} to provide {@link.this} links.
@@ -35,7 +35,7 @@ public class LinkThisTaglet extends AbstractInlineTaglet
 
     @Override
     public FluentNode toNode(Tag tag) throws Throwable {
-        if (! isEmpty(tag.text().trim())) {
+        if (isNotEmpty(tag.text().trim())) {
             throw new IllegalArgumentException("Invalid argument");
         }
 
