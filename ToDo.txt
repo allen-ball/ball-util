@@ -1,5 +1,7 @@
 $Id$
 
+* AntTaskProcessor: Use FluentDocument instead of JAXBDataSource.
+
 * Create a JSR 380 (javax.validation) for AntTask.
 
 * CoordinateMap: Calculate getColumnClass(int) (type member) by determining
