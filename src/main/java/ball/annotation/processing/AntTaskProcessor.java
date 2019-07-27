@@ -5,21 +5,19 @@
  */
 package ball.annotation.processing;
 
-import ball.activation.JAXBDataSource;
 import ball.annotation.ServiceProviderFor;
 import ball.util.PropertiesImpl;
 import ball.util.ant.taskdefs.AntLib;
 import ball.util.ant.taskdefs.AntTask;
 import ball.util.ant.taskdefs.BootstrapProcessorTask;
+import ball.xml.FluentDocument;
+import ball.xml.FluentDocumentBuilderFactory;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
 import java.nio.file.Files;
-import java.util.ArrayList;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -30,13 +28,12 @@ import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
 import javax.tools.FileObject;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.apache.commons.io.IOUtils;
 import org.apache.tools.ant.Task;
 
 import static java.lang.reflect.Modifier.isAbstract;
@@ -44,8 +41,10 @@ import static javax.lang.model.element.Modifier.ABSTRACT;
 import static javax.lang.model.element.Modifier.PUBLIC;
 import static javax.tools.Diagnostic.Kind.ERROR;
 import static javax.tools.StandardLocation.CLASS_OUTPUT;
+import static javax.xml.transform.OutputKeys.INDENT;
+import static javax.xml.transform.OutputKeys.OMIT_XML_DECLARATION;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
-import static org.apache.commons.lang3.StringUtils.isEmpty;
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 /**
  * {@link Processor} implementation to check {@link Class}es annotated with
@@ -69,6 +68,25 @@ public class AntTaskProcessor extends AbstractAnnotationProcessor
                               implements BootstrapProcessorTask.Processor {
     private static final String ANTLIB_XML = "antlib.xml";
 
+    private static final String NO = "no";
+    private static final String YES = "yes";
+
+    private static final String INDENT_AMOUNT =
+        "{http://xml.apache.org/xslt}indent-amount";
+
+    private static final Transformer TRANSFORMER;
+
+    static {
+        try {
+            TRANSFORMER = TransformerFactory.newInstance().newTransformer();
+            TRANSFORMER.setOutputProperty(OMIT_XML_DECLARATION, NO);
+            TRANSFORMER.setOutputProperty(INDENT, YES);
+            TRANSFORMER.setOutputProperty(INDENT_AMOUNT, String.valueOf(2));
+        } catch (Exception exception) {
+            throw new ExceptionInInitializerError(exception);
+        }
+    }
+
     private ResourceMap map = new ResourceMap();
     private LinkedHashSet<String> packages = new LinkedHashSet<>();
 
@@ -87,19 +105,20 @@ public class AntTaskProcessor extends AbstractAnnotationProcessor
                         FileObject file =
                             filer.createResource(CLASS_OUTPUT,
                                                  EMPTY, entry.getKey());
+
                         try (OutputStream out = file.openOutputStream()) {
                             entry.getValue().store(out, entry.getKey());
                         }
                     }
 
                     for (String pkg : packages) {
-                        AntLibXML xml = new AntLibXML(pkg, map);
+                        AntLibXML antlib = new AntLibXML(pkg, map);
                         FileObject file =
                             filer.createResource(CLASS_OUTPUT,
-                                                 EMPTY, xml.getPath());
+                                                 EMPTY, antlib.getPath());
 
                         try (OutputStream out = file.openOutputStream()) {
-                            xml.writeTo(out);
+                            antlib.writeTo(out);
                         }
                     }
                 }
@@ -133,7 +152,7 @@ public class AntTaskProcessor extends AbstractAnnotationProcessor
                     .toString();
             }
 
-            if (! isEmpty(name)) {
+            if (isNotEmpty(name)) {
                 if (isAssignable(element.asType(), Task.class)) {
                     if (! element.getModifiers().contains(ABSTRACT)) {
                         if (hasPublicNoArgumentConstructor(element)) {
@@ -236,11 +255,10 @@ public class AntTaskProcessor extends AbstractAnnotationProcessor
         private  ResourceMap() { super(); }
 
         public boolean put(String resource, String name, String task) {
-            if (! containsKey(resource)) {
-                put(resource, new PropertiesImpl());
-            }
+            PropertiesImpl value =
+                computeIfAbsent(resource, k -> new PropertiesImpl());
 
-            return (get(resource).put(name, task) != task);
+            return (value.put(name, task) != task);
         }
 
         public boolean put(String resource, String name, Class<?> task) {
@@ -253,79 +271,44 @@ public class AntTaskProcessor extends AbstractAnnotationProcessor
         }
     }
 
-    /**
-     * {@code <antlib/>}
-     */
-    @XmlRootElement(name = "antlib")
-    @XmlType(propOrder = { "taskdef" })
-    public static class AntLibXML extends TreeMap<String,String> {
-        private static final long serialVersionUID = 2430157873343229512L;
+    private static class AntLibXML extends TreeMap<String,String> {
+        private static final long serialVersionUID = -4362352118276244430L;
 
         /** @serial */ private final String path;
 
         private AntLibXML(String pkg, ResourceMap map) {
-            this(asPath(pkg) + SLASH + ANTLIB_XML);
-
-            for (PropertiesImpl properties : map.values()) {
-                for (Map.Entry<?,?> entry : properties.entrySet()) {
-                    String task = entry.getKey().toString();
-                    String type = entry.getValue().toString();
-
-                    if (type.startsWith(pkg + DOT)) {
-                        put(task, type);
-                    }
-                }
-            }
-        }
-
-        private AntLibXML(String path) {
             super();
 
-            this.path = path;
-        }
+            this.path = asPath(pkg) + SLASH + ANTLIB_XML;
 
-        private AntLibXML() { this(null); }
+            map.values()
+                .stream()
+                .flatMap(t -> t.entrySet().stream())
+                .filter(t -> t.getValue().toString().startsWith(pkg + DOT))
+                .forEach(t -> put(t.getKey().toString(),
+                                  t.getValue().toString()));
+        }
 
         public String getPath() { return path; }
 
-        @XmlElement(name = "taskdef")
-        public Taskdef[] getTaskdef() {
-            ArrayList<Taskdef> list = new ArrayList<>(size());
+        public FluentDocument asDocument() throws Exception {
+            FluentDocument d =
+                FluentDocumentBuilderFactory.newInstance()
+                .newDocumentBuilder()
+                .newDocument();
 
-            for (Map.Entry<String,String> entry : entrySet()) {
-                list.add(new Taskdef(entry.getKey(), entry.getValue()));
-            }
+            d.add(d.element("antlib",
+                            entrySet().stream()
+                            .map(t -> d.element("taskdef",
+                                                d.attr("name", t.getKey()),
+                                                d.attr("classname", t.getValue())))));
 
-            return list.toArray(new Taskdef[] { });
+            return d;
         }
 
         public void writeTo(OutputStream out) throws Exception {
-            IOUtils.copy(new JAXBDataSource(this).getInputStream(), out);
-        }
-
-        /**
-         * {@code <taskdef/>}
-         */
-        @XmlType(propOrder = { "name", "classname" })
-        public static class Taskdef {
-            private final String name;
-            private final String classname;
-
-            private Taskdef(String name, String classname) {
-                this.name = name;
-                this.classname = classname;
-            }
-
-            private Taskdef() { this(null, null); }
-
-            @XmlAttribute
-            public String getName() { return name; }
-
-            @XmlAttribute
-            public String getClassname() { return classname; }
-
-            @Override
-            public String toString() { return super.toString(); }
+            TRANSFORMER.transform(new DOMSource(asDocument()),
+                                  new StreamResult(out));
         }
     }
 }

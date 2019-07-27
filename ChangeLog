@@ -1,3 +1,9 @@
+2019-07-27  Allen D. Ball  <ball@sol.local>
+
+	* src/main/java/ball/annotation/processing/AntTaskProcessor.java:
+	Use FluentDocument instead of javax.xml.bind annotated inner
+	classes.
+
 2019-06-25  Allen D. Ball  <ball@sol.local>
 
 	* src/main/java/ball/util/DispatchSpliterator.java:
