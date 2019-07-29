@@ -1,3 +1,7 @@
+2019-07-29  Allen D. Ball  <ball@sol.local>
+
+	* pom.xml: Released version 4.1.0.
+
 2019-07-27  Allen D. Ball  <ball@sol.local>
 
 	* src/main/java/ball/annotation/processing/AntTaskProcessor.java:
