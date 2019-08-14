@@ -29,6 +29,8 @@ import org.apache.tools.ant.taskdefs.compilers.CompilerAdapterExtension;
 import org.apache.tools.ant.types.Path;
 import org.apache.tools.ant.util.FileUtils;
 
+import static org.apache.commons.lang3.StringUtils.EMPTY;
+
 /**
  * {@link CompilerAdapter} implementation for the system
  * {@link JavaCompiler}.  Subclass implementors will likely only need to
@@ -212,7 +214,7 @@ public class SystemJavaCompilerAdapter implements CompilerAdapter,
             String kind = entry.getKey().toString().toLowerCase();
             int count = entry.getValue();
 
-            log(count + SPACE + kind + ((count == 1) ? "" : "s"));
+            log(count + SPACE + kind + ((count == 1) ? EMPTY : "s"));
         }
     }
 
