@@ -1,5 +1,7 @@
 2019-08-14  Allen D. Ball  <ball@sol.local>
 
+	* pom.xml: Released version 4.1.1.
+
 	* NoopProcessor.properties: Added javax.validation.* annotations.
 
 2019-07-29  Allen D. Ball  <ball@sol.local>
