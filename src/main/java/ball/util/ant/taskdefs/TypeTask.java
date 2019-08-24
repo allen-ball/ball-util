@@ -166,7 +166,7 @@ public abstract class TypeTask extends Task
                 Class<?> subtype = getClassForName(getSubtype());
 
                 log(supertype.getName() + " is "
-                    + (supertype.isAssignableFrom(subtype) ? "" : "not ")
+                    + (supertype.isAssignableFrom(subtype) ? EMPTY : "not ")
                     + "assignable from " + subtype.getName());
             } catch (BuildException exception) {
                 throw exception;
