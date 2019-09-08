@@ -11,6 +11,7 @@ import java.beans.ConstructorProperties;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Objects;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -97,7 +98,7 @@ public class Coordinate implements Comparable<Coordinate>, Serializable {
 
     @Override
     public int compareTo(Coordinate that) {
-        return COMPARATOR.compare(this, that);
+        return Objects.compare(this, that, COMPARATOR);
     }
 
     @Override
