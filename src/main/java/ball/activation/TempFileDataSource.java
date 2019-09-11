@@ -24,7 +24,7 @@ public class TempFileDataSource extends AbstractDataSource {
     private final String prefix;
     private final String suffix;
     private final File parent;
-    private File file = null;
+    private volatile File file = null;
 
     /**
      * @param   prefix          The file name prefix.
@@ -74,27 +74,20 @@ public class TempFileDataSource extends AbstractDataSource {
 
     @Override
     public FileInputStream getInputStream() throws IOException {
-        FileInputStream in = null;
-
-        synchronized (this) {
-            in = new FileInputStream(file);
-        }
-
-        return in;
+        return new FileInputStream(file);
     }
 
     @Override
     public FileOutputStream getOutputStream() throws IOException {
         FileOutputStream out = null;
+        File old = file;
 
-        synchronized (this) {
-            if (file != null) {
-                file.delete();
-            }
-
-            file = File.createTempFile(prefix, suffix, parent);
-            out = new FileOutputStream(file);
+        if (old != null) {
+            old.delete();
         }
+
+        file = File.createTempFile(prefix, suffix, parent);
+        out = new FileOutputStream(file);
 
         return out;
     }
