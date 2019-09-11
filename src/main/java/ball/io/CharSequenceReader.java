@@ -34,7 +34,7 @@ public class CharSequenceReader extends LineNumberReader {
         private volatile int mark = 0;
 
         public ReaderImpl(CharSequence sequence) {
-            super();
+            super(new Object());
 
             this.sequence = Objects.requireNonNull(sequence);
             this.length = sequence.length();
