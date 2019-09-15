@@ -18,18 +18,6 @@
   </parent>
   <profiles>
     <profile>
-      <id>tools.jar</id>
-      <activation>
-        <file><exists>${java.home}/../lib/tools.jar</exists></file>
-      </activation>
-      <dependencies>
-        <dependency>
-          <groupId>jdk</groupId>
-          <artifactId>tools</artifactId>
-        </dependency>
-      </dependencies>
-    </profile>
-    <profile>
       <id>linux</id>
       <activation>
         <os><name>linux</name></os>
