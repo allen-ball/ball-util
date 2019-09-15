@@ -18,9 +18,9 @@
   </parent>
   <profiles>
     <profile>
-      <id>linux</id>
+      <id>Linux</id>
       <activation>
-        <os><name>linux</name></os>
+        <os><name>Linux</name></os>
       </activation>
       <build>
         <pluginManagement>
