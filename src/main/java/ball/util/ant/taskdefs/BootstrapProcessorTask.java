@@ -8,6 +8,7 @@ package ball.util.ant.taskdefs;
 import java.io.File;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Stream;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -38,8 +39,6 @@ import static java.util.Comparator.comparing;
 public class BootstrapProcessorTask extends Task
                                     implements AnnotatedAntTask,
                                                ClasspathDelegateAntTask {
-    private static final String _JAVA = ".java";
-
     @Getter @Setter @Accessors(chain = true, fluent = true)
     private ClasspathUtils.Delegate delegate = null;
     @Getter @Setter
@@ -76,15 +75,15 @@ public class BootstrapProcessorTask extends Task
         super.execute();
         AnnotatedAntTask.super.execute();
 
-        if (getBasedir() == null) {
-            setBasedir(getProject().resolveFile("."));
-        }
-
-        if (getDestdir() == null) {
-            setDestdir(getBasedir());
-        }
-
         try {
+            if (getBasedir() == null) {
+                setBasedir(getProject().resolveFile("."));
+            }
+
+            if (getDestdir() == null) {
+                setDestdir(getBasedir());
+            }
+
             for (Class<?> type : getClassSet()) {
                 if (Processor.class.isAssignableFrom(type)) {
                     if (! isAbstract(type.getModifiers())) {
@@ -94,6 +93,8 @@ public class BootstrapProcessorTask extends Task
                 }
             }
         } catch (BuildException exception) {
+            throw exception;
+        } catch (RuntimeException exception) {
             throw exception;
         } catch (Throwable throwable) {
             throwable.printStackTrace();
@@ -105,11 +106,7 @@ public class BootstrapProcessorTask extends Task
         TreeSet<Class<?>> set = new TreeSet<>(comparing(t -> t.getName()));
 
         try {
-            DirectoryIterator iterator =
-                new DirectoryIterator(getBasedir(), true);
-            ClassFile file = null;
-
-            while ((file = iterator.getNextClassFile()) != null) {
+            for (ClassFile file : new DirectoryIterator(getBasedir(), true)) {
                 set.add(getClassForName(file.getFullClassName()));
             }
         } catch (BuildException exception) {
@@ -135,18 +132,14 @@ public class BootstrapProcessorTask extends Task
                 type = type.getEnclosingClass();
             }
 
-            String child =
-                ClassFileUtils.convertDotName(type.getCanonicalName()) + _JAVA;
+            String path =
+                ClassFileUtils.convertDotName(type.getCanonicalName());
 
-            for (String parent : srcPath.list()) {
-                file = new File(parent, child);
-
-                if (file.isFile()) {
-                    break;
-                } else {
-                    file = null;
-                }
-            }
+            file =
+                Stream.of(srcPath.list())
+                .map(t -> new File(t, path + ".java"))
+                .filter(File::isFile)
+                .findFirst().orElse(null);
         }
 
         return file;
