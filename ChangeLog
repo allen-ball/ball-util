@@ -918,10 +918,6 @@
 	practically overriding the getValueAt(Map.Entry<K,V>,int)
 	method].
 
-2013-08-02  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/util/Histogram.java: Initial writing.
-
 2013-08-01  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* src/main/java/iprotium/activation/ByteArrayDataSource.java:
