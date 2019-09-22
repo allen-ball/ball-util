@@ -55,7 +55,7 @@ import static org.apache.commons.lang3.StringUtils.EMPTY;
 @For({ ServiceProviderFor.class })
 @NoArgsConstructor @ToString
 public class ServiceProviderForProcessor extends AbstractAnnotationProcessor
-                                         implements BootstrapProcessorTask.Processor {
+                                         implements ClassFileProcessor {
     private static final String PATH = META_INF + "/services/%s";
 
     private MapImpl map = new MapImpl();

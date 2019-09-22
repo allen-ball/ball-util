@@ -65,7 +65,7 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 @For({ AntLib.class, AntTask.class })
 @NoArgsConstructor @ToString
 public class AntTaskProcessor extends AbstractAnnotationProcessor
-                              implements BootstrapProcessorTask.Processor {
+                              implements ClassFileProcessor {
     private static final String ANTLIB_XML = "antlib.xml";
 
     private static final String NO = "no";

@@ -5,6 +5,7 @@
  */
 package ball.util.ant.taskdefs;
 
+import ball.annotation.processing.ClassFileProcessor;
 import java.io.File;
 import java.util.Set;
 import java.util.TreeSet;
@@ -28,7 +29,7 @@ import static java.util.Comparator.comparing;
 /**
  * {@link.uri http://ant.apache.org/ Ant} {@link Task} to bootstrap
  * {@link javax.annotation.processing.Processor}s.  Creates and invokes
- * {@link Processor}s found on the class path.
+ * {@link ClassFileProcessor}s found on the class path.
  *
  * {@ant.task}
  *
@@ -85,9 +86,9 @@ public class BootstrapProcessorTask extends Task
             }
 
             for (Class<?> type : getClassSet()) {
-                if (Processor.class.isAssignableFrom(type)) {
+                if (ClassFileProcessor.class.isAssignableFrom(type)) {
                     if (! isAbstract(type.getModifiers())) {
-                        type.asSubclass(Processor.class).newInstance()
+                        type.asSubclass(ClassFileProcessor.class).newInstance()
                             .process(getClassSet(), getDestdir());
                     }
                 }
@@ -143,25 +144,5 @@ public class BootstrapProcessorTask extends Task
         }
 
         return file;
-    }
-
-    /**
-     * Bootstrap processor interface.
-     */
-    public interface Processor {
-
-        /**
-         * Bootstrap method called by this {@link org.apache.tools.ant.Task}.
-         *
-         * @param       set     The {@link Set} of {@link Class}es to
-         *                      examine.
-         * @param       destdir The root of the hierarchy to record any
-         *                      output artifacts.
-         *
-         * @throws      Exception
-         *                      If the implementation throws an
-         *                      {@link Exception}.
-         */
-        public void process(Set<Class<?>> set, File destdir) throws Exception;
     }
 }

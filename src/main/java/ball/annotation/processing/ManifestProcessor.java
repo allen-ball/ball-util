@@ -59,7 +59,7 @@ import static org.apache.commons.lang3.StringUtils.join;
      })
 @NoArgsConstructor @ToString
 public class ManifestProcessor extends AbstractAnnotationProcessor
-                               implements BootstrapProcessorTask.Processor {
+                               implements ClassFileProcessor {
     private static final String MANIFEST_MF = "MANIFEST.MF";
 
     private static final String _CLASS = ".class";

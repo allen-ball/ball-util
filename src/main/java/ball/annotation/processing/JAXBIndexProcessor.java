@@ -43,7 +43,7 @@ import static javax.tools.StandardLocation.CLASS_OUTPUT;
 @For({ XmlRootElement.class, XmlType.class })
 @NoArgsConstructor @ToString
 public class JAXBIndexProcessor extends AbstractAnnotationProcessor
-                                implements BootstrapProcessorTask.Processor {
+                                implements ClassFileProcessor {
     private static final String JAXB_INDEX = "jaxb.index";
 
     private MapImpl map = new MapImpl();
