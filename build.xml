@@ -31,10 +31,10 @@
       <src path="${src.dir}/main/java"/>
     </javac>
     <taskdef classpathref="build.classpath"
-             name="bootstrap-processor"
-             classname="ball.util.ant.taskdefs.BootstrapProcessorTask"/>
-    <bootstrap-processor classpathref="build.classpath"
-                         basedir="${target.classes.dir}"/>
+             name="class-file-processors"
+             classname="ball.util.ant.taskdefs.ClassFileProcessorsTask"/>
+    <class-file-processors classpathref="build.classpath"
+                           basedir="${target.classes.dir}"/>
   </target>
 
   <target name="bean-info-for"

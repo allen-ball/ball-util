@@ -12,7 +12,6 @@ import ball.annotation.Manifest.JavaBean;
 import ball.annotation.Manifest.MainClass;
 import ball.annotation.Manifest.Section;
 import ball.annotation.ServiceProviderFor;
-import ball.util.ant.taskdefs.BootstrapProcessorTask;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;

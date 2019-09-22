@@ -37,9 +37,9 @@ import static java.util.Comparator.comparing;
  * @version $Revision$
  */
 @NoArgsConstructor @ToString
-public class BootstrapProcessorTask extends Task
-                                    implements AnnotatedAntTask,
-                                               ClasspathDelegateAntTask {
+public class ClassFileProcessorsTask extends Task
+                                     implements AnnotatedAntTask,
+                                                ClasspathDelegateAntTask {
     @Getter @Setter @Accessors(chain = true, fluent = true)
     private ClasspathUtils.Delegate delegate = null;
     @Getter @Setter
