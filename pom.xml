@@ -58,6 +58,10 @@
       <artifactId>maven-core</artifactId>
       <optional>false</optional>
     </dependency>
+    <dependency>
+      <groupId>org.fusesource.hawtjni</groupId>
+      <artifactId>hawtjni-runtime</artifactId>
+    </dependency>
   </dependencies>
   <build>
     <plugins>
