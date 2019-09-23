@@ -51,6 +51,7 @@
     <dependency>
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
+      <optional>false</optional>
     </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>
@@ -58,4 +59,30 @@
       <optional>false</optional>
     </dependency>
   </dependencies>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>class-file-processors</id>
+            <phase>process-classes</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <target>
+                <taskdef classpathref="maven.compile.classpath"
+                         name="process-classes"
+                         classname="ball.util.ant.taskdefs.ProcessClassesTask"/>
+                <process-classes classpathref="maven.compile.classpath"
+                                 basedir="${project.build.outputDirectory}"/>
+              </target>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
 </project>

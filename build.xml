@@ -23,18 +23,22 @@
     <javac source="${pom.properties.jre.version}"
            target="${pom.properties.jre.version}"
            destdir="${target.classes.dir}">
-      <compilerarg compiler="modern" value="-Xlint"/>
+      <compilerarg compiler="modern" value="-Xlint:all,-path"/>
+      <compilerarg compiler="modern" value="-Xdoclint"/>
+      <compilerarg compiler="modern" value="-Xdoclint:-missing"/>
+      <compilerarg compiler="modern" value="-Xdoclint:-reference"/>
       <compilerarg compiler="modern" value="-g:source,lines,vars"/>
+      <compilerarg compiler="modern" value="-parameters"/>
       <classpath>
         <path refid="build.classpath"/>
       </classpath>
       <src path="${src.dir}/main/java"/>
     </javac>
     <taskdef classpathref="build.classpath"
-             name="class-file-processors"
-             classname="ball.util.ant.taskdefs.ClassFileProcessorsTask"/>
-    <class-file-processors classpathref="build.classpath"
-                           basedir="${target.classes.dir}"/>
+             name="process-classes"
+             classname="ball.util.ant.taskdefs.ProcessClassesTask"/>
+    <process-classes classpathref="build.classpath"
+                     basedir="${target.classes.dir}"/>
   </target>
 
   <target name="bean-info-for"
