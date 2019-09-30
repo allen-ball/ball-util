@@ -45,6 +45,8 @@ public class InjectedFieldsTaglet extends AbstractInlineTaglet
     private static final String[] NAMES = new String[] {
         javax.annotation.Resource.class.getName(),
         "javax.inject.Inject",
+        "org.apache.maven.plugins.annotations.Component",
+        "org.apache.maven.plugins.annotations.Parameter",
         "org.springframework.beans.factory.annotation.Autowired",
         "org.springframework.beans.factory.annotation.Value"
     };

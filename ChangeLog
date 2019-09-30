@@ -1,3 +1,8 @@
+2019-09-30  Allen D. Ball  <ball@hcf.dev>
+
+	* src/main/java/ball/tools/javadoc/InjectedFieldsTaglet.java:
+	Added Plexus annotations.
+
 2019-09-21  Allen D. Ball  <ball@hcf.dev>
 
 	* Renamed BootstrapProcessorTask to ClassFileProcessorsTask.
