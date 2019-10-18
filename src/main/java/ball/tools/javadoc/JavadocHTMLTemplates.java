@@ -42,6 +42,7 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
  */
 public interface JavadocHTMLTemplates extends HTMLTemplates {
     FluentNode a(Tag tag, Class<?> type, Node node);
+    FluentNode a(Tag tag, Annotation annotation, Node node);
     FluentNode a(Tag tag, Member member, Node node);
     FluentNode a(Tag tag, String name, Node node);
 
@@ -97,6 +98,31 @@ public interface JavadocHTMLTemplates extends HTMLTemplates {
     }
 
     /**
+     * {@code <a href="}{@link ClassDoc annotation}{@code ">}{@link #code(String) code(String.valueOf(annotation))}{@code </a>}
+     *
+     * @param   tag             The {@link Tag}.
+     * @param   annotation      The target {@link Annotation}.
+     *
+     * @return  {@link org.w3c.dom.Element}
+     */
+    default FluentNode a(Tag tag, Annotation annotation) {
+        return a(tag, annotation, (String) null);
+    }
+
+    /**
+     * {@code <a href="}{@link ClassDoc annotation}{@code ">}{@link #code(String) code(name)}{@code </a>}
+     *
+     * @param   tag             The {@link Tag}.
+     * @param   annotation      The target {@link Annotation}.
+     * @param   name            The link name.
+     *
+     * @return  {@link org.w3c.dom.Element}
+     */
+    default FluentNode a(Tag tag, Annotation annotation, String name) {
+        return a(tag, annotation, (name != null) ? code(name) : null);
+    }
+
+    /**
      * {@code <a href="}{@link com.sun.javadoc.MemberDoc member}{@code ">}{@link com.sun.javadoc.MemberDoc#name() MemberDoc.name()}{@code </a>}
      *
      * @param   tag             The {@link Tag}.
@@ -119,21 +145,6 @@ public interface JavadocHTMLTemplates extends HTMLTemplates {
      */
     default FluentNode a(Tag tag, Member member, String name) {
         return a(tag, member, (name != null) ? code(name) : null);
-    }
-
-    /**
-     * {@code <a href="}{@link ClassDoc annotation}{@code ">}{@link #code(String) code(String.valueOf(annotation))}{@code </a>}
-     *
-     * @param   tag             The {@link Tag}.
-     * @param   annotation      The target {@link Annotation}.
-     *
-     * @return  {@link org.w3c.dom.Element}
-     */
-    default FluentNode a(Tag tag, Annotation annotation) {
-        return a(tag, annotation.annotationType(),
-                 String.valueOf(annotation)
-                 .replace(annotation.annotationType().getCanonicalName(),
-                          annotation.annotationType().getSimpleName()));
     }
 
     /**

@@ -1,3 +1,10 @@
+2019-10-18  Allen D. Ball  <ball@hcf.dev>
+
+	* src/main/java/ball/tools/javadoc/AbstractTaglet.java,
+	src/main/java/ball/tools/javadoc/JavadocHTMLTemplates.java:
+	Added a(Tag,Annotation,Node) and a(Tag,Annotation,String)
+	methods.
+
 2019-09-30  Allen D. Ball  <ball@hcf.dev>
 
 	* src/main/java/ball/tools/javadoc/InjectedFieldsTaglet.java:
