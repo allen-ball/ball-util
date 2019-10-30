@@ -964,15 +964,6 @@
 	src/main/java/iprotium/activation/ReaderWriterDataSource.java:
 	Provide no-argument constructor for JAXB annotated subclasses.
 
-2013-05-28  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/annotation/processing/CollectionToArrayProcessor.java:
-	Initial writing.
-
-	* src/main/java/iprotium/annotation/ConstantInitializer.java,
-	src/main/java/iprotium/annotation/processing/ConstantInitializerProcessor.java:
-	Initial writing.
-
 2013-05-27  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* src/main/java/iprotium/annotation/processing/ObjectToStringProcessor.java:
