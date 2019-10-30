@@ -23,7 +23,6 @@ import com.sun.tools.doclets.internal.toolkit.util.DocLink;
 import java.beans.BeanInfo;
 import java.beans.Introspector;
 import java.io.StringWriter;
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Executable;
 import java.lang.reflect.Field;
@@ -560,32 +559,6 @@ public abstract class AbstractTaglet implements AnnotatedTaglet,
                 ((target != null) ? target.name() : type.getCanonicalName());
 
             node = code(name + brackets);
-        }
-
-        return a(tag, target, node);
-    }
-
-    /**
-     * {@code <a href="}{@link ClassDoc annotation}{@code ">}{@link Node node}{@code </a>}
-     *
-     * @param   tag             The {@link Tag}.
-     * @param   annotation      The target {@link Annotation}.
-     * @param   node            The child {@link Node} (may be
-     *                          {@code null}).
-     *
-     * @return  {@link org.w3c.dom.Element}
-     */
-    @Override
-    public FluentNode a(Tag tag, Annotation annotation, Node node) {
-        Class<?> type = annotation.annotationType();
-        ClassDoc target = getClassDocFor(tag, type);
-
-        if (node == null) {
-            String string =
-                String.valueOf(annotation)
-                .replace(type.getCanonicalName(), type.getSimpleName());
-
-            node = code(string);
         }
 
         return a(tag, target, node);

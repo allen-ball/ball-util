@@ -13,11 +13,11 @@ import com.sun.javadoc.Tag;
 import com.sun.tools.doclets.Taglet;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Stream;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
@@ -86,17 +86,17 @@ public class InjectedFieldsTaglet extends AbstractInlineTaglet
 
     private FluentNode table(Tag tag, Class<?> type) {
         return table(thead(tr(th("Annotation(s)"), th("Field"))),
-                     tbody(Arrays.stream(type.getDeclaredFields())
-                           .filter(t -> (Arrays.stream(t.getAnnotations())
+                     tbody(Stream.of(type.getDeclaredFields())
+                           .filter(t -> (Stream.of(t.getAnnotations())
                                          .filter(a -> ANNOTATIONS.contains(a.annotationType()))
                                          .findFirst().isPresent()))
                            .map(t -> tr(tag, t))));
     }
 
     private FluentNode tr(Tag tag, Field field) {
-        return tr(td(fragment(Arrays.stream(field.getAnnotations())
+        return tr(td(fragment(Stream.of(field.getAnnotations())
                               .filter(t -> ANNOTATIONS.contains(t.annotationType()))
-                              .map(t -> a(tag, t)))),
+                              .map(t -> annotation(tag, t)))),
                   td(declaration(tag, field)));
     }
 }
