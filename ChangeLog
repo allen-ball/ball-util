@@ -1,3 +1,43 @@
+2019-11-13  Allen D. Ball  <ball@hcf.dev>
+
+	* pom.xml: Released version 4.2.0.
+
+2019-11-04  Allen D. Ball  <ball@hcf.dev>
+
+	* src/main/java/ball/util/CoordinateMap.java:
+	Implement getType() through reflection.
+
+2019-10-30  Allen D. Ball  <ball@hcf.dev>
+
+	* Replaced AbstractTaglet.a(Tag,Annotation,Node) with
+	JavadocHTMLTemplates.annotation(Tag,Annotation).
+
+2019-10-22  Allen D. Ball  <ball@hcf.dev>
+
+	* src/main/java/ball/lang/Keyword.java: Added JRE 13 "yield".
+
+	* src/main/java/ball/lang/Literal.java: Initial writing.
+
+2019-10-18  Allen D. Ball  <ball@hcf.dev>
+
+	* src/main/java/ball/tools/javadoc/AbstractTaglet.java,
+	src/main/java/ball/tools/javadoc/JavadocHTMLTemplates.java:
+	Added a(Tag,Annotation,Node) and a(Tag,Annotation,String)
+	methods.
+
+2019-09-30  Allen D. Ball  <ball@hcf.dev>
+
+	* src/main/java/ball/tools/javadoc/InjectedFieldsTaglet.java:
+	Added Plexus annotations.
+
+2019-09-21  Allen D. Ball  <ball@hcf.dev>
+
+	* Renamed BootstrapProcessorTask to ClassFileProcessorsTask.
+
+	* Renamed BootstrapProcessorTask.Processor to ClassFileProcessor.
+
+	* pom.xml: Started development of 4.2-SNAPSHOT.
+
 2019-09-08  Allen D. Ball  <ball@sol.local>
 
 	* pom.xml: Released version 4.1.3.
@@ -914,10 +954,6 @@
 	practically overriding the getValueAt(Map.Entry<K,V>,int)
 	method].
 
-2013-08-02  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/util/Histogram.java: Initial writing.
-
 2013-08-01  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* src/main/java/iprotium/activation/ByteArrayDataSource.java:
@@ -941,15 +977,6 @@
 	* src/main/java/iprotium/activation/FilterDataSource.java,
 	src/main/java/iprotium/activation/ReaderWriterDataSource.java:
 	Provide no-argument constructor for JAXB annotated subclasses.
-
-2013-05-28  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/annotation/processing/CollectionToArrayProcessor.java:
-	Initial writing.
-
-	* src/main/java/iprotium/annotation/ConstantInitializer.java,
-	src/main/java/iprotium/annotation/processing/ConstantInitializerProcessor.java:
-	Initial writing.
 
 2013-05-27  Allen D. Ball  <ball@10-0-1-2.lan>
 

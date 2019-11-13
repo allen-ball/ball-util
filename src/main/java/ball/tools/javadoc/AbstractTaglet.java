@@ -553,10 +553,15 @@ public abstract class AbstractTaglet implements AnnotatedTaglet,
         }
 
         ClassDoc target = getClassDocFor(tag, type);
-        String name =
-            ((target != null) ? target.name() : type.getCanonicalName());
 
-        return a(tag, target, (node != null) ? node : code(name + brackets));
+        if (node == null) {
+            String name =
+                ((target != null) ? target.name() : type.getCanonicalName());
+
+            node = code(name + brackets);
+        }
+
+        return a(tag, target, node);
     }
 
     /**
@@ -571,8 +576,11 @@ public abstract class AbstractTaglet implements AnnotatedTaglet,
      */
     @Override
     public FluentNode a(Tag tag, Member member, Node node) {
-        return a(href(tag, member),
-                 (node != null) ? node : code(member.getName()));
+        if (node == null) {
+            node = code(member.getName());
+        }
+
+        return a(href(tag, member), node);
     }
 
     /**
@@ -589,15 +597,18 @@ public abstract class AbstractTaglet implements AnnotatedTaglet,
     public FluentNode a(Tag tag, String name, Node node) {
         ClassDoc target = getClassDocFor(tag, name);
 
-        if (target != null) {
-            name = target.name();
+        if (node == null) {
+            node = code((target != null) ? target.name() : name);
         }
 
-        return a(tag, target, (node != null) ? node : code(name));
+        return a(tag, target, node);
     }
 
     private FluentNode a(Tag tag, ClassDoc target, Node node) {
-        return a((target != null) ? href(tag, target) : null,
-                 (node != null) ? node : code(target.name()));
+        if (node == null) {
+            node = code(target.name());
+        }
+
+        return a((target != null) ? href(tag, target) : null, node);
     }
 }

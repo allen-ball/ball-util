@@ -12,7 +12,6 @@ import ball.annotation.Manifest.JavaBean;
 import ball.annotation.Manifest.MainClass;
 import ball.annotation.Manifest.Section;
 import ball.annotation.ServiceProviderFor;
-import ball.util.ant.taskdefs.BootstrapProcessorTask;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -59,7 +58,7 @@ import static org.apache.commons.lang3.StringUtils.join;
      })
 @NoArgsConstructor @ToString
 public class ManifestProcessor extends AbstractAnnotationProcessor
-                               implements BootstrapProcessorTask.Processor {
+                               implements ClassFileProcessor {
     private static final String MANIFEST_MF = "MANIFEST.MF";
 
     private static final String _CLASS = ".class";

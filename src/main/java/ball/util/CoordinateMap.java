@@ -5,6 +5,8 @@
  */
 package ball.util;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -29,38 +31,27 @@ import javax.swing.table.TableModel;
  */
 public class CoordinateMap<V> extends MapView<Coordinate,V>
                               implements SortedMap<Coordinate,V>, TableModel {
-    private static final long serialVersionUID = -5722715786710308482L;
+    private static final long serialVersionUID = -7283339807212986103L;
 
-    /** @serial */ private final Class<? extends V> type;
     /** @serial */ private Coordinate min = null;
     /** @serial */ private Coordinate max = null;
     /** @serial */ private final EventListenerList list = new EventListenerList();
 
     /**
      * Constructor to create an empty {@link CoordinateMap}.
-     *
-     * @param   type            The {@link CoordinateMap} value
-     *                          {@link Class}.
      */
-    public CoordinateMap(Class<? extends V> type) {
-        super(new TreeMap<>());
-
-        this.type = type;
-    }
+    public CoordinateMap() { super(new TreeMap<>()); }
 
     /**
      * Constructor to specify minimum and maximum {@code Y} and {@code X}.
      *
-     * @param   type            The {@link CoordinateMap} value
-     *                          {@link Class}.
      * @param   y0              {@code MIN(y)}
      * @param   x0              {@code MIN(x)}
      * @param   yN              {@code MAX(y) + 1}
      * @param   xN              {@code MAX(x) + 1}
      */
-    public CoordinateMap(Class<? extends V> type,
-                         Number y0, Number x0, Number yN, Number xN) {
-        this(type);
+    public CoordinateMap(Number y0, Number x0, Number yN, Number xN) {
+        this();
 
         resize(y0, x0, yN, xN);
     }
@@ -69,20 +60,14 @@ public class CoordinateMap<V> extends MapView<Coordinate,V>
      * Constructor to specify maximum {@code Y} and {@code X} (origin
      * {@code (0, 0)}).
      *
-     * @param   type            The {@link CoordinateMap} value
-     *                          {@link Class}.
      * @param   yN              {@code MAX(y) + 1}
      * @param   xN              {@code MAX(x) + 1}
      */
-    public CoordinateMap(Class<? extends V> type, Number yN, Number xN) {
-        this(type, 0, 0, yN, xN);
-    }
+    public CoordinateMap(Number yN, Number xN) { this(0, 0, yN, xN); }
 
-    private CoordinateMap(Class<? extends V> type, Map<Coordinate,V> map,
+    private CoordinateMap(Map<Coordinate,V> map,
                           Number y0, Number x0, Number yN, Number xN) {
         super(map);
-
-        this.type = type;
 
         resize(y0, x0, yN, xN);
     }
@@ -97,7 +82,13 @@ public class CoordinateMap<V> extends MapView<Coordinate,V>
      *
      * @return  The value type {@link Class}.
      */
-    protected Class<? extends V> getType() { return type; }
+    protected Type getType() {
+        Type type =
+            ((ParameterizedType) getClass().getGenericSuperclass())
+            .getActualTypeArguments()[0];
+
+        return type;
+    }
 
     /**
      * Method to specify new limits for the {@link CoordinateMap}.
@@ -367,7 +358,10 @@ public class CoordinateMap<V> extends MapView<Coordinate,V>
     public String getColumnName(int x) { return null; }
 
     @Override
-    public Class<? extends V> getColumnClass(int x) { return getType(); }
+    @SuppressWarnings({ "unchecked" })
+    public Class<? extends V> getColumnClass(int x) {
+        return (Class<V>) getType();
+    }
 
     @Override
     public boolean isCellEditable(int y, int x) { return false; }
@@ -440,7 +434,7 @@ public class CoordinateMap<V> extends MapView<Coordinate,V>
 
         public Sub(CoordinateMap<V> map,
                    Number y0, Number x0, Number yN, Number xN) {
-            super(map.getType(), map, y0, x0, yN, xN);
+            super(map, y0, x0, yN, xN);
         }
 
         @Override
