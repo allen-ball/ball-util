@@ -11,6 +11,7 @@ import com.sun.javadoc.ClassDoc;
 import com.sun.javadoc.Tag;
 import com.sun.tools.doclets.Taglet;
 import java.lang.annotation.Annotation;
+/* import java.lang.reflect.AnnotatedElement; */
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Member;
@@ -122,21 +123,6 @@ public interface JavadocHTMLTemplates extends HTMLTemplates {
     }
 
     /**
-     * {@code <a href="}{@link ClassDoc annotation}{@code ">}{@link #code(String) code(String.valueOf(annotation))}{@code </a>}
-     *
-     * @param   tag             The {@link Tag}.
-     * @param   annotation      The target {@link Annotation}.
-     *
-     * @return  {@link org.w3c.dom.Element}
-     */
-    default FluentNode a(Tag tag, Annotation annotation) {
-        return a(tag, annotation.annotationType(),
-                 String.valueOf(annotation)
-                 .replace(annotation.annotationType().getCanonicalName(),
-                          annotation.annotationType().getSimpleName()));
-    }
-
-    /**
      * {@code <a href="}{@link ClassDoc constant}{@code ">}{@link Enum#name() constant.name()}{@code </a>}
      *
      * @param   tag             The {@link Tag}.
@@ -234,6 +220,32 @@ public interface JavadocHTMLTemplates extends HTMLTemplates {
                         type(tag, parameter.getParameterizedType()),
                         code(SPACE),
                         code(parameter.getName()));
+    }
+    /*
+     * default FluentNode annotations(Tag tag, AnnotatedElement element) {
+     *     return annotations(tag, element.getDeclaredAnnotations());
+     * }
+     *
+     * default FluentNode annotations(Tag tag, Annotation... annotations) {
+     *     return fragment().add(Stream.of(annotations)
+     *                           .map(t -> annotation(tag, t)));
+     * }
+     */
+    /**
+     * {@code <a href="}{@link ClassDoc annotation}{@code ">}{@link #code(String) code(String.valueOf(annotation))}{@code </a>}
+     *
+     * @param   tag             The {@link Tag}.
+     * @param   annotation      The target {@link Annotation}.
+     *
+     * @return  {@link org.w3c.dom.Element}
+     */
+    default FluentNode annotation(Tag tag, Annotation annotation) {
+        Class<?> type = annotation.annotationType();
+        String string =
+            String.valueOf(annotation)
+            .replace(type.getCanonicalName(), type.getSimpleName());
+
+        return fragment().add(a(tag, type, code(string)));
     }
 
     /**
@@ -341,13 +353,11 @@ public interface JavadocHTMLTemplates extends HTMLTemplates {
         String[] names =
             IntStream.range(0, model.getColumnCount())
             .boxed()
-            .map(x -> model.getColumnName(x))
+            .map(model::getColumnName)
             .toArray(String[]::new);
 
         if (! isAllBlank(names)) {
-            table
-                .add(thead(tr(Stream.of(names)
-                              .map(t -> th(t)))));
+            table.add(thead(tr(Stream.of(names).map(this::th))));
         }
 
         table

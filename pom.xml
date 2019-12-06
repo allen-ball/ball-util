@@ -8,31 +8,19 @@
   <name>Utilities</name>
   <groupId>ball</groupId>
   <artifactId>ball-util</artifactId>
-  <version>4.1.3</version>
+  <version>4.2.1</version>
   <packaging>jar</packaging>
   <parent>
     <groupId>ball</groupId>
     <artifactId>parent</artifactId>
-    <version>5</version>
+    <version>20191206.0</version>
     <relativePath>../ball/parent/pom.xml</relativePath>
   </parent>
   <profiles>
     <profile>
-      <id>tools.jar</id>
+      <id>Linux</id>
       <activation>
-        <file><exists>${java.home}/../lib/tools.jar</exists></file>
-      </activation>
-      <dependencies>
-        <dependency>
-          <groupId>jdk</groupId>
-          <artifactId>tools</artifactId>
-        </dependency>
-      </dependencies>
-    </profile>
-    <profile>
-      <id>linux</id>
-      <activation>
-        <os><name>linux</name></os>
+        <os><name>Linux</name></os>
       </activation>
       <build>
         <pluginManagement>
@@ -63,11 +51,42 @@
     <dependency>
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
+      <optional>false</optional>
     </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-core</artifactId>
       <optional>false</optional>
     </dependency>
+    <dependency>
+      <groupId>org.fusesource.hawtjni</groupId>
+      <artifactId>hawtjni-runtime</artifactId>
+    </dependency>
   </dependencies>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>class-file-processors</id>
+            <phase>process-classes</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <target>
+                <taskdef classpathref="maven.compile.classpath"
+                         name="process-classes"
+                         classname="ball.util.ant.taskdefs.ProcessClassesTask"/>
+                <process-classes classpathref="maven.compile.classpath"
+                                 basedir="${project.build.outputDirectory}"/>
+              </target>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
 </project>

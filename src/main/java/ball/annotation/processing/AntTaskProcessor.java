@@ -9,7 +9,6 @@ import ball.annotation.ServiceProviderFor;
 import ball.util.PropertiesImpl;
 import ball.util.ant.taskdefs.AntLib;
 import ball.util.ant.taskdefs.AntTask;
-import ball.util.ant.taskdefs.BootstrapProcessorTask;
 import ball.xml.FluentDocument;
 import ball.xml.FluentDocumentBuilderFactory;
 import java.io.File;
@@ -65,7 +64,7 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 @For({ AntLib.class, AntTask.class })
 @NoArgsConstructor @ToString
 public class AntTaskProcessor extends AbstractAnnotationProcessor
-                              implements BootstrapProcessorTask.Processor {
+                              implements ClassFileProcessor {
     private static final String ANTLIB_XML = "antlib.xml";
 
     private static final String NO = "no";

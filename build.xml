@@ -11,7 +11,7 @@
 
   <resolver:resolve>
     <dependencies>
-      <dependency coords="ball:parent:5:xml:compile"/>
+      <dependency coords="ball:parent:20191206.0:xml:compile"/>
     </dependencies>
     <properties/>
   </resolver:resolve>
@@ -23,18 +23,22 @@
     <javac source="${pom.properties.jre.version}"
            target="${pom.properties.jre.version}"
            destdir="${target.classes.dir}">
-      <compilerarg compiler="modern" value="-Xlint"/>
+      <compilerarg compiler="modern" value="-Xlint:all,-path"/>
+      <compilerarg compiler="modern" value="-Xdoclint"/>
+      <compilerarg compiler="modern" value="-Xdoclint:-missing"/>
+      <compilerarg compiler="modern" value="-Xdoclint:-reference"/>
       <compilerarg compiler="modern" value="-g:source,lines,vars"/>
+      <compilerarg compiler="modern" value="-parameters"/>
       <classpath>
         <path refid="build.classpath"/>
       </classpath>
       <src path="${src.dir}/main/java"/>
     </javac>
     <taskdef classpathref="build.classpath"
-             name="bootstrap-processor"
-             classname="ball.util.ant.taskdefs.BootstrapProcessorTask"/>
-    <bootstrap-processor classpathref="build.classpath"
-                         basedir="${target.classes.dir}"/>
+             name="process-classes"
+             classname="ball.util.ant.taskdefs.ProcessClassesTask"/>
+    <process-classes classpathref="build.classpath"
+                     basedir="${target.classes.dir}"/>
   </target>
 
   <target name="bean-info-for"
