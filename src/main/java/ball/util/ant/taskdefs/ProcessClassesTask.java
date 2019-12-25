@@ -104,7 +104,7 @@ public class ProcessClassesTask extends Task
     }
 
     protected Set<Class<?>> getClassSet() throws BuildException {
-        TreeSet<Class<?>> set = new TreeSet<>(comparing(t -> t.getName()));
+        TreeSet<Class<?>> set = new TreeSet<>(comparing(Class::getName));
 
         try {
             for (ClassFile file : new DirectoryIterator(getBasedir(), true)) {

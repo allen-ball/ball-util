@@ -22,7 +22,7 @@ public class Converter extends TreeMap<Class<?>,Factory<?>> {
     private static final Converter INSTANCE = new Converter();
 
     private Converter() {
-        super(comparing(t -> t.getName()));
+        super(comparing(Class::getName));
 
         put(String.class, new Factory<>(String.class));
 

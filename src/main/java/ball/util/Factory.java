@@ -60,7 +60,7 @@ public class Factory<T> extends TreeMap<Class<?>[],Member> {
      */
     @ConstructorProperties({ "type", "factory" })
     protected Factory(Class<? extends T> type, Object factory) {
-        super(comparing(t -> Arrays.toString(t)));
+        super(comparing(Arrays::toString));
 
         this.type = type;
         this.factory = factory;
