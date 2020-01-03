@@ -28,8 +28,8 @@ public class Coordinate implements Comparable<Coordinate>, Serializable {
 
     private static final Comparator<? super Coordinate> COMPARATOR =
         Comparator
-        .<Coordinate>comparingInt(t -> t.y)
-        .thenComparingInt(t -> t.x);
+        .comparingInt(Coordinate::getY)
+        .thenComparingInt(Coordinate::getX);
 
     /** @serial */ private final int y;
     /** @serial */ private final int x;
