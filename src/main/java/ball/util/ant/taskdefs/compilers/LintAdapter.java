@@ -69,7 +69,7 @@ public class LintAdapter extends SystemJavaCompilerAdapter {
         private static final long serialVersionUID = 3581687174576253455L;
 
         public OutputClassSet(StandardJavaFileManager fm) {
-            super(comparing(t -> t.getName()));
+            super(comparing(Class::getName));
 
             URI root = fm.getLocation(CLASS_OUTPUT).iterator().next().toURI();
             ClassLoader loader = fm.getClassLoader(CLASS_PATH);
