@@ -68,7 +68,7 @@ public class TagletNameProcessor extends AbstractAnnotationProcessor {
                       element,
                       element.getKind() + " annotated with "
                       + AT + annotation.getSimpleName()
-                      + " but does not implement" + Taglet.class.getName());
+                      + " but does not implement " + Taglet.class.getName());
             }
         } else {
             print(ERROR,
