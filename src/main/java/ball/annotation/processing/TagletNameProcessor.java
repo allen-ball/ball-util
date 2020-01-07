@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2013 - 2019 Allen D. Ball.  All rights reserved.
+ * Copyright 2013 - 2020 Allen D. Ball.  All rights reserved.
  */
 package ball.annotation.processing;
 
