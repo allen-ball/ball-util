@@ -1,20 +1,26 @@
 /*
  * $Id$
  *
- * Copyright 2015 - 2019 Allen D. Ball.  All rights reserved.
+ * Copyright 2015 - 2020 Allen D. Ball.  All rights reserved.
  */
 package ball.tools.javadoc;
 
 import ball.annotation.ServiceProviderFor;
 /* import ball.tools.maven.EmbeddedMaven; */
 import ball.tools.maven.POMProperties;
+import ball.util.PropertiesImpl;
 import ball.xml.FluentNode;
+import com.sun.javadoc.PackageDoc;
 import com.sun.javadoc.Tag;
 import com.sun.tools.doclets.Taglet;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.net.JarURLConnection;
+import java.net.URL;
 import java.util.Map;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.apache.maven.model.Model;
@@ -147,15 +153,50 @@ public abstract class MavenTaglet extends AbstractInlineTaglet
 
         @Override
         public FluentNode toNode(Tag tag) throws Throwable {
-            Model model = getModelFor(tag);
-            String groupId = model.getGroupId();
-            String artifactId = model.getArtifactId();
-            String version = model.getVersion();
+            String groupId = "unknown";
+            String artifactId = "unknown";
+            String version = "unknown";
+            Class<?> type = null;
 
-            if (isEmpty(version)) {
-                version =
-                    new POMProperties(groupId, artifactId)
-                    .getVersion();
+            if (tag.holder() instanceof PackageDoc) {
+                type = Class.forName(tag.holder().name() + ".package-info");
+            } else {
+                type = getClassFor(getContainingClassDocFor(tag));
+            }
+
+            String name =
+                "/" + String.join("/", type.getName().split("[.]")) + ".class";
+            URL url = type.getResource(name);
+
+            if (url.getProtocol().equalsIgnoreCase("file")) {
+                Model model = getModelFor(tag);
+
+                groupId = model.getGroupId();
+                artifactId = model.getArtifactId();
+                version = model.getVersion();
+
+                if (isEmpty(version)) {
+                    version =
+                        new POMProperties(groupId, artifactId)
+                        .getVersion();
+                }
+            } else if (url.getProtocol().equalsIgnoreCase("jar")) {
+                JarFile jar =
+                    ((JarURLConnection) url.openConnection()).getJarFile();
+                JarEntry entry =
+                    jar.stream()
+                    .filter(t -> t.getName().matches("META-INF/maven/[^/]+/[^/]+/pom.properties"))
+                    .findFirst().orElse(null);
+
+                if (entry != null) {
+                    PropertiesImpl properties = new PropertiesImpl();
+
+                    properties.load(jar.getInputStream(entry));
+
+                    groupId = properties.getProperty(GROUP_ID);
+                    artifactId = properties.getProperty(ARTIFACT_ID);
+                    version = properties.getProperty(VERSION);
+                }
             }
 
             return pre("xml",
