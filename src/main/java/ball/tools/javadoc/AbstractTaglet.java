@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2012 - 2019 Allen D. Ball.  All rights reserved.
+ * Copyright 2012 - 2020 Allen D. Ball.  All rights reserved.
  */
 package ball.tools.javadoc;
 
@@ -31,6 +31,7 @@ import java.lang.reflect.Method;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
@@ -460,7 +461,8 @@ public abstract class AbstractTaglet implements AnnotatedTaglet,
 
                 if (isNotEmpty(packageDoc.name())) {
                     path +=
-                        String.join("/", packageDoc.name().split("[.]"))
+                        String.join("/",
+                                    packageDoc.name().split(Pattern.quote(".")))
                         + "/";
                 }
 

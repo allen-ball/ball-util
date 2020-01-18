@@ -21,6 +21,7 @@ import java.net.URL;
 import java.util.Map;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -29,7 +30,6 @@ import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.apache.maven.project.MavenProject;
 
 import static lombok.AccessLevel.PROTECTED;
-import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 /**
@@ -164,7 +164,9 @@ public abstract class MavenTaglet extends AbstractInlineTaglet
             }
 
             String name =
-                "/" + String.join("/", type.getName().split("[.]")) + ".class";
+                "/"
+                + String.join("/", type.getName().split(Pattern.quote(".")))
+                + ".class";
             URL url = type.getResource(name);
 
             if (url.getProtocol().equalsIgnoreCase("file")) {
@@ -172,9 +174,10 @@ public abstract class MavenTaglet extends AbstractInlineTaglet
 
                 properties.setProperty(GROUP_ID, model.getGroupId());
                 properties.setProperty(ARTIFACT_ID, model.getArtifactId());
-                properties.setProperty(VERSION, model.getVersion());
 
-                if (isEmpty(properties.getProperty(VERSION))) {
+                if (isNotEmpty(model.getVersion())) {
+                    properties.setProperty(VERSION, model.getVersion());
+                } else {
                     String resource =
                         String.format("/META-INF/maven/%s/%s/pom.properties",
                                       properties.getProperty(GROUP_ID),

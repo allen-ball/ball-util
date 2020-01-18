@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2019 Allen D. Ball.  All rights reserved.
+ * Copyright 2019, 2020 Allen D. Ball.  All rights reserved.
  */
 package ball.tools.javadoc;
 
@@ -107,7 +107,8 @@ public class AntTaskTaglet extends AbstractInlineTaglet
 
             while (pkg != null) {
                 URL url =
-                    type.getResource("/" + pkg.replaceAll("[.]", "/")
+                    type.getResource("/"
+                                     + String.join("/", pkg.split(Pattern.quote(".")))
                                      + "/antlib.xml");
 
                 if (url != null) {
