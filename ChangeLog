@@ -1,5 +1,9 @@
 2020-01-17  Allen D. Ball  <ball@hcf.dev>
 
+	* pom.xml:
+	Released version 4.3.0.
+	Use ball:parent:20200117.0.
+
 	* src/main/java/ball/tools/javadoc/MavenTaglet.java:
 	({@pom.coordinates}) Robustly search for pom.properties.
 
