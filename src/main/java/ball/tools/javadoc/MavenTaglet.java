@@ -7,7 +7,6 @@ package ball.tools.javadoc;
 
 import ball.annotation.ServiceProviderFor;
 /* import ball.tools.maven.EmbeddedMaven; */
-import ball.tools.maven.POMProperties;
 import ball.util.PropertiesImpl;
 import ball.xml.FluentNode;
 import com.sun.javadoc.PackageDoc;
@@ -16,20 +15,19 @@ import com.sun.tools.doclets.Taglet;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.InputStream;
 import java.net.JarURLConnection;
 import java.net.URL;
 import java.util.Map;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+import java.util.stream.Stream;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.apache.maven.project.MavenProject;
 
-import static ball.tools.maven.POMProperties.ARTIFACT_ID;
-import static ball.tools.maven.POMProperties.GROUP_ID;
-import static ball.tools.maven.POMProperties.VERSION;
 import static lombok.AccessLevel.PROTECTED;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
@@ -46,6 +44,9 @@ public abstract class MavenTaglet extends AbstractInlineTaglet
                                   implements SunToolsInternalToolkitTaglet {
     private static final String POM_XML = "pom.xml";
     private static final String DEPENDENCY = "dependency";
+    private static final String GROUP_ID = "groupId";
+    private static final String ARTIFACT_ID = "artifactId";
+    private static final String VERSION = "version";
 
     /**
      * Method to locate the POM from a {@link Tag}.
@@ -153,9 +154,7 @@ public abstract class MavenTaglet extends AbstractInlineTaglet
 
         @Override
         public FluentNode toNode(Tag tag) throws Throwable {
-            String groupId = "unknown";
-            String artifactId = "unknown";
-            String version = "unknown";
+            PropertiesImpl properties = new PropertiesImpl();
             Class<?> type = null;
 
             if (tag.holder() instanceof PackageDoc) {
@@ -171,14 +170,21 @@ public abstract class MavenTaglet extends AbstractInlineTaglet
             if (url.getProtocol().equalsIgnoreCase("file")) {
                 Model model = getModelFor(tag);
 
-                groupId = model.getGroupId();
-                artifactId = model.getArtifactId();
-                version = model.getVersion();
+                properties.setProperty(GROUP_ID, model.getGroupId());
+                properties.setProperty(ARTIFACT_ID, model.getArtifactId());
+                properties.setProperty(VERSION, model.getVersion());
 
-                if (isEmpty(version)) {
-                    version =
-                        new POMProperties(groupId, artifactId)
-                        .getVersion();
+                if (isEmpty(properties.getProperty(VERSION))) {
+                    String resource =
+                        String.format("/META-INF/maven/%s/%s/pom.properties",
+                                      properties.getProperty(GROUP_ID),
+                                      properties.getProperty(ARTIFACT_ID));
+
+                    try (InputStream in = type.getResourceAsStream(resource)) {
+                        if (in != null) {
+                            properties.load(in);
+                        }
+                    }
                 }
             } else if (url.getProtocol().equalsIgnoreCase("jar")) {
                 JarFile jar =
@@ -189,21 +195,16 @@ public abstract class MavenTaglet extends AbstractInlineTaglet
                     .findFirst().orElse(null);
 
                 if (entry != null) {
-                    PropertiesImpl properties = new PropertiesImpl();
-
-                    properties.load(jar.getInputStream(entry));
-
-                    groupId = properties.getProperty(GROUP_ID);
-                    artifactId = properties.getProperty(ARTIFACT_ID);
-                    version = properties.getProperty(VERSION);
+                    try (InputStream in = jar.getInputStream(entry)) {
+                        properties.load(in);
+                    }
                 }
             }
 
             return pre("xml",
                        render(element(DEPENDENCY,
-                                      element(GROUP_ID).content(groupId),
-                                      element(ARTIFACT_ID).content(artifactId),
-                                      element(VERSION).content(version)),
+                                      Stream.of(GROUP_ID, ARTIFACT_ID, VERSION)
+                                      .map(t -> element(t).content(properties.getProperty(t, "unknown")))),
                               2));
         }
     }
