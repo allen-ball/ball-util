@@ -399,8 +399,8 @@ public interface JavadocHTMLTemplates extends HTMLTemplates {
             node = text(Arrays.toString((long[]) object));
         } else if (object instanceof Object[]) {
             node = toHTML(tag, Arrays.asList((Object[]) object));
-        } else if (object instanceof Class<?>) {
-            node = a(tag, (Class<?>) object);
+        } else if (object instanceof Type) {
+            node = type(tag, (Type) object);
         } else if (object instanceof Enum<?>) {
             node = a(tag, (Enum<?>) object);
         } else if (object instanceof Field) {

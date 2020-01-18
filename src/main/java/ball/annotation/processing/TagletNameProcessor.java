@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2013 - 2019 Allen D. Ball.  All rights reserved.
+ * Copyright 2013 - 2020 Allen D. Ball.  All rights reserved.
  */
 package ball.annotation.processing;
 
@@ -68,7 +68,7 @@ public class TagletNameProcessor extends AbstractAnnotationProcessor {
                       element,
                       element.getKind() + " annotated with "
                       + AT + annotation.getSimpleName()
-                      + " but does not implement" + Taglet.class.getName());
+                      + " but does not implement " + Taglet.class.getName());
             }
         } else {
             print(ERROR,

@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2013 - 2019 Allen D. Ball.  All rights reserved.
+ * Copyright 2013 - 2020 Allen D. Ball.  All rights reserved.
  */
 package ball.beans;
 
@@ -54,7 +54,13 @@ public class PropertyDescriptorsTableModel
             break;
 
         case 2:
-            value = row.getPropertyType();
+            if (row.getReadMethod() != null) {
+                value = row.getReadMethod().getGenericReturnType();
+            } else if (row.getWriteMethod() != null) {
+                value = row.getWriteMethod().getGenericParameterTypes()[0];
+            } else {
+                value = row.getPropertyType();
+            }
             break;
 
         case 3:
