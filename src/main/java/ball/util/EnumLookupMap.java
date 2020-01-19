@@ -1,11 +1,12 @@
 /*
  * $Id$
  *
- * Copyright 2017 Allen D. Ball.  All rights reserved.
+ * Copyright 2017 - 2020 Allen D. Ball.  All rights reserved.
  */
 package ball.util;
 
 import java.util.TreeMap;
+import java.util.stream.Stream;
 
 /**
  * {@link java.util.SortedMap} implementation which provides
@@ -27,10 +28,8 @@ public class EnumLookupMap extends TreeMap<String,Enum<?>> {
     public EnumLookupMap(Class<? extends Enum<?>>... types) {
         super(String.CASE_INSENSITIVE_ORDER);
 
-        for (Class<? extends Enum<?>> type : types) {
-            for (Enum<?> constant : type.getEnumConstants()) {
-                put(constant.name(), constant);
-            }
-        }
+        Stream.of(types)
+            .flatMap(t -> Stream.of(t.getEnumConstants()))
+            .forEach(t -> put(t.name(), t));
     }
 }
