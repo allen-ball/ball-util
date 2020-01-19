@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2014 - 2019 Allen D. Ball.  All rights reserved.
+ * Copyright 2014 - 2020 Allen D. Ball.  All rights reserved.
  */
 package ball.annotation.processing;
 
@@ -109,10 +109,9 @@ public class ResourceFileProcessor extends AbstractAnnotationProcessor {
         }
     }
 
+    @NoArgsConstructor
     private class MapImpl extends TreeMap<String,List<String>> {
         private static final long serialVersionUID = 5908228485945805046L;
-
-        public MapImpl() { super(); }
 
         public boolean add(String path, Collection<String> collection) {
             if (! containsKey(path)) {

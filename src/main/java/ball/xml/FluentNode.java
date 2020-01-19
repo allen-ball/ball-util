@@ -399,10 +399,9 @@ public interface FluentNode extends Node {
     }
 
     /**
-     * {@link FluentNode} {@link java.lang.reflect.InvocationHandler}
+     * {@link FluentNode} {@link java.lang.reflect.InvocationHandler}.
      */
-    @NoArgsConstructor(access = PROTECTED)
-    @ToString
+    @NoArgsConstructor(access = PROTECTED) @ToString
     public class InvocationHandler extends FacadeProxyInvocationHandler {
         private final HashMap<List<Class<?>>,Class<?>> map =
             new HashMap<>();

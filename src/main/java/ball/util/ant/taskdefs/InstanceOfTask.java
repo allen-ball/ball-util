@@ -114,10 +114,9 @@ public class InstanceOfTask extends TypeTask {
         }
     }
 
+    @NoArgsConstructor
     private class ClassList extends ArrayList<Class<?>> {
         private static final long serialVersionUID = -4504828433924386345L;
-
-        public ClassList() { super(); }
 
         @Override
         public Class<?>[] toArray() { return toArray(new Class<?>[] { }); }

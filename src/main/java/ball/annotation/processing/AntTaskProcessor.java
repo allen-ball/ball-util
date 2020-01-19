@@ -248,10 +248,9 @@ public class AntTaskProcessor extends AbstractAnnotationProcessor
         }
     }
 
+    @NoArgsConstructor
     private class ResourceMap extends TreeMap<String,PropertiesImpl> {
-        private static final long serialVersionUID = 6091007173199004788L;
-
-        private  ResourceMap() { super(); }
+        private static final long serialVersionUID = -6734240104662740026L;
 
         public boolean put(String resource, String name, String task) {
             PropertiesImpl value =
