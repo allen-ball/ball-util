@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2019 Allen D. Ball.  All rights reserved.
+ * Copyright 2019, 2020 Allen D. Ball.  All rights reserved.
  */
 package ball.tools.javadoc;
 
@@ -36,7 +36,7 @@ import static org.apache.commons.lang3.StringUtils.isAllBlank;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 /**
- * Javadoc {@link HTMLTemplates}
+ * Javadoc {@link HTMLTemplates}.
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$

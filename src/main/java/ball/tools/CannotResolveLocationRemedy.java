@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2011 - 2019 Allen D. Ball.  All rights reserved.
+ * Copyright 2011 - 2020 Allen D. Ball.  All rights reserved.
  */
 package ball.tools;
 
@@ -22,6 +22,8 @@ import static ball.lang.Punctuation.SEMICOLON;
 import static ball.lang.Punctuation.SPACE;
 
 /**
+ * compiler.err.cant.resolve.location {@link Remedy}.
+ *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */

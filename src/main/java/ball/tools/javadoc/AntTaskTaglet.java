@@ -41,7 +41,7 @@ import static org.apache.tools.ant.MagicNames.ANTLIB_PREFIX;
 @TagletName("ant.task")
 @NoArgsConstructor @ToString
 public class AntTaskTaglet extends AbstractInlineTaglet
-                            implements SunToolsInternalToolkitTaglet {
+                           implements SunToolsInternalToolkitTaglet {
     private static final AntTaskTaglet INSTANCE = new AntTaskTaglet();
 
     public static void register(Map<Object,Object> map) {

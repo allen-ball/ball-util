@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2019 Allen D. Ball.  All rights reserved.
+ * Copyright 2019, 2020 Allen D. Ball.  All rights reserved.
  */
 package ball.xml;
 
@@ -47,7 +47,7 @@ import static lombok.AccessLevel.PROTECTED;
 public interface FluentNode extends Node {
 
     /**
-     * {@link Map} {@link Node#getNodeType()} to type ({@link Class})
+     * {@link Map} {@link Node#getNodeType()} to type ({@link Class}).
      *
      * {@include #NODE_TYPE_MAP}
      */

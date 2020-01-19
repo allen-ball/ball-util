@@ -1,14 +1,14 @@
 /*
  * $Id$
  *
- * Copyright 2014 - 2018 Allen D. Ball.  All rights reserved.
+ * Copyright 2014 - 2020 Allen D. Ball.  All rights reserved.
  */
 package ball.activation;
 
 import java.io.PrintWriter;
 
 /**
- * {@link Throwable} {@link ReaderWriterDataSource}
+ * {@link Throwable} {@link ReaderWriterDataSource}.
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$

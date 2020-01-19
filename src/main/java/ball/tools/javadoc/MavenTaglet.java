@@ -6,7 +6,6 @@
 package ball.tools.javadoc;
 
 import ball.annotation.ServiceProviderFor;
-/* import ball.tools.maven.EmbeddedMaven; */
 import ball.util.PropertiesImpl;
 import ball.xml.FluentNode;
 import com.sun.javadoc.PackageDoc;

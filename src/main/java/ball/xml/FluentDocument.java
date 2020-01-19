@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2019 Allen D. Ball.  All rights reserved.
+ * Copyright 2019, 2020 Allen D. Ball.  All rights reserved.
  */
 package ball.xml;
 
@@ -46,7 +46,7 @@ public interface FluentDocument extends FluentNode, Document {
     }
 
     /**
-     * {@link FluentDocument} {@link DocumentBuilder}
+     * {@link FluentDocument} {@link DocumentBuilder}.
      */
     public class Builder extends DocumentBuilder {
         private final DocumentBuilder builder;

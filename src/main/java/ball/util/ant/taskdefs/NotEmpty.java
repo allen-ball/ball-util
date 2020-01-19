@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2014 - 2019 Allen D. Ball.  All rights reserved.
+ * Copyright 2014 - 2020 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.taskdefs;
 
@@ -34,7 +34,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 public @interface NotEmpty {
 
     /**
-     * {@link AntTaskAttributeConstraint.Checker}
+     * {@link AntTaskAttributeConstraint.Checker}.
      */
     @NoArgsConstructor @ToString
     public static class Checker extends AntTaskAttributeConstraint.Checker {

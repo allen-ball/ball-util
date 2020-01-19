@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2019 Allen D. Ball.  All rights reserved.
+ * Copyright 2019, 2020 Allen D. Ball.  All rights reserved.
  */
 package ball.util;
 
@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * {@link Comparator}s
+ * {@link Comparator}s.
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$

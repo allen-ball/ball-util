@@ -16,7 +16,7 @@ import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 /**
  * {@code BeanInfo} {@link PropertyDescriptor properties}
- * {@link javax.swing.table.TableModel} implementation
+ * {@link javax.swing.table.TableModel} implementation.
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$

@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2011 - 2019 Allen D. Ball.  All rights reserved.
+ * Copyright 2011 - 2020 Allen D. Ball.  All rights reserved.
  */
 package ball.tools;
 
@@ -27,6 +27,8 @@ import static java.lang.reflect.Modifier.PRIVATE;
 import static java.lang.reflect.Modifier.STATIC;
 
 /**
+ * compiler.warn.missing.SVUID {@link Remedy}.
+ *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */

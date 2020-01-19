@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2019 Allen D. Ball.  All rights reserved.
+ * Copyright 2019, 2020 Allen D. Ball.  All rights reserved.
  */
 package ball.xml;
 
@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 import org.w3c.dom.Node;
 
 /**
- * Common XML services
+ * Common XML services.
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
