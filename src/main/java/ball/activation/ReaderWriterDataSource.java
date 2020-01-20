@@ -1,42 +1,35 @@
 /*
  * $Id$
  *
- * Copyright 2009 - 2019 Allen D. Ball.  All rights reserved.
+ * Copyright 2009 - 2020 Allen D. Ball.  All rights reserved.
  */
 package ball.activation;
 
 import java.beans.ConstructorProperties;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.Reader;
-import java.io.StringReader;
-import java.io.StringWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-import org.apache.commons.io.IOUtils;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.util.stream.Collectors.joining;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 /**
  * {@link javax.activation.DataSource} implementation that provides a
  * {@link BufferedReader} wrapping the {@link javax.activation.DataSource}
- * {@link InputStream} and a {@link PrintWriter} wrapping the
- * {@link javax.activation.DataSource} {@link OutputStream}.
+ * {@link java.io.InputStream} and a {@link PrintWriter} wrapping the
+ * {@link javax.activation.DataSource} {@link java.io.OutputStream}.
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
-public class ReaderWriterDataSource extends FilterDataSource
-                                    implements Iterable<String> {
+public class ReaderWriterDataSource extends FilterDataSource {
     protected static final Charset CHARSET = UTF_8;
 
     private final Charset charset;
@@ -56,7 +49,7 @@ public class ReaderWriterDataSource extends FilterDataSource
      * @param   type            Initial {@code "ContentType"} attribute
      *                          value.
      * @param   charset         The {@link Charset} used to encode the
-     *                          {@link OutputStream}.
+     *                          {@link java.io.OutputStream}.
      */
     @ConstructorProperties({ "name", "contentType", "charset" })
     public ReaderWriterDataSource(String name, String type, Charset charset) {
@@ -68,7 +61,7 @@ public class ReaderWriterDataSource extends FilterDataSource
      * @param   type            Initial {@code "ContentType"} attribute
      *                          value.
      * @param   charset         The {@link Charset} used to encode the
-     *                          {@link OutputStream}.
+     *                          {@link java.io.OutputStream}.
      * @param   content         The initial content {@link String}.
      */
     @ConstructorProperties({ "name", "contentType", "charset", EMPTY })
@@ -79,9 +72,8 @@ public class ReaderWriterDataSource extends FilterDataSource
         this.charset = (charset != null) ? charset : CHARSET;
 
         if (content != null) {
-            try (Reader reader = new StringReader(content);
-                 Writer writer = getWriter()) {
-                IOUtils.copy(reader, writer);
+            try (Writer writer = getWriter()) {
+                 writer.write(content);
             } catch (IOException exception) {
                 throw new ExceptionInInitializerError(exception);
             }
@@ -103,12 +95,13 @@ public class ReaderWriterDataSource extends FilterDataSource
 
     /**
      * Method to return a new {@link Reader} to read the underlying
-     * {@link InputStream}.
+     * {@link java.io.InputStream}.
      *
      * @see #getInputStream()
      *
      * @return  A {@link Reader} wrapping the
-     *          {@link javax.activation.DataSource} {@link InputStream}.
+     *          {@link javax.activation.DataSource}
+     *          {@link java.io.InputStream}.
      *
      * @throws  IOException     If an I/O exception occurs.
      */
@@ -118,12 +111,13 @@ public class ReaderWriterDataSource extends FilterDataSource
 
     /**
      * Method to return a new {@link Writer} to write to the underlying
-     * {@link OutputStream}.
+     * {@link java.io.OutputStream}.
      *
      * @see #getOutputStream()
      *
      * @return  A {@link Writer} wrapping the
-     *          {@link javax.activation.DataSource} {@link OutputStream}.
+     *          {@link javax.activation.DataSource}
+     *          {@link java.io.OutputStream}.
      *
      * @throws  IOException     If an I/O exception occurs.
      */
@@ -133,12 +127,13 @@ public class ReaderWriterDataSource extends FilterDataSource
 
     /**
      * Method to return a new {@link BufferedReader} to read the underlying
-     * {@link InputStream}.
+     * {@link java.io.InputStream}.
      *
      * @see #getInputStream()
      *
      * @return  A {@link BufferedReader} wrapping the
-     *          {@link javax.activation.DataSource} {@link InputStream}.
+     *          {@link javax.activation.DataSource}
+     *          {@link java.io.InputStream}.
      *
      * @throws  IOException     If an I/O exception occurs.
      */
@@ -148,12 +143,13 @@ public class ReaderWriterDataSource extends FilterDataSource
 
     /**
      * Method to return a new {@link PrintWriter} to write to the underlying
-     * {@link OutputStream}.
+     * {@link java.io.OutputStream}.
      *
      * @see #getOutputStream()
      *
      * @return  A {@link PrintWriter} wrapping the
-     *          {@link javax.activation.DataSource} {@link OutputStream}.
+     *          {@link javax.activation.DataSource}
+     *          {@link java.io.OutputStream}.
      *
      * @throws  IOException     If an I/O exception occurs.
      */
@@ -163,12 +159,13 @@ public class ReaderWriterDataSource extends FilterDataSource
 
     /**
      * Method to return a new {@link PrintStream} to write to the underlying
-     * {@link OutputStream}.
+     * {@link java.io.OutputStream}.
      *
      * @see #getOutputStream()
      *
      * @return  A {@link PrintStream} wrapping the
-     *          {@link javax.activation.DataSource} {@link OutputStream}.
+     *          {@link javax.activation.DataSource}
+     *          {@link java.io.OutputStream}.
      *
      * @throws  IOException     If an I/O exception occurs.
      */
@@ -189,30 +186,15 @@ public class ReaderWriterDataSource extends FilterDataSource
      *                          writing to the {@link PrintWriter}.
      */
     public void writeTo(PrintWriter writer) throws IOException {
-        try (BufferedReader reader = getBufferedReader()) {
-            IOUtils.copy(reader, writer);
-        }
+        getBufferedReader().lines().forEach(t -> writer.println(t));
     }
-
-    /**
-     * Method to return an {@link Iterator} to access the lines of this
-     * {@link javax.activation.DataSource}.
-     *
-     * @see #getBufferedReader()
-     *
-     * @return  An {@link Iterator} to access the lines of the report.
-     */
-    @Override
-    public Iterator<String> iterator() { return new IteratorImpl(); }
 
     @Override
     public String toString() {
         String string = null;
 
-        try (Reader reader = getReader();
-             StringWriter writer = new StringWriter()) {
-            IOUtils.copy(reader, writer);
-            string = writer.toString();
+        try (BufferedReader reader = getBufferedReader()) {
+            string = reader.lines().collect(joining("\n"));
         } catch (IOException exception) {
             string = super.toString();
         }
@@ -232,49 +214,5 @@ public class ReaderWriterDataSource extends FilterDataSource
      */
     protected static String nameOf(Charset charset) {
         return (charset != null) ? charset.name() : null;
-    }
-
-    private class IteratorImpl implements Iterator<String> {
-        private final BufferedReader reader;
-        private transient String line = null;
-
-        public IteratorImpl() {
-            try {
-                reader = getBufferedReader();
-            } catch (IOException exception) {
-                throw new ExceptionInInitializerError(exception);
-            }
-        }
-
-        @Override
-        public boolean hasNext() {
-            if (line == null) {
-                try {
-                    line = reader.readLine();
-                } catch (IOException exception) {
-                    throw new RuntimeException(exception);
-                }
-            }
-
-            return (line != null);
-        }
-
-        @Override
-        public String next() {
-            hasNext();
-
-            String line = this.line;
-
-            this.line = null;
-
-            if (line == null) {
-                throw new NoSuchElementException();
-            }
-
-            return line;
-        }
-
-        @Override
-        public void remove() { throw new UnsupportedOperationException(); }
     }
 }
