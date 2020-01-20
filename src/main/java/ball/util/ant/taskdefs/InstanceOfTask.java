@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2019 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2020 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.taskdefs;
 
@@ -19,8 +19,6 @@ import java.util.Map;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.apache.tools.ant.BuildException;
-
-import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 /**
  * {@link.uri http://ant.apache.org/ Ant} {@link org.apache.tools.ant.Task}
@@ -88,21 +86,16 @@ public class InstanceOfTask extends TypeTask {
             if (getClass().isAssignableFrom(InstanceOfTask.class)) {
                 ReaderWriterDataSourceImpl ds =
                     new ReaderWriterDataSourceImpl();
-                XMLEncoder encoder = null;
 
-                try {
-                    encoder = new XMLEncoder(ds.getOutputStream());
+                try (XMLEncoder encoder =
+                         new XMLEncoder(ds.getOutputStream())) {
                     encoder.setExceptionListener(ds);
                     encoder.writeObject(instance);
                     encoder.flush();
 
                     if (ds.length() > 0) {
-                        log(EMPTY);
-                        log(ds);
-                    }
-                } finally {
-                    if (encoder != null) {
-                        encoder.close();
+                        log();
+                        log(ds.getBufferedReader().lines());
                     }
                 }
             }

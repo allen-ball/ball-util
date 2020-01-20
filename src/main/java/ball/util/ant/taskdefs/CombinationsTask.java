@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2010 - 2019 Allen D. Ball.  All rights reserved.
+ * Copyright 2010 - 2020 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.taskdefs;
 
@@ -14,7 +14,6 @@ import lombok.ToString;
 import org.apache.tools.ant.BuildException;
 
 import static lombok.AccessLevel.PROTECTED;
-import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 /**
  * Abstract {@link.uri http://ant.apache.org/ Ant}
@@ -47,7 +46,7 @@ public abstract class CombinationsTask extends InstanceOfTask {
             try {
                 Collection<?> collection = Collection.class.cast(instance);
 
-                log(EMPTY);
+                log();
                 log(Combinations.of(getCount(), collection).count()
                     + " combinations of " + getCount());
             } catch (BuildException exception) {
@@ -75,7 +74,7 @@ public abstract class CombinationsTask extends InstanceOfTask {
             try {
                 Collection<?> collection = Collection.class.cast(instance);
 
-                log(EMPTY);
+                log();
 
                 Combinations.of(getCount(), collection)
                     .forEach(t -> log(String.valueOf(t)));

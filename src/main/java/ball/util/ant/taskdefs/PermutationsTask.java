@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2010 - 2019 Allen D. Ball.  All rights reserved.
+ * Copyright 2010 - 2020 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.taskdefs;
 
@@ -12,7 +12,6 @@ import lombok.ToString;
 import org.apache.tools.ant.BuildException;
 
 import static lombok.AccessLevel.PROTECTED;
-import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 /**
  * Abstract {@link.uri http://ant.apache.org/ Ant}
@@ -43,7 +42,7 @@ public abstract class PermutationsTask extends InstanceOfTask {
             try {
                 Collection<?> collection = Collection.class.cast(instance);
 
-                log(EMPTY);
+                log();
                 log(Permutations.of(collection).count() + " permutations");
             } catch (BuildException exception) {
                 throw exception;
@@ -70,7 +69,7 @@ public abstract class PermutationsTask extends InstanceOfTask {
             try {
                 Collection<?> collection = Collection.class.cast(instance);
 
-                log(EMPTY);
+                log();
 
                 Permutations.of(collection)
                     .forEach(t -> log(String.valueOf(t)));

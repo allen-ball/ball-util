@@ -1,5 +1,9 @@
 2020-01-20  Allen D. Ball  <ball@hcf.dev>
 
+	* src/main/java/ball/util/ant/taskdefs/AntTaskLogMethods.java:
+	Added log(Stream<String>), log(Stream<String>,int), log(int), and
+	log() methods.
+
 	* src/main/java/ball/activation/ReaderWriterDataSource.java:
 	Do not implement Iterable<String> (callers should use
 	getBufferedReader().lines()).
