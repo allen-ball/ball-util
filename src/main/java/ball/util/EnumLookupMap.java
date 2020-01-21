@@ -24,7 +24,7 @@ public class EnumLookupMap extends TreeMap<String,Enum<?>> {
      *
      * @param   types           The {@link Enum} types to include.
      */
-    @SafeVarargs
+    @SafeVarargs @SuppressWarnings({ "varargs" })
     public EnumLookupMap(Class<? extends Enum<?>>... types) {
         super(String.CASE_INSENSITIVE_ORDER);
 
