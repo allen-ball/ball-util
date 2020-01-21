@@ -33,7 +33,7 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 /**
  * Abstract base class for inline {@link Taglet}s that load the
- * {@link org.apache.maven.Maven} POM.
+ * {@link.uri https://maven.apache.org/pom.html Maven POM}.
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
