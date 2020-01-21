@@ -13,7 +13,6 @@ import com.sun.javadoc.Tag;
 import com.sun.tools.doclets.Taglet;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.InputStream;
 import java.net.JarURLConnection;
 import java.net.URL;
@@ -22,11 +21,12 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathFactory;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.apache.maven.model.Model;
-import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
-import org.apache.maven.project.MavenProject;
+import org.w3c.dom.Document;
 
 import static lombok.AccessLevel.PROTECTED;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
@@ -88,49 +88,21 @@ public abstract class MavenTaglet extends AbstractInlineTaglet
     }
 
     /**
-     * Method to get the {@link Model} from a {@link Tag}.
-     *
-     * @param   tag             The {@link Tag}.
-     *
-     * @return  The POM {@link Model}.
-     *
-     * @throws  Exception       If the POM {@link Model} cannot be loaded.
-     */
-    protected Model getModelFor(Tag tag) throws Exception {
-        Model model = null;
-        File file = getPomFileFor(tag).getAbsoluteFile();
-
-        try {
-            MavenProject project = getProjectFor(file);
-
-            if (project != null) {
-                model = project.getModel();
-            }
-        } catch (Throwable throwable) {
-            /* throwable.printStackTrace(System.err); */
-        } finally {
-            if (model == null) {
-                try (FileReader reader = new FileReader(file)) {
-                    model = new MavenXpp3Reader().read(reader);
-                    model.setPomFile(file);
-                }
-            }
-        }
-
-        return model;
-    }
-
-    /**
-     * Method to load the {@link MavenProject} from a POM {@link File}.
+     * Method to load the {@link Document} from a POM {@link File}.
      *
      * @param   file            The POM {@link File}.
      *
-     * @return  The {@link MavenProject}.
+     * @return  The {@link Document}.
      *
-     * @throws  Exception       If the POM {@link Model} cannot be loaded.
+     * @throws  Exception       If the {@link Document} cannot be loaded.
      */
-    protected MavenProject getProjectFor(File file) throws Exception {
-        return null /* new EmbeddedMaven(file).getProject() */;
+    protected Document getProjectFor(File file) throws Exception {
+        Document document =
+            DocumentBuilderFactory.newInstance()
+            .newDocumentBuilder()
+            .parse(file);
+
+        return document;
     }
 
     /**
@@ -153,7 +125,7 @@ public abstract class MavenTaglet extends AbstractInlineTaglet
 
         @Override
         public FluentNode toNode(Tag tag) throws Throwable {
-            PropertiesImpl properties = new PropertiesImpl();
+            POMProperties properties = new POMProperties();
             Class<?> type = null;
 
             if (tag.holder() instanceof PackageDoc) {
@@ -169,25 +141,14 @@ public abstract class MavenTaglet extends AbstractInlineTaglet
             URL url = type.getResource(name);
 
             if (url.getProtocol().equalsIgnoreCase("file")) {
-                Model model = getModelFor(tag);
+                Document document = getProjectFor(getPomFileFor(tag));
 
-                properties.setProperty(GROUP_ID, model.getGroupId());
-                properties.setProperty(ARTIFACT_ID, model.getArtifactId());
+                Stream.of(GROUP_ID, ARTIFACT_ID, VERSION)
+                    .forEach(t -> properties
+                                  .getProperty(t, document, "/project/" + t));
 
-                if (isNotEmpty(model.getVersion())) {
-                    properties.setProperty(VERSION, model.getVersion());
-                } else {
-                    String resource =
-                        String.format("/META-INF/maven/%s/%s/pom.properties",
-                                      properties.getProperty(GROUP_ID),
-                                      properties.getProperty(ARTIFACT_ID));
-
-                    try (InputStream in = type.getResourceAsStream(resource)) {
-                        if (in != null) {
-                            properties.load(in);
-                        }
-                    }
-                }
+                properties
+                    .getProperty(VERSION, document, "/project/parent/" + VERSION);
             } else if (url.getProtocol().equalsIgnoreCase("jar")) {
                 JarFile jar =
                     ((JarURLConnection) url.openConnection()).getJarFile();
@@ -208,6 +169,33 @@ public abstract class MavenTaglet extends AbstractInlineTaglet
                                       Stream.of(GROUP_ID, ARTIFACT_ID, VERSION)
                                       .map(t -> element(t).content(properties.getProperty(t, "unknown")))),
                               2));
+        }
+    }
+
+    private static class POMProperties extends PropertiesImpl {
+        private static final long serialVersionUID = -708598891243199947L;
+
+        private static final XPath XPATH =
+            XPathFactory.newInstance().newXPath();
+
+        public String getProperty(String key,
+                                  Document document, String expression) {
+            if (document != null) {
+                computeIfAbsent(key, k -> evaluate(expression, document));
+            }
+
+            return super.getProperty(key);
+        }
+
+        private String evaluate(String expression, Document document) {
+            String value = null;
+
+            try {
+                value = XPATH.evaluate(expression, document);
+            } catch (Exception exception) {
+            }
+
+            return isNotEmpty(value) ? value : null;
         }
     }
 }

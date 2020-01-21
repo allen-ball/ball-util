@@ -1,3 +1,9 @@
+2020-01-21  Allen D. Ball  <ball@hcf.dev>
+
+	* src/main/java/ball/tools/javadoc/MavenTaglet.java:
+	Parse pom.xml as a Document instead of attempting to create a
+	MavenProject.
+
 2020-01-20  Allen D. Ball  <ball@hcf.dev>
 
 	* src/main/java/ball/util/ant/taskdefs/AntTaskLogMethods.java:
