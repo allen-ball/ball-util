@@ -35,20 +35,6 @@ public interface XMLServices {
      * Create a {@link org.w3c.dom.DocumentFragment} {@link Node}
      * (see {@link FluentNode#fragment(Node...)}).
      *
-     * @param   iterable        The {@link Iterable} of {@link Node}s to
-     *                          append to the newly created
-     *                          {@link org.w3c.dom.DocumentFragment}.
-     *
-     * @return  The newly created {@link org.w3c.dom.DocumentFragment}.
-     */
-    default FluentNode fragment(Iterable<Node> iterable) {
-        return document().fragment(iterable);
-    }
-
-    /**
-     * Create a {@link org.w3c.dom.DocumentFragment} {@link Node}
-     * (see {@link FluentNode#fragment(Node...)}).
-     *
      * @param   nodes           The {@link Node}s to append to the newly
      *                          created
      *                          {@link org.w3c.dom.DocumentFragment}.
@@ -72,21 +58,6 @@ public interface XMLServices {
      */
     default FluentNode element(String name, Stream<Node> stream) {
         return document().element(name, stream);
-    }
-
-    /**
-     * Create an {@link org.w3c.dom.Element} {@link Node}
-     * (see {@link FluentNode#element(String,Node...)}).
-     *
-     * @param   name            The {@link org.w3c.dom.Element} name.
-     * @param   iterable        The {@link Iterable} of {@link Node}s to
-     *                          append to the newly created
-     *                          {@link org.w3c.dom.Element}.
-     *
-     * @return  The newly created {@link org.w3c.dom.Element}.
-     */
-    default FluentNode element(String name, Iterable<Node> iterable) {
-        return document().element(name, iterable);
     }
 
     /**

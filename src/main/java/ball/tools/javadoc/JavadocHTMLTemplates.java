@@ -7,7 +7,6 @@ package ball.tools.javadoc;
 
 import ball.xml.FluentNode;
 import ball.xml.HTMLTemplates;
-import com.sun.javadoc.ClassDoc;
 import com.sun.javadoc.Tag;
 import com.sun.tools.doclets.Taglet;
 import java.lang.annotation.Annotation;
@@ -73,7 +72,7 @@ public interface JavadocHTMLTemplates extends HTMLTemplates {
     }
 
     /**
-     * {@code <a href="}{@link ClassDoc type}{@code ">}{@link ClassDoc#name() ClassDoc.name()}{@code </a>}
+     * {@code <a href="}{@link com.sun.javadoc.ClassDoc type}{@code ">}{@link com.sun.javadoc.ClassDoc#name() ClassDoc.name()}{@code </a>}
      *
      * @param   tag             The {@link Tag}.
      * @param   type            The target {@link Class}.
@@ -85,7 +84,7 @@ public interface JavadocHTMLTemplates extends HTMLTemplates {
     }
 
     /**
-     * {@code <a href="}{@link ClassDoc type}{@code ">}{@link #code(String) code(name)}{@code </a>}
+     * {@code <a href="}{@link com.sun.javadoc.ClassDoc type}{@code ">}{@link #code(String) code(name)}{@code </a>}
      *
      * @param   tag             The {@link Tag}.
      * @param   type            The target {@link Class}.
@@ -123,7 +122,7 @@ public interface JavadocHTMLTemplates extends HTMLTemplates {
     }
 
     /**
-     * {@code <a href="}{@link ClassDoc constant}{@code ">}{@link Enum#name() constant.name()}{@code </a>}
+     * {@code <a href="}{@link com.sun.javadoc.ClassDoc constant}{@code ">}{@link Enum#name() constant.name()}{@code </a>}
      *
      * @param   tag             The {@link Tag}.
      * @param   constant        The target {@link Enum}.
@@ -232,7 +231,7 @@ public interface JavadocHTMLTemplates extends HTMLTemplates {
      * }
      */
     /**
-     * {@code <a href="}{@link ClassDoc annotation}{@code ">}{@link #code(String) code(String.valueOf(annotation))}{@code </a>}
+     * {@code <a href="}{@link com.sun.javadoc.ClassDoc annotation}{@code ">}{@link #code(String) code(String.valueOf(annotation))}{@code </a>}
      *
      * @param   tag             The {@link Tag}.
      * @param   annotation      The target {@link Annotation}.
@@ -325,23 +324,6 @@ public interface JavadocHTMLTemplates extends HTMLTemplates {
      * @param   tag             The {@link Tag}.
      * @param   model           The {@link TableModel} to use to create the
      *                          new table {@link org.w3c.dom.Element}.
-     * @param   iterable        The {@link Iterable} of {@link Node}s to
-     *                          append to the newly created
-     *                          {@link org.w3c.dom.Element}.
-     *
-     * @return  {@link org.w3c.dom.Element}
-     */
-    default FluentNode table(Tag tag,
-                             TableModel model, Iterable<Node> iterable) {
-        return table(tag, model, FluentNode.toArray(iterable));
-    }
-
-    /**
-     * {@code <table>}{@link TableModel model}{@code </table>}
-     *
-     * @param   tag             The {@link Tag}.
-     * @param   model           The {@link TableModel} to use to create the
-     *                          new table {@link org.w3c.dom.Element}.
      * @param   nodes           The {@link Node}s to append to the newly
      *                          created
      *                          {@link org.w3c.dom.Element}.
@@ -384,7 +366,7 @@ public interface JavadocHTMLTemplates extends HTMLTemplates {
 
         if (object instanceof byte[]) {
             node =
-                text(Arrays.stream(ArrayUtils.toObject((byte[]) object))
+                text(Stream.of(ArrayUtils.toObject((byte[]) object))
                      .map (t -> String.format("0x%02X", t))
                      .collect(Collectors.joining(", ", "[", "]")));
         } else if (object instanceof boolean[]) {
@@ -423,7 +405,7 @@ public interface JavadocHTMLTemplates extends HTMLTemplates {
             node =
                 fragment()
                 .add(text("["))
-                .add(nodes)
+                .add(nodes.stream())
                 .add(text("]"));
         } else {
             node = text(String.valueOf(object));

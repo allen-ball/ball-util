@@ -112,19 +112,6 @@ public interface HTMLTemplates extends XMLServices {
     /**
      * {@code <div>}{@link Node nodes...}{@code </div>}
      *
-     * @param   iterable        The {@link Iterable} of {@link Node}s to
-     *                          append to the newly created
-     *                          {@link org.w3c.dom.Element}.
-     *
-     * @return  {@link org.w3c.dom.Element}
-     */
-    default FluentNode div(Iterable<Node> iterable) {
-        return div(FluentNode.toArray(iterable));
-    }
-
-    /**
-     * {@code <div>}{@link Node nodes...}{@code </div>}
-     *
      * @param   nodes           The {@link Node}s to append to the newly
      *                          created
      *                          {@link org.w3c.dom.Element}.
@@ -144,19 +131,6 @@ public interface HTMLTemplates extends XMLServices {
      */
     default FluentNode p(Stream<Node> stream) {
         return p(stream.toArray(Node[]::new));
-    }
-
-    /**
-     * {@code <p>}{@link Node nodes...}{@code </p>}
-     *
-     * @param   iterable        The {@link Iterable} of {@link Node}s to
-     *                          append to the newly created
-     *                          {@link org.w3c.dom.Element}.
-     *
-     * @return  {@link org.w3c.dom.Element}
-     */
-    default FluentNode p(Iterable<Node> iterable) {
-        return p(FluentNode.toArray(iterable));
     }
 
     /**
@@ -218,19 +192,6 @@ public interface HTMLTemplates extends XMLServices {
     /**
      * {@code <table>}{@link Node nodes...}{@code </table>}
      *
-     * @param   iterable        The {@link Iterable} of {@link Node}s to
-     *                          append to the newly created
-     *                          {@link org.w3c.dom.Element}.
-     *
-     * @return  {@link org.w3c.dom.Element}
-     */
-    default FluentNode table(Iterable<Node> iterable) {
-        return table(FluentNode.toArray(iterable));
-    }
-
-    /**
-     * {@code <table>}{@link Node nodes...}{@code </table>}
-     *
      * @param   nodes           The {@link Node}s to append to the newly
      *                          created
      *                          {@link org.w3c.dom.Element}.
@@ -268,19 +229,6 @@ public interface HTMLTemplates extends XMLServices {
     /**
      * {@code <thead>}{@link Node nodes...}{@code </thead>}
      *
-     * @param   iterable        The {@link Iterable} of {@link Node}s to
-     *                          append to the newly created
-     *                          {@link org.w3c.dom.Element}.
-     *
-     * @return  {@link org.w3c.dom.Element}
-     */
-    default FluentNode thead(Iterable<Node> iterable) {
-        return thead(FluentNode.toArray(iterable));
-    }
-
-    /**
-     * {@code <thead>}{@link Node nodes...}{@code </thead>}
-     *
      * @param   nodes           The {@link Node}s to append to the newly
      *                          created
      *                          {@link org.w3c.dom.Element}.
@@ -302,19 +250,6 @@ public interface HTMLTemplates extends XMLServices {
      */
     default FluentNode tbody(Stream<Node> stream) {
         return tbody(stream.toArray(Node[]::new));
-    }
-
-    /**
-     * {@code <tbody>}{@link Node nodes...}{@code </tbody>}
-     *
-     * @param   iterable        The {@link Iterable} of {@link Node}s to
-     *                          append to the newly created
-     *                          {@link org.w3c.dom.Element}.
-     *
-     * @return  {@link org.w3c.dom.Element}
-     */
-    default FluentNode tbody(Iterable<Node> iterable) {
-        return tbody(FluentNode.toArray(iterable));
     }
 
     /**
@@ -346,19 +281,6 @@ public interface HTMLTemplates extends XMLServices {
     /**
      * {@code <tfoot>}{@link Node nodes...}{@code </tfoot>}
      *
-     * @param   iterable        The {@link Iterable} of {@link Node}s to
-     *                          append to the newly created
-     *                          {@link org.w3c.dom.Element}.
-     *
-     * @return  {@link org.w3c.dom.Element}
-     */
-    default FluentNode tfoot(Iterable<Node> iterable) {
-        return tfoot(FluentNode.toArray(iterable));
-    }
-
-    /**
-     * {@code <tfoot>}{@link Node nodes...}{@code </tfoot>}
-     *
      * @param   nodes           The {@link Node}s to append to the newly
      *                          created
      *                          {@link org.w3c.dom.Element}.
@@ -380,19 +302,6 @@ public interface HTMLTemplates extends XMLServices {
      */
     default FluentNode tr(Stream<Node> stream) {
         return tr(stream.toArray(Node[]::new));
-    }
-
-    /**
-     * {@code <tr>}{@link Node nodes...}{@code </tr>}
-     *
-     * @param   iterable        The {@link Iterable} of {@link Node}s to
-     *                          append to the newly created
-     *                          {@link org.w3c.dom.Element}.
-     *
-     * @return  {@link org.w3c.dom.Element}
-     */
-    default FluentNode tr(Iterable<Node> iterable) {
-        return tr(FluentNode.toArray(iterable));
     }
 
     /**

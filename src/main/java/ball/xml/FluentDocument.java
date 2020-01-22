@@ -36,11 +36,6 @@ public interface FluentDocument extends FluentNode, Document {
     }
 
     @Override
-    default FluentDocument add(Iterable<Node> iterable) {
-        return (FluentDocument) FluentNode.super.add(iterable);
-    }
-
-    @Override
     default FluentDocument add(Node... nodes) {
         return (FluentDocument) FluentNode.super.add(nodes);
     }

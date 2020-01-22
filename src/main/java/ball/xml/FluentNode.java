@@ -8,16 +8,13 @@ package ball.xml;
 import ball.lang.reflect.FacadeProxyInvocationHandler;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.w3c.dom.Attr;
@@ -68,23 +65,6 @@ public interface FluentNode extends Node {
         }).collect(Collectors.toMap(t -> (Short) t[0],
                                     t -> ((Class<?>) t[1])
                                              .asSubclass(Node.class)));
-
-    /**
-     * Method to convert an {@link Iterable} of {@link Node}s to an array.
-     *
-     * @param   iterable        The {@link Iterable} of {@link Node}s.
-     *
-     * @return  The array of {@link Node}s.
-     */
-    public static Node[] toArray(Iterable<Node> iterable) {
-        return(StreamSupport
-               .stream(Optional
-                       .ofNullable(iterable)
-                       .orElse(Collections.emptyList())
-                       .spliterator(),
-                       false)
-               .toArray(Node[]::new));
-    }
 
     /**
      * See {@link Node#getOwnerDocument()}.
@@ -157,18 +137,6 @@ public interface FluentNode extends Node {
     /**
      * Method to add {@link Node}s to {@link.this} {@link FluentNode}.
      *
-     * @param   iterable        The {@link Iterable} of {@link Node}s to
-     *                          add.
-     *
-     * @return  {@link.this}
-     */
-    default FluentNode add(Iterable<Node> iterable) {
-        return add(toArray(iterable));
-    }
-
-    /**
-     * Method to add {@link Node}s to {@link.this} {@link FluentNode}.
-     *
      * @param   nodes           The {@link Node}s to add.
      *
      * @return  {@link.this}
@@ -205,19 +173,6 @@ public interface FluentNode extends Node {
     /**
      * Create an {@link DocumentFragment} {@link Node}.
      *
-     * @param   iterable        The {@link Iterable} of {@link Node}s to
-     *                          append to the newly created
-     *                          {@link DocumentFragment}.
-     *
-     * @return  The newly created {@link DocumentFragment}.
-     */
-    default FluentNode fragment(Iterable<Node> iterable) {
-        return fragment(toArray(iterable));
-    }
-
-    /**
-     * Create an {@link DocumentFragment} {@link Node}.
-     *
      * @param   nodes           The {@link Node}s to append to the newly
      *                          created {@link DocumentFragment}.
      *
@@ -238,19 +193,6 @@ public interface FluentNode extends Node {
      */
     default FluentNode element(String name, Stream<Node> stream) {
         return element(name, stream.toArray(Node[]::new));
-    }
-
-    /**
-     * Create an {@link Element} {@link Node}.
-     *
-     * @param   name            The {@link Element} name.
-     * @param   iterable        The {@link Iterable} of {@link Node}s to
-     *                          append to the newly created {@link Element}.
-     *
-     * @return  The newly created {@link Element}.
-     */
-    default FluentNode element(String name, Iterable<Node> iterable) {
-        return element(name, toArray(iterable));
     }
 
     /**
@@ -278,21 +220,6 @@ public interface FluentNode extends Node {
      */
     default FluentNode elementNS(String ns, String qn, Stream<Node> stream) {
         return elementNS(ns, qn, stream.toArray(Node[]::new));
-    }
-
-    /**
-     * Create an {@link Element} {@link Node}.
-     *
-     * @param   ns              The {@link Element} namespace.
-     * @param   qn              The {@link Element} qualified name.
-     * @param   iterable        The {@link Iterable} of {@link Node}s to
-     *                          append to the newly created {@link Element}.
-     *
-     * @return  The newly created {@link Element}.
-     */
-    default FluentNode elementNS(String ns, String qn,
-                                 Iterable<Node> iterable) {
-        return elementNS(ns, qn, toArray(iterable));
     }
 
     /**
