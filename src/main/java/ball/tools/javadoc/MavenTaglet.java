@@ -29,6 +29,7 @@ import lombok.ToString;
 import org.w3c.dom.Document;
 
 import static lombok.AccessLevel.PROTECTED;
+import static org.apache.commons.lang3.StringUtils.firstNonBlank;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 /**
@@ -57,27 +58,20 @@ public abstract class MavenTaglet extends AbstractInlineTaglet
      * @throws  Exception       If the POM {@link File} cannot be found.
      */
     protected File getPomFileFor(Tag tag) throws Exception {
-        File file = null;
-        String name = tag.text().trim();
+        File parent = tag.position().file().getParentFile();
+        String name = firstNonBlank(tag.text().trim(), POM_XML);
+        File file = new File(parent, name);
 
-        if (isNotEmpty(name)) {
-            file = new File(tag.position().file().getParentFile(), name);
-        } else {
-            name = POM_XML;
+        while (parent != null) {
+            file = new File(parent, name);
 
-            File parent = tag.position().file().getParentFile();
-
-            while (parent != null) {
-                file = new File(parent, name);
-
-                if (file.isFile()) {
-                    break;
-                } else {
-                    file = null;
-                }
-
-                parent = parent.getParentFile();
+            if (file.isFile()) {
+                break;
+            } else {
+                file = null;
             }
+
+            parent = parent.getParentFile();
         }
 
         if (file == null || (! file.isFile())) {
@@ -85,24 +79,6 @@ public abstract class MavenTaglet extends AbstractInlineTaglet
         }
 
         return file;
-    }
-
-    /**
-     * Method to load the {@link Document} from a POM {@link File}.
-     *
-     * @param   file            The POM {@link File}.
-     *
-     * @return  The {@link Document}.
-     *
-     * @throws  Exception       If the {@link Document} cannot be loaded.
-     */
-    protected Document getProjectFor(File file) throws Exception {
-        Document document =
-            DocumentBuilderFactory.newInstance()
-            .newDocumentBuilder()
-            .parse(file);
-
-        return document;
     }
 
     /**
@@ -129,7 +105,7 @@ public abstract class MavenTaglet extends AbstractInlineTaglet
             Class<?> type = null;
 
             if (tag.holder() instanceof PackageDoc) {
-                type = Class.forName(tag.holder().name() + ".package-info");
+                type = getClassFor((PackageDoc) tag.holder());
             } else {
                 type = getClassFor(getContainingClassDocFor(tag));
             }
@@ -141,14 +117,15 @@ public abstract class MavenTaglet extends AbstractInlineTaglet
             URL url = type.getResource(name);
 
             if (url.getProtocol().equalsIgnoreCase("file")) {
-                Document document = getProjectFor(getPomFileFor(tag));
+                Document document =
+                    DocumentBuilderFactory.newInstance()
+                    .newDocumentBuilder()
+                    .parse(getPomFileFor(tag));
 
                 Stream.of(GROUP_ID, ARTIFACT_ID, VERSION)
-                    .forEach(t -> properties
-                                  .getProperty(t, document, "/project/" + t));
-
-                properties
-                    .getProperty(VERSION, document, "/project/parent/" + VERSION);
+                    .forEach(t -> properties.load(t, document, "/project/"));
+                Stream.of(VERSION)
+                    .forEach(t -> properties.load(t, document, "/project/parent/"));
             } else if (url.getProtocol().equalsIgnoreCase("jar")) {
                 JarFile jar =
                     ((JarURLConnection) url.openConnection()).getJarFile();
@@ -173,15 +150,14 @@ public abstract class MavenTaglet extends AbstractInlineTaglet
     }
 
     private static class POMProperties extends PropertiesImpl {
-        private static final long serialVersionUID = -708598891243199947L;
+        private static final long serialVersionUID = 4307017362755213005L;
 
         private static final XPath XPATH =
             XPathFactory.newInstance().newXPath();
 
-        public String getProperty(String key,
-                                  Document document, String expression) {
+        public String load(String key, Document document, String prefix) {
             if (document != null) {
-                computeIfAbsent(key, k -> evaluate(expression, document));
+                computeIfAbsent(key, k -> evaluate(prefix + k, document));
             }
 
             return super.getProperty(key);
