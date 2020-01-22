@@ -10,12 +10,9 @@ import ball.util.Factory;
 import ball.util.ant.types.TypedAttributeType;
 import java.beans.ExceptionListener;
 import java.beans.XMLEncoder;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Member;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.apache.tools.ant.BuildException;
@@ -92,11 +89,11 @@ public class InstanceOfTask extends TypeTask {
                     encoder.setExceptionListener(ds);
                     encoder.writeObject(instance);
                     encoder.flush();
+                }
 
-                    if (ds.length() > 0) {
-                        log();
-                        log(ds.getBufferedReader().lines());
-                    }
+                if (ds.length() > 0) {
+                    log();
+                    log(ds.getBufferedReader().lines());
                 }
             }
         } catch (BuildException exception) {
