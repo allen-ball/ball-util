@@ -9,7 +9,6 @@ import ball.text.TextTable;
 import java.io.BufferedReader;
 import java.io.File;
 import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 import javax.swing.table.TableModel;
 import org.apache.tools.ant.Project;
 
@@ -69,27 +68,6 @@ public interface AntTaskLogMethods extends AntTaskMixIn {
      */
     default void log(Stream<String> stream, int msgLevel) {
         stream.forEach(t -> log(t, msgLevel));
-    }
-
-    /**
-     * See {@link #log(Stream)}.
-     *
-     * @param   iterable        The {@link Iterable} of {@link String}s to
-     *                          log.
-     */
-    default void log(Iterable<String> iterable) {
-        log(iterable, Project.MSG_INFO);
-    }
-
-    /**
-     * See {@link #log(Stream,int)}.
-     *
-     * @param   iterable        The {@link Iterable} of {@link String}s to
-     *                          log.
-     * @param   msgLevel        The log message level.
-     */
-    default void log(Iterable<String> iterable, int msgLevel) {
-        log(StreamSupport.stream(iterable.spliterator(), false), msgLevel);
     }
 
     /**

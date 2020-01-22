@@ -9,7 +9,8 @@
 
 	* src/main/java/ball/util/ant/taskdefs/AntTaskLogMethods.java:
 	Added log(Stream<String>), log(Stream<String>,int), log(int), and
-	log() methods.  Removed interfaces with Iterator parameters.
+	log() methods.  Removed interfaces with Iterable and Iterator
+	parameters.
 
 	* pom.xml: Remove Maven compilation dependencies.
 
