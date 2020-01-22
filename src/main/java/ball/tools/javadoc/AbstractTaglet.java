@@ -362,7 +362,39 @@ public abstract class AbstractTaglet implements AnnotatedTaglet,
     }
 
     /**
-     * Method to get the corresponding {@link Class} for a {@link ClassDoc}.
+     * Method to get the corresponding {@link Class}
+     * ({@code package-info.class}) for a {@link PackageDoc}.
+     *
+     * @param   doc             The {@link PackageDoc} (may be {@code null}).
+     *
+     * @return  The corresponding {@link Class}.
+     *
+     * @throws  RuntimeException
+     *                          Instead of checked {@link Exception}.
+     */
+    protected Class<?> getClassFor(PackageDoc doc) {
+        Class<?> type = null;
+
+        try {
+            if (doc != null) {
+                String name = doc.name() + ".package-info";
+
+                type = Class.forName(name);
+            }
+        } catch (RuntimeException exception) {
+            throw exception;
+        } catch (Error error) {
+            throw error;
+        } catch (Exception exception) {
+            throw new RuntimeException(exception);
+        }
+
+        return type;
+    }
+
+    /**
+     * Method to get the corresponding {@link Class} for a
+     * {@link ClassDoc}.
      *
      * @param   doc             The {@link ClassDoc} (may be {@code null}).
      *
@@ -375,7 +407,9 @@ public abstract class AbstractTaglet implements AnnotatedTaglet,
         Class<?> type = null;
 
         try {
-            type = (doc != null) ? Class.forName(getClassNameFor(doc)) : null;
+            if (doc != null) {
+                type = Class.forName(getClassNameFor(doc));
+            }
         } catch (RuntimeException exception) {
             throw exception;
         } catch (Error error) {

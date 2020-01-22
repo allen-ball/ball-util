@@ -14,6 +14,9 @@
 
 	* pom.xml: Remove Maven compilation dependencies.
 
+	* src/main/java/ball/tools/javadoc/AbstractTaglet.java:
+	Added getClassFor(PackageDoc) method.
+
 	* src/main/java/ball/tools/javadoc/MavenTaglet.java:
 	Parse pom.xml as a Document instead of attempting to create a
 	MavenProject.
