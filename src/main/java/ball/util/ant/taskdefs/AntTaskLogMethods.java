@@ -6,10 +6,10 @@
 package ball.util.ant.taskdefs;
 
 import ball.text.TextTable;
-import java.io.File;
 import java.io.BufferedReader;
-import java.util.Iterator;
+import java.io.File;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 import javax.swing.table.TableModel;
 import org.apache.tools.ant.Project;
 
@@ -29,14 +29,14 @@ public interface AntTaskLogMethods extends AntTaskMixIn {
     void log(Throwable throwable, int messageLevel);
 
     /**
-     * See {@link #log(Iterable)}.
+     * See {@link #log(Stream)}.
      *
      * @param   model           The {@link TableModel} to log.
      */
     default void log(TableModel model) { log(model, Project.MSG_INFO); }
 
     /**
-     * See {@link #log(Iterable,int)}.
+     * See {@link #log(Stream,int)}.
      *
      * @param   model           The {@link TableModel} to log.
      * @param   msgLevel        The log message level.
@@ -47,29 +47,6 @@ public interface AntTaskLogMethods extends AntTaskMixIn {
             log(reader.lines(), Project.MSG_INFO);
         } catch (Throwable throwable) {
             throw new IllegalStateException(throwable);
-        }
-    }
-
-    /**
-     * See {@link org.apache.tools.ant.Task#log(String)}.
-     *
-     * @param   iterable        The {@link Iterable} of {@link String}s to
-     *                          log.
-     */
-    default void log(Iterable<String> iterable) {
-        log(iterable, Project.MSG_INFO);
-    }
-
-    /**
-     * See {@link org.apache.tools.ant.Task#log(String,int)}.
-     *
-     * @param   iterable        The {@link Iterable} of {@link String}s to
-     *                          log.
-     * @param   msgLevel        The log message level.
-     */
-    default void log(Iterable<String> iterable, int msgLevel) {
-        for (String line : iterable) {
-            log(line, msgLevel);
         }
     }
 
@@ -91,30 +68,28 @@ public interface AntTaskLogMethods extends AntTaskMixIn {
      * @param   msgLevel        The log message level.
      */
     default void log(Stream<String> stream, int msgLevel) {
-        log(stream.iterator(), msgLevel);
+        stream.forEach(t -> log(t, msgLevel));
     }
 
     /**
-     * See {@link org.apache.tools.ant.Task#log(String)}.
+     * See {@link #log(Stream)}.
      *
-     * @param   iterator        The {@link Iterator} of {@link String}s to
+     * @param   iterable        The {@link Iterable} of {@link String}s to
      *                          log.
      */
-    default void log(Iterator<String> iterator) {
-        log(iterator, Project.MSG_INFO);
+    default void log(Iterable<String> iterable) {
+        log(iterable, Project.MSG_INFO);
     }
 
     /**
-     * See {@link org.apache.tools.ant.Task#log(String,int)}.
+     * See {@link #log(Stream,int)}.
      *
-     * @param   iterator        The {@link Iterator} of {@link String}s to
+     * @param   iterable        The {@link Iterable} of {@link String}s to
      *                          log.
      * @param   msgLevel        The log message level.
      */
-    default void log(Iterator<String> iterator, int msgLevel) {
-        while (iterator.hasNext()) {
-            log(iterator.next(), msgLevel);
-        }
+    default void log(Iterable<String> iterable, int msgLevel) {
+        log(StreamSupport.stream(iterable.spliterator(), false), msgLevel);
     }
 
     /**
