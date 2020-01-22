@@ -1,6 +1,7 @@
 2020-01-21  Allen D. Ball  <ball@hcf.dev>
 
-	* src/main/java/ball/xml/FluentNode.java,
+	* src/main/java/ball/xml/FluentDocument.java,
+	src/main/java/ball/xml/FluentNode.java,
 	src/main/java/ball/xml/HTMLTemplates.java,
 	src/main/java/ball/xml/XMLServices.java,
 	src/main/java/ball/tools/javadoc/JavadocHTMLTemplates.java:
