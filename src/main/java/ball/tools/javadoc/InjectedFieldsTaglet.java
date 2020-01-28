@@ -1,19 +1,18 @@
 /*
  * $Id$
  *
- * Copyright 2019 Allen D. Ball.  All rights reserved.
+ * Copyright 2019, 2020 Allen D. Ball.  All rights reserved.
  */
 package ball.tools.javadoc;
 
 import ball.annotation.ServiceProviderFor;
 import ball.xml.FluentNode;
 import com.sun.javadoc.ClassDoc;
-import com.sun.javadoc.Doc;
 import com.sun.javadoc.Tag;
 import com.sun.tools.doclets.Taglet;
 import java.lang.annotation.Annotation;
+import java.lang.annotation.Retention;
 import java.lang.reflect.Field;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -44,34 +43,15 @@ public class InjectedFieldsTaglet extends AbstractInlineTaglet
 
     private static final String[] NAMES = new String[] {
         javax.annotation.Resource.class.getName(),
+        javax.annotation.Resources.class.getName(),
         "javax.inject.Inject",
-        "org.apache.maven.plugins.annotations.Component",
-        "org.apache.maven.plugins.annotations.Parameter",
+        "javax.inject.Named",
         "org.springframework.beans.factory.annotation.Autowired",
         "org.springframework.beans.factory.annotation.Value"
     };
 
-    public static final Set<Class<? extends Annotation>> ANNOTATIONS;
-
-    static {
-        HashSet<Class<? extends Annotation>> set = new HashSet<>();
-
-        for (String name : NAMES) {
-            try {
-                set.add(Class.forName(name).asSubclass(Annotation.class));
-            } catch (Exception exception) {
-            }
-        }
-
-        ANNOTATIONS = Collections.unmodifiableSet(set);
-    }
-
     @Override
     public FluentNode toNode(Tag tag) throws Throwable {
-        if (ANNOTATIONS.isEmpty()) {
-            throw new Error("No annotations to map");
-        }
-
         ClassDoc doc = null;
         String[] argv = tag.text().trim().split("[\\p{Space}]+", 2);
 
@@ -81,21 +61,66 @@ public class InjectedFieldsTaglet extends AbstractInlineTaglet
             doc = getContainingClassDocFor(tag);
         }
 
-        return table(tag, getClassFor(doc));
+        Set<Class<? extends Annotation>> set = new HashSet<>();
+
+        for (String name : NAMES) {
+            Class<?> type = null;
+
+            try {
+                type = Class.forName(name);
+            } catch (Exception exception) {
+            }
+
+            if (type != null) {
+                Class<? extends Annotation> annotation =
+                    type.asSubclass(Annotation.class);
+                Retention retention =
+                    annotation.getAnnotation(Retention.class);
+
+                if (retention == null) {
+                    throw new IllegalStateException(annotation.getCanonicalName()
+                                                    + " does not specify a retention policy");
+                }
+
+                switch (retention.value()) {
+                case RUNTIME:
+                    break;
+
+                case CLASS:
+                case SOURCE:
+                default:
+                    throw new IllegalStateException(annotation.getCanonicalName()
+                                                    + " specifies "
+                                                    + retention.value()
+                                                    + " retention policy");
+                    /* break; */
+                }
+
+                set.add(annotation);
+            }
+        }
+
+        if (set.isEmpty()) {
+            throw new IllegalStateException("No annotations to map");
+        }
+
+        return table(tag, getClassFor(doc), set);
     }
 
-    private FluentNode table(Tag tag, Class<?> type) {
+    private FluentNode table(Tag tag, Class<?> type,
+                             Set<Class<? extends Annotation>> set) {
         return table(thead(tr(th("Annotation(s)"), th("Field"))),
                      tbody(Stream.of(type.getDeclaredFields())
                            .filter(t -> (Stream.of(t.getAnnotations())
-                                         .filter(a -> ANNOTATIONS.contains(a.annotationType()))
+                                         .filter(a -> set.contains(a.annotationType()))
                                          .findFirst().isPresent()))
-                           .map(t -> tr(tag, t))));
+                           .map(t -> tr(tag, t, set))));
     }
 
-    private FluentNode tr(Tag tag, Field field) {
+    private FluentNode tr(Tag tag, Field field,
+                          Set<Class<? extends Annotation>> set) {
         return tr(td(fragment(Stream.of(field.getAnnotations())
-                              .filter(t -> ANNOTATIONS.contains(t.annotationType()))
+                              .filter(t -> set.contains(t.annotationType()))
                               .map(t -> annotation(tag, t)))),
                   td(declaration(tag, field)));
     }
