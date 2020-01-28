@@ -151,6 +151,8 @@ public abstract class AbstractTaglet implements AnnotatedTaglet,
             node = toNode(tag);
         } catch (IllegalStateException exception) {
             throw exception;
+        } catch (Error error) {
+            throw error;
         } catch (Throwable throwable) {
             node = warning(tag, throwable);
         }

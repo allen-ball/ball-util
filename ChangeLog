@@ -1,3 +1,8 @@
+2020-01-27  Allen D. Ball  <ball@hcf.dev>
+
+	* src/main/java/ball/tools/javadoc/AbstractTaglet.java:
+	In toString(Tag) method, re-throw Error.
+
 2020-01-21  Allen D. Ball  <ball@hcf.dev>
 
 	* src/main/java/ball/xml/FluentDocument.java,
