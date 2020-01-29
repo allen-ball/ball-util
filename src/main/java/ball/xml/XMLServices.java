@@ -5,8 +5,10 @@
  */
 package ball.xml;
 
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  * Common XML services.
@@ -131,5 +133,16 @@ public interface XMLServices {
      */
     default FluentNode comment(String data) {
         return document().comment(data);
+    }
+
+    /**
+     * Convert a {@link NodeList} to a {@link Stream}.
+     *
+     * @param   list            The {@link NodeList}.
+     *
+     * @return  A {@link Stream} of {@link Node}s.
+     */
+    default Stream<Node> asStream(NodeList list) {
+        return IntStream.range(0, list.getLength()).mapToObj(list::item);
     }
 }
