@@ -1,5 +1,9 @@
 2020-01-29  Allen D. Ball  <ball@hcf.dev>
 
+	* src/main/java/ball/tools/javadoc/AbstractTaglet.java:
+	Added getResourcePathOf(Class<?>) and getResourceURLOf(Class<?>)
+	methods.
+
 	* Added <xpath-evaluate/> Ant Task and target.
 
 	* src/main/java/ball/util/ant/taskdefs/DownloadTask.java:

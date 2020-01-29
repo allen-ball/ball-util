@@ -29,6 +29,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.net.URI;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.regex.Pattern;
@@ -435,6 +436,32 @@ public abstract class AbstractTaglet implements AnnotatedTaglet,
         }
 
         return name;
+    }
+
+    /**
+     * Method to get a {@link Class}'s resource path.
+     *
+     * @param   type            The {@link Class}.
+     *
+     * @return  The {@link Class}'s resource path (as a {@link String}).
+     */
+    protected String getResourcePathOf(Class<?> type) {
+        String path =
+            String.join("/", type.getName().split(Pattern.quote(".")))
+            + ".class";
+
+        return path;
+    }
+
+    /**
+     * Method to get the {@link URL} to a {@link Class}.
+     *
+     * @param   type            The {@link Class}.
+     *
+     * @return  The {@link Class}'s {@link URL}.
+     */
+    protected URL getResourceURLOf(Class<?> type) {
+        return type.getResource("/" + getResourcePathOf(type));
     }
 
     /**
