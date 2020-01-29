@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2013 - 2019 Allen D. Ball.  All rights reserved.
+ * Copyright 2013 - 2020 Allen D. Ball.  All rights reserved.
  */
 package ball.tools.javadoc;
 
@@ -54,7 +54,8 @@ public class BeanInfoTaglet extends AbstractInlineTaglet
             new PropertyDescriptorsTableModel(getBeanInfo(type)
                                               .getPropertyDescriptors());
 
-        return div(attr("class", "block"),
+        return div(attr("class", "summary"),
+                   h3("Bean Property Summary"),
                    table(tag, model));
     }
 }

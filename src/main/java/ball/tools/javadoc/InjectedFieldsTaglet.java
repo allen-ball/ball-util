@@ -104,7 +104,9 @@ public class InjectedFieldsTaglet extends AbstractInlineTaglet
             throw new IllegalStateException("No annotations to map");
         }
 
-        return table(tag, getClassFor(doc), set);
+        return div(attr("class", "summary"),
+                   h3("Injected Field Summary"),
+                   table(tag, getClassFor(doc), set));
     }
 
     private FluentNode table(Tag tag, Class<?> type,
