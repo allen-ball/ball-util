@@ -340,9 +340,7 @@ public interface HTMLTemplates extends XMLServices {
      *
      * @return  {@link org.w3c.dom.Element}
      */
-    default FluentNode ol(Node... nodes) {
-        return element("ol", nodes);
-    }
+    default FluentNode ol(Node... nodes) { return element("ol", nodes); }
 
     /**
      * {@code <ul>}{@link Node nodes...}{@code </ul>}
@@ -366,9 +364,7 @@ public interface HTMLTemplates extends XMLServices {
      *
      * @return  {@link org.w3c.dom.Element}
      */
-    default FluentNode ul(Node... nodes) {
-        return element("ul", nodes);
-    }
+    default FluentNode ul(Node... nodes) { return element("ul", nodes); }
 
     /**
      * {@code <li>}{@link Node nodes...}{@code </li>}
@@ -481,9 +477,7 @@ public interface HTMLTemplates extends XMLServices {
      *
      * @return  {@link org.w3c.dom.Element}
      */
-    default FluentNode table(Node... nodes) {
-        return element("table", nodes);
-    }
+    default FluentNode table(Node... nodes) { return element("table", nodes); }
 
     /**
      * {@code <caption>}{@link String content}{@code </caption>}}
@@ -518,9 +512,7 @@ public interface HTMLTemplates extends XMLServices {
      *
      * @return  {@link org.w3c.dom.Element}
      */
-    default FluentNode thead(Node... nodes) {
-        return element("thead", nodes);
-    }
+    default FluentNode thead(Node... nodes) { return element("thead", nodes); }
 
     /**
      * {@code <tbody>}{@link Node nodes...}{@code </tbody>}
@@ -544,9 +536,7 @@ public interface HTMLTemplates extends XMLServices {
      *
      * @return  {@link org.w3c.dom.Element}
      */
-    default FluentNode tbody(Node... nodes) {
-        return element("tbody", nodes);
-    }
+    default FluentNode tbody(Node... nodes) { return element("tbody", nodes); }
 
     /**
      * {@code <tfoot>}{@link Node nodes...}{@code </tfoot>}
@@ -570,9 +560,7 @@ public interface HTMLTemplates extends XMLServices {
      *
      * @return  {@link org.w3c.dom.Element}
      */
-    default FluentNode tfoot(Node... nodes) {
-        return element("tfoot", nodes);
-    }
+    default FluentNode tfoot(Node... nodes) { return element("tfoot", nodes); }
 
     /**
      * {@code <tr>}{@link Node nodes...}{@code </tr>}
