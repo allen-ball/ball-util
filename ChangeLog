@@ -1,5 +1,7 @@
 2020-01-29  Allen D. Ball  <ball@hcf.dev>
 
+	* Added <xpath-evaluate/> Ant Task and target.
+
 	* src/main/java/ball/util/ant/taskdefs/DownloadTask.java:
 	Use try-with-resources to copy.
 

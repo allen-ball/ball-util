@@ -192,4 +192,12 @@
              resource="ball/util/ant/defaults.properties"/>
     <uuid-null/>
   </target>
+
+  <target name="xpath-evaluate"
+          description="--> Invokes &lt;xpath-evaluate/&gt; task."
+          depends="jar-classes">
+    <taskdef classpathref="build.classpath" onerror="ignore"
+             resource="ball/util/ant/defaults.properties"/>
+    <xpath-evaluate/>
+  </target>
 </project>
