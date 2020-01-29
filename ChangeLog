@@ -1,5 +1,8 @@
 2020-01-29  Allen D. Ball  <ball@hcf.dev>
 
+	* src/main/java/ball/xml/HTMLTemplates.java:
+	Added support for <h[1-6]/>, <ol/>, <ul/>, and <li/> elements.
+
 	* src/main/java/ball/tools/javadoc/AbstractTaglet.java:
 	Added getResourcePathOf(Class<?>) and getResourceURLOf(Class<?>)
 	methods.
