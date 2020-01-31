@@ -8,12 +8,12 @@
   <name>Utilities</name>
   <groupId>ball</groupId>
   <artifactId>ball-util</artifactId>
-  <version>4.3.0</version>
+  <version>4.4.0</version>
   <packaging>jar</packaging>
   <parent>
     <groupId>ball</groupId>
     <artifactId>parent</artifactId>
-    <version>20200117.0</version>
+    <version>20200130.0</version>
     <relativePath>../ball/parent/pom.xml</relativePath>
   </parent>
   <profiles>
