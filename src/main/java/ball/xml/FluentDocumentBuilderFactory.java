@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2019 Allen D. Ball.  All rights reserved.
+ * Copyright 2019, 2020 Allen D. Ball.  All rights reserved.
  */
 package ball.xml;
 
@@ -12,7 +12,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import static java.util.Objects.requireNonNull;
 
 /**
- * {@link FluentDocument.Builder} {@link DocumentBuilderFactory}
+ * {@link FluentDocument.Builder} {@link DocumentBuilderFactory}.
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$

@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2013 - 2019 Allen D. Ball.  All rights reserved.
+ * Copyright 2013 - 2020 Allen D. Ball.  All rights reserved.
  */
 package ball.annotation.processing;
 
@@ -121,10 +121,9 @@ public class JAXBIndexProcessor extends AbstractAnnotationProcessor
         }
     }
 
+    @NoArgsConstructor
     private class MapImpl extends TreeMap<String,Set<String>> {
         private static final long serialVersionUID = 5693261055822027911L;
-
-        public MapImpl() { super(); }
 
         public boolean add(Class<?> type) {
             return add(type.getPackage().getName(), type.getCanonicalName());

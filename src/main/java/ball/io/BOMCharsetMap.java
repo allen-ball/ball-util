@@ -1,19 +1,19 @@
 /*
  * $Id$
  *
- * Copyright 2014 - 2018 Allen D. Ball.  All rights reserved.
+ * Copyright 2014 - 2020 Allen D. Ball.  All rights reserved.
  */
 package ball.io;
 
 import java.nio.charset.Charset;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static java.nio.charset.StandardCharsets.UTF_16BE;
 import static java.nio.charset.StandardCharsets.UTF_16LE;
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.util.stream.Collectors.joining;
 
 /**
  * Byte order mark to {@link Charset} {@link Map} implementation.
@@ -59,28 +59,12 @@ public class BOMCharsetMap extends LinkedHashMap<byte[],Charset> {
 
     @Override
     public String toString() {
-        StringBuilder buffer = new StringBuilder();
+        String string =
+            entrySet().stream()
+            .map(t -> toString(t.getKey()) + "=" + toString(t.getValue()))
+            .collect(joining(", ", "{", "}"));
 
-        buffer.append("{");
-
-        Iterator<Map.Entry<byte[],Charset>> iterator = entrySet().iterator();
-
-        while (iterator.hasNext()) {
-            Map.Entry<byte[],Charset> entry = iterator.next();
-
-            buffer
-                .append(toString(entry.getKey()))
-                .append("=")
-                .append(toString(entry.getValue()));
-
-            if (iterator.hasNext()) {
-                buffer.append(", ");
-            }
-        }
-
-        buffer.append("}");
-
-        return buffer.toString();
+        return string;
     }
 
     private String toString(byte[] bytes) {

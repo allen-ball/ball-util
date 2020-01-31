@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2012 - 2019 Allen D. Ball.  All rights reserved.
+ * Copyright 2012 - 2020 Allen D. Ball.  All rights reserved.
  */
 package ball.tools.javadoc;
 
@@ -29,8 +29,10 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.net.URI;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
@@ -150,6 +152,8 @@ public abstract class AbstractTaglet implements AnnotatedTaglet,
             node = toNode(tag);
         } catch (IllegalStateException exception) {
             throw exception;
+        } catch (Error error) {
+            throw error;
         } catch (Throwable throwable) {
             node = warning(tag, throwable);
         }
@@ -361,7 +365,39 @@ public abstract class AbstractTaglet implements AnnotatedTaglet,
     }
 
     /**
-     * Method to get the corresponding {@link Class} for a {@link ClassDoc}.
+     * Method to get the corresponding {@link Class}
+     * ({@code package-info.class}) for a {@link PackageDoc}.
+     *
+     * @param   doc             The {@link PackageDoc} (may be {@code null}).
+     *
+     * @return  The corresponding {@link Class}.
+     *
+     * @throws  RuntimeException
+     *                          Instead of checked {@link Exception}.
+     */
+    protected Class<?> getClassFor(PackageDoc doc) {
+        Class<?> type = null;
+
+        try {
+            if (doc != null) {
+                String name = doc.name() + ".package-info";
+
+                type = Class.forName(name);
+            }
+        } catch (RuntimeException exception) {
+            throw exception;
+        } catch (Error error) {
+            throw error;
+        } catch (Exception exception) {
+            throw new RuntimeException(exception);
+        }
+
+        return type;
+    }
+
+    /**
+     * Method to get the corresponding {@link Class} for a
+     * {@link ClassDoc}.
      *
      * @param   doc             The {@link ClassDoc} (may be {@code null}).
      *
@@ -374,7 +410,9 @@ public abstract class AbstractTaglet implements AnnotatedTaglet,
         Class<?> type = null;
 
         try {
-            type = (doc != null) ? Class.forName(getClassNameFor(doc)) : null;
+            if (doc != null) {
+                type = Class.forName(getClassNameFor(doc));
+            }
         } catch (RuntimeException exception) {
             throw exception;
         } catch (Error error) {
@@ -398,6 +436,32 @@ public abstract class AbstractTaglet implements AnnotatedTaglet,
         }
 
         return name;
+    }
+
+    /**
+     * Method to get a {@link Class}'s resource path.
+     *
+     * @param   type            The {@link Class}.
+     *
+     * @return  The {@link Class}'s resource path (as a {@link String}).
+     */
+    protected String getResourcePathOf(Class<?> type) {
+        String path =
+            String.join("/", type.getName().split(Pattern.quote(".")))
+            + ".class";
+
+        return path;
+    }
+
+    /**
+     * Method to get the {@link URL} to a {@link Class}.
+     *
+     * @param   type            The {@link Class}.
+     *
+     * @return  The {@link Class}'s {@link URL}.
+     */
+    protected URL getResourceURLOf(Class<?> type) {
+        return type.getResource("/" + getResourcePathOf(type));
     }
 
     /**
@@ -460,7 +524,8 @@ public abstract class AbstractTaglet implements AnnotatedTaglet,
 
                 if (isNotEmpty(packageDoc.name())) {
                     path +=
-                        String.join("/", packageDoc.name().split("[.]"))
+                        String.join("/",
+                                    packageDoc.name().split(Pattern.quote(".")))
                         + "/";
                 }
 

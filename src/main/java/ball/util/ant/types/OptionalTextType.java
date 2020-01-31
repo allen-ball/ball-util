@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2016 - 2019 Allen D. Ball.  All rights reserved.
+ * Copyright 2016 - 2020 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.types;
 
@@ -10,7 +10,7 @@ import lombok.ToString;
 import org.apache.tools.ant.Project;
 
 import static org.apache.commons.lang3.StringUtils.EMPTY;
-import static org.apache.commons.lang3.StringUtils.isEmpty;
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 /**
  * Class to provide a {@link String} base text type for
@@ -29,7 +29,7 @@ public class OptionalTextType {
     private String unlessP = null;
 
     public void addText(String text) {
-        this.text = (! isEmpty(this.text) ? this.text : EMPTY) + text;
+        this.text = (isNotEmpty(this.text) ? this.text : EMPTY) + text;
     }
 
     /**

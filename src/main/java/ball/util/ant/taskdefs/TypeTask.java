@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2015 - 2019 Allen D. Ball.  All rights reserved.
+ * Copyright 2015 - 2020 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.taskdefs;
 
@@ -96,7 +96,7 @@ public abstract class TypeTask extends Task
 
         private void log(BeanInfo bean) {
             log(new BeanHeaderTableModel(bean.getBeanDescriptor()));
-            log(EMPTY);
+            log();
             log(new TableModelImpl(bean.getPropertyDescriptors()));
             log(bean.getAdditionalBeanInfo());
         }
@@ -104,7 +104,7 @@ public abstract class TypeTask extends Task
         private void log(BeanInfo[] beans) {
             if (beans != null) {
                 for (BeanInfo bean : beans) {
-                    log(EMPTY);
+                    log();
                     log(bean);
                 }
             }

@@ -1,3 +1,67 @@
+2020-01-30  Allen D. Ball  <ball@hcf.dev>
+
+	* pom.xml: Released version 4.4.0.
+
+2020-01-29  Allen D. Ball  <ball@hcf.dev>
+
+	* src/main/java/ball/tools/javadoc/MavenTaglet.java:
+	Added {@maven.plugin}.
+
+	* src/main/java/ball/xml/HTMLTemplates.java:
+	Added support for <h[1-6]/>, <ol/>, <ul/>, and <li/> elements.
+
+	* src/main/java/ball/tools/javadoc/AbstractTaglet.java:
+	Added getResourcePathOf(Class<?>) and getResourceURLOf(Class<?>)
+	methods.
+
+	* Added <xpath-evaluate/> Ant Task and target.
+
+	* src/main/java/ball/util/ant/taskdefs/DownloadTask.java:
+	Use try-with-resources to copy.
+
+2020-01-28  Allen D. Ball  <ball@hcf.dev>
+
+	* src/main/java/ball/xml/XMLServices.java:
+	Added asStream(NodeList) method.
+
+2020-01-27  Allen D. Ball  <ball@hcf.dev>
+
+	* src/main/java/ball/tools/javadoc/InjectedFieldsTaglet.java:
+	Do not process Annotations that do not have
+	RetentionPolicy.RUNTIME.
+
+	* src/main/java/ball/tools/javadoc/AbstractTaglet.java:
+	In toString(Tag) method, re-throw Error.
+
+2020-01-21  Allen D. Ball  <ball@hcf.dev>
+
+	* src/main/java/ball/xml/FluentDocument.java,
+	src/main/java/ball/xml/FluentNode.java,
+	src/main/java/ball/xml/HTMLTemplates.java,
+	src/main/java/ball/xml/XMLServices.java,
+	src/main/java/ball/tools/javadoc/JavadocHTMLTemplates.java:
+	Removed interfaces with Iterable parameters.
+
+	* src/main/java/ball/util/ant/taskdefs/AntTaskLogMethods.java:
+	Added log(Stream<String>), log(Stream<String>,int), log(int), and
+	log() methods.  Removed interfaces with Iterable and Iterator
+	parameters.
+
+	* pom.xml: Remove Maven compilation dependencies.
+
+	* src/main/java/ball/tools/javadoc/AbstractTaglet.java:
+	Added getClassFor(PackageDoc) method.
+
+	* src/main/java/ball/tools/javadoc/MavenTaglet.java:
+	Parse pom.xml as a Document instead of attempting to create a
+	MavenProject.
+
+2020-01-20  Allen D. Ball  <ball@hcf.dev>
+
+	* src/main/java/ball/activation/ReaderWriterDataSource.java:
+	Do not implement Iterable<String> (callers should use
+	getBufferedReader().lines()).
+
 2020-01-17  Allen D. Ball  <ball@hcf.dev>
 
 	* pom.xml:

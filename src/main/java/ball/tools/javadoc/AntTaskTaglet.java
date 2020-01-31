@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2019 Allen D. Ball.  All rights reserved.
+ * Copyright 2019, 2020 Allen D. Ball.  All rights reserved.
  */
 package ball.tools.javadoc;
 
@@ -41,7 +41,7 @@ import static org.apache.tools.ant.MagicNames.ANTLIB_PREFIX;
 @TagletName("ant.task")
 @NoArgsConstructor @ToString
 public class AntTaskTaglet extends AbstractInlineTaglet
-                            implements SunToolsInternalToolkitTaglet {
+                           implements SunToolsInternalToolkitTaglet {
     private static final AntTaskTaglet INSTANCE = new AntTaskTaglet();
 
     public static void register(Map<Object,Object> map) {
@@ -107,7 +107,8 @@ public class AntTaskTaglet extends AbstractInlineTaglet
 
             while (pkg != null) {
                 URL url =
-                    type.getResource("/" + pkg.replaceAll("[.]", "/")
+                    type.getResource("/"
+                                     + String.join("/", pkg.split(Pattern.quote(".")))
                                      + "/antlib.xml");
 
                 if (url != null) {

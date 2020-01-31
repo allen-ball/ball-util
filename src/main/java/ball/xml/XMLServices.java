@@ -1,15 +1,17 @@
 /*
  * $Id$
  *
- * Copyright 2019 Allen D. Ball.  All rights reserved.
+ * Copyright 2019, 2020 Allen D. Ball.  All rights reserved.
  */
 package ball.xml;
 
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
- * Common XML services
+ * Common XML services.
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
@@ -29,20 +31,6 @@ public interface XMLServices {
      */
     default FluentNode fragment(Stream<Node> stream) {
         return document().fragment(stream);
-    }
-
-    /**
-     * Create a {@link org.w3c.dom.DocumentFragment} {@link Node}
-     * (see {@link FluentNode#fragment(Node...)}).
-     *
-     * @param   iterable        The {@link Iterable} of {@link Node}s to
-     *                          append to the newly created
-     *                          {@link org.w3c.dom.DocumentFragment}.
-     *
-     * @return  The newly created {@link org.w3c.dom.DocumentFragment}.
-     */
-    default FluentNode fragment(Iterable<Node> iterable) {
-        return document().fragment(iterable);
     }
 
     /**
@@ -72,21 +60,6 @@ public interface XMLServices {
      */
     default FluentNode element(String name, Stream<Node> stream) {
         return document().element(name, stream);
-    }
-
-    /**
-     * Create an {@link org.w3c.dom.Element} {@link Node}
-     * (see {@link FluentNode#element(String,Node...)}).
-     *
-     * @param   name            The {@link org.w3c.dom.Element} name.
-     * @param   iterable        The {@link Iterable} of {@link Node}s to
-     *                          append to the newly created
-     *                          {@link org.w3c.dom.Element}.
-     *
-     * @return  The newly created {@link org.w3c.dom.Element}.
-     */
-    default FluentNode element(String name, Iterable<Node> iterable) {
-        return document().element(name, iterable);
     }
 
     /**
@@ -160,5 +133,16 @@ public interface XMLServices {
      */
     default FluentNode comment(String data) {
         return document().comment(data);
+    }
+
+    /**
+     * Convert a {@link NodeList} to a {@link Stream}.
+     *
+     * @param   list            The {@link NodeList}.
+     *
+     * @return  A {@link Stream} of {@link Node}s.
+     */
+    default Stream<Node> asStream(NodeList list) {
+        return IntStream.range(0, list.getLength()).mapToObj(list::item);
     }
 }

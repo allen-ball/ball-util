@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2019 Allen D. Ball.  All rights reserved.
+ * Copyright 2019, 2020 Allen D. Ball.  All rights reserved.
  */
 package ball.lang.reflect;
 
@@ -24,8 +24,7 @@ import static lombok.AccessLevel.PROTECTED;
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
-@NoArgsConstructor(access = PROTECTED)
-@ToString
+@NoArgsConstructor(access = PROTECTED) @ToString
 public abstract class FacadeProxyInvocationHandler
                       extends DefaultInvocationHandler {
     private final ProxyMap map = new ProxyMap();

@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2008 - 2019 Allen D. Ball.  All rights reserved.
+ * Copyright 2008 - 2020 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.taskdefs;
 
@@ -10,17 +10,12 @@ import ball.util.Factory;
 import ball.util.ant.types.TypedAttributeType;
 import java.beans.ExceptionListener;
 import java.beans.XMLEncoder;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Member;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.apache.tools.ant.BuildException;
-
-import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 /**
  * {@link.uri http://ant.apache.org/ Ant} {@link org.apache.tools.ant.Task}
@@ -88,22 +83,17 @@ public class InstanceOfTask extends TypeTask {
             if (getClass().isAssignableFrom(InstanceOfTask.class)) {
                 ReaderWriterDataSourceImpl ds =
                     new ReaderWriterDataSourceImpl();
-                XMLEncoder encoder = null;
 
-                try {
-                    encoder = new XMLEncoder(ds.getOutputStream());
+                try (XMLEncoder encoder =
+                         new XMLEncoder(ds.getOutputStream())) {
                     encoder.setExceptionListener(ds);
                     encoder.writeObject(instance);
                     encoder.flush();
+                }
 
-                    if (ds.length() > 0) {
-                        log(EMPTY);
-                        log(ds);
-                    }
-                } finally {
-                    if (encoder != null) {
-                        encoder.close();
-                    }
+                if (ds.length() > 0) {
+                    log();
+                    log(ds.getBufferedReader().lines());
                 }
             }
         } catch (BuildException exception) {
@@ -114,10 +104,9 @@ public class InstanceOfTask extends TypeTask {
         }
     }
 
+    @NoArgsConstructor
     private class ClassList extends ArrayList<Class<?>> {
         private static final long serialVersionUID = -4504828433924386345L;
-
-        public ClassList() { super(); }
 
         @Override
         public Class<?>[] toArray() { return toArray(new Class<?>[] { }); }

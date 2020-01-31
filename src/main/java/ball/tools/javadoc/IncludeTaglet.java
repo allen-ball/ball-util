@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2014 - 2019 Allen D. Ball.  All rights reserved.
+ * Copyright 2014 - 2020 Allen D. Ball.  All rights reserved.
  */
 package ball.tools.javadoc;
 
@@ -83,7 +83,7 @@ public class IncludeTaglet extends AbstractInlineTaglet
             node = pre(String.valueOf(object));
         }
 
-        return node;
+        return div(attr("class", "block"), node);
     }
 
     private FluentNode resource(Tag tag,

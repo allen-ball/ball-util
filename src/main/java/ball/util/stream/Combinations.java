@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright 2010 - 2019 Allen D. Ball.  All rights reserved.
+ * Copyright 2010 - 2020 Allen D. Ball.  All rights reserved.
  */
 package ball.util.stream;
 
@@ -85,7 +85,7 @@ public interface Combinations<T> extends Stream<List<T>> {
     }
 
     /**
-     * {@link Combinations} {@link Spliterator} {@link Supplier}
+     * {@link Combinations} {@link Spliterator} {@link Supplier}.
      */
     @NoArgsConstructor(access = PRIVATE) @ToString
     public static class SpliteratorSupplier<T>

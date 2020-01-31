@@ -1,13 +1,14 @@
 /*
  * $Id$
  *
- * Copyright 2019 Allen D. Ball.  All rights reserved.
+ * Copyright 2019, 2020 Allen D. Ball.  All rights reserved.
  */
 package ball.util.ant.taskdefs;
 
 import ball.net.ResponseCacheImpl;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.net.ResponseCache;
 import java.net.URI;
 import java.net.URLConnection;
@@ -63,10 +64,11 @@ public class DownloadTask extends Task implements AnnotatedAntTask,
         try {
             URLConnection connection = getUri().toURL().openConnection();
 
-            IOUtils.copy(connection.getInputStream(),
-                         new FileOutputStream(getToFile()));
-
-            log(getUri() + " --> " + getToFile());
+            try (InputStream in = connection.getInputStream();
+                 FileOutputStream out = new FileOutputStream(getToFile())) {
+                IOUtils.copy(in, out);
+                log(getUri() + " --> " + getToFile());
+            }
         } catch (BuildException exception) {
             throw exception;
         } catch (RuntimeException exception) {

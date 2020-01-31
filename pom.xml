@@ -8,12 +8,12 @@
   <name>Utilities</name>
   <groupId>ball</groupId>
   <artifactId>ball-util</artifactId>
-  <version>4.3.0</version>
+  <version>4.4.0</version>
   <packaging>jar</packaging>
   <parent>
     <groupId>ball</groupId>
     <artifactId>parent</artifactId>
-    <version>20200117.0</version>
+    <version>20200130.0</version>
     <relativePath>../ball/parent/pom.xml</relativePath>
   </parent>
   <profiles>
@@ -54,15 +54,9 @@
       <optional>false</optional>
     </dependency>
     <dependency>
-      <groupId>org.apache.maven</groupId>
-      <artifactId>maven-core</artifactId>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
       <optional>false</optional>
-      <exclusions>
-        <exclusion>
-          <groupId>org.apache.maven</groupId>
-          <artifactId>maven-resolver-provider</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.fusesource.hawtjni</groupId>
