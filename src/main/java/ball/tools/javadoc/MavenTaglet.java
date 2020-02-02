@@ -39,7 +39,7 @@ import org.w3c.dom.NodeList;
 import static javax.xml.xpath.XPathConstants.NODESET;
 import static lombok.AccessLevel.PROTECTED;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
-import static org.apache.commons.lang3.StringUtils.firstNonBlank;
+import static org.apache.commons.lang3.StringUtils.defaultIfBlank;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 /**
@@ -86,7 +86,7 @@ public abstract class MavenTaglet extends AbstractInlineTaglet
      */
     protected File getPomFileFor(Tag tag) throws Exception {
         File parent = tag.position().file().getParentFile();
-        String name = firstNonBlank(tag.text().trim(), POM_XML_NAME);
+        String name = defaultIfBlank(tag.text().trim(), POM_XML_NAME);
         File file = new File(parent, name);
 
         while (parent != null) {
