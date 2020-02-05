@@ -50,7 +50,7 @@ public class BeanInfoTaglet extends AbstractInlineTaglet
     private static final BeanInfoTaglet INSTANCE = new BeanInfoTaglet();
 
     public static void register(Map<Object,Object> map) {
-        map.putIfAbsent(INSTANCE.getName(), INSTANCE);
+        register(map, INSTANCE);
     }
 
     @Override

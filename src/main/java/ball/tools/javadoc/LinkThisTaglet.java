@@ -45,7 +45,7 @@ public class LinkThisTaglet extends AbstractInlineTaglet
     private static final LinkThisTaglet INSTANCE = new LinkThisTaglet();
 
     public static void register(Map<Object,Object> map) {
-        map.putIfAbsent(INSTANCE.getName(), INSTANCE);
+        register(map, INSTANCE);
     }
 
     @Override

@@ -43,7 +43,7 @@ public class LinkRFCTaglet extends AbstractInlineTaglet
     private static final LinkRFCTaglet INSTANCE = new LinkRFCTaglet();
 
     public static void register(Map<Object,Object> map) {
-        map.putIfAbsent(INSTANCE.getName(), INSTANCE);
+        register(map, INSTANCE);
     }
 
     private static final String TEXT = "RFC%d";

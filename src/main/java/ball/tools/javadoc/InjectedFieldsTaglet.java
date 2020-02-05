@@ -53,7 +53,7 @@ public class InjectedFieldsTaglet extends AbstractInlineTaglet
         new InjectedFieldsTaglet();
 
     public static void register(Map<Object,Object> map) {
-        map.putIfAbsent(INSTANCE.getName(), INSTANCE);
+        register(map, INSTANCE);
     }
 
     private static final String[] NAMES = new String[] {

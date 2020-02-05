@@ -53,7 +53,7 @@ public class IncludeTaglet extends AbstractInlineTaglet
     private static final IncludeTaglet INSTANCE = new IncludeTaglet();
 
     public static void register(Map<Object,Object> map) {
-        map.putIfAbsent(INSTANCE.getName(), INSTANCE);
+        register(map, INSTANCE);
     }
 
     @Override

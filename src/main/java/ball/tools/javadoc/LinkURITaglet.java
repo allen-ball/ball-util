@@ -44,7 +44,7 @@ public class LinkURITaglet extends AbstractInlineTaglet
     private static final LinkURITaglet INSTANCE = new LinkURITaglet();
 
     public static void register(Map<Object,Object> map) {
-        map.putIfAbsent(INSTANCE.getName(), INSTANCE);
+        register(map, INSTANCE);
     }
 
     private static final String SPACES = "[\\p{Space}]+";

@@ -139,7 +139,7 @@ public abstract class MavenTaglet extends AbstractInlineTaglet
         private static final PluginFields INSTANCE = new PluginFields();
 
         public static void register(Map<Object,Object> map) {
-            map.putIfAbsent(INSTANCE.getName(), INSTANCE);
+            register(map, INSTANCE);
         }
 
         @Override
@@ -240,7 +240,7 @@ public abstract class MavenTaglet extends AbstractInlineTaglet
         private static final Coordinates INSTANCE = new Coordinates();
 
         public static void register(Map<Object,Object> map) {
-            map.putIfAbsent(INSTANCE.getName(), INSTANCE);
+            register(map, INSTANCE);
         }
 
         @Override

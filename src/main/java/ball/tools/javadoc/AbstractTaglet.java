@@ -47,6 +47,7 @@ import java.net.URI;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import javax.xml.transform.Transformer;
@@ -77,6 +78,19 @@ public abstract class AbstractTaglet implements AnnotatedTaglet,
 
     private static final String INDENT_AMOUNT =
         "{http://xml.apache.org/xslt}indent-amount";
+
+    /**
+     * Implementation method for
+     * {@code public static void register(Map<Object,Object> map)}.
+     *
+     * @param   map             The {@link Map} to update.
+     * @param   map             The {@link AbstractTaglet} instance to
+     *                          register.
+     */
+    protected static void register(Map<Object,Object> map,
+                                   AbstractTaglet taglet) {
+        map.putIfAbsent(taglet.getName(), taglet);
+    }
 
     private final boolean isInlineTag;
     private final boolean inPackage;

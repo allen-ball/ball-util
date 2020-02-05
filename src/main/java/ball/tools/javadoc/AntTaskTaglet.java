@@ -60,7 +60,7 @@ public class AntTaskTaglet extends AbstractInlineTaglet
     private static final AntTaskTaglet INSTANCE = new AntTaskTaglet();
 
     public static void register(Map<Object,Object> map) {
-        map.putIfAbsent(INSTANCE.getName(), INSTANCE);
+        register(map, INSTANCE);
     }
 
     private static final String NO = "no";

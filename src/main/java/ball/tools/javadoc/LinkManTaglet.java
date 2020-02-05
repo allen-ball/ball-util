@@ -48,7 +48,7 @@ public class LinkManTaglet extends AbstractInlineTaglet
     private static final LinkManTaglet INSTANCE = new LinkManTaglet();
 
     public static void register(Map<Object,Object> map) {
-        map.putIfAbsent(INSTANCE.getName(), INSTANCE);
+        register(map, INSTANCE);
     }
 
     private String name = null;
