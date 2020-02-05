@@ -84,7 +84,7 @@ public abstract class AbstractTaglet implements AnnotatedTaglet,
      * {@code public static void register(Map<Object,Object> map)}.
      *
      * @param   map             The {@link Map} to update.
-     * @param   map             The {@link AbstractTaglet} instance to
+     * @param   taglet          The {@link AbstractTaglet} instance to
      *                          register.
      */
     protected static void register(Map<Object,Object> map,
