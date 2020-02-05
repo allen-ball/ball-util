@@ -124,7 +124,7 @@ public abstract class MavenTaglet extends AbstractInlineTaglet
     }
 
     /**
-     * Inline {@link Taglet} to provide a report of members whose values are
+     * Inline {@link Taglet} to provide a report of fields whose values are
      * configured by the {@link.uri https://maven.apache.org/index.html Maven}
      * {@link.uri https://maven.apache.org/plugin-developers/index.html Plugin}
      * {@code plugin.xml}.
@@ -133,10 +133,10 @@ public abstract class MavenTaglet extends AbstractInlineTaglet
      * @version $Revision$
      */
     @ServiceProviderFor({ Taglet.class })
-    @TagletName("maven.plugin")
+    @TagletName("maven.plugin.fields")
     @NoArgsConstructor @ToString
-    public static class Plugin extends MavenTaglet {
-        private static final Plugin INSTANCE = new Plugin();
+    public static class PluginFields extends MavenTaglet {
+        private static final PluginFields INSTANCE = new PluginFields();
 
         public static void register(Map<Object,Object> map) {
             map.putIfAbsent(INSTANCE.getName(), INSTANCE);
@@ -195,7 +195,7 @@ public abstract class MavenTaglet extends AbstractInlineTaglet
                 .evaluate(document, NODESET);
 
             return div(attr("class", "summary"),
-                       h3("Maven Plugin Configuration Summary"),
+                       h3("Maven Plugin Field Summary"),
                        table(tag, type, configuration));
         }
 
