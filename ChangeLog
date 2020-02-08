@@ -1,3 +1,7 @@
+2020-02-07  Allen D. Ball  <ball@hcf.dev>
+
+	* pom.xml: Released version 4.5.0.
+
 2020-02-05  Allen D. Ball  <ball@hcf.dev>
 
 	* src/main/java/ball/tools/javadoc/MavenTaglet.java:
