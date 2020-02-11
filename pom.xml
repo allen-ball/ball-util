@@ -67,17 +67,14 @@
     <dependency>
       <groupId>org.apache.ant</groupId>
       <artifactId>ant</artifactId>
-      <optional>false</optional>
     </dependency>
     <dependency>
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
-      <optional>false</optional>
     </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
-      <optional>false</optional>
     </dependency>
     <dependency>
       <groupId>org.fusesource.hawtjni</groupId>
