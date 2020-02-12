@@ -1,10 +1,25 @@
-/*
- * $Id$
- *
- * Copyright 2015 - 2020 Allen D. Ball.  All rights reserved.
- */
 package ball.tools.javadoc;
-
+/*-
+ * ##########################################################################
+ * Utilities
+ * $Id$
+ * $HeadURL$
+ * %%
+ * Copyright (C) 2008 - 2020 Allen D. Ball
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ##########################################################################
+ */
 import ball.annotation.ServiceProviderFor;
 import ball.util.PropertiesImpl;
 import ball.xml.FluentNode;
@@ -39,7 +54,7 @@ import org.w3c.dom.NodeList;
 import static javax.xml.xpath.XPathConstants.NODESET;
 import static lombok.AccessLevel.PROTECTED;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
-import static org.apache.commons.lang3.StringUtils.firstNonBlank;
+import static org.apache.commons.lang3.StringUtils.defaultIfBlank;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 /**
@@ -86,7 +101,7 @@ public abstract class MavenTaglet extends AbstractInlineTaglet
      */
     protected File getPomFileFor(Tag tag) throws Exception {
         File parent = tag.position().file().getParentFile();
-        String name = firstNonBlank(tag.text().trim(), POM_XML_NAME);
+        String name = defaultIfBlank(tag.text().trim(), POM_XML_NAME);
         File file = new File(parent, name);
 
         while (parent != null) {
@@ -109,7 +124,7 @@ public abstract class MavenTaglet extends AbstractInlineTaglet
     }
 
     /**
-     * Inline {@link Taglet} to provide a report of members whose values are
+     * Inline {@link Taglet} to provide a report of fields whose values are
      * configured by the {@link.uri https://maven.apache.org/index.html Maven}
      * {@link.uri https://maven.apache.org/plugin-developers/index.html Plugin}
      * {@code plugin.xml}.
@@ -118,13 +133,13 @@ public abstract class MavenTaglet extends AbstractInlineTaglet
      * @version $Revision$
      */
     @ServiceProviderFor({ Taglet.class })
-    @TagletName("maven.plugin")
+    @TagletName("maven.plugin.fields")
     @NoArgsConstructor @ToString
-    public static class Plugin extends MavenTaglet {
-        private static final Plugin INSTANCE = new Plugin();
+    public static class PluginFields extends MavenTaglet {
+        private static final PluginFields INSTANCE = new PluginFields();
 
         public static void register(Map<Object,Object> map) {
-            map.putIfAbsent(INSTANCE.getName(), INSTANCE);
+            register(map, INSTANCE);
         }
 
         @Override
@@ -180,7 +195,7 @@ public abstract class MavenTaglet extends AbstractInlineTaglet
                 .evaluate(document, NODESET);
 
             return div(attr("class", "summary"),
-                       h3("Maven Plugin Configuration Summary"),
+                       h3("Maven Plugin Field Summary"),
                        table(tag, type, configuration));
         }
 
@@ -225,7 +240,7 @@ public abstract class MavenTaglet extends AbstractInlineTaglet
         private static final Coordinates INSTANCE = new Coordinates();
 
         public static void register(Map<Object,Object> map) {
-            map.putIfAbsent(INSTANCE.getName(), INSTANCE);
+            register(map, INSTANCE);
         }
 
         @Override

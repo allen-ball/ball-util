@@ -1,10 +1,25 @@
-/*
- * $Id$
- *
- * Copyright 2012 - 2020 Allen D. Ball.  All rights reserved.
- */
 package ball.tools.javadoc;
-
+/*-
+ * ##########################################################################
+ * Utilities
+ * $Id$
+ * $HeadURL$
+ * %%
+ * Copyright (C) 2008 - 2020 Allen D. Ball
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ##########################################################################
+ */
 import ball.xml.FluentDocument;
 import ball.xml.FluentDocumentBuilderFactory;
 import ball.xml.FluentNode;
@@ -32,6 +47,7 @@ import java.net.URI;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import javax.xml.transform.Transformer;
@@ -62,6 +78,19 @@ public abstract class AbstractTaglet implements AnnotatedTaglet,
 
     private static final String INDENT_AMOUNT =
         "{http://xml.apache.org/xslt}indent-amount";
+
+    /**
+     * Implementation method for
+     * {@code public static void register(Map<Object,Object> map)}.
+     *
+     * @param   map             The {@link Map} to update.
+     * @param   taglet          The {@link AbstractTaglet} instance to
+     *                          register.
+     */
+    protected static void register(Map<Object,Object> map,
+                                   AbstractTaglet taglet) {
+        map.putIfAbsent(taglet.getName(), taglet);
+    }
 
     private final boolean isInlineTag;
     private final boolean inPackage;
