@@ -28,16 +28,37 @@
   <description></description>
   <groupId>ball</groupId>
   <artifactId>ball-util</artifactId>
-  <version>4.5.1</version>
+  <version>4.5.2</version>
   <packaging>jar</packaging>
   <parent>
     <groupId>ball</groupId>
     <artifactId>parent</artifactId>
-    <version>20200212.0</version>
+    <version>20200412.0</version>
     <relativePath>../ball/parent/pom.xml</relativePath>
   </parent>
   <inceptionYear>2008</inceptionYear>
+  <licenses>
+    <license>
+      <name>Apache-2.0</name>
+      <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
   <profiles>
+    <profile>
+      <id>jdk1.8</id>
+      <activation><jdk>1.8</jdk></activation>
+      <dependencyManagement>
+        <dependencies>
+          <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>2.2.8</version>
+            <scope>provided</scope>
+          </dependency>
+        </dependencies>
+      </dependencyManagement>
+    </profile>
     <profile>
       <id>Linux</id>
       <activation>
@@ -64,6 +85,10 @@
     <jre.version>1.8</jre.version>
   </properties>
   <dependencies verbose="true">
+    <dependency>
+      <groupId>javax.xml.bind</groupId>
+      <artifactId>jaxb-api</artifactId>
+    </dependency>
     <dependency>
       <groupId>org.apache.ant</groupId>
       <artifactId>ant</artifactId>
