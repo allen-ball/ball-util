@@ -41,7 +41,7 @@ import lombok.ToString;
 @ServiceProviderFor({ Taglet.class })
 @TagletName("link.man")
 @NoArgsConstructor @ToString
-@PatternRegex("(?is)(.+)[(]([\\p{Alnum}])[)]")
+@PatternRegex("(?is)(?<name>.+)[(](?<section>[\\p{Alnum}]+)[)]")
 public class LinkManTaglet extends AbstractInlineTaglet
                            implements SunToolsInternalToolkitTaglet,
                                       PatternMatcherBean {
