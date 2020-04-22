@@ -22,6 +22,13 @@ package ball.util;
  */
 import java.nio.LongBuffer;
 import java.util.UUID;
+import org.fusesource.hawtjni.runtime.JniClass;
+import org.fusesource.hawtjni.runtime.JniField;
+import org.fusesource.hawtjni.runtime.JniMethod;
+import org.fusesource.hawtjni.runtime.Library;
+
+import static org.fusesource.hawtjni.runtime.FieldFlag.CONSTANT;
+import static org.fusesource.hawtjni.runtime.MethodFlag.CONSTANT_INITIALIZER;
 
 /**
  * {@link UUID} {@link Factory} implementation.  Provides interfaces to
@@ -31,8 +38,18 @@ import java.util.UUID;
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
+@JniClass
 public class UUIDFactory extends Factory<UUID> {
-    private static final long serialVersionUID = 2636388251268998745L;
+    private static final long serialVersionUID = -7681449995837420263L;
+
+    static { new Library("ball-util", UUIDFactory.class).load(); init(); }
+
+    @JniMethod(flags = { CONSTANT_INITIALIZER })
+    private static final native void init();
+
+    /** See discussion in Darwin {@link.man stat(2)}. */
+    @JniField(flags = { CONSTANT })
+    public static int _DARWIN_FEATURE_64_BIT_INODE;
 
     private static final UUIDFactory DEFAULT = new UUIDFactory();
 
@@ -67,35 +84,35 @@ public class UUIDFactory extends Factory<UUID> {
     public UUID generateNull() {
         long[] out = new long[2];
 
-        JNI.uuid_clear(out);
+        uuid_clear(out);
 
         return toUUID(out);
     }
 
     /**
      * Method to generate a new {@link UUID} with the
-     * {@link JNI#uuid_generate_random(long[])} function.
+     * {@link #uuid_generate_random(long[])} function.
      *
      * @return  A new unique {@link UUID}.
      */
     public UUID generateRandom() {
         long[] out = new long[2];
 
-        JNI.uuid_generate_random(out);
+        uuid_generate_random(out);
 
         return toUUID(out);
     }
 
     /**
      * Method to generate a new {@link UUID} with the
-     * {@link JNI#uuid_generate_time(long[])} function.
+     * {@link #uuid_generate_time(long[])} function.
      *
      * @return  A new unique {@link UUID}.
      */
     public UUID generateTime() {
         long[] out = new long[2];
 
-        JNI.uuid_generate_time(out);
+        uuid_generate_time(out);
 
         return toUUID(out);
     }
@@ -107,4 +124,28 @@ public class UUIDFactory extends Factory<UUID> {
 
         return new UUID(msb, lsb);
     }
+
+    /**
+     * {@link.man uuid_clear(3)}
+     * @param   out             {@code uuid_t}
+     */
+    public static native void uuid_clear(long[] out);
+
+    /**
+     * {@link.man uuid_generate(3)}
+     * @param   out             {@code uuid_t}
+     */
+    public static native void uuid_generate(long[] out);
+
+    /**
+     * {@link.man uuid_generate_random(3)}
+     * @param   out             {@code uuid_t}
+     */
+    public static native void uuid_generate_random(long[] out);
+
+    /**
+     * {@link.man uuid_generate_time(3)}
+     * @param   out             {@code uuid_t}
+     */
+    public static native void uuid_generate_time(long[] out);
 }

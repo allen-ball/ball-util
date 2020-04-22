@@ -1,3 +1,8 @@
+2020-04-21  Allen D. Ball  <ball@hcf.dev>
+
+	* src/main/java/ball/util/UUIDFactory.java:
+	Implemented UUID native methods.
+
 2020-04-19  Allen D. Ball  <ball@hcf.dev>
 
 	* pom.xml: Started development of 4.6-SNAPSHOT.
@@ -407,10 +412,6 @@
 
 2019-01-15  Allen D. Ball  <ball@sol.local>
 
-	* src/main/java/ball/util/JNI.java:
-	Pass long[] instead of byte[] to uuid_generate* to guarantee
-	alignment.
-
 	* src/main/java/ball/util/ant/taskdefs/PropertySetterAntTask.java:
 	Re-factored from AbstractPropertyTask.
 
@@ -420,9 +421,6 @@
 2019-01-09  Allen D. Ball  <ball@sol.local>
 
 	* pom.xml: Added support for JNI compilation on Linux.
-
-	* src/main/java/ball/util/JNI.java:
-	Initial writing (moved native methods from UUIDFactory).
 
 2019-01-08  Allen D. Ball  <ball@sol.local>
 
