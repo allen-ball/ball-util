@@ -59,27 +59,6 @@
         </dependencies>
       </dependencyManagement>
     </profile>
-    <profile>
-      <id>Linux</id>
-      <activation>
-        <os><name>Linux</name></os>
-      </activation>
-      <build>
-        <pluginManagement>
-          <plugins>
-            <plugin>
-              <groupId>org.fusesource.hawtjni</groupId>
-              <artifactId>hawtjni-maven-plugin</artifactId>
-              <configuration>
-                <configureArgs>
-                  <configureArg>LDFLAGS="-luuid"</configureArg>
-                </configureArgs>
-              </configuration>
-            </plugin>
-          </plugins>
-        </pluginManagement>
-      </build>
-    </profile>
   </profiles>
   <properties>
     <jre.version>1.8</jre.version>
@@ -100,10 +79,6 @@
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.fusesource.hawtjni</groupId>
-      <artifactId>hawtjni-runtime</artifactId>
     </dependency>
   </dependencies>
   <build>

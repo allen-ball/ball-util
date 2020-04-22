@@ -1,8 +1,3 @@
-2020-04-21  Allen D. Ball  <ball@hcf.dev>
-
-	* src/main/java/ball/util/UUIDFactory.java:
-	Implemented UUID native methods.
-
 2020-04-19  Allen D. Ball  <ball@hcf.dev>
 
 	* pom.xml: Started development of 4.6-SNAPSHOT.
@@ -414,9 +409,6 @@
 
 	* src/main/java/ball/util/ant/taskdefs/PropertySetterAntTask.java:
 	Re-factored from AbstractPropertyTask.
-
-	* src/main/java/ball/util/ant/taskdefs/UUIDTask.java:
-	Re-factored from UUIDGenerateTask.
 
 2019-01-09  Allen D. Ball  <ball@sol.local>
 
@@ -1331,8 +1323,6 @@
 
 	* Added <uuid-generate/>, <uuid-generate-random/>, and
 	<uuid-generate-time/> build targets and Ant Tasks.
-
-	* src/main/java/iprotium/util/UUIDFactory.java: Initial writing.
 
 	* src/main/java/iprotium/util/ant/taskdefs/AbstractPropertyTask.java:
 	Initial writing.
