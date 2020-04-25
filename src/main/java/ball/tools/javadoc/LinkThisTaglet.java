@@ -21,7 +21,6 @@ package ball.tools.javadoc;
  * ##########################################################################
  */
 import ball.annotation.ServiceProviderFor;
-import ball.lang.Keyword;
 import ball.xml.FluentNode;
 import com.sun.javadoc.Tag;
 import com.sun.tools.doclets.Taglet;
@@ -54,8 +53,6 @@ public class LinkThisTaglet extends AbstractInlineTaglet
             throw new IllegalArgumentException("Invalid argument");
         }
 
-        return a(tag,
-                 getClassFor(getContainingClassDocFor(tag)),
-                 Keyword.THIS.lexeme());
+        return a(tag, getClassFor(getContainingClassDocFor(tag)), "this");
     }
 }
