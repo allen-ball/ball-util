@@ -1,3 +1,8 @@
+2020-04-26  Allen D. Ball  <ball@hcf.dev>
+
+	* src/main/java/ball/lang/reflect/JavaLangReflectMethods.java:
+	Initial writing.
+
 2020-04-19  Allen D. Ball  <ball@hcf.dev>
 
 	* pom.xml: Started development of 4.6-SNAPSHOT.
@@ -150,12 +155,6 @@
 
 	* Replaced AbstractTaglet.a(Tag,Annotation,Node) with
 	JavadocHTMLTemplates.annotation(Tag,Annotation).
-
-2019-10-22  Allen D. Ball  <ball@hcf.dev>
-
-	* src/main/java/ball/lang/Keyword.java: Added JRE 13 "yield".
-
-	* src/main/java/ball/lang/Literal.java: Initial writing.
 
 2019-10-18  Allen D. Ball  <ball@hcf.dev>
 
@@ -1250,9 +1249,6 @@
 
 2011-07-09  Allen D. Ball  <ball@10-0-1-2.lan>
 
-	* src/main/java/iprotium/lang/java/Punctuation.java:
-	Added SPACE member.
-
 	* src/main/java/iprotium/tools/CannotResolveLocationRemedy.java:
 	Initial writing.
 
@@ -1313,12 +1309,6 @@
 	Added getInputStream(Class<?>...) and getOutputStream(Class<?>...)
 	methods.
 
-2011-04-25  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/lang/java/Keyword.java,
-	src/main/java/iprotium/lang/java/Punctuation.java:
-	Implement Parser.Lexeme.
-
 2011-04-24  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* Added <uuid-generate/>, <uuid-generate-random/>, and
@@ -1332,17 +1322,7 @@
 	* src/main/java/iprotium/util/Shell.java:
 	Initial (trivial) implementation.
 
-2010-12-23  Allen D. Ball  <ball@mercury.local>
-
-	* src/main/java/iprotium/util/Parser.java: Initial writing.
-
 2010-12-07  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/lang/java/Keyword.java:
-	Re-factored as an Enum.
-
-	* src/main/java/iprotium/lang/java/Punctuation.java:
-	Initial writing.
 
 	* src/main/java/iprotium/util/PropertiesImpl.java:
 	Initial writing.
@@ -1352,9 +1332,6 @@
 
 	* src/main/java/iprotium/util/ant/taskdefs/SuperclassesOfTask.java:
 	Include type variables in output.
-
-	* src/main/java/iprotium/util/ant/taskdefs/lint/SerializableCheck.java:
-	Use iprotium.lang.java.Punctuation.
 
 2010-11-21  Allen D. Ball  <ball@10-0-1-2.lan>
 
@@ -1448,9 +1425,6 @@
 	* src/main/java/iprotium/activation/ByteArrayDataSource.java:
 	Added size() method.
 
-	* src/main/java/iprotium/lang/java/Keyword.java:
-	Changed SET member to SortedSet.
-
 2010-08-22  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* src/main/java/iprotium/util/ant/taskdefs/LintTask.java:
@@ -1460,8 +1434,6 @@
 2010-08-21  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* Added iprotium.lang and iprotium.lang.java packages.
-
-	* src/main/java/iprotium/lang/java/Keyword.java: Initial writing.
 
 2010-07-27  Allen D. Ball  <ball@10-0-1-2.lan>
 
