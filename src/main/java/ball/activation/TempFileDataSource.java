@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import lombok.ToString;
 
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 
@@ -35,6 +36,7 @@ import static org.apache.commons.lang3.StringUtils.EMPTY;
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
+@ToString
 public class TempFileDataSource extends AbstractDataSource {
     private final String prefix;
     private final String suffix;

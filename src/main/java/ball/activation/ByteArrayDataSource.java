@@ -26,6 +26,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import lombok.ToString;
 
 /**
  * {@link javax.activation.DataSource} implementation based on
@@ -34,6 +35,7 @@ import java.io.OutputStream;
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
+@ToString
 public class ByteArrayDataSource extends AbstractDataSource {
     private final ByteArrayOutputStreamImpl out =
         new ByteArrayOutputStreamImpl();

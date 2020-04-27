@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.io.LineNumberReader;
 import java.io.Reader;
 import java.util.Objects;
+import lombok.ToString;
 
 /**
  * {@link CharSequence} {@link Reader} implementation.
@@ -31,6 +32,7 @@ import java.util.Objects;
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
+@ToString
 public class CharSequenceReader extends LineNumberReader {
 
     /**
@@ -42,6 +44,7 @@ public class CharSequenceReader extends LineNumberReader {
         super(new ReaderImpl(sequence), 1024);
     }
 
+    @ToString
     private static class ReaderImpl extends Reader {
         private CharSequence sequence = null;
         private volatile int length = 0;
