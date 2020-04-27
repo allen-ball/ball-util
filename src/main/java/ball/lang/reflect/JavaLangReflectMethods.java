@@ -20,6 +20,7 @@ package ball.lang.reflect;
  * limitations under the License.
  * ##########################################################################
  */
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
@@ -85,8 +86,9 @@ public interface JavaLangReflectMethods {
     }
 
     /**
-     * Dispatches call to {@link #declaration(Field)} or
-     * {@link #declaration(Method)} as appropriate.
+     * Dispatches call to {@link #declaration(Constructor)},
+     * {@link #declaration(Field)}, or {@link #declaration(Method)} as
+     * appropriate.
      *
      * @param   member          The target {@link Member}.
      *
@@ -95,7 +97,9 @@ public interface JavaLangReflectMethods {
     default String declaration(Member member) {
         String string = null;
 
-        if (member instanceof Field) {
+        if (member instanceof Constructor) {
+            string = declaration((Constructor) member);
+        } else if (member instanceof Field) {
             string = declaration((Field) member);
         } else if (member instanceof Method) {
             string = declaration((Method) member);
@@ -104,6 +108,23 @@ public interface JavaLangReflectMethods {
         }
 
         return string;
+    }
+
+    /**
+     * Method to generate a {@link Constructor} declaration.
+     *
+     * @param   constructor     The target {@link Constructor}.
+     *
+     * @return  {@link String}
+     */
+    default String declaration(Constructor<?> constructor) {
+        String string =
+            modifiers(constructor.getModifiers())
+            + " " + constructor.getName()
+            + parameters(constructor.getParameters())
+            + " " + exceptions(constructor.getGenericExceptionTypes());
+
+        return string.trim();
     }
 
     /**
@@ -130,17 +151,61 @@ public interface JavaLangReflectMethods {
      * @return  {@link String}
      */
     default String declaration(Method method) {
-        String string =
-            modifiers(method.getModifiers())
-            + " " + type(method.getGenericReturnType())
-            + " " + method.getName();
+        return declaration(method.getModifiers(), method);
+    }
 
-        string +=
-            Stream.of(method.getParameters())
-            .map(t -> declaration(t))
-            .collect(joining(", ", "(", ")"));
+    /**
+     * Method to generate a {@link Method} declaration.
+     *
+     * @param   modifiers       The adjusted modifiers.
+     * @param   method          The target {@link Method}.
+     *
+     * @return  {@link String}
+     */
+    default String declaration(int modifiers, Method method) {
+        String string =
+            modifiers(modifiers)
+            + " " + type(method.getGenericReturnType())
+            + " " + method.getName()
+            + parameters(method.getParameters())
+            + " " + exceptions(method.getGenericExceptionTypes());
 
         return string.trim();
+    }
+
+    /**
+     * Method to generate a {@link Constructor} or {@link Method} parameter
+     * declaration.
+     *
+     * @param   parameters      The target {@link Parameter} array.
+     *
+     * @return  {@link String}
+     */
+    default String parameters(Parameter[] parameters) {
+        return Stream.of(parameters)
+               .map(t -> declaration(t))
+               .collect(joining(", ", "(", ")"));
+    }
+
+    /**
+     * Method to generate a {@link Constructor} or {@link Method} thrown
+     * exception list.
+     *
+     * @param   exceptions      The target {@link Type} array.
+     *
+     * @return  {@link String}
+     */
+    default String exceptions(Type[] exceptions) {
+        String string = "";
+
+        if (exceptions != null && exceptions.length > 0) {
+            string =
+                Stream.of(exceptions)
+                .map(t -> type(t))
+                .collect(joining(", ", "throws ", ""));
+        }
+
+        return string;
     }
 
     /**
@@ -173,7 +238,7 @@ public interface JavaLangReflectMethods {
     /**
      * Method to generate types for {@code declaration()} methods.
      *
-     * @param   type            The target {@link Type}.
+     * @param   type            The {@link Type}.
      *
      * @return  {@link String}
      */
@@ -181,13 +246,7 @@ public interface JavaLangReflectMethods {
         String string = null;
 
         if (type instanceof ParameterizedType) {
-            string =
-                Stream.of(((ParameterizedType) type).getActualTypeArguments())
-                .map(t -> type(t))
-                .collect(joining(",",
-                                 type(((ParameterizedType) type).getRawType())
-                                 + "<",
-                                 ">"));
+            string = type((ParameterizedType) type);
         } else if (type instanceof Class<?>) {
             string = ((Class<?>) type).getSimpleName();
         } else {
@@ -195,5 +254,18 @@ public interface JavaLangReflectMethods {
         }
 
         return string;
+    }
+
+    /**
+     * Method to generate types for {@code declaration()} methods.
+     *
+     * @param   type            The {@link ParameterizedType}.
+     *
+     * @return  {@link String}
+     */
+    default String type(ParameterizedType type) {
+        return Stream.of(type.getActualTypeArguments())
+               .map(t -> type(t))
+               .collect(joining(",", type(type.getRawType()) + "<", ">"));
     }
 }
