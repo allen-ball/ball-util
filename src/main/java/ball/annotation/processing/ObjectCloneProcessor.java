@@ -61,15 +61,15 @@ import static javax.tools.Diagnostic.Kind.WARNING;
 @NoArgsConstructor @ToString
 public class ObjectCloneProcessor extends AbstractNoAnnotationProcessor {
     private ExecutableElement METHOD = null;
-    private TypeElement THROWABLE = null;
+    private TypeElement CLONEABLE = null;
 
     @Override
     public void init(ProcessingEnvironment processingEnv) {
         super.init(processingEnv);
 
         try {
-            METHOD = getExecutableElementFor(Object.class, "clone");
-            THROWABLE = getTypeElementFor(Cloneable.class);
+            METHOD = asExecutableElement(Object.class, "clone");
+            CLONEABLE = asTypeElement(Cloneable.class);
         } catch (Exception exception) {
             print(ERROR, null, exception);
         }
@@ -86,13 +86,13 @@ public class ObjectCloneProcessor extends AbstractNoAnnotationProcessor {
     private void check(ExecutableElement method) {
         TypeElement type = (TypeElement) method.getEnclosingElement();
 
-        if (! type.getInterfaces().contains(THROWABLE.asType())) {
+        if (! type.getInterfaces().contains(CLONEABLE.asType())) {
             print(WARNING,
                   type,
                   type.getKind() + " overrides "
                   + METHOD.getEnclosingElement().getSimpleName()
-                  + DOT + METHOD.toString() + " but does not implement "
-                  + THROWABLE.getSimpleName());
+                  + "." + METHOD + " but does not implement "
+                  + CLONEABLE.getSimpleName());
         }
 
         if (! types.isAssignable(method.getReturnType(), type.asType())) {
@@ -100,8 +100,7 @@ public class ObjectCloneProcessor extends AbstractNoAnnotationProcessor {
                   method,
                   method.getKind() + " overrides "
                   + METHOD.getEnclosingElement().getSimpleName()
-                  + DOT + METHOD.toString()
-                  + " but does not return a subclass of "
+                  + "." + METHOD + " but does not return a subclass of "
                   + type.getSimpleName());
         }
 
@@ -129,7 +128,7 @@ public class ObjectCloneProcessor extends AbstractNoAnnotationProcessor {
                   method,
                   method.getKind() + " overrides "
                   + METHOD.getEnclosingElement().getSimpleName()
-                  + DOT + METHOD.toString() + " but does not throw " + name);
+                  + "." + METHOD + " but does not throw " + name);
         }
     }
 }

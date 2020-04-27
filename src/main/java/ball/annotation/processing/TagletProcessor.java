@@ -27,6 +27,7 @@ import java.util.Map;
 import javax.annotation.processing.Processor;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
+import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -52,7 +53,7 @@ import static javax.tools.Diagnostic.Kind.WARNING;
 @NoArgsConstructor @ToString
 public class TagletProcessor extends AbstractNoAnnotationProcessor {
     private static abstract class PROTOTYPE {
-        public static void register(Map<String,Taglet> map) { }
+        public static void register(Map<Object,Object> map) { }
     }
 
     private static final Method METHOD =
@@ -63,16 +64,18 @@ public class TagletProcessor extends AbstractNoAnnotationProcessor {
         if (! element.getModifiers().contains(ABSTRACT)) {
             TypeElement type = (TypeElement) element;
             ExecutableElement method =
-                getExecutableElementFor(type, METHOD);
+                asExecutableElement(type,
+                                    METHOD.getName(),
+                                    METHOD.getParameterTypes());
 
-            if (! (method != null
-                   && (method.getModifiers()
-                       .containsAll(getModifierSetFor(METHOD))))) {
+            if (method == null
+                || (! method.getModifiers().containsAll(getModifierSetFor(METHOD)))) {
                 print(WARNING,
                       element,
                       element.getKind()
                       + " implements " + Taglet.class.getName()
-                      + " but does not implement `" + toString(METHOD) + "'");
+                      + " but does not implement `"
+                      + declaration(METHOD) + "'");
             }
         }
     }

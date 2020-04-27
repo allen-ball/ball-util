@@ -61,7 +61,7 @@ public class AntTaskAttributeConstraintProcessor
                 print(ERROR,
                       element,
                       element.getKind() + " annotated with "
-                      + AT + annotation.getSimpleName()
+                      + "@" + annotation.getSimpleName()
                       + " but is not a property getter method");
             }
             break;

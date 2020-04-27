@@ -58,9 +58,9 @@ public class NoOverrideProcessor extends AbstractNoAnnotationProcessor {
                 print(WARNING,
                       method,
                       method.getKind() + " specified by "
-                      + specification.getEnclosingElement() + DOT
+                      + specification.getEnclosingElement() + "."
                       + specification.toString() + " but does not have "
-                      + AT + Override.class.getSimpleName() + " annotation");
+                      + "@" + Override.class.getSimpleName() + " annotation");
             }
         }
     }

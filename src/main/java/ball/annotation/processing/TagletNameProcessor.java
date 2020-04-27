@@ -67,7 +67,7 @@ public class TagletNameProcessor extends AbstractAnnotationProcessor {
                         print(ERROR,
                               element,
                               element.getKind() + " annotated with "
-                              + AT + annotation.getSimpleName()
+                              + "@" + annotation.getSimpleName()
                               + " but does not have a " + PUBLIC
                               + " no-argument constructor");
                     }
@@ -75,21 +75,21 @@ public class TagletNameProcessor extends AbstractAnnotationProcessor {
                     print(ERROR,
                           element,
                           element.getKind() + " annotated with "
-                          + AT + annotation.getSimpleName()
+                          + "@" + annotation.getSimpleName()
                           + " but is " + ABSTRACT);
                 }
             } else {
                 print(ERROR,
                       element,
                       element.getKind() + " annotated with "
-                      + AT + annotation.getSimpleName()
+                      + "@" + annotation.getSimpleName()
                       + " but does not implement " + Taglet.class.getName());
             }
         } else {
             print(ERROR,
                   element,
                   element.getKind() + " annotated with "
-                  + AT + annotation.getSimpleName()
+                  + "@" + annotation.getSimpleName()
                   + " but does not specify value()");
         }
     }

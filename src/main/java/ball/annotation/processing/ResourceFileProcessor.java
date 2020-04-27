@@ -112,14 +112,14 @@ public class ResourceFileProcessor extends AbstractAnnotationProcessor {
                 print(ERROR,
                       element,
                       element.getKind() + " annotated with "
-                      + AT + annotation.getSimpleName()
+                      + "@" + annotation.getSimpleName()
                       + " but no lines() specified");
             }
         } else {
             print(ERROR,
                   element,
                   element.getKind() + " annotated with "
-                  + AT + annotation.getSimpleName()
+                  + "@" + annotation.getSimpleName()
                   + " but no path() specified");
         }
     }
@@ -143,7 +143,7 @@ public class ResourceFileProcessor extends AbstractAnnotationProcessor {
         public Parameters(TypeElement type) {
             super();
 
-            PackageElement pkg = getPackageElementFor(type);
+            PackageElement pkg = elements.getPackageOf(type);
 
             put(ResourceFile.CLASS,
                 type.getQualifiedName().toString());

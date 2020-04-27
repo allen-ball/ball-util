@@ -33,10 +33,10 @@ import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.apache.commons.lang3.StringUtils;
 
 import static javax.tools.Diagnostic.Kind.ERROR;
 import static javax.tools.Diagnostic.Kind.WARNING;
-import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 /**
  * {@link Processor} implementation to verify {@link ConstructorProperties}
@@ -73,7 +73,7 @@ public class ConstructorPropertiesProcessor
             Set<String> properties = getPropertyNames(type);
 
             Arrays.stream(value)
-                .filter(t -> (! isEmpty(t)))
+                .filter(StringUtils::isNotEmpty)
                 .filter(t -> (! properties.contains(t)))
                 .forEach(t -> print(WARNING,
                                     element,
@@ -84,7 +84,7 @@ public class ConstructorPropertiesProcessor
             print(ERROR,
                   element,
                   element.getKind() + " annotated with "
-                  + AT + annotation.getSimpleName());
+                  + "@" + annotation.getSimpleName());
             break;
         }
     }

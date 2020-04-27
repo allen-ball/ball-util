@@ -175,7 +175,7 @@ public class AntTaskProcessor extends AbstractAnnotationProcessor
                             print(ERROR,
                                   element,
                                   element.getKind() + " annotated with "
-                                  + AT + annotation.getSimpleName()
+                                  + "@" + annotation.getSimpleName()
                                   + " but does not have a " + PUBLIC
                                   + " no-argument constructor");
                         }
@@ -183,7 +183,7 @@ public class AntTaskProcessor extends AbstractAnnotationProcessor
                         print(ERROR,
                               element,
                               element.getKind() + " annotated with "
-                              + AT + annotation.getSimpleName()
+                              + "@" + annotation.getSimpleName()
                               + " but is " + ABSTRACT);
                     }
                 } else {
@@ -195,7 +195,7 @@ public class AntTaskProcessor extends AbstractAnnotationProcessor
                 print(ERROR,
                       element,
                       element.getKind() + " annotated with "
-                      + AT + annotation.getSimpleName()
+                      + "@" + annotation.getSimpleName()
                       + " but does not specify value()");
             }
             break;
@@ -292,12 +292,12 @@ public class AntTaskProcessor extends AbstractAnnotationProcessor
         private AntLibXML(String pkg, ResourceMap map) {
             super();
 
-            this.path = asPath(pkg) + SLASH + ANTLIB_XML;
+            this.path = asPath(pkg) + "/" + ANTLIB_XML;
 
             map.values()
                 .stream()
                 .flatMap(t -> t.entrySet().stream())
-                .filter(t -> t.getValue().toString().startsWith(pkg + DOT))
+                .filter(t -> t.getValue().toString().startsWith(pkg + "."))
                 .forEach(t -> put(t.getKey().toString(),
                                   t.getValue().toString()));
         }

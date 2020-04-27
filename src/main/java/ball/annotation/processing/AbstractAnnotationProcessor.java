@@ -33,6 +33,7 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import javax.tools.Diagnostic;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import static javax.tools.Diagnostic.Kind.ERROR;
 import static lombok.AccessLevel.PROTECTED;
@@ -44,7 +45,7 @@ import static lombok.AccessLevel.PROTECTED;
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
-@NoArgsConstructor(access = PROTECTED)
+@NoArgsConstructor(access = PROTECTED) @ToString
 public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
     private final List<Class<? extends Annotation>> list;
     private transient TypeElement annotation = null;
@@ -127,8 +128,8 @@ public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
         if (annotation != null) {
             sequence =
                 new StringBuilder()
-                .append(AT).append(annotation.getQualifiedName())
-                .append(COLON).append(SPACE).append(message);
+                .append("@").append(annotation.getQualifiedName())
+                .append(":").append(" ").append(message);
         }
 
         return sequence;
@@ -139,7 +140,7 @@ public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
      */
     @ServiceProviderFor({ Processor.class })
     @For({ For.class })
-    @NoArgsConstructor
+    @NoArgsConstructor @ToString
     public static class AnnotationProcessor
                         extends AbstractAnnotationProcessor {
         private static final Class<?> SUPERCLASS =
@@ -155,7 +156,7 @@ public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
                     print(ERROR,
                           element,
                           element.getKind() + " annotated with "
-                          + AT + annotation.getSimpleName()
+                          + "@" + annotation.getSimpleName()
                           + " but is not a subclass of "
                           + SUPERCLASS.getCanonicalName());
                 }

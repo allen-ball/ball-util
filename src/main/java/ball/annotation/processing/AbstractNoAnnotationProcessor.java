@@ -37,6 +37,7 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.TypeElement;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import static javax.lang.model.element.ElementKind.CLASS;
 import static javax.lang.model.element.ElementKind.INTERFACE;
@@ -54,7 +55,7 @@ import static lombok.AccessLevel.PROTECTED;
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
-@NoArgsConstructor(access = PROTECTED)
+@NoArgsConstructor(access = PROTECTED) @ToString
 public abstract class AbstractNoAnnotationProcessor extends AbstractProcessor {
     private static final List<ElementKind> REQUIRED_FOR_SUBCLASSES_OF =
         Arrays.asList(CLASS, INTERFACE);
@@ -157,7 +158,7 @@ public abstract class AbstractNoAnnotationProcessor extends AbstractProcessor {
      */
     @ServiceProviderFor({ Processor.class })
     @For({ ForElementKinds.class, ForSubclassesOf.class })
-    @NoArgsConstructor
+    @NoArgsConstructor @ToString
     public static class AnnotationProcessor
                         extends AbstractAnnotationProcessor {
         private static final Class<?> SUPERCLASS =
@@ -173,7 +174,7 @@ public abstract class AbstractNoAnnotationProcessor extends AbstractProcessor {
                     print(ERROR,
                           element,
                           element.getKind() + " annotated with "
-                          + AT + annotation.getSimpleName()
+                          + "@" + annotation.getSimpleName()
                           + " but is not a subclass of "
                           + SUPERCLASS.getCanonicalName());
                 }
@@ -194,8 +195,8 @@ public abstract class AbstractNoAnnotationProcessor extends AbstractProcessor {
                             print(ERROR,
                                   element,
                                   element.getKind() + " annotated with "
-                                  + AT + annotation.getSimpleName() + " and "
-                                  + AT + ForElementKinds.class.getSimpleName()
+                                  + "@" + annotation.getSimpleName() + " and "
+                                  + "@" + ForElementKinds.class.getSimpleName()
                                   + " but does not specify one of "
                                   + REQUIRED_FOR_SUBCLASSES_OF);
                         }
@@ -204,8 +205,8 @@ public abstract class AbstractNoAnnotationProcessor extends AbstractProcessor {
                             print(WARNING,
                                   element,
                                   element.getKind() + " annotated with "
-                                  + AT + annotation.getSimpleName() + " and "
-                                  + AT + ForElementKinds.class.getSimpleName()
+                                  + "@" + annotation.getSimpleName() + " and "
+                                  + "@" + ForElementKinds.class.getSimpleName()
                                   + "; " + set + " will be ignored");
                         }
                     }
@@ -216,7 +217,7 @@ public abstract class AbstractNoAnnotationProcessor extends AbstractProcessor {
                 print(ERROR,
                       element,
                       element.getKind() + " annotated with "
-                      + AT + annotation.getSimpleName()
+                      + "@" + annotation.getSimpleName()
                       + " but is not a " + CLASS);
                 break;
             }

@@ -22,25 +22,24 @@ package ball.annotation.processing;
  */
 import ball.activation.ThrowableDataSource;
 import ball.beans.PropertyMethodEnum;
+import ball.lang.reflect.JavaLangReflectMethods;
 import java.lang.annotation.Annotation;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Target;
-import java.lang.reflect.Member;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.EnumSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
-import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.annotation.processing.Filer;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
@@ -49,10 +48,11 @@ import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
-import javax.lang.model.element.Modifier;
 import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.ArrayType;
+import javax.lang.model.type.ExecutableType;
 import javax.lang.model.type.PrimitiveType;
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
@@ -61,13 +61,11 @@ import javax.lang.model.util.Types;
 import javax.tools.Diagnostic;
 import javax.tools.FileObject;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
-import static ball.lang.Keyword.THROWS;
-import static ball.lang.Punctuation.COMMA;
-import static ball.lang.Punctuation.LP;
-import static ball.lang.Punctuation.RP;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Collections.disjoint;
+import static java.util.stream.Collectors.toList;
 import static javax.lang.model.element.Modifier.PRIVATE;
 import static javax.lang.model.element.Modifier.PUBLIC;
 import static javax.lang.model.element.Modifier.STATIC;
@@ -88,23 +86,10 @@ import static lombok.AccessLevel.PROTECTED;
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
-@NoArgsConstructor(access = PROTECTED)
+@NoArgsConstructor(access = PROTECTED) @ToString
 public abstract class AbstractProcessor
-                      extends javax.annotation.processing.AbstractProcessor {
-    /** {@link #META_INF} = {@value #META_INF} */
-    protected static final String META_INF = "META-INF";
-
-    /** {@link #AT} = {@value #AT} */
-    protected static final String AT = "@";
-    /** {@link #COLON} = {@value #COLON} */
-    protected static final String COLON = ":";
-    /** {@link #DOT} = {@value #DOT} */
-    protected static final String DOT = ".";
-    /** {@link #SLASH} = {@value #SLASH} */
-    protected static final String SLASH = "/";
-    /** {@link #SPACE} = {@value #SPACE} */
-    protected static final String SPACE = " ";
-
+                      extends javax.annotation.processing.AbstractProcessor
+                      implements JavaLangReflectMethods {
     /** UTF-8 */
     protected static final Charset CHARSET = UTF_8;
 
@@ -165,6 +150,167 @@ public abstract class AbstractProcessor
     }
 
     /**
+     * Method to get a {@link TypeElement} for a {@link Class}.
+     *
+     * @param   type            The {@link Class}.
+     *
+     * @return  The {@link TypeElement} for the {@link Class}.
+     */
+    protected TypeElement asTypeElement(Class<?> type) {
+        TypeElement element = null;
+
+        try {
+            element = elements.getTypeElement(type.getCanonicalName());
+        } catch (Exception exception) {
+            throw new IllegalArgumentException("type=" + String.valueOf(type),
+                                               exception);
+        }
+
+        return element;
+    }
+
+    /**
+     * Method to get an {@link ExecutableElement} for a {@link Class}
+     * {@link Method}.
+     *
+     * @param   type            The {@link Class}.
+     * @param   name            The {@link Method} name.
+     * @param   parameters      The {@link Method} parameter types.
+     *
+     * @return  The {@link ExecutableElement} for the {@link Method}.
+     */
+    protected ExecutableElement asExecutableElement(Class<?> type,
+                                                    String name,
+                                                    Class<?>... parameters) {
+        return asExecutableElement(asTypeElement(type), name, parameters);
+    }
+
+    /**
+     * Method to get an {@link ExecutableElement} for a {@link Class}
+     * {@link Method}.
+     *
+     * @param   type            The {@link TypeElement}.
+     * @param   name            The {@link Method} name.
+     * @param   parameters      The {@link Method} parameter types.
+     *
+     * @return  The {@link ExecutableElement} for the {@link Method}.
+     */
+    protected ExecutableElement asExecutableElement(TypeElement type,
+                                                    String name,
+                                                    Class<?>... parameters) {
+        ExecutableElement element =
+            methodsIn(type.getEnclosedElements())
+            .stream()
+            .filter(t -> t.getSimpleName().contentEquals(name))
+            .filter(t -> areAssignable(t.getParameters(), parameters))
+            .findFirst().orElse(null);
+
+        return element;
+    }
+
+    private boolean areAssignable(List<? extends Element> from,
+                                  Class<?>[] to) {
+        boolean areAssignable = (from.size() == to.length);
+
+        if (areAssignable) {
+            for (int i = 0; i < to.length; i += 1) {
+                areAssignable &=
+                    isAssignable(types.erasure(from.get(i).asType()), to[i]);
+
+                if (! areAssignable) {
+                    break;
+                }
+            }
+        }
+
+        return areAssignable;
+    }
+
+    /**
+     * Method to get a {@link TypeMirror} for a {@link Class}.
+     *
+     * @param   type            The {@link Class}.
+     *
+     * @return  The {@link TypeMirror} for the {@link Class}.
+     */
+    protected TypeMirror asTypeMirror(Class<?> type) {
+        TypeMirror mirror = null;
+
+        try {
+            if (type.isArray()) {
+                TypeMirror component = asTypeMirror(type.getComponentType());
+
+                mirror = types.getArrayType(component);
+            } else if (type.isPrimitive()) {
+                TypeKind kind = TypeKind.valueOf(type.getName().toUpperCase());
+
+                mirror =
+                    kind.isPrimitive()
+                        ? types.getPrimitiveType(kind)
+                        : types.getNoType(kind);
+            } else {
+                mirror = asTypeElement(type).asType();
+            }
+        } catch (Exception exception) {
+            throw new IllegalArgumentException("type=" + String.valueOf(type),
+                                               exception);
+        }
+
+        return mirror;
+    }
+
+    /**
+     * See {@link Types#isAssignable(TypeMirror,TypeMirror)}.
+     *
+     * @param   from            The left-hand side of the assignment.
+     * @param   to              The right-hand side of the assignment.
+     *
+     * @return  {@code true} if {@code from} can be assigned to {@code to};
+     *          {@code false} otherwise.
+     */
+    protected boolean isAssignable(TypeMirror from, Class<?> to) {
+        boolean isAssignable = true;
+
+        if (from instanceof ArrayType && to.isArray()) {
+            isAssignable &=
+                isAssignable(((ArrayType) from).getComponentType(),
+                             to.getComponentType());
+        } else if (from instanceof PrimitiveType && to.isPrimitive()) {
+            isAssignable &= from.toString().equals(to.getName());
+        } else {
+            isAssignable &=
+                types.isAssignable(from, asTypeMirror(to));
+        }
+
+        return isAssignable;
+    }
+
+    /**
+     * See {@link Types#isSameType(TypeMirror,TypeMirror)}.
+     *
+     * @param   from            The left-hand side of the type test.
+     * @param   to              The right-hand side of the type test.
+     *
+     * @return  {@code true} if {@code from} represents the same type as
+     *                          {@code to}; {@code false} otherwise.
+     */
+    protected boolean isSameType(TypeMirror from, Class<?> to) {
+        boolean isSameType = true;
+
+        if (from instanceof ArrayType && to.isArray()) {
+            isSameType &=
+                isSameType(((ArrayType) from).getComponentType(),
+                           to.getComponentType());
+        } else if (from instanceof PrimitiveType && to.isPrimitive()) {
+            isSameType &= from.toString().equals(to.getName());
+        } else {
+            isSameType &= types.isSameType(from, asTypeMirror(to));
+        }
+
+        return isSameType;
+    }
+
+    /**
      * Method to get an {@link Annotation}'s {@link Target}
      * {@link ElementType}s.
      *
@@ -207,14 +353,10 @@ public abstract class AbstractProcessor
      *          constructor; {@code false} otherwise.
      */
     protected boolean hasPublicNoArgumentConstructor(Element element) {
-        Optional<ExecutableElement> optional =
-            constructorsIn(element.getEnclosedElements())
-            .stream()
-            .filter(t -> t.getModifiers().contains(PUBLIC))
-            .filter(t -> t.getParameters().isEmpty())
-            .findFirst();
-
-        return optional.isPresent();
+        return constructorsIn(element.getEnclosedElements())
+               .stream()
+               .anyMatch(t -> (t.getModifiers().contains(PUBLIC)
+                               && t.getParameters().isEmpty()));
     }
 
     /**
@@ -230,14 +372,14 @@ public abstract class AbstractProcessor
      */
     protected ExecutableElement overrides(ExecutableElement overrider) {
         TypeElement type = (TypeElement) overrider.getEnclosingElement();
-        Optional<ExecutableElement> optional =
+        ExecutableElement element =
             types.directSupertypes(type.asType())
             .stream()
             .map(t -> overrides(overrider, types.asElement(t)))
             .filter(Objects::nonNull)
-            .findFirst();
+            .findFirst().orElse(null);
 
-        return optional.orElse(null);
+        return element;
     }
 
     private ExecutableElement overrides(ExecutableElement overrider,
@@ -261,21 +403,20 @@ public abstract class AbstractProcessor
 
     private ExecutableElement overridden(ExecutableElement overrider,
                                          TypeElement type) {
-        Optional<ExecutableElement> optional =
+        ExecutableElement element =
             methodsIn(type.getEnclosedElements())
             .stream()
             .filter(t -> disjoint(t.getModifiers(),
                                   Arrays.asList(PRIVATE, STATIC)))
             .filter(t -> elements.overrides(overrider, t, type))
-            .findFirst();
+            .findFirst().orElse(null);
 
-        if (! optional.isPresent()) {
-            optional =
-                Optional.ofNullable(overrides(overrider,
-                                              types.asElement(type.getSuperclass())));
+        if (element == null) {
+            element =
+                overrides(overrider, types.asElement(type.getSuperclass()));
         }
 
-        return optional.orElse(null);
+        return element;
     }
 
     /**
@@ -312,156 +453,26 @@ public abstract class AbstractProcessor
      */
     protected ExecutableElement implementationOf(ExecutableElement overridden,
                                                  TypeElement type) {
-        Optional<ExecutableElement> optional = Optional.empty();
+        ExecutableElement element = null;
 
         if (type != null) {
-            optional =
+            element =
                 methodsIn(type.getEnclosedElements())
                 .stream()
                 .filter(t -> overrides(t, overridden))
-                .findFirst();
+                .findFirst().orElse(null);
 
-            if (! optional.isPresent()) {
-                optional =
+            if (element == null) {
+                element =
                     Optional.ofNullable(type.getSuperclass())
                     .map(t -> (TypeElement) types.asElement(t))
                     .filter(Objects::nonNull)
-                    .map(t -> implementationOf(overridden, t));
+                    .map(t -> implementationOf(overridden, t))
+                    .orElse(null);
             }
         }
 
-        return optional.orElse(null);
-    }
-
-    /**
-     * See {@link Types#isAssignable(TypeMirror,TypeMirror)}.
-     *
-     * @param   from            The left-hand side of the assignment.
-     * @param   to              The right-hand side of the assignment.
-     *
-     * @return  {@code true} if {@code from} can be assigned to {@code to};
-     *          {@code false} otherwise.
-     */
-    protected boolean isAssignable(TypeMirror from, TypeMirror to) {
-        return types.isAssignable(from, to);
-    }
-
-    /**
-     * See {@link Types#isAssignable(TypeMirror,TypeMirror)}.
-     *
-     * @param   from            The left-hand side of the assignment.
-     * @param   to              The right-hand side of the assignment.
-     *
-     * @return  {@code true} if {@code from} can be assigned to {@code to};
-     *          {@code false} otherwise.
-     */
-    protected boolean isAssignable(TypeMirror from, Class<?> to) {
-        boolean isAssignable = true;
-
-        if (from instanceof ArrayType && to.isArray()) {
-            isAssignable &=
-                isAssignable(((ArrayType) from).getComponentType(),
-                           to.getComponentType());
-        } else if (from instanceof PrimitiveType && to.isPrimitive()) {
-            isAssignable &= from.toString().equals(to.getName());
-        } else {
-            isAssignable &= isAssignable(from, getTypeMirrorFor(to));
-        }
-
-        return isAssignable;
-    }
-
-    /**
-     * See {@link Types#isAssignable(TypeMirror,TypeMirror)}.
-     *
-     * @param   from            The parameter list (the left-hand side of
-     *                          the assignment).
-     * @param   to              The argument list (the right-hand side of
-     *                          the assignment).
-     *
-     * @return  {@code true} if {@code from} can be assigned to {@code to};
-     *          {@code false} otherwise.
-     */
-    protected boolean isAssignable(List<? extends Element> from,
-                                   Class<?>[] to) {
-        boolean isAssignable = (from.size() == to.length);
-
-        if (isAssignable) {
-            for (int i = 0; i < to.length; i += 1) {
-                isAssignable &= isAssignable(from.get(i).asType(), to[i]);
-
-                if (! isAssignable) {
-                    break;
-                }
-            }
-        }
-
-        return isAssignable;
-    }
-
-    /**
-     * See {@link Types#isSameType(TypeMirror,TypeMirror)}.
-     *
-     * @param   from            The left-hand side of the type test.
-     * @param   to              The right-hand side of the type test.
-     *
-     * @return  {@code true} if {@code from} represents the same type as
-     *                          {@code to}; {@code false} otherwise.
-     */
-    protected boolean isSameType(TypeMirror from, TypeMirror to) {
-        return types.isSameType(from, to);
-    }
-
-    /**
-     * See {@link Types#isSameType(TypeMirror,TypeMirror)}.
-     *
-     * @param   from            The left-hand side of the type test.
-     * @param   to              The right-hand side of the type test.
-     *
-     * @return  {@code true} if {@code from} represents the same type as
-     *                          {@code to}; {@code false} otherwise.
-     */
-    protected boolean isSameType(TypeMirror from, Class<?> to) {
-        boolean isSameType = true;
-
-        if (from instanceof ArrayType && to.isArray()) {
-            isSameType &=
-                isSameType(((ArrayType) from).getComponentType(),
-                           to.getComponentType());
-        } else if (from instanceof PrimitiveType && to.isPrimitive()) {
-            isSameType &= from.toString().equals(to.getName());
-        } else {
-            isSameType &= isSameType(from, getTypeMirrorFor(to));
-        }
-
-        return isSameType;
-    }
-
-    /**
-     * See {@link Types#isSameType(TypeMirror,TypeMirror)}.
-     *
-     * @param   from            The parameter list (the left-hand side of
-     *                          the type test).
-     * @param   to              The argument list (the right-hand side of
-     *                          the type test).
-     *
-     * @return  {@code true} if {@code from} represents the same types as
-     *                          {@code to}; {@code false} otherwise.
-     */
-    protected boolean isSameType(List<? extends Element> from, Class<?>[] to) {
-        boolean isSameType = (from.size() == to.length);
-
-        if (isSameType) {
-            for (int i = 0; i < to.length; i += 1) {
-                isSameType &= isSameType(from.get(i).asType(), to[i]);
-
-                if (! isSameType) {
-                    break;
-                }
-            }
-        }
-
-        return isSameType;
+        return element;
     }
 
     /**
@@ -491,241 +502,6 @@ public abstract class AbstractProcessor
         }
 
         return specification;
-    }
-
-    /**
-     * Method to get an {@link ExecutableElement} for a {@link Class}
-     * {@link Method}.
-     *
-     * @param   type            The {@link Class}.
-     * @param   name            The {@link Method} name.
-     * @param   parameters      The {@link Method} parameter types.
-     *
-     * @return  The {@link ExecutableElement} for the {@link Method}.
-     *
-     * @throws  NoSuchMethodException
-     *                          If the named {@link Method} does not exist.
-     */
-    protected ExecutableElement getExecutableElementFor(Class<?> type,
-                                                        String name,
-                                                        Class<?>... parameters)
-                                        throws NoSuchMethodException {
-        return getExecutableElementFor(type.getDeclaredMethod(name,
-                                                              parameters));
-    }
-
-    /**
-     * Method to get an {@link ExecutableElement} for a {@link Method}.
-     *
-     * @param   method          The {@link Method}.
-     *
-     * @return  The {@link ExecutableElement} for the {@link Method}.
-     */
-    protected ExecutableElement getExecutableElementFor(Method method) {
-        TypeElement type = getTypeElementFor(method.getDeclaringClass());
-
-        return getExecutableElementFor(type, method);
-    }
-
-    /**
-     * Method to get an {@link ExecutableElement} for a {@link Method} if an
-     * equivalent is declared in the argument {@link TypeElement}.
-     *
-     * @param   type            The {@link TypeElement}.
-     * @param   method          The {@link Method} prototype.
-     *
-     * @return  The {@link ExecutableElement} for the {@link Method}.
-     */
-    protected ExecutableElement getExecutableElementFor(TypeElement type,
-                                                        Method method) {
-        Optional<ExecutableElement> optional = Optional.empty();
-
-        if (type != null) {
-            optional =
-                methodsIn(type.getEnclosedElements())
-                .stream()
-                .filter(t -> t.getSimpleName().contentEquals(method.getName()))
-                .filter(t -> t.isVarArgs() == method.isVarArgs())
-                .filter(t -> isSameType(t.getReturnType(),
-                                        method.getReturnType()))
-                .filter(t -> isSameType(t.getParameters(),
-                                        method.getParameterTypes()))
-                .findFirst();
-        }
-
-        return optional.orElse(null);
-    }
-
-    /**
-     * Method to get a {@link PackageElement} for a {@link TypeElement}.
-     *
-     * @param   type            The {@link TypeElement}.
-     *
-     * @return  The {@link PackageElement} for the {@link TypeElement}.
-     */
-    protected PackageElement getPackageElementFor(TypeElement type) {
-        return (type != null) ? elements.getPackageOf(type) : null;
-    }
-
-    /**
-     * Method to get a {@link TypeElement} for a {@link Class}.
-     *
-     * @param   type            The {@link Class}.
-     *
-     * @return  The {@link TypeElement} for the {@link Class}.
-     */
-    protected TypeElement getTypeElementFor(Class<?> type) {
-        TypeElement element = null;
-
-        try {
-            element = elements.getTypeElement(type.getCanonicalName());
-        } catch (Exception exception) {
-            throw new IllegalArgumentException("type=" + String.valueOf(type),
-                                               exception);
-        }
-
-        return element;
-    }
-
-    /**
-     * Method to get a {@link TypeMirror} for a {@link Class}.
-     *
-     * @param   type            The {@link Class}.
-     *
-     * @return  The {@link TypeMirror} for the {@link Class}.
-     */
-    protected TypeMirror getTypeMirrorFor(Class<?> type) {
-        TypeMirror mirror = null;
-
-        try {
-            if (type.isArray()) {
-                TypeMirror component =
-                    getTypeMirrorFor(type.getComponentType());
-
-                mirror = types.getArrayType(component);
-            } else if (type.isPrimitive()) {
-                TypeKind kind = TypeKind.valueOf(type.getName().toUpperCase());
-
-                mirror =
-                    kind.isPrimitive()
-                        ? types.getPrimitiveType(kind)
-                        : types.getNoType(kind);
-            } else {
-                mirror = getTypeElementFor(type).asType();
-            }
-        } catch (Exception exception) {
-            throw new IllegalArgumentException("type=" + String.valueOf(type),
-                                               exception);
-        }
-
-        return mirror;
-    }
-
-    /**
-     * Method to get a {@link List} of {@link TypeMirror}s for an array
-     * of {@link Class}es.
-     *
-     * @param   types           The {@link Class}es.
-     *
-     * @return  The {@link List} of {@link TypeMirror}s for the
-     *          {@link Class}es.
-     */
-    protected List<TypeMirror> getTypeMirrorsFor(Class<?>... types) {
-        return (Arrays.stream(types)
-                .map(t -> getTypeMirrorFor(t))
-                .collect(Collectors.toList()));
-    }
-
-    /**
-     * Method to get bean property name from an {@link ExecutableElement}.
-     *
-     * @param   element         The {@link ExecutableElement}.
-     *
-     * @return  the name {@link String} if the {@link ExecutableElement}
-     *          is a getter or setter method; {@code null} otherwise.
-     */
-    protected String getPropertyName(ExecutableElement element) {
-        Optional<String> optional =
-            Arrays.stream(PropertyMethodEnum.values())
-            .filter(t -> t.getPropertyName(element.getSimpleName().toString()) != null)
-            .filter(t -> isAssignable(element.getReturnType(),
-                                      t.getReturnType()))
-            .filter(t -> isAssignable(element.getParameters(),
-                                      t.getParameterTypes()))
-            .map(t -> t.getPropertyName(element.getSimpleName().toString()))
-            .findFirst();
-
-        return optional.orElse(null);
-    }
-
-    /**
-     * Method to determine if an {@link ExecutableElement} is a bean getter.
-     *
-     * @param   element         The {@link ExecutableElement}.
-     *
-     * @return  {@code true} if the {@link Element} has a non-private getter
-     *          method; {@code false} otherwise.
-     */
-    protected boolean isGetterMethod(ExecutableElement element) {
-        Optional <PropertyMethodEnum> optional =
-            Arrays.asList(PropertyMethodEnum.GET, PropertyMethodEnum.IS)
-            .stream()
-            .filter(t -> (! element.getModifiers().contains(PRIVATE)))
-            .filter(t -> t.getPropertyName(element.getSimpleName().toString()) != null)
-            .filter(t -> isAssignable(element.getReturnType(),
-                                      t.getReturnType()))
-            .filter(t -> isAssignable(element.getParameters(),
-                                      t.getParameterTypes()))
-            .findFirst();
-
-        return optional.isPresent();
-    }
-
-    /**
-     * Method to translate {@link Class} {@link java.lang.reflect.Modifier}
-     * bits to an {@link EnumSet} of {@link Modifier}s.
-     *
-     * @param   modifiers       The {@code int} representing the modifiers.
-     *
-     * @return  The {@link EnumSet} of {@link Modifier}s.
-     */
-    protected EnumSet<Modifier> asModifierSet(int modifiers) {
-        TreeMap<String,Modifier> map = new TreeMap<>();
-
-        if (modifiers != 0) {
-            for (Modifier modifier : Modifier.values()) {
-                map.put(modifier.toString(), modifier);
-            }
-
-            String string = java.lang.reflect.Modifier.toString(modifiers);
-
-            map.keySet()
-                .retainAll(Arrays.asList(string.split("[\\p{Space}]+")));
-        }
-
-        return EnumSet.copyOf(map.values());
-    }
-
-    /**
-     * See {@link #asModifierSet(int)}.
-     *
-     * @param   type            The {@link Class}.
-     *
-     * @return  The {@link EnumSet} of {@link Modifier}s.
-     */
-    protected EnumSet<Modifier> getModifierSetFor(Class<?> type) {
-        return asModifierSet(type.getModifiers());
-    }
-
-    /**
-     * See {@link #asModifierSet(int)}.
-     *
-     * @param   member          The {@link Member}.
-     *
-     * @return  The {@link EnumSet} of {@link Modifier}s.
-     */
-    protected EnumSet<Modifier> getModifierSetFor(Member member) {
-        return asModifierSet(member.getModifiers());
     }
 
     /**
@@ -766,14 +542,59 @@ public abstract class AbstractProcessor
 
     private AnnotationMirror getAnnotationMirror(Element element,
                                                  String name) {
-        Optional<AnnotationMirror> optional =
+        AnnotationMirror mirror =
             element.getAnnotationMirrors()
             .stream()
             .filter(t -> t.getAnnotationType().toString().equals(name))
             .map(t -> (AnnotationMirror) t)
+            .findFirst().orElse(null);
+
+        return mirror;
+    }
+
+    /**
+     * Method to get bean property name from an {@link ExecutableElement}.
+     *
+     * @param   element         The {@link ExecutableElement}.
+     *
+     * @return  the name {@link String} if the {@link ExecutableElement}
+     *          is a getter or setter method; {@code null} otherwise.
+     */
+    protected String getPropertyName(ExecutableElement element) {
+        String string =
+            Arrays.stream(PropertyMethodEnum.values())
+            .filter(t -> t.getPropertyName(element.getSimpleName().toString()) != null)
+            .filter(t -> isAssignable(element.getReturnType(),
+                                      t.getReturnType()))
+            .filter(t -> areAssignable(element.getParameters(),
+                                       t.getParameterTypes()))
+            .map(t -> t.getPropertyName(element.getSimpleName().toString()))
+            .findFirst().orElse(null);
+
+        return string;
+    }
+
+    /**
+     * Method to determine if an {@link ExecutableElement} is a bean getter.
+     *
+     * @param   element         The {@link ExecutableElement}.
+     *
+     * @return  {@code true} if the {@link Element} has a non-private getter
+     *          method; {@code false} otherwise.
+     */
+    protected boolean isGetterMethod(ExecutableElement element) {
+        Optional <PropertyMethodEnum> optional =
+            Arrays.asList(PropertyMethodEnum.GET, PropertyMethodEnum.IS)
+            .stream()
+            .filter(t -> (! element.getModifiers().contains(PRIVATE)))
+            .filter(t -> t.getPropertyName(element.getSimpleName().toString()) != null)
+            .filter(t -> isAssignable(element.getReturnType(),
+                                      t.getReturnType()))
+            .filter(t -> areAssignable(element.getParameters(),
+                                       t.getParameterTypes()))
             .findFirst();
 
-        return optional.orElse(null);
+        return optional.isPresent();
     }
 
     /**
@@ -791,16 +612,15 @@ public abstract class AbstractProcessor
     private Set<String> getPropertyNames(Set<String> set, TypeElement type) {
         for (ExecutableElement element :
                  methodsIn(type.getEnclosedElements())) {
-            if (element.getModifiers().contains(PUBLIC)) {
+            if (! element.getModifiers().contains(PRIVATE)) {
                 Arrays.stream(PropertyMethodEnum.values())
                     .filter(t -> t.getPropertyName(element.getSimpleName().toString()) != null)
                     .filter(t -> isAssignable(element.getReturnType(),
                                               t.getReturnType()))
-                    .filter(t -> isAssignable(element.getParameters(),
-                                              t.getParameterTypes()))
+                    .filter(t -> areAssignable(element.getParameters(),
+                                               t.getParameterTypes()))
                     .map(t -> t.getPropertyName(element.getSimpleName().toString()))
-                    .findFirst()
-                    .ifPresent(t -> set.add(t));
+                    .forEach(t -> set.add(t));
             }
         }
 
@@ -843,77 +663,26 @@ public abstract class AbstractProcessor
 
     /**
      * Method to get the argument {@link PackageElement} name as a path
-     * (including the trailing {@value SLASH}).
+     * (including the trailing {@code /}).
      *
      * @param   element         The {@link PackageElement}.
      *
      * @return  The {@link PackageElement} name as a path.
      */
     protected String asPath(PackageElement element) {
-        return asPath(element.getQualifiedName().toString()) + SLASH;
-    }
-
-    /**
-     * Method to get {@link String} representation of a {@link Method} for
-     * use in diagnostic messages.
-     *
-     * @param   method          The {@link Method}.
-     *
-     * @return  The {@link String} representation.
-     */
-    protected String toString(Method method) {
-        StringBuilder buffer = new StringBuilder();
-        int modifiers = method.getModifiers();
-
-        if (modifiers != 0) {
-            buffer
-                .append(java.lang.reflect.Modifier.toString(modifiers))
-                .append(SPACE);
-        }
-
-        buffer
-            .append(method.getReturnType().getSimpleName())
-            .append(SPACE)
-            .append(method.getName())
-            .append(LP.lexeme());
-
-        Class<?>[] types = method.getParameterTypes();
-
-        for (int i = 0; i < types.length; i += 1) {
-            if (i > 0) {
-                buffer.append(COMMA.lexeme());
-            }
-
-            buffer.append(types[i].getSimpleName());
-        }
-
-        buffer.append(RP.lexeme());
-
-        Class<?>[] exceptions = method.getExceptionTypes();
-
-        for (int i = 0; i < exceptions.length; i += 1) {
-            if (i == 0) {
-                buffer.append(THROWS.lexeme());
-            } else {
-                buffer.append(COMMA.lexeme());
-            }
-
-            buffer.append(SPACE).append(exceptions[i].getSimpleName());
-        }
-
-        return buffer.toString().trim();
+        return asPath(element.getQualifiedName().toString()) + "/";
     }
 
     /**
      * Static method to get the argument {@link Package} name as a path
-     * (including the trailing {@value SLASH}).
+     * (including the trailing {@code /}).
      *
      * @param   pkg             The {@link Package}.
      *
      * @return  The {@link Package} name as a path.
      */
     protected static String asPath(Package pkg) {
-        return asPath(pkg.getName()) + SLASH;
+        return asPath(pkg.getName()) + "/";
     }
 
     /**
@@ -924,7 +693,7 @@ public abstract class AbstractProcessor
      * @return  The argument {@link String} as a path.
      */
     protected static String asPath(String name) {
-        return name.replaceAll(Pattern.quote(DOT), SLASH);
+        return name.replaceAll(Pattern.quote("."), "/");
     }
 
     /**
@@ -939,27 +708,24 @@ public abstract class AbstractProcessor
     }
 
     /**
-     * {@link TypeElement} {@link List} from {@link AnnotationValue}.
+     * Method to get the {@link List} of {@link TypeElement}s from an
+     * {@link AnnotationValue}.
+     *
+     * @param   value           The {@link AnnotationValue}.
+     *
+     * @return  The {@link List}.
      */
-    protected class TypeElementList extends ArrayList<TypeElement> {
-        private static final long serialVersionUID = -6613114921805902827L;
+    protected List<TypeElement> getTypeElementListFrom(AnnotationValue value) {
+        List<TypeElement> list =
+            Stream.of(value)
+            .filter(Objects::nonNull)
+            .map(t -> (List<?>) t.getValue())
+            .flatMap(List::stream)
+            .map(t -> (AnnotationValue) t)
+            .map(t -> (TypeMirror) t.getValue())
+            .map(t -> (TypeElement) types.asElement(t))
+            .collect(toList());
 
-        /**
-         * Sole constructor.
-         *
-         * @param       value   The {link AnnotationValue}.
-         */
-        public TypeElementList(AnnotationValue value) {
-            super();
-
-            if (value != null) {
-                for (Object object : (List<?>) value.getValue()) {
-                    TypeMirror mirror =
-                        (TypeMirror) ((AnnotationValue) object).getValue();
-
-                    add((TypeElement) types.asElement(mirror));
-                }
-            }
-        }
+        return list;
     }
 }

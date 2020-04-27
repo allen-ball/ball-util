@@ -59,6 +59,7 @@ import static javax.tools.StandardLocation.CLASS_OUTPUT;
 public class JAXBIndexProcessor extends AbstractAnnotationProcessor
                                 implements ClassFileProcessor {
     private static final String JAXB_INDEX = "jaxb.index";
+    private static final String DOT = ".";
 
     private MapImpl map = new MapImpl();
 
@@ -145,8 +146,7 @@ public class JAXBIndexProcessor extends AbstractAnnotationProcessor
         }
 
         public boolean add(TypeElement type) {
-            return add(getPackageElementFor(type)
-                       .getQualifiedName().toString(),
+            return add(elements.getPackageOf(type).getQualifiedName().toString(),
                        type.getQualifiedName().toString());
         }
 

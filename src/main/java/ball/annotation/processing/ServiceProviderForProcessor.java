@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -70,7 +71,7 @@ import static org.apache.commons.lang3.StringUtils.EMPTY;
 @NoArgsConstructor @ToString
 public class ServiceProviderForProcessor extends AbstractAnnotationProcessor
                                          implements ClassFileProcessor {
-    private static final String PATH = META_INF + "/services/%s";
+    private static final String PATH = "META-INF/services/%s";
 
     private MapImpl map = new MapImpl();
 
@@ -118,7 +119,7 @@ public class ServiceProviderForProcessor extends AbstractAnnotationProcessor
             .filter(t -> t.getKey().toString().equals("value()"))
             .map(t -> t.getValue())
             .findFirst().get();
-        TypeElementList list = new TypeElementList(value);
+        List<TypeElement> list = getTypeElementListFrom(value);
 
         if (! list.isEmpty()) {
             switch (element.getKind()) {
@@ -126,13 +127,14 @@ public class ServiceProviderForProcessor extends AbstractAnnotationProcessor
                 if (! element.getModifiers().contains(ABSTRACT)) {
                     if (hasPublicNoArgumentConstructor(element)) {
                         for (TypeElement service : list) {
-                            if (isAssignable(element.asType(), service.asType())) {
+                            if (types.isAssignable(element.asType(),
+                                                   service.asType())) {
                                 map.add(service, (TypeElement) element);
                             } else {
                                 print(ERROR,
                                       element,
                                       element.getKind() + " annotated with "
-                                      + AT + annotation.getSimpleName()
+                                      + "@" + annotation.getSimpleName()
                                       + " and specifies "
                                       + service.getQualifiedName()
                                       + " but is not an implementing class");
@@ -142,7 +144,7 @@ public class ServiceProviderForProcessor extends AbstractAnnotationProcessor
                         print(ERROR,
                               element,
                               element.getKind() + " annotated with "
-                              + AT + annotation.getSimpleName()
+                              + "@" + annotation.getSimpleName()
                               + " but does not have a " + PUBLIC
                               + " no-argument constructor");
                     }
@@ -150,7 +152,7 @@ public class ServiceProviderForProcessor extends AbstractAnnotationProcessor
                     print(ERROR,
                           element,
                           element.getKind() + " annotated with "
-                          + AT + annotation.getSimpleName()
+                          + "@" + annotation.getSimpleName()
                           + " but is " + ABSTRACT);
                 }
                 break;
@@ -162,7 +164,7 @@ public class ServiceProviderForProcessor extends AbstractAnnotationProcessor
             print(ERROR,
                   element,
                   element.getKind() + " annotated with "
-                  + AT + annotation.getSimpleName()
+                  + "@" + annotation.getSimpleName()
                   + " but no services specified");
         }
     }

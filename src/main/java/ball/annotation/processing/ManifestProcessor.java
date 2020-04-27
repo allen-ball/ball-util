@@ -74,8 +74,8 @@ import static org.apache.commons.lang3.StringUtils.join;
 @NoArgsConstructor @ToString
 public class ManifestProcessor extends AbstractAnnotationProcessor
                                implements ClassFileProcessor {
+    private static final String META_INF = "META-INF";
     private static final String MANIFEST_MF = "MANIFEST.MF";
-
     private static final String _CLASS = ".class";
 
     private static abstract class PROTOTYPE {
@@ -94,7 +94,7 @@ public class ManifestProcessor extends AbstractAnnotationProcessor
         boolean result = true;
 
         try {
-            String path = META_INF + SLASH + MANIFEST_MF;
+            String path = META_INF + "/" + MANIFEST_MF;
 
             if (manifest == null) {
                 manifest = new ManifestImpl();
@@ -147,7 +147,9 @@ public class ManifestProcessor extends AbstractAnnotationProcessor
                 case INTERFACE:
                     TypeElement type = (TypeElement) element;
                     ExecutableElement method =
-                        getExecutableElementFor(type, METHOD);
+                        asExecutableElement(type,
+                                            METHOD.getName(),
+                                            METHOD.getParameterTypes());
 
                     if (method != null
                         && (method.getModifiers()
@@ -159,7 +161,7 @@ public class ManifestProcessor extends AbstractAnnotationProcessor
                             print(WARNING,
                                   element,
                                   element.getKind() + " annotated with "
-                                  + AT + main.annotationType().getSimpleName()
+                                  + "@" + main.annotationType().getSimpleName()
                                   + " overwrites previous definition of "
                                   + old);
                         }
@@ -167,9 +169,9 @@ public class ManifestProcessor extends AbstractAnnotationProcessor
                         print(ERROR,
                               element,
                               element.getKind() + " annotated with "
-                              + AT + main.annotationType().getSimpleName()
+                              + "@" + main.annotationType().getSimpleName()
                               + " but does not implement `"
-                              + toString(METHOD) + "'");
+                              + declaration(METHOD) + "'");
                     }
                     break;
 
@@ -313,12 +315,12 @@ public class ManifestProcessor extends AbstractAnnotationProcessor
 
             if (depends != null) {
                 attributes.putValue(getAttributeName(depends.getClass()),
-                                    join(depends.value(), SPACE));
+                                    join(depends.value(), " "));
             }
 
             if (design != null) {
                 attributes.putValue(getAttributeName(design.getClass()),
-                                    join(design.value(), SPACE));
+                                    join(design.value(), " "));
             }
         }
 

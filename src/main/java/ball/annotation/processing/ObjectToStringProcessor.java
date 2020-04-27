@@ -58,7 +58,7 @@ public class ObjectToStringProcessor extends AbstractNoAnnotationProcessor {
         super.init(processingEnv);
 
         try {
-            METHOD = getExecutableElementFor(Object.class, "toString");
+            METHOD = asExecutableElement(Object.class, "toString");
         } catch (Exception exception) {
             print(ERROR, null, exception);
         }
@@ -70,14 +70,15 @@ public class ObjectToStringProcessor extends AbstractNoAnnotationProcessor {
             TypeElement type = (TypeElement) element;
 
             if (type.getAnnotation(ToString.class) == null) {
-                ExecutableElement method = implementationOf(METHOD, type);
+                ExecutableElement implementation =
+                    implementationOf(METHOD, type);
 
-                if (method == null || METHOD.equals(method)) {
+                if (implementation == null || METHOD.equals(implementation)) {
                     print(WARNING,
                           type,
                           type.getKind() + " does not override "
                           + METHOD.getEnclosingElement().getSimpleName()
-                          + DOT + METHOD.toString());
+                          + "." + METHOD);
                 }
             }
         }

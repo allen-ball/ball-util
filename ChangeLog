@@ -1,6 +1,7 @@
 2020-04-27  Allen D. Ball  <ball@hcf.dev>
 
-	* src/main/java/ball/util/ant/taskdefs/TypeTask.java:
+	* src/main/java/ball/annotation/processing/AbstractProcessor.java,
+	src/main/java/ball/util/ant/taskdefs/TypeTask.java:
 	Implement JavaLangReflectMethods.
 
 	* src/main/java/ball/lang/reflect/JavaLangReflectMethods.java:
