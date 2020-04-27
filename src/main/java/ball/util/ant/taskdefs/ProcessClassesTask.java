@@ -122,7 +122,11 @@ public class ProcessClassesTask extends Task
         TreeSet<Class<?>> set = new TreeSet<>(comparing(Class::getName));
 
         try {
-            for (ClassFile file : new DirectoryIterator(getBasedir(), true)) {
+            DirectoryIterator iterator =
+                new DirectoryIterator(getBasedir(), true);
+            ClassFile file = null;
+
+            while ((file = iterator.getNextClassFile()) != null) {
                 set.add(getClassForName(file.getFullClassName()));
             }
         } catch (BuildException exception) {

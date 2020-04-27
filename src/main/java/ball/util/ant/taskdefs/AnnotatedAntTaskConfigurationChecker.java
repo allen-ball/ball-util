@@ -32,6 +32,7 @@ import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
 import org.apache.tools.ant.Task;
 import org.apache.tools.ant.TaskConfigurationChecker;
+import lombok.ToString;
 
 import static ball.beans.PropertyMethodEnum.getPropertyName;
 
@@ -42,6 +43,7 @@ import static ball.beans.PropertyMethodEnum.getPropertyName;
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
+@ToString
 public class AnnotatedAntTaskConfigurationChecker
              extends TaskConfigurationChecker {
     private final Task task;

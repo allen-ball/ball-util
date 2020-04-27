@@ -21,17 +21,15 @@ package ball.util.ant.taskdefs;
  * ##########################################################################
  */
 import ball.beans.PropertyDescriptorsTableModel;
+import ball.lang.reflect.JavaLangReflectMethods;
 import ball.swing.table.SimpleTableModel;
 import java.beans.BeanDescriptor;
 import java.beans.BeanInfo;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.TypeVariable;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.stream.Stream;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -42,8 +40,6 @@ import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 import org.apache.tools.ant.util.ClasspathUtils;
 
-import static ball.lang.Punctuation.GT;
-import static ball.lang.Punctuation.LT;
 import static lombok.AccessLevel.PROTECTED;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 
@@ -59,7 +55,8 @@ import static org.apache.commons.lang3.StringUtils.EMPTY;
 @NoArgsConstructor(access = PROTECTED)
 public abstract class TypeTask extends Task
                                implements AnnotatedAntTask,
-                                          ClasspathDelegateAntTask {
+                                          ClasspathDelegateAntTask,
+                                          JavaLangReflectMethods {
     @Getter @Setter @Accessors(chain = true, fluent = true)
     private ClasspathUtils.Delegate delegate = null;
     @NotNull @Getter
@@ -126,7 +123,7 @@ public abstract class TypeTask extends Task
         }
 
         private class BeanHeaderTableModel extends SimpleTableModel {
-            private static final long serialVersionUID = 2338583773511453873L;
+            private static final long serialVersionUID = -6207300503623991416L;
 
             public BeanHeaderTableModel(BeanDescriptor descriptor) {
                 super(new Object[][] { }, 2);
@@ -209,24 +206,15 @@ public abstract class TypeTask extends Task
             try {
                 Class<?> type = getClassForName(getType());
 
-                log(String.valueOf(type));
-
-                for (Constructor<?> constructor :
-                         type.getDeclaredConstructors()) {
-                    log(constructor.toGenericString());
-                }
-
-                for (Field field : type.getDeclaredFields()) {
-                    log(field.toGenericString());
-                }
-
-                for (Method method : type.getDeclaredMethods()) {
-                    log(method.toGenericString());
-                }
-
-                for (Class<?> cls : type.getDeclaredClasses()) {
-                    log(cls.toString());
-                }
+                log(type(type));
+                Stream.of(type.getDeclaredClasses())
+                    .forEach(t -> log(type(t)));
+                Stream.of(type.getDeclaredFields())
+                    .forEach(t -> log(declaration(t)));
+                Stream.of(type.getDeclaredConstructors())
+                    .forEach(t -> log(declaration(t)));
+                Stream.of(type.getDeclaredMethods())
+                    .forEach(t -> log(declaration(t)));
             } catch (BuildException exception) {
                 throw exception;
             } catch (Throwable throwable) {
@@ -292,7 +280,7 @@ public abstract class TypeTask extends Task
                 list.addAll(ClassUtils.getAllInterfaces(type));
 
                 for (Class<?> superclass : list) {
-                    log(toString(superclass));
+                    log(type(superclass));
                 }
             } catch (BuildException exception) {
                 throw exception;
@@ -300,22 +288,6 @@ public abstract class TypeTask extends Task
                 throwable.printStackTrace();
                 throw new BuildException(throwable);
             }
-        }
-
-        private String toString(Class<?> type) {
-            StringBuilder buffer = new StringBuilder(type.getName());
-
-            if (type.getTypeParameters().length > 0) {
-                buffer.append(LT.lexeme());
-
-                for (TypeVariable<?> parameter : type.getTypeParameters()) {
-                    buffer.append(parameter);
-                }
-
-                buffer.append(GT.lexeme());
-            }
-
-            return buffer.toString();
         }
     }
 }
