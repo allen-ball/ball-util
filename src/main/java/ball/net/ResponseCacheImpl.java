@@ -38,9 +38,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.ToString;
 
 import static java.nio.file.attribute.PosixFilePermissions.asFileAttribute;
 import static java.nio.file.attribute.PosixFilePermissions.fromString;
+import static lombok.AccessLevel.PRIVATE;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 /**
@@ -49,6 +54,7 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
+@NoArgsConstructor(access = PRIVATE) @ToString
 public class ResponseCacheImpl extends ResponseCache {
 
     /**
@@ -59,16 +65,11 @@ public class ResponseCacheImpl extends ResponseCache {
     private static final String BODY = "BODY";
     private static final String HEADERS = "HEADERS";
 
-    private final Path cache;
+    private final Path cache =
+        Paths.get(System.getProperty("user.home"), ".config", "java", "cache");
 
-    private ResponseCacheImpl() {
-        super();
-
+    {
         try {
-            cache =
-                Paths.get(System.getProperty("user.home"),
-                          ".config", "java", "cache");
-
             Files.createDirectories(cache,
                                     asFileAttribute(fromString("rwx------")));
         } catch (Exception exception) {
@@ -145,16 +146,10 @@ public class ResponseCacheImpl extends ResponseCache {
         Files.deleteIfExists(path);
     }
 
+    @AllArgsConstructor(access = PRIVATE) @ToString
     public class CacheRequestImpl extends CacheRequest {
-        private final Path path;
-        private final Map<String,List<String>> headers;
-
-        private CacheRequestImpl(Path path, Map<String,List<String>> headers) {
-            super();
-
-            this.path = Objects.requireNonNull(path);
-            this.headers = Objects.requireNonNull(headers);
-        }
+        @NonNull private final Path path;
+        @NonNull private final Map<String,List<String>> headers;
 
         @Override
         public OutputStream getBody() throws IOException {
@@ -179,14 +174,9 @@ public class ResponseCacheImpl extends ResponseCache {
         }
     }
 
+    @AllArgsConstructor(access = PRIVATE) @ToString
     public class CacheResponseImpl extends CacheResponse {
-        private final Path path;
-
-        private CacheResponseImpl(Path path) {
-            super();
-
-            this.path = Objects.requireNonNull(path);
-        }
+        @NonNull private final Path path;
 
         @Override
         public Map<String,List<String>> getHeaders() throws IOException {

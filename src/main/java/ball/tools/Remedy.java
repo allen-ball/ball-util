@@ -20,6 +20,7 @@ package ball.tools;
  * limitations under the License.
  * ##########################################################################
  */
+import ball.lang.reflect.JavaLangReflectMethods;
 import java.util.Collections;
 import java.util.ServiceLoader;
 import java.util.SortedMap;
@@ -29,7 +30,9 @@ import javax.tools.Diagnostic;
 import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
+import static lombok.AccessLevel.PRIVATE;
 import static lombok.AccessLevel.PROTECTED;
 
 /**
@@ -38,9 +41,10 @@ import static lombok.AccessLevel.PROTECTED;
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
-@NoArgsConstructor(access = PROTECTED)
-public abstract class Remedy {
-    private static class Lazy {
+@NoArgsConstructor(access = PROTECTED) @ToString
+public abstract class Remedy implements JavaLangReflectMethods {
+    @NoArgsConstructor(access = PRIVATE) @ToString
+    private static abstract class Lazy {
         public static final SortedMap<String,Remedy> MAP;
 
         static {

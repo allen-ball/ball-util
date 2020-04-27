@@ -23,7 +23,7 @@ package ball.tools;
 import ball.annotation.ServiceProviderFor;
 import java.io.ObjectStreamClass;
 import java.io.Serializable;
-import java.lang.reflect.Modifier;
+import java.lang.reflect.Field;
 import java.util.Collections;
 import java.util.Locale;
 import java.util.SortedSet;
@@ -33,13 +33,6 @@ import javax.tools.StandardJavaFileManager;
 import javax.tools.StandardLocation;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-
-import static ball.lang.Punctuation.EQUALS;
-import static ball.lang.Punctuation.SEMICOLON;
-import static ball.lang.Punctuation.SPACE;
-import static java.lang.reflect.Modifier.FINAL;
-import static java.lang.reflect.Modifier.PRIVATE;
-import static java.lang.reflect.Modifier.STATIC;
 
 /**
  * compiler.warn.missing.SVUID {@link Remedy}.
@@ -53,10 +46,11 @@ import static java.lang.reflect.Modifier.STATIC;
 public class MissingSVUIDRemedy extends Remedy implements Serializable {
     private static final long serialVersionUID = -6900234880629237267L;
 
-    private static final int MODIFIERS = PRIVATE | STATIC | FINAL;
-    private static final Class<?> TYPE = Long.TYPE;
-    private static final String SVUID = "serialVersionUID";
-    private static final String L = "L";
+    private static abstract class PROTOTYPE {
+        private static final long serialVersionUID = 0L;
+    }
+
+    private static final Field FIELD = PROTOTYPE.class.getDeclaredFields()[0];
 
     @Override
     public String getRx(Diagnostic<? extends JavaFileObject> diagnostic,
@@ -68,7 +62,7 @@ public class MissingSVUIDRemedy extends Remedy implements Serializable {
         int start = message.lastIndexOf(name);
         int end =
             (start >= 0)
-                ? message.indexOf(SPACE.lexeme(), start)
+                ? message.indexOf(" ", start)
                 : message.length();
 
         if (0 <= start && start < end) {
@@ -91,20 +85,11 @@ public class MissingSVUIDRemedy extends Remedy implements Serializable {
         String remedy = null;
 
         if (type != null) {
-            long serialVersionUID =
-                ObjectStreamClass.lookup(type).getSerialVersionUID();
+            long uid = ObjectStreamClass.lookup(type).getSerialVersionUID();
 
-            remedy = getDeclaration(serialVersionUID);
+            remedy = String.format("%s = %dL;", declaration(FIELD), uid);
         }
 
         return remedy;
-    }
-
-    private String getDeclaration(long serialVersionUID) {
-        return (Modifier.toString(MODIFIERS) + SPACE.lexeme() + TYPE.getName()
-                + SPACE.lexeme() + SVUID
-                + SPACE.lexeme() + EQUALS.lexeme()
-                + SPACE.lexeme() + String.valueOf(serialVersionUID) + L
-                + SEMICOLON.lexeme());
     }
 }

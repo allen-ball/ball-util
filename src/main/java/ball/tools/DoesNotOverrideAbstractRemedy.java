@@ -22,10 +22,7 @@ package ball.tools;
  */
 import ball.annotation.Regex;
 import ball.annotation.ServiceProviderFor;
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.lang.reflect.Type;
 import java.util.Locale;
 import java.util.SortedSet;
 import java.util.regex.Matcher;
@@ -36,17 +33,6 @@ import javax.tools.StandardJavaFileManager;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import static ball.lang.Keyword.THROWS;
-import static ball.lang.Punctuation.AT;
-import static ball.lang.Punctuation.COMMA;
-import static ball.lang.Punctuation.GT;
-import static ball.lang.Punctuation.LBC;
-import static ball.lang.Punctuation.LP;
-import static ball.lang.Punctuation.LT;
-import static ball.lang.Punctuation.RBC;
-import static ball.lang.Punctuation.RP;
-import static ball.lang.Punctuation.SEMICOLON;
-import static ball.lang.Punctuation.SPACE;
 import static java.lang.reflect.Modifier.ABSTRACT;
 
 /**
@@ -96,75 +82,14 @@ public class DoesNotOverrideAbstractRemedy extends Remedy {
     }
 
     protected String getRX(Method method) {
-        StringBuilder buffer = null;
-
-        if (method != null) {
-            buffer =
-                new StringBuilder()
-                .append(AT.lexeme()).append(toString(Override.class))
-                .append(NL)
-                .append(Modifier.toString(method.getModifiers() ^ ABSTRACT))
-                .append(SPACE.lexeme())
-                .append(toTypeList(LT.lexeme(), GT.lexeme() + SPACE.lexeme(),
-                                   COMMA.lexeme(), method.getTypeParameters()))
-                .append(toString(method.getGenericReturnType()))
-                .append(SPACE.lexeme()).append(method.getName())
-                .append(LP.lexeme())
-                .append(toTypeList(null, null,
-                                   COMMA.lexeme() + SPACE.lexeme(),
-                                   method.getGenericParameterTypes()))
-                .append(RP.lexeme())
-                .append(SPACE.lexeme())
-                .append(toTypeList(THROWS.lexeme() + SPACE.lexeme(),
-                                   SPACE.lexeme(),
-                                   COMMA.lexeme() + SPACE.lexeme(),
-                                   method.getGenericExceptionTypes()))
-                .append(LBC.lexeme()).append(NL).append(RBC.lexeme());
-        }
-
-        return (buffer != null) ? buffer.toString() : null;
-    }
-
-    private String toTypeList(String start, String end, String separator,
-                              Type... types) {
-        StringBuilder buffer = new StringBuilder();
-
-        if (types != null && types.length > 0) {
-            if (start != null) {
-                buffer.append(start);
-            }
-
-            boolean first = true;
-
-            for (Type type : types) {
-                if (first) {
-                    first = false;
-                } else {
-                    if (separator != null) {
-                        buffer.append(separator);
-                    }
-                }
-
-                buffer.append(toString(type));
-            }
-
-            if (end != null) {
-                buffer.append(end);
-            }
-        }
-
-        return buffer.toString();
-    }
-
-    private String toString(Type type) {
         String string = null;
 
-        if (type != null) {
-            if (type instanceof Class) {
-                string = ((Class) type).getSimpleName();
-            } else {
-                string = type.toString();
-            }
+        if (method != null) {
+            string =
+                String.format("@%s\n%s {\n}",
+                              type(Override.class),
+                              declaration(method.getModifiers() ^ ABSTRACT,
+                                          method));
         }
 
         return string;

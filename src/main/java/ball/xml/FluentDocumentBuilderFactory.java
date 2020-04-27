@@ -23,6 +23,7 @@ package ball.xml;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.FactoryConfigurationError;
 import javax.xml.parsers.ParserConfigurationException;
+import lombok.ToString;
 
 import static java.util.Objects.requireNonNull;
 
@@ -32,6 +33,7 @@ import static java.util.Objects.requireNonNull;
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
+@ToString
 public class FluentDocumentBuilderFactory extends DocumentBuilderFactory {
     private final DocumentBuilderFactory factory;
 

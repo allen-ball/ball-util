@@ -32,7 +32,7 @@ import java.util.Map;
  * @version $Revision$
  */
 public class PrimitiveTypeMap extends HashMap<Class<?>,Class<?>> {
-    private static final long serialVersionUID = -4786403682565499928L;
+    private static final long serialVersionUID = 542657344546950531L;
 
     /**
      * Unmodifiable instance of a {@link PrimitiveTypeMap}.

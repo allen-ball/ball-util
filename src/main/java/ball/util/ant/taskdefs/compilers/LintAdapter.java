@@ -32,6 +32,7 @@ import javax.tools.Diagnostic;
 import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import static java.util.Comparator.comparing;
 import static javax.tools.JavaFileObject.Kind.CLASS;
@@ -48,13 +49,8 @@ import static org.apache.commons.lang3.StringUtils.EMPTY;
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
-@NoArgsConstructor
+@NoArgsConstructor @ToString
 public class LintAdapter extends SystemJavaCompilerAdapter {
-    /** {@link #PERIOD} = {@value #PERIOD} */
-    protected static final String PERIOD = ".";
-    /** {@link #SLASH} = {@value #SLASH} */
-    protected static final String SLASH = "/";
-
     private static final URI FILE = URI.create("file:///");
 
     @Override
@@ -81,7 +77,7 @@ public class LintAdapter extends SystemJavaCompilerAdapter {
     }
 
     private static class OutputClassSet extends TreeSet<Class<?>> {
-        private static final long serialVersionUID = 3581687174576253455L;
+        private static final long serialVersionUID = -6071215710420201764L;
 
         public OutputClassSet(StandardJavaFileManager fm) {
             super(comparing(Class::getName));
@@ -109,7 +105,7 @@ public class LintAdapter extends SystemJavaCompilerAdapter {
                                        - CLASS.extension.length());
                 }
 
-                name = name.replaceAll(Pattern.quote(SLASH), PERIOD);
+                name = name.replaceAll(Pattern.quote("/"), ".");
 
                 try {
                     add(Class.forName(name, false, loader));

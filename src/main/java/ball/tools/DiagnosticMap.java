@@ -72,7 +72,7 @@ public class DiagnosticMap
         public void count(Diagnostic.Kind key) { count(key, 1); }
 
         public void count(Diagnostic.Kind key, int count) {
-            put(key, count + (containsKey(key) ? get(key) : 0));
+            put(key, computeIfAbsent(key, k -> 0) + count);
         }
     }
 }
