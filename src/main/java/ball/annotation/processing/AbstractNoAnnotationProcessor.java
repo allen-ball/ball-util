@@ -60,9 +60,9 @@ public abstract class AbstractNoAnnotationProcessor extends AbstractProcessor {
     private static final List<ElementKind> REQUIRED_FOR_SUBCLASSES_OF =
         Arrays.asList(CLASS, INTERFACE);
 
-    private TreeSet<ElementKind> kinds =
+    protected TreeSet<ElementKind> kinds =
         new TreeSet<>(EnumSet.allOf(ElementKind.class));
-    private Class<?> superclass = null;
+    protected Class<?> superclass = null;
 
     @Override
     public Set<String> getSupportedAnnotationTypes() {
@@ -94,10 +94,6 @@ public abstract class AbstractNoAnnotationProcessor extends AbstractProcessor {
         }
     }
 
-    private <A extends Annotation> A getAnnotation(Class<A> annotation) {
-        return getClass().getAnnotation(annotation);
-    }
-
     /**
      * @return  {@code false} always.
      */
@@ -105,7 +101,7 @@ public abstract class AbstractNoAnnotationProcessor extends AbstractProcessor {
     public boolean process(Set<? extends TypeElement> annotations,
                            RoundEnvironment roundEnv) {
         try {
-            new IterableImpl(roundEnv.getRootElements())
+            roundEnv.getRootElements()
                 .stream()
                 .filter(t -> kinds.contains(t.getKind()))
                 .filter(t -> (superclass == null
@@ -125,34 +121,6 @@ public abstract class AbstractNoAnnotationProcessor extends AbstractProcessor {
      */
     protected abstract void process(Element element);
 
-    private class IterableImpl extends LinkedHashSet<Element> {
-        private static final long serialVersionUID = -6350696749245608053L;
-
-        public IterableImpl(Collection<? extends Element> collection) {
-            addAll(collection);
-        }
-
-        @Override
-        public boolean add(Element element) {
-            boolean modified = super.add(element);
-
-            modified |= addAll(element.getEnclosedElements());
-
-            return modified;
-        }
-
-        @Override
-        public boolean addAll(Collection<? extends Element> collection) {
-            boolean modified = false;
-
-            for (Element element : collection) {
-                modified |= add(element);
-            }
-
-            return modified;
-        }
-    }
-
     /**
      * {@link Processor} implementation.
      */
@@ -171,12 +139,11 @@ public abstract class AbstractNoAnnotationProcessor extends AbstractProcessor {
             switch (element.getKind()) {
             case CLASS:
                 if (! isAssignable(element.asType(), SUPERCLASS)) {
-                    print(ERROR,
-                          element,
-                          element.getKind() + " annotated with "
-                          + "@" + annotation.getSimpleName()
-                          + " but is not a subclass of "
-                          + SUPERCLASS.getCanonicalName());
+                    print(ERROR, element,
+                          "%s annotated with @%s but is not a subclass of %s",
+                          element.getKind(),
+                          annotation.getSimpleName(),
+                          SUPERCLASS.getCanonicalName());
                 }
 
                 if (isSameType(annotation.asType(), ForSubclassesOf.class)) {
@@ -192,33 +159,29 @@ public abstract class AbstractNoAnnotationProcessor extends AbstractProcessor {
                         }
 
                         if (! set.removeAll(REQUIRED_FOR_SUBCLASSES_OF)) {
-                            print(ERROR,
-                                  element,
-                                  element.getKind() + " annotated with "
-                                  + "@" + annotation.getSimpleName() + " and "
-                                  + "@" + ForElementKinds.class.getSimpleName()
-                                  + " but does not specify one of "
-                                  + REQUIRED_FOR_SUBCLASSES_OF);
+                            print(ERROR, element,
+                                  "%s annotated with @%s and @%s but does not specify one of %s",
+                                  element.getKind(),
+                                  annotation.getSimpleName(),
+                                  ForElementKinds.class.getSimpleName(),
+                                  REQUIRED_FOR_SUBCLASSES_OF);
                         }
 
                         if (! set.isEmpty()) {
-                            print(WARNING,
-                                  element,
-                                  element.getKind() + " annotated with "
-                                  + "@" + annotation.getSimpleName() + " and "
-                                  + "@" + ForElementKinds.class.getSimpleName()
-                                  + "; " + set + " will be ignored");
+                            print(WARNING, element,
+                                  "%s annotated with @%s and @%s; %s will be ignored",
+                                  element.getKind(),
+                                  annotation.getSimpleName(),
+                                  ForElementKinds.class.getSimpleName(), set);
                         }
                     }
                 }
                 break;
 
             default:
-                print(ERROR,
-                      element,
-                      element.getKind() + " annotated with "
-                      + "@" + annotation.getSimpleName()
-                      + " but is not a " + CLASS);
+                print(ERROR, element,
+                      "%s annotated with @%s but is not a %s",
+                      element.getKind(), annotation.getSimpleName(), CLASS);
                 break;
             }
         }

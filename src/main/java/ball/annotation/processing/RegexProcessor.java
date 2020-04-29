@@ -55,9 +55,9 @@ public class RegexProcessor extends AbstractAnnotationProcessor {
             if (regex instanceof String) {
                 Pattern.compile((String) regex);
             } else {
-                print(ERROR,
-                      element,
-                      "Constant value is not " + String.class.getSimpleName());
+                print(ERROR, element,
+                      "Constant value is not %s",
+                      String.class.getSimpleName());
             }
         }
     }

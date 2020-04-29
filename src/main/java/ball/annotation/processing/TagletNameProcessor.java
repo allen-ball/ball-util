@@ -64,33 +64,27 @@ public class TagletNameProcessor extends AbstractAnnotationProcessor {
             if (isAssignable(element.asType(), Taglet.class)) {
                 if (! element.getModifiers().contains(ABSTRACT)) {
                     if (! hasPublicNoArgumentConstructor(element)) {
-                        print(ERROR,
-                              element,
-                              element.getKind() + " annotated with "
-                              + "@" + annotation.getSimpleName()
-                              + " but does not have a " + PUBLIC
-                              + " no-argument constructor");
+                        print(ERROR, element,
+                              "%s annotated with @%s but does not have a %s no-argument constructor",
+                              element.getKind(),
+                              annotation.getSimpleName(), PUBLIC);
                     }
                 } else {
-                    print(ERROR,
-                          element,
-                          element.getKind() + " annotated with "
-                          + "@" + annotation.getSimpleName()
-                          + " but is " + ABSTRACT);
+                    print(ERROR, element,
+                          "%s annotated with @%s but is %s",
+                          element.getKind(),
+                          annotation.getSimpleName(), ABSTRACT);
                 }
             } else {
-                print(ERROR,
-                      element,
-                      element.getKind() + " annotated with "
-                      + "@" + annotation.getSimpleName()
-                      + " but does not implement " + Taglet.class.getName());
+                print(ERROR, element,
+                      "%s annotated with @%s but does not implement %s",
+                      element.getKind(), annotation.getSimpleName(),
+                      Taglet.class.getName());
             }
         } else {
-            print(ERROR,
-                  element,
-                  element.getKind() + " annotated with "
-                  + "@" + annotation.getSimpleName()
-                  + " but does not specify value()");
+            print(ERROR, element,
+                  "%s annotated with @%s but does not specify value()",
+                  element.getKind(), annotation.getSimpleName());
         }
     }
 }

@@ -56,7 +56,7 @@ public class TagletProcessor extends AbstractNoAnnotationProcessor {
         public static void register(Map<Object,Object> map) { }
     }
 
-    private static final Method METHOD =
+    private static final Method PROTOTYPE =
         PROTOTYPE.class.getDeclaredMethods()[0];
 
     @Override
@@ -65,17 +65,15 @@ public class TagletProcessor extends AbstractNoAnnotationProcessor {
             TypeElement type = (TypeElement) element;
             ExecutableElement method =
                 asExecutableElement(type,
-                                    METHOD.getName(),
-                                    METHOD.getParameterTypes());
+                                    PROTOTYPE.getName(),
+                                    PROTOTYPE.getParameterTypes());
 
             if (method == null
-                || (! method.getModifiers().containsAll(getModifierSetFor(METHOD)))) {
-                print(WARNING,
-                      element,
-                      element.getKind()
-                      + " implements " + Taglet.class.getName()
-                      + " but does not implement `"
-                      + declaration(METHOD) + "'");
+                || (! method.getModifiers().containsAll(getModifierSetFor(PROTOTYPE)))) {
+                print(WARNING, element,
+                      "%s implements %s but does not implement '%s'",
+                      element.getKind(), Taglet.class.getName(),
+                      declaration(PROTOTYPE));
             }
         }
     }

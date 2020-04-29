@@ -109,18 +109,14 @@ public class ResourceFileProcessor extends AbstractAnnotationProcessor {
 
                 map.add(format(path, parameters), list);
             } else {
-                print(ERROR,
-                      element,
-                      element.getKind() + " annotated with "
-                      + "@" + annotation.getSimpleName()
-                      + " but no lines() specified");
+                print(ERROR, element,
+                      "%s annotated with @%s but no lines() specified",
+                      element.getKind(), annotation.getSimpleName());
             }
         } else {
-            print(ERROR,
-                  element,
-                  element.getKind() + " annotated with "
-                  + "@" + annotation.getSimpleName()
-                  + " but no path() specified");
+            print(ERROR, element,
+                  "%s annotated with @%s but no path() specified",
+                  element.getKind(), annotation.getSimpleName());
         }
     }
 

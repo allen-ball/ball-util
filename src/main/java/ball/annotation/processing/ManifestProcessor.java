@@ -82,7 +82,7 @@ public class ManifestProcessor extends AbstractAnnotationProcessor
         public static void main(String[] argv) { }
     }
 
-    private static final Method METHOD =
+    private static final Method PROTOTYPE =
         PROTOTYPE.class.getDeclaredMethods()[0];
 
     private ManifestImpl manifest = null;
@@ -148,30 +148,27 @@ public class ManifestProcessor extends AbstractAnnotationProcessor
                     TypeElement type = (TypeElement) element;
                     ExecutableElement method =
                         asExecutableElement(type,
-                                            METHOD.getName(),
-                                            METHOD.getParameterTypes());
+                                            PROTOTYPE.getName(),
+                                            PROTOTYPE.getParameterTypes());
 
                     if (method != null
                         && (method.getModifiers()
-                            .containsAll(getModifierSetFor(METHOD)))) {
+                            .containsAll(getModifierSetFor(PROTOTYPE)))) {
                         String name = elements.getBinaryName(type).toString();
                         String old = manifest.put(main, name);
 
                         if (old != null && (! name.equals(old))) {
-                            print(WARNING,
-                                  element,
-                                  element.getKind() + " annotated with "
-                                  + "@" + main.annotationType().getSimpleName()
-                                  + " overwrites previous definition of "
-                                  + old);
+                            print(WARNING, element,
+                                  "%s annotated with @%s overwrites previous definition of %s",
+                                  element.getKind(),
+                                  main.annotationType().getSimpleName(), old);
                         }
                     } else {
-                        print(ERROR,
-                              element,
-                              element.getKind() + " annotated with "
-                              + "@" + main.annotationType().getSimpleName()
-                              + " but does not implement `"
-                              + declaration(METHOD) + "'");
+                        print(ERROR, element,
+                              "%s annotated with @%s but does not implement '%s'",
+                              element.getKind(),
+                              main.annotationType().getSimpleName(),
+                              declaration(PROTOTYPE));
                     }
                     break;
 

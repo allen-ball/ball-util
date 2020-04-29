@@ -35,7 +35,7 @@ import static javax.tools.Diagnostic.Kind.ERROR;
 
 /**
  * {@link AbstractNoAnnotationProcessor} base class to specify superclasses
- * and interfaces and annotated {@link Class} must implement.
+ * and interfaces and annotated {@link Class} {@link MustImplement}.
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
@@ -68,11 +68,10 @@ public abstract class MustImplementAnnotationProcessor
             if (! element.getModifiers().contains(ABSTRACT)) {
                 for (Class<?> type : superclasses) {
                     if (! isAssignable(element.asType(), type)) {
-                        print(ERROR,
-                              element,
-                              element.getKind()
-                              + " implements " + superclass.getName()
-                              + " but is not a subclass of " + type.getName());
+                        print(ERROR, element,
+                              "%s implements %s but is not a subclass of %s",
+                              element.getKind(),
+                              superclass.getName(), type.getName());
                     }
                 }
             }
@@ -97,21 +96,18 @@ public abstract class MustImplementAnnotationProcessor
             switch (element.getKind()) {
             case CLASS:
                 if (! isAssignable(element.asType(), SUPERCLASS)) {
-                    print(ERROR,
-                          element,
-                          element.getKind() + " annotated with "
-                          + "@" + annotation.getSimpleName()
-                          + " but is not a subclass of "
-                          + SUPERCLASS.getCanonicalName());
+                    print(ERROR, element,
+                          "%s annotated with @%s but is not a subclass of %s",
+                          element.getKind(),
+                          annotation.getSimpleName(),
+                          SUPERCLASS.getCanonicalName());
                 }
                 break;
 
             default:
-                print(ERROR,
-                      element,
-                      element.getKind() + " annotated with "
-                      + "@" + annotation.getSimpleName()
-                      + " but is not a " + CLASS);
+                print(ERROR, element,
+                      "%s annotated with @%s but is not a %s",
+                      element.getKind(), annotation.getSimpleName(), CLASS);
                 break;
             }
         }

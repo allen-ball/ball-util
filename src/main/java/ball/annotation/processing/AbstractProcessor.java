@@ -100,6 +100,19 @@ public abstract class AbstractProcessor
     /** See {@link ProcessingEnvironment#getTypeUtils()}. */
     protected Types types = null;
 
+    /**
+     * Method to get an {@link Annotation} on {@link.this} instance
+     * {@link Class}.
+     *
+     * @param   annotation      The {@link Annotation} {@link Class}.
+     * @param   <A>             The {@link Annotation} subtype.
+     *
+     * @return  The {@link Annotation} or {@code null}.
+     */
+    protected <A extends Annotation> A getAnnotation(Class<A> annotation) {
+        return getClass().getAnnotation(annotation);
+    }
+
     @Override
     public SourceVersion getSupportedSourceVersion() {
         return SourceVersion.latestSupported();
@@ -130,11 +143,14 @@ public abstract class AbstractProcessor
      *
      * @param   kind            The {@link javax.tools.Diagnostic.Kind}.
      * @param   element         The offending {@link Element}.
-     * @param   message         The message {@link CharSequence}.
+     * @param   format          The message format {@link String}.
+     * @param   argv            Optional arguments to the  message format
+     *                          {@link String}.
      */
     protected void print(Diagnostic.Kind kind,
-                         Element element, CharSequence message) {
-        processingEnv.getMessager().printMessage(kind, message, element);
+                         Element element, String format, Object... argv) {
+        processingEnv.getMessager()
+            .printMessage(kind, String.format(format, argv), element);
     }
 
     /**

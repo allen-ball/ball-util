@@ -172,19 +172,16 @@ public class AntTaskProcessor extends AbstractAnnotationProcessor
                         if (hasPublicNoArgumentConstructor(element)) {
                             map.put(resource, name, (TypeElement) element);
                         } else {
-                            print(ERROR,
-                                  element,
-                                  element.getKind() + " annotated with "
-                                  + "@" + annotation.getSimpleName()
-                                  + " but does not have a " + PUBLIC
-                                  + " no-argument constructor");
+                            print(ERROR, element,
+                                  "%s annotated with @%s but does not have a %s no-argument constructor",
+                                  element.getKind(),
+                                  annotation.getSimpleName(), PUBLIC);
                         }
                     } else {
-                        print(ERROR,
-                              element,
-                              element.getKind() + " annotated with "
-                              + "@" + annotation.getSimpleName()
-                              + " but is " + ABSTRACT);
+                        print(ERROR, element,
+                              "%s annotated with @%s but is %s",
+                              element.getKind(),
+                              annotation.getSimpleName(), ABSTRACT);
                     }
                 } else {
                     /*
@@ -192,11 +189,9 @@ public class AntTaskProcessor extends AbstractAnnotationProcessor
                      */
                 }
             } else {
-                print(ERROR,
-                      element,
-                      element.getKind() + " annotated with "
-                      + "@" + annotation.getSimpleName()
-                      + " but does not specify value()");
+                print(ERROR, element,
+                      "%s annotated with @%s but does not specify value()",
+                      element.getKind(), annotation.getSimpleName());
             }
             break;
 

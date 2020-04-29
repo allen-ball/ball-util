@@ -87,21 +87,19 @@ public class ObjectCloneProcessor extends AbstractNoAnnotationProcessor {
         TypeElement type = (TypeElement) method.getEnclosingElement();
 
         if (! type.getInterfaces().contains(CLONEABLE.asType())) {
-            print(WARNING,
-                  type,
-                  type.getKind() + " overrides "
-                  + METHOD.getEnclosingElement().getSimpleName()
-                  + "." + METHOD + " but does not implement "
-                  + CLONEABLE.getSimpleName());
+            print(WARNING, type,
+                  "%s overrides %s.%s but does not implement %s",
+                  type.getKind(),
+                  METHOD.getEnclosingElement().getSimpleName(), METHOD,
+                  CLONEABLE.getSimpleName());
         }
 
         if (! types.isAssignable(method.getReturnType(), type.asType())) {
-            print(WARNING,
-                  method,
-                  method.getKind() + " overrides "
-                  + METHOD.getEnclosingElement().getSimpleName()
-                  + "." + METHOD + " but does not return a subclass of "
-                  + type.getSimpleName());
+            print(WARNING, method,
+                  "%s overrides %s.%s but does not return a subclass of %s",
+                  method.getKind(),
+                  METHOD.getEnclosingElement().getSimpleName(), METHOD,
+                  type.getSimpleName());
         }
 
         ArrayList<TypeMirror> throwables = new ArrayList<>();
@@ -124,11 +122,10 @@ public class ObjectCloneProcessor extends AbstractNoAnnotationProcessor {
                 break;
             }
 
-            print(WARNING,
-                  method,
-                  method.getKind() + " overrides "
-                  + METHOD.getEnclosingElement().getSimpleName()
-                  + "." + METHOD + " but does not throw " + name);
+            print(WARNING, method,
+                  "%s overrides %s.%s but does not throw %s",
+                  method.getKind(),
+                  METHOD.getEnclosingElement().getSimpleName(), METHOD, name);
         }
     }
 }

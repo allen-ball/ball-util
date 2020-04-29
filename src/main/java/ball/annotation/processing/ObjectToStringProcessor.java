@@ -74,11 +74,11 @@ public class ObjectToStringProcessor extends AbstractNoAnnotationProcessor {
                     implementationOf(METHOD, type);
 
                 if (implementation == null || METHOD.equals(implementation)) {
-                    print(WARNING,
-                          type,
-                          type.getKind() + " does not override "
-                          + METHOD.getEnclosingElement().getSimpleName()
-                          + "." + METHOD);
+                    print(WARNING, type,
+                          "%s does not override %s.%s",
+                          type.getKind(),
+                          METHOD.getEnclosingElement().getSimpleName(),
+                          METHOD);
                 }
             }
         }

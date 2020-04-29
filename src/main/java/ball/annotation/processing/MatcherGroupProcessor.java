@@ -51,11 +51,9 @@ public class MatcherGroupProcessor extends AbstractAnnotationProcessor {
         int group = element.getAnnotation(MatcherGroup.class).value();
 
         if (group < 0) {
-            print(ERROR,
-                  element,
-                  element.getKind() + " annotated with "
-                  + "@" + annotation.getSimpleName()
-                  + " has invalid value()");
+            print(ERROR, element,
+                  "%s annotated with @%s has invalid value()",
+                  element.getKind(), annotation.getSimpleName());
         }
 
         switch (element.getKind()) {
@@ -69,18 +67,14 @@ public class MatcherGroupProcessor extends AbstractAnnotationProcessor {
 
             if (! element.getModifiers().contains(PRIVATE)) {
                 if (executable.isVarArgs() || executable.getParameters().size() != 1) {
-                    print(ERROR,
-                          element,
-                          element.getKind() + " annotated with "
-                          + "@" + annotation.getSimpleName()
-                          + " but does not take exactly one argument");
+                    print(ERROR, element,
+                          "%s annotated with @%s but does not take exactly one argument",
+                          element.getKind(), annotation.getSimpleName());
                 }
             } else {
-                print(ERROR,
-                      element,
-                      element.getKind() + " annotated with "
-                      + "@" + annotation.getSimpleName()
-                      + " but is " + PRIVATE);
+                print(ERROR, element,
+                      "%s annotated with @%s but is %s",
+                      element.getKind(), annotation.getSimpleName(), PRIVATE);
             }
             break;
         }

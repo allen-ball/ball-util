@@ -131,29 +131,24 @@ public class ServiceProviderForProcessor extends AbstractAnnotationProcessor
                                                    service.asType())) {
                                 map.add(service, (TypeElement) element);
                             } else {
-                                print(ERROR,
-                                      element,
-                                      element.getKind() + " annotated with "
-                                      + "@" + annotation.getSimpleName()
-                                      + " and specifies "
-                                      + service.getQualifiedName()
-                                      + " but is not an implementing class");
+                                print(ERROR, element,
+                                      "%s annotated with @%s and specifies %s but is not an implementing class",
+                                      element.getKind(),
+                                      annotation.getSimpleName(),
+                                      service.getQualifiedName());
                             }
                         }
                     } else {
-                        print(ERROR,
-                              element,
-                              element.getKind() + " annotated with "
-                              + "@" + annotation.getSimpleName()
-                              + " but does not have a " + PUBLIC
-                              + " no-argument constructor");
+                        print(ERROR, element,
+                              "%s annotated with @%s but does not have a %s no-argument constructor",
+                              element.getKind(),
+                              annotation.getSimpleName(), PUBLIC);
                     }
                 } else {
-                    print(ERROR,
-                          element,
-                          element.getKind() + " annotated with "
-                          + "@" + annotation.getSimpleName()
-                          + " but is " + ABSTRACT);
+                    print(ERROR, element,
+                          "%s annotated with @%s but is %s",
+                          element.getKind(),
+                          annotation.getSimpleName(), ABSTRACT);
                 }
                 break;
 
@@ -161,11 +156,9 @@ public class ServiceProviderForProcessor extends AbstractAnnotationProcessor
                 break;
             }
         } else {
-            print(ERROR,
-                  element,
-                  element.getKind() + " annotated with "
-                  + "@" + annotation.getSimpleName()
-                  + " but no services specified");
+            print(ERROR, element,
+                  "%s annotated with @%s but no services specified",
+                  element.getKind(), annotation.getSimpleName());
         }
     }
 

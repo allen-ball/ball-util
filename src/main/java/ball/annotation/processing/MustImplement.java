@@ -28,10 +28,8 @@ import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * {@link MustImplementAnnotationProcessor}
- * ({@link AbstractNoAnnotationProcessor})
  * {@link java.lang.annotation.Annotation} to specify required
- * super-{@link Class} criteria.
+ * super-{@link Class} criteria a {@link Class} must implement.
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$

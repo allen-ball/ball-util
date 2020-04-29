@@ -55,12 +55,11 @@ public class NoOverrideProcessor extends AbstractNoAnnotationProcessor {
             ExecutableElement specification = specifiedBy(method);
 
             if (specification != null) {
-                print(WARNING,
-                      method,
-                      method.getKind() + " specified by "
-                      + specification.getEnclosingElement() + "."
-                      + specification.toString() + " but does not have "
-                      + "@" + Override.class.getSimpleName() + " annotation");
+                print(WARNING, method,
+                      "%s specified by %s.%s but does not have a @%s annotation",
+                      method.getKind(),
+                      specification.getEnclosingElement(), specification,
+                      Override.class.getSimpleName());
             }
         }
     }

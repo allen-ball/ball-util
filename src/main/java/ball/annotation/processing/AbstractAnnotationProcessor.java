@@ -52,7 +52,7 @@ public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
 
     {
         try {
-            list = Arrays.asList(getClass().getAnnotation(For.class).value());
+            list = Arrays.asList(getAnnotation(For.class).value());
         } catch (Exception exception) {
             throw new ExceptionInInitializerError(exception);
         }
@@ -118,21 +118,16 @@ public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
 
     @Override
     protected void print(Diagnostic.Kind kind,
-                         Element element, CharSequence message) {
-        super.print(kind, element, format(message));
-    }
-
-    private CharSequence format(CharSequence message) {
-        CharSequence sequence = message;
+                         Element element, String format, Object... argv) {
+        String message = String.format(format, argv);
 
         if (annotation != null) {
-            sequence =
-                new StringBuilder()
-                .append("@").append(annotation.getQualifiedName())
-                .append(":").append(" ").append(message);
+            message =
+                String.format("@%s: %s",
+                              annotation.getQualifiedName(), message);
         }
 
-        return sequence;
+        super.print(kind, element, message);
     }
 
     /**
@@ -153,12 +148,11 @@ public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
             switch (element.getKind()) {
             case CLASS:
                 if (! isAssignable(element.asType(), SUPERCLASS)) {
-                    print(ERROR,
-                          element,
-                          element.getKind() + " annotated with "
-                          + "@" + annotation.getSimpleName()
-                          + " but is not a subclass of "
-                          + SUPERCLASS.getCanonicalName());
+                    print(ERROR, element,
+                          "%s annotated with @%s but is not a subclass of %s",
+                          element.getKind(),
+                          annotation.getSimpleName(),
+                          SUPERCLASS.getCanonicalName());
                 }
                 break;
 

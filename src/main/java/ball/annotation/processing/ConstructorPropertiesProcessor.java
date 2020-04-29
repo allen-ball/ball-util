@@ -63,10 +63,9 @@ public class ConstructorPropertiesProcessor
                 ((ExecutableElement) element).getParameters();
 
             if (value.length != parameters.size()) {
-                print(WARNING,
-                      element,
-                      Arrays.asList(value) + " does not match "
-                      + element.getKind() + " parameters");
+                print(WARNING, element,
+                      "%s does not match %s parameters",
+                      Arrays.asList(value), element.getKind());
             }
 
             TypeElement type = (TypeElement) element.getEnclosingElement();
@@ -75,16 +74,14 @@ public class ConstructorPropertiesProcessor
             Arrays.stream(value)
                 .filter(StringUtils::isNotEmpty)
                 .filter(t -> (! properties.contains(t)))
-                .forEach(t -> print(WARNING,
-                                    element,
-                                    "bean property `" + t + "' not defined"));
+                .forEach(t -> print(WARNING, element,
+                                    "bean property '%s' not defined", t));
             break;
 
         default:
-            print(ERROR,
-                  element,
-                  element.getKind() + " annotated with "
-                  + "@" + annotation.getSimpleName());
+            print(ERROR, element,
+                  "%s annotated with @%s",
+                  element.getKind(), annotation.getSimpleName());
             break;
         }
     }
