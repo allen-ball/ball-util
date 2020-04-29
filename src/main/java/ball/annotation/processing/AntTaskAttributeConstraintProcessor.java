@@ -32,7 +32,6 @@ import javax.lang.model.element.TypeElement;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import static javax.lang.model.element.Modifier.PRIVATE;
 import static javax.tools.Diagnostic.Kind.ERROR;
 
 /**
@@ -44,8 +43,7 @@ import static javax.tools.Diagnostic.Kind.ERROR;
 @ServiceProviderFor({ Processor.class })
 @For({ AntTaskAttributeConstraint.class, NotEmpty.class, NotNull.class })
 @NoArgsConstructor @ToString
-public class AntTaskAttributeConstraintProcessor
-             extends AbstractAnnotationProcessor {
+public class AntTaskAttributeConstraintProcessor extends AbstractAnnotationProcessor {
     @Override
     public void process(RoundEnvironment roundEnv,
                         TypeElement annotation,

@@ -26,12 +26,9 @@ import ball.lang.reflect.JavaLangReflectMethods;
 import java.lang.annotation.Annotation;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Target;
-import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -50,9 +47,7 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
-import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.ArrayType;
-import javax.lang.model.type.ExecutableType;
 import javax.lang.model.type.PrimitiveType;
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
@@ -187,13 +182,13 @@ public abstract class AbstractProcessor
 
     /**
      * Method to get an {@link ExecutableElement} for a {@link Class}
-     * {@link Method}.
+     * {@link java.lang.reflect.Method} by return type and parameter list.
      *
      * @param   type            The {@link Class}.
-     * @param   name            The {@link Method} name.
-     * @param   parameters      The {@link Method} parameter types.
+     * @param   name            The method name.
+     * @param   parameters      The method parameter types.
      *
-     * @return  The {@link ExecutableElement} for the {@link Method}.
+     * @return  The {@link ExecutableElement} for the method.
      */
     protected ExecutableElement asExecutableElement(Class<?> type,
                                                     String name,
@@ -203,13 +198,13 @@ public abstract class AbstractProcessor
 
     /**
      * Method to get an {@link ExecutableElement} for a {@link Class}
-     * {@link Method}.
+     * {@link java.lang.reflect.Method}.
      *
      * @param   type            The {@link TypeElement}.
-     * @param   name            The {@link Method} name.
-     * @param   parameters      The {@link Method} parameter types.
+     * @param   name            The method name.
+     * @param   parameters      The method parameter types.
      *
-     * @return  The {@link ExecutableElement} for the {@link Method}.
+     * @return  The {@link ExecutableElement} for the method.
      */
     protected ExecutableElement asExecutableElement(TypeElement type,
                                                     String name,
@@ -376,8 +371,9 @@ public abstract class AbstractProcessor
     }
 
     /**
-     * Method to return the {@link ExecutableElement} ({@link Method}) the
-     * argument {@link ExecutableElement} overrides (if any).
+     * Method to return the {@link ExecutableElement}
+     * ({@link java.lang.reflect.Method}) the argument
+     * {@link ExecutableElement} overrides (if any).
      *
      * @param   overrider       The {@link ExecutableElement}.
      *
@@ -436,8 +432,9 @@ public abstract class AbstractProcessor
     }
 
     /**
-     * Method to determine if a {@link ExecutableElement} ({@link Method})
-     * overrides another {@link ExecutableElement}.
+     * Method to determine if a {@link ExecutableElement}
+     * ({@link java.lang.reflect.Method}) overrides another
+     * {@link ExecutableElement}.
      *
      * @param   overrider       The (possibly) overriding
      *                          {@link ExecutableElement}.
@@ -456,8 +453,9 @@ public abstract class AbstractProcessor
     }
 
     /**
-     * Method to return the {@link ExecutableElement} ({@link Method}) the
-     * argument {@link ExecutableElement} is overriden by (if any).
+     * Method to return the {@link ExecutableElement}
+     * ({@link java.lang.reflect.Method}) the argument
+     * {@link ExecutableElement} is overriden by (if any).
      *
      * @param   overridden      The {@link ExecutableElement}.
      * @param   type            The {@link TypeElement}.
@@ -492,8 +490,9 @@ public abstract class AbstractProcessor
     }
 
     /**
-     * Method to return the {@link ExecutableElement} ({@link Method}) the
-     * argument {@link ExecutableElement} is specified by (if any).
+     * Method to return the {@link ExecutableElement}
+     * ({@link java.lang.reflect.Method}) the argument
+     * {@link ExecutableElement} is specified by (if any).
      *
      * @param   method          The {@link ExecutableElement}.
      *

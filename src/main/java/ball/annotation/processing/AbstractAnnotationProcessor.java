@@ -26,7 +26,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
@@ -35,6 +34,7 @@ import javax.tools.Diagnostic;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import static java.util.stream.Collectors.toSet;
 import static javax.tools.Diagnostic.Kind.ERROR;
 import static lombok.AccessLevel.PROTECTED;
 
@@ -75,7 +75,7 @@ public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
             getSupportedAnnotationTypeList()
             .stream()
             .map(Class::getCanonicalName)
-            .collect(Collectors.toSet());
+            .collect(toSet());
 
         return Collections.unmodifiableSet(set);
     }
@@ -136,8 +136,7 @@ public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
     @ServiceProviderFor({ Processor.class })
     @For({ For.class })
     @NoArgsConstructor @ToString
-    public static class AnnotationProcessor
-                        extends AbstractAnnotationProcessor {
+    public static class AnnotationProcessor extends AbstractAnnotationProcessor {
         private static final Class<?> SUPERCLASS =
             AbstractAnnotationProcessor.class;
 

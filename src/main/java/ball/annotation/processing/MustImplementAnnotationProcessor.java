@@ -35,14 +35,13 @@ import static javax.tools.Diagnostic.Kind.ERROR;
 
 /**
  * {@link AbstractNoAnnotationProcessor} base class to specify superclasses
- * and interfaces and annotated {@link Class} {@link MustImplement}.
+ * and interfaces an annotated {@link Class} {@link MustImplement}.
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 @NoArgsConstructor @ToString
-public abstract class MustImplementAnnotationProcessor
-                      extends AbstractNoAnnotationProcessor {
+public abstract class MustImplementAnnotationProcessor extends AbstractNoAnnotationProcessor {
     private Class<?>[] superclasses = null;
 
     @Override
@@ -84,8 +83,7 @@ public abstract class MustImplementAnnotationProcessor
     @ServiceProviderFor({ Processor.class })
     @For({ MustImplement.class })
     @NoArgsConstructor @ToString
-    public static class AnnotationProcessor
-                        extends AbstractAnnotationProcessor {
+    public static class AnnotationProcessor extends AbstractAnnotationProcessor {
         private static final Class<?> SUPERCLASS =
             MustImplementAnnotationProcessor.class;
 

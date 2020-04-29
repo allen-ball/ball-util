@@ -21,9 +21,7 @@ package ball.annotation.processing;
  * ##########################################################################
  */
 import ball.annotation.ServiceProviderFor;
-import java.lang.annotation.Annotation;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.LinkedHashSet;
@@ -60,7 +58,7 @@ public abstract class AbstractNoAnnotationProcessor extends AbstractProcessor {
     private static final List<ElementKind> REQUIRED_FOR_SUBCLASSES_OF =
         Arrays.asList(CLASS, INTERFACE);
 
-    protected TreeSet<ElementKind> kinds =
+    protected Set<ElementKind> kinds =
         new TreeSet<>(EnumSet.allOf(ElementKind.class));
     protected Class<?> superclass = null;
 
@@ -127,8 +125,7 @@ public abstract class AbstractNoAnnotationProcessor extends AbstractProcessor {
     @ServiceProviderFor({ Processor.class })
     @For({ ForElementKinds.class, ForSubclassesOf.class })
     @NoArgsConstructor @ToString
-    public static class AnnotationProcessor
-                        extends AbstractAnnotationProcessor {
+    public static class AnnotationProcessor extends AbstractAnnotationProcessor {
         private static final Class<?> SUPERCLASS =
             AbstractNoAnnotationProcessor.class;
 

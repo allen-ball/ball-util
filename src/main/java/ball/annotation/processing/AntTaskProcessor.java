@@ -241,7 +241,7 @@ public class AntTaskProcessor extends AbstractAnnotationProcessor
 
             Files.createDirectories(file.toPath().getParent());
 
-            try (OutputStream out = new FileOutputStream(file)) {
+            try (FileOutputStream out = new FileOutputStream(file)) {
                 entry.getValue().store(out, entry.getKey());
             }
         }
@@ -252,7 +252,7 @@ public class AntTaskProcessor extends AbstractAnnotationProcessor
 
             Files.createDirectories(file.toPath().getParent());
 
-            try (OutputStream out = new FileOutputStream(file)) {
+            try (FileOutputStream out = new FileOutputStream(file)) {
                 xml.writeTo(out);
             }
         }

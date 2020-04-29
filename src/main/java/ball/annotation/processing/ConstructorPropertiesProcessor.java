@@ -40,8 +40,8 @@ import static javax.tools.Diagnostic.Kind.WARNING;
 
 /**
  * {@link Processor} implementation to verify {@link ConstructorProperties}
- * annotation are actual bean properties of the {@link
- * java.lang.reflect.Constructor}'s {@link Class}.
+ * annotation are actual bean properties of the
+ * {@link java.lang.reflect.Constructor}'s {@link Class}.
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
@@ -49,8 +49,7 @@ import static javax.tools.Diagnostic.Kind.WARNING;
 @ServiceProviderFor({ Processor.class })
 @For({ ConstructorProperties.class })
 @NoArgsConstructor @ToString
-public class ConstructorPropertiesProcessor
-             extends AbstractAnnotationProcessor {
+public class ConstructorPropertiesProcessor extends AbstractAnnotationProcessor {
     @Override
     public void process(RoundEnvironment roundEnv,
                         TypeElement annotation,

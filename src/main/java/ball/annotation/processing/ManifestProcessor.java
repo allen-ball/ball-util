@@ -20,12 +20,6 @@ package ball.annotation.processing;
  * limitations under the License.
  * ##########################################################################
  */
-import ball.annotation.Manifest.Attribute;
-import ball.annotation.Manifest.DependsOn;
-import ball.annotation.Manifest.DesignTimeOnly;
-import ball.annotation.Manifest.JavaBean;
-import ball.annotation.Manifest.MainClass;
-import ball.annotation.Manifest.Section;
 import ball.annotation.ServiceProviderFor;
 import java.io.File;
 import java.io.FileInputStream;
@@ -36,7 +30,6 @@ import java.io.OutputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.nio.file.Files;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.jar.Attributes;
@@ -45,13 +38,18 @@ import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
-import javax.lang.model.element.Modifier;
 import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
 import javax.tools.FileObject;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import static ball.annotation.Manifest.Attribute;
+import static ball.annotation.Manifest.DependsOn;
+import static ball.annotation.Manifest.DesignTimeOnly;
+import static ball.annotation.Manifest.JavaBean;
+import static ball.annotation.Manifest.MainClass;
+import static ball.annotation.Manifest.Section;
 import static javax.tools.Diagnostic.Kind.ERROR;
 import static javax.tools.Diagnostic.Kind.WARNING;
 import static javax.tools.StandardLocation.CLASS_OUTPUT;
@@ -251,7 +249,7 @@ public class ManifestProcessor extends AbstractAnnotationProcessor
 
         Files.createDirectories(file.toPath().getParent());
 
-        try (OutputStream out = new FileOutputStream(file)) {
+        try (FileOutputStream out = new FileOutputStream(file)) {
             manifest.write(out);
         }
     }
@@ -266,10 +264,9 @@ public class ManifestProcessor extends AbstractAnnotationProcessor
         return super.asPath(type) + _CLASS;
     }
 
+    @NoArgsConstructor @ToString
     private class ManifestImpl extends Manifest {
         private static final String MANIFEST_VERSION = "Manifest-Version";
-
-        public ManifestImpl() { super(); }
 
         protected void init() {
             if (getMainAttributes().getValue(MANIFEST_VERSION) == null) {
@@ -324,8 +321,5 @@ public class ManifestProcessor extends AbstractAnnotationProcessor
         private String getAttributeName(Class<? extends Annotation> type) {
             return type.getAnnotation(Attribute.class).value();
         }
-
-        @Override
-        public String toString() { return super.toString(); }
     }
 }
