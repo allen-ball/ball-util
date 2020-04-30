@@ -20,12 +20,10 @@ package ball.annotation.processing;
  * limitations under the License.
  * ##########################################################################
  */
-import ball.annotation.ServiceProviderFor;
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
-import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
@@ -105,34 +103,4 @@ public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
     protected abstract void process(RoundEnvironment roundEnv,
                                     TypeElement annotation,
                                     Element element);
-
-    /**
-     * {@link Processor} implementation.
-     */
-    @ServiceProviderFor({ Processor.class })
-    @For({ For.class })
-    @NoArgsConstructor @ToString
-    public static class AnnotationProcessor extends AbstractAnnotationProcessor {
-        private static final Class<?> SUPERCLASS =
-            AbstractAnnotationProcessor.class;
-
-        @Override
-        public void process(RoundEnvironment roundEnv,
-                            TypeElement annotation, Element element) {
-            switch (element.getKind()) {
-            case CLASS:
-                if (! isAssignable(element.asType(), SUPERCLASS)) {
-                    print(ERROR, element,
-                          "%s annotated with @%s but is not a subclass of %s",
-                          element.getKind(),
-                          annotation.getSimpleName(),
-                          SUPERCLASS.getCanonicalName());
-                }
-                break;
-
-            default:
-                break;
-            }
-        }
-    }
 }
