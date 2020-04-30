@@ -28,6 +28,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.function.Predicate;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
@@ -58,9 +59,13 @@ public abstract class AbstractNoAnnotationProcessor extends AbstractProcessor {
     private static final List<ElementKind> REQUIRED_FOR_SUBCLASSES_OF =
         Arrays.asList(CLASS, INTERFACE);
 
-    protected Set<ElementKind> kinds =
+    private Set<ElementKind> kinds =
         new TreeSet<>(EnumSet.allOf(ElementKind.class));
     protected Class<?> superclass = null;
+    private final Predicate<Element> forElementKinds =
+        t -> kinds.contains(t.getKind());
+    private final Predicate<Element> forSubclasses =
+        t -> (superclass == null || isAssignable(t.asType(), superclass));
 
     @Override
     public Set<String> getSupportedAnnotationTypes() {
@@ -101,12 +106,10 @@ public abstract class AbstractNoAnnotationProcessor extends AbstractProcessor {
         try {
             roundEnv.getRootElements()
                 .stream()
-                .filter(t -> kinds.contains(t.getKind()))
-                .filter(t -> (superclass == null
-                              || isAssignable(t.asType(), superclass)))
-                .forEach(t -> process(t));
-        } catch (Exception exception) {
-            print(ERROR, null, exception);
+                .filter(forElementKinds.and(forSubclasses))
+                .forEach(t -> process(roundEnv, t));
+        } catch (Throwable throwable) {
+            print(ERROR, null, throwable);
         }
 
         return false;
@@ -115,9 +118,11 @@ public abstract class AbstractNoAnnotationProcessor extends AbstractProcessor {
     /**
      * Method to process each {@link Element}.
      *
+     * @param   roundEnv        The {@link RoundEnvironment}.
      * @param   element         The {@link Element}.
      */
-    protected abstract void process(Element element);
+    protected abstract void process(RoundEnvironment roundEnv,
+                                    Element element);
 
     /**
      * {@link Processor} implementation.
@@ -131,8 +136,7 @@ public abstract class AbstractNoAnnotationProcessor extends AbstractProcessor {
 
         @Override
         public void process(RoundEnvironment roundEnv,
-                            TypeElement annotation,
-                            Element element) throws Exception {
+                            TypeElement annotation, Element element) {
             switch (element.getKind()) {
             case CLASS:
                 if (! isAssignable(element.asType(), SUPERCLASS)) {

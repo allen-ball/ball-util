@@ -110,8 +110,7 @@ public class ServiceProviderForProcessor extends AbstractAnnotationProcessor
 
     @Override
     protected void process(RoundEnvironment env,
-                           TypeElement annotation,
-                           Element element) throws Exception {
+                           TypeElement annotation, Element element) {
         AnnotationMirror mirror = getAnnotationMirror(element, annotation);
         AnnotationValue value =
             elements.getElementValuesWithDefaults(mirror).entrySet()

@@ -47,13 +47,22 @@ import static javax.tools.Diagnostic.Kind.ERROR;
 public class RegexProcessor extends AbstractAnnotationProcessor {
     @Override
     public void process(RoundEnvironment roundEnv,
-                        TypeElement annotation,
-                        Element element) throws Exception {
+                        TypeElement annotation, Element element) {
         Object regex = ((VariableElement) element).getConstantValue();
 
         if (regex != null) {
             if (regex instanceof String) {
-                Pattern.compile((String) regex);
+                String string = (String) regex;
+
+                try {
+                    Pattern.compile(string);
+                } catch (Exception exception) {
+                    print(ERROR, element,
+                          "%s annotated with @%s but cannot convert '%s' to %s",
+                          element.getKind(), annotation.getSimpleName(),
+                          string, Pattern.class.getName());
+                    print(ERROR, element, exception);
+                }
             } else {
                 print(ERROR, element,
                       "Constant value is not %s",

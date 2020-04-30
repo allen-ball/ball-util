@@ -46,8 +46,7 @@ import static javax.tools.Diagnostic.Kind.ERROR;
 public class AntTaskAttributeConstraintProcessor extends AbstractAnnotationProcessor {
     @Override
     public void process(RoundEnvironment roundEnv,
-                        TypeElement annotation,
-                        Element element) throws Exception {
+                        TypeElement annotation, Element element) {
         switch (element.getKind()) {
         case ANNOTATION_TYPE:
         case FIELD:

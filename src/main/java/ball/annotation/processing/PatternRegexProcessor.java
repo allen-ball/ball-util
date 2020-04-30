@@ -30,6 +30,8 @@ import javax.lang.model.element.TypeElement;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import static javax.tools.Diagnostic.Kind.ERROR;
+
 /**
  * {@link Processor} implementation to check {@link PatternRegex}
  * annotations.
@@ -43,8 +45,16 @@ import lombok.ToString;
 public class PatternRegexProcessor extends AbstractAnnotationProcessor {
     @Override
     protected void process(RoundEnvironment env,
-                           TypeElement annotation,
-                           Element element) throws Exception {
-        Pattern.compile(element.getAnnotation(PatternRegex.class).value());
+                           TypeElement annotation, Element element) {
+        String string = element.getAnnotation(PatternRegex.class).value();
+
+        try {
+            Pattern.compile(string);
+        } catch (Exception exception) {
+            print(ERROR, element,
+                  "%s annotated with @%s but cannot convert '%s' to %s: %s",
+                  element.getKind(), annotation.getSimpleName(),
+                  string, Pattern.class.getName(), exception.getMessage());
+        }
     }
 }

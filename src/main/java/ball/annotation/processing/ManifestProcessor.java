@@ -130,8 +130,7 @@ public class ManifestProcessor extends AbstractAnnotationProcessor
 
     @Override
     protected void process(RoundEnvironment env,
-                           TypeElement ignore,
-                           Element element) throws Exception {
+                           TypeElement ignore, Element element) {
         if (! processed.contains(element)) {
             processed.add(element);
 

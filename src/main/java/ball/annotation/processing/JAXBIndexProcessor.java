@@ -95,8 +95,7 @@ public class JAXBIndexProcessor extends AbstractAnnotationProcessor
 
     @Override
     protected void process(RoundEnvironment env,
-                           TypeElement annotation,
-                           Element element) throws Exception {
+                           TypeElement annotation, Element element) {
         switch (element.getKind()) {
         case CLASS:
             map.add((TypeElement) element);

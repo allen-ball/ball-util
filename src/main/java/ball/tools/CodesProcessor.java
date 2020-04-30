@@ -43,7 +43,6 @@ import lombok.ToString;
 public class CodesProcessor extends AbstractAnnotationProcessor {
     @Override
     public void process(RoundEnvironment roundEnv,
-                        TypeElement annotation,
-                        Element element) throws Exception {
+                        TypeElement annotation, Element element) {
     }
 }

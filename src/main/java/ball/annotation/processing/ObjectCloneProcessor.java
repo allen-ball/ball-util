@@ -24,6 +24,7 @@ import ball.annotation.ServiceProviderFor;
 import java.util.ArrayList;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.Processor;
+import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
@@ -76,14 +77,14 @@ public class ObjectCloneProcessor extends AbstractNoAnnotationProcessor {
     }
 
     @Override
-    protected void process(Element element) {
+    protected void process(RoundEnvironment roundEnv, Element element) {
         methodsIn(((TypeElement) element).getEnclosedElements())
             .stream()
             .filter(t -> overrides(t, METHOD))
-            .forEach(t -> check(t));
+            .forEach(t -> check(roundEnv, t));
     }
 
-    private void check(ExecutableElement method) {
+    private void check(RoundEnvironment roundEnv, ExecutableElement method) {
         TypeElement type = (TypeElement) method.getEnclosingElement();
 
         if (! type.getInterfaces().contains(CLONEABLE.asType())) {

@@ -23,14 +23,12 @@ package ball.annotation.processing;
 import ball.annotation.ServiceProviderFor;
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
-import javax.tools.Diagnostic;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
@@ -48,7 +46,6 @@ import static lombok.AccessLevel.PROTECTED;
 @NoArgsConstructor(access = PROTECTED) @ToString
 public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
     private final List<Class<? extends Annotation>> list;
-    private transient TypeElement annotation = null;
 
     {
         try {
@@ -77,30 +74,25 @@ public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
             .map(Class::getCanonicalName)
             .collect(toSet());
 
-        return Collections.unmodifiableSet(set);
+        return set;
     }
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations,
                            RoundEnvironment roundEnv) {
-        for (TypeElement annotation : annotations) {
-            try {
-                this.annotation = annotation;
-
-                for (Element element :
-                         roundEnv.getElementsAnnotatedWith(annotation)) {
-                    try {
-                        process(roundEnv, annotation, element);
-                    } catch (Exception exception) {
-                        print(ERROR, element, exception);
-                    }
-                }
-            } finally {
-                this.annotation = null;
-            }
-        }
+        annotations.stream().forEach(t -> process(roundEnv, t));
 
         return true;
+    }
+
+    private void process(RoundEnvironment roundEnv, TypeElement annotation) {
+        for (Element element : roundEnv.getElementsAnnotatedWith(annotation)) {
+            try {
+                process(roundEnv, annotation, element);
+            } catch (Throwable throwable) {
+                print(ERROR, element, throwable);
+            }
+        }
     }
 
     /**
@@ -109,26 +101,10 @@ public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
      * @param   roundEnv        The {@link RoundEnvironment}.
      * @param   annotation      The annotation {@link TypeElement}.
      * @param   element         The annotated {@link Element}.
-     *
-     * @throws  Exception       If an exception occurs.
      */
     protected abstract void process(RoundEnvironment roundEnv,
                                     TypeElement annotation,
-                                    Element element) throws Exception;
-
-    @Override
-    protected void print(Diagnostic.Kind kind,
-                         Element element, String format, Object... argv) {
-        String message = String.format(format, argv);
-
-        if (annotation != null) {
-            message =
-                String.format("@%s: %s",
-                              annotation.getQualifiedName(), message);
-        }
-
-        super.print(kind, element, message);
-    }
+                                    Element element);
 
     /**
      * {@link Processor} implementation.
@@ -142,8 +118,7 @@ public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
 
         @Override
         public void process(RoundEnvironment roundEnv,
-                            TypeElement annotation,
-                            Element element) throws Exception {
+                            TypeElement annotation, Element element) {
             switch (element.getKind()) {
             case CLASS:
                 if (! isAssignable(element.asType(), SUPERCLASS)) {

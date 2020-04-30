@@ -52,8 +52,7 @@ import static javax.tools.Diagnostic.Kind.WARNING;
 public class ConstructorPropertiesProcessor extends AbstractAnnotationProcessor {
     @Override
     public void process(RoundEnvironment roundEnv,
-                        TypeElement annotation,
-                        Element element) throws Exception {
+                        TypeElement annotation, Element element) {
         switch (element.getKind()) {
         case CONSTRUCTOR:
             String[] value =

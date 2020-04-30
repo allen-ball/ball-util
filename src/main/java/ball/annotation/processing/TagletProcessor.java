@@ -25,6 +25,7 @@ import com.sun.tools.doclets.Taglet;
 import java.lang.reflect.Method;
 import java.util.Map;
 import javax.annotation.processing.Processor;
+import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
@@ -59,7 +60,7 @@ public class TagletProcessor extends AbstractNoAnnotationProcessor {
         PROTOTYPE.class.getDeclaredMethods()[0];
 
     @Override
-    protected void process(Element element) {
+    protected void process(RoundEnvironment roundEnv, Element element) {
         if (! element.getModifiers().contains(ABSTRACT)) {
             TypeElement type = (TypeElement) element;
             ExecutableElement method =

@@ -41,7 +41,7 @@ import static javax.tools.Diagnostic.Kind.ERROR;
  * @version $Revision$
  */
 @NoArgsConstructor @ToString
-public abstract class MustImplementAnnotationProcessor extends AbstractNoAnnotationProcessor {
+public abstract class MustImplementProcessor extends AbstractNoAnnotationProcessor {
     private Class<?>[] superclasses = null;
 
     @Override
@@ -62,7 +62,7 @@ public abstract class MustImplementAnnotationProcessor extends AbstractNoAnnotat
     }
 
     @Override
-    protected void process(Element element) {
+    protected void process(RoundEnvironment roundEnv, Element element) {
         if (superclasses != null) {
             if (! element.getModifiers().contains(ABSTRACT)) {
                 for (Class<?> type : superclasses) {
@@ -85,12 +85,11 @@ public abstract class MustImplementAnnotationProcessor extends AbstractNoAnnotat
     @NoArgsConstructor @ToString
     public static class AnnotationProcessor extends AbstractAnnotationProcessor {
         private static final Class<?> SUPERCLASS =
-            MustImplementAnnotationProcessor.class;
+            MustImplementProcessor.class;
 
         @Override
         public void process(RoundEnvironment roundEnv,
-                            TypeElement annotation,
-                            Element element) throws Exception {
+                            TypeElement annotation, Element element) {
             switch (element.getKind()) {
             case CLASS:
                 if (! isAssignable(element.asType(), SUPERCLASS)) {

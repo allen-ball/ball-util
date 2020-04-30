@@ -22,6 +22,7 @@ package ball.annotation.processing;
  */
 import ball.annotation.ServiceProviderFor;
 import javax.annotation.processing.Processor;
+import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import lombok.NoArgsConstructor;
@@ -47,7 +48,7 @@ import static javax.tools.Diagnostic.Kind.WARNING;
 @NoArgsConstructor @ToString
 public class NoOverrideProcessor extends AbstractNoAnnotationProcessor {
     @Override
-    protected void process(Element element) {
+    protected void process(RoundEnvironment roundEnv, Element element) {
         ExecutableElement method = (ExecutableElement) element;
 
         if (method.getAnnotation(Override.class) == null

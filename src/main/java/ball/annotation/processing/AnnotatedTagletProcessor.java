@@ -41,6 +41,5 @@ import static javax.lang.model.element.ElementKind.CLASS;
 @ForSubclassesOf(AnnotatedTaglet.class)
 @MustImplement({ Taglet.class })
 @NoArgsConstructor @ToString
-public class AnnotatedTagletProcessor
-             extends MustImplementAnnotationProcessor {
+public class AnnotatedTagletProcessor extends MustImplementProcessor {
 }

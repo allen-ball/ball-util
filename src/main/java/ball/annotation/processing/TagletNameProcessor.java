@@ -56,8 +56,7 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
 public class TagletNameProcessor extends AbstractAnnotationProcessor {
     @Override
     protected void process(RoundEnvironment env,
-                           TypeElement annotation,
-                           Element element) throws Exception {
+                           TypeElement annotation, Element element) {
         String name = element.getAnnotation(TagletName.class).value();
 
         if (! isEmpty(name)) {

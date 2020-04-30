@@ -4,7 +4,7 @@
 	Re-factored class hierarchy.
 
 	* src/main/java/ball/annotation/processing/MustImplement.java,
-	MustImplementAnnotationProcessor.java:
+	MustImplementProcessor.java:
 	Initial writing.
 
 2020-04-27  Allen D. Ball  <ball@hcf.dev>
