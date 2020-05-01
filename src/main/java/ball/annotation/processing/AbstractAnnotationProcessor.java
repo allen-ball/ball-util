@@ -86,9 +86,27 @@ public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
     private void process(RoundEnvironment roundEnv, TypeElement annotation) {
         for (Element element : roundEnv.getElementsAnnotatedWith(annotation)) {
             try {
+                check(roundEnv,
+                      annotation, getAnnotation(MustExtend.class), element);
+
                 process(roundEnv, annotation, element);
             } catch (Throwable throwable) {
                 print(ERROR, element, throwable);
+            }
+        }
+    }
+
+    private void check(RoundEnvironment roundEnv, TypeElement annotation,
+                       MustExtend meta, Element element) {
+        if (meta != null) {
+            Class<?> superclass = meta.value();
+
+            if (! isAssignable(element.asType(), superclass)) {
+                print(ERROR, element,
+                      "%s annotated with @%s but does not extend %s",
+                      element.getKind(),
+                      annotation.getSimpleName(),
+                      superclass.getCanonicalName());
             }
         }
     }
@@ -101,6 +119,5 @@ public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
      * @param   element         The annotated {@link Element}.
      */
     protected abstract void process(RoundEnvironment roundEnv,
-                                    TypeElement annotation,
-                                    Element element);
+                                    TypeElement annotation, Element element);
 }

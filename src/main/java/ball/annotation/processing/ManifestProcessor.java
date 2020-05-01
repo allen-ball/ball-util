@@ -135,7 +135,6 @@ public class ManifestProcessor extends AbstractAnnotationProcessor
             processed.add(element);
 
             Attribute attribute = element.getAnnotation(Attribute.class);
-
             MainClass main = element.getAnnotation(MainClass.class);
 
             if (main != null) {

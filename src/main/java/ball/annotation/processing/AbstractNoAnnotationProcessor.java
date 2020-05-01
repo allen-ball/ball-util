@@ -130,23 +130,12 @@ public abstract class AbstractNoAnnotationProcessor extends AbstractProcessor {
     @ServiceProviderFor({ Processor.class })
     @For({ ForElementKinds.class, ForSubclassesOf.class })
     @NoArgsConstructor @ToString
-    public static class AnnotationProcessor extends AbstractAnnotationProcessor {
-        private static final Class<?> SUPERCLASS =
-            AbstractNoAnnotationProcessor.class;
-
+    public static class ProcessorImpl extends AbstractAnnotationProcessor {
         @Override
         public void process(RoundEnvironment roundEnv,
                             TypeElement annotation, Element element) {
             switch (element.getKind()) {
             case CLASS:
-                if (! isAssignable(element.asType(), SUPERCLASS)) {
-                    print(ERROR, element,
-                          "%s annotated with @%s but is not a subclass of %s",
-                          element.getKind(),
-                          annotation.getSimpleName(),
-                          SUPERCLASS.getCanonicalName());
-                }
-
                 if (isSameType(annotation.asType(), ForSubclassesOf.class)) {
                     ForElementKinds kinds =
                         element.getAnnotation(ForElementKinds.class);

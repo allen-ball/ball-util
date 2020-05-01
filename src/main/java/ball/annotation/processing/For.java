@@ -34,7 +34,6 @@ import lombok.ToString;
 
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
-import static javax.tools.Diagnostic.Kind.ERROR;
 
 /**
  * {@link AbstractAnnotationProcessor} {@link Annotation} to specify
@@ -46,6 +45,7 @@ import static javax.tools.Diagnostic.Kind.ERROR;
 @Documented
 @Retention(RUNTIME)
 @Target({ TYPE })
+@MustExtend(AbstractAnnotationProcessor.class)
 public @interface For {
     Class<? extends Annotation>[] value();
 
@@ -55,27 +55,10 @@ public @interface For {
     @ServiceProviderFor({ Processor.class })
     @For({ For.class })
     @NoArgsConstructor @ToString
-    public static class ForProcessor extends AbstractAnnotationProcessor {
-        private static final Class<?> SUPERCLASS =
-            AbstractAnnotationProcessor.class;
-
+    public static class ProcessorImpl extends AbstractAnnotationProcessor {
         @Override
         public void process(RoundEnvironment roundEnv,
                             TypeElement annotation, Element element) {
-            switch (element.getKind()) {
-            case CLASS:
-                if (! isAssignable(element.asType(), SUPERCLASS)) {
-                    print(ERROR, element,
-                          "%s annotated with @%s but is not a subclass of %s",
-                          element.getKind(),
-                          annotation.getSimpleName(),
-                          SUPERCLASS.getCanonicalName());
-                }
-                break;
-
-            default:
-                break;
-            }
         }
     }
 }

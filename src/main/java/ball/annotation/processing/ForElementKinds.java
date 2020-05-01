@@ -39,6 +39,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 @Retention(RUNTIME)
 @Target({ TYPE })
+@MustExtend(AbstractNoAnnotationProcessor.class)
 public @interface ForElementKinds {
     ElementKind[] value();
 }
