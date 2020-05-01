@@ -83,7 +83,7 @@ public abstract class MustImplementProcessor extends AbstractNoAnnotationProcess
     @ServiceProviderFor({ Processor.class })
     @For({ MustImplement.class })
     @NoArgsConstructor @ToString
-    public static class AnnotationProcessor extends AbstractAnnotationProcessor {
+    public static class ProcessorImpl extends AbstractAnnotationProcessor {
         private static final Class<?> SUPERCLASS =
             MustImplementProcessor.class;
 
