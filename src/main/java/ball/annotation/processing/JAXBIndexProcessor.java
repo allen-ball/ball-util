@@ -136,7 +136,7 @@ public class JAXBIndexProcessor extends AbstractAnnotationProcessor
 
     @NoArgsConstructor
     private class MapImpl extends TreeMap<String,Set<String>> {
-        private static final long serialVersionUID = 5693261055822027911L;
+        private static final long serialVersionUID = -1632488233965567327L;
 
         public boolean add(Class<?> type) {
             return add(type.getPackage().getName(), type.getCanonicalName());
@@ -156,16 +156,7 @@ public class JAXBIndexProcessor extends AbstractAnnotationProcessor
                 type = type.substring(DOT.length());
             }
 
-            return get(pkg).add(type);
-        }
-
-        @Override
-        public Set<String> get(Object key) {
-            if (! super.containsKey(key)) {
-                super.put((String) key, new TreeSet<>());
-            }
-
-            return super.get(key);
+            return computeIfAbsent(pkg, k -> new TreeSet<>()).add(type);
         }
     }
 }

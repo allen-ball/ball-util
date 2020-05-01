@@ -124,11 +124,7 @@ public class ResourceFileProcessor extends AbstractAnnotationProcessor {
         private static final long serialVersionUID = 5908228485945805046L;
 
         public boolean add(String path, Collection<String> collection) {
-            if (! containsKey(path)) {
-                put(path, new ArrayList<>());
-            }
-
-            return get(path).addAll(collection);
+            return computeIfAbsent(path, k -> new ArrayList<>()).addAll(collection);
         }
     }
 

@@ -198,11 +198,7 @@ public class ServiceProviderForProcessor extends AbstractAnnotationProcessor
         private static final long serialVersionUID = -5826890336322674613L;
 
         public boolean add(String service, String provider) {
-            if (! containsKey(service)) {
-                put(service, new TreeSet<>());
-            }
-
-            return get(service).add(provider);
+            return computeIfAbsent(service, k -> new TreeSet<>()).add(provider);
         }
 
         public boolean add(Class<?> service, Class<?> provider) {
