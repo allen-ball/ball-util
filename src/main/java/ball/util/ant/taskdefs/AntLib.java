@@ -21,6 +21,7 @@ package ball.util.ant.taskdefs;
  * ##########################################################################
  */
 import ball.annotation.processing.MustExtend;
+import ball.annotation.processing.MustHaveNoArgsConstructor;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
@@ -39,6 +40,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 @Retention(RUNTIME)
 @Target({ PACKAGE })
-@MustExtend(Task.class)
+@MustExtend(Task.class) @MustHaveNoArgsConstructor
 public @interface AntLib {
 }

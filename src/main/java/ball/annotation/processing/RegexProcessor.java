@@ -34,9 +34,8 @@ import lombok.ToString;
 import static javax.tools.Diagnostic.Kind.ERROR;
 
 /**
- * {@link javax.annotation.processing.Processor} implementation to verify
- * {@link String} initializers marked by the {@link Regex} annotation are
- * valid {@link Pattern}s.
+ * {@link Processor} implementation to verify {@link String} initializers
+ * marked by the {@link Regex} annotation are valid {@link Pattern}s.
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$

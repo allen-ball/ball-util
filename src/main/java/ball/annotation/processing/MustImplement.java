@@ -20,12 +20,22 @@ package ball.annotation.processing;
  * limitations under the License.
  * ##########################################################################
  */
+import ball.annotation.ServiceProviderFor;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
+import javax.annotation.processing.Processor;
+import javax.annotation.processing.RoundEnvironment;
+import javax.lang.model.element.AnnotationMirror;
+import javax.lang.model.element.AnnotationValue;
+import javax.lang.model.element.Element;
+import javax.lang.model.element.TypeElement;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import static javax.tools.Diagnostic.Kind.ERROR;
 
 /**
  * {@link java.lang.annotation.Annotation} to specify required
@@ -37,6 +47,28 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 @Retention(RUNTIME)
 @Target({ TYPE })
+@MustExtend(AbstractNoAnnotationProcessor.class)
 public @interface MustImplement {
-    Class<?>[] value();
+    Class<?>[] value() default { };
+
+    /**
+     * {@link Processor} implementation.
+     */
+    @ServiceProviderFor({ Processor.class })
+    @For({ MustImplement.class })
+    @NoArgsConstructor @ToString
+    public static class ProcessorImpl extends AbstractAnnotationProcessor {
+        @Override
+        public void process(RoundEnvironment roundEnv,
+                            TypeElement annotation, Element element) {
+            AnnotationMirror mirror = getAnnotationMirror(element, annotation);
+            AnnotationValue value = getAnnotationElementValue(mirror, "value");
+
+            if (isEmptyArray(value)) {
+                print(ERROR, element,
+                      "%s annotated with @%s but no types specified",
+                      element.getKind(), annotation.getSimpleName());
+            }
+        }
+    }
 }

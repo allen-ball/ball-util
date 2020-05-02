@@ -20,17 +20,11 @@ package ball.annotation.processing;
  * limitations under the License.
  * ##########################################################################
  */
-import ball.annotation.ServiceProviderFor;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumSet;
-import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 import java.util.function.Predicate;
-import javax.annotation.processing.ProcessingEnvironment;
-import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
@@ -38,10 +32,8 @@ import javax.lang.model.element.TypeElement;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import static javax.lang.model.element.ElementKind.CLASS;
-import static javax.lang.model.element.ElementKind.INTERFACE;
+import static javax.lang.model.element.Modifier.ABSTRACT;
 import static javax.tools.Diagnostic.Kind.ERROR;
-import static javax.tools.Diagnostic.Kind.WARNING;
 import static lombok.AccessLevel.PROTECTED;
 
 /**
@@ -50,38 +42,21 @@ import static lombok.AccessLevel.PROTECTED;
  *
  * @see ForElementKinds
  * @see ForSubclassesOf
+ * @see MustImplement
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 @NoArgsConstructor(access = PROTECTED) @ToString
 public abstract class AbstractNoAnnotationProcessor extends AbstractProcessor {
-    private static final List<ElementKind> REQUIRED_FOR_SUBCLASSES_OF =
-        Arrays.asList(CLASS, INTERFACE);
+    private EnumSet<ElementKind> kinds = EnumSet.allOf(ElementKind.class);
+    private Class<?> superclass = null;
+    private Class<?>[] superclasses = null;
 
-    private Set<ElementKind> kinds =
-        new TreeSet<>(EnumSet.allOf(ElementKind.class));
-    protected Class<?> superclass = null;
-    private final Predicate<Element> forElementKinds =
-        t -> kinds.contains(t.getKind());
-    private final Predicate<Element> forSubclasses =
-        t -> (superclass == null || isAssignable(t.asType(), superclass));
-
-    @Override
-    public Set<String> getSupportedAnnotationTypes() {
-        return Collections.singleton("*");
-    }
-
-    @Override
-    public void init(ProcessingEnvironment processingEnv) {
-        super.init(processingEnv);
-
-        try {
-            setElementKinds(getAnnotation(ForElementKinds.class));
-            setSubclassesOf(getAnnotation(ForSubclassesOf.class));
-        } catch (Exception exception) {
-            print(ERROR, null, exception);
-        }
+    {
+        setElementKinds(getClass().getAnnotation(ForElementKinds.class));
+        setSubclassesOf(getClass().getAnnotation(ForSubclassesOf.class));
+        setMustImplement(getClass().getAnnotation(MustImplement.class));
     }
 
     private void setElementKinds(ForElementKinds annotation) {
@@ -93,8 +68,19 @@ public abstract class AbstractNoAnnotationProcessor extends AbstractProcessor {
     private void setSubclassesOf(ForSubclassesOf annotation) {
         if (annotation != null) {
             superclass = annotation.value();
-            kinds.retainAll(REQUIRED_FOR_SUBCLASSES_OF);
+            kinds.retainAll(ForSubclassesOf.ELEMENT_KINDS);
         }
+    }
+
+    private void setMustImplement(MustImplement annotation) {
+        if (annotation != null) {
+            superclasses = annotation.value();
+        }
+    }
+
+    @Override
+    public Set<String> getSupportedAnnotationTypes() {
+        return Collections.singleton("*");
     }
 
     /**
@@ -104,9 +90,17 @@ public abstract class AbstractNoAnnotationProcessor extends AbstractProcessor {
     public boolean process(Set<? extends TypeElement> annotations,
                            RoundEnvironment roundEnv) {
         try {
+            Predicate<Element> forElementKinds =
+                t -> kinds.contains(t.getKind());
+            Predicate<Element> forSubclasses =
+                t -> (superclass == null
+                      || isAssignable(t.asType(), superclass));
+
             roundEnv.getRootElements()
                 .stream()
-                .filter(forElementKinds.and(forSubclasses))
+                .filter(forElementKinds)
+                .filter(forSubclasses)
+                .filter(new MustImplementPredicate())
                 .forEach(t -> process(roundEnv, t));
         } catch (Throwable throwable) {
             print(ERROR, null, throwable);
@@ -116,64 +110,37 @@ public abstract class AbstractNoAnnotationProcessor extends AbstractProcessor {
     }
 
     /**
-     * Method to process each {@link Element}.
+     * Method to process each {@link Element}.  Default implementation does
+     * nothing.
      *
      * @param   roundEnv        The {@link RoundEnvironment}.
      * @param   element         The {@link Element}.
      */
-    protected abstract void process(RoundEnvironment roundEnv,
-                                    Element element);
+    protected void process(RoundEnvironment roundEnv, Element element) {
+    }
 
-    /**
-     * {@link Processor} implementation.
-     */
-    @ServiceProviderFor({ Processor.class })
-    @For({ ForElementKinds.class, ForSubclassesOf.class })
     @NoArgsConstructor @ToString
-    public static class ProcessorImpl extends AbstractAnnotationProcessor {
+    private class MustImplementPredicate implements Predicate<Element> {
         @Override
-        public void process(RoundEnvironment roundEnv,
-                            TypeElement annotation, Element element) {
-            switch (element.getKind()) {
-            case CLASS:
-                if (isSameType(annotation.asType(), ForSubclassesOf.class)) {
-                    ForElementKinds kinds =
-                        element.getAnnotation(ForElementKinds.class);
+        public boolean test(Element element) {
+            boolean match = true;
 
-                    if (kinds != null) {
-                        ElementKind[] array = kinds.value();
-                        LinkedHashSet<ElementKind> set = new LinkedHashSet<>();
-
-                        if (array != null) {
-                            Collections.addAll(set, array);
-                        }
-
-                        if (! set.removeAll(REQUIRED_FOR_SUBCLASSES_OF)) {
+            if (superclasses != null) {
+                if (! element.getModifiers().contains(ABSTRACT)) {
+                    for (Class<?> type : superclasses) {
+                        if (! isAssignable(element.asType(), type)) {
+                            match &= false;
                             print(ERROR, element,
-                                  "%s annotated with @%s and @%s but does not specify one of %s",
+                                  "%s annotated with @%s but does not implement %s",
                                   element.getKind(),
-                                  annotation.getSimpleName(),
-                                  ForElementKinds.class.getSimpleName(),
-                                  REQUIRED_FOR_SUBCLASSES_OF);
-                        }
-
-                        if (! set.isEmpty()) {
-                            print(WARNING, element,
-                                  "%s annotated with @%s and @%s; %s will be ignored",
-                                  element.getKind(),
-                                  annotation.getSimpleName(),
-                                  ForElementKinds.class.getSimpleName(), set);
+                                  MustImplement.class.getSimpleName(),
+                                  type.getName());
                         }
                     }
                 }
-                break;
-
-            default:
-                print(ERROR, element,
-                      "%s annotated with @%s but is not a %s",
-                      element.getKind(), annotation.getSimpleName(), CLASS);
-                break;
             }
+
+            return match;
         }
     }
 }

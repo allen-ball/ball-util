@@ -42,7 +42,6 @@ import lombok.ToString;
 
 import static java.lang.reflect.Modifier.isAbstract;
 import static javax.lang.model.element.Modifier.ABSTRACT;
-import static javax.lang.model.element.Modifier.PUBLIC;
 import static javax.tools.Diagnostic.Kind.ERROR;
 import static javax.tools.StandardLocation.CLASS_OUTPUT;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
@@ -112,36 +111,24 @@ public class ServiceProviderForProcessor extends AbstractAnnotationProcessor
     protected void process(RoundEnvironment env,
                            TypeElement annotation, Element element) {
         AnnotationMirror mirror = getAnnotationMirror(element, annotation);
-        AnnotationValue value =
-            elements.getElementValuesWithDefaults(mirror).entrySet()
-            .stream()
-            .filter(t -> t.getKey().toString().equals("value()"))
-            .map(t -> t.getValue())
-            .findFirst().get();
+        AnnotationValue value = getAnnotationElementValue(mirror, "value");
         List<TypeElement> list = getTypeElementListFrom(value);
 
         if (! list.isEmpty()) {
             switch (element.getKind()) {
             case CLASS:
                 if (! element.getModifiers().contains(ABSTRACT)) {
-                    if (hasPublicNoArgumentConstructor(element)) {
-                        for (TypeElement service : list) {
-                            if (types.isAssignable(element.asType(),
-                                                   service.asType())) {
-                                map.add(service, (TypeElement) element);
-                            } else {
-                                print(ERROR, element,
-                                      "%s annotated with @%s and specifies %s but is not an implementing class",
-                                      element.getKind(),
-                                      annotation.getSimpleName(),
-                                      service.getQualifiedName());
-                            }
+                    for (TypeElement service : list) {
+                        if (types.isAssignable(element.asType(),
+                                               service.asType())) {
+                            map.add(service, (TypeElement) element);
+                        } else {
+                            print(ERROR, element,
+                                  "%s annotated with @%s and specifies %s but is not an implementing class",
+                                  element.getKind(),
+                                  annotation.getSimpleName(),
+                                  service.getQualifiedName());
                         }
-                    } else {
-                        print(ERROR, element,
-                              "%s annotated with @%s but does not have a %s no-argument constructor",
-                              element.getKind(),
-                              annotation.getSimpleName(), PUBLIC);
                     }
                 } else {
                     print(ERROR, element,
@@ -198,7 +185,8 @@ public class ServiceProviderForProcessor extends AbstractAnnotationProcessor
         private static final long serialVersionUID = -5826890336322674613L;
 
         public boolean add(String service, String provider) {
-            return computeIfAbsent(service, k -> new TreeSet<>()).add(provider);
+            return computeIfAbsent(service,
+                                   k -> new TreeSet<>()).add(provider);
         }
 
         public boolean add(Class<?> service, Class<?> provider) {

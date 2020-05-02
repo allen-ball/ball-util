@@ -61,16 +61,11 @@ public @interface MustExtend {
         public void process(RoundEnvironment roundEnv,
                             TypeElement annotation, Element element) {
             AnnotationMirror mirror = getAnnotationMirror(element, annotation);
-            AnnotationValue value =
-                elements.getElementValuesWithDefaults(mirror).entrySet()
-                .stream()
-                .filter(t -> t.getKey().toString().equals("value()"))
-                .map(t -> t.getValue())
-                .findFirst().orElse(null);
+            AnnotationValue value = getAnnotationElementValue(mirror, "value");
 
-            if (value == null) {
+            if (isNull(value)) {
                 print(ERROR, element,
-                      "%s annotated with @%s but no type specified",
+                      "%s annotated with @%s but no value() specified",
                       element.getKind(), annotation.getSimpleName());
             }
         }

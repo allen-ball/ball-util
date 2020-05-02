@@ -78,6 +78,8 @@ public class ObjectCloneProcessor extends AbstractNoAnnotationProcessor {
 
     @Override
     protected void process(RoundEnvironment roundEnv, Element element) {
+        super.process(roundEnv, element);
+
         methodsIn(((TypeElement) element).getEnclosedElements())
             .stream()
             .filter(t -> overrides(t, METHOD))

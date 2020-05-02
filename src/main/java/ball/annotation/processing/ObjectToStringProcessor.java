@@ -36,8 +36,7 @@ import static javax.tools.Diagnostic.Kind.ERROR;
 import static javax.tools.Diagnostic.Kind.WARNING;
 
 /**
- * {@link javax.annotation.processing.Processor} implementation to check
- * {@link Class}es to verify:
+ * {@link Processor} implementation to check {@link Class}es to verify:
  * <ol>
  *   <li value="1">
  *     The implementing {@link Class} also overrides {@link Object#toString()}

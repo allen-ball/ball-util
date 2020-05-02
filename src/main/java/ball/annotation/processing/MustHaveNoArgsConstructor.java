@@ -1,4 +1,4 @@
-package ball.annotation;
+package ball.annotation.processing;
 /*-
  * ##########################################################################
  * Utilities
@@ -20,41 +20,45 @@ package ball.annotation;
  * limitations under the License.
  * ##########################################################################
  */
+import ball.annotation.ServiceProviderFor;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
+import javax.annotation.processing.Processor;
+import javax.annotation.processing.RoundEnvironment;
+import javax.lang.model.element.Element;
+import javax.lang.model.element.Modifier;
+import javax.lang.model.element.TypeElement;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
-import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import static javax.lang.model.element.Modifier.PUBLIC;
 
 /**
- * {@link java.lang.annotation.Annotation} to provide resource file
- * fragments.  {@link #path() path} specifies the resource file path and
- * {@link #lines() lines} specifies the file fragment lines.  The
- * {@link ball.annotation.processing.ResourceFileProcessor} uses
- * {@link ball.text.ParameterizedMessageFormat} to replace the
- * {@value #CLASS} named parameter with the annotated class name and the
- * {@value #PACKAGE} named parameter with the annotated class' package name
- * for both the annotation {@link #path() path} and {@link #lines() lines}
- * members.
+ * {@link java.lang.annotation.Annotation} to specify required
+ * super-{@link Class} must have a no-arguments constructor.
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 @Documented
 @Retention(RUNTIME)
-@Target({ TYPE })
-public @interface ResourceFile {
-    String path();
-    String[] lines() default { };
+@Target(ANNOTATION_TYPE)
+public @interface MustHaveNoArgsConstructor {
+    Modifier value() default PUBLIC;
 
     /**
-     * {@link #CLASS} = {@value #CLASS}
+     * {@link Processor} implementation.
      */
-    public static final String CLASS = "class";
-
-    /**
-     * {@link #PACKAGE} = {@value #PACKAGE}
-     */
-    public static final String PACKAGE = "package";
+    @ServiceProviderFor({ Processor.class })
+    @For({ MustHaveNoArgsConstructor.class })
+    @NoArgsConstructor @ToString
+    public static class ProcessorImpl extends AbstractAnnotationProcessor {
+        @Override
+        public void process(RoundEnvironment roundEnv,
+                            TypeElement annotation, Element element) {
+        }
+    }
 }

@@ -20,13 +20,25 @@ package ball.tools.javadoc;
  * limitations under the License.
  * ##########################################################################
  */
+import ball.annotation.ServiceProviderFor;
+import ball.annotation.processing.AbstractAnnotationProcessor;
+import ball.annotation.processing.For;
 import ball.annotation.processing.MustExtend;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
+import javax.annotation.processing.Processor;
+import javax.annotation.processing.RoundEnvironment;
+import javax.lang.model.element.Element;
+import javax.lang.model.element.TypeElement;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import static javax.lang.model.element.Modifier.ABSTRACT;
+import static javax.tools.Diagnostic.Kind.ERROR;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 /**
  * {@link java.lang.annotation.Annotation} to mark
@@ -42,4 +54,31 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @MustExtend(AnnotatedTaglet.class)
 public @interface TagletName {
     String value();
+
+    /**
+     * {@link Processor} implementation.
+     */
+    @ServiceProviderFor({ Processor.class })
+    @For({ TagletName.class })
+    @NoArgsConstructor @ToString
+    public class ProcessorImpl extends AbstractAnnotationProcessor {
+        @Override
+        protected void process(RoundEnvironment env,
+                               TypeElement annotation, Element element) {
+            String name = element.getAnnotation(TagletName.class).value();
+
+            if (! isEmpty(name)) {
+                if (element.getModifiers().contains(ABSTRACT)) {
+                    print(ERROR, element,
+                          "%s annotated with @%s but is %s",
+                          element.getKind(),
+                          annotation.getSimpleName(), ABSTRACT);
+                }
+            } else {
+                print(ERROR, element,
+                      "%s annotated with @%s but does not specify value()",
+                      element.getKind(), annotation.getSimpleName());
+            }
+        }
+    }
 }

@@ -98,20 +98,14 @@ public class ResourceFileProcessor extends AbstractAnnotationProcessor {
         String[] lines = element.getAnnotation(ResourceFile.class).lines();
 
         if (! isEmpty(path)) {
-            if (lines != null) {
-                ArrayList<String> list = new ArrayList<>(lines.length);
-                Parameters parameters = new Parameters((TypeElement) element);
+            ArrayList<String> list = new ArrayList<>(lines.length);
+            Parameters parameters = new Parameters((TypeElement) element);
 
-                for (String line : lines) {
-                    list.add(format(line, parameters));
-                }
-
-                map.add(format(path, parameters), list);
-            } else {
-                print(ERROR, element,
-                      "%s annotated with @%s but no lines() specified",
-                      element.getKind(), annotation.getSimpleName());
+            for (String line : lines) {
+                list.add(format(line, parameters));
             }
+
+            map.add(format(path, parameters), list);
         } else {
             print(ERROR, element,
                   "%s annotated with @%s but no path() specified",
@@ -124,7 +118,8 @@ public class ResourceFileProcessor extends AbstractAnnotationProcessor {
         private static final long serialVersionUID = 5908228485945805046L;
 
         public boolean add(String path, Collection<String> collection) {
-            return computeIfAbsent(path, k -> new ArrayList<>()).addAll(collection);
+            return computeIfAbsent(path,
+                                   k -> new ArrayList<>()).addAll(collection);
         }
     }
 

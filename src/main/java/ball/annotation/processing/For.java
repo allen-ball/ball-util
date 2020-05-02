@@ -27,6 +27,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
+import javax.lang.model.element.AnnotationMirror;
+import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import lombok.NoArgsConstructor;
@@ -34,6 +36,7 @@ import lombok.ToString;
 
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import static javax.tools.Diagnostic.Kind.ERROR;
 
 /**
  * {@link AbstractAnnotationProcessor} {@link Annotation} to specify
@@ -47,7 +50,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target({ TYPE })
 @MustExtend(AbstractAnnotationProcessor.class)
 public @interface For {
-    Class<? extends Annotation>[] value();
+    Class<? extends Annotation>[] value() default { };
 
     /**
      * {@link Processor} implementation.
@@ -59,6 +62,14 @@ public @interface For {
         @Override
         public void process(RoundEnvironment roundEnv,
                             TypeElement annotation, Element element) {
+            AnnotationMirror mirror = getAnnotationMirror(element, annotation);
+            AnnotationValue value = getAnnotationElementValue(mirror, "value");
+
+            if (isEmptyArray(value)) {
+                print(ERROR, element,
+                      "%s annotated with @%s but no types specified",
+                      element.getKind(), annotation.getSimpleName());
+            }
         }
     }
 }

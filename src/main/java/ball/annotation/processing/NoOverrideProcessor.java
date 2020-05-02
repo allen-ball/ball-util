@@ -49,6 +49,8 @@ import static javax.tools.Diagnostic.Kind.WARNING;
 public class NoOverrideProcessor extends AbstractNoAnnotationProcessor {
     @Override
     protected void process(RoundEnvironment roundEnv, Element element) {
+        super.process(roundEnv, element);
+
         ExecutableElement method = (ExecutableElement) element;
 
         if (method.getAnnotation(Override.class) == null

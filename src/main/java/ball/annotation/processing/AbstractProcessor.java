@@ -29,7 +29,7 @@ import java.lang.annotation.Target;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -62,9 +62,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Collections.disjoint;
 import static java.util.stream.Collectors.toList;
 import static javax.lang.model.element.Modifier.PRIVATE;
-import static javax.lang.model.element.Modifier.PUBLIC;
 import static javax.lang.model.element.Modifier.STATIC;
-import static javax.lang.model.util.ElementFilter.constructorsIn;
 import static javax.lang.model.util.ElementFilter.methodsIn;
 import static javax.tools.Diagnostic.Kind.ERROR;
 import static lombok.AccessLevel.PROTECTED;
@@ -94,19 +92,6 @@ public abstract class AbstractProcessor
     protected Elements elements = null;
     /** See {@link ProcessingEnvironment#getTypeUtils()}. */
     protected Types types = null;
-
-    /**
-     * Method to get an {@link Annotation} on {@link.this} instance
-     * {@link Class}.
-     *
-     * @param   annotation      The {@link Annotation} {@link Class}.
-     * @param   <A>             The {@link Annotation} subtype.
-     *
-     * @return  The {@link Annotation} or {@code null}.
-     */
-    protected <A extends Annotation> A getAnnotation(Class<A> annotation) {
-        return getClass().getAnnotation(annotation);
-    }
 
     @Override
     public SourceVersion getSupportedSourceVersion() {
@@ -355,22 +340,6 @@ public abstract class AbstractProcessor
     }
 
     /**
-     * Method to determine if an {@link Element} is a {@link TypeElement}
-     * that has a public no-argument constructor.
-     *
-     * @param   element         The {@link Element}.
-     *
-     * @return  {@code true} if the {@link Element} has a public no-argument
-     *          constructor; {@code false} otherwise.
-     */
-    protected boolean hasPublicNoArgumentConstructor(Element element) {
-        return constructorsIn(element.getEnclosedElements())
-               .stream()
-               .anyMatch(t -> (t.getModifiers().contains(PUBLIC)
-                               && t.getParameters().isEmpty()));
-    }
-
-    /**
      * Method to return the {@link ExecutableElement}
      * ({@link java.lang.reflect.Method}) the argument
      * {@link ExecutableElement} overrides (if any).
@@ -419,7 +388,7 @@ public abstract class AbstractProcessor
             methodsIn(type.getEnclosedElements())
             .stream()
             .filter(t -> disjoint(t.getModifiers(),
-                                  Arrays.asList(PRIVATE, STATIC)))
+                                  EnumSet.of(PRIVATE, STATIC)))
             .filter(t -> elements.overrides(overrider, t, type))
             .findFirst().orElse(null);
 
@@ -568,6 +537,79 @@ public abstract class AbstractProcessor
     }
 
     /**
+     * Method to get an {@link AnnotationMirror} element's
+     * {@link AnnotationValue}.
+     *
+     * @param   annotation      The {@link AnnotationMirror}.
+     * @param   name            The simple name of the element.
+     *
+     * @return  The {@link AnnotationValue} if it is defined; {@code null}
+     *          otherwise.
+     *
+     * @see Elements#getElementValuesWithDefaults(AnnotationMirror)
+     */
+    protected AnnotationValue getAnnotationElementValue(AnnotationMirror annotation,
+                                                        String name) {
+        AnnotationValue value =
+            elements.getElementValuesWithDefaults(annotation).entrySet()
+            .stream()
+            .filter(t -> t.getKey().getSimpleName().contentEquals(name))
+            .map(t -> t.getValue())
+            .findFirst().orElse(null);
+
+        return value;
+    }
+
+    /**
+     * Method to determine if an {@link AnnotationValue} is {@code null}:
+     * either the value itself or the
+     * {@link AnnotationValue#getValue() value} it references.
+     *
+     * @param   value           The {@link AnnotationValue}.
+     *
+     * @return  {@code true} if "{code null}"; {code false} otherwise.
+     */
+    protected boolean isNull(AnnotationValue value) {
+        return (value == null || value.getValue() == null);
+    }
+
+    /**
+     * Method to determine if an {@link AnnotationValue} is "empty":
+     * {@code null} or an empty array.
+     *
+     * @param   value           The {@link AnnotationValue}.
+     *
+     * @return  {@code true} if empty; {code false} otherwise.
+     */
+    protected boolean isEmptyArray(AnnotationValue value) {
+        List<?> list = (List<?>) ((value != null) ? value.getValue() : null);
+
+        return (list == null || list.isEmpty());
+    }
+
+    /**
+     * Method to get the {@link List} of {@link TypeElement}s from an
+     * {@link AnnotationValue}.
+     *
+     * @param   value           The {@link AnnotationValue}.
+     *
+     * @return  The {@link List}.
+     */
+    protected List<TypeElement> getTypeElementListFrom(AnnotationValue value) {
+        List<TypeElement> list =
+            Stream.of(value)
+            .filter(Objects::nonNull)
+            .map(t -> (List<?>) t.getValue())
+            .flatMap(List::stream)
+            .map(t -> (AnnotationValue) t)
+            .map(t -> (TypeMirror) t.getValue())
+            .map(t -> (TypeElement) types.asElement(t))
+            .collect(toList());
+
+        return list;
+    }
+
+    /**
      * Method to get bean property name from an {@link ExecutableElement}.
      *
      * @param   element         The {@link ExecutableElement}.
@@ -577,7 +619,7 @@ public abstract class AbstractProcessor
      */
     protected String getPropertyName(ExecutableElement element) {
         String string =
-            Arrays.stream(PropertyMethodEnum.values())
+            Stream.of(PropertyMethodEnum.values())
             .filter(t -> t.getPropertyName(element.getSimpleName().toString()) != null)
             .filter(t -> isAssignable(element.getReturnType(),
                                       t.getReturnType()))
@@ -599,8 +641,7 @@ public abstract class AbstractProcessor
      */
     protected boolean isGetterMethod(ExecutableElement element) {
         Optional <PropertyMethodEnum> optional =
-            Arrays.asList(PropertyMethodEnum.GET, PropertyMethodEnum.IS)
-            .stream()
+            Stream.of(PropertyMethodEnum.GET, PropertyMethodEnum.IS)
             .filter(t -> (! element.getModifiers().contains(PRIVATE)))
             .filter(t -> t.getPropertyName(element.getSimpleName().toString()) != null)
             .filter(t -> isAssignable(element.getReturnType(),
@@ -628,7 +669,7 @@ public abstract class AbstractProcessor
         for (ExecutableElement element :
                  methodsIn(type.getEnclosedElements())) {
             if (! element.getModifiers().contains(PRIVATE)) {
-                Arrays.stream(PropertyMethodEnum.values())
+                Stream.of(PropertyMethodEnum.values())
                     .filter(t -> t.getPropertyName(element.getSimpleName().toString()) != null)
                     .filter(t -> isAssignable(element.getReturnType(),
                                               t.getReturnType()))
@@ -720,27 +761,5 @@ public abstract class AbstractProcessor
      */
     protected static Path toPath(FileObject file) {
         return Paths.get(file.toUri());
-    }
-
-    /**
-     * Method to get the {@link List} of {@link TypeElement}s from an
-     * {@link AnnotationValue}.
-     *
-     * @param   value           The {@link AnnotationValue}.
-     *
-     * @return  The {@link List}.
-     */
-    protected List<TypeElement> getTypeElementListFrom(AnnotationValue value) {
-        List<TypeElement> list =
-            Stream.of(value)
-            .filter(Objects::nonNull)
-            .map(t -> (List<?>) t.getValue())
-            .flatMap(List::stream)
-            .map(t -> (AnnotationValue) t)
-            .map(t -> (TypeMirror) t.getValue())
-            .map(t -> (TypeElement) types.asElement(t))
-            .collect(toList());
-
-        return list;
     }
 }

@@ -31,6 +31,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import static java.util.stream.Collectors.toSet;
+import static javax.lang.model.util.ElementFilter.constructorsIn;
 import static javax.tools.Diagnostic.Kind.ERROR;
 import static lombok.AccessLevel.PROTECTED;
 
@@ -47,7 +48,7 @@ public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
 
     {
         try {
-            list = Arrays.asList(getAnnotation(For.class).value());
+            list = Arrays.asList(getClass().getAnnotation(For.class).value());
         } catch (Exception exception) {
             throw new ExceptionInInitializerError(exception);
         }
@@ -86,8 +87,8 @@ public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
     private void process(RoundEnvironment roundEnv, TypeElement annotation) {
         for (Element element : roundEnv.getElementsAnnotatedWith(annotation)) {
             try {
-                check(roundEnv,
-                      annotation, getAnnotation(MustExtend.class), element);
+                check(annotation, getClass().getAnnotation(MustExtend.class), element);
+                check(annotation, getClass().getAnnotation(MustHaveNoArgsConstructor.class), element);
 
                 process(roundEnv, annotation, element);
             } catch (Throwable throwable) {
@@ -96,7 +97,7 @@ public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
         }
     }
 
-    private void check(RoundEnvironment roundEnv, TypeElement annotation,
+    private void check(TypeElement annotation,
                        MustExtend meta, Element element) {
         if (meta != null) {
             Class<?> superclass = meta.value();
@@ -107,6 +108,24 @@ public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
                       element.getKind(),
                       annotation.getSimpleName(),
                       superclass.getCanonicalName());
+            }
+        }
+    }
+
+    private void check(TypeElement annotation,
+                       MustHaveNoArgsConstructor meta, Element element) {
+        if (meta != null) {
+            boolean found =
+                constructorsIn(element.getEnclosedElements())
+                .stream()
+                .anyMatch(t -> (t.getModifiers().contains(meta.value())
+                                && t.getParameters().isEmpty()));
+
+            if (! found) {
+                print(ERROR, element,
+                      "%s annotated with @%s but does not have a %s no-argument constructor",
+                      element.getKind(), annotation.getSimpleName(),
+                      meta.value());
             }
         }
     }

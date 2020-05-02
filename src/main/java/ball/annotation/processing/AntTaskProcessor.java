@@ -52,7 +52,6 @@ import org.apache.tools.ant.Task;
 
 import static java.lang.reflect.Modifier.isAbstract;
 import static javax.lang.model.element.Modifier.ABSTRACT;
-import static javax.lang.model.element.Modifier.PUBLIC;
 import static javax.tools.Diagnostic.Kind.ERROR;
 import static javax.tools.StandardLocation.CLASS_OUTPUT;
 import static javax.xml.transform.OutputKeys.INDENT;
@@ -168,14 +167,7 @@ public class AntTaskProcessor extends AbstractAnnotationProcessor
             if (isNotEmpty(name)) {
                 if (isAssignable(element.asType(), Task.class)) {
                     if (! element.getModifiers().contains(ABSTRACT)) {
-                        if (hasPublicNoArgumentConstructor(element)) {
-                            map.put(resource, name, (TypeElement) element);
-                        } else {
-                            print(ERROR, element,
-                                  "%s annotated with @%s but does not have a %s no-argument constructor",
-                                  element.getKind(),
-                                  annotation.getSimpleName(), PUBLIC);
-                        }
+                        map.put(resource, name, (TypeElement) element);
                     } else {
                         print(ERROR, element,
                               "%s annotated with @%s but is %s",

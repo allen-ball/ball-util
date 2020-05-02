@@ -41,5 +41,5 @@ import static javax.lang.model.element.ElementKind.CLASS;
 @ForSubclassesOf(AntTaskMixIn.class)
 @MustImplement({ Task.class })
 @NoArgsConstructor @ToString
-public class AntTaskMixInProcessor extends MustImplementProcessor {
+public class AntTaskMixInProcessor extends AbstractNoAnnotationProcessor {
 }

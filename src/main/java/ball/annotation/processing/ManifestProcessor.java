@@ -54,7 +54,6 @@ import static javax.tools.Diagnostic.Kind.ERROR;
 import static javax.tools.Diagnostic.Kind.WARNING;
 import static javax.tools.StandardLocation.CLASS_OUTPUT;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
-import static org.apache.commons.lang3.StringUtils.join;
 
 /**
  * {@link Processor} implementation to scan {@link ball.annotation.Manifest}
@@ -307,12 +306,12 @@ public class ManifestProcessor extends AbstractAnnotationProcessor
 
             if (depends != null) {
                 attributes.putValue(getAttributeName(depends.getClass()),
-                                    join(depends.value(), " "));
+                                    String.join(" ", depends.value()));
             }
 
             if (design != null) {
                 attributes.putValue(getAttributeName(design.getClass()),
-                                    join(design.value(), " "));
+                                    String.join(" ", design.value()));
             }
         }
 
