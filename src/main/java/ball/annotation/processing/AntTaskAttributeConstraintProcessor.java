@@ -43,7 +43,7 @@ import static javax.tools.Diagnostic.Kind.ERROR;
 @ServiceProviderFor({ Processor.class })
 @For({ AntTaskAttributeConstraint.class, NotEmpty.class, NotNull.class })
 @NoArgsConstructor @ToString
-public class AntTaskAttributeConstraintProcessor extends AbstractAnnotationProcessor {
+public class AntTaskAttributeConstraintProcessor extends AnnotatedProcessor {
     @Override
     public void process(RoundEnvironment roundEnv,
                         TypeElement annotation, Element element) {

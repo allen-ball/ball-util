@@ -60,7 +60,7 @@ import static javax.tools.Diagnostic.Kind.WARNING;
 @ForElementKinds({ CLASS })
 @ForSubclassesOf(Object.class)
 @NoArgsConstructor @ToString
-public class ObjectCloneProcessor extends AbstractNoAnnotationProcessor {
+public class ObjectCloneProcessor extends AnnotatedNoAnnotationProcessor {
     private ExecutableElement METHOD = null;
     private TypeElement CLONEABLE = null;
 

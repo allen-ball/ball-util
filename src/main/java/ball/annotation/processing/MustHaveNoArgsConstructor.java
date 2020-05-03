@@ -55,7 +55,7 @@ public @interface MustHaveNoArgsConstructor {
     @ServiceProviderFor({ Processor.class })
     @For({ MustHaveNoArgsConstructor.class })
     @NoArgsConstructor @ToString
-    public static class ProcessorImpl extends AbstractAnnotationProcessor {
+    public static class ProcessorImpl extends AnnotatedProcessor {
         @Override
         public void process(RoundEnvironment roundEnv,
                             TypeElement annotation, Element element) {

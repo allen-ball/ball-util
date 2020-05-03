@@ -50,7 +50,7 @@ import static javax.tools.Diagnostic.Kind.WARNING;
 @ForElementKinds({ CLASS })
 @ForSubclassesOf(Object.class)
 @NoArgsConstructor @ToString
-public class ObjectToStringProcessor extends AbstractNoAnnotationProcessor {
+public class ObjectToStringProcessor extends AnnotatedNoAnnotationProcessor {
     private ExecutableElement METHOD = null;
 
     @Override

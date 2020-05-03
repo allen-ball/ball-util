@@ -54,7 +54,7 @@ import static javax.tools.StandardLocation.CLASS_OUTPUT;
 @ServiceProviderFor({ Processor.class })
 @For({ XmlRootElement.class, XmlType.class })
 @NoArgsConstructor @ToString
-public class JAXBIndexProcessor extends AbstractAnnotationProcessor
+public class JAXBIndexProcessor extends AnnotatedProcessor
                                 implements ClassFileProcessor {
     private static final String JAXB_INDEX = "jaxb.index";
     private static final String DOT = ".";

@@ -46,7 +46,7 @@ import static javax.tools.Diagnostic.Kind.WARNING;
 @ServiceProviderFor({ Processor.class })
 @ForElementKinds({ METHOD })
 @NoArgsConstructor @ToString
-public class NoOverrideProcessor extends AbstractNoAnnotationProcessor {
+public class NoOverrideProcessor extends AnnotatedNoAnnotationProcessor {
     @Override
     protected void process(RoundEnvironment roundEnv, Element element) {
         super.process(roundEnv, element);

@@ -43,7 +43,7 @@ import static javax.tools.Diagnostic.Kind.ERROR;
 @ServiceProviderFor({ Processor.class })
 @For({ MatcherGroup.class })
 @NoArgsConstructor @ToString
-public class MatcherGroupProcessor extends AbstractAnnotationProcessor {
+public class MatcherGroupProcessor extends AnnotatedProcessor {
     @Override
     protected void process(RoundEnvironment env,
                            TypeElement annotation, Element element) {

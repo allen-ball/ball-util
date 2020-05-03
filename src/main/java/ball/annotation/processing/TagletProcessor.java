@@ -51,7 +51,7 @@ import static javax.tools.Diagnostic.Kind.WARNING;
 @ForElementKinds({ CLASS })
 @ForSubclassesOf(Taglet.class)
 @NoArgsConstructor @ToString
-public class TagletProcessor extends AbstractNoAnnotationProcessor {
+public class TagletProcessor extends AnnotatedNoAnnotationProcessor {
     private static abstract class PROTOTYPE {
         public static void register(Map<Object,Object> map) { }
     }

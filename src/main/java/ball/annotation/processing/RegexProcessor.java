@@ -43,7 +43,7 @@ import static javax.tools.Diagnostic.Kind.ERROR;
 @ServiceProviderFor({ Processor.class })
 @For({ Regex.class })
 @NoArgsConstructor @ToString
-public class RegexProcessor extends AbstractAnnotationProcessor {
+public class RegexProcessor extends AnnotatedProcessor {
     @Override
     public void process(RoundEnvironment roundEnv,
                         TypeElement annotation, Element element) {

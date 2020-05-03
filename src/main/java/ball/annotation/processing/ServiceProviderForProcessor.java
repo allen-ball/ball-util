@@ -68,7 +68,7 @@ import static org.apache.commons.lang3.StringUtils.EMPTY;
 @ServiceProviderFor({ Processor.class })
 @For({ ServiceProviderFor.class })
 @NoArgsConstructor @ToString
-public class ServiceProviderForProcessor extends AbstractAnnotationProcessor
+public class ServiceProviderForProcessor extends AnnotatedProcessor
                                          implements ClassFileProcessor {
     private static final String PATH = "META-INF/services/%s";
 

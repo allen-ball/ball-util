@@ -21,7 +21,7 @@ package ball.tools.javadoc;
  * ##########################################################################
  */
 import ball.annotation.ServiceProviderFor;
-import ball.annotation.processing.AbstractAnnotationProcessor;
+import ball.annotation.processing.AnnotatedProcessor;
 import ball.annotation.processing.For;
 import ball.annotation.processing.MustExtend;
 import java.lang.annotation.Documented;
@@ -61,7 +61,7 @@ public @interface TagletName {
     @ServiceProviderFor({ Processor.class })
     @For({ TagletName.class })
     @NoArgsConstructor @ToString
-    public class ProcessorImpl extends AbstractAnnotationProcessor {
+    public class ProcessorImpl extends AnnotatedProcessor {
         @Override
         protected void process(RoundEnvironment env,
                                TypeElement annotation, Element element) {

@@ -48,7 +48,7 @@ import static lombok.AccessLevel.PROTECTED;
  * @version $Revision$
  */
 @NoArgsConstructor(access = PROTECTED) @ToString
-public abstract class AbstractNoAnnotationProcessor extends AbstractProcessor {
+public abstract class AnnotatedNoAnnotationProcessor extends AbstractProcessor {
     private EnumSet<ElementKind> kinds = EnumSet.allOf(ElementKind.class);
     private Class<?> superclass = null;
     private Class<?>[] superclasses = null;

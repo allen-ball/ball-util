@@ -39,7 +39,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import static javax.tools.Diagnostic.Kind.ERROR;
 
 /**
- * {@link AbstractAnnotationProcessor} {@link Annotation} to specify
+ * {@link AnnotatedProcessor} {@link Annotation} to specify
  * {@link Annotation}s.
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
@@ -48,7 +48,7 @@ import static javax.tools.Diagnostic.Kind.ERROR;
 @Documented
 @Retention(RUNTIME)
 @Target({ TYPE })
-@MustExtend(AbstractAnnotationProcessor.class)
+@MustExtend(AnnotatedProcessor.class)
 public @interface For {
     Class<? extends Annotation>[] value() default { };
 
@@ -58,7 +58,7 @@ public @interface For {
     @ServiceProviderFor({ Processor.class })
     @For({ For.class })
     @NoArgsConstructor @ToString
-    public static class ProcessorImpl extends AbstractAnnotationProcessor {
+    public static class ProcessorImpl extends AnnotatedProcessor {
         @Override
         public void process(RoundEnvironment roundEnv,
                             TypeElement annotation, Element element) {

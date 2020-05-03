@@ -39,7 +39,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import static javax.tools.Diagnostic.Kind.ERROR;
 
 /**
- * {@link AbstractNoAnnotationProcessor}
+ * {@link AnnotatedNoAnnotationProcessor}
  * {@link java.lang.annotation.Annotation} to specify {@link ElementKind}
  * criteria.
  *
@@ -49,7 +49,7 @@ import static javax.tools.Diagnostic.Kind.ERROR;
 @Documented
 @Retention(RUNTIME)
 @Target({ TYPE })
-@MustExtend(AbstractNoAnnotationProcessor.class)
+@MustExtend(AnnotatedNoAnnotationProcessor.class)
 public @interface ForElementKinds {
     ElementKind[] value() default { };
 
@@ -59,7 +59,7 @@ public @interface ForElementKinds {
     @ServiceProviderFor({ Processor.class })
     @For({ ForElementKinds.class })
     @NoArgsConstructor @ToString
-    public static class ProcessorImpl extends AbstractAnnotationProcessor {
+    public static class ProcessorImpl extends AnnotatedProcessor {
         @Override
         public void process(RoundEnvironment roundEnv,
                             TypeElement annotation, Element element) {

@@ -44,7 +44,7 @@ import static javax.tools.Diagnostic.Kind.ERROR;
 import static javax.tools.Diagnostic.Kind.WARNING;
 
 /**
- * {@link AbstractNoAnnotationProcessor}
+ * {@link AnnotatedNoAnnotationProcessor}
  * {@link java.lang.annotation.Annotation} to specify super-{@link Class}
  * criteria.
  *
@@ -54,7 +54,7 @@ import static javax.tools.Diagnostic.Kind.WARNING;
 @Documented
 @Retention(RUNTIME)
 @Target({ TYPE })
-@MustExtend(AbstractNoAnnotationProcessor.class)
+@MustExtend(AnnotatedNoAnnotationProcessor.class)
 public @interface ForSubclassesOf {
     Class<?> value();
 
@@ -70,7 +70,7 @@ public @interface ForSubclassesOf {
     @ServiceProviderFor({ Processor.class })
     @For({ ForSubclassesOf.class })
     @NoArgsConstructor @ToString
-    public static class ProcessorImpl extends AbstractAnnotationProcessor {
+    public static class ProcessorImpl extends AnnotatedProcessor {
         @Override
         public void process(RoundEnvironment roundEnv,
                             TypeElement annotation, Element element) {

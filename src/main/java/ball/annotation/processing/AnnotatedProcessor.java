@@ -24,9 +24,14 @@ import java.lang.annotation.Annotation;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Consumer;
 import javax.annotation.processing.RoundEnvironment;
+import javax.lang.model.element.AnnotationMirror;
+import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.type.TypeMirror;
+import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
@@ -37,13 +42,13 @@ import static lombok.AccessLevel.PROTECTED;
 
 /**
  * Abstract {@link javax.annotation.processing.Processor} base class for
- * processing an {@link Annotation}.
+ * processing {@link Annotation}s specified by @{@link For}.
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 @NoArgsConstructor(access = PROTECTED) @ToString
-public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
+public abstract class AnnotatedProcessor extends AbstractProcessor {
     private final List<Class<? extends Annotation>> list;
 
     {
@@ -85,47 +90,25 @@ public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
     }
 
     private void process(RoundEnvironment roundEnv, TypeElement annotation) {
+/*
+        try {
+            roundEnv.getElementsAnnotatedWith(annotation)
+                .stream()
+                .peek(new MustExtendConsumer(annotation))
+                .peek(new MustHaveNoArgsConstructorConsumer(annotation))
+                .forEach(t -> process(roundEnv, annotation, t));
+        } catch (Throwable throwable) {
+            print(ERROR, null, throwable);
+        }
+*/
         for (Element element : roundEnv.getElementsAnnotatedWith(annotation)) {
             try {
-                check(annotation, getClass().getAnnotation(MustExtend.class), element);
-                check(annotation, getClass().getAnnotation(MustHaveNoArgsConstructor.class), element);
+                new MustExtendConsumer(annotation).accept(element);
+                new MustHaveNoArgsConstructorConsumer(annotation).accept(element);
 
                 process(roundEnv, annotation, element);
             } catch (Throwable throwable) {
                 print(ERROR, element, throwable);
-            }
-        }
-    }
-
-    private void check(TypeElement annotation,
-                       MustExtend meta, Element element) {
-        if (meta != null) {
-            Class<?> superclass = meta.value();
-
-            if (! isAssignable(element.asType(), superclass)) {
-                print(ERROR, element,
-                      "%s annotated with @%s but does not extend %s",
-                      element.getKind(),
-                      annotation.getSimpleName(),
-                      superclass.getCanonicalName());
-            }
-        }
-    }
-
-    private void check(TypeElement annotation,
-                       MustHaveNoArgsConstructor meta, Element element) {
-        if (meta != null) {
-            boolean found =
-                constructorsIn(element.getEnclosedElements())
-                .stream()
-                .anyMatch(t -> (t.getModifiers().contains(meta.value())
-                                && t.getParameters().isEmpty()));
-
-            if (! found) {
-                print(ERROR, element,
-                      "%s annotated with @%s but does not have a %s no-argument constructor",
-                      element.getKind(), annotation.getSimpleName(),
-                      meta.value());
             }
         }
     }
@@ -139,4 +122,65 @@ public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
      */
     protected abstract void process(RoundEnvironment roundEnv,
                                     TypeElement annotation, Element element);
+
+    @AllArgsConstructor @ToString
+    private class MustExtendConsumer implements Consumer<Element> {
+        private final TypeElement annotation;
+
+        @Override
+        public void accept(Element element) {
+            /*
+             * Cannot simply get the Annotation value:
+             * meta.value() throws MirroredTypeException
+             *
+             * Class<?> superclass = (meta != null) ? meta.value() : null;
+             * MustExtend meta = annotation.getAnnotation(MustExtend.class);
+             */
+            AnnotationMirror mirror =
+                getAnnotationMirror(annotation, MustExtend.class);
+
+            if (mirror != null) {
+                AnnotationValue value =
+                    getAnnotationElementValue(mirror, "value");
+                TypeElement superclass =
+                    (TypeElement) types.asElement((TypeMirror) value.getValue());
+
+                if (superclass != null) {
+                    if (! types.isAssignable(element.asType(), superclass.asType())) {
+                        print(ERROR, element,
+                              "%s annotated with @%s but does not extend %s",
+                              element.getKind(),
+                              annotation.getSimpleName(),
+                              superclass.getQualifiedName());
+                    }
+                }
+            }
+        }
+    }
+
+    @AllArgsConstructor @ToString
+    private class MustHaveNoArgsConstructorConsumer implements Consumer<Element> {
+        private final TypeElement annotation;
+
+        @Override
+        public void accept(Element element) {
+            MustHaveNoArgsConstructor meta =
+                annotation.getAnnotation(MustHaveNoArgsConstructor.class);
+
+            if (meta != null) {
+                boolean found =
+                    constructorsIn(element.getEnclosedElements())
+                    .stream()
+                    .filter(t -> t.getModifiers().contains(meta.value()))
+                    .anyMatch(t -> t.getParameters().isEmpty());
+
+                if (! found) {
+                    print(ERROR, element,
+                          "%s annotated with @%s but does not have a %s no-argument constructor",
+                          element.getKind(), annotation.getSimpleName(),
+                          meta.value());
+                }
+            }
+        }
+    }
 }

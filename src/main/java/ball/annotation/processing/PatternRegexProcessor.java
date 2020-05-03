@@ -42,7 +42,7 @@ import static javax.tools.Diagnostic.Kind.ERROR;
 @ServiceProviderFor({ Processor.class })
 @For({ PatternRegex.class })
 @NoArgsConstructor @ToString
-public class PatternRegexProcessor extends AbstractAnnotationProcessor {
+public class PatternRegexProcessor extends AnnotatedProcessor {
     @Override
     protected void process(RoundEnvironment env,
                            TypeElement annotation, Element element) {

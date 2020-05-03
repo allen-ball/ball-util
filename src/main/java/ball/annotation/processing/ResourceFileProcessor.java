@@ -56,7 +56,7 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
 @ServiceProviderFor({ Processor.class })
 @For({ ResourceFile.class })
 @NoArgsConstructor @ToString
-public class ResourceFileProcessor extends AbstractAnnotationProcessor {
+public class ResourceFileProcessor extends AnnotatedProcessor {
     private MapImpl map = new MapImpl();
 
     @Override

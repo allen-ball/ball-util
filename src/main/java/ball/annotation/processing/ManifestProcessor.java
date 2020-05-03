@@ -69,7 +69,7 @@ import static org.apache.commons.lang3.StringUtils.EMPTY;
             JavaBean.class, DependsOn.class, DesignTimeOnly.class
      })
 @NoArgsConstructor @ToString
-public class ManifestProcessor extends AbstractAnnotationProcessor
+public class ManifestProcessor extends AnnotatedProcessor
                                implements ClassFileProcessor {
     private static final String META_INF = "META-INF";
     private static final String MANIFEST_MF = "MANIFEST.MF";

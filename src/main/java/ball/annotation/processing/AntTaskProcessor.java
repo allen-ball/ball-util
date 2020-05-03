@@ -77,7 +77,7 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 @ServiceProviderFor({ Processor.class })
 @For({ AntLib.class, AntTask.class })
 @NoArgsConstructor @ToString
-public class AntTaskProcessor extends AbstractAnnotationProcessor
+public class AntTaskProcessor extends AnnotatedProcessor
                               implements ClassFileProcessor {
     private static final String ANTLIB_XML = "antlib.xml";
 

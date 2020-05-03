@@ -21,7 +21,7 @@ package ball.tools;
  * ##########################################################################
  */
 import ball.annotation.ServiceProviderFor;
-import ball.annotation.processing.AbstractAnnotationProcessor;
+import ball.annotation.processing.AnnotatedProcessor;
 import ball.annotation.processing.For;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
@@ -40,7 +40,7 @@ import lombok.ToString;
 @ServiceProviderFor({ Processor.class })
 @For({ Codes.class })
 @NoArgsConstructor @ToString
-public class CodesProcessor extends AbstractAnnotationProcessor {
+public class CodesProcessor extends AnnotatedProcessor {
     @Override
     public void process(RoundEnvironment roundEnv,
                         TypeElement annotation, Element element) {

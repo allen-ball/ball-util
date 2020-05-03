@@ -47,7 +47,7 @@ import static javax.tools.Diagnostic.Kind.ERROR;
 @Documented
 @Retention(RUNTIME)
 @Target({ TYPE })
-@MustExtend(AbstractNoAnnotationProcessor.class)
+@MustExtend(AnnotatedNoAnnotationProcessor.class)
 public @interface MustImplement {
     Class<?>[] value() default { };
 
@@ -57,7 +57,7 @@ public @interface MustImplement {
     @ServiceProviderFor({ Processor.class })
     @For({ MustImplement.class })
     @NoArgsConstructor @ToString
-    public static class ProcessorImpl extends AbstractAnnotationProcessor {
+    public static class ProcessorImpl extends AnnotatedProcessor {
         @Override
         public void process(RoundEnvironment roundEnv,
                             TypeElement annotation, Element element) {

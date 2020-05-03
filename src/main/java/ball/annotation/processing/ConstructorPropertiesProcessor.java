@@ -49,7 +49,7 @@ import static javax.tools.Diagnostic.Kind.WARNING;
 @ServiceProviderFor({ Processor.class })
 @For({ ConstructorProperties.class })
 @NoArgsConstructor @ToString
-public class ConstructorPropertiesProcessor extends AbstractAnnotationProcessor {
+public class ConstructorPropertiesProcessor extends AnnotatedProcessor {
     @Override
     public void process(RoundEnvironment roundEnv,
                         TypeElement annotation, Element element) {
