@@ -98,21 +98,14 @@ public class ResourceFileProcessor extends AnnotatedProcessor {
 
         String path = element.getAnnotation(ResourceFile.class).path();
         String[] lines = element.getAnnotation(ResourceFile.class).lines();
+        ArrayList<String> list = new ArrayList<>(lines.length);
+        Parameters parameters = new Parameters((TypeElement) element);
 
-        if (! isEmpty(path)) {
-            ArrayList<String> list = new ArrayList<>(lines.length);
-            Parameters parameters = new Parameters((TypeElement) element);
-
-            for (String line : lines) {
-                list.add(format(line, parameters));
-            }
-
-            map.add(format(path, parameters), list);
-        } else {
-            print(ERROR, element,
-                  "%s annotated with @%s but no path() specified",
-                  element.getKind(), annotation.getSimpleName());
+        for (String line : lines) {
+            list.add(format(line, parameters));
         }
+
+        map.add(format(path, parameters), list);
     }
 
     @NoArgsConstructor

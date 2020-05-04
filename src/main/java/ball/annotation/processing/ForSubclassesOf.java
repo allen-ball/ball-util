@@ -76,40 +76,30 @@ public @interface ForSubclassesOf {
                             TypeElement annotation, Element element) {
             super.process(roundEnv, annotation, element);
 
-            AnnotationMirror mirror = getAnnotationMirror(element, annotation);
-            AnnotationValue value = getAnnotationElementValue(mirror, "value");
+            ForElementKinds kinds =
+                element.getAnnotation(ForElementKinds.class);
 
-            if (! isNull(value)) {
-                ForElementKinds kinds =
-                    element.getAnnotation(ForElementKinds.class);
+            if (kinds != null) {
+                EnumSet<ElementKind> set = EnumSet.noneOf(ElementKind.class);
 
-                if (kinds != null) {
-                    EnumSet<ElementKind> set =
-                        EnumSet.noneOf(ElementKind.class);
+                Collections.addAll(set, kinds.value());
 
-                    Collections.addAll(set, kinds.value());
-
-                    if (! set.removeAll(ELEMENT_KINDS)) {
-                        print(ERROR, element,
-                              "%s annotated with @%s and @%s but does not specify one of %s",
-                              element.getKind(),
-                              annotation.getSimpleName(),
-                              ForElementKinds.class.getSimpleName(),
-                              ELEMENT_KINDS);
-                    }
-
-                    if (! set.isEmpty()) {
-                        print(WARNING, element,
-                              "%s annotated with @%s and @%s; %s will be ignored",
-                              element.getKind(),
-                              annotation.getSimpleName(),
-                              ForElementKinds.class.getSimpleName(), set);
-                    }
+                if (! set.removeAll(ELEMENT_KINDS)) {
+                    print(ERROR, element,
+                          "%s annotated with @%s and @%s but does not specify one of %s",
+                          element.getKind(),
+                          annotation.getSimpleName(),
+                          ForElementKinds.class.getSimpleName(),
+                          ELEMENT_KINDS);
                 }
-            } else {
-                print(ERROR, element,
-                      "%s annotated with @%s but no type specified",
-                      element.getKind(), annotation.getSimpleName());
+
+                if (! set.isEmpty()) {
+                    print(WARNING, element,
+                          "%s annotated with @%s and @%s; %s will be ignored",
+                          element.getKind(),
+                          annotation.getSimpleName(),
+                          ForElementKinds.class.getSimpleName(), set);
+                }
             }
         }
     }

@@ -32,9 +32,9 @@ import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * {@link java.lang.annotation.Annotation} to specify an
- * {@link java.lang.annotation.Annotation} element value must be a vaild
- * {@link java.net.URI}.
+ * {@link java.lang.annotation.Annotation} to test an
+ * {@link java.lang.annotation.Annotation} can be converted to a specified
+ * {@link Class}.
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
@@ -42,14 +42,16 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 @Retention(RUNTIME)
 @Target(ANNOTATION_TYPE)
-public @interface AnnotationValueMustBeURI {
-    String value() default "value";
+public @interface AnnotationValueMustConvertTo {
+    Class<?> value();
+    String method() default "";
+    String name() default "value";
 
     /**
      * {@link Processor} implementation.
      */
     @ServiceProviderFor({ Processor.class })
-    @For({ AnnotationValueMustBeURI.class })
+    @For({ AnnotationValueMustConvertTo.class })
     @NoArgsConstructor @ToString
     public static class ProcessorImpl extends AnnotatedProcessor {
     }

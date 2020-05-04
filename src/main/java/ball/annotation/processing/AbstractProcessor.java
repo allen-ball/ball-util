@@ -548,8 +548,7 @@ public abstract class AbstractProcessor
      *
      * @see Elements#getElementValuesWithDefaults(AnnotationMirror)
      */
-    protected AnnotationValue getAnnotationElementValue(AnnotationMirror annotation,
-                                                        String name) {
+    protected AnnotationValue getAnnotationValue(AnnotationMirror annotation, String name) {
         AnnotationValue value =
             elements.getElementValuesWithDefaults(annotation).entrySet()
             .stream()
@@ -558,19 +557,6 @@ public abstract class AbstractProcessor
             .findFirst().orElse(null);
 
         return value;
-    }
-
-    /**
-     * Method to determine if an {@link AnnotationValue} is {@code null}:
-     * either the value itself or the
-     * {@link AnnotationValue#getValue() value} it references.
-     *
-     * @param   value           The {@link AnnotationValue}.
-     *
-     * @return  {@code true} if "{code null}"; {code false} otherwise.
-     */
-    protected boolean isNull(AnnotationValue value) {
-        return (value == null || value.getValue() == null);
     }
 
     /**

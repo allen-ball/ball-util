@@ -25,16 +25,18 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 import javax.annotation.processing.Processor;
+import javax.lang.model.element.ElementKind;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import static javax.lang.model.element.Modifier.PUBLIC;
 
 /**
- * {@link java.lang.annotation.Annotation} to specify an
- * {@link java.lang.annotation.Annotation} element value must be a vaild
- * {@link java.util.regex.Pattern}.
+ * {@link java.lang.annotation.Annotation} to test an
+ * {@link java.lang.annotation.Annotation}ed element is a specific
+ * {@link ElementKind kind}.
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
@@ -42,14 +44,14 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 @Retention(RUNTIME)
 @Target(ANNOTATION_TYPE)
-public @interface AnnotationValueMustBePattern {
-    String value() default "value";
+public @interface AnnotatedElementMustBe {
+    ElementKind value();
 
     /**
      * {@link Processor} implementation.
      */
     @ServiceProviderFor({ Processor.class })
-    @For({ AnnotationValueMustBePattern.class })
+    @For({ AnnotatedElementMustBe.class })
     @NoArgsConstructor @ToString
     public static class ProcessorImpl extends AnnotatedProcessor {
     }

@@ -59,8 +59,7 @@ public class RegexProcessor extends AnnotatedProcessor {
                       "@%s: Cannot compile %s to %s: %s",
                       annotation.getSimpleName(),
                       elements.getConstantExpression(value),
-                      Pattern.class.getName(),
-                      exception.getMessage());
+                      Pattern.class.getName(), exception.getMessage());
             }
         }
     }

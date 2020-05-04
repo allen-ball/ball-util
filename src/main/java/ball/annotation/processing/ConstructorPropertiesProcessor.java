@@ -55,34 +55,24 @@ public class ConstructorPropertiesProcessor extends AnnotatedProcessor {
                         TypeElement annotation, Element element) {
         super.process(roundEnv, annotation, element);
 
-        switch (element.getKind()) {
-        case CONSTRUCTOR:
-            String[] value =
-                element.getAnnotation(ConstructorProperties.class).value();
-            List<? extends VariableElement> parameters =
-                ((ExecutableElement) element).getParameters();
+        String[] value =
+            element.getAnnotation(ConstructorProperties.class).value();
+        List<? extends VariableElement> parameters =
+            ((ExecutableElement) element).getParameters();
 
-            if (value.length != parameters.size()) {
-                print(WARNING, element,
-                      "%s does not match %s parameters",
-                      Arrays.asList(value), element.getKind());
-            }
-
-            TypeElement type = (TypeElement) element.getEnclosingElement();
-            Set<String> properties = getPropertyNames(type);
-
-            Arrays.stream(value)
-                .filter(StringUtils::isNotEmpty)
-                .filter(t -> (! properties.contains(t)))
-                .forEach(t -> print(WARNING, element,
-                                    "bean property '%s' not defined", t));
-            break;
-
-        default:
-            print(ERROR, element,
-                  "%s annotated with @%s",
-                  element.getKind(), annotation.getSimpleName());
-            break;
+        if (value.length != parameters.size()) {
+            print(WARNING, element,
+                  "%s does not match %s parameters",
+                  Arrays.asList(value), element.getKind());
         }
+
+        TypeElement type = (TypeElement) element.getEnclosingElement();
+        Set<String> properties = getPropertyNames(type);
+
+        Arrays.stream(value)
+            .filter(StringUtils::isNotEmpty)
+            .filter(t -> (! properties.contains(t)))
+            .forEach(t -> print(WARNING, element,
+                                "bean property '%s' not defined", t));
     }
 }

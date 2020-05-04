@@ -65,7 +65,7 @@ public @interface For {
             super.process(roundEnv, annotation, element);
 
             AnnotationMirror mirror = getAnnotationMirror(element, annotation);
-            AnnotationValue value = getAnnotationElementValue(mirror, "value");
+            AnnotationValue value = getAnnotationValue(mirror, "value");
 
             if (isEmptyArray(value)) {
                 print(ERROR, element,

@@ -130,7 +130,7 @@ public abstract class AnnotatedNoAnnotationProcessor extends AbstractProcessor {
                         if (! isAssignable(element.asType(), type)) {
                             print(ERROR, element,
                                   "%s annotated with @%s but does not implement %s",
-                                  element.getKind(),
+                                  element,
                                   MustImplement.class.getSimpleName(),
                                   type.getName());
                         }

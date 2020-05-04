@@ -21,12 +21,10 @@ package ball.annotation.processing;
  * ##########################################################################
  */
 import java.lang.annotation.Annotation;
-import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
-import java.util.regex.Pattern;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.AnnotationValue;
@@ -47,10 +45,10 @@ import static lombok.AccessLevel.PROTECTED;
  * processing {@link Annotation}s specified by @{@link For}.  Provides
  * built-in support for a number of {@link Annotation} types.
  *
+ * @see AnnotatedElementMustBe
  * @see AnnotatedTypeMustExtend
  * @see AnnotatedTypeMustHaveNoArgsConstructor
- * @see AnnotationValueMustBePattern
- * @see AnnotationValueMustBeURI
+ * @see AnnotationValueMustConvertTo
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
@@ -101,10 +99,10 @@ public abstract class AnnotatedProcessor extends AbstractProcessor {
         try {
             roundEnv.getElementsAnnotatedWith(annotation)
                 .stream()
+                .peek(new AnnotatedElementMustBeConsumer(annotation))
                 .peek(new AnnotatedTypeMustExtendConsumer(annotation))
                 .peek(new AnnotatedTypeMustHaveNoArgsConstructorConsumer(annotation))
-                .peek(new AnnotationValueMustBePatternConsumer(annotation))
-                .peek(new AnnotationValueMustBeURIConsumer(annotation))
+                .peek(new AnnotationValueMustConvertToConsumer(annotation))
                 .forEach(t -> process(roundEnv, annotation, t));
         } catch (Throwable throwable) {
             print(ERROR, null, throwable);
@@ -124,6 +122,25 @@ public abstract class AnnotatedProcessor extends AbstractProcessor {
     }
 
     @AllArgsConstructor @ToString
+    private class AnnotatedElementMustBeConsumer implements Consumer<Element> {
+        private final TypeElement annotation;
+
+        @Override
+        public void accept(Element element) {
+            AnnotatedElementMustBe meta =
+                annotation.getAnnotation(AnnotatedElementMustBe.class);
+
+            if (meta != null) {
+                if (element.getKind() != meta.value()) {
+                    print(ERROR, element,
+                          "%s annotated with @%s but is not a %s",
+                          element, annotation.getSimpleName(), meta.value());
+                }
+            }
+        }
+    }
+
+    @AllArgsConstructor @ToString
     private class AnnotatedTypeMustExtendConsumer implements Consumer<Element> {
         private final TypeElement annotation;
 
@@ -136,23 +153,20 @@ public abstract class AnnotatedProcessor extends AbstractProcessor {
              * Class<?> superclass = (meta != null) ? meta.value() : null;
              * AnnotatedTypeMustExtend meta = annotation.getAnnotation(AnnotatedTypeMustExtend.class);
              */
-            AnnotationMirror mirror =
+            AnnotationMirror meta =
                 getAnnotationMirror(annotation, AnnotatedTypeMustExtend.class);
 
-            if (mirror != null) {
-                AnnotationValue value =
-                    getAnnotationElementValue(mirror, "value");
+            if (meta != null) {
+                AnnotationValue value = getAnnotationValue(meta, "value");
                 TypeElement superclass =
                     (TypeElement) types.asElement((TypeMirror) value.getValue());
 
-                if (superclass != null) {
-                    if (! types.isAssignable(element.asType(), superclass.asType())) {
-                        print(ERROR, element,
-                              "%s annotated with @%s but does not extend %s",
-                              element.getKind(),
-                              annotation.getSimpleName(),
-                              superclass.getQualifiedName());
-                    }
+                if (! types.isAssignable(element.asType(), superclass.asType())) {
+                    print(ERROR, element,
+                          "%s annotated with @%s but does not extend %s",
+                          element.getKind(),
+                          annotation.getSimpleName(),
+                          superclass.getQualifiedName());
                 }
             }
         }
@@ -185,56 +199,46 @@ public abstract class AnnotatedProcessor extends AbstractProcessor {
     }
 
     @AllArgsConstructor @ToString
-    private class AnnotationValueMustBePatternConsumer implements Consumer<Element> {
+    private class AnnotationValueMustConvertToConsumer implements Consumer<Element> {
         private final TypeElement annotation;
 
         @Override
         public void accept(Element element) {
-            AnnotationValueMustBePattern meta =
-                annotation.getAnnotation(AnnotationValueMustBePattern.class);
+            AnnotationMirror meta =
+                getAnnotationMirror(annotation,
+                                    AnnotationValueMustConvertTo.class);
 
             if (meta != null) {
+                AnnotationValue value = getAnnotationValue(meta, "value");
+                TypeElement to =
+                    (TypeElement)
+                    types.asElement((TypeMirror) value.getValue());
+                String method =
+                    (String) getAnnotationValue(meta, "method").getValue();
+                String name =
+                    (String) getAnnotationValue(meta, "name").getValue();
                 AnnotationMirror mirror =
                     getAnnotationMirror(element, annotation);
-                AnnotationValue value = null;
+                AnnotationValue from = null;
 
                 try {
-                    value = getAnnotationElementValue(mirror, meta.value());
-                    Pattern.compile((String) value.getValue());
-                } catch (Exception exception) {
-                    print(ERROR, element,
-                          "@%s: Cannot compile %s to %s: %s",
-                          annotation.getSimpleName(),
-                          value, Pattern.class.getName(),
-                          exception.getMessage());
-                }
-            }
-        }
-    }
+                    from = getAnnotationValue(mirror, name);
 
-    @AllArgsConstructor @ToString
-    private class AnnotationValueMustBeURIConsumer implements Consumer<Element> {
-        private final TypeElement annotation;
+                    Class<?> type =
+                        Class.forName(to.getQualifiedName().toString());
 
-        @Override
-        public void accept(Element element) {
-            AnnotationValueMustBeURI meta =
-                annotation.getAnnotation(AnnotationValueMustBeURI.class);
-
-            if (meta != null) {
-                AnnotationMirror mirror =
-                    getAnnotationMirror(element, annotation);
-                AnnotationValue value = null;
-
-                try {
-                    value = getAnnotationElementValue(mirror, meta.value());
-                    new URI((String) value.getValue());
+                    if (! method.isEmpty()) {
+                        type.getMethod(method, from.getValue().getClass())
+                            .invoke(null, from.getValue());
+                    } else {
+                        type.getConstructor(from.getValue().getClass())
+                            .newInstance(from.getValue());
+                    }
                 } catch (Exception exception) {
                     print(ERROR, element,
                           "@%s: Cannot convert %s to %s: %s",
                           annotation.getSimpleName(),
-                          value, URI.class.getName(),
-                          exception.getMessage());
+                          from, to.getQualifiedName(), exception.getMessage());
                 }
             }
         }

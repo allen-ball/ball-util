@@ -113,7 +113,7 @@ public class ServiceProviderForProcessor extends AnnotatedProcessor
         super.process(roundEnv, annotation, element);
 
         AnnotationMirror mirror = getAnnotationMirror(element, annotation);
-        AnnotationValue value = getAnnotationElementValue(mirror, "value");
+        AnnotationValue value = getAnnotationValue(mirror, "value");
         List<TypeElement> list = getTypeElementListFrom(value);
 
         if (! list.isEmpty()) {
