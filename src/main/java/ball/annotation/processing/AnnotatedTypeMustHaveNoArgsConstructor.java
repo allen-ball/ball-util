@@ -37,6 +37,8 @@ import static javax.lang.model.element.Modifier.PUBLIC;
  * {@link java.lang.annotation.Annotation} to specify required
  * super-{@link Class} must have a no-arguments constructor.
  *
+ * @see AnnotatedProcessor
+ *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */

@@ -35,6 +35,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * {@link java.lang.annotation.Annotation} to specify required
  * super-{@link Class} criteria an annotated {@link Class} must extend.
  *
+ * @see AnnotatedProcessor
+ *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */

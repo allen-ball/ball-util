@@ -36,6 +36,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * {@link java.lang.annotation.Annotation} can be converted to a specified
  * {@link Class}.
  *
+ * @see AnnotatedProcessor
+ *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */

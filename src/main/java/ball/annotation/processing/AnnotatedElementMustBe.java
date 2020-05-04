@@ -34,9 +34,10 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import static javax.lang.model.element.Modifier.PUBLIC;
 
 /**
- * {@link java.lang.annotation.Annotation} to test an
- * {@link java.lang.annotation.Annotation}ed element is a specific
- * {@link ElementKind kind}.
+ * {@link java.lang.annotation.Annotation} to test an Annotated element is a
+ * specific {@link ElementKind kind}.
+ *
+ * @see AnnotatedProcessor
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
