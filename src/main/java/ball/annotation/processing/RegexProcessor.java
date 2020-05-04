@@ -49,25 +49,18 @@ public class RegexProcessor extends AnnotatedProcessor {
                         TypeElement annotation, Element element) {
         super.process(roundEnv, annotation, element);
 
-        Object regex = ((VariableElement) element).getConstantValue();
+        Object value = ((VariableElement) element).getConstantValue();
 
-        if (regex != null) {
-            if (regex instanceof String) {
-                String string = (String) regex;
-
-                try {
-                    Pattern.compile(string);
-                } catch (Exception exception) {
-                    print(ERROR, element,
-                          "%s annotated with @%s but cannot convert '%s' to %s",
-                          element.getKind(), annotation.getSimpleName(),
-                          string, Pattern.class.getName());
-                    print(ERROR, element, exception);
-                }
-            } else {
+        if (value != null) {
+            try {
+                Pattern.compile((String) value);
+            } catch (Exception exception) {
                 print(ERROR, element,
-                      "Constant value is not %s",
-                      String.class.getSimpleName());
+                      "@%s: Cannot compile %s to %s: %s",
+                      annotation.getSimpleName(),
+                      elements.getConstantExpression(value),
+                      Pattern.class.getName(),
+                      exception.getMessage());
             }
         }
     }

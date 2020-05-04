@@ -22,11 +22,7 @@ package ball.annotation.processing;
  */
 import ball.annotation.PatternRegex;
 import ball.annotation.ServiceProviderFor;
-import java.util.regex.Pattern;
 import javax.annotation.processing.Processor;
-import javax.annotation.processing.RoundEnvironment;
-import javax.lang.model.element.Element;
-import javax.lang.model.element.TypeElement;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
@@ -43,20 +39,4 @@ import static javax.tools.Diagnostic.Kind.ERROR;
 @For({ PatternRegex.class })
 @NoArgsConstructor @ToString
 public class PatternRegexProcessor extends AnnotatedProcessor {
-    @Override
-    protected void process(RoundEnvironment roundEnv,
-                           TypeElement annotation, Element element) {
-        super.process(roundEnv, annotation, element);
-
-        String string = element.getAnnotation(PatternRegex.class).value();
-
-        try {
-            Pattern.compile(string);
-        } catch (Exception exception) {
-            print(ERROR, element,
-                  "%s annotated with @%s but cannot convert '%s' to %s: %s",
-                  element.getKind(), annotation.getSimpleName(),
-                  string, Pattern.class.getName(), exception.getMessage());
-        }
-    }
 }

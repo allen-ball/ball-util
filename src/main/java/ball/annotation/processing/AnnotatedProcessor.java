@@ -21,10 +21,12 @@ package ball.annotation.processing;
  * ##########################################################################
  */
 import java.lang.annotation.Annotation;
+import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
+import java.util.regex.Pattern;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.AnnotationValue;
@@ -47,6 +49,8 @@ import static lombok.AccessLevel.PROTECTED;
  *
  * @see AnnotatedTypeMustExtend
  * @see AnnotatedTypeMustHaveNoArgsConstructor
+ * @see AnnotationValueMustBePattern
+ * @see AnnotationValueMustBeURI
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
@@ -99,6 +103,8 @@ public abstract class AnnotatedProcessor extends AbstractProcessor {
                 .stream()
                 .peek(new AnnotatedTypeMustExtendConsumer(annotation))
                 .peek(new AnnotatedTypeMustHaveNoArgsConstructorConsumer(annotation))
+                .peek(new AnnotationValueMustBePatternConsumer(annotation))
+                .peek(new AnnotationValueMustBeURIConsumer(annotation))
                 .forEach(t -> process(roundEnv, annotation, t));
         } catch (Throwable throwable) {
             print(ERROR, null, throwable);
@@ -173,6 +179,62 @@ public abstract class AnnotatedProcessor extends AbstractProcessor {
                           "%s annotated with @%s but does not have a %s no-argument constructor",
                           element.getKind(), annotation.getSimpleName(),
                           meta.value());
+                }
+            }
+        }
+    }
+
+    @AllArgsConstructor @ToString
+    private class AnnotationValueMustBePatternConsumer implements Consumer<Element> {
+        private final TypeElement annotation;
+
+        @Override
+        public void accept(Element element) {
+            AnnotationValueMustBePattern meta =
+                annotation.getAnnotation(AnnotationValueMustBePattern.class);
+
+            if (meta != null) {
+                AnnotationMirror mirror =
+                    getAnnotationMirror(element, annotation);
+                AnnotationValue value = null;
+
+                try {
+                    value = getAnnotationElementValue(mirror, meta.value());
+                    Pattern.compile((String) value.getValue());
+                } catch (Exception exception) {
+                    print(ERROR, element,
+                          "@%s: Cannot compile %s to %s: %s",
+                          annotation.getSimpleName(),
+                          value, Pattern.class.getName(),
+                          exception.getMessage());
+                }
+            }
+        }
+    }
+
+    @AllArgsConstructor @ToString
+    private class AnnotationValueMustBeURIConsumer implements Consumer<Element> {
+        private final TypeElement annotation;
+
+        @Override
+        public void accept(Element element) {
+            AnnotationValueMustBeURI meta =
+                annotation.getAnnotation(AnnotationValueMustBeURI.class);
+
+            if (meta != null) {
+                AnnotationMirror mirror =
+                    getAnnotationMirror(element, annotation);
+                AnnotationValue value = null;
+
+                try {
+                    value = getAnnotationElementValue(mirror, meta.value());
+                    new URI((String) value.getValue());
+                } catch (Exception exception) {
+                    print(ERROR, element,
+                          "@%s: Cannot convert %s to %s: %s",
+                          annotation.getSimpleName(),
+                          value, URI.class.getName(),
+                          exception.getMessage());
                 }
             }
         }
