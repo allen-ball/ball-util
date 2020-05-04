@@ -42,7 +42,11 @@ import static lombok.AccessLevel.PROTECTED;
 
 /**
  * Abstract {@link javax.annotation.processing.Processor} base class for
- * processing {@link Annotation}s specified by @{@link For}.
+ * processing {@link Annotation}s specified by @{@link For}.  Provides
+ * built-in support for a number of {@link Annotation} types.
+ *
+ * @see AnnotatedTypeMustExtend
+ * @see AnnotatedTypeMustHaveNoArgsConstructor
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
@@ -90,41 +94,31 @@ public abstract class AnnotatedProcessor extends AbstractProcessor {
     }
 
     private void process(RoundEnvironment roundEnv, TypeElement annotation) {
-/*
         try {
             roundEnv.getElementsAnnotatedWith(annotation)
                 .stream()
-                .peek(new MustExtendConsumer(annotation))
-                .peek(new MustHaveNoArgsConstructorConsumer(annotation))
+                .peek(new AnnotatedTypeMustExtendConsumer(annotation))
+                .peek(new AnnotatedTypeMustHaveNoArgsConstructorConsumer(annotation))
                 .forEach(t -> process(roundEnv, annotation, t));
         } catch (Throwable throwable) {
             print(ERROR, null, throwable);
         }
-*/
-        for (Element element : roundEnv.getElementsAnnotatedWith(annotation)) {
-            try {
-                new MustExtendConsumer(annotation).accept(element);
-                new MustHaveNoArgsConstructorConsumer(annotation).accept(element);
-
-                process(roundEnv, annotation, element);
-            } catch (Throwable throwable) {
-                print(ERROR, element, throwable);
-            }
-        }
     }
 
     /**
-     * Callback method to process an annotated {@link Element}.
+     * Callback method to process an annotated {@link Element}.  Default
+     * implementation does nothing.
      *
      * @param   roundEnv        The {@link RoundEnvironment}.
      * @param   annotation      The annotation {@link TypeElement}.
      * @param   element         The annotated {@link Element}.
      */
-    protected abstract void process(RoundEnvironment roundEnv,
-                                    TypeElement annotation, Element element);
+    protected void process(RoundEnvironment roundEnv,
+                           TypeElement annotation, Element element) {
+    }
 
     @AllArgsConstructor @ToString
-    private class MustExtendConsumer implements Consumer<Element> {
+    private class AnnotatedTypeMustExtendConsumer implements Consumer<Element> {
         private final TypeElement annotation;
 
         @Override
@@ -134,10 +128,10 @@ public abstract class AnnotatedProcessor extends AbstractProcessor {
              * meta.value() throws MirroredTypeException
              *
              * Class<?> superclass = (meta != null) ? meta.value() : null;
-             * MustExtend meta = annotation.getAnnotation(MustExtend.class);
+             * AnnotatedTypeMustExtend meta = annotation.getAnnotation(AnnotatedTypeMustExtend.class);
              */
             AnnotationMirror mirror =
-                getAnnotationMirror(annotation, MustExtend.class);
+                getAnnotationMirror(annotation, AnnotatedTypeMustExtend.class);
 
             if (mirror != null) {
                 AnnotationValue value =
@@ -159,13 +153,13 @@ public abstract class AnnotatedProcessor extends AbstractProcessor {
     }
 
     @AllArgsConstructor @ToString
-    private class MustHaveNoArgsConstructorConsumer implements Consumer<Element> {
+    private class AnnotatedTypeMustHaveNoArgsConstructorConsumer implements Consumer<Element> {
         private final TypeElement annotation;
 
         @Override
         public void accept(Element element) {
-            MustHaveNoArgsConstructor meta =
-                annotation.getAnnotation(MustHaveNoArgsConstructor.class);
+            AnnotatedTypeMustHaveNoArgsConstructor meta =
+                annotation.getAnnotation(AnnotatedTypeMustHaveNoArgsConstructor.class);
 
             if (meta != null) {
                 boolean found =

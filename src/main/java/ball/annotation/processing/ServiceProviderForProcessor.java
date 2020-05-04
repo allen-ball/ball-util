@@ -108,8 +108,10 @@ public class ServiceProviderForProcessor extends AnnotatedProcessor
     }
 
     @Override
-    protected void process(RoundEnvironment env,
+    protected void process(RoundEnvironment roundEnv,
                            TypeElement annotation, Element element) {
+        super.process(roundEnv, annotation, element);
+
         AnnotationMirror mirror = getAnnotationMirror(element, annotation);
         AnnotationValue value = getAnnotationElementValue(mirror, "value");
         List<TypeElement> list = getTypeElementListFrom(value);

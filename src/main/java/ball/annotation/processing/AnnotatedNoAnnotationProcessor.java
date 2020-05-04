@@ -24,6 +24,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
@@ -100,7 +101,7 @@ public abstract class AnnotatedNoAnnotationProcessor extends AbstractProcessor {
                 .stream()
                 .filter(forElementKinds)
                 .filter(forSubclasses)
-                .filter(new MustImplementPredicate())
+                .peek(new MustImplementConsumer())
                 .forEach(t -> process(roundEnv, t));
         } catch (Throwable throwable) {
             print(ERROR, null, throwable);
@@ -120,16 +121,13 @@ public abstract class AnnotatedNoAnnotationProcessor extends AbstractProcessor {
     }
 
     @NoArgsConstructor @ToString
-    private class MustImplementPredicate implements Predicate<Element> {
+    private class MustImplementConsumer implements Consumer<Element> {
         @Override
-        public boolean test(Element element) {
-            boolean match = true;
-
+        public void accept(Element element) {
             if (superclasses != null) {
                 if (! element.getModifiers().contains(ABSTRACT)) {
                     for (Class<?> type : superclasses) {
                         if (! isAssignable(element.asType(), type)) {
-                            match &= false;
                             print(ERROR, element,
                                   "%s annotated with @%s but does not implement %s",
                                   element.getKind(),
@@ -139,8 +137,6 @@ public abstract class AnnotatedNoAnnotationProcessor extends AbstractProcessor {
                     }
                 }
             }
-
-            return match;
         }
     }
 }

@@ -47,6 +47,8 @@ public class AntTaskAttributeConstraintProcessor extends AnnotatedProcessor {
     @Override
     public void process(RoundEnvironment roundEnv,
                         TypeElement annotation, Element element) {
+        super.process(roundEnv, annotation, element);
+
         switch (element.getKind()) {
         case ANNOTATION_TYPE:
         case FIELD:

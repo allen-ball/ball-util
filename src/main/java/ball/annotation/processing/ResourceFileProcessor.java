@@ -92,8 +92,10 @@ public class ResourceFileProcessor extends AnnotatedProcessor {
     }
 
     @Override
-    protected void process(RoundEnvironment env,
+    protected void process(RoundEnvironment roundEnv,
                            TypeElement annotation, Element element) {
+        super.process(roundEnv, annotation, element);
+
         String path = element.getAnnotation(ResourceFile.class).path();
         String[] lines = element.getAnnotation(ResourceFile.class).lines();
 

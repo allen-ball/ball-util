@@ -47,6 +47,8 @@ public class RegexProcessor extends AnnotatedProcessor {
     @Override
     public void process(RoundEnvironment roundEnv,
                         TypeElement annotation, Element element) {
+        super.process(roundEnv, annotation, element);
+
         Object regex = ((VariableElement) element).getConstantValue();
 
         if (regex != null) {

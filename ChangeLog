@@ -4,16 +4,6 @@
 	AbstractNoAnnotationProcessor -> AnnotatedNoAnnotationProcessor;
 	Re-factored class hierarchy accordingly.
 
-2020-04-30  Allen D. Ball  <ball@hcf.dev>
-
-	* src/main/java/ball/annotation/processing/MustExtend.java:
-	Initial writing.
-
-2020-04-28  Allen D. Ball  <ball@hcf.dev>
-
-	* src/main/java/ball/annotation/processing/MustImplement.java:
-	Initial writing.
-
 2020-04-27  Allen D. Ball  <ball@hcf.dev>
 
 	* src/main/java/ball/annotation/processing/AbstractProcessor.java,

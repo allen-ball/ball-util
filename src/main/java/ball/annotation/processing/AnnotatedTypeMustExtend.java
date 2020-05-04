@@ -26,19 +26,20 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
+import javax.lang.model.element.AnnotationMirror;
+import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.Element;
-import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
-import static javax.lang.model.element.Modifier.PUBLIC;
+import static javax.tools.Diagnostic.Kind.ERROR;
 
 /**
  * {@link java.lang.annotation.Annotation} to specify required
- * super-{@link Class} must have a no-arguments constructor.
+ * super-{@link Class} criteria an annotated {@link Class} must extend.
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
@@ -46,19 +47,29 @@ import static javax.lang.model.element.Modifier.PUBLIC;
 @Documented
 @Retention(RUNTIME)
 @Target(ANNOTATION_TYPE)
-public @interface MustHaveNoArgsConstructor {
-    Modifier value() default PUBLIC;
+public @interface AnnotatedTypeMustExtend {
+    Class<?> value();
 
     /**
      * {@link Processor} implementation.
      */
     @ServiceProviderFor({ Processor.class })
-    @For({ MustHaveNoArgsConstructor.class })
+    @For({ AnnotatedTypeMustExtend.class })
     @NoArgsConstructor @ToString
     public static class ProcessorImpl extends AnnotatedProcessor {
         @Override
         public void process(RoundEnvironment roundEnv,
                             TypeElement annotation, Element element) {
+            super.process(roundEnv, annotation, element);
+
+            AnnotationMirror mirror = getAnnotationMirror(element, annotation);
+            AnnotationValue value = getAnnotationElementValue(mirror, "value");
+
+            if (isNull(value)) {
+                print(ERROR, element,
+                      "%s annotated with @%s but no value() specified",
+                      element.getKind(), annotation.getSimpleName());
+            }
         }
     }
 }

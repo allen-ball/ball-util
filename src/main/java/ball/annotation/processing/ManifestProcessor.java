@@ -128,8 +128,10 @@ public class ManifestProcessor extends AnnotatedProcessor
     }
 
     @Override
-    protected void process(RoundEnvironment env,
+    protected void process(RoundEnvironment roundEnv,
                            TypeElement ignore, Element element) {
+        super.process(roundEnv, ignore, element);
+
         if (! processed.contains(element)) {
             processed.add(element);
 

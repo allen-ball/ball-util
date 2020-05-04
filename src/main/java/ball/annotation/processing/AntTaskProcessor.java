@@ -144,8 +144,10 @@ public class AntTaskProcessor extends AnnotatedProcessor
     }
 
     @Override
-    protected void process(RoundEnvironment env,
+    protected void process(RoundEnvironment roundEnv,
                            TypeElement annotation, Element element) {
+        super.process(roundEnv, annotation, element);
+
         switch (element.getKind()) {
         case CLASS:
             String name = element.getAnnotation(AntTask.class).value();

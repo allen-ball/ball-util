@@ -53,6 +53,8 @@ public class ConstructorPropertiesProcessor extends AnnotatedProcessor {
     @Override
     public void process(RoundEnvironment roundEnv,
                         TypeElement annotation, Element element) {
+        super.process(roundEnv, annotation, element);
+
         switch (element.getKind()) {
         case CONSTRUCTOR:
             String[] value =

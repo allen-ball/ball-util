@@ -23,7 +23,7 @@ package ball.tools.javadoc;
 import ball.annotation.ServiceProviderFor;
 import ball.annotation.processing.AnnotatedProcessor;
 import ball.annotation.processing.For;
-import ball.annotation.processing.MustExtend;
+import ball.annotation.processing.AnnotatedTypeMustExtend;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
@@ -51,7 +51,7 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
 @Documented
 @Retention(RUNTIME)
 @Target({ TYPE })
-@MustExtend(AnnotatedTaglet.class)
+@AnnotatedTypeMustExtend(AnnotatedTaglet.class)
 public @interface TagletName {
     String value();
 
@@ -63,8 +63,10 @@ public @interface TagletName {
     @NoArgsConstructor @ToString
     public class ProcessorImpl extends AnnotatedProcessor {
         @Override
-        protected void process(RoundEnvironment env,
+        protected void process(RoundEnvironment roundEnv,
                                TypeElement annotation, Element element) {
+            super.process(roundEnv, annotation, element);
+
             String name = element.getAnnotation(TagletName.class).value();
 
             if (! isEmpty(name)) {

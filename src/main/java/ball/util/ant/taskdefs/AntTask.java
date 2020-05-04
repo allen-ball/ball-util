@@ -20,8 +20,8 @@ package ball.util.ant.taskdefs;
  * limitations under the License.
  * ##########################################################################
  */
-import ball.annotation.processing.MustExtend;
-import ball.annotation.processing.MustHaveNoArgsConstructor;
+import ball.annotation.processing.AnnotatedTypeMustExtend;
+import ball.annotation.processing.AnnotatedTypeMustHaveNoArgsConstructor;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
@@ -41,7 +41,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 @Retention(RUNTIME)
 @Target({ TYPE })
-@MustExtend(Task.class) @MustHaveNoArgsConstructor
+@AnnotatedTypeMustExtend(Task.class) @AnnotatedTypeMustHaveNoArgsConstructor
 public @interface AntTask {
     String value();
     String resource() default "../defaults.properties";

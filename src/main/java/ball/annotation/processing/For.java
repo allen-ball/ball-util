@@ -48,7 +48,7 @@ import static javax.tools.Diagnostic.Kind.ERROR;
 @Documented
 @Retention(RUNTIME)
 @Target({ TYPE })
-@MustExtend(AnnotatedProcessor.class)
+@AnnotatedTypeMustExtend(AnnotatedProcessor.class)
 public @interface For {
     Class<? extends Annotation>[] value() default { };
 
@@ -62,6 +62,8 @@ public @interface For {
         @Override
         public void process(RoundEnvironment roundEnv,
                             TypeElement annotation, Element element) {
+            super.process(roundEnv, annotation, element);
+
             AnnotationMirror mirror = getAnnotationMirror(element, annotation);
             AnnotationValue value = getAnnotationElementValue(mirror, "value");
 

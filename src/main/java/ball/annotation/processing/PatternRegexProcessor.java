@@ -44,8 +44,10 @@ import static javax.tools.Diagnostic.Kind.ERROR;
 @NoArgsConstructor @ToString
 public class PatternRegexProcessor extends AnnotatedProcessor {
     @Override
-    protected void process(RoundEnvironment env,
+    protected void process(RoundEnvironment roundEnv,
                            TypeElement annotation, Element element) {
+        super.process(roundEnv, annotation, element);
+
         String string = element.getAnnotation(PatternRegex.class).value();
 
         try {

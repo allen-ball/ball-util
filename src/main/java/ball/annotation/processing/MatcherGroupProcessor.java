@@ -45,8 +45,10 @@ import static javax.tools.Diagnostic.Kind.ERROR;
 @NoArgsConstructor @ToString
 public class MatcherGroupProcessor extends AnnotatedProcessor {
     @Override
-    protected void process(RoundEnvironment env,
+    protected void process(RoundEnvironment roundEnv,
                            TypeElement annotation, Element element) {
+        super.process(roundEnv, annotation, element);
+
         int group = element.getAnnotation(MatcherGroup.class).value();
 
         if (group < 0) {
