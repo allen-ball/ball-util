@@ -56,15 +56,8 @@ import static lombok.AccessLevel.PROTECTED;
  */
 @NoArgsConstructor(access = PROTECTED) @ToString
 public abstract class AnnotatedProcessor extends AbstractProcessor {
-    private final List<Class<? extends Annotation>> list;
-
-    {
-        try {
-            list = Arrays.asList(getClass().getAnnotation(For.class).value());
-        } catch (Exception exception) {
-            throw new ExceptionInInitializerError(exception);
-        }
-    }
+    private final List<Class<? extends Annotation>> list =
+        Arrays.asList(getClass().getAnnotation(For.class).value());
 
     /**
      * Method to get the {@link List} of supported {@link Annotation}
@@ -165,7 +158,7 @@ public abstract class AnnotatedProcessor extends AbstractProcessor {
                 if (! types.isAssignable(element.asType(), superclass.asType())) {
                     print(ERROR, element,
                           "%s annotated with @%s but does not extend %s",
-                          element.getKind(),
+                          element,
                           annotation.getSimpleName(),
                           superclass.getQualifiedName());
                 }
@@ -192,8 +185,7 @@ public abstract class AnnotatedProcessor extends AbstractProcessor {
                 if (! found) {
                     print(ERROR, element,
                           "%s annotated with @%s but does not have a %s no-argument constructor",
-                          element.getKind(), annotation.getSimpleName(),
-                          meta.value());
+                          element, annotation.getSimpleName(), meta.value());
                 }
             }
         }
