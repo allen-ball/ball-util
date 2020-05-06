@@ -20,7 +20,7 @@ package ball.beans;
  * limitations under the License.
  * ##########################################################################
  */
-import ball.annotation.Regex;
+import ball.annotation.ConstantValueMustConvertTo;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.EnumMap;
@@ -42,7 +42,7 @@ public enum PropertyMethodEnum {
     private static final Map<PropertyMethodEnum,Method> MAP =
         Collections.unmodifiableMap(new MethodPrototypeMap());
 
-    @Regex
+    @ConstantValueMustConvertTo(value = Pattern.class, method = "compile")
     private static final String PROPERTY_REGEX = "([\\p{Upper}][\\p{Alnum}]*)";
 
     private Pattern pattern = null;

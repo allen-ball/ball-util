@@ -29,12 +29,11 @@ import static java.lang.annotation.ElementType.LOCAL_VARIABLE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * Annotation to specify a field constant value is a well-formed regular
- * expression {@link String} which may be passed to
- * {@link java.util.regex.Pattern#compile(String)} without throwing
- * {@link java.util.regex.PatternSyntaxException}.
+ * Annotation to specify a field constant expression must convert to the
+ * specified type.  The test is made at compile time during annotation
+ * processing.
  *
- * @see ball.annotation.processing.RegexProcessor
+ * @see ball.annotation.processing.ConstantValueMustConvertToProcessor
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
@@ -42,5 +41,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 @Retention(RUNTIME)
 @Target({ FIELD, LOCAL_VARIABLE })
-public @interface Regex {
+public @interface ConstantValueMustConvertTo {
+    Class<?> value();
+    String method() default "";
 }

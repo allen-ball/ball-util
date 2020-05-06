@@ -20,7 +20,7 @@ package ball.tools;
  * limitations under the License.
  * ##########################################################################
  */
-import ball.annotation.Regex;
+import ball.annotation.ConstantValueMustConvertTo;
 import ball.annotation.ServiceProviderFor;
 import java.lang.reflect.Method;
 import java.util.Locale;
@@ -45,7 +45,7 @@ import static java.lang.reflect.Modifier.ABSTRACT;
 @Codes({ "compiler.err.does.not.override.abstract" })
 @NoArgsConstructor @ToString
 public class DoesNotOverrideAbstractRemedy extends Remedy {
-    @Regex
+    @ConstantValueMustConvertTo(value = Pattern.class, method = "compile")
     private static final String REGEX =
         "(?m)^.*does not override abstract method ([\\p{Graph}]+[(][\\p{Graph}]*[)])[\\p{Space}]+in[\\p{Space}]+([\\p{Graph}]+)$";
     private static final Pattern PATTERN = Pattern.compile(REGEX);

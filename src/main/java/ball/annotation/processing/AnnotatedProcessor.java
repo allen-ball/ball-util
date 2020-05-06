@@ -21,6 +21,7 @@ package ball.annotation.processing;
  * ##########################################################################
  */
 import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
@@ -235,10 +236,16 @@ public abstract class AnnotatedProcessor extends AbstractProcessor {
                             .newInstance(from.getValue());
                     }
                 } catch (Exception exception) {
+                    Throwable throwable = exception;
+
+                    while (throwable instanceof InvocationTargetException) {
+                        throwable = throwable.getCause();
+                    }
+
                     print(ERROR, element,
                           "@%s: Cannot convert %s to %s: %s",
                           annotation.getSimpleName(),
-                          from, to.getQualifiedName(), exception.getMessage());
+                          from, to.getQualifiedName(), throwable.getMessage());
                 }
             }
         }

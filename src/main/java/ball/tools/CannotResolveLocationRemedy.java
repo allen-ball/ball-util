@@ -20,7 +20,7 @@ package ball.tools;
  * limitations under the License.
  * ##########################################################################
  */
-import ball.annotation.Regex;
+import ball.annotation.ConstantValueMustConvertTo;
 import ball.annotation.ServiceProviderFor;
 import java.util.Locale;
 import java.util.SortedSet;
@@ -42,7 +42,7 @@ import lombok.ToString;
 @Codes({ "compiler.err.cant.resolve.location" })
 @NoArgsConstructor @ToString
 public class CannotResolveLocationRemedy extends Remedy {
-    @Regex
+    @ConstantValueMustConvertTo(value = Pattern.class, method = "compile")
     private static final String REGEX =
         "(?m)^symbol[\\p{Space}]*:[\\p{Space}]*class[\\p{Space}]+(?<class>[\\p{Graph}]+)$";
     private static final Pattern PATTERN = Pattern.compile(REGEX);
