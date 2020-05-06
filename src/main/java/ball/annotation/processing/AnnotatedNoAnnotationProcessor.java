@@ -30,6 +30,7 @@ import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.TypeElement;
+import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
@@ -50,34 +51,34 @@ import static lombok.AccessLevel.PROTECTED;
  */
 @NoArgsConstructor(access = PROTECTED) @ToString
 public abstract class AnnotatedNoAnnotationProcessor extends AbstractProcessor {
-    private EnumSet<ElementKind> kinds = EnumSet.allOf(ElementKind.class);
-    private Class<?> superclass = null;
-    private Class<?>[] superclasses = null;
+    private final ForElementKinds forElementKinds =
+        getClass().getAnnotation(ForElementKinds.class);
+    private final ForSubclassesOf forSubclassesOf =
+        getClass().getAnnotation(ForSubclassesOf.class);
+    private final MustImplement mustImplement =
+        getClass().getAnnotation(MustImplement.class);
+
+    private final EnumSet<ElementKind> kinds =
+        EnumSet.allOf(ElementKind.class);
+    private final Class<?> superclass =
+        (forSubclassesOf != null) ? forSubclassesOf.value() : null;
 
     {
-        setElementKinds(getClass().getAnnotation(ForElementKinds.class));
-        setSubclassesOf(getClass().getAnnotation(ForSubclassesOf.class));
-        setMustImplement(getClass().getAnnotation(MustImplement.class));
-    }
-
-    private void setElementKinds(ForElementKinds annotation) {
-        if (annotation != null) {
-            kinds.retainAll(Arrays.asList(annotation.value()));
+        if (forElementKinds != null) {
+            kinds.retainAll(Arrays.asList(forElementKinds.value()));
         }
-    }
 
-    private void setSubclassesOf(ForSubclassesOf annotation) {
-        if (annotation != null) {
-            superclass = annotation.value();
+        if (superclass != null) {
             kinds.retainAll(ForSubclassesOf.ELEMENT_KINDS);
         }
     }
 
-    private void setMustImplement(MustImplement annotation) {
-        if (annotation != null) {
-            superclasses = annotation.value();
-        }
-    }
+    private final Predicate<Element> elementKindsPredicate =
+        t -> kinds.contains(t.getKind());
+    private final Predicate<Element> subclassesOfPredicate =
+        t -> (superclass == null || isAssignable(t.asType(), superclass));
+    private Consumer<Element> mustImplementConsumer =
+        new MustImplementConsumer(mustImplement);
 
     @Override
     public Set<String> getSupportedAnnotationTypes() {
@@ -91,17 +92,11 @@ public abstract class AnnotatedNoAnnotationProcessor extends AbstractProcessor {
     public boolean process(Set<? extends TypeElement> annotations,
                            RoundEnvironment roundEnv) {
         try {
-            Predicate<Element> forElementKinds =
-                t -> kinds.contains(t.getKind());
-            Predicate<Element> forSubclasses =
-                t -> (superclass == null
-                      || isAssignable(t.asType(), superclass));
-
             roundEnv.getRootElements()
                 .stream()
-                .filter(forElementKinds)
-                .filter(forSubclasses)
-                .peek(new MustImplementConsumer())
+                .filter(elementKindsPredicate)
+                .filter(subclassesOfPredicate)
+                .peek(mustImplementConsumer)
                 .forEach(t -> process(roundEnv, t));
         } catch (Throwable throwable) {
             print(ERROR, null, throwable);
@@ -120,18 +115,20 @@ public abstract class AnnotatedNoAnnotationProcessor extends AbstractProcessor {
     protected void process(RoundEnvironment roundEnv, Element element) {
     }
 
-    @NoArgsConstructor @ToString
+    @AllArgsConstructor @ToString
     private class MustImplementConsumer implements Consumer<Element> {
+        private final MustImplement annotation;
+
         @Override
         public void accept(Element element) {
-            if (superclasses != null) {
+            if (annotation != null) {
                 if (! element.getModifiers().contains(ABSTRACT)) {
-                    for (Class<?> type : superclasses) {
+                    for (Class<?> type : annotation.value()) {
                         if (! isAssignable(element.asType(), type)) {
                             print(ERROR, element,
                                   "%s annotated with @%s but does not implement %s",
                                   element,
-                                  MustImplement.class.getSimpleName(),
+                                  annotation.annotationType().getSimpleName(),
                                   type.getName());
                         }
                     }
