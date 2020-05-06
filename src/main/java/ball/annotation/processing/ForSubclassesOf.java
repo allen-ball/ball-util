@@ -26,6 +26,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 import java.util.Collections;
 import java.util.EnumSet;
+import java.util.stream.Stream;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.AnnotationMirror;
@@ -38,8 +39,7 @@ import lombok.ToString;
 
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
-import static javax.lang.model.element.ElementKind.CLASS;
-import static javax.lang.model.element.ElementKind.INTERFACE;
+import static java.util.stream.Collectors.toCollection;
 import static javax.tools.Diagnostic.Kind.ERROR;
 import static javax.tools.Diagnostic.Kind.WARNING;
 
@@ -62,7 +62,9 @@ public @interface ForSubclassesOf {
      * {@link ElementKind} subset if {@link ForElementKinds} is specified.
      */
     public static final EnumSet<ElementKind> ELEMENT_KINDS =
-        EnumSet.of(CLASS, INTERFACE);
+        Stream.of(ElementKind.values())
+        .filter(t -> (t.isClass() || t.isInterface()))
+        .collect(toCollection(() -> EnumSet.noneOf(ElementKind.class)));
 
     /**
      * {@link Processor} implementation.
