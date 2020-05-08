@@ -35,6 +35,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.function.Consumer;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 import javax.annotation.processing.Filer;
@@ -110,7 +111,7 @@ public abstract class AbstractProcessor
             elements = processingEnv.getElementUtils();
             types = processingEnv.getTypeUtils();
         } catch (Exception exception) {
-            print(ERROR, null, exception);
+            print(ERROR, exception);
         }
     }
 
@@ -119,30 +120,88 @@ public abstract class AbstractProcessor
                                     RoundEnvironment roundEnv);
 
     /**
-     * Method to print a diagnositc message.
+     * Method to print a diagnostic message.
+     *
+     * @param   kind            The {@link javax.tools.Diagnostic.Kind}.
+     * @param   format          The message format {@link String}.
+     * @param   argv            Optional arguments to the message format
+     *                          {@link String}.
+     *
+     * @see javax.annotation.processing.Messager#printMessage(Diagnostic.Kind,CharSequence)
+     */
+    protected void print(Diagnostic.Kind kind, String format, Object... argv) {
+        processingEnv.getMessager()
+            .printMessage(kind, String.format(format, argv));
+    }
+
+    /**
+     * Method to print a diagnostic message.
      *
      * @param   kind            The {@link javax.tools.Diagnostic.Kind}.
      * @param   element         The offending {@link Element}.
      * @param   format          The message format {@link String}.
-     * @param   argv            Optional arguments to the  message format
+     * @param   argv            Optional arguments to the message format
      *                          {@link String}.
+     *
+     * @see javax.annotation.processing.Messager#printMessage(Diagnostic.Kind,CharSequence,Element)
+     */
+    protected void print(Diagnostic.Kind kind, Element element,
+                         String format, Object... argv) {
+        processingEnv.getMessager()
+            .printMessage(kind, String.format(format, argv),
+                          element);
+    }
+
+    /**
+     * Method to print a diagnostic message.
+     *
+     * @param   kind            The {@link javax.tools.Diagnostic.Kind}.
+     * @param   element         The offending {@link Element}.
+     * @param   annotation      The offending {@link AnnotationMirror}.
+     * @param   format          The message format {@link String}.
+     * @param   argv            Optional arguments to the message format
+     *                          {@link String}.
+     *
+     * @see javax.annotation.processing.Messager#printMessage(Diagnostic.Kind,CharSequence,Element,AnnotationMirror)
      */
     protected void print(Diagnostic.Kind kind,
-                         Element element, String format, Object... argv) {
+                         Element element, AnnotationMirror annotation,
+                         String format, Object... argv) {
         processingEnv.getMessager()
-            .printMessage(kind, String.format(format, argv), element);
+            .printMessage(kind, String.format(format, argv),
+                          element, annotation);
+    }
+
+    /**
+     * Method to print a diagnostic message.
+     *
+     * @param   kind            The {@link javax.tools.Diagnostic.Kind}.
+     * @param   element         The offending {@link Element}.
+     * @param   annotation      The offending {@link AnnotationMirror}.
+     * @param   value           The offending {@link AnnotationValue}.
+     * @param   format          The message format {@link String}.
+     * @param   argv            Optional arguments to the message format
+     *                          {@link String}.
+     *
+     * @see javax.annotation.processing.Messager#printMessage(Diagnostic.Kind,CharSequence,Element,AnnotationMirror,AnnotationValue)
+     */
+    protected void print(Diagnostic.Kind kind,
+                         Element element,
+                         AnnotationMirror annotation, AnnotationValue value,
+                         String format, Object... argv) {
+        processingEnv.getMessager()
+            .printMessage(kind, String.format(format, argv),
+                          element, annotation, value);
     }
 
     /**
      * Method to print a {@link Throwable}.
      *
      * @param   kind            The {@link javax.tools.Diagnostic.Kind}.
-     * @param   element         The offending {@link Element}.
      * @param   throwable       The {@link Throwable}.
      */
-    protected void print(Diagnostic.Kind kind,
-                         Element element, Throwable throwable) {
-        print(kind, element, new ThrowableDataSource(throwable).toString());
+    protected void print(Diagnostic.Kind kind, Throwable throwable) {
+        print(kind, new ThrowableDataSource(throwable).toString());
     }
 
     /**
@@ -747,5 +806,12 @@ public abstract class AbstractProcessor
      */
     protected static Path toPath(FileObject file) {
         return Paths.get(file.toUri());
+    }
+
+    /**
+     * Abstract {@link Check} base class.
+     */
+    @NoArgsConstructor(access = PROTECTED) @ToString
+    protected abstract class Check implements Consumer<Element> {
     }
 }
