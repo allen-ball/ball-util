@@ -21,6 +21,7 @@ package ball.annotation.processing;
  * ##########################################################################
  */
 import ball.annotation.ServiceProviderFor;
+import java.lang.reflect.Method;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
@@ -49,8 +50,19 @@ import static javax.tools.Diagnostic.Kind.WARNING;
 @ServiceProviderFor({ Processor.class })
 @ForElementKinds({ CLASS })
 @ForSubclassesOf(Object.class)
+@WithoutModifiers({ ABSTRACT })
 @NoArgsConstructor @ToString
 public class ObjectToStringProcessor extends AnnotatedNoAnnotationProcessor {
+    private static final Method PROTOTYPE;
+
+    static {
+        try {
+            PROTOTYPE = Object.class.getDeclaredMethod("toString");
+        } catch (Exception exception) {
+            throw new ExceptionInInitializerError(exception);
+        }
+    }
+
     private ExecutableElement METHOD = null;
 
     @Override
@@ -58,7 +70,9 @@ public class ObjectToStringProcessor extends AnnotatedNoAnnotationProcessor {
         super.init(processingEnv);
 
         try {
-            METHOD = getMethod(Object.class, "toString");
+            METHOD = getMethod(PROTOTYPE);
+
+            criteria.add(t -> t.getAnnotation(ToString.class) == null);
         } catch (Exception exception) {
             print(ERROR, exception);
         }
@@ -66,21 +80,13 @@ public class ObjectToStringProcessor extends AnnotatedNoAnnotationProcessor {
 
     @Override
     protected void process(RoundEnvironment roundEnv, Element element) {
-        if (! element.getModifiers().contains(ABSTRACT)) {
-            TypeElement type = (TypeElement) element;
+        TypeElement type = (TypeElement) element;
+        ExecutableElement implementation = implementationOf(METHOD, type);
 
-            if (type.getAnnotation(ToString.class) == null) {
-                ExecutableElement implementation =
-                    implementationOf(METHOD, type);
-
-                if (implementation == null || METHOD.equals(implementation)) {
-                    print(WARNING, type,
-                          "%s does not override %s.%s",
-                          type.getKind(),
-                          METHOD.getEnclosingElement().getSimpleName(),
-                          METHOD);
-                }
-            }
+        if (implementation == null || METHOD.equals(implementation)) {
+            print(WARNING, type,
+                  "%s does not override '%s'",
+                  type.getKind(), declaration(PROTOTYPE));
         }
     }
 }

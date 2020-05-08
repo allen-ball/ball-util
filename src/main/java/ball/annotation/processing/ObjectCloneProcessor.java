@@ -21,7 +21,8 @@ package ball.annotation.processing;
  * ##########################################################################
  */
 import ball.annotation.ServiceProviderFor;
-import java.util.ArrayList;
+import java.lang.reflect.Method;
+import java.util.List;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
@@ -32,8 +33,10 @@ import javax.lang.model.type.TypeMirror;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import static javax.lang.model.element.ElementKind.CLASS;
-import static javax.lang.model.util.ElementFilter.methodsIn;
+import static java.util.stream.Collectors.toList;
+import static javax.lang.model.element.ElementKind.METHOD;
+import static javax.lang.model.element.Modifier.PRIVATE;
+import static javax.lang.model.element.Modifier.STATIC;
 import static javax.tools.Diagnostic.Kind.ERROR;
 import static javax.tools.Diagnostic.Kind.WARNING;
 
@@ -57,10 +60,19 @@ import static javax.tools.Diagnostic.Kind.WARNING;
  * @version $Revision$
  */
 @ServiceProviderFor({ Processor.class })
-@ForElementKinds({ CLASS })
-@ForSubclassesOf(Object.class)
+@ForElementKinds({ METHOD })
 @NoArgsConstructor @ToString
 public class ObjectCloneProcessor extends AnnotatedNoAnnotationProcessor {
+    private static final Method PROTOTYPE;
+
+    static {
+        try {
+            PROTOTYPE = Object.class.getDeclaredMethod("clone");
+        } catch (Exception exception) {
+            throw new ExceptionInInitializerError(exception);
+        }
+    }
+
     private ExecutableElement METHOD = null;
     private TypeElement CLONEABLE = null;
 
@@ -69,8 +81,10 @@ public class ObjectCloneProcessor extends AnnotatedNoAnnotationProcessor {
         super.init(processingEnv);
 
         try {
-            METHOD = getMethod(Object.class, "clone");
+            METHOD = getMethod(PROTOTYPE);
             CLONEABLE = asTypeElement(Cloneable.class);
+
+            criteria.add(t -> overrides((ExecutableElement) t, METHOD));
         } catch (Exception exception) {
             print(ERROR, exception);
         }
@@ -78,57 +92,33 @@ public class ObjectCloneProcessor extends AnnotatedNoAnnotationProcessor {
 
     @Override
     protected void process(RoundEnvironment roundEnv, Element element) {
-        super.process(roundEnv, element);
-
-        methodsIn(((TypeElement) element).getEnclosedElements())
-            .stream()
-            .filter(t -> overrides(t, METHOD))
-            .forEach(t -> check(roundEnv, t));
-    }
-
-    private void check(RoundEnvironment roundEnv, ExecutableElement method) {
+        ExecutableElement method = (ExecutableElement) element;
         TypeElement type = (TypeElement) method.getEnclosingElement();
 
         if (! type.getInterfaces().contains(CLONEABLE.asType())) {
             print(WARNING, type,
-                  "%s overrides %s.%s but does not implement %s",
+                  "%s overrides '%s' but does not implement %s",
                   type.getKind(),
-                  METHOD.getEnclosingElement().getSimpleName(), METHOD,
-                  CLONEABLE.getSimpleName());
+                  declaration(PROTOTYPE), CLONEABLE.getSimpleName());
         }
 
         if (! types.isAssignable(method.getReturnType(), type.asType())) {
             print(WARNING, method,
-                  "%s overrides %s.%s but does not return a subclass of %s",
+                  "%s overrides '%s' but does not return a subclass of %s",
                   method.getKind(),
-                  METHOD.getEnclosingElement().getSimpleName(), METHOD,
-                  type.getSimpleName());
+                  declaration(PROTOTYPE), type.getSimpleName());
         }
 
-        ArrayList<TypeMirror> throwables = new ArrayList<>();
+        List<TypeMirror> throwables =
+            METHOD.getThrownTypes().stream().collect(toList());
 
-        throwables.addAll(METHOD.getThrownTypes());
         throwables.retainAll(overrides(method).getThrownTypes());
         throwables.removeAll(method.getThrownTypes());
-
-        for (TypeMirror mirror : throwables) {
-            Element element = types.asElement(mirror);
-            CharSequence name = null;
-
-            switch (element.getKind()) {
-            case CLASS:
-                name = ((TypeElement) element).getQualifiedName();
-                break;
-
-            default:
-                name = element.getSimpleName();
-                break;
-            }
-
-            print(WARNING, method,
-                  "%s overrides %s.%s but does not throw %s",
-                  method.getKind(),
-                  METHOD.getEnclosingElement().getSimpleName(), METHOD, name);
-        }
+        throwables.stream()
+            .map(t -> types.asElement(t))
+            .map(t -> t.getSimpleName())
+            .forEach(t -> print(WARNING, method,
+                                "%s overrides '%s' but does not throw %s",
+                                method.getKind(), declaration(PROTOTYPE), t));
     }
 }
