@@ -83,8 +83,7 @@ public class ConstantValueMustConvertToProcessor extends AnnotatedProcessor {
             }
 
             print(ERROR, element,
-                  "@%s: Cannot convert %s to %s: %s",
-                  annotation.getSimpleName(),
+                  "Cannot convert %s to %s\n%s",
                   elements.getConstantExpression(from),
                   to.getQualifiedName(), throwable.getMessage());
         }

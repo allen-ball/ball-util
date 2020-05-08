@@ -83,29 +83,29 @@ public abstract class AnnotatedNoAnnotationProcessor extends AbstractProcessor {
             }
 
             if (getClass().isAnnotationPresent(WithModifiers.class)) {
-                EnumSet<Modifier> modifiers = EnumSet.allOf(Modifier.class);
                 Modifier[] value =
                     getClass().getAnnotation(WithModifiers.class).value();
+                EnumSet<Modifier> modifiers = EnumSet.allOf(Modifier.class);
 
                 modifiers.retainAll(Arrays.asList(value));
                 criteria.add(t -> modifiers.containsAll(t.getModifiers()));
             }
 
             if (getClass().isAnnotationPresent(WithoutModifiers.class)) {
-                EnumSet<Modifier> modifiers = EnumSet.allOf(Modifier.class);
                 Modifier[] value =
                     getClass().getAnnotation(WithoutModifiers.class).value();
+                EnumSet<Modifier> modifiers = EnumSet.allOf(Modifier.class);
 
                 modifiers.retainAll(Arrays.asList(value));
                 criteria.add(t -> disjoint(modifiers, t.getModifiers()));
             }
 
             if (getClass().isAnnotationPresent(ForSubclassesOf.class)) {
-                Class<?> superclass =
+                Class<?> value =
                     getClass().getAnnotation(ForSubclassesOf.class).value();
 
                 kinds.retainAll(ForSubclassesOf.ELEMENT_KINDS);
-                criteria.add(t -> isAssignable(t.asType(), superclass));
+                criteria.add(t -> isAssignable(t.asType(), value));
             }
 
             if (getClass().isAnnotationPresent(MustImplement.class)) {

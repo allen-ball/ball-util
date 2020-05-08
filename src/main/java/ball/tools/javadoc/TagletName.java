@@ -22,13 +22,15 @@ package ball.tools.javadoc;
  */
 import ball.annotation.ServiceProviderFor;
 import ball.annotation.processing.AnnotatedProcessor;
-import ball.annotation.processing.For;
 import ball.annotation.processing.AnnotatedTypeMustExtend;
+import ball.annotation.processing.For;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
+import javax.lang.model.element.AnnotationMirror;
+import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import lombok.NoArgsConstructor;
@@ -67,19 +69,18 @@ public @interface TagletName {
                                TypeElement annotation, Element element) {
             super.process(roundEnv, annotation, element);
 
-            String name = element.getAnnotation(TagletName.class).value();
+            AnnotationMirror mirror = getAnnotationMirror(element, annotation);
+            AnnotationValue value = getAnnotationValue(mirror, "value");
+            String name = (String) value.getValue();
 
-            if (! isEmpty(name)) {
+            if (! name.isEmpty()) {
                 if (element.getModifiers().contains(ABSTRACT)) {
-                    print(ERROR, element,
-                          "%s annotated with @%s but is %s",
-                          element.getKind(),
-                          annotation.getSimpleName(), ABSTRACT);
+                    print(ERROR, element, mirror,
+                          "%s is %s", element.getKind(), ABSTRACT);
                 }
             } else {
-                print(ERROR, element,
-                      "%s annotated with @%s but does not specify value()",
-                      element.getKind(), annotation.getSimpleName());
+                print(ERROR, element, mirror, value,
+                      "value() must be a non-empty String");
             }
         }
     }

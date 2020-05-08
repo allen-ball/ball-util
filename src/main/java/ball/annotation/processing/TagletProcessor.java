@@ -64,12 +64,11 @@ public class TagletProcessor extends AnnotatedNoAnnotationProcessor {
         if (! element.getModifiers().contains(ABSTRACT)) {
             TypeElement type = (TypeElement) element;
             ExecutableElement method =
-                asExecutableElement(type,
-                                    PROTOTYPE.getName(),
-                                    PROTOTYPE.getParameterTypes());
+                getMethod(type,
+                          PROTOTYPE.getName(), PROTOTYPE.getParameterTypes());
 
             if (method == null
-                || (! method.getModifiers().containsAll(getModifierSetFor(PROTOTYPE)))) {
+                || (! method.getModifiers().containsAll(getModifiers(PROTOTYPE)))) {
                 print(WARNING, element,
                       "%s implements %s but does not implement '%s'",
                       element.getKind(), Taglet.class.getName(),

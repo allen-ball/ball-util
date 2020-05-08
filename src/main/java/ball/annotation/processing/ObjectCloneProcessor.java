@@ -69,10 +69,10 @@ public class ObjectCloneProcessor extends AnnotatedNoAnnotationProcessor {
         super.init(processingEnv);
 
         try {
-            METHOD = asExecutableElement(Object.class, "clone");
+            METHOD = getMethod(Object.class, "clone");
             CLONEABLE = asTypeElement(Cloneable.class);
         } catch (Exception exception) {
-            print(ERROR, null, exception);
+            print(ERROR, exception);
         }
     }
 

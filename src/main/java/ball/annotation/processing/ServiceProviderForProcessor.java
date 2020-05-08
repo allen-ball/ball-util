@@ -72,7 +72,7 @@ public class ServiceProviderForProcessor extends AnnotatedProcessor
                                          implements ClassFileProcessor {
     private static final String PATH = "META-INF/services/%s";
 
-    private MapImpl map = new MapImpl();
+    private Map<String,Set<String>> map = new TreeMap<>();
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations,
@@ -101,7 +101,7 @@ public class ServiceProviderForProcessor extends AnnotatedProcessor
                 }
             }
         } catch (Exception exception) {
-            print(ERROR, null, exception);
+            print(ERROR, exception);
         }
 
         return result;
@@ -114,39 +114,34 @@ public class ServiceProviderForProcessor extends AnnotatedProcessor
 
         AnnotationMirror mirror = getAnnotationMirror(element, annotation);
         AnnotationValue value = getAnnotationValue(mirror, "value");
-        List<TypeElement> list = getTypeElementListFrom(value);
 
-        if (! list.isEmpty()) {
-            switch (element.getKind()) {
-            case CLASS:
-                if (! element.getModifiers().contains(ABSTRACT)) {
-                    for (TypeElement service : list) {
-                        if (types.isAssignable(element.asType(),
-                                               service.asType())) {
-                            map.add(service, (TypeElement) element);
-                        } else {
-                            print(ERROR, element,
-                                  "%s annotated with @%s and specifies %s but is not an implementing class",
-                                  element.getKind(),
-                                  annotation.getSimpleName(),
-                                  service.getQualifiedName());
-                        }
+        if (! isEmptyArray(value)) {
+            if (! element.getModifiers().contains(ABSTRACT)) {
+                String provider =
+                    elements.getBinaryName((TypeElement) element).toString();
+
+                for (TypeElement service : getTypeElementListFrom(value)) {
+                    if (types.isAssignable(element.asType(),
+                                           service.asType())) {
+                        String key =
+                            elements.getBinaryName(service).toString();
+
+                        map.computeIfAbsent(key, k -> new TreeSet<>())
+                            .add(provider);
+                    } else {
+                        print(ERROR, element,
+                              "%s: %s does not implement %s",
+                              annotation.getSimpleName(),
+                              element.getKind(), service.getQualifiedName());
                     }
-                } else {
-                    print(ERROR, element,
-                          "%s annotated with @%s but is %s",
-                          element.getKind(),
-                          annotation.getSimpleName(), ABSTRACT);
                 }
-                break;
-
-            default:
-                break;
+            } else {
+                print(ERROR, element,
+                      "%s: %s is %s",
+                      annotation.getSimpleName(), element.getKind(), ABSTRACT);
             }
         } else {
-            print(ERROR, element,
-                  "%s annotated with @%s but no services specified",
-                  element.getKind(), annotation.getSimpleName());
+            print(ERROR, element, mirror, value, "value() is empty");
         }
     }
 
@@ -160,7 +155,9 @@ public class ServiceProviderForProcessor extends AnnotatedProcessor
                 if (annotation != null) {
                     for (Class<?> service : annotation.value()) {
                         if (service.isAssignableFrom(provider)) {
-                            map.add(service, provider);
+                            map.computeIfAbsent(service.getName(),
+                                                k -> new TreeSet<>())
+                                .add(provider.getName());
                         }
                     }
                 }
@@ -179,25 +176,6 @@ public class ServiceProviderForProcessor extends AnnotatedProcessor
             lines.addAll(entry.getValue());
 
             Files.write(file.toPath(), lines, CHARSET);
-        }
-    }
-
-    @NoArgsConstructor
-    private class MapImpl extends TreeMap<String,Set<String>> {
-        private static final long serialVersionUID = -5826890336322674613L;
-
-        public boolean add(String service, String provider) {
-            return computeIfAbsent(service,
-                                   k -> new TreeSet<>()).add(provider);
-        }
-
-        public boolean add(Class<?> service, Class<?> provider) {
-            return add(service.getName(), provider.getName());
-        }
-
-        public boolean add(TypeElement service, TypeElement provider) {
-            return add(elements.getBinaryName(service).toString(),
-                       elements.getBinaryName(provider).toString());
         }
     }
 }

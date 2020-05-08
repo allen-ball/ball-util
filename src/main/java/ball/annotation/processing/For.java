@@ -68,9 +68,7 @@ public @interface For {
             AnnotationValue value = getAnnotationValue(mirror, "value");
 
             if (isEmptyArray(value)) {
-                print(ERROR, element,
-                      "%s annotated with @%s but no types specified",
-                      element.getKind(), annotation.getSimpleName());
+                print(ERROR, element, mirror, value, "value() is empty");
             }
         }
     }

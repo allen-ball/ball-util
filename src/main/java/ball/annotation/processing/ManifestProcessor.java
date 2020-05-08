@@ -121,7 +121,7 @@ public class ManifestProcessor extends AnnotatedProcessor
                 }
             }
         } catch (Exception exception) {
-            print(ERROR, null, exception);
+            print(ERROR, exception);
         }
 
         return result;
@@ -144,13 +144,13 @@ public class ManifestProcessor extends AnnotatedProcessor
                 case INTERFACE:
                     TypeElement type = (TypeElement) element;
                     ExecutableElement method =
-                        asExecutableElement(type,
-                                            PROTOTYPE.getName(),
-                                            PROTOTYPE.getParameterTypes());
+                        getMethod(type,
+                                  PROTOTYPE.getName(),
+                                  PROTOTYPE.getParameterTypes());
 
                     if (method != null
                         && (method.getModifiers()
-                            .containsAll(getModifierSetFor(PROTOTYPE)))) {
+                            .containsAll(getModifiers(PROTOTYPE)))) {
                         String name = elements.getBinaryName(type).toString();
                         String old = manifest.put(main, name);
 

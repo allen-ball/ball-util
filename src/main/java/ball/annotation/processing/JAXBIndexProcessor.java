@@ -87,7 +87,7 @@ public class JAXBIndexProcessor extends AnnotatedProcessor
                 }
             }
         } catch (Exception exception) {
-            print(ERROR, null, exception);
+            print(ERROR, exception);
         }
 
         return result;

@@ -69,9 +69,7 @@ public @interface ForElementKinds {
             AnnotationValue value = getAnnotationValue(mirror, "value");
 
             if (isEmptyArray(value)) {
-                print(ERROR, element,
-                      "%s annotated with @%s whose value() is empty",
-                      element.getKind(), annotation.getSimpleName());
+                print(ERROR, element, mirror, value, "value() is empty");
             }
         }
     }

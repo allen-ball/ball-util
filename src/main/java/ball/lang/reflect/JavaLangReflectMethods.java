@@ -34,7 +34,8 @@ import javax.lang.model.element.Modifier;
 import static java.util.stream.Collectors.joining;
 
 /**
- * {@link java.lang.reflect} utility methods.
+ * {@link java.lang.reflect} and {@link javax.lang.model.element} utility
+ * methods.
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
@@ -70,7 +71,7 @@ public interface JavaLangReflectMethods {
      *
      * @return  The {@link EnumSet} of {@link Modifier}s.
      */
-    default EnumSet<Modifier> getModifierSetFor(Class<?> type) {
+    default EnumSet<Modifier> getModifiers(Class<?> type) {
         return asModifierSet(type.getModifiers());
     }
 
@@ -81,7 +82,7 @@ public interface JavaLangReflectMethods {
      *
      * @return  The {@link EnumSet} of {@link Modifier}s.
      */
-    default EnumSet<Modifier> getModifierSetFor(Member member) {
+    default EnumSet<Modifier> getModifiers(Member member) {
         return asModifierSet(member.getModifiers());
     }
 

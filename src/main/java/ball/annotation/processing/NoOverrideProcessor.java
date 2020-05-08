@@ -59,10 +59,9 @@ public class NoOverrideProcessor extends AnnotatedNoAnnotationProcessor {
 
             if (specification != null) {
                 print(WARNING, method,
-                      "%s specified by %s.%s but does not have a @%s annotation",
-                      method.getKind(),
-                      specification.getEnclosingElement(), specification,
-                      Override.class.getSimpleName());
+                      "Missing @%s annotation (specified by %s)",
+                      Override.class.getSimpleName(),
+                      specification.getEnclosingElement());
             }
         }
     }

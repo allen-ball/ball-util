@@ -58,9 +58,9 @@ public class ObjectToStringProcessor extends AnnotatedNoAnnotationProcessor {
         super.init(processingEnv);
 
         try {
-            METHOD = asExecutableElement(Object.class, "toString");
+            METHOD = getMethod(Object.class, "toString");
         } catch (Exception exception) {
-            print(ERROR, null, exception);
+            print(ERROR, exception);
         }
     }
 

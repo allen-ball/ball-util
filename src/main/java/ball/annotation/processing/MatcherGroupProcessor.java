@@ -24,6 +24,8 @@ import ball.annotation.MatcherGroup;
 import ball.annotation.ServiceProviderFor;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
+import javax.lang.model.element.AnnotationMirror;
+import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
@@ -49,12 +51,13 @@ public class MatcherGroupProcessor extends AnnotatedProcessor {
                            TypeElement annotation, Element element) {
         super.process(roundEnv, annotation, element);
 
-        int group = element.getAnnotation(MatcherGroup.class).value();
+        AnnotationMirror mirror = getAnnotationMirror(element, annotation);
+        AnnotationValue value = getAnnotationValue(mirror, "value");
+        int group = (Integer) value.getValue();
 
         if (group < 0) {
-            print(ERROR, element,
-                  "%s annotated with @%s has invalid value()",
-                  element.getKind(), annotation.getSimpleName());
+            print(ERROR, element, mirror, value,
+                  "value() must be non-negative");
         }
 
         switch (element.getKind()) {
@@ -69,13 +72,13 @@ public class MatcherGroupProcessor extends AnnotatedProcessor {
             if (! element.getModifiers().contains(PRIVATE)) {
                 if (executable.isVarArgs() || executable.getParameters().size() != 1) {
                     print(ERROR, element,
-                          "%s annotated with @%s but does not take exactly one argument",
-                          element.getKind(), annotation.getSimpleName());
+                          "@%s: %s must take exactly one argument",
+                          annotation.getSimpleName(), element.getKind());
                 }
             } else {
                 print(ERROR, element,
-                      "%s annotated with @%s but is %s",
-                      element.getKind(), annotation.getSimpleName(), PRIVATE);
+                      "@%s: %s is %s",
+                      annotation.getSimpleName(), element.getKind(), PRIVATE);
             }
             break;
         }

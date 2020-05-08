@@ -37,6 +37,8 @@ import java.util.Set;
 import java.util.TreeMap;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
+import javax.lang.model.element.AnnotationMirror;
+import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.PackageElement;
@@ -137,7 +139,7 @@ public class AntTaskProcessor extends AnnotatedProcessor
                 }
             }
         } catch (Exception exception) {
-            print(ERROR, null, exception);
+            print(ERROR, exception);
         }
 
         return result;
@@ -150,41 +152,36 @@ public class AntTaskProcessor extends AnnotatedProcessor
 
         switch (element.getKind()) {
         case CLASS:
-            String name = element.getAnnotation(AntTask.class).value();
-            String resource = element.getAnnotation(AntTask.class).resource();
-            Element enclosing = element;
+            AnnotationMirror mirror = getAnnotationMirror(element, annotation);
+            AnnotationValue value = getAnnotationValue(mirror, "value");
+            AnnotationValue resource = getAnnotationValue(mirror, "resource");
 
-            while (enclosing != null
-                   && enclosing.getKind() != ElementKind.PACKAGE) {
-                enclosing = enclosing.getEnclosingElement();
-            }
-
-            if (enclosing != null) {
-                resource =
-                    URI.create(asPath((PackageElement) enclosing) + resource)
-                    .normalize()
-                    .toString();
-            }
-
-            if (isNotEmpty(name)) {
+            if (isNotEmpty((String) value.getValue())) {
                 if (isAssignable(element.asType(), Task.class)) {
                     if (! element.getModifiers().contains(ABSTRACT)) {
-                        map.put(resource, name, (TypeElement) element);
+                        String key = (String) resource.getValue();
+                        PackageElement pkg =
+                            elements.getPackageOf(element);
+
+                        if (pkg != null) {
+                            key =
+                                URI.create(asPath(pkg) + key)
+                                .normalize()
+                                .toString();
+                        }
+
+                        map.put(key,
+                                (String) value.getValue(),
+                                (TypeElement) element);
                     } else {
                         print(ERROR, element,
-                              "%s annotated with @%s but is %s",
-                              element.getKind(),
-                              annotation.getSimpleName(), ABSTRACT);
+                              "%s is %s", element.getKind(), ABSTRACT);
                     }
                 } else {
                     /*
                      * See AntTaskMixInProcessor.
                      */
                 }
-            } else {
-                print(ERROR, element,
-                      "%s annotated with @%s but does not specify value()",
-                      element.getKind(), annotation.getSimpleName());
             }
             break;
 
