@@ -25,12 +25,14 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
-import java.util.function.Consumer;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.Element;
+import javax.lang.model.element.ElementKind;
+import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.TypeMirror;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -56,8 +58,6 @@ import static lombok.AccessLevel.PROTECTED;
  */
 @NoArgsConstructor(access = PROTECTED) @ToString
 public abstract class AnnotatedProcessor extends AbstractProcessor {
-    private final List<Class<? extends Annotation>> list =
-        Arrays.asList(getClass().getAnnotation(For.class).value());
 
     /**
      * Method to get the {@link List} of supported {@link Annotation}
@@ -67,7 +67,7 @@ public abstract class AnnotatedProcessor extends AbstractProcessor {
      *          {@link Class}es.
      */
     protected List<Class<? extends Annotation>> getSupportedAnnotationTypeList() {
-        return list;
+        return Arrays.asList(getClass().getAnnotation(For.class).value());
     }
 
     @Override
@@ -93,13 +93,13 @@ public abstract class AnnotatedProcessor extends AbstractProcessor {
         try {
             roundEnv.getElementsAnnotatedWith(annotation)
                 .stream()
-                .peek(new AnnotatedElementMustBeConsumer(annotation))
-                .peek(new AnnotatedTypeMustExtendConsumer(annotation))
-                .peek(new AnnotatedTypeMustHaveNoArgsConstructorConsumer(annotation))
-                .peek(new AnnotationValueMustConvertToConsumer(annotation))
+                .peek(new AnnotatedElementMustBeCheck(annotation))
+                .peek(new AnnotatedTypeMustExtendCheck(annotation))
+                .peek(new AnnotatedTypeMustHaveNoArgsConstructorCheck(annotation))
+                .peek(new AnnotationValueMustConvertToCheck(annotation))
                 .forEach(t -> process(roundEnv, annotation, t));
         } catch (Throwable throwable) {
-            print(ERROR, null, throwable);
+            print(ERROR, throwable);
         }
     }
 
@@ -116,83 +116,87 @@ public abstract class AnnotatedProcessor extends AbstractProcessor {
     }
 
     @AllArgsConstructor @ToString
-    private class AnnotatedElementMustBeConsumer implements Consumer<Element> {
+    private class AnnotatedElementMustBeCheck extends Check {
         private final TypeElement annotation;
 
         @Override
         public void accept(Element element) {
-            AnnotatedElementMustBe meta =
-                annotation.getAnnotation(AnnotatedElementMustBe.class);
+            AnnotationMirror meta =
+                getAnnotationMirror(annotation, AnnotatedElementMustBe.class);
 
             if (meta != null) {
-                if (element.getKind() != meta.value()) {
+                AnnotationValue value = getAnnotationValue(meta, "value");
+                String name =
+                    ((VariableElement) value.getValue()).getSimpleName()
+                    .toString();
+                ElementKind kind = ElementKind.valueOf(name);
+
+                if (! kind.equals(element.getKind())) {
                     print(ERROR, element,
-                          "%s annotated with @%s but is not a %s",
-                          element, annotation.getSimpleName(), meta.value());
+                          "@%s: %s is not a %s",
+                          annotation.getSimpleName(), element.getKind(), kind);
                 }
             }
         }
     }
 
     @AllArgsConstructor @ToString
-    private class AnnotatedTypeMustExtendConsumer implements Consumer<Element> {
+    private class AnnotatedTypeMustExtendCheck extends Check {
         private final TypeElement annotation;
 
         @Override
         public void accept(Element element) {
-            /*
-             * Cannot simply get the Annotation value:
-             * meta.value() throws MirroredTypeException
-             *
-             * Class<?> superclass = (meta != null) ? meta.value() : null;
-             * AnnotatedTypeMustExtend meta = annotation.getAnnotation(AnnotatedTypeMustExtend.class);
-             */
             AnnotationMirror meta =
                 getAnnotationMirror(annotation, AnnotatedTypeMustExtend.class);
 
             if (meta != null) {
                 AnnotationValue value = getAnnotationValue(meta, "value");
-                TypeElement superclass =
+                TypeElement type =
                     (TypeElement) types.asElement((TypeMirror) value.getValue());
 
-                if (! types.isAssignable(element.asType(), superclass.asType())) {
+                if (! types.isAssignable(element.asType(), type.asType())) {
                     print(ERROR, element,
-                          "%s annotated with @%s but does not extend %s",
-                          element,
+                          "@%s: %s does not extend %s",
                           annotation.getSimpleName(),
-                          superclass.getQualifiedName());
+                          element, type.getQualifiedName());
                 }
             }
         }
     }
 
     @AllArgsConstructor @ToString
-    private class AnnotatedTypeMustHaveNoArgsConstructorConsumer implements Consumer<Element> {
+    private class AnnotatedTypeMustHaveNoArgsConstructorCheck extends Check {
         private final TypeElement annotation;
 
         @Override
         public void accept(Element element) {
-            AnnotatedTypeMustHaveNoArgsConstructor meta =
-                annotation.getAnnotation(AnnotatedTypeMustHaveNoArgsConstructor.class);
+            AnnotationMirror meta =
+                getAnnotationMirror(annotation,
+                                    AnnotatedTypeMustHaveNoArgsConstructor.class);
 
             if (meta != null) {
+                AnnotationValue value = getAnnotationValue(meta, "value");
+                String name =
+                    ((VariableElement) value.getValue()).getSimpleName()
+                    .toString();
+                Modifier modifier = Modifier.valueOf(name);
                 boolean found =
                     constructorsIn(element.getEnclosedElements())
                     .stream()
-                    .filter(t -> t.getModifiers().contains(meta.value()))
+                    .filter(t -> t.getModifiers().contains(modifier))
                     .anyMatch(t -> t.getParameters().isEmpty());
 
                 if (! found) {
                     print(ERROR, element,
-                          "%s annotated with @%s but does not have a %s no-argument constructor",
-                          element, annotation.getSimpleName(), meta.value());
+                          "@%s: No %s no-argument constructor",
+                          annotation.getSimpleName(), modifier);
                 }
             }
         }
     }
 
     @AllArgsConstructor @ToString
-    private class AnnotationValueMustConvertToConsumer implements Consumer<Element> {
+    private class AnnotationValueMustConvertToCheck extends Check {
         private final TypeElement annotation;
 
         @Override
@@ -234,9 +238,8 @@ public abstract class AnnotatedProcessor extends AbstractProcessor {
                         throwable = throwable.getCause();
                     }
 
-                    print(ERROR, element,
-                          "@%s: Cannot convert %s to %s: %s",
-                          annotation.getSimpleName(),
+                    print(ERROR, element, mirror,
+                          "Cannot convert %s to %s\n%s",
                           from, to.getQualifiedName(), throwable.getMessage());
                 }
             }
