@@ -32,6 +32,7 @@ import lombok.ToString;
 import static javax.lang.model.element.ElementKind.METHOD;
 import static javax.lang.model.element.Modifier.PRIVATE;
 import static javax.lang.model.element.Modifier.STATIC;
+import static javax.tools.Diagnostic.Kind.ERROR;
 import static javax.tools.Diagnostic.Kind.WARNING;
 
 /**
@@ -51,7 +52,11 @@ public class NoOverrideProcessor extends AnnotatedNoAnnotationProcessor {
     public void init(ProcessingEnvironment processingEnv) {
         super.init(processingEnv);
 
-        criteria.add(t -> t.getAnnotation(Override.class) == null);
+        try {
+            criteria.add(t -> t.getAnnotation(Override.class) == null);
+        } catch (Exception exception) {
+            print(ERROR, exception);
+        }
     }
 
     @Override
