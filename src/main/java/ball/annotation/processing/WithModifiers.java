@@ -40,8 +40,8 @@ import static javax.tools.Diagnostic.Kind.ERROR;
 
 /**
  * {@link AnnotatedNoAnnotationProcessor}
- * {@link java.lang.annotation.Annotation} to specify {@link Modifier}
- * criteria.
+ * {@link java.lang.annotation.Annotation} to specify {@link Modifier}s
+ * that should be present on the target.
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
