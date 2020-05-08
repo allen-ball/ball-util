@@ -217,8 +217,7 @@ public abstract class AbstractProcessor
         try {
             element = elements.getTypeElement(type.getCanonicalName());
         } catch (Exception exception) {
-            throw new IllegalArgumentException("type=" + String.valueOf(type),
-                                               exception);
+            throw new IllegalArgumentException("type=" + type, exception);
         }
 
         return element;
@@ -226,7 +225,7 @@ public abstract class AbstractProcessor
 
     /**
      * Method to get an {@link ExecutableElement} for a {@link Class}
-     * {@link java.lang.reflect.Method} by return type and parameter list.
+     * {@link java.lang.reflect.Method} by name and parameter list.
      *
      * @param   type            The {@link Class}.
      * @param   name            The method name.
@@ -234,10 +233,10 @@ public abstract class AbstractProcessor
      *
      * @return  The {@link ExecutableElement} for the method.
      */
-    protected ExecutableElement asExecutableElement(Class<?> type,
-                                                    String name,
-                                                    Class<?>... parameters) {
-        return asExecutableElement(asTypeElement(type), name, parameters);
+    protected ExecutableElement getMethod(Class<?> type,
+                                          String name,
+                                          Class<?>... parameters) {
+        return getMethod(asTypeElement(type), name, parameters);
     }
 
     /**
@@ -250,9 +249,9 @@ public abstract class AbstractProcessor
      *
      * @return  The {@link ExecutableElement} for the method.
      */
-    protected ExecutableElement asExecutableElement(TypeElement type,
-                                                    String name,
-                                                    Class<?>... parameters) {
+    protected ExecutableElement getMethod(TypeElement type,
+                                          String name,
+                                          Class<?>... parameters) {
         ExecutableElement element =
             methodsIn(type.getEnclosedElements())
             .stream()
