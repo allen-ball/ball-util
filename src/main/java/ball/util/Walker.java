@@ -20,6 +20,9 @@ package ball.util;
  * limitations under the License.
  * ##########################################################################
  */
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.Spliterator;
@@ -44,20 +47,20 @@ import lombok.ToString;
 public class Walker<T> extends AbstractSpliterator<T> {
     private final Stream<Supplier<Walker<T>>> stream;
     private Iterator<Supplier<Walker<T>>> iterator = null;
-    private Spliterator<T> spliterator = null;
+    private Spliterator<? extends T> spliterator = null;
 
-    private Walker(T node, Function<? super T,T[]> childrenOf) {
+    private Walker(Collection<? extends T> nodes,
+                   Function<? super T,Collection<? extends T>> childrenOf) {
         super(Long.MAX_VALUE, IMMUTABLE | NONNULL);
 
         stream =
-            Stream.of(node)
+            nodes.stream()
             .filter(Objects::nonNull)
             .map(childrenOf)
             .filter(Objects::nonNull)
-            .flatMap(t -> Stream.<T>of(t))
             .map(t -> (() -> new Walker<T>(t, childrenOf)));
         spliterator =
-            Stream.of(node)
+            nodes.stream()
             .filter(Objects::nonNull)
             .spliterator();
     }
@@ -97,8 +100,25 @@ public class Walker<T> extends AbstractSpliterator<T> {
      * @return  A {@link Stream}.
      */
     public static <T> Stream<T> walk(T root,
-                                     Function<? super T,T[]> childrenOf) {
-        Walker<T> walker = new Walker<>(root, childrenOf);
+                                     Function<? super T,Collection<? extends T>> childrenOf) {
+        return walk(Collections.singleton(root), childrenOf);
+    }
+
+    /**
+     * Entry-point to create a {@link Stream} for traversing a tree of type
+     * {@code <T>} nodes.  The caller need only supply the root nodes and a
+     * {@link Function} to calculate the children nodes.
+     *
+     * @param   roots           The root nodes.
+     * @param   childrenOf      The {@link Function} to get the children of
+     *                          a node.
+     * @param   <T>             The type of node.
+     *
+     * @return  A {@link Stream}.
+     */
+    public static <T> Stream<T> walk(Collection<? extends T> roots,
+                                     Function<? super T,Collection<? extends T>> childrenOf) {
+        Walker<T> walker = new Walker<>(roots, childrenOf);
 
         return StreamSupport.stream(walker, false);
     }
