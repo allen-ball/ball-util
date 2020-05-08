@@ -26,6 +26,7 @@ import ball.lang.reflect.JavaLangReflectMethods;
 import java.lang.annotation.Annotation;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Target;
+import java.lang.reflect.Method;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -36,6 +37,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 import javax.annotation.processing.Filer;
@@ -224,24 +226,34 @@ public abstract class AbstractProcessor
     }
 
     /**
-     * Method to get an {@link ExecutableElement} for a {@link Class}
-     * {@link java.lang.reflect.Method} by name and parameter list.
+     * Method to get an {@link ExecutableElement} for a {@link Method}
+     * prototype.
      *
-     * @param   type            The {@link Class}.
-     * @param   name            The method name.
-     * @param   parameters      The method parameter types.
+     * @param   method          The prototype {@link Method}.
      *
      * @return  The {@link ExecutableElement} for the method.
      */
-    protected ExecutableElement getMethod(Class<?> type,
-                                          String name,
-                                          Class<?>... parameters) {
-        return getMethod(asTypeElement(type), name, parameters);
+    protected ExecutableElement getMethod(Method method) {
+        return getMethod(asTypeElement(method.getDeclaringClass()),
+                         method.getName(), method.getParameterTypes());
+    }
+
+    /**
+     * Method to get an {@link ExecutableElement} for a {@link Method}
+     * prototype.
+     *
+     * @param   type            The {@link TypeElement}.
+     * @param   method          The prototype {@link Method}.
+     *
+     * @return  The {@link ExecutableElement} for the method.
+     */
+    protected ExecutableElement getMethod(TypeElement type, Method method) {
+        return getMethod(type, method.getName(), method.getParameterTypes());
     }
 
     /**
      * Method to get an {@link ExecutableElement} for a {@link Class}
-     * {@link java.lang.reflect.Method}.
+     * {@link Method} prototype by name and parameter list.
      *
      * @param   type            The {@link TypeElement}.
      * @param   name            The method name.
@@ -260,6 +272,22 @@ public abstract class AbstractProcessor
             .findFirst().orElse(null);
 
         return element;
+    }
+
+    /**
+     * Method to get an {@link ExecutableElement} for a {@link Class}
+     * {@link Method} prototype by name and parameter list.
+     *
+     * @param   type            The {@link Class}.
+     * @param   name            The method name.
+     * @param   parameters      The method parameter types.
+     *
+     * @return  The {@link ExecutableElement} for the method.
+     */
+    protected ExecutableElement getMethod(Class<?> type,
+                                          String name,
+                                          Class<?>... parameters) {
+        return getMethod(asTypeElement(type), name, parameters);
     }
 
     private boolean areAssignable(List<? extends Element> from,
@@ -805,6 +833,13 @@ public abstract class AbstractProcessor
      */
     protected static Path toPath(FileObject file) {
         return Paths.get(file.toUri());
+    }
+
+    /**
+     * Abstract {@link Criterion} base class.
+     */
+    @NoArgsConstructor(access = PROTECTED) @ToString
+    protected abstract class Criterion implements Predicate<Element> {
     }
 
     /**
