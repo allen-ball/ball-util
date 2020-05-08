@@ -50,6 +50,7 @@ import static javax.tools.Diagnostic.Kind.WARNING;
 @ServiceProviderFor({ Processor.class })
 @ForElementKinds({ CLASS })
 @ForSubclassesOf(Taglet.class)
+@WithoutModifiers({ ABSTRACT })
 @NoArgsConstructor @ToString
 public class TagletProcessor extends AnnotatedNoAnnotationProcessor {
     private static abstract class PROTOTYPE {
@@ -61,19 +62,15 @@ public class TagletProcessor extends AnnotatedNoAnnotationProcessor {
 
     @Override
     protected void process(RoundEnvironment roundEnv, Element element) {
-        if (! element.getModifiers().contains(ABSTRACT)) {
-            TypeElement type = (TypeElement) element;
-            ExecutableElement method =
-                getMethod(type,
-                          PROTOTYPE.getName(), PROTOTYPE.getParameterTypes());
+        TypeElement type = (TypeElement) element;
+        ExecutableElement method = getMethod(type, PROTOTYPE);
 
-            if (method == null
-                || (! method.getModifiers().containsAll(getModifiers(PROTOTYPE)))) {
-                print(WARNING, element,
-                      "%s implements %s but does not implement '%s'",
-                      element.getKind(), Taglet.class.getName(),
-                      declaration(PROTOTYPE));
-            }
+        if (! (method != null
+               && method.getModifiers().containsAll(getModifiers(PROTOTYPE)))) {
+            print(WARNING, element,
+                  "%s implements %s but does not implement '%s'",
+                  element.getKind(), Taglet.class.getName(),
+                  declaration(PROTOTYPE));
         }
     }
 }
