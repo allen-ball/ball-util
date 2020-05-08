@@ -20,20 +20,27 @@ package ball.annotation.processing;
  * limitations under the License.
  * ##########################################################################
  */
+import java.lang.annotation.Annotation;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
+import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import static ball.util.Walker.walk;
+import static java.util.Collections.disjoint;
 import static javax.lang.model.element.Modifier.ABSTRACT;
 import static javax.tools.Diagnostic.Kind.ERROR;
 import static lombok.AccessLevel.PROTECTED;
@@ -51,38 +58,66 @@ import static lombok.AccessLevel.PROTECTED;
  */
 @NoArgsConstructor(access = PROTECTED) @ToString
 public abstract class AnnotatedNoAnnotationProcessor extends AbstractProcessor {
-    private final ForElementKinds forElementKinds =
-        getClass().getAnnotation(ForElementKinds.class);
-    private final ForSubclassesOf forSubclassesOf =
-        getClass().getAnnotation(ForSubclassesOf.class);
-    private final MustImplement mustImplement =
-        getClass().getAnnotation(MustImplement.class);
-
-    private final EnumSet<ElementKind> kinds =
-        EnumSet.allOf(ElementKind.class);
-    private final Class<?> superclass =
-        (forSubclassesOf != null) ? forSubclassesOf.value() : null;
-
-    {
-        if (forElementKinds != null) {
-            kinds.retainAll(Arrays.asList(forElementKinds.value()));
-        }
-
-        if (superclass != null) {
-            kinds.retainAll(ForSubclassesOf.ELEMENT_KINDS);
-        }
-    }
-
-    private final Predicate<Element> elementKindsPredicate =
-        t -> kinds.contains(t.getKind());
-    private final Predicate<Element> subclassesOfPredicate =
-        t -> (superclass == null || isAssignable(t.asType(), superclass));
-    private Consumer<Element> mustImplementConsumer =
-        new MustImplementConsumer(mustImplement);
+    protected final List<Predicate<Element>> criteria = new ArrayList<>();
+    protected final List<Consumer<Element>> checks = new ArrayList<>();
 
     @Override
     public Set<String> getSupportedAnnotationTypes() {
         return Collections.singleton("*");
+    }
+
+    @Override
+    public void init(ProcessingEnvironment processingEnv) {
+        super.init(processingEnv);
+
+        try {
+            EnumSet<ElementKind> kinds = EnumSet.allOf(ElementKind.class);
+
+            criteria.add(t -> kinds.contains(t.getKind()));
+
+            if (getClass().isAnnotationPresent(ForElementKinds.class)) {
+                ElementKind[] value =
+                    getClass().getAnnotation(ForElementKinds.class).value();
+
+                kinds.retainAll(Arrays.asList(value));
+            }
+
+            if (getClass().isAnnotationPresent(WithModifiers.class)) {
+                EnumSet<Modifier> modifiers = EnumSet.allOf(Modifier.class);
+                Modifier[] value =
+                    getClass().getAnnotation(WithModifiers.class).value();
+
+                modifiers.retainAll(Arrays.asList(value));
+                criteria.add(t -> modifiers.containsAll(t.getModifiers()));
+            }
+
+            if (getClass().isAnnotationPresent(WithoutModifiers.class)) {
+                EnumSet<Modifier> modifiers = EnumSet.allOf(Modifier.class);
+                Modifier[] value =
+                    getClass().getAnnotation(WithoutModifiers.class).value();
+
+                modifiers.retainAll(Arrays.asList(value));
+                criteria.add(t -> disjoint(modifiers, t.getModifiers()));
+            }
+
+            if (getClass().isAnnotationPresent(ForSubclassesOf.class)) {
+                Class<?> superclass =
+                    getClass().getAnnotation(ForSubclassesOf.class).value();
+
+                kinds.retainAll(ForSubclassesOf.ELEMENT_KINDS);
+                criteria.add(t -> isAssignable(t.asType(), superclass));
+            }
+
+            if (getClass().isAnnotationPresent(MustImplement.class)) {
+                MustImplement annotation =
+                    getClass().getAnnotation(MustImplement.class);
+                Class<?>[] types = annotation.value();
+
+                checks.add(new MustImplementCheck(annotation, types));
+            }
+        } catch (Exception exception) {
+            print(ERROR, exception);
+        }
     }
 
     /**
@@ -92,14 +127,12 @@ public abstract class AnnotatedNoAnnotationProcessor extends AbstractProcessor {
     public boolean process(Set<? extends TypeElement> annotations,
                            RoundEnvironment roundEnv) {
         try {
-            roundEnv.getRootElements()
-                .stream()
-                .filter(elementKindsPredicate)
-                .filter(subclassesOfPredicate)
-                .peek(mustImplementConsumer)
+            walk(roundEnv.getRootElements(), Element::getEnclosedElements)
+                .filter(criteria.stream().reduce(t -> true, Predicate::and))
+                .peek(checks.stream().reduce(t -> {}, Consumer::andThen))
                 .forEach(t -> process(roundEnv, t));
         } catch (Throwable throwable) {
-            print(ERROR, null, throwable);
+            print(ERROR, throwable);
         }
 
         return false;
@@ -116,21 +149,20 @@ public abstract class AnnotatedNoAnnotationProcessor extends AbstractProcessor {
     }
 
     @AllArgsConstructor @ToString
-    private class MustImplementConsumer implements Consumer<Element> {
-        private final MustImplement annotation;
+    private class MustImplementCheck extends Check {
+        private final Annotation annotation;
+        private final Class<?>[] types;
 
         @Override
         public void accept(Element element) {
-            if (annotation != null) {
-                if (! element.getModifiers().contains(ABSTRACT)) {
-                    for (Class<?> type : annotation.value()) {
-                        if (! isAssignable(element.asType(), type)) {
-                            print(ERROR, element,
-                                  "%s annotated with @%s but does not implement %s",
-                                  element,
-                                  annotation.annotationType().getSimpleName(),
-                                  type.getName());
-                        }
+            if (! element.getModifiers().contains(ABSTRACT)) {
+                for (Class<?> type : types) {
+                    if (! isAssignable(element.asType(), type)) {
+                        print(ERROR, element,
+                              "%s annotated with @%s but does not implement %s",
+                              element,
+                              annotation.annotationType().getSimpleName(),
+                              type.getName());
                     }
                 }
             }
