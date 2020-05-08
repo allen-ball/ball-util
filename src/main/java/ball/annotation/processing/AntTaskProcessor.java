@@ -35,6 +35,7 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.AnnotationMirror;
@@ -104,6 +105,19 @@ public class AntTaskProcessor extends AnnotatedProcessor
 
     private ResourceMap map = new ResourceMap();
     private LinkedHashSet<String> packages = new LinkedHashSet<>();
+
+    @Override
+    public void init(ProcessingEnvironment processingEnv) {
+        super.init(processingEnv);
+
+        try {
+            /*
+             * Load any partially generated files.
+             */
+        } catch (Exception exception) {
+            print(ERROR, exception);
+        }
+    }
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations,

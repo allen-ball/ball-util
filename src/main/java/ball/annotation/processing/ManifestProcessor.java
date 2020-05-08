@@ -34,6 +34,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
+import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
@@ -84,6 +85,19 @@ public class ManifestProcessor extends AnnotatedProcessor
 
     private ManifestImpl manifest = null;
     private HashSet<Element> processed = new HashSet<>();
+
+    @Override
+    public void init(ProcessingEnvironment processingEnv) {
+        super.init(processingEnv);
+
+        try {
+            /*
+             * Load any partially generated files.
+             */
+        } catch (Exception exception) {
+            print(ERROR, exception);
+        }
+    }
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations,
@@ -143,10 +157,7 @@ public class ManifestProcessor extends AnnotatedProcessor
                 case CLASS:
                 case INTERFACE:
                     TypeElement type = (TypeElement) element;
-                    ExecutableElement method =
-                        getMethod(type,
-                                  PROTOTYPE.getName(),
-                                  PROTOTYPE.getParameterTypes());
+                    ExecutableElement method = getMethod(type, PROTOTYPE);
 
                     if (method != null
                         && (method.getModifiers()
@@ -156,16 +167,15 @@ public class ManifestProcessor extends AnnotatedProcessor
 
                         if (old != null && (! name.equals(old))) {
                             print(WARNING, element,
-                                  "%s annotated with @%s overwrites previous definition of %s",
-                                  element.getKind(),
-                                  main.annotationType().getSimpleName(), old);
+                                  "@%s: %s overwrites previous definition of %s",
+                                  main.annotationType().getSimpleName(),
+                                  element.getKind(), old);
                         }
                     } else {
                         print(ERROR, element,
-                              "%s annotated with @%s but does not implement '%s'",
-                              element.getKind(),
+                              "@%s: %s does not implement '%s'",
                               main.annotationType().getSimpleName(),
-                              declaration(PROTOTYPE));
+                              element.getKind(), declaration(PROTOTYPE));
                     }
                     break;
 
@@ -224,7 +234,6 @@ public class ManifestProcessor extends AnnotatedProcessor
 
         for (Class<?> type : set) {
             Attribute attribute = type.getAnnotation(Attribute.class);
-
             MainClass main = type.getAnnotation(MainClass.class);
 
             if (main != null) {

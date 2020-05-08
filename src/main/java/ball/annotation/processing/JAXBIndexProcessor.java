@@ -30,6 +30,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
@@ -60,6 +61,19 @@ public class JAXBIndexProcessor extends AnnotatedProcessor
     private static final String DOT = ".";
 
     private MapImpl map = new MapImpl();
+
+    @Override
+    public void init(ProcessingEnvironment processingEnv) {
+        super.init(processingEnv);
+
+        try {
+            /*
+             * Load any partially generated files.
+             */
+        } catch (Exception exception) {
+            print(ERROR, exception);
+        }
+    }
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations,
