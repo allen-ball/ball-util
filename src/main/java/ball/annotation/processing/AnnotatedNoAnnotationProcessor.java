@@ -113,7 +113,7 @@ public abstract class AnnotatedNoAnnotationProcessor extends AbstractProcessor {
                     getClass().getAnnotation(MustImplement.class);
                 Class<?>[] types = annotation.value();
 
-                checks.add(new MustImplementCheck(annotation, types));
+                criteria.add(new MustImplementCriterion(annotation, types));
             }
         } catch (Exception exception) {
             print(ERROR, exception);
@@ -149,23 +149,28 @@ public abstract class AnnotatedNoAnnotationProcessor extends AbstractProcessor {
     }
 
     @AllArgsConstructor @ToString
-    private class MustImplementCheck extends Check {
+    private class MustImplementCriterion extends Criterion {
         private final Annotation annotation;
         private final Class<?>[] types;
 
         @Override
-        public void accept(Element element) {
-            if (! element.getModifiers().contains(ABSTRACT)) {
+        public boolean test(Element element) {
+            boolean match = (! element.getModifiers().contains(ABSTRACT));
+
+            if (match) {
                 for (Class<?> type : types) {
                     if (! isAssignable(element.asType(), type)) {
+                        match &= false;
+
                         print(ERROR, element,
-                              "%s annotated with @%s but does not implement %s",
-                              element,
+                              "@%s: @%s does not implement %s",
                               annotation.annotationType().getSimpleName(),
-                              type.getName());
+                              element.getKind(), type.getName());
                     }
                 }
             }
+
+            return match;
         }
     }
 }
