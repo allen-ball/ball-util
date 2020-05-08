@@ -58,7 +58,7 @@ public class AntTaskAttributeConstraintProcessor extends AnnotatedProcessor {
         case METHOD:
             if (! isGetterMethod((ExecutableElement) element)) {
                 print(ERROR, element,
-                      "%s: %s is not a property getter",
+                      "@%s: %s is not a property getter",
                       annotation.getSimpleName(), element.getKind());
             }
             break;
