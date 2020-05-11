@@ -85,6 +85,7 @@ public abstract class AnnotatedNoAnnotationProcessor extends AbstractProcessor {
             if (getClass().isAnnotationPresent(WithModifiers.class)) {
                 Modifier[] value =
                     getClass().getAnnotation(WithModifiers.class).value();
+
                 criteria.add(withModifiers(value));
             }
 
