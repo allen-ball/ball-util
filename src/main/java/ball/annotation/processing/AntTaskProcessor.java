@@ -171,8 +171,8 @@ public class AntTaskProcessor extends AnnotatedProcessor
             AnnotationValue resource = getAnnotationValue(mirror, "resource");
 
             if (isNotEmpty((String) value.getValue())) {
-                if (isAssignable(element.asType(), Task.class)) {
-                    if (! element.getModifiers().contains(ABSTRACT)) {
+                if (isAssignableTo(Task.class).test(element)) {
+                    if (withoutModifiers(ABSTRACT).test(element)) {
                         String key = (String) resource.getValue();
                         PackageElement pkg =
                             elements.getPackageOf(element);

@@ -34,8 +34,9 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import static javax.lang.model.element.Modifier.PUBLIC;
 
 /**
- * {@link java.lang.annotation.Annotation} to specify required
- * super-{@link Class} must have a no-arguments constructor.
+ * {@link java.lang.annotation.Annotation} to specify annotated
+ * {@link Class} must have a corresponding constructor.  The default values
+ * correspond to a public no-argument constructor.
  *
  * @see AnnotatedProcessor
  *
@@ -45,14 +46,15 @@ import static javax.lang.model.element.Modifier.PUBLIC;
 @Documented
 @Retention(RUNTIME)
 @Target(ANNOTATION_TYPE)
-public @interface AnnotatedTypeMustHaveNoArgsConstructor {
+public @interface AnnotatedTypeMustHaveConstructor {
     Modifier value() default PUBLIC;
+    Class<?>[] parameters() default { };
 
     /**
      * {@link Processor} implementation.
      */
     @ServiceProviderFor({ Processor.class })
-    @For({ AnnotatedTypeMustHaveNoArgsConstructor.class })
+    @For({ AnnotatedTypeMustHaveConstructor.class })
     @NoArgsConstructor @ToString
     public static class ProcessorImpl extends AnnotatedProcessor {
     }

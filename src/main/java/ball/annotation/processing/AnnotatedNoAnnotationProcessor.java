@@ -85,19 +85,14 @@ public abstract class AnnotatedNoAnnotationProcessor extends AbstractProcessor {
             if (getClass().isAnnotationPresent(WithModifiers.class)) {
                 Modifier[] value =
                     getClass().getAnnotation(WithModifiers.class).value();
-                EnumSet<Modifier> modifiers = EnumSet.allOf(Modifier.class);
-
-                modifiers.retainAll(Arrays.asList(value));
-                criteria.add(t -> modifiers.containsAll(t.getModifiers()));
+                criteria.add(withModifiers(value));
             }
 
             if (getClass().isAnnotationPresent(WithoutModifiers.class)) {
                 Modifier[] value =
                     getClass().getAnnotation(WithoutModifiers.class).value();
-                EnumSet<Modifier> modifiers = EnumSet.allOf(Modifier.class);
 
-                modifiers.retainAll(Arrays.asList(value));
-                criteria.add(t -> disjoint(modifiers, t.getModifiers()));
+                criteria.add(withoutModifiers(value));
             }
 
             if (getClass().isAnnotationPresent(ForSubclassesOf.class)) {
@@ -105,7 +100,7 @@ public abstract class AnnotatedNoAnnotationProcessor extends AbstractProcessor {
                     getClass().getAnnotation(ForSubclassesOf.class).value();
 
                 kinds.retainAll(ForSubclassesOf.ELEMENT_KINDS);
-                criteria.add(t -> isAssignable(t.asType(), value));
+                criteria.add(isAssignableTo(value));
             }
 
             if (getClass().isAnnotationPresent(MustImplement.class)) {
@@ -149,17 +144,17 @@ public abstract class AnnotatedNoAnnotationProcessor extends AbstractProcessor {
     }
 
     @AllArgsConstructor @ToString
-    private class MustImplementCriterion extends Criterion {
+    private class MustImplementCriterion extends Criterion<Element> {
         private final Annotation annotation;
         private final Class<?>[] types;
 
         @Override
         public boolean test(Element element) {
-            boolean match = (! element.getModifiers().contains(ABSTRACT));
+            boolean match = withoutModifiers(ABSTRACT).test(element);
 
             if (match) {
                 for (Class<?> type : types) {
-                    if (! isAssignable(element.asType(), type)) {
+                    if (! isAssignableTo(type).test(element)) {
                         match &= false;
 
                         print(ERROR, element,

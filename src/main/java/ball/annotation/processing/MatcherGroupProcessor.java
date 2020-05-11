@@ -69,7 +69,7 @@ public class MatcherGroupProcessor extends AnnotatedProcessor {
         case METHOD:
             ExecutableElement executable = (ExecutableElement) element;
 
-            if (! element.getModifiers().contains(PRIVATE)) {
+            if (withoutModifiers(PRIVATE).test(element)) {
                 if (executable.isVarArgs() || executable.getParameters().size() != 1) {
                     print(ERROR, element,
                           "@%s: %s must take exactly one argument",

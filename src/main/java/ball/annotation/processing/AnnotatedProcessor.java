@@ -24,12 +24,15 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Stream;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
+import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
@@ -38,8 +41,8 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
-import static javax.lang.model.util.ElementFilter.constructorsIn;
 import static javax.tools.Diagnostic.Kind.ERROR;
 import static lombok.AccessLevel.PROTECTED;
 
@@ -50,7 +53,7 @@ import static lombok.AccessLevel.PROTECTED;
  *
  * @see AnnotatedElementMustBe
  * @see AnnotatedTypeMustExtend
- * @see AnnotatedTypeMustHaveNoArgsConstructor
+ * @see AnnotatedTypeMustHaveConstructor
  * @see AnnotationValueMustConvertTo
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
@@ -95,7 +98,7 @@ public abstract class AnnotatedProcessor extends AbstractProcessor {
                 .stream()
                 .peek(new AnnotatedElementMustBeCheck(annotation))
                 .peek(new AnnotatedTypeMustExtendCheck(annotation))
-                .peek(new AnnotatedTypeMustHaveNoArgsConstructorCheck(annotation))
+                .peek(new AnnotatedTypeMustHaveConstructorCheck(annotation))
                 .peek(new AnnotationValueMustConvertToCheck(annotation))
                 .forEach(t -> process(roundEnv, annotation, t));
         } catch (Throwable throwable) {
@@ -116,7 +119,7 @@ public abstract class AnnotatedProcessor extends AbstractProcessor {
     }
 
     @AllArgsConstructor @ToString
-    private class AnnotatedElementMustBeCheck extends Check {
+    private class AnnotatedElementMustBeCheck extends Check<Element> {
         private final TypeElement annotation;
 
         @Override
@@ -141,7 +144,7 @@ public abstract class AnnotatedProcessor extends AbstractProcessor {
     }
 
     @AllArgsConstructor @ToString
-    private class AnnotatedTypeMustExtendCheck extends Check {
+    private class AnnotatedTypeMustExtendCheck extends Check<Element> {
         private final TypeElement annotation;
 
         @Override
@@ -152,7 +155,8 @@ public abstract class AnnotatedProcessor extends AbstractProcessor {
             if (meta != null) {
                 AnnotationValue value = getAnnotationValue(meta, "value");
                 TypeElement type =
-                    (TypeElement) types.asElement((TypeMirror) value.getValue());
+                    (TypeElement)
+                    types.asElement((TypeMirror) value.getValue());
 
                 if (! types.isAssignable(element.asType(), type.asType())) {
                     print(ERROR, element,
@@ -165,14 +169,14 @@ public abstract class AnnotatedProcessor extends AbstractProcessor {
     }
 
     @AllArgsConstructor @ToString
-    private class AnnotatedTypeMustHaveNoArgsConstructorCheck extends Check {
+    private class AnnotatedTypeMustHaveConstructorCheck extends Check<Element> {
         private final TypeElement annotation;
 
         @Override
         public void accept(Element element) {
             AnnotationMirror meta =
                 getAnnotationMirror(annotation,
-                                    AnnotatedTypeMustHaveNoArgsConstructor.class);
+                                    AnnotatedTypeMustHaveConstructor.class);
 
             if (meta != null) {
                 AnnotationValue value = getAnnotationValue(meta, "value");
@@ -180,15 +184,23 @@ public abstract class AnnotatedProcessor extends AbstractProcessor {
                     ((VariableElement) value.getValue()).getSimpleName()
                     .toString();
                 Modifier modifier = Modifier.valueOf(name);
+                List<TypeMirror> parameters =
+                    Stream.of(getAnnotationValue(meta, "parameters"))
+                    .filter(Objects::nonNull)
+                    .map(t -> (List<?>) t.getValue())
+                    .flatMap(List::stream)
+                    .map(t -> (AnnotationValue) t)
+                    .map(t -> (TypeMirror) t.getValue())
+                    .collect(toList());
+                ExecutableElement constructor =
+                    getConstructor((TypeElement) element, parameters);
                 boolean found =
-                    constructorsIn(element.getEnclosedElements())
-                    .stream()
-                    .filter(t -> t.getModifiers().contains(modifier))
-                    .anyMatch(t -> t.getParameters().isEmpty());
+                    (constructor != null
+                     && constructor.getModifiers().contains(modifier));
 
                 if (! found) {
                     print(ERROR, element,
-                          "@%s: No %s no-argument constructor",
+                          "@%s: No %s matching constructor",
                           annotation.getSimpleName(), modifier);
                 }
             }
@@ -196,7 +208,7 @@ public abstract class AnnotatedProcessor extends AbstractProcessor {
     }
 
     @AllArgsConstructor @ToString
-    private class AnnotationValueMustConvertToCheck extends Check {
+    private class AnnotationValueMustConvertToCheck extends Check<Element> {
         private final TypeElement annotation;
 
         @Override

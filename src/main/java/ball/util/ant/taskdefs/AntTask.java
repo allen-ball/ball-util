@@ -21,7 +21,7 @@ package ball.util.ant.taskdefs;
  * ##########################################################################
  */
 import ball.annotation.processing.AnnotatedTypeMustExtend;
-import ball.annotation.processing.AnnotatedTypeMustHaveNoArgsConstructor;
+import ball.annotation.processing.AnnotatedTypeMustHaveConstructor;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
@@ -41,7 +41,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 @Retention(RUNTIME)
 @Target({ TYPE })
-@AnnotatedTypeMustExtend(Task.class) @AnnotatedTypeMustHaveNoArgsConstructor
+@AnnotatedTypeMustExtend(Task.class)
+@AnnotatedTypeMustHaveConstructor
 public @interface AntTask {
     String value();
     String resource() default "../defaults.properties";

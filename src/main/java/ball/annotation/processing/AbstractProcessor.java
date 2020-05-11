@@ -30,6 +30,8 @@ import java.lang.reflect.Method;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Objects;
@@ -37,8 +39,10 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import javax.annotation.processing.Filer;
 import javax.annotation.processing.ProcessingEnvironment;
@@ -48,6 +52,7 @@ import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
+import javax.lang.model.element.Modifier;
 import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.ArrayType;
@@ -64,8 +69,11 @@ import lombok.ToString;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Collections.disjoint;
 import static java.util.stream.Collectors.toList;
+import static javax.lang.model.element.ElementKind.CONSTRUCTOR;
+import static javax.lang.model.element.ElementKind.METHOD;
 import static javax.lang.model.element.Modifier.PRIVATE;
 import static javax.lang.model.element.Modifier.STATIC;
+import static javax.lang.model.util.ElementFilter.constructorsIn;
 import static javax.lang.model.util.ElementFilter.methodsIn;
 import static javax.tools.Diagnostic.Kind.ERROR;
 import static lombok.AccessLevel.PROTECTED;
@@ -122,91 +130,6 @@ public abstract class AbstractProcessor
                                     RoundEnvironment roundEnv);
 
     /**
-     * Method to print a diagnostic message.
-     *
-     * @param   kind            The {@link javax.tools.Diagnostic.Kind}.
-     * @param   format          The message format {@link String}.
-     * @param   argv            Optional arguments to the message format
-     *                          {@link String}.
-     *
-     * @see javax.annotation.processing.Messager#printMessage(Diagnostic.Kind,CharSequence)
-     */
-    protected void print(Diagnostic.Kind kind, String format, Object... argv) {
-        processingEnv.getMessager()
-            .printMessage(kind, String.format(format, argv));
-    }
-
-    /**
-     * Method to print a diagnostic message.
-     *
-     * @param   kind            The {@link javax.tools.Diagnostic.Kind}.
-     * @param   element         The offending {@link Element}.
-     * @param   format          The message format {@link String}.
-     * @param   argv            Optional arguments to the message format
-     *                          {@link String}.
-     *
-     * @see javax.annotation.processing.Messager#printMessage(Diagnostic.Kind,CharSequence,Element)
-     */
-    protected void print(Diagnostic.Kind kind, Element element,
-                         String format, Object... argv) {
-        processingEnv.getMessager()
-            .printMessage(kind, String.format(format, argv),
-                          element);
-    }
-
-    /**
-     * Method to print a diagnostic message.
-     *
-     * @param   kind            The {@link javax.tools.Diagnostic.Kind}.
-     * @param   element         The offending {@link Element}.
-     * @param   annotation      The offending {@link AnnotationMirror}.
-     * @param   format          The message format {@link String}.
-     * @param   argv            Optional arguments to the message format
-     *                          {@link String}.
-     *
-     * @see javax.annotation.processing.Messager#printMessage(Diagnostic.Kind,CharSequence,Element,AnnotationMirror)
-     */
-    protected void print(Diagnostic.Kind kind,
-                         Element element, AnnotationMirror annotation,
-                         String format, Object... argv) {
-        processingEnv.getMessager()
-            .printMessage(kind, String.format(format, argv),
-                          element, annotation);
-    }
-
-    /**
-     * Method to print a diagnostic message.
-     *
-     * @param   kind            The {@link javax.tools.Diagnostic.Kind}.
-     * @param   element         The offending {@link Element}.
-     * @param   annotation      The offending {@link AnnotationMirror}.
-     * @param   value           The offending {@link AnnotationValue}.
-     * @param   format          The message format {@link String}.
-     * @param   argv            Optional arguments to the message format
-     *                          {@link String}.
-     *
-     * @see javax.annotation.processing.Messager#printMessage(Diagnostic.Kind,CharSequence,Element,AnnotationMirror,AnnotationValue)
-     */
-    protected void print(Diagnostic.Kind kind,
-                         Element element,
-                         AnnotationMirror annotation, AnnotationValue value,
-                         String format, Object... argv) {
-        processingEnv.getMessager()
-            .printMessage(kind, String.format(format, argv),
-                          element, annotation, value);
-    }
-
-    /**
-     * Method to print a {@link Throwable}.
-     *
-     * @param   kind            The {@link javax.tools.Diagnostic.Kind}.
-     * @param   throwable       The {@link Throwable}.
-     */
-    protected void print(Diagnostic.Kind kind, Throwable throwable) {
-        print(kind, new ThrowableDataSource(throwable).toString());
-    }
-
-    /**
      * Method to get a {@link TypeElement} for a {@link Class}.
      *
      * @param   type            The {@link Class}.
@@ -226,6 +149,63 @@ public abstract class AbstractProcessor
     }
 
     /**
+     * Method to get a {@link TypeMirror} for a {@link Class}.
+     *
+     * @param   type            The {@link Class}.
+     *
+     * @return  The {@link TypeMirror} for the {@link Class}.
+     */
+    protected TypeMirror asTypeMirror(Class<?> type) {
+        TypeMirror mirror = null;
+
+        if (type.isArray()) {
+            mirror = types.getArrayType(asTypeMirror(type.getComponentType()));
+        } else if (type.isPrimitive()) {
+            mirror = asTypeMirror(TypeKind.valueOf(type.getName().toUpperCase()));
+        } else {
+            mirror = asTypeElement(type).asType();
+        }
+
+        return mirror;
+    }
+
+    private TypeMirror asTypeMirror(TypeKind type) {
+        return type.isPrimitive() ? types.getPrimitiveType(type) : types.getNoType(type);
+    }
+
+    /**
+     * Method to get a {@link List} of {@link TypeMirror}s for an array of
+     * {@link Class}es.
+     *
+     * @param   types           The array of {@link Class}es.
+     *
+     * @return  The {@link List} of {@link TypeMirror}s.
+     */
+    protected List<TypeMirror> asTypeMirrorList(Class<?>... types) {
+        return Stream.of(types).map(t -> asTypeMirror(t)).collect(toList());
+    }
+
+    /**
+     * Constructor to get an {@link ExecutableElement} for a {@link Class}
+     * {@link java.lang.reflect.Constructor} by parameter list.
+     *
+     * @param   type            The {@link TypeElement}.
+     * @param   parameters      The constructor parameter types.
+     *
+     * @return  The {@link ExecutableElement} for the constructor.
+     */
+    protected ExecutableElement getConstructor(TypeElement type,
+                                               List<TypeMirror> parameters) {
+        Element element =
+            constructorsIn(type.getEnclosedElements())
+            .stream()
+            .filter(hasSameSignatureAs(parameters))
+            .findFirst().orElse(null);
+
+        return (ExecutableElement) element;
+    }
+
+    /**
      * Method to get an {@link ExecutableElement} for a {@link Method}
      * prototype.
      *
@@ -234,8 +214,7 @@ public abstract class AbstractProcessor
      * @return  The {@link ExecutableElement} for the method.
      */
     protected ExecutableElement getMethod(Method method) {
-        return getMethod(asTypeElement(method.getDeclaringClass()),
-                         method.getName(), method.getParameterTypes());
+        return getMethod(asTypeElement(method.getDeclaringClass()), method);
     }
 
     /**
@@ -248,181 +227,13 @@ public abstract class AbstractProcessor
      * @return  The {@link ExecutableElement} for the method.
      */
     protected ExecutableElement getMethod(TypeElement type, Method method) {
-        return getMethod(type, method.getName(), method.getParameterTypes());
-    }
-
-    /**
-     * Method to get an {@link ExecutableElement} for a {@link Class}
-     * {@link Method} prototype by name and parameter list.
-     *
-     * @param   type            The {@link TypeElement}.
-     * @param   name            The method name.
-     * @param   parameters      The method parameter types.
-     *
-     * @return  The {@link ExecutableElement} for the method.
-     */
-    protected ExecutableElement getMethod(TypeElement type,
-                                          String name,
-                                          Class<?>... parameters) {
-        ExecutableElement element =
+        Element element =
             methodsIn(type.getEnclosedElements())
             .stream()
-            .filter(t -> t.getSimpleName().contentEquals(name))
-            .filter(t -> areAssignable(t.getParameters(), parameters))
+            .filter(hasSameSignatureAs(method))
             .findFirst().orElse(null);
 
-        return element;
-    }
-
-    /**
-     * Method to get an {@link ExecutableElement} for a {@link Class}
-     * {@link Method} prototype by name and parameter list.
-     *
-     * @param   type            The {@link Class}.
-     * @param   name            The method name.
-     * @param   parameters      The method parameter types.
-     *
-     * @return  The {@link ExecutableElement} for the method.
-     */
-    protected ExecutableElement getMethod(Class<?> type,
-                                          String name,
-                                          Class<?>... parameters) {
-        return getMethod(asTypeElement(type), name, parameters);
-    }
-
-    private boolean areAssignable(List<? extends Element> from,
-                                  Class<?>[] to) {
-        boolean areAssignable = (from.size() == to.length);
-
-        if (areAssignable) {
-            for (int i = 0; i < to.length; i += 1) {
-                areAssignable &=
-                    isAssignable(types.erasure(from.get(i).asType()), to[i]);
-
-                if (! areAssignable) {
-                    break;
-                }
-            }
-        }
-
-        return areAssignable;
-    }
-
-    /**
-     * Method to get a {@link TypeMirror} for a {@link Class}.
-     *
-     * @param   type            The {@link Class}.
-     *
-     * @return  The {@link TypeMirror} for the {@link Class}.
-     */
-    protected TypeMirror asTypeMirror(Class<?> type) {
-        TypeMirror mirror = null;
-
-        try {
-            if (type.isArray()) {
-                TypeMirror component = asTypeMirror(type.getComponentType());
-
-                mirror = types.getArrayType(component);
-            } else if (type.isPrimitive()) {
-                TypeKind kind = TypeKind.valueOf(type.getName().toUpperCase());
-
-                mirror =
-                    kind.isPrimitive()
-                        ? types.getPrimitiveType(kind)
-                        : types.getNoType(kind);
-            } else {
-                mirror = asTypeElement(type).asType();
-            }
-        } catch (Exception exception) {
-            throw new IllegalArgumentException("type=" + String.valueOf(type),
-                                               exception);
-        }
-
-        return mirror;
-    }
-
-    /**
-     * See {@link Types#isAssignable(TypeMirror,TypeMirror)}.
-     *
-     * @param   from            The left-hand side of the assignment.
-     * @param   to              The right-hand side of the assignment.
-     *
-     * @return  {@code true} if {@code from} can be assigned to {@code to};
-     *          {@code false} otherwise.
-     */
-    protected boolean isAssignable(TypeMirror from, Class<?> to) {
-        boolean isAssignable = true;
-
-        if (from instanceof ArrayType && to.isArray()) {
-            isAssignable &=
-                isAssignable(((ArrayType) from).getComponentType(),
-                             to.getComponentType());
-        } else if (from instanceof PrimitiveType && to.isPrimitive()) {
-            isAssignable &= from.toString().equals(to.getName());
-        } else {
-            isAssignable &=
-                types.isAssignable(from, asTypeMirror(to));
-        }
-
-        return isAssignable;
-    }
-
-    /**
-     * See {@link Types#isSameType(TypeMirror,TypeMirror)}.
-     *
-     * @param   from            The left-hand side of the type test.
-     * @param   to              The right-hand side of the type test.
-     *
-     * @return  {@code true} if {@code from} represents the same type as
-     *                          {@code to}; {@code false} otherwise.
-     */
-    protected boolean isSameType(TypeMirror from, Class<?> to) {
-        boolean isSameType = true;
-
-        if (from instanceof ArrayType && to.isArray()) {
-            isSameType &=
-                isSameType(((ArrayType) from).getComponentType(),
-                           to.getComponentType());
-        } else if (from instanceof PrimitiveType && to.isPrimitive()) {
-            isSameType &= from.toString().equals(to.getName());
-        } else {
-            isSameType &= types.isSameType(from, asTypeMirror(to));
-        }
-
-        return isSameType;
-    }
-
-    /**
-     * Method to get an {@link Annotation}'s {@link Target}
-     * {@link ElementType}s.
-     *
-     * @param   annotation      The {@link Annotation}.
-     *
-     * @return  The array of {@link Target} {@link ElementType}s or
-     *          {@code null} if the argument is {@code null} or if none
-     *          specified.
-     */
-    protected ElementType[] getTargetElementTypesFor(Annotation annotation) {
-        return ((annotation != null)
-                    ? getTargetElementTypesFor(annotation.annotationType())
-                    : null);
-    }
-
-    /**
-     * Method to get an {@link Annotation}'s {@link Target}
-     * {@link ElementType}s.
-     *
-     * @param   type            The {@link Annotation#annotationType()}.
-     *
-     * @return  The array of {@link Target} {@link ElementType}s or
-     *          {@code null} if the argument is {@code null} or if none
-     *          specified.
-     */
-    protected ElementType[] getTargetElementTypesFor(Class<? extends Annotation> type) {
-        Target target =
-            (type != null) ? type.getAnnotation(Target.class) : null;
-
-        return (target != null) ? target.value() : null;
+        return (ExecutableElement) element;
     }
 
     /**
@@ -473,8 +284,7 @@ public abstract class AbstractProcessor
         ExecutableElement element =
             methodsIn(type.getEnclosedElements())
             .stream()
-            .filter(t -> disjoint(t.getModifiers(),
-                                  EnumSet.of(PRIVATE, STATIC)))
+            .filter(withoutModifiers(PRIVATE, STATIC))
             .filter(t -> elements.overrides(overrider, t, type))
             .findFirst().orElse(null);
 
@@ -638,7 +448,7 @@ public abstract class AbstractProcessor
         AnnotationValue value =
             elements.getElementValuesWithDefaults(annotation).entrySet()
             .stream()
-            .filter(t -> t.getKey().getSimpleName().contentEquals(name))
+            .filter(t -> named(name).test(t.getKey()))
             .map(t -> t.getValue())
             .findFirst().orElse(null);
 
@@ -660,28 +470,6 @@ public abstract class AbstractProcessor
     }
 
     /**
-     * Method to get the {@link List} of {@link TypeElement}s from an
-     * {@link AnnotationValue}.
-     *
-     * @param   value           The {@link AnnotationValue}.
-     *
-     * @return  The {@link List}.
-     */
-    protected List<TypeElement> getTypeElementListFrom(AnnotationValue value) {
-        List<TypeElement> list =
-            Stream.of(value)
-            .filter(Objects::nonNull)
-            .map(t -> (List<?>) t.getValue())
-            .flatMap(List::stream)
-            .map(t -> (AnnotationValue) t)
-            .map(t -> (TypeMirror) t.getValue())
-            .map(t -> (TypeElement) types.asElement(t))
-            .collect(toList());
-
-        return list;
-    }
-
-    /**
      * Method to get bean property name from an {@link ExecutableElement}.
      *
      * @param   element         The {@link ExecutableElement}.
@@ -693,10 +481,9 @@ public abstract class AbstractProcessor
         String string =
             Stream.of(PropertyMethodEnum.values())
             .filter(t -> t.getPropertyName(element.getSimpleName().toString()) != null)
-            .filter(t -> isAssignable(element.getReturnType(),
-                                      t.getReturnType()))
-            .filter(t -> areAssignable(element.getParameters(),
-                                       t.getParameterTypes()))
+            .filter(t -> isAssignableTo(t.getReturnType(),
+                                        e -> ((ExecutableElement) e).getReturnType()).test(element))
+            .filter(t -> withParameters(t.getParameterTypes()).test(element))
             .map(t -> t.getPropertyName(element.getSimpleName().toString()))
             .findFirst().orElse(null);
 
@@ -714,12 +501,11 @@ public abstract class AbstractProcessor
     protected boolean isGetterMethod(ExecutableElement element) {
         Optional <PropertyMethodEnum> optional =
             Stream.of(PropertyMethodEnum.GET, PropertyMethodEnum.IS)
-            .filter(t -> (! element.getModifiers().contains(PRIVATE)))
             .filter(t -> t.getPropertyName(element.getSimpleName().toString()) != null)
-            .filter(t -> isAssignable(element.getReturnType(),
-                                      t.getReturnType()))
-            .filter(t -> areAssignable(element.getParameters(),
-                                       t.getParameterTypes()))
+            .filter(t -> withoutModifiers(PRIVATE).test(element))
+            .filter(t -> isAssignableTo(t.getReturnType(),
+                                        e -> ((ExecutableElement) e).getReturnType()).test(element))
+            .filter(t -> withParameters(t.getParameterTypes()).test(element))
             .findFirst();
 
         return optional.isPresent();
@@ -740,13 +526,12 @@ public abstract class AbstractProcessor
     private Set<String> getPropertyNames(Set<String> set, TypeElement type) {
         for (ExecutableElement element :
                  methodsIn(type.getEnclosedElements())) {
-            if (! element.getModifiers().contains(PRIVATE)) {
+            if (withoutModifiers(PRIVATE).test(element)) {
                 Stream.of(PropertyMethodEnum.values())
                     .filter(t -> t.getPropertyName(element.getSimpleName().toString()) != null)
-                    .filter(t -> isAssignable(element.getReturnType(),
-                                              t.getReturnType()))
-                    .filter(t -> areAssignable(element.getParameters(),
-                                               t.getParameterTypes()))
+                    .filter(t -> isAssignableTo(t.getReturnType(),
+                                                e -> ((ExecutableElement) e).getReturnType()).test(element))
+                    .filter(t -> withParameters(t.getParameterTypes()).test(element))
                     .map(t -> t.getPropertyName(element.getSimpleName().toString()))
                     .forEach(t -> set.add(t));
             }
@@ -834,18 +619,188 @@ public abstract class AbstractProcessor
     protected static Path toPath(FileObject file) {
         return Paths.get(file.toUri());
     }
+    /*
+     * Element Predicate Calculus
+     */
+    private <E extends Enum<E>> Predicate<Element> is(E e, Function<? super Element,E> extractor) {
+        return t -> e.equals(extractor.apply(t));
+    }
+
+    private <E extends Enum<E>> EnumSet<E> toEnumSet(E[] array) {
+        return EnumSet.copyOf(Arrays.asList(array));
+    }
+
+    protected Predicate<Element> hasSameSignatureAs(List<TypeMirror> parameters) {
+        return is(CONSTRUCTOR, Element::getKind).and(withParameters(parameters));
+    }
+
+    protected Predicate<Element> hasSameSignatureAs(Method method) {
+        return hasSameSignatureAs(method.getName(),
+                                  method.getParameterTypes());
+    }
+
+    protected Predicate<Element> hasSameSignatureAs(CharSequence name,
+                                                    Class<?>[] parameters) {
+        return is(METHOD, Element::getKind).and(named(name).and(withParameters(parameters)));
+    }
+
+    protected Predicate<Element> isAssignableTo(Class<?> type) {
+        return isAssignableTo(type, t -> t.asType());
+    }
+
+    protected Predicate<Element> isAssignableTo(Class<?> type,
+                                                Function<? super Element,TypeMirror> extractor) {
+        return isAssignableTo(asTypeMirror(type), extractor);
+    }
+
+    private Predicate<Element> isAssignableTo(TypeMirror type,
+                                              Function<? super Element,TypeMirror> extractor) {
+        return t -> types.isAssignable(extractor.apply(t), type);
+    }
+
+    protected Predicate<Element> named(CharSequence name) {
+        return t -> t.getSimpleName().contentEquals(name);
+    }
+
+    protected Predicate<Element> withParameters(Class<?>[] parameters) {
+        return withParameters(asTypeMirrorList(parameters));
+    }
+
+    protected Predicate<Element> withParameters(List<TypeMirror> parameters) {
+        return new Predicate<Element>() {
+            @Override
+            public boolean test(Element element) {
+                boolean match =
+                    parameters.size() == ((ExecutableElement) element).getParameters().size();
+
+                if (match) {
+                    match &=
+                        IntStream.range(0, parameters.size())
+                        .allMatch(i -> isAssignableTo(parameters.get(i),
+                                                      t -> types.erasure(((ExecutableElement) t)
+                                                                         .getParameters().get(i).asType()))
+                                       .test(element));
+                }
+
+                return match;
+            }
+        };
+    }
+
+    protected Predicate<Element> withModifiers(Modifier... modifiers) {
+        return with(toEnumSet(modifiers), t -> t.getModifiers());
+    }
+
+    protected Predicate<Element> withoutModifiers(Modifier... modifiers) {
+        return without(toEnumSet(modifiers), t-> t.getModifiers());
+    }
+
+    private <E extends Enum<E>> Predicate<Element> with(EnumSet<E> set,
+                                                        Function<Element,Collection<E>> extractor) {
+        return t -> set.containsAll(extractor.apply(t));
+    }
+
+    private <E extends Enum<E>> Predicate<Element> without(EnumSet<E> set,
+                                                           Function<Element,Collection<E>> extractor) {
+        return t -> disjoint(set, extractor.apply(t));
+    }
+
+    /**
+     * Method to print a diagnostic message.
+     *
+     * @param   kind            The {@link javax.tools.Diagnostic.Kind}.
+     * @param   format          The message format {@link String}.
+     * @param   argv            Optional arguments to the message format
+     *                          {@link String}.
+     *
+     * @see javax.annotation.processing.Messager#printMessage(Diagnostic.Kind,CharSequence)
+     */
+    protected void print(Diagnostic.Kind kind, String format, Object... argv) {
+        processingEnv.getMessager()
+            .printMessage(kind, String.format(format, argv));
+    }
+
+    /**
+     * Method to print a diagnostic message.
+     *
+     * @param   kind            The {@link javax.tools.Diagnostic.Kind}.
+     * @param   element         The offending {@link Element}.
+     * @param   format          The message format {@link String}.
+     * @param   argv            Optional arguments to the message format
+     *                          {@link String}.
+     *
+     * @see javax.annotation.processing.Messager#printMessage(Diagnostic.Kind,CharSequence,Element)
+     */
+    protected void print(Diagnostic.Kind kind, Element element,
+                         String format, Object... argv) {
+        processingEnv.getMessager()
+            .printMessage(kind, String.format(format, argv),
+                          element);
+    }
+
+    /**
+     * Method to print a diagnostic message.
+     *
+     * @param   kind            The {@link javax.tools.Diagnostic.Kind}.
+     * @param   element         The offending {@link Element}.
+     * @param   annotation      The offending {@link AnnotationMirror}.
+     * @param   format          The message format {@link String}.
+     * @param   argv            Optional arguments to the message format
+     *                          {@link String}.
+     *
+     * @see javax.annotation.processing.Messager#printMessage(Diagnostic.Kind,CharSequence,Element,AnnotationMirror)
+     */
+    protected void print(Diagnostic.Kind kind,
+                         Element element, AnnotationMirror annotation,
+                         String format, Object... argv) {
+        processingEnv.getMessager()
+            .printMessage(kind, String.format(format, argv),
+                          element, annotation);
+    }
+
+    /**
+     * Method to print a diagnostic message.
+     *
+     * @param   kind            The {@link javax.tools.Diagnostic.Kind}.
+     * @param   element         The offending {@link Element}.
+     * @param   annotation      The offending {@link AnnotationMirror}.
+     * @param   value           The offending {@link AnnotationValue}.
+     * @param   format          The message format {@link String}.
+     * @param   argv            Optional arguments to the message format
+     *                          {@link String}.
+     *
+     * @see javax.annotation.processing.Messager#printMessage(Diagnostic.Kind,CharSequence,Element,AnnotationMirror,AnnotationValue)
+     */
+    protected void print(Diagnostic.Kind kind,
+                         Element element,
+                         AnnotationMirror annotation, AnnotationValue value,
+                         String format, Object... argv) {
+        processingEnv.getMessager()
+            .printMessage(kind, String.format(format, argv),
+                          element, annotation, value);
+    }
+
+    /**
+     * Method to print a {@link Throwable}.
+     *
+     * @param   kind            The {@link javax.tools.Diagnostic.Kind}.
+     * @param   throwable       The {@link Throwable}.
+     */
+    protected void print(Diagnostic.Kind kind, Throwable throwable) {
+        print(kind, new ThrowableDataSource(throwable).toString());
+    }
 
     /**
      * Abstract {@link Criterion} base class.
      */
     @NoArgsConstructor(access = PROTECTED) @ToString
-    protected abstract class Criterion implements Predicate<Element> {
+    protected abstract class Criterion<T extends Element> implements Predicate<T> {
     }
 
     /**
      * Abstract {@link Check} base class.
      */
     @NoArgsConstructor(access = PROTECTED) @ToString
-    protected abstract class Check implements Consumer<Element> {
+    protected abstract class Check<T extends Element> implements Consumer<T> {
     }
 }

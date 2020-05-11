@@ -27,9 +27,11 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.stream.Stream;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
@@ -37,11 +39,13 @@ import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.type.TypeMirror;
 import javax.tools.FileObject;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import static java.lang.reflect.Modifier.isAbstract;
+import static java.util.stream.Collectors.toList;
 import static javax.lang.model.element.Modifier.ABSTRACT;
 import static javax.tools.Diagnostic.Kind.ERROR;
 import static javax.tools.StandardLocation.CLASS_OUTPUT;
@@ -130,11 +134,20 @@ public class ServiceProviderForProcessor extends AnnotatedProcessor
         AnnotationValue value = getAnnotationValue(mirror, "value");
 
         if (! isEmptyArray(value)) {
-            if (! element.getModifiers().contains(ABSTRACT)) {
+            if (withoutModifiers(ABSTRACT).test(element)) {
                 String provider =
                     elements.getBinaryName((TypeElement) element).toString();
+                List<TypeElement> services =
+                    Stream.of(value)
+                    .filter(Objects::nonNull)
+                    .map(t -> (List<?>) t.getValue())
+                    .flatMap(List::stream)
+                    .map(t -> (AnnotationValue) t)
+                    .map(t -> (TypeMirror) t.getValue())
+                    .map(t -> (TypeElement) types.asElement(t))
+                    .collect(toList());
 
-                for (TypeElement service : getTypeElementListFrom(value)) {
+                for (TypeElement service : services) {
                     if (types.isAssignable(element.asType(),
                                            service.asType())) {
                         String key =

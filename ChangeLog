@@ -1,9 +1,19 @@
+2020-05-10  Allen D. Ball  <ball@hcf.dev>
+
+	* src/main/java/ball/annotation/processing/AbstractProcessor.java:
+	Created protected "Element Predicate Calculus" methods to
+	construct Stream filters.
+
+	* Renamed AnnotatedTypeMustHaveConstructor to
+	AnnotatedTypeMustHaveConstructor and added parameters element to
+	specify parameter list.
+
 2020-05-07  Allen D. Ball  <ball@hcf.dev>
 
 	* src/main/java/ball/annotation/processing/AbstractProcessor.java:
 	Added print() methods for Element, AnnotationMirror, and
-	AnnotationValue location information.
-	Added Check abstract (inner) base class.
+	AnnotationValue location information.  Added Check abstract
+	(inner) base class.
 
 	* src/main/java/ball/util/Walker.java:
 	Added static walk(Collection<? extends T> roots,...) method.
