@@ -32,7 +32,6 @@ import javax.lang.model.element.TypeElement;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import static javax.lang.model.element.Modifier.PRIVATE;
 import static javax.tools.Diagnostic.Kind.ERROR;
 
 /**
@@ -44,12 +43,12 @@ import static javax.tools.Diagnostic.Kind.ERROR;
 @ServiceProviderFor({ Processor.class })
 @For({ AntTaskAttributeConstraint.class, NotEmpty.class, NotNull.class })
 @NoArgsConstructor @ToString
-public class AntTaskAttributeConstraintProcessor
-             extends AbstractAnnotationProcessor {
+public class AntTaskAttributeConstraintProcessor extends AnnotatedProcessor {
     @Override
     public void process(RoundEnvironment roundEnv,
-                        TypeElement annotation,
-                        Element element) throws Exception {
+                        TypeElement annotation, Element element) {
+        super.process(roundEnv, annotation, element);
+
         switch (element.getKind()) {
         case ANNOTATION_TYPE:
         case FIELD:
@@ -58,11 +57,9 @@ public class AntTaskAttributeConstraintProcessor
 
         case METHOD:
             if (! isGetterMethod((ExecutableElement) element)) {
-                print(ERROR,
-                      element,
-                      element.getKind() + " annotated with "
-                      + AT + annotation.getSimpleName()
-                      + " but is not a property getter method");
+                print(ERROR, element,
+                      "@%s: %s is not a property getter",
+                      annotation.getSimpleName(), element.getKind());
             }
             break;
         }

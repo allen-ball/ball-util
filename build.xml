@@ -31,7 +31,7 @@
 
   <resolver:resolve>
     <dependencies>
-      <dependency coords="ball:parent:20200412.0:xml:compile"/>
+      <dependency coords="ball:parent:20200513.0:xml:compile"/>
     </dependencies>
     <properties/>
   </resolver:resolve>
@@ -171,46 +171,6 @@
     <taskdef classpathref="build.classpath" onerror="ignore"
              resource="ball/util/ant/defaults.properties"/>
     <superclasses-of classpathref="build.classpath" type="${type}"/>
-  </target>
-
-  <target name="uuid-from"
-          description="--> Invokes &lt;uuid-from/&gt; task."
-          depends="jar-classes">
-    <taskdef classpathref="build.classpath" onerror="ignore"
-             resource="ball/util/ant/defaults.properties"/>
-    <uuid-from/>
-  </target>
-
-  <target name="uuid-generate"
-          description="--> Invokes &lt;uuid-generate/&gt; task."
-          depends="jar-classes">
-    <taskdef classpathref="build.classpath" onerror="ignore"
-             resource="ball/util/ant/defaults.properties"/>
-    <uuid-generate/>
-  </target>
-
-  <target name="uuid-generate-random"
-          description="--> Invokes &lt;uuid-generate-random/&gt; task."
-          depends="jar-classes">
-    <taskdef classpathref="build.classpath" onerror="ignore"
-             resource="ball/util/ant/defaults.properties"/>
-    <uuid-generate-random/>
-  </target>
-
-  <target name="uuid-generate-time"
-          description="--> Invokes &lt;uuid-generate-time/&gt; task."
-          depends="jar-classes">
-    <taskdef classpathref="build.classpath" onerror="ignore"
-             resource="ball/util/ant/defaults.properties"/>
-    <uuid-generate-time/>
-  </target>
-
-  <target name="uuid-null"
-          description="--> Invokes &lt;uuid-null/&gt; task."
-          depends="jar-classes">
-    <taskdef classpathref="build.classpath" onerror="ignore"
-             resource="ball/util/ant/defaults.properties"/>
-    <uuid-null/>
   </target>
 
   <target name="xpath-evaluate"

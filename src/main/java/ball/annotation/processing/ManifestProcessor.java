@@ -20,12 +20,6 @@ package ball.annotation.processing;
  * limitations under the License.
  * ##########################################################################
  */
-import ball.annotation.Manifest.Attribute;
-import ball.annotation.Manifest.DependsOn;
-import ball.annotation.Manifest.DesignTimeOnly;
-import ball.annotation.Manifest.JavaBean;
-import ball.annotation.Manifest.MainClass;
-import ball.annotation.Manifest.Section;
 import ball.annotation.ServiceProviderFor;
 import java.io.File;
 import java.io.FileInputStream;
@@ -36,27 +30,31 @@ import java.io.OutputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.nio.file.Files;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
+import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
-import javax.lang.model.element.Modifier;
 import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
 import javax.tools.FileObject;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import static ball.annotation.Manifest.Attribute;
+import static ball.annotation.Manifest.DependsOn;
+import static ball.annotation.Manifest.DesignTimeOnly;
+import static ball.annotation.Manifest.JavaBean;
+import static ball.annotation.Manifest.MainClass;
+import static ball.annotation.Manifest.Section;
 import static javax.tools.Diagnostic.Kind.ERROR;
 import static javax.tools.Diagnostic.Kind.WARNING;
 import static javax.tools.StandardLocation.CLASS_OUTPUT;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
-import static org.apache.commons.lang3.StringUtils.join;
 
 /**
  * {@link Processor} implementation to scan {@link ball.annotation.Manifest}
@@ -72,21 +70,34 @@ import static org.apache.commons.lang3.StringUtils.join;
             JavaBean.class, DependsOn.class, DesignTimeOnly.class
      })
 @NoArgsConstructor @ToString
-public class ManifestProcessor extends AbstractAnnotationProcessor
+public class ManifestProcessor extends AnnotatedProcessor
                                implements ClassFileProcessor {
+    private static final String META_INF = "META-INF";
     private static final String MANIFEST_MF = "MANIFEST.MF";
-
     private static final String _CLASS = ".class";
 
     private static abstract class PROTOTYPE {
         public static void main(String[] argv) { }
     }
 
-    private static final Method METHOD =
+    private static final Method PROTOTYPE =
         PROTOTYPE.class.getDeclaredMethods()[0];
 
     private ManifestImpl manifest = null;
     private HashSet<Element> processed = new HashSet<>();
+
+    @Override
+    public void init(ProcessingEnvironment processingEnv) {
+        super.init(processingEnv);
+
+        try {
+            /*
+             * Load any partially generated files.
+             */
+        } catch (Exception exception) {
+            print(ERROR, exception);
+        }
+    }
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations,
@@ -94,7 +105,7 @@ public class ManifestProcessor extends AbstractAnnotationProcessor
         boolean result = true;
 
         try {
-            String path = META_INF + SLASH + MANIFEST_MF;
+            String path = META_INF + "/" + MANIFEST_MF;
 
             if (manifest == null) {
                 manifest = new ManifestImpl();
@@ -124,21 +135,21 @@ public class ManifestProcessor extends AbstractAnnotationProcessor
                 }
             }
         } catch (Exception exception) {
-            print(ERROR, null, exception);
+            print(ERROR, exception);
         }
 
         return result;
     }
 
     @Override
-    protected void process(RoundEnvironment env,
-                           TypeElement ignore,
-                           Element element) throws Exception {
+    protected void process(RoundEnvironment roundEnv,
+                           TypeElement ignore, Element element) {
+        super.process(roundEnv, ignore, element);
+
         if (! processed.contains(element)) {
             processed.add(element);
 
             Attribute attribute = element.getAnnotation(Attribute.class);
-
             MainClass main = element.getAnnotation(MainClass.class);
 
             if (main != null) {
@@ -146,30 +157,25 @@ public class ManifestProcessor extends AbstractAnnotationProcessor
                 case CLASS:
                 case INTERFACE:
                     TypeElement type = (TypeElement) element;
-                    ExecutableElement method =
-                        getExecutableElementFor(type, METHOD);
+                    ExecutableElement method = getMethod(type, PROTOTYPE);
 
                     if (method != null
                         && (method.getModifiers()
-                            .containsAll(getModifierSetFor(METHOD)))) {
+                            .containsAll(getModifiers(PROTOTYPE)))) {
                         String name = elements.getBinaryName(type).toString();
                         String old = manifest.put(main, name);
 
                         if (old != null && (! name.equals(old))) {
-                            print(WARNING,
-                                  element,
-                                  element.getKind() + " annotated with "
-                                  + AT + main.annotationType().getSimpleName()
-                                  + " overwrites previous definition of "
-                                  + old);
+                            print(WARNING, element,
+                                  "@%s: %s overwrites previous definition of %s",
+                                  main.annotationType().getSimpleName(),
+                                  element.getKind(), old);
                         }
                     } else {
-                        print(ERROR,
-                              element,
-                              element.getKind() + " annotated with "
-                              + AT + main.annotationType().getSimpleName()
-                              + " but does not implement `"
-                              + toString(METHOD) + "'");
+                        print(ERROR, element,
+                              "@%s: %s does not implement '%s'",
+                              main.annotationType().getSimpleName(),
+                              element.getKind(), declaration(PROTOTYPE));
                     }
                     break;
 
@@ -228,7 +234,6 @@ public class ManifestProcessor extends AbstractAnnotationProcessor
 
         for (Class<?> type : set) {
             Attribute attribute = type.getAnnotation(Attribute.class);
-
             MainClass main = type.getAnnotation(MainClass.class);
 
             if (main != null) {
@@ -252,7 +257,7 @@ public class ManifestProcessor extends AbstractAnnotationProcessor
 
         Files.createDirectories(file.toPath().getParent());
 
-        try (OutputStream out = new FileOutputStream(file)) {
+        try (FileOutputStream out = new FileOutputStream(file)) {
             manifest.write(out);
         }
     }
@@ -267,10 +272,9 @@ public class ManifestProcessor extends AbstractAnnotationProcessor
         return super.asPath(type) + _CLASS;
     }
 
+    @NoArgsConstructor @ToString
     private class ManifestImpl extends Manifest {
         private static final String MANIFEST_VERSION = "Manifest-Version";
-
-        public ManifestImpl() { super(); }
 
         protected void init() {
             if (getMainAttributes().getValue(MANIFEST_VERSION) == null) {
@@ -313,20 +317,17 @@ public class ManifestProcessor extends AbstractAnnotationProcessor
 
             if (depends != null) {
                 attributes.putValue(getAttributeName(depends.getClass()),
-                                    join(depends.value(), SPACE));
+                                    String.join(" ", depends.value()));
             }
 
             if (design != null) {
                 attributes.putValue(getAttributeName(design.getClass()),
-                                    join(design.value(), SPACE));
+                                    String.join(" ", design.value()));
             }
         }
 
         private String getAttributeName(Class<? extends Annotation> type) {
             return type.getAnnotation(Attribute.class).value();
         }
-
-        @Override
-        public String toString() { return super.toString(); }
     }
 }

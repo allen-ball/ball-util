@@ -1,4 +1,4 @@
-package ball.lang;
+package ball.annotation;
 /*-
  * ##########################################################################
  * Utilities
@@ -20,32 +20,28 @@ package ball.lang;
  * limitations under the License.
  * ##########################################################################
  */
-import ball.util.Parser;
-import java.util.regex.Pattern;
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+
+import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.ElementType.LOCAL_VARIABLE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * Provides Java literals as an {@link Enum} type.
+ * Annotation to specify a field constant expression must convert to the
+ * specified type.  The test is made at compile time during annotation
+ * processing.
+ *
+ * @see ball.annotation.processing.ConstantValueMustConvertToProcessor
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
-public enum Literal implements Parser.Lexeme {
-    FALSE, TRUE, NULL;
-
-    private final Pattern pattern;
-
-    private Literal() {
-        pattern = Pattern.compile("\\b" + Pattern.quote(lexeme()) + "\\B");
-    }
-
-    /**
-     * Method to get the lexeme associated with {@link.this}
-     * {@link Literal}.
-     *
-     * @return  The lexeme (literal).
-     */
-    public String lexeme() { return name().toLowerCase(); }
-
-    @Override
-    public Pattern pattern() { return pattern; }
+@Documented
+@Retention(RUNTIME)
+@Target({ FIELD, LOCAL_VARIABLE })
+public @interface ConstantValueMustConvertTo {
+    Class<?> value();
+    String method() default "";
 }

@@ -20,7 +20,7 @@ package ball.tools;
  * limitations under the License.
  * ##########################################################################
  */
-import ball.annotation.Regex;
+import ball.annotation.ConstantValueMustConvertTo;
 import ball.annotation.ServiceProviderFor;
 import java.util.Locale;
 import java.util.SortedSet;
@@ -32,10 +32,6 @@ import javax.tools.StandardJavaFileManager;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import static ball.lang.Keyword.IMPORT;
-import static ball.lang.Punctuation.SEMICOLON;
-import static ball.lang.Punctuation.SPACE;
-
 /**
  * compiler.err.cant.resolve.location {@link Remedy}.
  *
@@ -46,11 +42,10 @@ import static ball.lang.Punctuation.SPACE;
 @Codes({ "compiler.err.cant.resolve.location" })
 @NoArgsConstructor @ToString
 public class CannotResolveLocationRemedy extends Remedy {
-    @Regex
+    @ConstantValueMustConvertTo(value = Pattern.class, method = "compile")
     private static final String REGEX =
-        "(?m)^symbol[\\p{Space}]*:[\\p{Space}]*class[\\p{Space}]+([\\p{Graph}]+)$";
+        "(?m)^symbol[\\p{Space}]*:[\\p{Space}]*class[\\p{Space}]+(?<class>[\\p{Graph}]+)$";
     private static final Pattern PATTERN = Pattern.compile(REGEX);
-    private static final int CLASS = 1;
 
     @Override
     public String getRx(Diagnostic<? extends JavaFileObject> diagnostic,
@@ -62,7 +57,7 @@ public class CannotResolveLocationRemedy extends Remedy {
         Class<?> type = null;
 
         if (matcher.find()) {
-            type = getClassForNameFrom(matcher.group(CLASS), classes);
+            type = getClassForNameFrom(matcher.group("class"), classes);
         }
 
         return getRX(type);
@@ -72,9 +67,7 @@ public class CannotResolveLocationRemedy extends Remedy {
         String remedy = null;
 
         if (type != null) {
-            remedy =
-                IMPORT.lexeme() + SPACE.lexeme()
-                + type.getName() + SEMICOLON.lexeme();
+            remedy = String.format("import %s;", type.getName());
         }
 
         return remedy;

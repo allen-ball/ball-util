@@ -20,16 +20,26 @@ package ball.annotation.processing;
  * limitations under the License.
  * ##########################################################################
  */
+import ball.annotation.ServiceProviderFor;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
+import javax.annotation.processing.Processor;
+import javax.annotation.processing.RoundEnvironment;
+import javax.lang.model.element.AnnotationMirror;
+import javax.lang.model.element.AnnotationValue;
+import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
+import javax.lang.model.element.TypeElement;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import static javax.tools.Diagnostic.Kind.ERROR;
 
 /**
- * {@link AbstractNoAnnotationProcessor}
+ * {@link AnnotatedNoAnnotationProcessor}
  * {@link java.lang.annotation.Annotation} to specify {@link ElementKind}
  * criteria.
  *
@@ -39,6 +49,28 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 @Retention(RUNTIME)
 @Target({ TYPE })
+@AnnotatedTypeMustExtend(AnnotatedNoAnnotationProcessor.class)
 public @interface ForElementKinds {
-    ElementKind[] value();
+    ElementKind[] value() default { };
+
+    /**
+     * {@link Processor} implementation.
+     */
+    @ServiceProviderFor({ Processor.class })
+    @For({ ForElementKinds.class })
+    @NoArgsConstructor @ToString
+    public static class ProcessorImpl extends AnnotatedProcessor {
+        @Override
+        public void process(RoundEnvironment roundEnv,
+                            TypeElement annotation, Element element) {
+            super.process(roundEnv, annotation, element);
+
+            AnnotationMirror mirror = getAnnotationMirror(element, annotation);
+            AnnotationValue value = getAnnotationValue(mirror, "value");
+
+            if (isEmptyArray(value)) {
+                print(ERROR, element, mirror, value, "value() is empty");
+            }
+        }
+    }
 }

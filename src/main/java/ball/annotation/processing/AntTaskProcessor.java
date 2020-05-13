@@ -35,8 +35,11 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
+import javax.lang.model.element.AnnotationMirror;
+import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.PackageElement;
@@ -52,7 +55,6 @@ import org.apache.tools.ant.Task;
 
 import static java.lang.reflect.Modifier.isAbstract;
 import static javax.lang.model.element.Modifier.ABSTRACT;
-import static javax.lang.model.element.Modifier.PUBLIC;
 import static javax.tools.Diagnostic.Kind.ERROR;
 import static javax.tools.StandardLocation.CLASS_OUTPUT;
 import static javax.xml.transform.OutputKeys.INDENT;
@@ -78,7 +80,7 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 @ServiceProviderFor({ Processor.class })
 @For({ AntLib.class, AntTask.class })
 @NoArgsConstructor @ToString
-public class AntTaskProcessor extends AbstractAnnotationProcessor
+public class AntTaskProcessor extends AnnotatedProcessor
                               implements ClassFileProcessor {
     private static final String ANTLIB_XML = "antlib.xml";
 
@@ -103,6 +105,19 @@ public class AntTaskProcessor extends AbstractAnnotationProcessor
 
     private ResourceMap map = new ResourceMap();
     private LinkedHashSet<String> packages = new LinkedHashSet<>();
+
+    @Override
+    public void init(ProcessingEnvironment processingEnv) {
+        super.init(processingEnv);
+
+        try {
+            /*
+             * Load any partially generated files.
+             */
+        } catch (Exception exception) {
+            print(ERROR, exception);
+        }
+    }
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations,
@@ -138,65 +153,49 @@ public class AntTaskProcessor extends AbstractAnnotationProcessor
                 }
             }
         } catch (Exception exception) {
-            print(ERROR, null, exception);
+            print(ERROR, exception);
         }
 
         return result;
     }
 
     @Override
-    protected void process(RoundEnvironment env,
-                           TypeElement annotation,
-                           Element element) throws Exception {
+    protected void process(RoundEnvironment roundEnv,
+                           TypeElement annotation, Element element) {
+        super.process(roundEnv, annotation, element);
+
         switch (element.getKind()) {
         case CLASS:
-            String name = element.getAnnotation(AntTask.class).value();
-            String resource = element.getAnnotation(AntTask.class).resource();
-            Element enclosing = element;
+            AnnotationMirror mirror = getAnnotationMirror(element, annotation);
+            AnnotationValue value = getAnnotationValue(mirror, "value");
+            AnnotationValue resource = getAnnotationValue(mirror, "resource");
 
-            while (enclosing != null
-                   && enclosing.getKind() != ElementKind.PACKAGE) {
-                enclosing = enclosing.getEnclosingElement();
-            }
+            if (isNotEmpty((String) value.getValue())) {
+                if (isAssignableTo(Task.class).test(element)) {
+                    if (withoutModifiers(ABSTRACT).test(element)) {
+                        String key = (String) resource.getValue();
+                        PackageElement pkg =
+                            elements.getPackageOf(element);
 
-            if (enclosing != null) {
-                resource =
-                    URI.create(asPath((PackageElement) enclosing) + resource)
-                    .normalize()
-                    .toString();
-            }
-
-            if (isNotEmpty(name)) {
-                if (isAssignable(element.asType(), Task.class)) {
-                    if (! element.getModifiers().contains(ABSTRACT)) {
-                        if (hasPublicNoArgumentConstructor(element)) {
-                            map.put(resource, name, (TypeElement) element);
-                        } else {
-                            print(ERROR,
-                                  element,
-                                  element.getKind() + " annotated with "
-                                  + AT + annotation.getSimpleName()
-                                  + " but does not have a " + PUBLIC
-                                  + " no-argument constructor");
+                        if (pkg != null) {
+                            key =
+                                URI.create(asPath(pkg) + key)
+                                .normalize()
+                                .toString();
                         }
+
+                        map.put(key,
+                                (String) value.getValue(),
+                                (TypeElement) element);
                     } else {
-                        print(ERROR,
-                              element,
-                              element.getKind() + " annotated with "
-                              + AT + annotation.getSimpleName()
-                              + " but is " + ABSTRACT);
+                        print(ERROR, element,
+                              "%s is %s", element.getKind(), ABSTRACT);
                     }
                 } else {
                     /*
                      * See AntTaskMixInProcessor.
                      */
                 }
-            } else {
-                print(ERROR,
-                      element,
-                      element.getKind() + " annotated with "
-                      + AT + annotation.getSimpleName()
-                      + " but does not specify value()");
             }
             break;
 
@@ -246,7 +245,7 @@ public class AntTaskProcessor extends AbstractAnnotationProcessor
 
             Files.createDirectories(file.toPath().getParent());
 
-            try (OutputStream out = new FileOutputStream(file)) {
+            try (FileOutputStream out = new FileOutputStream(file)) {
                 entry.getValue().store(out, entry.getKey());
             }
         }
@@ -257,7 +256,7 @@ public class AntTaskProcessor extends AbstractAnnotationProcessor
 
             Files.createDirectories(file.toPath().getParent());
 
-            try (OutputStream out = new FileOutputStream(file)) {
+            try (FileOutputStream out = new FileOutputStream(file)) {
                 xml.writeTo(out);
             }
         }
@@ -292,12 +291,12 @@ public class AntTaskProcessor extends AbstractAnnotationProcessor
         private AntLibXML(String pkg, ResourceMap map) {
             super();
 
-            this.path = asPath(pkg) + SLASH + ANTLIB_XML;
+            this.path = asPath(pkg) + "/" + ANTLIB_XML;
 
             map.values()
                 .stream()
                 .flatMap(t -> t.entrySet().stream())
-                .filter(t -> t.getValue().toString().startsWith(pkg + DOT))
+                .filter(t -> t.getValue().toString().startsWith(pkg + "."))
                 .forEach(t -> put(t.getKey().toString(),
                                   t.getValue().toString()));
         }

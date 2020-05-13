@@ -24,13 +24,10 @@ import ball.annotation.ServiceProviderFor;
 import ball.tools.javadoc.AnnotatedTaglet;
 import com.sun.tools.doclets.Taglet;
 import javax.annotation.processing.Processor;
-import javax.lang.model.element.Element;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import static javax.lang.model.element.ElementKind.CLASS;
-import static javax.lang.model.element.Modifier.ABSTRACT;
-import static javax.tools.Diagnostic.Kind.ERROR;
 
 /**
  * {@link Processor} implementation to verify concrete implementations of
@@ -42,18 +39,7 @@ import static javax.tools.Diagnostic.Kind.ERROR;
 @ServiceProviderFor({ Processor.class })
 @ForElementKinds({ CLASS })
 @ForSubclassesOf(AnnotatedTaglet.class)
+@MustImplement({ Taglet.class })
 @NoArgsConstructor @ToString
-public class AnnotatedTagletProcessor extends AbstractNoAnnotationProcessor {
-    @Override
-    protected void process(Element element) {
-        if (! element.getModifiers().contains(ABSTRACT)) {
-            if (! isAssignable(element.asType(), Taglet.class)) {
-                print(ERROR,
-                      element,
-                      element.getKind()
-                      + " implements " + AnnotatedTaglet.class.getName()
-                      + " but is not a subclass of " + Taglet.class.getName());
-            }
-        }
-    }
+public class AnnotatedTagletProcessor extends AnnotatedNoAnnotationProcessor {
 }

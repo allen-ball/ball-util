@@ -1,4 +1,4 @@
-package ball.annotation;
+package ball.annotation.processing;
 /*-
  * ##########################################################################
  * Utilities
@@ -20,27 +20,38 @@ package ball.annotation;
  * limitations under the License.
  * ##########################################################################
  */
+import ball.annotation.ServiceProviderFor;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
+import javax.annotation.processing.Processor;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
-import static java.lang.annotation.ElementType.FIELD;
-import static java.lang.annotation.ElementType.LOCAL_VARIABLE;
+import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * Annotation to specify a field constant value is a well-formed regular
- * expression {@link String} which may be passed to
- * {@link java.util.regex.Pattern#compile(String)} without throwing
- * {@link java.util.regex.PatternSyntaxException}.
+ * {@link java.lang.annotation.Annotation} to specify required
+ * super-{@link Class} criteria an annotated {@link Class} must extend.
  *
- * @see ball.annotation.processing.RegexProcessor
+ * @see AnnotatedProcessor
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 @Documented
 @Retention(RUNTIME)
-@Target({ FIELD, LOCAL_VARIABLE })
-public @interface Regex {
+@Target(ANNOTATION_TYPE)
+public @interface AnnotatedTypeMustExtend {
+    Class<?> value();
+
+    /**
+     * {@link Processor} implementation.
+     */
+    @ServiceProviderFor({ Processor.class })
+    @For({ AnnotatedTypeMustExtend.class })
+    @NoArgsConstructor @ToString
+    public static class ProcessorImpl extends AnnotatedProcessor {
+    }
 }

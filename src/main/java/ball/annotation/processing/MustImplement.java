@@ -1,4 +1,4 @@
-package ball.tools.javadoc;
+package ball.annotation.processing;
 /*-
  * ##########################################################################
  * Utilities
@@ -21,9 +21,6 @@ package ball.tools.javadoc;
  * ##########################################################################
  */
 import ball.annotation.ServiceProviderFor;
-import ball.annotation.processing.AnnotatedProcessor;
-import ball.annotation.processing.AnnotatedTypeMustExtend;
-import ball.annotation.processing.For;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
@@ -38,14 +35,11 @@ import lombok.ToString;
 
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
-import static javax.lang.model.element.Modifier.ABSTRACT;
 import static javax.tools.Diagnostic.Kind.ERROR;
-import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 /**
- * {@link java.lang.annotation.Annotation} to mark
- * {@link com.sun.tools.doclets.internal.toolkit.taglets.Taglet}s
- * with their name.
+ * {@link java.lang.annotation.Annotation} to specify required
+ * super-{@link Class} criteria a {@link Class} must implement.
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
@@ -53,34 +47,27 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
 @Documented
 @Retention(RUNTIME)
 @Target({ TYPE })
-@AnnotatedTypeMustExtend(AnnotatedTaglet.class)
-public @interface TagletName {
-    String value();
+@AnnotatedTypeMustExtend(AnnotatedNoAnnotationProcessor.class)
+public @interface MustImplement {
+    Class<?>[] value() default { };
 
     /**
      * {@link Processor} implementation.
      */
     @ServiceProviderFor({ Processor.class })
-    @For({ TagletName.class })
+    @For({ MustImplement.class })
     @NoArgsConstructor @ToString
-    public class ProcessorImpl extends AnnotatedProcessor {
+    public static class ProcessorImpl extends AnnotatedProcessor {
         @Override
-        protected void process(RoundEnvironment roundEnv,
-                               TypeElement annotation, Element element) {
+        public void process(RoundEnvironment roundEnv,
+                            TypeElement annotation, Element element) {
             super.process(roundEnv, annotation, element);
 
             AnnotationMirror mirror = getAnnotationMirror(element, annotation);
             AnnotationValue value = getAnnotationValue(mirror, "value");
-            String name = (String) value.getValue();
 
-            if (! name.isEmpty()) {
-                if (element.getModifiers().contains(ABSTRACT)) {
-                    print(ERROR, element, mirror,
-                          "%s is %s", element.getKind(), ABSTRACT);
-                }
-            } else {
-                print(ERROR, element, mirror, value,
-                      "value() must be a non-empty String");
+            if (isEmptyArray(value)) {
+                print(ERROR, element, mirror, value, "value() is empty");
             }
         }
     }

@@ -68,8 +68,8 @@ public class InstanceOfTask extends TypeTask {
 
             log(type.getName());
 
-            ClassList parameters = new ClassList();
-            List<Object> arguments = new ArrayList<>();
+            List<Class<?>> parameters = new ArrayList<>(list.size());
+            List<Object> arguments = new ArrayList<>(list.size());
 
             for (TypedAttributeType argument : list) {
                 Factory<?> factory =
@@ -87,11 +87,13 @@ public class InstanceOfTask extends TypeTask {
             log(String.valueOf(arguments));
 
             Factory<?> factory = new Factory<>(type);
-            Member member = factory.getFactoryMethod(parameters.toArray());
+            Member member =
+                factory.getFactoryMethod(parameters.stream().toArray(Class<?>[]::new));
 
             log(String.valueOf(member));
 
-            instance = factory.apply(member, arguments.toArray());
+            instance =
+                factory.apply(member, arguments.stream().toArray(Object[]::new));
 
             log(String.valueOf(instance));
 
@@ -117,14 +119,6 @@ public class InstanceOfTask extends TypeTask {
             throwable.printStackTrace();
             throw new BuildException(throwable);
         }
-    }
-
-    @NoArgsConstructor
-    private class ClassList extends ArrayList<Class<?>> {
-        private static final long serialVersionUID = -4504828433924386345L;
-
-        @Override
-        public Class<?>[] toArray() { return toArray(new Class<?>[] { }); }
     }
 
     private class ReaderWriterDataSourceImpl extends ReaderWriterDataSource

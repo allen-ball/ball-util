@@ -37,6 +37,7 @@ import javax.tools.StandardJavaFileManager;
 import javax.tools.StandardLocation;
 import javax.tools.ToolProvider;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.taskdefs.Javac;
 import org.apache.tools.ant.taskdefs.compilers.CompilerAdapter;
@@ -56,7 +57,7 @@ import static org.apache.commons.lang3.StringUtils.EMPTY;
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
-@NoArgsConstructor
+@NoArgsConstructor @ToString
 public class SystemJavaCompilerAdapter implements CompilerAdapter,
                                                   CompilerAdapterExtension {
     /** {@link #CARET} = {@value #CARET} */

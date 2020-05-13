@@ -46,7 +46,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target({ TYPE })
 public @interface ResourceFile {
     String path();
-    String[] lines();
+    String[] lines() default { };
 
     /**
      * {@link #CLASS} = {@value #CLASS}

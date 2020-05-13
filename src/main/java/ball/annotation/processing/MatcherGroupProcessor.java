@@ -24,6 +24,8 @@ import ball.annotation.MatcherGroup;
 import ball.annotation.ServiceProviderFor;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
+import javax.lang.model.element.AnnotationMirror;
+import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
@@ -43,19 +45,19 @@ import static javax.tools.Diagnostic.Kind.ERROR;
 @ServiceProviderFor({ Processor.class })
 @For({ MatcherGroup.class })
 @NoArgsConstructor @ToString
-public class MatcherGroupProcessor extends AbstractAnnotationProcessor {
+public class MatcherGroupProcessor extends AnnotatedProcessor {
     @Override
-    protected void process(RoundEnvironment env,
-                           TypeElement annotation,
-                           Element element) throws Exception {
-        int group = element.getAnnotation(MatcherGroup.class).value();
+    protected void process(RoundEnvironment roundEnv,
+                           TypeElement annotation, Element element) {
+        super.process(roundEnv, annotation, element);
+
+        AnnotationMirror mirror = getAnnotationMirror(element, annotation);
+        AnnotationValue value = getAnnotationValue(mirror, "value");
+        int group = (Integer) value.getValue();
 
         if (group < 0) {
-            print(ERROR,
-                  element,
-                  element.getKind() + " annotated with "
-                  + AT + annotation.getSimpleName()
-                  + " has invalid value()");
+            print(ERROR, element, mirror, value,
+                  "value() must be non-negative");
         }
 
         switch (element.getKind()) {
@@ -67,20 +69,16 @@ public class MatcherGroupProcessor extends AbstractAnnotationProcessor {
         case METHOD:
             ExecutableElement executable = (ExecutableElement) element;
 
-            if (! element.getModifiers().contains(PRIVATE)) {
+            if (withoutModifiers(PRIVATE).test(element)) {
                 if (executable.isVarArgs() || executable.getParameters().size() != 1) {
-                    print(ERROR,
-                          element,
-                          element.getKind() + " annotated with "
-                          + AT + annotation.getSimpleName()
-                          + " but does not take exactly one argument");
+                    print(ERROR, element,
+                          "@%s: %s must take exactly one argument",
+                          annotation.getSimpleName(), element.getKind());
                 }
             } else {
-                print(ERROR,
-                      element,
-                      element.getKind() + " annotated with "
-                      + AT + annotation.getSimpleName()
-                      + " but is " + PRIVATE);
+                print(ERROR, element,
+                      "@%s: %s is %s",
+                      annotation.getSimpleName(), element.getKind(), PRIVATE);
             }
             break;
         }

@@ -21,8 +21,10 @@ package ball.annotation.processing;
  * ##########################################################################
  */
 import ball.annotation.ServiceProviderFor;
+import java.lang.reflect.Method;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.Processor;
+import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
@@ -35,8 +37,7 @@ import static javax.tools.Diagnostic.Kind.ERROR;
 import static javax.tools.Diagnostic.Kind.WARNING;
 
 /**
- * {@link javax.annotation.processing.Processor} implementation to check
- * {@link Class}es to verify:
+ * {@link Processor} implementation to check {@link Class}es to verify:
  * <ol>
  *   <li value="1">
  *     The implementing {@link Class} also overrides {@link Object#toString()}
@@ -49,8 +50,19 @@ import static javax.tools.Diagnostic.Kind.WARNING;
 @ServiceProviderFor({ Processor.class })
 @ForElementKinds({ CLASS })
 @ForSubclassesOf(Object.class)
+@WithoutModifiers({ ABSTRACT })
 @NoArgsConstructor @ToString
-public class ObjectToStringProcessor extends AbstractNoAnnotationProcessor {
+public class ObjectToStringProcessor extends AnnotatedNoAnnotationProcessor {
+    private static final Method PROTOTYPE;
+
+    static {
+        try {
+            PROTOTYPE = Object.class.getDeclaredMethod("toString");
+        } catch (Exception exception) {
+            throw new ExceptionInInitializerError(exception);
+        }
+    }
+
     private ExecutableElement METHOD = null;
 
     @Override
@@ -58,28 +70,23 @@ public class ObjectToStringProcessor extends AbstractNoAnnotationProcessor {
         super.init(processingEnv);
 
         try {
-            METHOD = getExecutableElementFor(Object.class, "toString");
+            METHOD = getMethod(PROTOTYPE);
+
+            criteria.add(t -> t.getAnnotation(ToString.class) == null);
         } catch (Exception exception) {
-            print(ERROR, null, exception);
+            print(ERROR, exception);
         }
     }
 
     @Override
-    protected void process(Element element) {
-        if (! element.getModifiers().contains(ABSTRACT)) {
-            TypeElement type = (TypeElement) element;
+    protected void process(RoundEnvironment roundEnv, Element element) {
+        TypeElement type = (TypeElement) element;
+        ExecutableElement implementation = implementationOf(METHOD, type);
 
-            if (type.getAnnotation(ToString.class) == null) {
-                ExecutableElement method = implementationOf(METHOD, type);
-
-                if (method == null || METHOD.equals(method)) {
-                    print(WARNING,
-                          type,
-                          type.getKind() + " does not override "
-                          + METHOD.getEnclosingElement().getSimpleName()
-                          + DOT + METHOD.toString());
-                }
-            }
+        if (implementation == null || METHOD.equals(implementation)) {
+            print(WARNING, type,
+                  "%s does not override '%s'",
+                  type.getKind(), declaration(PROTOTYPE));
         }
     }
 }

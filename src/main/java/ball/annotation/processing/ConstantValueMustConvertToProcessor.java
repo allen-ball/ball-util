@@ -20,40 +20,34 @@ package ball.annotation.processing;
  * limitations under the License.
  * ##########################################################################
  */
+import ball.annotation.ConstantValueMustConvertTo;
 import ball.annotation.ServiceProviderFor;
-import java.beans.ConstructorProperties;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Stream;
+import java.lang.reflect.InvocationTargetException;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.Element;
-import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
+import javax.lang.model.type.TypeMirror;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.apache.commons.lang3.StringUtils;
 
-import static java.util.stream.Collectors.toList;
 import static javax.tools.Diagnostic.Kind.ERROR;
-import static javax.tools.Diagnostic.Kind.WARNING;
 
 /**
- * {@link Processor} implementation to verify {@link ConstructorProperties}
- * annotation are actual bean properties of the
- * {@link java.lang.reflect.Constructor}'s {@link Class}.
+ * {@link Processor} implementation to verify constant initializers
+ * marked by the {@link ConstantValueMustConvertTo} can be converted to the
+ * specified type.
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 @ServiceProviderFor({ Processor.class })
-@For({ ConstructorProperties.class })
+@For({ ConstantValueMustConvertTo.class })
 @NoArgsConstructor @ToString
-public class ConstructorPropertiesProcessor extends AnnotatedProcessor {
+public class ConstantValueMustConvertToProcessor extends AnnotatedProcessor {
     @Override
     public void process(RoundEnvironment roundEnv,
                         TypeElement annotation, Element element) {
@@ -61,29 +55,37 @@ public class ConstructorPropertiesProcessor extends AnnotatedProcessor {
 
         AnnotationMirror mirror = getAnnotationMirror(element, annotation);
         AnnotationValue value = getAnnotationValue(mirror, "value");
-        List<String> names =
-            Stream.of(value)
-            .filter(Objects::nonNull)
-            .map(t -> (List<?>) t.getValue())
-            .flatMap(List::stream)
-            .map(t -> (AnnotationValue) t)
-            .map(t -> (String) t.getValue())
-            .collect(toList());
-        List<? extends VariableElement> parameters =
-            ((ExecutableElement) element).getParameters();
+        TypeElement to =
+            (TypeElement)
+            types.asElement((TypeMirror) value.getValue());
+        String method =
+            (String) getAnnotationValue(mirror, "method").getValue();
+        Object from = null;
 
-        if (names.size() != parameters.size()) {
-            print(WARNING, element, mirror, value,
-                  "value() does not match %s parameters", element.getKind());
+        try {
+            from = ((VariableElement) element).getConstantValue();
+
+            Class<?> type =
+                Class.forName(to.getQualifiedName().toString());
+
+            if (! method.isEmpty()) {
+                type.getMethod(method, from.getClass())
+                    .invoke(null, from);
+            } else {
+                type.getConstructor(from.getClass())
+                    .newInstance(from);
+            }
+        } catch (Exception exception) {
+            Throwable throwable = exception;
+
+            while (throwable instanceof InvocationTargetException) {
+                throwable = throwable.getCause();
+            }
+
+            print(ERROR, element,
+                  "Cannot convert %s to %s\n%s",
+                  elements.getConstantExpression(from),
+                  to.getQualifiedName(), throwable.getMessage());
         }
-
-        TypeElement type = (TypeElement) element.getEnclosingElement();
-        Set<String> properties = getPropertyNames(type);
-
-        names.stream()
-            .filter(StringUtils::isNotEmpty)
-            .filter(t -> (! properties.contains(t)))
-            .forEach(t -> print(WARNING, element, mirror,
-                                "bean property '%s' not defined", t));
     }
 }

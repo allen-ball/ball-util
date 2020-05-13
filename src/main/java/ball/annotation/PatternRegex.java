@@ -20,9 +20,11 @@ package ball.annotation;
  * limitations under the License.
  * ##########################################################################
  */
+import ball.annotation.processing.AnnotationValueMustConvertTo;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
+import java.util.regex.Pattern;
 
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
@@ -31,7 +33,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * {@link java.lang.annotation.Annotation} to mark a type with a
  * {@link java.util.regex.Pattern} regex.
  *
- * @see java.util.regex.Pattern#compile(String)
+ * @see Pattern#compile(String)
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
@@ -39,6 +41,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 @Retention(RUNTIME)
 @Target({ TYPE })
+@AnnotationValueMustConvertTo(value = Pattern.class, method = "compile")
 public @interface PatternRegex {
     String value();
 }

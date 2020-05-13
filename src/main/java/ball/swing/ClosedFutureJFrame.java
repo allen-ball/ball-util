@@ -36,7 +36,7 @@ import javax.swing.JFrame;
  * @version $Revision$
  */
 public class ClosedFutureJFrame extends JFrame {
-    private static final long serialVersionUID = 5053218780099876938L;
+    private static final long serialVersionUID = -1292559417822522869L;
 
     /** @serial */ private final Object lock = new Object();
     /** @serial */ private boolean isStarted = false;

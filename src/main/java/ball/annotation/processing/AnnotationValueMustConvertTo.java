@@ -20,23 +20,41 @@ package ball.annotation.processing;
  * limitations under the License.
  * ##########################################################################
  */
-import ball.annotation.PatternRegex;
 import ball.annotation.ServiceProviderFor;
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 import javax.annotation.processing.Processor;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import static javax.tools.Diagnostic.Kind.ERROR;
+import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * {@link Processor} implementation to check {@link PatternRegex}
- * annotations.
+ * {@link java.lang.annotation.Annotation} to test an
+ * {@link java.lang.annotation.Annotation} can be converted to a specified
+ * {@link Class}.
+ *
+ * @see AnnotatedProcessor
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
-@ServiceProviderFor({ Processor.class })
-@For({ PatternRegex.class })
-@NoArgsConstructor @ToString
-public class PatternRegexProcessor extends AnnotatedProcessor {
+@Documented
+@Retention(RUNTIME)
+@Target(ANNOTATION_TYPE)
+public @interface AnnotationValueMustConvertTo {
+    Class<?> value();
+    String method() default "";
+    String name() default "value";
+
+    /**
+     * {@link Processor} implementation.
+     */
+    @ServiceProviderFor({ Processor.class })
+    @For({ AnnotationValueMustConvertTo.class })
+    @NoArgsConstructor @ToString
+    public static class ProcessorImpl extends AnnotatedProcessor {
+    }
 }

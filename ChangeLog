@@ -1,3 +1,48 @@
+2020-05-13  Allen D. Ball  <ball@hcf.dev>
+
+	* pom.xml: Released version 4.6.0.
+
+2020-05-10  Allen D. Ball  <ball@hcf.dev>
+
+	* src/main/java/ball/annotation/processing/AbstractProcessor.java:
+	Created protected "Element Predicate Calculus" methods to
+	construct Stream filters.
+
+	* Renamed AnnotatedTypeMustHaveConstructor to
+	AnnotatedTypeMustHaveConstructor and added parameters element to
+	specify parameter list.
+
+2020-05-07  Allen D. Ball  <ball@hcf.dev>
+
+	* src/main/java/ball/annotation/processing/AbstractProcessor.java:
+	Added print() methods for Element, AnnotationMirror, and
+	AnnotationValue location information.  Added Check abstract
+	(inner) base class.
+
+	* src/main/java/ball/util/Walker.java:
+	Added static walk(Collection<? extends T> roots,...) method.
+
+2020-05-05  Allen D. Ball  <ball@hcf.dev>
+
+	* Converted @Regex to @ConstantValueMustConvertTo to support the
+	general case (similar to AnnotatedProcessor's
+	@AnnotationValueMustConvertTo).
+
+2020-05-03  Allen D. Ball  <ball@hcf.dev>
+
+	* AbstractAnnotationProcessor -> AnnotatedProcessor,
+	AbstractNoAnnotationProcessor -> AnnotatedNoAnnotationProcessor;
+	Re-factored class hierarchy accordingly.
+
+2020-04-27  Allen D. Ball  <ball@hcf.dev>
+
+	* src/main/java/ball/annotation/processing/AbstractProcessor.java,
+	src/main/java/ball/util/ant/taskdefs/TypeTask.java:
+	Implement JavaLangReflectMethods.
+
+	* src/main/java/ball/lang/reflect/JavaLangReflectMethods.java:
+	Initial writing.
+
 2020-04-12  Allen D. Ball  <ball@hcf.dev>
 
 	* pom.xml: Released version 4.5.2.
@@ -146,12 +191,6 @@
 
 	* Replaced AbstractTaglet.a(Tag,Annotation,Node) with
 	JavadocHTMLTemplates.annotation(Tag,Annotation).
-
-2019-10-22  Allen D. Ball  <ball@hcf.dev>
-
-	* src/main/java/ball/lang/Keyword.java: Added JRE 13 "yield".
-
-	* src/main/java/ball/lang/Literal.java: Initial writing.
 
 2019-10-18  Allen D. Ball  <ball@hcf.dev>
 
@@ -403,22 +442,12 @@
 
 2019-01-15  Allen D. Ball  <ball@sol.local>
 
-	* src/main/java/ball/util/JNI.java:
-	Pass long[] instead of byte[] to uuid_generate* to guarantee
-	alignment.
-
 	* src/main/java/ball/util/ant/taskdefs/PropertySetterAntTask.java:
 	Re-factored from AbstractPropertyTask.
-
-	* src/main/java/ball/util/ant/taskdefs/UUIDTask.java:
-	Re-factored from UUIDGenerateTask.
 
 2019-01-09  Allen D. Ball  <ball@sol.local>
 
 	* pom.xml: Added support for JNI compilation on Linux.
-
-	* src/main/java/ball/util/JNI.java:
-	Initial writing (moved native methods from UUIDFactory).
 
 2019-01-08  Allen D. Ball  <ball@sol.local>
 
@@ -1256,9 +1285,6 @@
 
 2011-07-09  Allen D. Ball  <ball@10-0-1-2.lan>
 
-	* src/main/java/iprotium/lang/java/Punctuation.java:
-	Added SPACE member.
-
 	* src/main/java/iprotium/tools/CannotResolveLocationRemedy.java:
 	Initial writing.
 
@@ -1319,18 +1345,10 @@
 	Added getInputStream(Class<?>...) and getOutputStream(Class<?>...)
 	methods.
 
-2011-04-25  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/lang/java/Keyword.java,
-	src/main/java/iprotium/lang/java/Punctuation.java:
-	Implement Parser.Lexeme.
-
 2011-04-24  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* Added <uuid-generate/>, <uuid-generate-random/>, and
 	<uuid-generate-time/> build targets and Ant Tasks.
-
-	* src/main/java/iprotium/util/UUIDFactory.java: Initial writing.
 
 	* src/main/java/iprotium/util/ant/taskdefs/AbstractPropertyTask.java:
 	Initial writing.
@@ -1340,17 +1358,7 @@
 	* src/main/java/iprotium/util/Shell.java:
 	Initial (trivial) implementation.
 
-2010-12-23  Allen D. Ball  <ball@mercury.local>
-
-	* src/main/java/iprotium/util/Parser.java: Initial writing.
-
 2010-12-07  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/lang/java/Keyword.java:
-	Re-factored as an Enum.
-
-	* src/main/java/iprotium/lang/java/Punctuation.java:
-	Initial writing.
 
 	* src/main/java/iprotium/util/PropertiesImpl.java:
 	Initial writing.
@@ -1360,9 +1368,6 @@
 
 	* src/main/java/iprotium/util/ant/taskdefs/SuperclassesOfTask.java:
 	Include type variables in output.
-
-	* src/main/java/iprotium/util/ant/taskdefs/lint/SerializableCheck.java:
-	Use iprotium.lang.java.Punctuation.
 
 2010-11-21  Allen D. Ball  <ball@10-0-1-2.lan>
 
@@ -1456,9 +1461,6 @@
 	* src/main/java/iprotium/activation/ByteArrayDataSource.java:
 	Added size() method.
 
-	* src/main/java/iprotium/lang/java/Keyword.java:
-	Changed SET member to SortedSet.
-
 2010-08-22  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* src/main/java/iprotium/util/ant/taskdefs/LintTask.java:
@@ -1468,8 +1470,6 @@
 2010-08-21  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* Added iprotium.lang and iprotium.lang.java packages.
-
-	* src/main/java/iprotium/lang/java/Keyword.java: Initial writing.
 
 2010-07-27  Allen D. Ball  <ball@10-0-1-2.lan>
 

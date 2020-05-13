@@ -21,17 +21,18 @@ package ball.annotation.processing;
  * ##########################################################################
  */
 import ball.annotation.ServiceProviderFor;
+import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.Processor;
+import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import static java.util.Arrays.asList;
-import static java.util.Collections.disjoint;
 import static javax.lang.model.element.ElementKind.METHOD;
 import static javax.lang.model.element.Modifier.PRIVATE;
 import static javax.lang.model.element.Modifier.STATIC;
+import static javax.tools.Diagnostic.Kind.ERROR;
 import static javax.tools.Diagnostic.Kind.WARNING;
 
 /**
@@ -44,24 +45,32 @@ import static javax.tools.Diagnostic.Kind.WARNING;
  */
 @ServiceProviderFor({ Processor.class })
 @ForElementKinds({ METHOD })
+@WithoutModifiers({ PRIVATE, STATIC })
 @NoArgsConstructor @ToString
-public class NoOverrideProcessor extends AbstractNoAnnotationProcessor {
+public class NoOverrideProcessor extends AnnotatedNoAnnotationProcessor {
     @Override
-    protected void process(Element element) {
+    public void init(ProcessingEnvironment processingEnv) {
+        super.init(processingEnv);
+
+        try {
+            criteria.add(t -> t.getAnnotation(Override.class) == null);
+        } catch (Exception exception) {
+            print(ERROR, exception);
+        }
+    }
+
+    @Override
+    protected void process(RoundEnvironment roundEnv, Element element) {
+        super.process(roundEnv, element);
+
         ExecutableElement method = (ExecutableElement) element;
+        ExecutableElement specification = specifiedBy(method);
 
-        if (method.getAnnotation(Override.class) == null
-            && disjoint(method.getModifiers(), asList(PRIVATE, STATIC))) {
-            ExecutableElement specification = specifiedBy(method);
-
-            if (specification != null) {
-                print(WARNING,
-                      method,
-                      method.getKind() + " specified by "
-                      + specification.getEnclosingElement() + DOT
-                      + specification.toString() + " but does not have "
-                      + AT + Override.class.getSimpleName() + " annotation");
-            }
+        if (specification != null) {
+            print(WARNING, method,
+                  "Missing @%s annotation (specified by %s)",
+                  Override.class.getSimpleName(),
+                  specification.getEnclosingElement());
         }
     }
 }

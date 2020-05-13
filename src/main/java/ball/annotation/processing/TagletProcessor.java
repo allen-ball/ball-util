@@ -25,6 +25,7 @@ import com.sun.tools.doclets.Taglet;
 import java.lang.reflect.Method;
 import java.util.Map;
 import javax.annotation.processing.Processor;
+import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
@@ -49,31 +50,27 @@ import static javax.tools.Diagnostic.Kind.WARNING;
 @ServiceProviderFor({ Processor.class })
 @ForElementKinds({ CLASS })
 @ForSubclassesOf(Taglet.class)
+@WithoutModifiers({ ABSTRACT })
 @NoArgsConstructor @ToString
-public class TagletProcessor extends AbstractNoAnnotationProcessor {
+public class TagletProcessor extends AnnotatedNoAnnotationProcessor {
     private static abstract class PROTOTYPE {
-        public static void register(Map<String,Taglet> map) { }
+        public static void register(Map<Object,Object> map) { }
     }
 
-    private static final Method METHOD =
+    private static final Method PROTOTYPE =
         PROTOTYPE.class.getDeclaredMethods()[0];
 
     @Override
-    protected void process(Element element) {
-        if (! element.getModifiers().contains(ABSTRACT)) {
-            TypeElement type = (TypeElement) element;
-            ExecutableElement method =
-                getExecutableElementFor(type, METHOD);
+    protected void process(RoundEnvironment roundEnv, Element element) {
+        TypeElement type = (TypeElement) element;
+        ExecutableElement method = getMethod(type, PROTOTYPE);
 
-            if (! (method != null
-                   && (method.getModifiers()
-                       .containsAll(getModifierSetFor(METHOD))))) {
-                print(WARNING,
-                      element,
-                      element.getKind()
-                      + " implements " + Taglet.class.getName()
-                      + " but does not implement `" + toString(METHOD) + "'");
-            }
+        if (! (method != null
+               && method.getModifiers().containsAll(getModifiers(PROTOTYPE)))) {
+            print(WARNING, element,
+                  "%s implements %s but does not implement '%s'",
+                  element.getKind(), Taglet.class.getName(),
+                  declaration(PROTOTYPE));
         }
     }
 }

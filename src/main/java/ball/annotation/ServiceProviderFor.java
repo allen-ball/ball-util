@@ -20,12 +20,16 @@ package ball.annotation;
  * limitations under the License.
  * ##########################################################################
  */
+import ball.annotation.processing.AnnotatedElementMustBe;
+import ball.annotation.processing.AnnotatedTypeMustHaveConstructor;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import static javax.lang.model.element.ElementKind.CLASS;
+import static javax.lang.model.element.Modifier.PUBLIC;
 
 /**
  * {@link java.lang.annotation.Annotation} to mark service providers.
@@ -38,6 +42,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 @Retention(RUNTIME)
 @Target({ TYPE })
+@AnnotatedElementMustBe(CLASS)
+@AnnotatedTypeMustHaveConstructor(PUBLIC)
 public @interface ServiceProviderFor {
-    Class<?>[] value();
+    Class<?>[] value() default { };
 }

@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
@@ -56,8 +57,21 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
 @ServiceProviderFor({ Processor.class })
 @For({ ResourceFile.class })
 @NoArgsConstructor @ToString
-public class ResourceFileProcessor extends AbstractAnnotationProcessor {
+public class ResourceFileProcessor extends AnnotatedProcessor {
     private MapImpl map = new MapImpl();
+
+    @Override
+    public void init(ProcessingEnvironment processingEnv) {
+        super.init(processingEnv);
+
+        try {
+            /*
+             * Load any partially generated files.
+             */
+        } catch (Exception exception) {
+            print(ERROR, exception);
+        }
+    }
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations,
@@ -85,43 +99,27 @@ public class ResourceFileProcessor extends AbstractAnnotationProcessor {
                 }
             }
         } catch (Exception exception) {
-            print(ERROR, null, exception);
+            print(ERROR, exception);
         }
 
         return result;
     }
 
     @Override
-    protected void process(RoundEnvironment env,
-                           TypeElement annotation,
-                           Element element) throws Exception {
+    protected void process(RoundEnvironment roundEnv,
+                           TypeElement annotation, Element element) {
+        super.process(roundEnv, annotation, element);
+
         String path = element.getAnnotation(ResourceFile.class).path();
         String[] lines = element.getAnnotation(ResourceFile.class).lines();
+        ArrayList<String> list = new ArrayList<>(lines.length);
+        Parameters parameters = new Parameters((TypeElement) element);
 
-        if (! isEmpty(path)) {
-            if (lines != null) {
-                ArrayList<String> list = new ArrayList<>(lines.length);
-                Parameters parameters = new Parameters((TypeElement) element);
-
-                for (String line : lines) {
-                    list.add(format(line, parameters));
-                }
-
-                map.add(format(path, parameters), list);
-            } else {
-                print(ERROR,
-                      element,
-                      element.getKind() + " annotated with "
-                      + AT + annotation.getSimpleName()
-                      + " but no lines() specified");
-            }
-        } else {
-            print(ERROR,
-                  element,
-                  element.getKind() + " annotated with "
-                  + AT + annotation.getSimpleName()
-                  + " but no path() specified");
+        for (String line : lines) {
+            list.add(format(line, parameters));
         }
+
+        map.add(format(path, parameters), list);
     }
 
     @NoArgsConstructor
@@ -129,11 +127,8 @@ public class ResourceFileProcessor extends AbstractAnnotationProcessor {
         private static final long serialVersionUID = 5908228485945805046L;
 
         public boolean add(String path, Collection<String> collection) {
-            if (! containsKey(path)) {
-                put(path, new ArrayList<>());
-            }
-
-            return get(path).addAll(collection);
+            return computeIfAbsent(path,
+                                   k -> new ArrayList<>()).addAll(collection);
         }
     }
 
@@ -143,7 +138,7 @@ public class ResourceFileProcessor extends AbstractAnnotationProcessor {
         public Parameters(TypeElement type) {
             super();
 
-            PackageElement pkg = getPackageElementFor(type);
+            PackageElement pkg = elements.getPackageOf(type);
 
             put(ResourceFile.CLASS,
                 type.getQualifiedName().toString());

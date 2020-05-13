@@ -30,11 +30,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
-import java.util.regex.Pattern;
+import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
-import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
 import javax.tools.FileObject;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -56,11 +55,25 @@ import static javax.tools.StandardLocation.CLASS_OUTPUT;
 @ServiceProviderFor({ Processor.class })
 @For({ XmlRootElement.class, XmlType.class })
 @NoArgsConstructor @ToString
-public class JAXBIndexProcessor extends AbstractAnnotationProcessor
+public class JAXBIndexProcessor extends AnnotatedProcessor
                                 implements ClassFileProcessor {
     private static final String JAXB_INDEX = "jaxb.index";
+    private static final String DOT = ".";
 
     private MapImpl map = new MapImpl();
+
+    @Override
+    public void init(ProcessingEnvironment processingEnv) {
+        super.init(processingEnv);
+
+        try {
+            /*
+             * Load any partially generated files.
+             */
+        } catch (Exception exception) {
+            print(ERROR, exception);
+        }
+    }
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations,
@@ -88,16 +101,17 @@ public class JAXBIndexProcessor extends AbstractAnnotationProcessor
                 }
             }
         } catch (Exception exception) {
-            print(ERROR, null, exception);
+            print(ERROR, exception);
         }
 
         return result;
     }
 
     @Override
-    protected void process(RoundEnvironment env,
-                           TypeElement annotation,
-                           Element element) throws Exception {
+    protected void process(RoundEnvironment roundEnv,
+                           TypeElement annotation, Element element) {
+        super.process(roundEnv, annotation, element);
+
         switch (element.getKind()) {
         case CLASS:
             map.add((TypeElement) element);
@@ -138,15 +152,14 @@ public class JAXBIndexProcessor extends AbstractAnnotationProcessor
 
     @NoArgsConstructor
     private class MapImpl extends TreeMap<String,Set<String>> {
-        private static final long serialVersionUID = 5693261055822027911L;
+        private static final long serialVersionUID = -1632488233965567327L;
 
         public boolean add(Class<?> type) {
             return add(type.getPackage().getName(), type.getCanonicalName());
         }
 
         public boolean add(TypeElement type) {
-            return add(getPackageElementFor(type)
-                       .getQualifiedName().toString(),
+            return add(elements.getPackageOf(type).getQualifiedName().toString(),
                        type.getQualifiedName().toString());
         }
 
@@ -159,16 +172,7 @@ public class JAXBIndexProcessor extends AbstractAnnotationProcessor
                 type = type.substring(DOT.length());
             }
 
-            return get(pkg).add(type);
-        }
-
-        @Override
-        public Set<String> get(Object key) {
-            if (! super.containsKey(key)) {
-                super.put((String) key, new TreeSet<>());
-            }
-
-            return super.get(key);
+            return computeIfAbsent(pkg, k -> new TreeSet<>()).add(type);
         }
     }
 }
