@@ -66,6 +66,86 @@ public abstract class AnnotatedNoAnnotationProcessor extends AbstractProcessor {
         return Collections.singleton("*");
     }
 
+    /**
+     * See {@link ForElementKinds}.
+     *
+     * @return  The array of {@link ElementKind}s specified by the
+     *          annotation ({@code null} if no annotation present).
+     */
+    protected ElementKind[] getForElementKinds() {
+        ElementKind[] value = null;
+
+        if (getClass().isAnnotationPresent(ForElementKinds.class)) {
+            value = getClass().getAnnotation(ForElementKinds.class).value();
+        }
+
+        return value;
+    }
+
+    /**
+     * See {@link WithModifiers}.
+     *
+     * @return  The array of {@link Modifier}s specified by the
+     *          annotation ({@code null} if no annotation present).
+     */
+    protected Modifier[] getWithModifiers() {
+        Modifier[] value = null;
+
+        if (getClass().isAnnotationPresent(WithModifiers.class)) {
+            value = getClass().getAnnotation(WithModifiers.class).value();
+        }
+
+        return value;
+    }
+
+    /**
+     * See {@link WithoutModifiers}.
+     *
+     * @return  The array of {@link Modifier}s specified by the
+     *          annotation ({@code null} if no annotation present).
+     */
+    protected Modifier[] getWithoutModifiers() {
+        Modifier[] value = null;
+
+        if (getClass().isAnnotationPresent(WithoutModifiers.class)) {
+            value = getClass().getAnnotation(WithoutModifiers.class).value();
+        }
+
+        return value;
+    }
+
+    /**
+     * See {@link ForSubclassesOf}.
+     *
+     * @return  The {@link Class} specified by the annotation ({@code null}
+     *          if no annotation present).
+     */
+    protected Class<?> getForSubclassesOf() {
+        Class<?> value = null;
+
+        if (getClass().isAnnotationPresent(ForSubclassesOf.class)) {
+            value = getClass().getAnnotation(ForSubclassesOf.class).value();
+        }
+
+        return value;
+    }
+
+    /**
+     * See {@link MustImplement}.
+     *
+     * @return  The array of {@link Class}es specified by the annotation
+     *          ({@code null} if no annotation present).
+     */
+    protected Class<?>[] getMustImplement() {
+        Class<?>[] value = null;
+
+        if (getClass().isAnnotationPresent(MustImplement.class)) {
+            value = getClass().getAnnotation(MustImplement.class).value();
+        }
+
+        return value;
+    }
+
     @Override
     public void init(ProcessingEnvironment processingEnv) {
         super.init(processingEnv);
@@ -75,39 +155,29 @@ public abstract class AnnotatedNoAnnotationProcessor extends AbstractProcessor {
 
             criteria.add(t -> kinds.contains(t.getKind()));
 
-            if (getClass().isAnnotationPresent(ForElementKinds.class)) {
-                ElementKind[] value =
-                    getClass().getAnnotation(ForElementKinds.class).value();
+            ElementKind[] array = getForElementKinds();
 
-                kinds.retainAll(Arrays.asList(value));
+            if (array != null) {
+                kinds.retainAll(Arrays.asList(array));
             }
 
             if (getClass().isAnnotationPresent(WithModifiers.class)) {
-                Modifier[] value =
-                    getClass().getAnnotation(WithModifiers.class).value();
-
-                criteria.add(withModifiers(value));
+                criteria.add(withModifiers(getWithModifiers()));
             }
 
             if (getClass().isAnnotationPresent(WithoutModifiers.class)) {
-                Modifier[] value =
-                    getClass().getAnnotation(WithoutModifiers.class).value();
-
-                criteria.add(withoutModifiers(value));
+                criteria.add(withoutModifiers(getWithoutModifiers()));
             }
 
             if (getClass().isAnnotationPresent(ForSubclassesOf.class)) {
-                Class<?> value =
-                    getClass().getAnnotation(ForSubclassesOf.class).value();
-
                 kinds.retainAll(ForSubclassesOf.ELEMENT_KINDS);
-                criteria.add(isAssignableTo(value));
+                criteria.add(isAssignableTo(getForSubclassesOf()));
             }
 
             if (getClass().isAnnotationPresent(MustImplement.class)) {
                 MustImplement annotation =
                     getClass().getAnnotation(MustImplement.class);
-                Class<?>[] types = annotation.value();
+                Class<?>[] types = getMustImplement();
 
                 criteria.add(new MustImplementCriterion(annotation, types));
             }
