@@ -47,10 +47,10 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import static javax.xml.xpath.XPathConstants.NODE;
 import static javax.xml.xpath.XPathConstants.NODESET;
 import static lombok.AccessLevel.PROTECTED;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
@@ -68,8 +68,6 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 public abstract class MavenTaglet extends AbstractInlineTaglet
                                   implements SunToolsInternalToolkitTaglet {
     private static final String PLUGIN_XML_PATH = "META-INF/maven/plugin.xml";
-    private static final String PLUGIN_MOJO_EXPRESSION_FORMAT =
-        "/plugin/mojos/mojo[implementation='%s']%s";
     private static final XPath XPATH = XPathFactory.newInstance().newXPath();
 
     private static final String POM_XML_NAME = "pom.xml";
@@ -181,42 +179,54 @@ public abstract class MavenTaglet extends AbstractInlineTaglet
                                                 + PLUGIN_XML_PATH);
             }
 
-            NodeList parameters =
-                (NodeList)
-                compile(PLUGIN_MOJO_EXPRESSION_FORMAT,
-                        type.getCanonicalName(),
-                        "/parameters/parameter")
-                .evaluate(document, NODESET);
-            NodeList configuration =
-                (NodeList)
-                compile(PLUGIN_MOJO_EXPRESSION_FORMAT,
-                        type.getCanonicalName(),
-                        "/configuration/*")
-                .evaluate(document, NODESET);
+            Node mojo =
+                (Node)
+                compile("/plugin/mojos/mojo[implementation='%s']",
+                        type.getCanonicalName())
+                .evaluate(document, NODE);
 
             return div(attr("class", "summary"),
-                       h3("Maven Plugin Field Summary"),
-                       table(tag, type, configuration));
+                       h3("Maven Plugin Parameter Summary"),
+                       table(tag, type, mojo,
+                             (NodeList)
+                             compile("parameters/parameter")
+                             .evaluate(mojo, NODESET)));
         }
 
-        private FluentNode table(Tag tag, Class<?> type, NodeList list) {
-            return table(thead(tr(th(EMPTY), th("Field"), th("Default"))),
-                         tbody(asStream(list)
-                               .map(t -> tr(tag, type, (Element) t))));
+        private FluentNode table(Tag tag, Class<?> type,
+                                 Node mojo, NodeList parameters) {
+            return table(thead(tr(th(EMPTY), th("Field"),
+                                  th("Default"), th("Required"),
+                                  th("Editable"), th("Description"))),
+                         tbody(asStream(parameters)
+                               .map(t -> tr(tag, type, mojo, t))));
         }
 
-        private FluentNode tr(Tag tag, Class<?> type, Element element) {
+        private FluentNode tr(Tag tag, Class<?> type,
+                              Node mojo, Node parameter) {
             FluentNode tr = fragment();
-            Field field =
-                FieldUtils.getField(type, element.getNodeName(), true);
 
-            if (field != null) {
-                tr =
-                    tr(td((! type.equals(field.getDeclaringClass()))
-                              ? type(tag, field.getDeclaringClass())
-                              : text(EMPTY)),
-                       td(declaration(tag, field)),
-                       td(code(element.getAttribute("default-value"))));
+            try {
+                String name = compile("name").evaluate(parameter);
+                Field field = FieldUtils.getField(type, name, true);
+
+                if (field != null) {
+                    tr =
+                        tr(td((! type.equals(field.getDeclaringClass()))
+                                  ? type(tag, field.getDeclaringClass())
+                                  : text(EMPTY)),
+                           td(declaration(tag, field)),
+                           td(code(compile("configuration/%s/@default-value",
+                                           name)
+                                   .evaluate(mojo))),
+                           td(code(compile("required").evaluate(parameter))),
+                           td(code(compile("editable").evaluate(parameter))),
+                           td(compile("description").evaluate(parameter)));
+                }
+            } catch (RuntimeException exception) {
+                throw exception;
+            } catch (Exception exception) {
+                throw new IllegalStateException(exception);
             }
 
             return tr;
