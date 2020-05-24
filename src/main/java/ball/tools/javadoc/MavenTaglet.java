@@ -29,10 +29,14 @@ import com.sun.javadoc.Tag;
 import com.sun.tools.doclets.Taglet;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.net.JarURLConnection;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Map;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -67,10 +71,9 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 @NoArgsConstructor(access = PROTECTED)
 public abstract class MavenTaglet extends AbstractInlineTaglet
                                   implements SunToolsInternalToolkitTaglet {
-    private static final String PLUGIN_XML_PATH = "META-INF/maven/plugin.xml";
     private static final XPath XPATH = XPathFactory.newInstance().newXPath();
 
-    private static final String POM_XML_NAME = "pom.xml";
+    private static final String POM_XML = "pom.xml";
     private static final String DEPENDENCY = "dependency";
     private static final String GROUP_ID = "groupId";
     private static final String ARTIFACT_ID = "artifactId";
@@ -99,7 +102,7 @@ public abstract class MavenTaglet extends AbstractInlineTaglet
      */
     protected File getPomFileFor(Tag tag) throws Exception {
         File parent = tag.position().file().getParentFile();
-        String name = defaultIfBlank(tag.text().trim(), POM_XML_NAME);
+        String name = defaultIfBlank(tag.text().trim(), POM_XML);
         File file = new File(parent, name);
 
         while (parent != null) {
@@ -137,6 +140,8 @@ public abstract class MavenTaglet extends AbstractInlineTaglet
             register(map, INSTANCE);
         }
 
+        private static final String PLUGIN_XML = "META-INF/maven/plugin.xml";
+
         @Override
         public FluentNode toNode(Tag tag) throws Throwable {
             ClassDoc doc = null;
@@ -150,19 +155,24 @@ public abstract class MavenTaglet extends AbstractInlineTaglet
 
             Class<?> type = getClassFor(doc);
             URL url = getResourceURLOf(type);
+            Protocol protocol = Protocol.of(url);
             Document document = null;
 
-            if (url.getProtocol().equalsIgnoreCase("file")) {
+            switch (protocol) {
+            case FILE:
+                String root =
+                    url.getPath()
+                    .replaceAll(Pattern.quote(getResourcePathOf(type)), EMPTY);
+
                 document =
                     DocumentBuilderFactory.newInstance()
                     .newDocumentBuilder()
-                    .parse(url.getPath()
-                           .replaceAll(Pattern.quote(getResourcePathOf(type)),
-                                       PLUGIN_XML_PATH));
-            } else if (url.getProtocol().equalsIgnoreCase("jar")) {
-                try (JarFile jar =
-                         ((JarURLConnection) url.openConnection()).getJarFile()) {
-                    ZipEntry entry = jar.getEntry(PLUGIN_XML_PATH);
+                    .parse(root + PLUGIN_XML);
+                break;
+
+            case JAR:
+                try (JarFile jar = protocol.getJarFile(url)) {
+                    ZipEntry entry = jar.getEntry(PLUGIN_XML);
 
                     try (InputStream in = jar.getInputStream(entry)) {
                         document =
@@ -171,9 +181,11 @@ public abstract class MavenTaglet extends AbstractInlineTaglet
                             .parse(in);
                     }
                 }
-            } else {
-                throw new IllegalStateException("Cannot find "
-                                                + PLUGIN_XML_PATH);
+                break;
+            }
+
+            if (document == null) {
+                throw new IllegalStateException("Cannot find " + PLUGIN_XML);
             }
 
             Node mojo =
@@ -219,7 +231,7 @@ public abstract class MavenTaglet extends AbstractInlineTaglet
                                    .evaluate(mojo))),
                            td(code(compile("required").evaluate(parameter))),
                            td(code(compile("editable").evaluate(parameter))),
-                           td(compile("description").evaluate(parameter)));
+                           td(p(compile("description").evaluate(parameter))));
                 }
             } catch (RuntimeException exception) {
                 throw exception;
@@ -228,6 +240,83 @@ public abstract class MavenTaglet extends AbstractInlineTaglet
             }
 
             return tr;
+        }
+    }
+
+    /**
+     * Inline {@link Taglet} to include generated
+     * {@link.uri https://maven.apache.org/index.html Maven}
+     * {@link.uri https://maven.apache.org/plugin-developers/index.html Plugin}
+     * help documentation.
+     */
+    @ServiceProviderFor({ Taglet.class })
+    @TagletName("maven.plugin.help")
+    @NoArgsConstructor @ToString
+    public static class PluginHelp extends MavenTaglet {
+        private static final PluginHelp INSTANCE = new PluginHelp();
+
+        public static void register(Map<Object,Object> map) {
+            register(map, INSTANCE);
+        }
+
+        private static final String NAME = "plugin-help.xml";
+        private static final Pattern PATTERN =
+            Pattern.compile("META-INF/maven/(?<g>[^/]+)/(?<a>[^/]+)/"
+                            + Pattern.quote(NAME));
+
+        @Override
+        public FluentNode toNode(Tag tag) throws Throwable {
+            Class<?> type = null;
+
+            if (tag.holder() instanceof PackageDoc) {
+                type = getClassFor((PackageDoc) tag.holder());
+            } else {
+                type = getClassFor(getContainingClassDocFor(tag));
+            }
+
+            URL url = getResourceURLOf(type);
+            Protocol protocol = Protocol.of(url);
+            Document document = null;
+
+            switch (protocol) {
+            case FILE:
+                Path root =
+                    Paths.get(url.getPath()
+                              .replaceAll(Pattern.quote(getResourcePathOf(type)), EMPTY));
+                Path path =
+                    Files.walk(root, Integer.MAX_VALUE)
+                    .filter(Files::isRegularFile)
+                    .filter(t -> PATTERN.matcher(root.relativize(t).toString()).matches())
+                    .findFirst().orElse(null);
+
+                document =
+                    DocumentBuilderFactory.newInstance()
+                    .newDocumentBuilder()
+                    .parse(path.toFile());
+                break;
+
+            case JAR:
+                try (JarFile jar = protocol.getJarFile(url)) {
+                    JarEntry entry =
+                        jar.stream()
+                        .filter(t -> PATTERN.matcher(t.getName()).matches())
+                        .findFirst().orElse(null);
+
+                    try (InputStream in = jar.getInputStream(entry)) {
+                        document =
+                            DocumentBuilderFactory.newInstance()
+                            .newDocumentBuilder()
+                            .parse(in);
+                    }
+                }
+                break;
+            }
+
+            if (document == null) {
+                throw new IllegalStateException("Cannot find " + NAME);
+            }
+
+            return pre("xml", render(document, 2));
         }
     }
 
@@ -251,6 +340,9 @@ public abstract class MavenTaglet extends AbstractInlineTaglet
             register(map, INSTANCE);
         }
 
+        private static final Pattern PATTERN =
+            Pattern.compile("META-INF/maven/(?<g>[^/]+)/(?<a>[^/]+)/pom[.]properties");
+
         @Override
         public FluentNode toNode(Tag tag) throws Throwable {
             POMProperties properties = new POMProperties();
@@ -263,8 +355,10 @@ public abstract class MavenTaglet extends AbstractInlineTaglet
             }
 
             URL url = getResourceURLOf(type);
+            Protocol protocol = Protocol.of(url);
 
-            if (url.getProtocol().equalsIgnoreCase("file")) {
+            switch (protocol) {
+            case FILE:
                 Document document =
                     DocumentBuilderFactory.newInstance()
                     .newDocumentBuilder()
@@ -274,12 +368,13 @@ public abstract class MavenTaglet extends AbstractInlineTaglet
                     .forEach(t -> properties.load(t, document, "/project/"));
                 Stream.of(VERSION)
                     .forEach(t -> properties.load(t, document, "/project/parent/"));
-            } else if (url.getProtocol().equalsIgnoreCase("jar")) {
-                try (JarFile jar =
-                         ((JarURLConnection) url.openConnection()).getJarFile()) {
+                break;
+
+            case JAR:
+                try (JarFile jar = protocol.getJarFile(url)) {
                     JarEntry entry =
                         jar.stream()
-                        .filter(t -> t.getName().matches("META-INF/maven/[^/]+/[^/]+/pom.properties"))
+                        .filter(t -> PATTERN.matcher(t.getName()).matches())
                         .findFirst().orElse(null);
 
                     if (entry != null) {
@@ -288,6 +383,7 @@ public abstract class MavenTaglet extends AbstractInlineTaglet
                         }
                     }
                 }
+                break;
             }
 
             return pre("xml",
@@ -295,6 +391,30 @@ public abstract class MavenTaglet extends AbstractInlineTaglet
                                       Stream.of(GROUP_ID, ARTIFACT_ID, VERSION)
                                       .map(t -> element(t).content(properties.getProperty(t, "unknown")))),
                               2));
+        }
+    }
+
+    private static enum Protocol {
+        FILE, JAR;
+
+        public static Protocol of(URL url) {
+            return valueOf(url.getProtocol().toUpperCase());
+        }
+
+        public JarFile getJarFile(URL url) throws IOException {
+            JarFile jar = null;
+
+            switch (this) {
+            case JAR:
+                jar = ((JarURLConnection) url.openConnection()).getJarFile();
+                break;
+
+            default:
+                throw new IllegalStateException();
+                /* break; */
+            }
+
+            return jar;
         }
     }
 
