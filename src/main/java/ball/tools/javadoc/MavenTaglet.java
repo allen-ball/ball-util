@@ -114,7 +114,7 @@ public abstract class MavenTaglet extends AbstractInlineTaglet
             parent = parent.getParentFile();
         }
 
-        if (file == null || (! file.isFile())) {
+        if (! (file != null && file.isFile())) {
             throw new FileNotFoundException(name);
         }
 
@@ -126,9 +126,6 @@ public abstract class MavenTaglet extends AbstractInlineTaglet
      * configured by the {@link.uri https://maven.apache.org/index.html Maven}
      * {@link.uri https://maven.apache.org/plugin-developers/index.html Plugin}
      * {@code plugin.xml}.
-     *
-     * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
-     * @version $Revision$
      */
     @ServiceProviderFor({ Taglet.class })
     @TagletName("maven.plugin.fields")
@@ -188,18 +185,18 @@ public abstract class MavenTaglet extends AbstractInlineTaglet
             return div(attr("class", "summary"),
                        h3("Maven Plugin Parameter Summary"),
                        table(tag, type, mojo,
-                             (NodeList)
-                             compile("parameters/parameter")
-                             .evaluate(mojo, NODESET)));
+                             asStream((NodeList)
+                                      compile("parameters/parameter")
+                                      .evaluate(mojo, NODESET))));
         }
 
         private FluentNode table(Tag tag, Class<?> type,
-                                 Node mojo, NodeList parameters) {
+                                 Node mojo, Stream<Node> parameters) {
             return table(thead(tr(th(EMPTY), th("Field"),
-                                  th("Default"), th("Required"),
-                                  th("Editable"), th("Description"))),
-                         tbody(asStream(parameters)
-                               .map(t -> tr(tag, type, mojo, t))));
+                                  th("Default"), th("Property"),
+                                  th("Required"), th("Editable"),
+                                  th("Description"))),
+                         tbody(parameters.map(t -> tr(tag, type, mojo, t))));
         }
 
         private FluentNode tr(Tag tag, Class<?> type,
@@ -216,8 +213,9 @@ public abstract class MavenTaglet extends AbstractInlineTaglet
                                   ? type(tag, field.getDeclaringClass())
                                   : text(EMPTY)),
                            td(declaration(tag, field)),
-                           td(code(compile("configuration/%s/@default-value",
-                                           name)
+                           td(code(compile("configuration/%s/@default-value", name)
+                                   .evaluate(mojo))),
+                           td(code(compile("configuration/%s", name)
                                    .evaluate(mojo))),
                            td(code(compile("required").evaluate(parameter))),
                            td(code(compile("editable").evaluate(parameter))),
@@ -301,7 +299,7 @@ public abstract class MavenTaglet extends AbstractInlineTaglet
     }
 
     private static class POMProperties extends PropertiesImpl {
-        private static final long serialVersionUID = -590870165719527159L;
+        private static final long serialVersionUID = 1354153174028868013L;
 
         public String load(String key, Document document, String prefix) {
             if (document != null) {
