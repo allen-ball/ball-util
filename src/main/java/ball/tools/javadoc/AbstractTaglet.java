@@ -48,8 +48,10 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Objects;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -64,6 +66,7 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 /**
  * Abstract {@link com.sun.tools.doclets.Taglet} base class.
+ * See {@link #toNode(Tag)}.
  *
  * <p>Note: {@link #getName()} implementation requires the subclass is
  * annotated with {@link TagletName}.</p>
@@ -199,6 +202,15 @@ public abstract class AbstractTaglet implements AnnotatedTaglet,
         this.configuration = configuration;
     }
 
+    /**
+     * Abstract method to be overridden by subclass implementations.
+     *
+     * @param   tag             The {@link Tag}.
+     *
+     * @return  The {@link Node} representing the output.
+     *
+     * @throws  Throwable       If the method fails for any reason.
+     */
     protected abstract Node toNode(Tag tag) throws Throwable;
 
     /**
@@ -251,7 +263,96 @@ public abstract class AbstractTaglet implements AnnotatedTaglet,
     }
 
     /**
-     * Convenience method to attempt to find a {@link ClassDoc}.
+     * Method to get the containing {@link ClassDoc}.  See
+     * {@link ProgramElementDoc#containingClass()}.
+     *
+     * @param   tag             The {@link Tag}.
+     *
+     * @return  The containing {@link ClassDoc} (may be {@code null}).
+     */
+    protected ClassDoc containingClass(Tag tag) {
+        return containingClass(tag.holder());
+    }
+
+    private ClassDoc containingClass(Doc holder) {
+        ClassDoc doc = null;
+
+        if (holder instanceof ClassDoc) {
+            doc = (ClassDoc) holder;
+        } else if (holder instanceof ProgramElementDoc) {
+            doc = ((ProgramElementDoc) holder).containingClass();
+        }
+
+        return doc;
+    }
+
+    /**
+     * Method to get the containing {@link PackageDoc}.  See
+     * {@link ProgramElementDoc#containingPackage()}.
+     *
+     * @param   tag             The {@link Tag}.
+     *
+     * @return  The containing {@link PackageDoc} (may be {@code null}).
+     */
+    protected PackageDoc containingPackage(Tag tag) {
+        return containingPackage(tag.holder());
+    }
+
+    private PackageDoc containingPackage(Doc holder) {
+        PackageDoc doc = null;
+
+        if (holder instanceof PackageDoc) {
+            doc = (PackageDoc) holder;
+        } else if (holder instanceof ProgramElementDoc) {
+            doc = ((ProgramElementDoc) holder).containingPackage();
+        }
+
+        return doc;
+    }
+
+    /**
+     * Method to attempt to find a {@link ClassDoc}.
+     *
+     * @param   tag             The {@link Tag}.
+     * @param   name            The {@link Class} name.
+     *
+     * @return  The {@link ClassDoc} if it can be found; {@code null}
+     *          otherwise.
+     */
+    protected ClassDoc getClassDocFor(Tag tag, String name) {
+        return findClass(tag.holder(), name);
+    }
+
+    private ClassDoc findClass(Doc holder, String name) {
+        ClassDoc doc = null;
+
+        if (holder instanceof ClassDoc) {
+            doc = findClass((ClassDoc) holder, name);
+        } else if (holder instanceof PackageDoc) {
+            doc = findClass((PackageDoc) holder, name);
+        } else if (holder instanceof MemberDoc) {
+            doc = findClass(((MemberDoc) holder).containingClass(), name);
+        }
+
+        return doc;
+    }
+
+    private ClassDoc findClass(ClassDoc holder, String name) {
+        return holder.findClass(name);
+    }
+
+    private ClassDoc findClass(PackageDoc holder, String name) {
+        ClassDoc doc =
+            Stream.of(holder.allClasses(true))
+            .map(t -> t.findClass(name))
+            .filter(Objects::nonNull)
+            .findFirst().orElse(holder.findClass(name));
+
+        return doc;
+    }
+
+    /**
+     * Method to attempt to find a {@link ClassDoc}.
      *
      * @param   tag             The {@link Tag}.
      * @param   type            The {@link Class}.
@@ -260,34 +361,11 @@ public abstract class AbstractTaglet implements AnnotatedTaglet,
      *          otherwise.
      */
     protected ClassDoc getClassDocFor(Tag tag, Class<?> type) {
-        return getClassDocFor(tag.holder(), type.getCanonicalName());
+        return getClassDocFor(tag, type.getCanonicalName());
     }
 
     /**
-     * Convenience method to attempt to find a {@link ClassDoc}.
-     *
-     * @param   tag             The {@link Tag}.
-     * @param   name            The name to qualify.
-     *
-     * @return  The {@link ClassDoc} if it can be found; {@code null}
-     *          otherwise.
-     */
-    protected ClassDoc getClassDocFor(Tag tag, String name) {
-        return getClassDocFor(tag.holder(), name);
-    }
-
-    private ClassDoc getClassDocFor(Doc context, String name) {
-        return getClassDocFor(getContainingClassDocFor(context), name);
-    }
-
-    private ClassDoc getClassDocFor(ClassDoc context, String name) {
-        return ((context != null)
-                    ? (isNotEmpty(name) ? context.findClass(name) : context)
-                    : null);
-    }
-
-    /**
-     * Convenience method to attempt to find a {@link FieldDoc}.
+     * Method to attempt to find a {@link FieldDoc}.
      *
      * @param   tag             The {@link Tag}.
      * @param   field           The {@link Field}.
@@ -310,7 +388,7 @@ public abstract class AbstractTaglet implements AnnotatedTaglet,
     }
 
     /**
-     * Convenience method to attempt to find a {@link ConstructorDoc}.
+     * Method to attempt to find a {@link ConstructorDoc}.
      *
      * @param   tag             The {@link Tag}.
      * @param   constructor     The {@link Constructor}.
@@ -335,7 +413,7 @@ public abstract class AbstractTaglet implements AnnotatedTaglet,
     }
 
     /**
-     * Convenience method to attempt to find a {@link MethodDoc}.
+     * Method to attempt to find a {@link MethodDoc}.
      *
      * @param   tag             The {@link Tag}.
      * @param   method          The {@link Method}.
@@ -365,32 +443,6 @@ public abstract class AbstractTaglet implements AnnotatedTaglet,
             .collect(Collectors.joining(",", "(", ")"));
 
         return signature;
-    }
-
-    /**
-     * Convenience method to get the containing {@link ClassDoc}.
-     *
-     * @param   tag             The {@link Tag}.
-     *
-     * @return  The containing {@link ClassDoc} or {@code null} if there is
-     *          none.
-     */
-    protected ClassDoc getContainingClassDocFor(Tag tag) {
-        return getContainingClassDocFor(tag.holder());
-    }
-
-    private ClassDoc getContainingClassDocFor(Doc doc) {
-        ClassDoc container = null;
-
-        if (doc instanceof ClassDoc) {
-            container = (ClassDoc) doc;
-        } else if (doc instanceof ProgramElementDoc) {
-            container =
-                getContainingClassDocFor(((ProgramElementDoc) doc)
-                                         .containingClass());
-        }
-
-        return container;
     }
 
     /**
@@ -534,97 +586,23 @@ public abstract class AbstractTaglet implements AnnotatedTaglet,
         return getBeanInfo(start, Object.class);
     }
 
-    private URI href(Tag tag, ProgramElementDoc target) {
-        return href(getContainingClassDocFor(tag.holder()), target);
-    }
-
-    private URI href(ClassDoc source, ProgramElementDoc target) {
-        URI href = null;
-
-        if (target != null) {
-            ClassDoc classDoc = getContainingClassDocFor(target);
-            PackageDoc packageDoc = classDoc.containingPackage();
-
-            if (target.isIncluded()) {
-                String path = "./";
-                int depth = countMatches(source.qualifiedName(), ".");
-
-                path += String.join(EMPTY, Collections.nCopies(depth, "../"));
-
-                if (isNotEmpty(packageDoc.name())) {
-                    path +=
-                        String.join("/",
-                                    packageDoc.name().split(Pattern.quote(".")))
-                        + "/";
-                }
-
-                path += classDoc.name() + ".html";
-
-                href = URI.create(path).normalize();
-            } else {
-                if (configuration != null) {
-                    DocLink link =
-                        configuration.extern
-                        .getExternalLink(packageDoc.name(),
-                                         null, classDoc.name() + ".html");
-                    /*
-                     * Link might be null because the class cannot be
-                     * loaded.
-                     */
-                    if (link != null) {
-                        href = URI.create(link.toString());
-                    }
-                }
-            }
+    /**
+     * {@code <a href="}{@link ClassDoc type}{@code ">}{@link Node node}{@code </a>}
+     *
+     * @param   tag             The {@link Tag}.
+     * @param   target          The target {@link ClassDoc}.
+     * @param   node            The child {@link Node} (may be
+     *                          {@code null}).
+     *
+     * @return  {@link org.w3c.dom.Element}
+     */
+    @Override
+    public FluentNode a(Tag tag, ProgramElementDoc target, Node node) {
+        if (node == null) {
+            node = code(target.name());
         }
 
-        if (href != null) {
-            if (target instanceof MemberDoc) {
-                String fragment = "#" + target.name();
-
-                if (target instanceof ExecutableMemberDoc) {
-                    fragment +=
-                        ((ExecutableMemberDoc) target).signature()
-                        .replaceAll("[(),]", "-");
-                }
-
-                href = href.resolve(fragment);
-            }
-        }
-
-        return href;
-    }
-
-    private URI href(Tag tag, Class<?> type) {
-        URI href = null;
-        Doc context = tag.holder();
-        ClassDoc source = getContainingClassDocFor(context);
-        ClassDoc target = getClassDocFor(source, type.getCanonicalName());
-
-        if (target != null) {
-            href = href(source, target);
-        }
-
-        return href;
-    }
-
-    private URI href(Tag tag, Member member) {
-        URI href = null;
-        ProgramElementDoc target = null;
-
-        if (member instanceof Field) {
-            target = getFieldDocFor(tag, (Field) member);
-        } else if (member instanceof Constructor) {
-            target = getConstructorDocFor(tag, (Constructor) member);
-        } else if (member instanceof Method) {
-            target = getMethodDocFor(tag, (Method) member);
-        }
-
-        if (target != null) {
-            href = href(tag, target);
-        }
-
-        return href;
+        return a((target != null) ? href(tag, target) : null, node);
     }
 
     /**
@@ -698,11 +676,91 @@ public abstract class AbstractTaglet implements AnnotatedTaglet,
         return a(tag, target, node);
     }
 
-    private FluentNode a(Tag tag, ClassDoc target, Node node) {
-        if (node == null) {
-            node = code(target.name());
+    private URI href(Tag tag, ProgramElementDoc target) {
+        URI href = null;
+
+        if (target != null) {
+            ClassDoc classDoc = containingClass(target);
+            PackageDoc packageDoc = containingPackage(target);
+
+            if (target.isIncluded()) {
+                String path = "./";
+                int depth =
+                    countMatches(containingPackage(tag).name(), ".") + 1;
+
+                path += String.join(EMPTY, Collections.nCopies(depth, "../"));
+
+                if (isNotEmpty(packageDoc.name())) {
+                    path +=
+                        String.join("/",
+                                    packageDoc.name().split(Pattern.quote(".")))
+                        + "/";
+                }
+
+                path += classDoc.name() + ".html";
+
+                href = URI.create(path).normalize();
+            } else {
+                if (configuration != null) {
+                    DocLink link =
+                        configuration.extern
+                        .getExternalLink(packageDoc.name(),
+                                         null, classDoc.name() + ".html");
+                    /*
+                     * Link might be null because the class cannot be
+                     * loaded.
+                     */
+                    if (link != null) {
+                        href = URI.create(link.toString());
+                    }
+                }
+            }
         }
 
-        return a((target != null) ? href(tag, target) : null, node);
+        if (href != null) {
+            if (target instanceof MemberDoc) {
+                String fragment = "#" + target.name();
+
+                if (target instanceof ExecutableMemberDoc) {
+                    fragment +=
+                        ((ExecutableMemberDoc) target).signature()
+                        .replaceAll("[(),]", "-");
+                }
+
+                href = href.resolve(fragment);
+            }
+        }
+
+        return href;
+    }
+
+    private URI href(Tag tag, Class<?> type) {
+        URI href = null;
+        ClassDoc target = getClassDocFor(tag, type);
+
+        if (target != null) {
+            href = href(tag, target);
+        }
+
+        return href;
+    }
+
+    private URI href(Tag tag, Member member) {
+        URI href = null;
+        ProgramElementDoc target = null;
+
+        if (member instanceof Field) {
+            target = getFieldDocFor(tag, (Field) member);
+        } else if (member instanceof Constructor) {
+            target = getConstructorDocFor(tag, (Constructor) member);
+        } else if (member instanceof Method) {
+            target = getMethodDocFor(tag, (Method) member);
+        }
+
+        if (target != null) {
+            href = href(tag, target);
+        }
+
+        return href;
     }
 }

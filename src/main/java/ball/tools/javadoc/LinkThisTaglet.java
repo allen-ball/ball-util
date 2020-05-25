@@ -53,6 +53,6 @@ public class LinkThisTaglet extends AbstractInlineTaglet
             throw new IllegalArgumentException("Invalid argument");
         }
 
-        return a(tag, getClassFor(getContainingClassDocFor(tag)), "this");
+        return a(tag, getClassFor(containingClass(tag)), "this");
     }
 }

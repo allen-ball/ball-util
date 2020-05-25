@@ -22,6 +22,7 @@ package ball.tools.javadoc;
  */
 import ball.xml.FluentNode;
 import ball.xml.HTMLTemplates;
+import com.sun.javadoc.ProgramElementDoc;
 import com.sun.javadoc.Tag;
 import com.sun.tools.doclets.Taglet;
 import java.lang.annotation.Annotation;
@@ -56,6 +57,7 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
  * @version $Revision$
  */
 public interface JavadocHTMLTemplates extends HTMLTemplates {
+    FluentNode a(Tag tag, ProgramElementDoc target, Node node);
     FluentNode a(Tag tag, Class<?> type, Node node);
     FluentNode a(Tag tag, Member member, Node node);
     FluentNode a(Tag tag, String name, Node node);

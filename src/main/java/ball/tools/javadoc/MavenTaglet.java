@@ -150,7 +150,7 @@ public abstract class MavenTaglet extends AbstractInlineTaglet
             if (isNotEmpty(argv[0])) {
                 doc = getClassDocFor(tag, argv[0]);
             } else {
-                doc = getContainingClassDocFor(tag);
+                doc = containingClass(tag);
             }
 
             Class<?> type = getClassFor(doc);
@@ -271,7 +271,7 @@ public abstract class MavenTaglet extends AbstractInlineTaglet
             if (tag.holder() instanceof PackageDoc) {
                 type = getClassFor((PackageDoc) tag.holder());
             } else {
-                type = getClassFor(getContainingClassDocFor(tag));
+                type = getClassFor(containingClass(tag));
             }
 
             URL url = getResourceURLOf(type);
@@ -316,7 +316,35 @@ public abstract class MavenTaglet extends AbstractInlineTaglet
                 throw new IllegalStateException("Cannot find " + NAME);
             }
 
-            return pre("xml", render(document, 2));
+            NodeList mojos =
+                (NodeList)
+                compile("/plugin/mojos/mojo")
+                .evaluate(document, NODESET);
+
+            return fragment(div(table(tag, asStream(mojos))),
+                            div(pre("xml", render(document, 2))));
+        }
+
+        private FluentNode table(Tag tag, Stream<Node> mojos) {
+            return table(thead(tr(th("Goal"))),
+                         tbody(mojos.map(t -> tr(tag, t))));
+        }
+
+        private FluentNode tr(Tag tag, Node mojo) {
+            FluentNode tr = fragment();
+
+            try {
+                tr =
+                    tr(td(a(tag,
+                            compile("implementation").evaluate(mojo),
+                            code(compile("goal").evaluate(mojo)))));
+            } catch (RuntimeException exception) {
+                throw exception;
+            } catch (Exception exception) {
+                throw new IllegalStateException(exception);
+            }
+
+            return tr;
         }
     }
 
@@ -351,7 +379,7 @@ public abstract class MavenTaglet extends AbstractInlineTaglet
             if (tag.holder() instanceof PackageDoc) {
                 type = getClassFor((PackageDoc) tag.holder());
             } else {
-                type = getClassFor(getContainingClassDocFor(tag));
+                type = getClassFor(containingClass(tag));
             }
 
             URL url = getResourceURLOf(type);

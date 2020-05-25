@@ -73,7 +73,7 @@ public class InjectedFieldsTaglet extends AbstractInlineTaglet
         if (isNotEmpty(argv[0])) {
             doc = getClassDocFor(tag, argv[0]);
         } else {
-            doc = getContainingClassDocFor(tag);
+            doc = containingClass(tag);
         }
 
         Set<Class<? extends Annotation>> set = new HashSet<>();

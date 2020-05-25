@@ -61,7 +61,7 @@ public class BeanInfoTaglet extends AbstractInlineTaglet
         if (isNotEmpty(name)) {
             doc = getClassDocFor(tag, name);
         } else {
-            doc = getContainingClassDocFor(tag);
+            doc = containingClass(tag);
         }
 
         Class<?> type = getClassFor(doc);

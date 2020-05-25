@@ -66,12 +66,12 @@ public class IncludeTaglet extends AbstractInlineTaglet
                 field(tag,
                       getClassFor(isNotEmpty(text[0])
                                       ? getClassDocFor(tag, text[0])
-                                      : getContainingClassDocFor(tag)),
+                                      : containingClass(tag)),
                       text[1]);
         } else {
             node =
                 resource(tag,
-                         getClassFor(getContainingClassDocFor(tag)),
+                         getClassFor(containingClass(tag)),
                          text[0]);
         }
 
