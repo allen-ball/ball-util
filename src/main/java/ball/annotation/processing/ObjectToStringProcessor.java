@@ -28,6 +28,7 @@ import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
@@ -72,7 +73,8 @@ public class ObjectToStringProcessor extends AnnotatedNoAnnotationProcessor {
         try {
             METHOD = getMethod(PROTOTYPE);
 
-            criteria.add(t -> t.getAnnotation(ToString.class) == null);
+            criteria.add(t -> (t.getAnnotation(Data.class) == null
+                               && t.getAnnotation(ToString.class) == null));
         } catch (Exception exception) {
             print(ERROR, exception);
         }
