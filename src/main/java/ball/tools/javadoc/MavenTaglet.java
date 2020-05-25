@@ -316,17 +316,17 @@ public abstract class MavenTaglet extends AbstractInlineTaglet
                 throw new IllegalStateException("Cannot find " + NAME);
             }
 
-            NodeList mojos =
-                (NodeList)
-                compile("/plugin/mojos/mojo")
-                .evaluate(document, NODESET);
-
-            return fragment(div(table(tag, asStream(mojos))),
-                            div(pre("xml", render(document, 2))));
+            return div(attr("class", "summary"),
+                       h3(compile("/plugin/name").evaluate(document)),
+                       p(compile("/plugin/description").evaluate(document)),
+                       table(tag,
+                             asStream((NodeList)
+                                      compile("/plugin/mojos/mojo")
+                                      .evaluate(document, NODESET))));
         }
 
         private FluentNode table(Tag tag, Stream<Node> mojos) {
-            return table(thead(tr(th("Goal"))),
+            return table(thead(tr(th("Goal"), th("Phase"), th("Description"))),
                          tbody(mojos.map(t -> tr(tag, t))));
         }
 
@@ -337,7 +337,9 @@ public abstract class MavenTaglet extends AbstractInlineTaglet
                 tr =
                     tr(td(a(tag,
                             compile("implementation").evaluate(mojo),
-                            code(compile("goal").evaluate(mojo)))));
+                            code(compile("goal").evaluate(mojo)))),
+                       td(code(compile("phase").evaluate(mojo))),
+                       td(p(code(compile("description").evaluate(mojo)))));
             } catch (RuntimeException exception) {
                 throw exception;
             } catch (Exception exception) {
