@@ -106,7 +106,9 @@ public abstract class AbstractProcessor
 
     @Override
     public SourceVersion getSupportedSourceVersion() {
-        return SourceVersion.latestSupported();
+        SourceVersion[] values = SourceVersion.values();
+
+        return values[values.length - 1];
     }
 
     /**
@@ -692,12 +694,12 @@ public abstract class AbstractProcessor
     }
 
     protected Predicate<Element> withoutModifiers(Modifier... modifiers) {
-        return without(toEnumSet(modifiers), t-> t.getModifiers());
+        return without(toEnumSet(modifiers), t -> t.getModifiers());
     }
 
     private <E extends Enum<E>> Predicate<Element> with(EnumSet<E> set,
                                                         Function<Element,Collection<E>> extractor) {
-        return t -> set.containsAll(extractor.apply(t));
+        return t -> extractor.apply(t).containsAll(set);
     }
 
     private <E extends Enum<E>> Predicate<Element> without(EnumSet<E> set,
