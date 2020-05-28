@@ -36,7 +36,7 @@
 2020-05-18  Allen D. Ball  <ball@hcf.dev>
 
 	* src/main/java/ball/annotation/processing/SerializableProcessor.java:
-	Initial writing (from MissingSVUIDRemedy).
+	Initial writing.
 
 	* src/main/java/ball/annotation/processing/AnnotatedNoAnnotationProcessor.java:
 	Added methods to access implementation annotation values.
@@ -829,12 +829,6 @@
 
 	* pom.xml: Include Ant dependency source in javadoc.
 
-2014-11-01  Allen D. Ball  <ball@sol.local>
-
-	* src/main/java/ball/util/ant/taskdefs/compilers/SystemJavaCompilerAdapter.java:
-	Avoid printing source line and pointer if the source is already
-	printed in the diagnostic message.
-
 2014-10-07  Allen D. Ball  <ball@sol.local>
 
 	* src/main/java/ball/tools/javadoc/AbstractTaglet.java:
@@ -1229,27 +1223,6 @@
 	* src/main/java/iprotium/annotation/processing/ObjectCloneProcessor.java:
 	Initial writing.
 
-2013-02-10  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/tools/Remedy.java:
-	Provide default getCodes() implementation that returns the value
-	of any @Codes annotation.
-
-	* src/main/java/iprotium/tools/DoesNotOverrideAbstractRemedy.java:
-	Initial writing.
-
-2013-02-09  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/tools/Codes.java,
-	src/main/java/iprotium/tools/CodesProcessor.java:
-	Initial writing.
-
-2013-01-13  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/tools/Remedy.java,
-	src/main/java/iprotium/tools/CannotResolveLocationRemedy.java:
-	Re-factored ClassMap to Remedy base class.
-
 2013-01-05  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* Moved iprotium.lang.java to iprotium.lang.
@@ -1281,12 +1254,6 @@
 	* src/main/java/iprotium/annotation/processing/NoOverrideProcessor.java:
 	Use super.specifiedBy(ExecutableElement).
 
-	* src/main/java/iprotium/util/ant/taskdefs/compilers/SystemJavaCompilerAdapter.java:
-	Spell CARET correctly.
-
-	* src/main/java/iprotium/util/ant/taskdefs/compilers/LintAdapter.java:
-	Added named constants for "/" and ".".
-
 2012-12-30  Allen D. Ball  <ball@mecury.local>
 
 	* src/main/java/iprotium/annotation/processing/
@@ -1313,11 +1280,6 @@
 
 	* Re-factored Factory as a subclass of TreeMap<Class<?>[],Member>.
 
-2012-12-08  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/tools/CannotResolveLocationRemedy.java:
-	Provide a suggested import based on Package.getPackages().
-
 2012-12-01  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* Silence JDK 1.7 compilation warnings.
@@ -1328,11 +1290,6 @@
 
 	* src/main/java/iprotium/tools/javadoc/LinkManTaglet.java,
 	src/main/java/iprotium/tools/javadoc/LinkRFCTaglet.java:
-	Initial writing.
-
-2011-07-09  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/tools/CannotResolveLocationRemedy.java:
 	Initial writing.
 
 2011-07-06  Allen D. Ball  <ball@10-0-1-2.lan>
@@ -1348,33 +1305,12 @@
 	* Added javax.annotation.processing.Processor implementations in
 	iprotium.annotation.processing.
 
-2011-06-27  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* Replaced LintTask with LintAdapter.
-
-	* Moved DiagnosticMap from iprotium.util.ant.taskdefs.compilers to
-	iprotium.tools.
-
-	* src/main/java/iprotium/util/ant/taskdefs/compilers/LintAdapter.java:
-	Initial writing.
-
-2011-06-14  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* DiagnosticMap.java: Initial writing.
-
-	* SystemJavaCompilerAdapter.java:
-	Re-factored to provide the
-	compile(StandardJavaFileManager,DiagnosticMap) method to ease
-	design of subclass implementations.
-
 2011-06-12  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* AbstractPropertyTask.java:
 	Changed getPropertyValue() to throw Throwable.  Log property value
 	if property name is not set but do not set property if the value
 	is null.
-
-	* SystemJavaCompilerAdapter.java: Initial writing.
 
 2011-06-09  Allen D. Ball  <ball@10-0-1-2.lan>
 
