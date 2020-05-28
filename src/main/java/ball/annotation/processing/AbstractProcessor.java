@@ -23,6 +23,7 @@ package ball.annotation.processing;
 import ball.activation.ThrowableDataSource;
 import ball.beans.PropertyMethodEnum;
 import ball.lang.reflect.JavaLangReflectMethods;
+import com.sun.source.util.JavacTask;
 import java.lang.annotation.Annotation;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Target;
@@ -97,6 +98,8 @@ public abstract class AbstractProcessor
     /** UTF-8 */
     protected static final Charset CHARSET = UTF_8;
 
+    /** See {@link JavacTask#instance(ProcessingEnvironment)}. */
+    protected JavacTask javac = null;
     /** See {@link ProcessingEnvironment#getFiler()}. */
     protected Filer filer = null;
     /** See {@link ProcessingEnvironment#getElementUtils()}. */
@@ -119,6 +122,7 @@ public abstract class AbstractProcessor
         super.init(processingEnv);
 
         try {
+            javac = JavacTask.instance(processingEnv);
             filer = processingEnv.getFiler();
             elements = processingEnv.getElementUtils();
             types = processingEnv.getTypeUtils();
