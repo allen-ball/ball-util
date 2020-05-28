@@ -697,13 +697,13 @@ public abstract class AbstractProcessor
         return without(toEnumSet(modifiers), t -> t.getModifiers());
     }
 
-    private <E extends Enum<E>> Predicate<Element> with(EnumSet<E> set,
-                                                        Function<Element,Collection<E>> extractor) {
+    protected <E> Predicate<Element> with(Set<E> set,
+                                          Function<Element,Collection<E>> extractor) {
         return t -> extractor.apply(t).containsAll(set);
     }
 
-    private <E extends Enum<E>> Predicate<Element> without(EnumSet<E> set,
-                                                           Function<Element,Collection<E>> extractor) {
+    protected <E> Predicate<Element> without(Set<E> set,
+                                             Function<Element,Collection<E>> extractor) {
         return t -> disjoint(set, extractor.apply(t));
     }
 
