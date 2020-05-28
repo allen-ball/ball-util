@@ -22,16 +22,21 @@ package ball.annotation.processing;
  */
 import ball.annotation.ServiceProviderFor;
 import java.lang.reflect.Method;
+import java.util.Objects;
+import java.util.ResourceBundle;
+import java.util.Set;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
+import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
-import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import static java.util.Collections.disjoint;
+import static java.util.stream.Collectors.toSet;
 import static javax.lang.model.element.ElementKind.CLASS;
 import static javax.lang.model.element.Modifier.ABSTRACT;
 import static javax.tools.Diagnostic.Kind.ERROR;
@@ -64,6 +69,10 @@ public class ObjectToStringProcessor extends AnnotatedNoAnnotationProcessor {
         }
     }
 
+    private static final Set<String> ANNOTATIONS =
+        ResourceBundle.getBundle(ObjectToStringProcessor.class.getName())
+        .keySet();
+
     private ExecutableElement METHOD = null;
 
     @Override
@@ -72,9 +81,6 @@ public class ObjectToStringProcessor extends AnnotatedNoAnnotationProcessor {
 
         try {
             METHOD = getMethod(PROTOTYPE);
-
-            criteria.add(t -> (t.getAnnotation(Data.class) == null
-                               && t.getAnnotation(ToString.class) == null));
         } catch (Exception exception) {
             print(ERROR, exception);
         }
@@ -83,12 +89,21 @@ public class ObjectToStringProcessor extends AnnotatedNoAnnotationProcessor {
     @Override
     protected void process(RoundEnvironment roundEnv, Element element) {
         TypeElement type = (TypeElement) element;
-        ExecutableElement implementation = implementationOf(METHOD, type);
+        Set<String> annotations =
+            type.getAnnotationMirrors()
+            .stream()
+            .map(AnnotationMirror::getAnnotationType)
+            .map(Objects::toString)
+            .collect(toSet());
 
-        if (implementation == null || METHOD.equals(implementation)) {
-            print(WARNING, type,
-                  "%s does not override '%s'",
-                  type.getKind(), declaration(PROTOTYPE));
+        if (disjoint(ANNOTATIONS, annotations)) {
+            ExecutableElement implementation = implementationOf(METHOD, type);
+
+            if (implementation == null || METHOD.equals(implementation)) {
+                print(WARNING, type,
+                      "%s does not override '%s'",
+                      type.getKind(), declaration(PROTOTYPE));
+            }
         }
     }
 }
