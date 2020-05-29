@@ -20,7 +20,7 @@ package ball.annotation.processing;
  * limitations under the License.
  * ##########################################################################
  */
-import java.io.File;
+import java.nio.file.Path;
 import java.util.Set;
 import javax.annotation.processing.Processor;
 
@@ -43,5 +43,5 @@ public interface ClassFileProcessor extends Processor {
      * @throws      Exception   If the implementation throws an
      *                          {@link Exception}.
      */
-    public void process(Set<Class<?>> set, File destdir) throws Exception;
+    public void process(Set<Class<?>> set, Path destdir) throws Exception;
 }

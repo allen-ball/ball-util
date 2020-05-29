@@ -21,10 +21,10 @@ package ball.annotation.processing;
  * ##########################################################################
  */
 import ball.annotation.ServiceProviderFor;
-import java.io.File;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
@@ -123,7 +123,7 @@ public class JAXBIndexProcessor extends AnnotatedProcessor
     }
 
     @Override
-    public void process(Set<Class<?>> set, File destdir) throws IOException {
+    public void process(Set<Class<?>> set, Path destdir) throws IOException {
         for (Class<?> type : set) {
             if (! isAbstract(type.getModifiers())) {
                 for (Class<? extends Annotation> annotation :
@@ -137,16 +137,16 @@ public class JAXBIndexProcessor extends AnnotatedProcessor
 
         for (Map.Entry<String,Set<String>> entry : map.entrySet()) {
             String pkg = entry.getKey();
-            File file = new File(new File(destdir, asPath(pkg)), JAXB_INDEX);
+            Path path = destdir.resolve(asPath(pkg)).resolve(JAXB_INDEX);
 
-            Files.createDirectories(file.toPath().getParent());
+            Files.createDirectories(path.getParent());
 
             ArrayList<String> lines = new ArrayList<>();
 
             lines.add("# " + JAXB_INDEX);
             lines.addAll(entry.getValue());
 
-            Files.write(file.toPath(), lines, CHARSET);
+            Files.write(path, lines, CHARSET);
         }
     }
 

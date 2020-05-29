@@ -104,7 +104,7 @@ public class ProcessClassesTask extends Task
                 if (ClassFileProcessor.class.isAssignableFrom(type)) {
                     if (! isAbstract(type.getModifiers())) {
                         type.asSubclass(ClassFileProcessor.class).newInstance()
-                            .process(getClassSet(), getDestdir());
+                            .process(getClassSet(), getDestdir().toPath());
                     }
                 }
             }

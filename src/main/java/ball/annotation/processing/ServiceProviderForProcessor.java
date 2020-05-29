@@ -21,9 +21,9 @@ package ball.annotation.processing;
  * ##########################################################################
  */
 import ball.annotation.ServiceProviderFor;
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -173,7 +173,7 @@ public class ServiceProviderForProcessor extends AnnotatedProcessor
     }
 
     @Override
-    public void process(Set<Class<?>> set, File destdir) throws IOException {
+    public void process(Set<Class<?>> set, Path destdir) throws IOException {
         for (Class<?> provider : set) {
             if (! isAbstract(provider.getModifiers())) {
                 ServiceProviderFor annotation =
@@ -193,16 +193,16 @@ public class ServiceProviderForProcessor extends AnnotatedProcessor
 
         for (Map.Entry<String,Set<String>> entry : map.entrySet()) {
             String service = entry.getKey();
-            File file = new File(destdir, String.format(PATH, service));
+            Path path = destdir.resolve(String.format(PATH, service));
 
-            Files.createDirectories(file.toPath().getParent());
+            Files.createDirectories(path.getParent());
 
             ArrayList<String> lines = new ArrayList<>();
 
             lines.add("# " + service);
             lines.addAll(entry.getValue());
 
-            Files.write(file.toPath(), lines, CHARSET);
+            Files.write(path, lines, CHARSET);
         }
     }
 }

@@ -21,15 +21,13 @@ package ball.annotation.processing;
  * ##########################################################################
  */
 import ball.annotation.ServiceProviderFor;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.jar.Attributes;
@@ -217,14 +215,14 @@ public class ManifestProcessor extends AnnotatedProcessor
     }
 
     @Override
-    public void process(Set<Class<?>> set, File destdir) throws IOException {
-        File file = new File(new File(destdir, META_INF), MANIFEST_MF);
+    public void process(Set<Class<?>> set, Path destdir) throws IOException {
+        Path path = destdir.resolve(META_INF).resolve(MANIFEST_MF);
 
         if (manifest == null) {
             manifest = new ManifestImpl();
 
-            if (file.exists()) {
-                try (FileInputStream in = new FileInputStream(file)) {
+            if (Files.exists(path)) {
+                try (InputStream in = Files.newInputStream(path)) {
                     manifest.read(in);
                 }
             }
@@ -255,9 +253,9 @@ public class ManifestProcessor extends AnnotatedProcessor
             }
         }
 
-        Files.createDirectories(file.toPath().getParent());
+        Files.createDirectories(path.getParent());
 
-        try (FileOutputStream out = new FileOutputStream(file)) {
+        try (OutputStream out = Files.newOutputStream(path)) {
             manifest.write(out);
         }
     }

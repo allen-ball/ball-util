@@ -26,11 +26,10 @@ import ball.util.ant.taskdefs.AntLib;
 import ball.util.ant.taskdefs.AntTask;
 import ball.xml.FluentDocument;
 import ball.xml.FluentDocumentBuilderFactory;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.net.URI;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
@@ -210,7 +209,7 @@ public class AntTaskProcessor extends AnnotatedProcessor
     }
 
     @Override
-    public void process(Set<Class<?>> set, File destdir) throws Exception {
+    public void process(Set<Class<?>> set, Path destdir) throws Exception {
         for (Class<?> type : set) {
             AntTask task = type.getAnnotation(AntTask.class);
 
@@ -241,22 +240,22 @@ public class AntTaskProcessor extends AnnotatedProcessor
         }
 
         for (Map.Entry<String,PropertiesImpl> entry : map.entrySet()) {
-            File file = new File(destdir, entry.getKey());
+            Path path = destdir.resolve(entry.getKey());
 
-            Files.createDirectories(file.toPath().getParent());
+            Files.createDirectories(path.getParent());
 
-            try (FileOutputStream out = new FileOutputStream(file)) {
+            try (OutputStream out = Files.newOutputStream(path)) {
                 entry.getValue().store(out, entry.getKey());
             }
         }
 
         for (String pkg : packages) {
             AntLibXML xml = new AntLibXML(pkg, map);
-            File file = new File(destdir, xml.getPath());
+            Path path = destdir.resolve(xml.getPath());
 
-            Files.createDirectories(file.toPath().getParent());
+            Files.createDirectories(path.getParent());
 
-            try (FileOutputStream out = new FileOutputStream(file)) {
+            try (OutputStream out = Files.newOutputStream(path)) {
                 xml.writeTo(out);
             }
         }
