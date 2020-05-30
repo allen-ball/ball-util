@@ -30,8 +30,6 @@ import com.sun.source.util.Trees;
 import com.sun.tools.javac.processing.JavacProcessingEnvironment;
 import com.sun.tools.javac.util.Context;
 import java.lang.annotation.Annotation;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Target;
 import java.lang.reflect.Method;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
@@ -61,8 +59,6 @@ import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
-import javax.lang.model.type.ArrayType;
-import javax.lang.model.type.PrimitiveType;
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Elements;
@@ -83,6 +79,7 @@ import static javax.lang.model.element.Modifier.STATIC;
 import static javax.lang.model.util.ElementFilter.constructorsIn;
 import static javax.lang.model.util.ElementFilter.methodsIn;
 import static javax.tools.Diagnostic.Kind.ERROR;
+import static javax.tools.StandardLocation.CLASS_PATH;
 import static lombok.AccessLevel.PROTECTED;
 
 /**
@@ -163,6 +160,19 @@ public abstract class AbstractProcessor
      * finished.
      */
     protected void whenAnnotationProcessingFinished() { }
+
+    /**
+     * See {@link JavaFileManager#getClassLoader(javax.tools.JavaFileManager.Location) JavaFileManager.getClassLoader(CLASS_PATH)}.
+     *
+     * @return  The {@link ClassLoader}.
+     */
+    public ClassLoader getClassPathClassLoader() {
+        ClassLoader loader =
+            (javaFileManager != null)
+                ? javaFileManager.getClassLoader(CLASS_PATH) : null;
+
+        return loader;
+    }
 
     /**
      * Method to get a {@link TypeElement} for a {@link Class}.

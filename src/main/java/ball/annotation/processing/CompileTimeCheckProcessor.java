@@ -25,28 +25,25 @@ import ball.annotation.ServiceProviderFor;
 import ball.tools.javac.AbstractTaskListener;
 import com.sun.source.util.TaskEvent;
 import java.lang.reflect.InvocationTargetException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.EnumSet;
-import java.util.HashSet;
-import java.util.Set;
-import javax.annotation.processing.ProcessingEnvironment;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.TreeMap;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
+import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.element.VariableElement;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import static java.util.stream.Collectors.toSet;
 import static javax.lang.model.element.Modifier.FINAL;
 import static javax.lang.model.element.Modifier.STATIC;
+import static javax.lang.model.util.ElementFilter.fieldsIn;
 import static javax.tools.Diagnostic.Kind.ERROR;
 import static javax.tools.Diagnostic.Kind.WARNING;
-import static javax.tools.StandardLocation.CLASS_OUTPUT;
-import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 /**
  * {@link CompileTimeCheck} {@link Processor}.
@@ -61,25 +58,11 @@ public class CompileTimeCheckProcessor extends AnnotatedProcessor {
     private static final EnumSet<Modifier> FIELD_MODIFIERS =
         EnumSet.of(STATIC, FINAL);
 
-    private final Set<Element> set = new HashSet<>();
-    private Path base = null;
-    private ClassLoader loader = null;
+    private final Map<String,String> map = new TreeMap<>();
 
     @Override
-    public void init(ProcessingEnvironment processingEnv) {
-        super.init(processingEnv);
-
-        try {
-            //javac.addTaskListener(new OnAnnotationProcessingFinished());
-            //javac.addTaskListener(new TaskListenerImpl());
-
-            base =
-                Paths.get(filer.getResource(CLASS_OUTPUT, EMPTY, "UNUSED")
-                          .toUri().resolve(EMPTY));
-            loader = new ClassLoaderImpl();
-        } catch (Exception exception) {
-            print(ERROR, exception);
-        }
+    protected void whenAnnotationProcessingFinished() {
+        javac.addTaskListener(new TaskListenerImpl());
     }
 
     @Override
@@ -89,9 +72,13 @@ public class CompileTimeCheckProcessor extends AnnotatedProcessor {
 
         switch (element.getKind()) {
         case FIELD:
-            if (! set.contains(element)) {
+            TypeElement type = (TypeElement) element.getEnclosingElement();
+            String key = type.getQualifiedName().toString();
+            String value = element.getSimpleName().toString();
+
+            if (! map.containsKey(key)) {
                 if (element.getModifiers().containsAll(FIELD_MODIFIERS)) {
-                    set.add(element);
+                    map.put(key, value);
                 } else {
                     print(ERROR, element,
                           "%s must be %s", element.getKind(), FIELD_MODIFIERS);
@@ -105,92 +92,54 @@ public class CompileTimeCheckProcessor extends AnnotatedProcessor {
         }
     }
 
-    private void check(Element element) {
-        TypeElement type = (TypeElement) element.getEnclosingElement();
-        String name = type.getQualifiedName().toString();
-
-        try {
-            Class.forName(name, false, loader);
-        } catch (Throwable throwable) {
-            if (throwable instanceof ExceptionInInitializerError) {
-                throwable = throwable.getCause();
-            }
-
-            while (throwable instanceof InvocationTargetException) {
-                throwable = throwable.getCause();
-            }
-
-            print(ERROR, element, "%s", throwable.getMessage());
-        }
-    }
-
     @NoArgsConstructor @ToString
     private class TaskListenerImpl extends AbstractTaskListener {
         @Override
-        public void started(TaskEvent event) {
-            print(WARNING, "STARTED %s", event);
-        }
-
-        @Override
         public void finished(TaskEvent event) {
-            print(WARNING, "FINISHED %s", event);
-        }
-    }
+            switch (event.getKind()) {
+            case GENERATE:
+                Iterator<Map.Entry<String,String>> iterator =
+                    map.entrySet().iterator();
 
-    @NoArgsConstructor @ToString
-    private class OnAnnotationProcessingFinished extends AbstractTaskListener {
-        @Override
-        public void finished(TaskEvent event) {
-            if (event.getKind() == TaskEvent.Kind.ANNOTATION_PROCESSING) {
-                javac.removeTaskListener(this);
-                javac.addTaskListener(new OnGenerationFinished());
-            }
-        }
-    }
+                while (iterator.hasNext()) {
+                    Map.Entry<String,String> entry = iterator.next();
+                    String name = entry.getKey();
+                    TypeElement type = elements.getTypeElement(name);
+                    VariableElement element =
+                        fieldsIn(type.getEnclosedElements())
+                        .stream()
+                        .filter(t -> t.getSimpleName().contentEquals(entry.getValue()))
+                        .findFirst().orElse(null);
+                    AnnotationMirror annotation =
+                        getAnnotationMirror(element, CompileTimeCheck.class);
 
-    @NoArgsConstructor @ToString
-    private class OnGenerationFinished extends AbstractTaskListener {
-        private final Set<? extends Element> required =
-            set.stream()
-            .map(Element::getEnclosingElement)
-            .collect(toSet());
+                    try {
+                        Class.forName(name, true, getClassPathClassLoader());
+                        iterator.remove();
+                    } catch (ClassNotFoundException exception) {
+                        continue;
+                    } catch (NoClassDefFoundError error) {
+                        continue;
+                    } catch (Throwable throwable) {
+                        while (throwable instanceof ExceptionInInitializerError) {
+                            throwable = throwable.getCause();
+                        }
 
-        @Override
-        public void finished(TaskEvent event) {
-            if (event.getKind() == TaskEvent.Kind.GENERATE) {
-                TypeElement type = event.getTypeElement();
+                        while (throwable instanceof InvocationTargetException) {
+                            throwable = throwable.getCause();
+                        }
 
-                required.remove(type);
-
-                if (required.isEmpty()) {
-                    javac.removeTaskListener(this);
+                        print(WARNING, element /* , annotation */,
+                              "%s", throwable.getMessage());
+                        iterator.remove();
+                        continue;
+                    }
                 }
+                break;
+
+            default:
+                break;
             }
-        }
-    }
-
-    @ToString
-    private class ClassLoaderImpl extends ClassLoader {
-        public ClassLoaderImpl() { super(null); }
-
-        @Override
-        public Class<?> findClass(String name) throws ClassNotFoundException {
-            Class<?> type = null;
-
-            try {
-                Path path = getClassFilePath(name);
-                byte[] bytes = Files.readAllBytes(path);
-            } catch (Exception exception) {
-                type = super.findClass(name);
-            }
-
-            return type;
-        }
-
-        private Path getClassFilePath(String name) {
-            Path path = Paths.get(base.toString(), name.split("[.]"));
-
-            return path.resolveSibling(path.getFileName() + ".class");
         }
     }
 }

@@ -27,8 +27,8 @@ import java.io.ObjectStreamClass;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.Iterator;
+import java.util.Set;
 import java.util.TreeSet;
-import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
@@ -39,11 +39,7 @@ import lombok.ToString;
 
 import static javax.lang.model.element.ElementKind.CLASS;
 import static javax.lang.model.util.ElementFilter.fieldsIn;
-import static javax.tools.Diagnostic.Kind.ERROR;
 import static javax.tools.Diagnostic.Kind.WARNING;
-import static javax.tools.StandardLocation.CLASS_OUTPUT;
-import static javax.tools.StandardLocation.CLASS_PATH;
-import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 /**
  * {@link Processor} implementation to check subclasses of
@@ -65,19 +61,7 @@ public class SerializableProcessor extends AnnotatedNoAnnotationProcessor {
     private static final Field PROTOTYPE =
         PROTOTYPE.class.getDeclaredFields()[0];
 
-    private final TreeSet<String> set = new TreeSet<>();
-    private ClassLoader loader = null;
-
-    @Override
-    public void init(ProcessingEnvironment processingEnv) {
-        super.init(processingEnv);
-
-        try {
-            loader = javaFileManager.getClassLoader(CLASS_PATH);
-        } catch (Exception exception) {
-            print(ERROR, exception);
-        }
-    }
+    private final Set<String> set = new TreeSet<>();
 
     @Override
     protected void whenAnnotationProcessingFinished() {
@@ -104,14 +88,18 @@ public class SerializableProcessor extends AnnotatedNoAnnotationProcessor {
     private class TaskListenerImpl extends AbstractTaskListener {
         @Override
         public void finished(TaskEvent event) {
-            if (event.getKind() == TaskEvent.Kind.GENERATE) {
+            switch (event.getKind()) {
+            case GENERATE:
                 Iterator<String> iterator = set.iterator();
 
                 while (iterator.hasNext()) {
+                    String name = iterator.next();
+                    TypeElement type = elements.getTypeElement(name);
+
                     try {
-                        String name = iterator.next();
-                        TypeElement type = elements.getTypeElement(name);
-                        Class<?> cls = Class.forName(name, true, loader);
+                        Class<?> cls =
+                            Class.forName(name, true,
+                                          getClassPathClassLoader());
                         long uid =
                             ObjectStreamClass.lookup(cls)
                             .getSerialVersionUID();
@@ -123,9 +111,18 @@ public class SerializableProcessor extends AnnotatedNoAnnotationProcessor {
                               declaration(PROTOTYPE), uid);
 
                         iterator.remove();
+                    } catch (ClassNotFoundException exception) {
+                        continue;
+                    } catch (NoClassDefFoundError error) {
+                        continue;
                     } catch (Throwable throwable) {
+                        continue;
                     }
                 }
+                break;
+
+            default:
+                break;
             }
         }
     }
