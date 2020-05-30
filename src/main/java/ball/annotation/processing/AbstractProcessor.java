@@ -144,7 +144,9 @@ public abstract class AbstractProcessor
             trees = Trees.instance(processingEnv);
 
             filer = processingEnv.getFiler();
+
             elements = processingEnv.getElementUtils();
+
             types = processingEnv.getTypeUtils();
         } catch (Exception exception) {
             print(ERROR, exception);
@@ -827,24 +829,26 @@ public abstract class AbstractProcessor
      * Abstract {@link Criterion} base class.
      */
     @NoArgsConstructor(access = PROTECTED) @ToString
-    protected abstract class Criterion<T extends Element> implements Predicate<T> {
-    }
+    protected abstract class Criterion<T extends Element> implements Predicate<T> { }
 
     /**
      * Abstract {@link Check} base class.
      */
     @NoArgsConstructor(access = PROTECTED) @ToString
-    protected abstract class Check<T extends Element> implements Consumer<T> {
-    }
+    protected abstract class Check<T extends Element> implements Consumer<T> { }
 
     @NoArgsConstructor @ToString
     private class WhenAnnotationProcessingFinished extends AbstractTaskListener {
         @Override
         public void finished(TaskEvent event) {
-            if (event.getKind() == TaskEvent.Kind.ANNOTATION_PROCESSING) {
+            switch (event.getKind()) {
+            case ANNOTATION_PROCESSING:
                 javac.removeTaskListener(this);
-
                 whenAnnotationProcessingFinished();
+                break;
+
+            default:
+                break;
             }
         }
     }

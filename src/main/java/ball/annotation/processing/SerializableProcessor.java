@@ -21,9 +21,14 @@ package ball.annotation.processing;
  * ##########################################################################
  */
 import ball.annotation.ServiceProviderFor;
+import ball.tools.javac.AbstractTaskListener;
+import com.sun.source.util.TaskEvent;
 import java.io.ObjectStreamClass;
 import java.io.Serializable;
 import java.lang.reflect.Field;
+import java.util.Iterator;
+import java.util.TreeSet;
+import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
@@ -34,7 +39,11 @@ import lombok.ToString;
 
 import static javax.lang.model.element.ElementKind.CLASS;
 import static javax.lang.model.util.ElementFilter.fieldsIn;
+import static javax.tools.Diagnostic.Kind.ERROR;
 import static javax.tools.Diagnostic.Kind.WARNING;
+import static javax.tools.StandardLocation.CLASS_OUTPUT;
+import static javax.tools.StandardLocation.CLASS_PATH;
+import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 /**
  * {@link Processor} implementation to check subclasses of
@@ -56,6 +65,25 @@ public class SerializableProcessor extends AnnotatedNoAnnotationProcessor {
     private static final Field PROTOTYPE =
         PROTOTYPE.class.getDeclaredFields()[0];
 
+    private final TreeSet<String> set = new TreeSet<>();
+    private ClassLoader loader = null;
+
+    @Override
+    public void init(ProcessingEnvironment processingEnv) {
+        super.init(processingEnv);
+
+        try {
+            loader = javaFileManager.getClassLoader(CLASS_PATH);
+        } catch (Exception exception) {
+            print(ERROR, exception);
+        }
+    }
+
+    @Override
+    protected void whenAnnotationProcessingFinished() {
+        javac.addTaskListener(new TaskListenerImpl());
+    }
+
     @Override
     protected void process(RoundEnvironment roundEnv, Element element) {
         TypeElement type = (TypeElement) element;
@@ -68,17 +96,36 @@ public class SerializableProcessor extends AnnotatedNoAnnotationProcessor {
         if (! (field != null
                && field.getModifiers().containsAll(getModifiers(PROTOTYPE))
                && isAssignableTo(PROTOTYPE.getType()).test(field))) {
-            try {
-                String name = elements.getBinaryName(type).toString();
-                Class<?> cls = Class.forName(name);
-                long uid = ObjectStreamClass.lookup(cls).getSerialVersionUID();
+            set.add(type.getQualifiedName().toString());
+        }
+    }
 
-                print(WARNING, type,
-                      "%s %s has no definition of %s\n%s = %dL;",
-                      getForSubclassesOf().getSimpleName(),
-                      type.getKind(), PROTOTYPE.getName(),
-                      declaration(PROTOTYPE), uid);
-            } catch (Exception exception) {
+    @NoArgsConstructor @ToString
+    private class TaskListenerImpl extends AbstractTaskListener {
+        @Override
+        public void finished(TaskEvent event) {
+            if (event.getKind() == TaskEvent.Kind.GENERATE) {
+                Iterator<String> iterator = set.iterator();
+
+                while (iterator.hasNext()) {
+                    try {
+                        String name = iterator.next();
+                        TypeElement type = elements.getTypeElement(name);
+                        Class<?> cls = Class.forName(name, true, loader);
+                        long uid =
+                            ObjectStreamClass.lookup(cls)
+                            .getSerialVersionUID();
+
+                        print(WARNING, type,
+                              "%s %s has no definition of %s\n%s = %dL;",
+                              getForSubclassesOf().getSimpleName(),
+                              type.getKind(), PROTOTYPE.getName(),
+                              declaration(PROTOTYPE), uid);
+
+                        iterator.remove();
+                    } catch (Throwable throwable) {
+                    }
+                }
             }
         }
     }
