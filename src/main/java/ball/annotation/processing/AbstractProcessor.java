@@ -23,7 +23,12 @@ package ball.annotation.processing;
 import ball.activation.ThrowableDataSource;
 import ball.beans.PropertyMethodEnum;
 import ball.lang.reflect.JavaLangReflectMethods;
+import ball.tools.javac.AbstractTaskListener;
 import com.sun.source.util.JavacTask;
+import com.sun.source.util.TaskEvent;
+import com.sun.source.util.Trees;
+import com.sun.tools.javac.processing.JavacProcessingEnvironment;
+import com.sun.tools.javac.util.Context;
 import java.lang.annotation.Annotation;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Target;
@@ -64,6 +69,7 @@ import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
 import javax.tools.Diagnostic;
 import javax.tools.FileObject;
+import javax.tools.JavaFileManager;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
@@ -100,6 +106,10 @@ public abstract class AbstractProcessor
 
     /** See {@link JavacTask#instance(ProcessingEnvironment)}. */
     protected JavacTask javac = null;
+    /** {@link JavacTask} {@link JavaFileManager} instance. */
+    protected JavaFileManager javaFileManager = null;
+    /** See {@link Trees#instance(ProcessingEnvironment)}. */
+    protected Trees trees = null;
     /** See {@link ProcessingEnvironment#getFiler()}. */
     protected Filer filer = null;
     /** See {@link ProcessingEnvironment#getElementUtils()}. */
@@ -114,15 +124,25 @@ public abstract class AbstractProcessor
         return values[values.length - 1];
     }
 
-    /**
-     * See {@link #elements} and {@link #types}.
-     */
     @Override
     public void init(ProcessingEnvironment processingEnv) {
         super.init(processingEnv);
 
         try {
             javac = JavacTask.instance(processingEnv);
+            javac.addTaskListener(new WhenAnnotationProcessingFinished());
+
+            if (processingEnv instanceof JavacProcessingEnvironment) {
+                Context context =
+                    ((JavacProcessingEnvironment) processingEnv).getContext();
+
+                if (context != null) {
+                    javaFileManager = context.get(JavaFileManager.class);
+                }
+            }
+
+            trees = Trees.instance(processingEnv);
+
             filer = processingEnv.getFiler();
             elements = processingEnv.getElementUtils();
             types = processingEnv.getTypeUtils();
@@ -134,6 +154,13 @@ public abstract class AbstractProcessor
     @Override
     public abstract boolean process(Set<? extends TypeElement> annotations,
                                     RoundEnvironment roundEnv);
+
+    /**
+     * Callback method to signal
+     * {@link com.sun.source.util.TaskEvent.Kind#ANNOTATION_PROCESSING} is
+     * finished.
+     */
+    protected void whenAnnotationProcessingFinished() { }
 
     /**
      * Method to get a {@link TypeElement} for a {@link Class}.
@@ -808,5 +835,17 @@ public abstract class AbstractProcessor
      */
     @NoArgsConstructor(access = PROTECTED) @ToString
     protected abstract class Check<T extends Element> implements Consumer<T> {
+    }
+
+    @NoArgsConstructor @ToString
+    private class WhenAnnotationProcessingFinished extends AbstractTaskListener {
+        @Override
+        public void finished(TaskEvent event) {
+            if (event.getKind() == TaskEvent.Kind.ANNOTATION_PROCESSING) {
+                javac.removeTaskListener(this);
+
+                whenAnnotationProcessingFinished();
+            }
+        }
     }
 }
