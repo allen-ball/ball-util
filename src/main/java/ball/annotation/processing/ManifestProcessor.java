@@ -40,6 +40,7 @@ import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
 import javax.tools.FileObject;
+import javax.tools.JavaFileManager;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
@@ -215,20 +216,25 @@ public class ManifestProcessor extends AnnotatedProcessor
     }
 
     @Override
-    public void process(Set<Class<?>> set, Path destdir) throws IOException {
-        Path path = destdir.resolve(META_INF).resolve(MANIFEST_MF);
+    public void process(Set<Class<?>> set,
+                        JavaFileManager fm) throws Throwable {
+        String path = META_INF + "/" + MANIFEST_MF;
 
         if (manifest == null) {
             manifest = new ManifestImpl();
 
-            if (Files.exists(path)) {
-                try (InputStream in = Files.newInputStream(path)) {
+            FileObject file = fm.getFileForInput(CLASS_OUTPUT, EMPTY, path);
+
+            if (file != null) {
+                try (InputStream in = file.openInputStream()) {
                     manifest.read(in);
                 }
             }
 
             manifest.init();
         }
+
+        FileObject file = fm.getFileForOutput(CLASS_OUTPUT, EMPTY, path, null);
 
         for (Class<?> type : set) {
             Attribute attribute = type.getAnnotation(Attribute.class);
@@ -253,9 +259,7 @@ public class ManifestProcessor extends AnnotatedProcessor
             }
         }
 
-        Files.createDirectories(path.getParent());
-
-        try (OutputStream out = Files.newOutputStream(path)) {
+        try (OutputStream out = file.openOutputStream()) {
             manifest.write(out);
         }
     }

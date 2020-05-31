@@ -92,9 +92,7 @@ public interface ClasspathDelegateAntTask extends AntTaskMixIn {
      *
      * @param   name            The class name ({@link String}).
      */
-    default void setClassname(String name) {
-        delegate().setClassname(name);
-    }
+    default void setClassname(String name) { delegate().setClassname(name); }
 
     /**
      * Method to get the {@link AntClassLoader} specified by {@link.this}

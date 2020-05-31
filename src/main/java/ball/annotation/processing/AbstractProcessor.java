@@ -104,7 +104,7 @@ public abstract class AbstractProcessor
     /** See {@link JavacTask#instance(ProcessingEnvironment)}. */
     protected JavacTask javac = null;
     /** {@link JavacTask} {@link JavaFileManager} instance. */
-    protected JavaFileManager javaFileManager = null;
+    protected JavaFileManager fm = null;
     /** See {@link Trees#instance(ProcessingEnvironment)}. */
     protected Trees trees = null;
     /** See {@link ProcessingEnvironment#getFiler()}. */
@@ -134,7 +134,7 @@ public abstract class AbstractProcessor
                     ((JavacProcessingEnvironment) processingEnv).getContext();
 
                 if (context != null) {
-                    javaFileManager = context.get(JavaFileManager.class);
+                    fm = context.get(JavaFileManager.class);
                 }
             }
 
@@ -166,12 +166,8 @@ public abstract class AbstractProcessor
      *
      * @return  The {@link ClassLoader}.
      */
-    public ClassLoader getClassPathClassLoader() {
-        ClassLoader loader =
-            (javaFileManager != null)
-                ? javaFileManager.getClassLoader(CLASS_PATH) : null;
-
-        return loader;
+    protected ClassLoader getClassPathClassLoader() {
+        return (fm != null) ? fm.getClassLoader(CLASS_PATH) : null;
     }
 
     /**

@@ -41,6 +41,7 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.TypeMirror;
 import javax.tools.FileObject;
+import javax.tools.JavaFileManager;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
@@ -173,7 +174,8 @@ public class ServiceProviderForProcessor extends AnnotatedProcessor
     }
 
     @Override
-    public void process(Set<Class<?>> set, Path destdir) throws IOException {
+    public void process(Set<Class<?>> set,
+                        JavaFileManager fm) throws Throwable {
         for (Class<?> provider : set) {
             if (! isAbstract(provider.getModifiers())) {
                 ServiceProviderFor annotation =
@@ -193,16 +195,16 @@ public class ServiceProviderForProcessor extends AnnotatedProcessor
 
         for (Map.Entry<String,Set<String>> entry : map.entrySet()) {
             String service = entry.getKey();
-            Path path = destdir.resolve(String.format(PATH, service));
-
-            Files.createDirectories(path.getParent());
-
+            FileObject file =
+                fm.getFileForOutput(CLASS_OUTPUT,
+                                    EMPTY, String.format(PATH, service), null);
             ArrayList<String> lines = new ArrayList<>();
 
             lines.add("# " + service);
             lines.addAll(entry.getValue());
 
-            Files.write(path, lines, CHARSET);
+            Files.createDirectories(toPath(file).getParent());
+            Files.write(toPath(file), lines, CHARSET);
         }
     }
 }

@@ -44,6 +44,7 @@ import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
 import javax.tools.FileObject;
+import javax.tools.JavaFileManager;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -209,7 +210,8 @@ public class AntTaskProcessor extends AnnotatedProcessor
     }
 
     @Override
-    public void process(Set<Class<?>> set, Path destdir) throws Exception {
+    public void process(Set<Class<?>> set,
+                        JavaFileManager fm) throws Throwable {
         for (Class<?> type : set) {
             AntTask task = type.getAnnotation(AntTask.class);
 
@@ -240,23 +242,21 @@ public class AntTaskProcessor extends AnnotatedProcessor
         }
 
         for (Map.Entry<String,PropertiesImpl> entry : map.entrySet()) {
-            Path path = destdir.resolve(entry.getKey());
+            FileObject file =
+                fm.getFileForOutput(CLASS_OUTPUT, EMPTY, entry.getKey(), null);
 
-            Files.createDirectories(path.getParent());
-
-            try (OutputStream out = Files.newOutputStream(path)) {
+            try (OutputStream out = file.openOutputStream()) {
                 entry.getValue().store(out, entry.getKey());
             }
         }
 
         for (String pkg : packages) {
-            AntLibXML xml = new AntLibXML(pkg, map);
-            Path path = destdir.resolve(xml.getPath());
+            AntLibXML antlib = new AntLibXML(pkg, map);
+            FileObject file =
+                fm.getFileForOutput(CLASS_OUTPUT, EMPTY, antlib.getPath(), null);
 
-            Files.createDirectories(path.getParent());
-
-            try (OutputStream out = Files.newOutputStream(path)) {
-                xml.writeTo(out);
+            try (OutputStream out = file.openOutputStream()) {
+                antlib.writeTo(out);
             }
         }
     }

@@ -22,9 +22,10 @@ package ball.util.ant.taskdefs;
  */
 import ball.annotation.processing.ClassFileProcessor;
 import java.io.File;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.List;
 import java.util.stream.Stream;
+import javax.tools.StandardJavaFileManager;
+import javax.tools.ToolProvider;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -32,14 +33,15 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
-import org.apache.tools.ant.taskdefs.optional.depend.ClassFile;
-import org.apache.tools.ant.taskdefs.optional.depend.ClassFileUtils;
-import org.apache.tools.ant.taskdefs.optional.depend.DirectoryIterator;
 import org.apache.tools.ant.types.Path;
 import org.apache.tools.ant.util.ClasspathUtils;
 
-import static java.lang.reflect.Modifier.isAbstract;
-import static java.util.Comparator.comparing;
+import static java.util.Arrays.asList;
+import static java.util.stream.Collectors.toList;
+import static javax.tools.StandardLocation.CLASS_OUTPUT;
+import static javax.tools.StandardLocation.CLASS_PATH;
+import static javax.tools.StandardLocation.PLATFORM_CLASS_PATH;
+import static javax.tools.StandardLocation.SOURCE_PATH;
 
 /**
  * {@link.uri http://ant.apache.org/ Ant} {@link Task} to bootstrap
@@ -64,6 +66,8 @@ public class ProcessClassesTask extends Task
     @Getter @Setter
     private File destdir = null;
 
+    private StandardJavaFileManager fm = null;
+
     public void setSrcdir(Path srcdir) {
         if (srcPath == null) {
             srcPath = srcdir;
@@ -84,6 +88,19 @@ public class ProcessClassesTask extends Task
     public void init() throws BuildException {
         super.init();
         ClasspathDelegateAntTask.super.init();
+
+        try {
+            fm =
+                ToolProvider.getSystemJavaCompiler()
+                .getStandardFileManager(null, null, null);
+        } catch (BuildException exception) {
+            throw exception;
+        } catch (RuntimeException exception) {
+            throw exception;
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+            throw new BuildException(throwable);
+        }
     }
 
     @Override
@@ -100,14 +117,21 @@ public class ProcessClassesTask extends Task
                 setDestdir(getBasedir());
             }
 
-            for (Class<?> type : getClassSet()) {
-                if (ClassFileProcessor.class.isAssignableFrom(type)) {
-                    if (! isAbstract(type.getModifiers())) {
-                        type.asSubclass(ClassFileProcessor.class).newInstance()
-                            .process(getClassSet(), getDestdir().toPath());
-                    }
-                }
-            }
+            List<File> srcPaths =
+                Stream.of(createSrc().list())
+                .map(File::new)
+                .collect(toList());
+            List<File> classPaths =
+                Stream.of(delegate.getClasspath().list())
+                .map(File::new)
+                .collect(toList());
+
+            fm.setLocation(SOURCE_PATH, srcPaths);
+            fm.setLocation(PLATFORM_CLASS_PATH, classPaths);
+            fm.setLocation(CLASS_PATH, classPaths);
+            fm.setLocation(CLASS_OUTPUT, asList(getDestdir()));
+
+            ClassFileProcessor.process(fm);
         } catch (BuildException exception) {
             throw exception;
         } catch (RuntimeException exception) {
@@ -116,52 +140,5 @@ public class ProcessClassesTask extends Task
             throwable.printStackTrace();
             throw new BuildException(throwable);
         }
-    }
-
-    protected Set<Class<?>> getClassSet() throws BuildException {
-        TreeSet<Class<?>> set = new TreeSet<>(comparing(Class::getName));
-
-        try {
-            DirectoryIterator iterator =
-                new DirectoryIterator(getBasedir(), true);
-            ClassFile file = null;
-
-            while ((file = iterator.getNextClassFile()) != null) {
-                set.add(getClassForName(file.getFullClassName()));
-            }
-        } catch (BuildException exception) {
-            throw exception;
-        } catch (RuntimeException exception) {
-            throw exception;
-        } catch (Exception exception) {
-            throw new BuildException(exception);
-        }
-
-        return set;
-    }
-
-    protected File getJavaFile(Class<?> type) {
-        File file = null;
-
-        if (srcPath != null && type != null) {
-            while (type.getDeclaringClass() != null) {
-                type = type.getDeclaringClass();
-            }
-
-            while (type.getEnclosingClass() != null) {
-                type = type.getEnclosingClass();
-            }
-
-            String path =
-                ClassFileUtils.convertDotName(type.getCanonicalName());
-
-            file =
-                Stream.of(srcPath.list())
-                .map(t -> new File(t, path + ".java"))
-                .filter(File::isFile)
-                .findFirst().orElse(null);
-        }
-
-        return file;
     }
 }

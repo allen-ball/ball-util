@@ -36,6 +36,7 @@ import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import javax.tools.FileObject;
+import javax.tools.JavaFileManager;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import lombok.NoArgsConstructor;
@@ -44,6 +45,7 @@ import lombok.ToString;
 import static java.lang.reflect.Modifier.isAbstract;
 import static javax.tools.Diagnostic.Kind.ERROR;
 import static javax.tools.StandardLocation.CLASS_OUTPUT;
+import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 /**
  * {@link Processor} implementation to generate {@code jaxb.index} files
@@ -123,7 +125,8 @@ public class JAXBIndexProcessor extends AnnotatedProcessor
     }
 
     @Override
-    public void process(Set<Class<?>> set, Path destdir) throws IOException {
+    public void process(Set<Class<?>> set,
+                        JavaFileManager fm) throws Throwable {
         for (Class<?> type : set) {
             if (! isAbstract(type.getModifiers())) {
                 for (Class<? extends Annotation> annotation :
@@ -137,16 +140,16 @@ public class JAXBIndexProcessor extends AnnotatedProcessor
 
         for (Map.Entry<String,Set<String>> entry : map.entrySet()) {
             String pkg = entry.getKey();
-            Path path = destdir.resolve(asPath(pkg)).resolve(JAXB_INDEX);
-
-            Files.createDirectories(path.getParent());
-
+            String path = asPath(pkg) + "/" + JAXB_INDEX;
+            FileObject file =
+                fm.getFileForOutput(CLASS_OUTPUT, EMPTY, path, null);
             ArrayList<String> lines = new ArrayList<>();
 
             lines.add("# " + JAXB_INDEX);
             lines.addAll(entry.getValue());
 
-            Files.write(path, lines, CHARSET);
+            Files.createDirectories(toPath(file).getParent());
+            Files.write(toPath(file), lines, CHARSET);
         }
     }
 
