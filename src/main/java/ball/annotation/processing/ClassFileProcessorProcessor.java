@@ -20,31 +20,25 @@ package ball.annotation.processing;
  * limitations under the License.
  * ##########################################################################
  */
-import java.util.Set;
+import ball.annotation.ServiceProviderFor;
 import javax.annotation.processing.Processor;
-import javax.tools.JavaFileManager;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
+import static javax.lang.model.element.ElementKind.CLASS;
 
 /**
- * Interface to provide an alternate entry point for annotation processing
- * on compiled class files.  Implementors must extend
+ * {@link Processor} implementation to verify concrete implementations of
+ * {@link ClassFileProcessor} are also subclasses of
  * {@link AnnotatedProcessor}.
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
-public interface ClassFileProcessor extends Processor {
-
-    /**
-     * {@link Processor} alternate entry point.
-     *
-     * @param   set             The {@link Set} of {@link Class}es to
-     *                          analyze.
-     * @param   fm              The configured {@link JavaFileManager} (for
-     *                          writing output files).
-     *
-     * @throws  Throwable       If the implementation throws a
-     *                          {@link Throwable}.
-     */
-    public void process(Set<Class<?>> set,
-                        JavaFileManager fm) throws Throwable;
+@ServiceProviderFor({ Processor.class })
+@ForElementKinds({ CLASS })
+@ForSubclassesOf(ClassFileProcessor.class)
+@MustImplement({ AnnotatedProcessor.class })
+@NoArgsConstructor @ToString
+public class ClassFileProcessorProcessor extends AnnotatedNoAnnotationProcessor {
 }
