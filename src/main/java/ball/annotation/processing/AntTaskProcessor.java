@@ -28,20 +28,15 @@ import ball.xml.FluentDocument;
 import ball.xml.FluentDocumentBuilderFactory;
 import java.io.OutputStream;
 import java.net.URI;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.Element;
-import javax.lang.model.element.ElementKind;
-import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
 import javax.tools.FileObject;
 import javax.tools.JavaFileManager;
@@ -103,62 +98,6 @@ public class AntTaskProcessor extends AnnotatedProcessor
         }
     }
 
-    private ResourceMap map = new ResourceMap();
-    private LinkedHashSet<String> packages = new LinkedHashSet<>();
-
-    @Override
-    public void init(ProcessingEnvironment processingEnv) {
-        super.init(processingEnv);
-
-        try {
-            /*
-             * Load any partially generated files.
-             */
-        } catch (Exception exception) {
-            print(ERROR, exception);
-        }
-    }
-
-    @Override
-    public boolean process(Set<? extends TypeElement> annotations,
-                           RoundEnvironment roundEnv) {
-        boolean result = true;
-
-        try {
-            if (! roundEnv.errorRaised()) {
-                result &= super.process(annotations, roundEnv);
-
-                if (roundEnv.processingOver()) {
-                    for (Map.Entry<String,PropertiesImpl> entry :
-                             map.entrySet()) {
-                        FileObject file =
-                            filer.createResource(CLASS_OUTPUT,
-                                                 EMPTY, entry.getKey());
-
-                        try (OutputStream out = file.openOutputStream()) {
-                            entry.getValue().store(out, entry.getKey());
-                        }
-                    }
-
-                    for (String pkg : packages) {
-                        AntLibXML antlib = new AntLibXML(pkg, map);
-                        FileObject file =
-                            filer.createResource(CLASS_OUTPUT,
-                                                 EMPTY, antlib.getPath());
-
-                        try (OutputStream out = file.openOutputStream()) {
-                            antlib.writeTo(out);
-                        }
-                    }
-                }
-            }
-        } catch (Exception exception) {
-            print(ERROR, exception);
-        }
-
-        return result;
-    }
-
     @Override
     protected void process(RoundEnvironment roundEnv,
                            TypeElement annotation, Element element) {
@@ -173,20 +112,6 @@ public class AntTaskProcessor extends AnnotatedProcessor
             if (isNotEmpty((String) value.getValue())) {
                 if (isAssignableTo(Task.class).test(element)) {
                     if (withoutModifiers(ABSTRACT).test(element)) {
-                        String key = (String) resource.getValue();
-                        PackageElement pkg =
-                            elements.getPackageOf(element);
-
-                        if (pkg != null) {
-                            key =
-                                URI.create(asPath(pkg) + key)
-                                .normalize()
-                                .toString();
-                        }
-
-                        map.put(key,
-                                (String) value.getValue(),
-                                (TypeElement) element);
                     } else {
                         print(ERROR, element,
                               "%s is %s", element.getKind(), ABSTRACT);
@@ -200,8 +125,6 @@ public class AntTaskProcessor extends AnnotatedProcessor
             break;
 
         case PACKAGE:
-            packages.add(((PackageElement) element)
-                         .getQualifiedName().toString());
             break;
 
         default:
@@ -212,14 +135,17 @@ public class AntTaskProcessor extends AnnotatedProcessor
     @Override
     public void process(Set<Class<?>> set,
                         JavaFileManager fm) throws Throwable {
-        for (Class<?> type : set) {
-            AntTask task = type.getAnnotation(AntTask.class);
+        ResourceMap map = new ResourceMap();
+        LinkedHashSet<String> packages = new LinkedHashSet<>();
 
-            if (task != null) {
+        for (Class<?> type : set) {
+            AntTask annotation = type.getAnnotation(AntTask.class);
+
+            if (annotation != null) {
                 if (Task.class.isAssignableFrom(type)) {
                     if (! isAbstract(type.getModifiers())) {
-                        String name = task.value();
-                        String resource = task.resource();
+                        String name = annotation.value();
+                        String resource = annotation.resource();
                         Package pkg = type.getPackage();
 
                         if (pkg != null) {

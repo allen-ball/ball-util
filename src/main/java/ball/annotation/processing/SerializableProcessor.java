@@ -80,7 +80,7 @@ public class SerializableProcessor extends AnnotatedNoAnnotationProcessor {
         if (! (field != null
                && field.getModifiers().containsAll(getModifiers(PROTOTYPE))
                && isAssignableTo(PROTOTYPE.getType()).test(field))) {
-            set.add(type.getQualifiedName().toString());
+            set.add(elements.getBinaryName(type).toString());
         }
     }
 
@@ -90,19 +90,19 @@ public class SerializableProcessor extends AnnotatedNoAnnotationProcessor {
         public void finished(TaskEvent event) {
             switch (event.getKind()) {
             case GENERATE:
+                ClassLoader loader = getClassPathClassLoader(fm);
                 Iterator<String> iterator = set.iterator();
 
                 while (iterator.hasNext()) {
                     String name = iterator.next();
-                    TypeElement type = elements.getTypeElement(name);
 
                     try {
-                        Class<?> cls =
-                            Class.forName(name, true,
-                                          getClassPathClassLoader());
+                        Class<?> cls = Class.forName(name, true, loader);
                         long uid =
                             ObjectStreamClass.lookup(cls)
                             .getSerialVersionUID();
+                        TypeElement type =
+                            elements.getTypeElement(cls.getCanonicalName());
 
                         print(WARNING, type,
                               "%s %s has no definition of %s\n%s = %dL;",

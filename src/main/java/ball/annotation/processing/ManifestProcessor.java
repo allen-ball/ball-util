@@ -26,18 +26,13 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
-import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
-import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
 import javax.tools.FileObject;
 import javax.tools.JavaFileManager;
@@ -51,8 +46,8 @@ import static ball.annotation.Manifest.JavaBean;
 import static ball.annotation.Manifest.MainClass;
 import static ball.annotation.Manifest.Section;
 import static javax.tools.Diagnostic.Kind.ERROR;
-import static javax.tools.Diagnostic.Kind.WARNING;
 import static javax.tools.StandardLocation.CLASS_OUTPUT;
+import static javax.tools.StandardLocation.CLASS_PATH;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 /**
@@ -71,8 +66,7 @@ import static org.apache.commons.lang3.StringUtils.EMPTY;
 @NoArgsConstructor @ToString
 public class ManifestProcessor extends AnnotatedProcessor
                                implements ClassFileProcessor {
-    private static final String META_INF = "META-INF";
-    private static final String MANIFEST_MF = "MANIFEST.MF";
+    private static final String PATH = "META-INF/MANIFEST.MF";
     private static final String _CLASS = ".class";
 
     private static abstract class PROTOTYPE {
@@ -82,159 +76,60 @@ public class ManifestProcessor extends AnnotatedProcessor
     private static final Method PROTOTYPE =
         PROTOTYPE.class.getDeclaredMethods()[0];
 
-    private ManifestImpl manifest = null;
-    private HashSet<Element> processed = new HashSet<>();
-
-    @Override
-    public void init(ProcessingEnvironment processingEnv) {
-        super.init(processingEnv);
-
-        try {
-            /*
-             * Load any partially generated files.
-             */
-        } catch (Exception exception) {
-            print(ERROR, exception);
-        }
-    }
-
-    @Override
-    public boolean process(Set<? extends TypeElement> annotations,
-                           RoundEnvironment roundEnv) {
-        boolean result = true;
-
-        try {
-            String path = META_INF + "/" + MANIFEST_MF;
-
-            if (manifest == null) {
-                manifest = new ManifestImpl();
-
-                FileObject file = filer.getResource(CLASS_OUTPUT, EMPTY, path);
-
-                if (file.getLastModified() != 0) {
-                    try (InputStream in = file.openInputStream()) {
-                        manifest.read(in);
-                    } catch (Exception exception) {
-                    }
-                }
-
-                manifest.init();
-            }
-
-            if (! roundEnv.errorRaised()) {
-                result &= super.process(annotations, roundEnv);
-
-                if (roundEnv.processingOver()) {
-                    FileObject file =
-                        filer.createResource(CLASS_OUTPUT, EMPTY, path);
-
-                    try (OutputStream out = file.openOutputStream()) {
-                        manifest.write(out);
-                    }
-                }
-            }
-        } catch (Exception exception) {
-            print(ERROR, exception);
-        }
-
-        return result;
-    }
-
     @Override
     protected void process(RoundEnvironment roundEnv,
-                           TypeElement ignore, Element element) {
-        super.process(roundEnv, ignore, element);
+                           TypeElement annotation, Element element) {
+        super.process(roundEnv, annotation, element);
 
-        if (! processed.contains(element)) {
-            processed.add(element);
+        Attribute attribute = element.getAnnotation(Attribute.class);
+        MainClass main = element.getAnnotation(MainClass.class);
 
-            Attribute attribute = element.getAnnotation(Attribute.class);
-            MainClass main = element.getAnnotation(MainClass.class);
+        if (main != null) {
+            switch (element.getKind()) {
+            case CLASS:
+            case INTERFACE:
+                TypeElement type = (TypeElement) element;
+                ExecutableElement method = getMethod(type, PROTOTYPE);
 
-            if (main != null) {
-                switch (element.getKind()) {
-                case CLASS:
-                case INTERFACE:
-                    TypeElement type = (TypeElement) element;
-                    ExecutableElement method = getMethod(type, PROTOTYPE);
-
-                    if (method != null
-                        && (method.getModifiers()
-                            .containsAll(getModifiers(PROTOTYPE)))) {
-                        String name = elements.getBinaryName(type).toString();
-                        String old = manifest.put(main, name);
-
-                        if (old != null && (! name.equals(old))) {
-                            print(WARNING, element,
-                                  "@%s: %s overwrites previous definition of %s",
-                                  main.annotationType().getSimpleName(),
-                                  element.getKind(), old);
-                        }
-                    } else {
-                        print(ERROR, element,
-                              "@%s: %s does not implement '%s'",
-                              main.annotationType().getSimpleName(),
-                              element.getKind(), declaration(PROTOTYPE));
-                    }
-                    break;
-
-                default:
-                    break;
+                if (method != null
+                    && (method.getModifiers()
+                        .containsAll(getModifiers(PROTOTYPE)))) {
+                } else {
+                    print(ERROR, element,
+                          "@%s: %s does not implement '%s'",
+                          main.annotationType().getSimpleName(),
+                          element.getKind(), declaration(PROTOTYPE));
                 }
-            }
+                break;
 
-            Section section = element.getAnnotation(Section.class);
-
-            if (section != null) {
-                switch (element.getKind()) {
-                case PACKAGE:
-                    manifest.put(asPath((PackageElement) element), section);
-                    break;
-
-                default:
-                    break;
-                }
-            }
-
-            JavaBean bean = element.getAnnotation(JavaBean.class);
-            DependsOn depends = element.getAnnotation(DependsOn.class);
-            DesignTimeOnly design =
-                element.getAnnotation(DesignTimeOnly.class);
-
-            if (bean != null || depends != null || design != null) {
-                switch (element.getKind()) {
-                case CLASS:
-                    manifest.put(asPath((TypeElement) element),
-                                 bean, depends, design);
-                    break;
-
-                default:
-                    break;
-                }
+            default:
+                break;
             }
         }
+
+        Section section = element.getAnnotation(Section.class);
+        JavaBean bean = element.getAnnotation(JavaBean.class);
+        DependsOn depends = element.getAnnotation(DependsOn.class);
+        DesignTimeOnly design =
+            element.getAnnotation(DesignTimeOnly.class);
     }
 
     @Override
     public void process(Set<Class<?>> set,
                         JavaFileManager fm) throws Throwable {
-        String path = META_INF + "/" + MANIFEST_MF;
+        ManifestImpl manifest = new ManifestImpl();
+        FileObject file = fm.getFileForInput(CLASS_PATH, EMPTY, PATH);
 
-        if (manifest == null) {
-            manifest = new ManifestImpl();
-
-            FileObject file = fm.getFileForInput(CLASS_OUTPUT, EMPTY, path);
-
-            if (file != null) {
-                try (InputStream in = file.openInputStream()) {
-                    manifest.read(in);
-                }
+        if (file != null) {
+            try (InputStream in = file.openInputStream()) {
+                manifest.read(in);
+            } catch (IOException exception) {
             }
-
+        } else {
             manifest.init();
         }
 
-        FileObject file = fm.getFileForOutput(CLASS_OUTPUT, EMPTY, path, null);
+        file = fm.getFileForOutput(CLASS_OUTPUT, EMPTY, PATH, null);
 
         for (Class<?> type : set) {
             Attribute attribute = type.getAnnotation(Attribute.class);
@@ -261,12 +156,7 @@ public class ManifestProcessor extends AnnotatedProcessor
 
         try (OutputStream out = file.openOutputStream()) {
             manifest.write(out);
-        }
-    }
-
-    @Override
-    protected String asPath(TypeElement element) {
-        return super.asPath(element) + _CLASS;
+         }
     }
 
     @Override

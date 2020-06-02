@@ -20,21 +20,15 @@ package ball.annotation.processing;
  * limitations under the License.
  * ##########################################################################
  */
+
 import ball.annotation.ServiceProviderFor;
-import java.io.IOException;
+import java.io.PrintWriter;
 import java.lang.annotation.Annotation;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
-import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.Processor;
-import javax.annotation.processing.RoundEnvironment;
-import javax.lang.model.element.Element;
-import javax.lang.model.element.TypeElement;
 import javax.tools.FileObject;
 import javax.tools.JavaFileManager;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -43,7 +37,6 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import static java.lang.reflect.Modifier.isAbstract;
-import static javax.tools.Diagnostic.Kind.ERROR;
 import static javax.tools.StandardLocation.CLASS_OUTPUT;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 
@@ -62,76 +55,18 @@ public class JAXBIndexProcessor extends AnnotatedProcessor
     private static final String JAXB_INDEX = "jaxb.index";
     private static final String DOT = ".";
 
-    private MapImpl map = new MapImpl();
-
-    @Override
-    public void init(ProcessingEnvironment processingEnv) {
-        super.init(processingEnv);
-
-        try {
-            /*
-             * Load any partially generated files.
-             */
-        } catch (Exception exception) {
-            print(ERROR, exception);
-        }
-    }
-
-    @Override
-    public boolean process(Set<? extends TypeElement> annotations,
-                           RoundEnvironment roundEnv) {
-        boolean result = true;
-
-        try {
-            if (! roundEnv.errorRaised()) {
-                result &= super.process(annotations, roundEnv);
-
-                if (roundEnv.processingOver()) {
-                    for (Map.Entry<String,Set<String>> entry :
-                             map.entrySet()) {
-                        FileObject file =
-                            filer.createResource(CLASS_OUTPUT,
-                                                 entry.getKey(), JAXB_INDEX);
-                        ArrayList<String> lines = new ArrayList<>();
-
-                        lines.add("# " + JAXB_INDEX);
-                        lines.addAll(entry.getValue());
-
-                        Files.createDirectories(toPath(file).getParent());
-                        Files.write(toPath(file), lines, CHARSET);
-                    }
-                }
-            }
-        } catch (Exception exception) {
-            print(ERROR, exception);
-        }
-
-        return result;
-    }
-
-    @Override
-    protected void process(RoundEnvironment roundEnv,
-                           TypeElement annotation, Element element) {
-        super.process(roundEnv, annotation, element);
-
-        switch (element.getKind()) {
-        case CLASS:
-            map.add((TypeElement) element);
-            break;
-
-        default:
-            break;
-        }
-    }
+    private final Set<String> set = new TreeSet<>();
 
     @Override
     public void process(Set<Class<?>> set,
                         JavaFileManager fm) throws Throwable {
+        MapImpl map = new MapImpl();
+
         for (Class<?> type : set) {
             if (! isAbstract(type.getModifiers())) {
                 for (Class<? extends Annotation> annotation :
                          getSupportedAnnotationTypeList()) {
-                    if (type.getAnnotation(annotation) != null) {
+                    if (type.isAnnotationPresent(annotation)) {
                         map.add(type);
                     }
                 }
@@ -143,27 +78,21 @@ public class JAXBIndexProcessor extends AnnotatedProcessor
             String path = asPath(pkg) + "/" + JAXB_INDEX;
             FileObject file =
                 fm.getFileForOutput(CLASS_OUTPUT, EMPTY, path, null);
-            ArrayList<String> lines = new ArrayList<>();
 
-            lines.add("# " + JAXB_INDEX);
-            lines.addAll(entry.getValue());
+            try (PrintWriter writer = new PrintWriter(file.openWriter())) {
+                writer.println("# " + JAXB_INDEX);
 
-            Files.createDirectories(toPath(file).getParent());
-            Files.write(toPath(file), lines, CHARSET);
+                entry.getValue().stream().forEach(t -> writer.println(t));
+            }
         }
     }
 
     @NoArgsConstructor
     private class MapImpl extends TreeMap<String,Set<String>> {
-        private static final long serialVersionUID = -1632488233965567327L;
+        private static final long serialVersionUID = 886164937928579676L;
 
         public boolean add(Class<?> type) {
             return add(type.getPackage().getName(), type.getCanonicalName());
-        }
-
-        public boolean add(TypeElement type) {
-            return add(elements.getPackageOf(type).getQualifiedName().toString(),
-                       type.getQualifiedName().toString());
         }
 
         private boolean add(String pkg, String type) {

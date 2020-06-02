@@ -1,5 +1,9 @@
 2020-06-01  Allen D. Ball  <ball@hcf.dev>
 
+	* Re-factored AnnotatedProcessor subclasses that analyze generated
+	class files and create configuration files to use a
+	JavaFileManager to create a ClassLoader and generate files.
+
 	* src/main/java/ball/annotation/processing/AnnotatedProcessor.java:
 	Automatically call process(Set<Class<?>>,JavaFileManager) if the
 	subclass implements ClassFileProcessor.

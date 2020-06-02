@@ -22,28 +22,24 @@ package ball.annotation.processing;
  */
 import ball.annotation.ResourceFile;
 import ball.annotation.ServiceProviderFor;
-import java.nio.file.Files;
+import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-import javax.annotation.processing.ProcessingEnvironment;
+import java.util.stream.Stream;
 import javax.annotation.processing.Processor;
-import javax.annotation.processing.RoundEnvironment;
-import javax.lang.model.element.Element;
-import javax.lang.model.element.PackageElement;
-import javax.lang.model.element.TypeElement;
 import javax.tools.FileObject;
+import javax.tools.JavaFileManager;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import static ball.text.ParameterizedMessageFormat.format;
+import static java.util.stream.Collectors.toList;
 import static javax.tools.Diagnostic.Kind.ERROR;
 import static javax.tools.StandardLocation.CLASS_OUTPUT;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
-import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 /**
  * {@link Processor} implementation to check and assemble
@@ -57,93 +53,51 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
 @ServiceProviderFor({ Processor.class })
 @For({ ResourceFile.class })
 @NoArgsConstructor @ToString
-public class ResourceFileProcessor extends AnnotatedProcessor {
-    private MapImpl map = new MapImpl();
-
+public class ResourceFileProcessor extends AnnotatedProcessor
+                                   implements ClassFileProcessor {
     @Override
-    public void init(ProcessingEnvironment processingEnv) {
-        super.init(processingEnv);
+    public void process(Set<Class<?>> set,
+                        JavaFileManager fm) throws Throwable {
+        Map<String,List<String>> map = new TreeMap<>();
 
-        try {
-            /*
-             * Load any partially generated files.
-             */
-        } catch (Exception exception) {
-            print(ERROR, exception);
-        }
-    }
+        for (Class<?> type : set) {
+            ResourceFile annotation = type.getAnnotation(ResourceFile.class);
 
-    @Override
-    public boolean process(Set<? extends TypeElement> annotations,
-                           RoundEnvironment roundEnv) {
-        boolean result = true;
+            if (annotation != null) {
+                Parameters parameters = new Parameters(type);
+                String key = format(annotation.path(), parameters);
+                List<String> value =
+                    Stream.of(annotation.lines())
+                    .map(t -> format(t, parameters))
+                    .collect(toList());
 
-        try {
-            if (! roundEnv.errorRaised()) {
-                result &= super.process(annotations, roundEnv);
-
-                if (roundEnv.processingOver()) {
-                    for (Map.Entry<String,List<String>> entry :
-                             map.entrySet()) {
-                        String path = entry.getKey();
-                        FileObject file =
-                            filer.createResource(CLASS_OUTPUT, EMPTY, path);
-                        ArrayList<String> lines = new ArrayList<>();
-
-                        lines.add("# " + path);
-                        lines.addAll(entry.getValue());
-
-                        Files.createDirectories(toPath(file).getParent());
-                        Files.write(toPath(file), lines, CHARSET);
-                    }
-                }
+                map.computeIfAbsent(key, k -> new ArrayList<>())
+                    .addAll(value);
             }
-        } catch (Exception exception) {
-            print(ERROR, exception);
         }
 
-        return result;
-    }
+        for (Map.Entry<String,List<String>> entry : map.entrySet()) {
+            String path = entry.getKey();
+            FileObject file =
+                fm.getFileForOutput(CLASS_OUTPUT, EMPTY, path, null);
 
-    @Override
-    protected void process(RoundEnvironment roundEnv,
-                           TypeElement annotation, Element element) {
-        super.process(roundEnv, annotation, element);
+            try (PrintWriter writer = new PrintWriter(file.openWriter())) {
+                writer.println("# " + path);
 
-        String path = element.getAnnotation(ResourceFile.class).path();
-        String[] lines = element.getAnnotation(ResourceFile.class).lines();
-        ArrayList<String> list = new ArrayList<>(lines.length);
-        Parameters parameters = new Parameters((TypeElement) element);
-
-        for (String line : lines) {
-            list.add(format(line, parameters));
-        }
-
-        map.add(format(path, parameters), list);
-    }
-
-    @NoArgsConstructor
-    private class MapImpl extends TreeMap<String,List<String>> {
-        private static final long serialVersionUID = 5908228485945805046L;
-
-        public boolean add(String path, Collection<String> collection) {
-            return computeIfAbsent(path,
-                                   k -> new ArrayList<>()).addAll(collection);
+                entry.getValue().stream()
+                    .forEach(t -> writer.println(t));
+            }
         }
     }
 
     private class Parameters extends TreeMap<String,Object> {
-        private static final long serialVersionUID = -1831974140591319719L;
+        private static final long serialVersionUID = 363071267469868108L;
 
-        public Parameters(TypeElement type) {
+        public Parameters(Class<?> type) {
             super();
 
-            PackageElement pkg = elements.getPackageOf(type);
-
-            put(ResourceFile.CLASS,
-                type.getQualifiedName().toString());
-            put(ResourceFile.PACKAGE,
-                (pkg != null) ? pkg.getQualifiedName().toString() : EMPTY);
+            put(ResourceFile.CLASS, type.getCanonicalName());
+            put(ResourceFile.PACKAGE, type.getPackage().getName());
         }
     }
 }

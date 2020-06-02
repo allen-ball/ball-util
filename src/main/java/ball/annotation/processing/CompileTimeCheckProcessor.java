@@ -98,6 +98,7 @@ public class CompileTimeCheckProcessor extends AnnotatedProcessor {
         public void finished(TaskEvent event) {
             switch (event.getKind()) {
             case GENERATE:
+                ClassLoader loader = getClassPathClassLoader(fm);
                 Iterator<Map.Entry<String,String>> iterator =
                     map.entrySet().iterator();
 
@@ -114,7 +115,7 @@ public class CompileTimeCheckProcessor extends AnnotatedProcessor {
                         getAnnotationMirror(element, CompileTimeCheck.class);
 
                     try {
-                        Class.forName(name, true, getClassPathClassLoader());
+                        Class.forName(name, true, loader);
                         iterator.remove();
                     } catch (ClassNotFoundException exception) {
                         continue;

@@ -21,10 +21,7 @@ package ball.annotation.processing;
  * ##########################################################################
  */
 import ball.annotation.ServiceProviderFor;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.ArrayList;
+import java.io.PrintWriter;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -32,7 +29,6 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.stream.Stream;
-import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.AnnotationMirror;
@@ -78,54 +74,6 @@ public class ServiceProviderForProcessor extends AnnotatedProcessor
                                          implements ClassFileProcessor {
     private static final String PATH = "META-INF/services/%s";
 
-    private Map<String,Set<String>> map = new TreeMap<>();
-
-    @Override
-    public void init(ProcessingEnvironment processingEnv) {
-        super.init(processingEnv);
-
-        try {
-            /*
-             * Load any partially generated files.
-             */
-        } catch (Exception exception) {
-            print(ERROR, exception);
-        }
-    }
-
-    @Override
-    public boolean process(Set<? extends TypeElement> annotations,
-                           RoundEnvironment roundEnv) {
-        boolean result = true;
-
-        try {
-            if (! roundEnv.errorRaised()) {
-                result &= super.process(annotations, roundEnv);
-
-                if (roundEnv.processingOver()) {
-                    for (Map.Entry<String,Set<String>> entry :
-                             map.entrySet()) {
-                        String service = entry.getKey();
-                        FileObject file =
-                            filer.createResource(CLASS_OUTPUT, EMPTY,
-                                                 String.format(PATH, service));
-                        ArrayList<String> lines = new ArrayList<>();
-
-                        lines.add("# " + service);
-                        lines.addAll(entry.getValue());
-
-                        Files.createDirectories(toPath(file).getParent());
-                        Files.write(toPath(file), lines, CHARSET);
-                    }
-                }
-            }
-        } catch (Exception exception) {
-            print(ERROR, exception);
-        }
-
-        return result;
-    }
-
     @Override
     protected void process(RoundEnvironment roundEnv,
                            TypeElement annotation, Element element) {
@@ -151,11 +99,6 @@ public class ServiceProviderForProcessor extends AnnotatedProcessor
                 for (TypeElement service : services) {
                     if (types.isAssignable(element.asType(),
                                            service.asType())) {
-                        String key =
-                            elements.getBinaryName(service).toString();
-
-                        map.computeIfAbsent(key, k -> new TreeSet<>())
-                            .add(provider);
                     } else {
                         print(ERROR, element,
                               "%s: %s does not implement %s",
@@ -176,6 +119,8 @@ public class ServiceProviderForProcessor extends AnnotatedProcessor
     @Override
     public void process(Set<Class<?>> set,
                         JavaFileManager fm) throws Throwable {
+        Map<String,Set<String>> map = new TreeMap<>();
+
         for (Class<?> provider : set) {
             if (! isAbstract(provider.getModifiers())) {
                 ServiceProviderFor annotation =
@@ -198,13 +143,12 @@ public class ServiceProviderForProcessor extends AnnotatedProcessor
             FileObject file =
                 fm.getFileForOutput(CLASS_OUTPUT,
                                     EMPTY, String.format(PATH, service), null);
-            ArrayList<String> lines = new ArrayList<>();
 
-            lines.add("# " + service);
-            lines.addAll(entry.getValue());
+            try (PrintWriter writer = new PrintWriter(file.openWriter())) {
+                writer.println("# " + service);
 
-            Files.createDirectories(toPath(file).getParent());
-            Files.write(toPath(file), lines, CHARSET);
+                entry.getValue().stream().forEach(t -> writer.println(t));
+            }
         }
     }
 }
