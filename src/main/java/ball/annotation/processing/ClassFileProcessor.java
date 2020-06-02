@@ -62,6 +62,8 @@ public interface ClassFileProcessor extends Processor {
      *
      * @param   fm              The configured {@link JavaFileManager}.
      *
+     * @return  The {@link List} of class file names ({@link String}s).
+     *
      * @throws  IOException     If the {@link JavaFileManager} throws an
      *                          {@link IOException}.
      */
