@@ -32,6 +32,7 @@ import java.util.TreeMap;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.AnnotationMirror;
+/* import javax.lang.model.element.AnnotationValue; */
 import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
@@ -73,8 +74,9 @@ public class CompileTimeCheckProcessor extends AnnotatedProcessor {
         switch (element.getKind()) {
         case FIELD:
             TypeElement type = (TypeElement) element.getEnclosingElement();
-            String key = type.getQualifiedName().toString();
-            String value = element.getSimpleName().toString();
+            String key =
+                type.getQualifiedName() + ":" + element.getSimpleName();
+            String value = elements.getBinaryName(type).toString();
 
             if (! map.containsKey(key)) {
                 if (element.getModifiers().containsAll(FIELD_MODIFIERS)) {
@@ -104,18 +106,21 @@ public class CompileTimeCheckProcessor extends AnnotatedProcessor {
 
                 while (iterator.hasNext()) {
                     Map.Entry<String,String> entry = iterator.next();
-                    String name = entry.getKey();
-                    TypeElement type = elements.getTypeElement(name);
+                    String[] names = entry.getKey().split(":", 2);
+                    TypeElement type = elements.getTypeElement(names[0]);
                     VariableElement element =
                         fieldsIn(type.getEnclosedElements())
                         .stream()
-                        .filter(t -> t.getSimpleName().contentEquals(entry.getValue()))
+                        .filter(t -> t.getSimpleName().contentEquals(names[1]))
                         .findFirst().orElse(null);
                     AnnotationMirror annotation =
                         getAnnotationMirror(element, CompileTimeCheck.class);
-
+                    /*
+                     * AnnotationValue value =
+                     *     getAnnotationValue(annotation, "value");
+                     */
                     try {
-                        Class.forName(name, true, loader);
+                        Class.forName(entry.getValue(), true, loader);
                         iterator.remove();
                     } catch (ClassNotFoundException exception) {
                         continue;
@@ -131,7 +136,10 @@ public class CompileTimeCheckProcessor extends AnnotatedProcessor {
                         }
 
                         print(WARNING, element /* , annotation */,
-                              "%s", throwable.getMessage());
+                              "Invalid %s initializer\n%s: %s",
+                              element.getKind(),
+                              throwable.getClass().getName(),
+                              throwable.getMessage());
                         iterator.remove();
                         continue;
                     }
