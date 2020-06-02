@@ -32,8 +32,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
  * {@link java.lang.annotation.Annotation} to mark
- * {@link.uri http://ant.apache.org/ Ant}
- * {@link org.apache.tools.ant.Task}s.
+ * {@link.uri http://ant.apache.org/ Ant} {@link Task}s.
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$

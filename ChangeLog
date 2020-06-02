@@ -1006,12 +1006,6 @@
 	* src/main/java/iprotium/tools/javadoc/IncludeTaglet.java:
 	Initial writing.
 
-2014-01-01  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/annotation/ResourceFile.java,
-	src/main/java/iprotium/annotation/processing/ResourceFileProcessor.java:
-	Initial writing.
-
 2013-12-29  Allen D. Ball  <ball@10-0-1-2.lan>
 
 	* Moved JAXBDataSource to iprotium.activation.  Removed unused
