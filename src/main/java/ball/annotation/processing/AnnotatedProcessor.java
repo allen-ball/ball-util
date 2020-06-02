@@ -20,13 +20,18 @@ package ball.annotation.processing;
  * limitations under the License.
  * ##########################################################################
  */
+import ball.tools.javac.AbstractTaskListener;
+import com.sun.source.util.TaskEvent;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Stream;
+import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.AnnotationValue;
@@ -34,11 +39,13 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.Modifier;
+import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.TypeMirror;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
 import static java.util.stream.Collectors.toList;
@@ -61,6 +68,7 @@ import static lombok.AccessLevel.PROTECTED;
  */
 @NoArgsConstructor(access = PROTECTED) @ToString
 public abstract class AnnotatedProcessor extends AbstractProcessor {
+    private final Set<String> processed = new TreeSet<>();
 
     /**
      * Method to get the {@link List} of supported {@link Annotation}
@@ -85,6 +93,19 @@ public abstract class AnnotatedProcessor extends AbstractProcessor {
     }
 
     @Override
+    public void init(ProcessingEnvironment processingEnv) {
+        super.init(processingEnv);
+
+        try {
+            if (this instanceof ClassFileProcessor) {
+                javac.addTaskListener(new Invoker((ClassFileProcessor) this));
+            }
+        } catch (Exception exception) {
+            print(ERROR, exception);
+        }
+    }
+
+    @Override
     public boolean process(Set<? extends TypeElement> annotations,
                            RoundEnvironment roundEnv) {
         annotations.stream().forEach(t -> process(roundEnv, t));
@@ -96,6 +117,7 @@ public abstract class AnnotatedProcessor extends AbstractProcessor {
         try {
             roundEnv.getElementsAnnotatedWith(annotation)
                 .stream()
+                .peek(t -> processed.add(getEnclosingTypeBinaryName(t)))
                 .peek(new AnnotatedElementMustBeCheck(annotation))
                 .peek(new AnnotatedTypeMustExtendCheck(annotation))
                 .peek(new AnnotatedTypeMustHaveConstructorCheck(annotation))
@@ -116,6 +138,75 @@ public abstract class AnnotatedProcessor extends AbstractProcessor {
      */
     protected void process(RoundEnvironment roundEnv,
                            TypeElement annotation, Element element) {
+    }
+
+    private String getEnclosingTypeBinaryName(Element element) {
+        String name = null;
+
+        switch (element.getKind()) {
+        case ANNOTATION_TYPE:
+        case CLASS:
+        case ENUM:
+        case INTERFACE:
+            name = elements.getBinaryName((TypeElement) element).toString();
+            break;
+
+        case PACKAGE:
+            name =
+                ((PackageElement) element).getQualifiedName().toString()
+                + ".package-info";
+            break;
+
+        default:
+            name = getEnclosingTypeBinaryName(element.getEnclosingElement());
+            break;
+        }
+
+        return name;
+    }
+
+    @RequiredArgsConstructor @ToString
+    private class Invoker extends AbstractTaskListener {
+        private final ClassFileProcessor processor;
+        private final Set<String> generated = new TreeSet<>();
+
+        @Override @SuppressWarnings({ "fallthrough" })
+        public void finished(TaskEvent event) {
+            switch (event.getKind()) {
+            case GENERATE:
+                String name =
+                    elements.getBinaryName(event.getTypeElement()).toString();
+
+                generated.add(name);
+                /*
+                 * Fall-through
+                 */
+            case ANNOTATION_PROCESSING:
+                if (processed.isEmpty() || generated.containsAll(processed)) {
+                    try {
+                        process();
+
+                        javac.removeTaskListener(this);
+                    } catch (Throwable throwable) {
+                    }
+                }
+                break;
+
+            default:
+                break;
+            }
+        }
+
+        private void process() throws Throwable {
+            HashSet<Class<?>> set = new HashSet<>();
+            ClassLoader loader = getClassPathClassLoader(fm);
+
+            for (String name : ClassFileProcessor.list(fm)) {
+                set.add(Class.forName(name, true, loader));
+            }
+
+            processor.process(set, fm);
+        }
     }
 
     @AllArgsConstructor @ToString

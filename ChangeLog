@@ -1,5 +1,9 @@
 2020-06-01  Allen D. Ball  <ball@hcf.dev>
 
+	* src/main/java/ball/annotation/processing/AnnotatedProcessor.java:
+	Automatically call process(Set<Class<?>>,JavaFileManager) if the
+	subclass implements ClassFileProcessor.
+
 	* src/main/java/ball/annotation/processing/AbstractProcessor.java:
 	Removed CHARSET member and added JavaFileManager parameter to
 	getClassPathClassLoader() method.
