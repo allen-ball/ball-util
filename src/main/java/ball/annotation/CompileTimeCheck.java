@@ -23,9 +23,11 @@ package ball.annotation;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
+/* import javax.tools.Diagnostic; */
 
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
+/* import static javax.tools.Diagnostic.Kind.WARNING; */
 
 /**
  * {@link java.lang.annotation.Annotation} to indicate the initializer
@@ -38,4 +40,5 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 @Target({ FIELD })
 public @interface CompileTimeCheck {
+    /* Diagnostic.Kind value() default WARNING; */
 }
