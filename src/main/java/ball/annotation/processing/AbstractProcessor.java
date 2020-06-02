@@ -31,7 +31,7 @@ import com.sun.tools.javac.processing.JavacProcessingEnvironment;
 import com.sun.tools.javac.util.Context;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.nio.charset.Charset;
+import java.net.URLClassLoader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -69,7 +69,6 @@ import javax.tools.JavaFileManager;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Collections.disjoint;
 import static java.util.stream.Collectors.toList;
 import static javax.lang.model.element.ElementKind.CONSTRUCTOR;
@@ -98,9 +97,6 @@ import static lombok.AccessLevel.PROTECTED;
 public abstract class AbstractProcessor
                       extends javax.annotation.processing.AbstractProcessor
                       implements JavaLangReflectMethods {
-    /** UTF-8 */
-    protected static final Charset CHARSET = UTF_8;
-
     /** See {@link JavacTask#instance(ProcessingEnvironment)}. */
     protected JavacTask javac = null;
     /** {@link JavacTask} {@link JavaFileManager} instance. */
@@ -164,10 +160,25 @@ public abstract class AbstractProcessor
     /**
      * See {@link JavaFileManager#getClassLoader(javax.tools.JavaFileManager.Location) JavaFileManager.getClassLoader(CLASS_PATH)}.
      *
+     * @param   fm              The {@link JavaFileManager}.
+     *
      * @return  The {@link ClassLoader}.
      */
-    protected ClassLoader getClassPathClassLoader() {
-        return (fm != null) ? fm.getClassLoader(CLASS_PATH) : null;
+    protected ClassLoader getClassPathClassLoader(JavaFileManager fm) {
+        ClassLoader loader = null;
+
+        if (fm != null) {
+            loader = fm.getClassLoader(CLASS_PATH);
+
+            if (loader instanceof URLClassLoader) {
+                loader =
+                    URLClassLoader
+                    .newInstance(((URLClassLoader) loader).getURLs(),
+                                 getClass().getClassLoader());
+            }
+        }
+
+        return loader;
     }
 
     /**
