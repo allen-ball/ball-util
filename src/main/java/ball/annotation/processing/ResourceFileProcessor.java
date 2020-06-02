@@ -23,11 +23,13 @@ package ball.annotation.processing;
 import ball.annotation.ResourceFile;
 import ball.annotation.ServiceProviderFor;
 import java.io.PrintWriter;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 import javax.annotation.processing.Processor;
 import javax.tools.FileObject;
@@ -35,7 +37,6 @@ import javax.tools.JavaFileManager;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import static ball.text.ParameterizedMessageFormat.format;
 import static java.util.stream.Collectors.toList;
 import static javax.tools.Diagnostic.Kind.ERROR;
 import static javax.tools.StandardLocation.CLASS_OUTPUT;
@@ -88,6 +89,32 @@ public class ResourceFileProcessor extends AnnotatedProcessor
                     .forEach(t -> writer.println(t));
             }
         }
+    }
+
+    /**
+     * Method that translates the pattern {@link String} and named to
+     * parameters in the argument {@link Map} to positional parameters for a
+     * call to {@link #format(String,Object...)}.
+     *
+     * @param   pattern         The pattern {@link String}.
+     * @param   map             The parameter {@link Map}.
+     *
+     * @return  The formatted {@link String}.
+     */
+    private String format(String pattern, Map<String,?> map) {
+        Object[] values = new Object[map.size()];
+        int i = 0;
+
+        for (Map.Entry<String,?> entry : map.entrySet()) {
+            pattern =
+                pattern.replaceAll(Pattern.quote("{" + entry.getKey() + "}"),
+                                   "{" + i + "}");
+            values[i] = entry.getValue();
+
+            i += 1;
+        }
+
+        return MessageFormat.format(pattern, values);
     }
 
     private class Parameters extends TreeMap<String,Object> {
