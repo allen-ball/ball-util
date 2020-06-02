@@ -22,6 +22,9 @@ package ball.util.ant.taskdefs;
  */
 import ball.annotation.processing.ClassFileProcessor;
 import java.io.File;
+import java.net.URLClassLoader;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Stream;
 import javax.tools.StandardJavaFileManager;
@@ -36,6 +39,7 @@ import org.apache.tools.ant.Task;
 import org.apache.tools.ant.types.Path;
 import org.apache.tools.ant.util.ClasspathUtils;
 
+import static java.lang.reflect.Modifier.isAbstract;
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 import static javax.tools.StandardLocation.CLASS_OUTPUT;
@@ -131,7 +135,32 @@ public class ProcessClassesTask extends Task
             fm.setLocation(CLASS_PATH, classPaths);
             fm.setLocation(CLASS_OUTPUT, asList(getDestdir()));
 
-            ClassFileProcessor.process(fm);
+            HashSet<Class<?>> set = new HashSet<>();
+            List<Class<? extends ClassFileProcessor>> list = new ArrayList<>();
+            ClassLoader loader = fm.getClassLoader(CLASS_PATH);
+
+            if (loader instanceof URLClassLoader) {
+                loader =
+                    URLClassLoader
+                    .newInstance(((URLClassLoader) loader).getURLs(),
+                                 getClass().getClassLoader());
+            }
+
+            for (String name : ClassFileProcessor.list(fm)) {
+                Class<?> type = Class.forName(name, true, loader);
+
+                set.add(type);
+
+                if (! isAbstract(type.getModifiers())) {
+                    if (ClassFileProcessor.class.isAssignableFrom(type)) {
+                        list.add(type.asSubclass(ClassFileProcessor.class));
+                    }
+                }
+            }
+
+            for (Class<? extends ClassFileProcessor> processor : list) {
+                processor.newInstance().process(set, fm);
+            }
         } catch (BuildException exception) {
             throw exception;
         } catch (RuntimeException exception) {
