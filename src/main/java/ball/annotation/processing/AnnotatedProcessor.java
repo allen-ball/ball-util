@@ -119,6 +119,8 @@ public abstract class AnnotatedProcessor extends AbstractProcessor {
                 .stream()
                 .peek(t -> processed.add(getEnclosingTypeBinaryName(t)))
                 .peek(new AnnotatedElementMustBeCheck(annotation))
+                .peek(new TargetMustHaveModifiersCheck(annotation))
+                .peek(new TargetMustNotHaveModifiersCheck(annotation))
                 .peek(new AnnotatedTypeMustExtendCheck(annotation))
                 .peek(new AnnotatedTypeMustHaveConstructorCheck(annotation))
                 .peek(new AnnotationValueMustConvertToCheck(annotation))
@@ -229,6 +231,63 @@ public abstract class AnnotatedProcessor extends AbstractProcessor {
                     print(ERROR, element,
                           "@%s: %s is not a %s",
                           annotation.getSimpleName(), element.getKind(), kind);
+                }
+            }
+        }
+    }
+
+    @AllArgsConstructor @ToString
+    private class TargetMustHaveModifiersCheck extends Check<Element> {
+        private final TypeElement annotation;
+
+        @Override
+        public void accept(Element element) {
+            AnnotationMirror meta =
+                getAnnotationMirror(annotation, TargetMustHaveModifiers.class);
+
+            if (meta != null) {
+                Set<Modifier> modifiers =
+                    Stream.of(getAnnotationValue(meta, "value"))
+                    .filter(Objects::nonNull)
+                    .map(t -> (List<?>) t.getValue())
+                    .flatMap(List::stream)
+                    .map(t -> ((AnnotationValue) t).getValue())
+                    .map(Objects::toString)
+                    .map(Modifier::valueOf)
+                    .collect(toSet());
+
+                if (! with(modifiers, t -> t.getModifiers()).test(element)) {
+                    print(ERROR, element,
+                          "%s must be %s", element.getKind(), modifiers);
+                }
+            }
+        }
+    }
+
+    @AllArgsConstructor @ToString
+    private class TargetMustNotHaveModifiersCheck extends Check<Element> {
+        private final TypeElement annotation;
+
+        @Override
+        public void accept(Element element) {
+            AnnotationMirror meta =
+                getAnnotationMirror(annotation,
+                                    TargetMustNotHaveModifiers.class);
+
+            if (meta != null) {
+                Set<Modifier> modifiers =
+                    Stream.of(getAnnotationValue(meta, "value"))
+                    .filter(Objects::nonNull)
+                    .map(t -> (List<?>) t.getValue())
+                    .flatMap(List::stream)
+                    .map(t -> ((AnnotationValue) t).getValue())
+                    .map(Objects::toString)
+                    .map(Modifier::valueOf)
+                    .collect(toSet());
+
+                if (! without(modifiers, t -> t.getModifiers()).test(element)) {
+                    print(ERROR, element,
+                          "%s must not be %s", element.getKind(), modifiers);
                 }
             }
         }

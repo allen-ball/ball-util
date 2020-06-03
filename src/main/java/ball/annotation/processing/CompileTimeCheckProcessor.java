@@ -79,7 +79,7 @@ public class CompileTimeCheckProcessor extends AnnotatedProcessor {
             String value = elements.getBinaryName(type).toString();
 
             if (! map.containsKey(key)) {
-                if (element.getModifiers().containsAll(FIELD_MODIFIERS)) {
+                if (with(FIELD_MODIFIERS, t -> t.getModifiers()).test(element)) {
                     map.put(key, value);
                 } else {
                     print(ERROR, element,

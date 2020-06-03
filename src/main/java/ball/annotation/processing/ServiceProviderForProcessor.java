@@ -43,7 +43,6 @@ import lombok.ToString;
 
 import static java.lang.reflect.Modifier.isAbstract;
 import static java.util.stream.Collectors.toList;
-import static javax.lang.model.element.Modifier.ABSTRACT;
 import static javax.tools.Diagnostic.Kind.ERROR;
 import static javax.tools.StandardLocation.CLASS_OUTPUT;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
@@ -83,33 +82,25 @@ public class ServiceProviderForProcessor extends AnnotatedProcessor
         AnnotationValue value = getAnnotationValue(mirror, "value");
 
         if (! isEmptyArray(value)) {
-            if (withoutModifiers(ABSTRACT).test(element)) {
-                String provider =
-                    elements.getBinaryName((TypeElement) element).toString();
-                List<TypeElement> services =
-                    Stream.of(value)
-                    .filter(Objects::nonNull)
-                    .map(t -> (List<?>) t.getValue())
-                    .flatMap(List::stream)
-                    .map(t -> (AnnotationValue) t)
-                    .map(t -> (TypeMirror) t.getValue())
-                    .map(t -> (TypeElement) types.asElement(t))
-                    .collect(toList());
+            String provider =
+                elements.getBinaryName((TypeElement) element).toString();
+            List<TypeElement> services =
+                Stream.of(value)
+                .filter(Objects::nonNull)
+                .map(t -> (List<?>) t.getValue())
+                .flatMap(List::stream)
+                .map(t -> (AnnotationValue) t)
+                .map(t -> (TypeMirror) t.getValue())
+                .map(t -> (TypeElement) types.asElement(t))
+                .collect(toList());
 
-                for (TypeElement service : services) {
-                    if (types.isAssignable(element.asType(),
-                                           service.asType())) {
-                    } else {
-                        print(ERROR, element,
-                              "%s: %s does not implement %s",
-                              annotation.getSimpleName(),
-                              element.getKind(), service.getQualifiedName());
-                    }
+            for (TypeElement service : services) {
+                if (! types.isAssignable(element.asType(), service.asType())) {
+                    print(ERROR, element,
+                          "@%s: %s does not implement %s",
+                          annotation.getSimpleName(),
+                          element.getKind(), service.getQualifiedName());
                 }
-            } else {
-                print(ERROR, element,
-                      "%s: %s is %s",
-                      annotation.getSimpleName(), element.getKind(), ABSTRACT);
             }
         } else {
             print(ERROR, element, mirror, value, "value() is empty");
