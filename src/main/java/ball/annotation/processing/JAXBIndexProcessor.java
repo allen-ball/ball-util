@@ -38,7 +38,6 @@ import lombok.ToString;
 
 import static java.lang.reflect.Modifier.isAbstract;
 import static javax.tools.StandardLocation.CLASS_OUTPUT;
-import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 /**
  * {@link Processor} implementation to generate {@code jaxb.index} files
@@ -60,51 +59,39 @@ public class JAXBIndexProcessor extends AnnotatedProcessor
     @Override
     public void process(Set<Class<?>> set,
                         JavaFileManager fm) throws Throwable {
-        MapImpl map = new MapImpl();
+        Map<String,Set<String>> map = new TreeMap<>();
 
         for (Class<?> type : set) {
             if (! isAbstract(type.getModifiers())) {
                 for (Class<? extends Annotation> annotation :
                          getSupportedAnnotationTypeList()) {
                     if (type.isAnnotationPresent(annotation)) {
-                        map.add(type);
+                        String key = type.getPackage().getName();
+                        String value =
+                            type.getCanonicalName().substring(key.length());
+
+                        if (value.startsWith(DOT)) {
+                            value = value.substring(DOT.length());
+                        }
+
+                        map.computeIfAbsent(key, k -> new TreeSet<>())
+                            .add(value);
                     }
                 }
             }
         }
 
         for (Map.Entry<String,Set<String>> entry : map.entrySet()) {
-            String pkg = entry.getKey();
-            String path = asPath(pkg) + "/" + JAXB_INDEX;
+            String path = JAXB_INDEX;
             FileObject file =
-                fm.getFileForOutput(CLASS_OUTPUT, EMPTY, path, null);
+                fm.getFileForOutput(CLASS_OUTPUT,
+                                    entry.getKey(), JAXB_INDEX, null);
 
             try (PrintWriter writer = new PrintWriter(file.openWriter())) {
                 writer.println("# " + JAXB_INDEX);
 
                 entry.getValue().stream().forEach(t -> writer.println(t));
             }
-        }
-    }
-
-    @NoArgsConstructor
-    private class MapImpl extends TreeMap<String,Set<String>> {
-        private static final long serialVersionUID = 886164937928579676L;
-
-        public boolean add(Class<?> type) {
-            return add(type.getPackage().getName(), type.getCanonicalName());
-        }
-
-        private boolean add(String pkg, String type) {
-            if (type.startsWith(pkg)) {
-                type = type.substring(pkg.length());
-            }
-
-            if (type.startsWith(DOT)) {
-                type = type.substring(DOT.length());
-            }
-
-            return computeIfAbsent(pkg, k -> new TreeSet<>()).add(type);
         }
     }
 }
