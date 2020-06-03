@@ -111,8 +111,7 @@ public class AntTaskProcessor extends AnnotatedProcessor
 
             if (isNotEmpty((String) value.getValue())) {
                 if (isAssignableTo(Task.class).test(element)) {
-                    if (withoutModifiers(ABSTRACT).test(element)) {
-                    } else {
+                    if (! withoutModifiers(ABSTRACT).test(element)) {
                         print(ERROR, element,
                               "%s is %s", element.getKind(), ABSTRACT);
                     }

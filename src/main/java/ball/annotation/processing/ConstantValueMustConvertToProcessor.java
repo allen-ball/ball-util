@@ -56,8 +56,7 @@ public class ConstantValueMustConvertToProcessor extends AnnotatedProcessor {
         AnnotationMirror mirror = getAnnotationMirror(element, annotation);
         AnnotationValue value = getAnnotationValue(mirror, "value");
         TypeElement to =
-            (TypeElement)
-            types.asElement((TypeMirror) value.getValue());
+            (TypeElement) types.asElement((TypeMirror) value.getValue());
         String method =
             (String) getAnnotationValue(mirror, "method").getValue();
         Object from = null;
@@ -65,8 +64,7 @@ public class ConstantValueMustConvertToProcessor extends AnnotatedProcessor {
         try {
             from = ((VariableElement) element).getConstantValue();
 
-            Class<?> type =
-                Class.forName(to.getQualifiedName().toString());
+            Class<?> type = Class.forName(to.getQualifiedName().toString());
 
             if (! method.isEmpty()) {
                 type.getMethod(method, from.getClass())
