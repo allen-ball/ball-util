@@ -58,10 +58,12 @@ import static lombok.AccessLevel.PROTECTED;
  * processing {@link Annotation}s specified by @{@link For}.  Provides
  * built-in support for a number of {@link Annotation} types.
  *
- * @see AnnotatedElementMustBe
- * @see AnnotatedTypeMustExtend
- * @see AnnotatedTypeMustHaveConstructor
  * @see AnnotationValueMustConvertTo
+ * @see TargetMustBe
+ * @see TargetMustExtend
+ * @see TargetMustHaveConstructor
+ * @see TargetMustHaveModifiers
+ * @see TargetMustNotHaveModifiers
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
@@ -118,12 +120,12 @@ public abstract class AnnotatedProcessor extends AbstractProcessor {
             roundEnv.getElementsAnnotatedWith(annotation)
                 .stream()
                 .peek(t -> processed.add(getEnclosingTypeBinaryName(t)))
-                .peek(new AnnotatedElementMustBeCheck(annotation))
+                .peek(new AnnotationValueMustConvertToCheck(annotation))
+                .peek(new TargetMustBeCheck(annotation))
                 .peek(new TargetMustHaveModifiersCheck(annotation))
                 .peek(new TargetMustNotHaveModifiersCheck(annotation))
-                .peek(new AnnotatedTypeMustExtendCheck(annotation))
-                .peek(new AnnotatedTypeMustHaveConstructorCheck(annotation))
-                .peek(new AnnotationValueMustConvertToCheck(annotation))
+                .peek(new TargetMustExtendCheck(annotation))
+                .peek(new TargetMustHaveConstructorCheck(annotation))
                 .forEach(t -> process(roundEnv, annotation, t));
         } catch (Throwable throwable) {
             print(ERROR, throwable);
@@ -212,13 +214,64 @@ public abstract class AnnotatedProcessor extends AbstractProcessor {
     }
 
     @AllArgsConstructor @ToString
-    private class AnnotatedElementMustBeCheck extends Check<Element> {
+    private class AnnotationValueMustConvertToCheck extends Check<Element> {
         private final TypeElement annotation;
 
         @Override
         public void accept(Element element) {
             AnnotationMirror meta =
-                getAnnotationMirror(annotation, AnnotatedElementMustBe.class);
+                getAnnotationMirror(annotation,
+                                    AnnotationValueMustConvertTo.class);
+
+            if (meta != null) {
+                AnnotationValue value = getAnnotationValue(meta, "value");
+                TypeElement to =
+                    (TypeElement)
+                    types.asElement((TypeMirror) value.getValue());
+                String method =
+                    (String) getAnnotationValue(meta, "method").getValue();
+                String name =
+                    (String) getAnnotationValue(meta, "name").getValue();
+                AnnotationMirror mirror =
+                    getAnnotationMirror(element, annotation);
+                AnnotationValue from = null;
+
+                try {
+                    from = getAnnotationValue(mirror, name);
+
+                    Class<?> type =
+                        Class.forName(to.getQualifiedName().toString());
+
+                    if (! method.isEmpty()) {
+                        type.getMethod(method, from.getValue().getClass())
+                            .invoke(null, from.getValue());
+                    } else {
+                        type.getConstructor(from.getValue().getClass())
+                            .newInstance(from.getValue());
+                    }
+                } catch (Exception exception) {
+                    Throwable throwable = exception;
+
+                    while (throwable instanceof InvocationTargetException) {
+                        throwable = throwable.getCause();
+                    }
+
+                    print(ERROR, element, mirror,
+                          "Cannot convert %s to %s\n%s",
+                          from, to.getQualifiedName(), throwable.getMessage());
+                }
+            }
+        }
+    }
+
+    @AllArgsConstructor @ToString
+    private class TargetMustBeCheck extends Check<Element> {
+        private final TypeElement annotation;
+
+        @Override
+        public void accept(Element element) {
+            AnnotationMirror meta =
+                getAnnotationMirror(annotation, TargetMustBe.class);
 
             if (meta != null) {
                 AnnotationValue value = getAnnotationValue(meta, "value");
@@ -294,13 +347,13 @@ public abstract class AnnotatedProcessor extends AbstractProcessor {
     }
 
     @AllArgsConstructor @ToString
-    private class AnnotatedTypeMustExtendCheck extends Check<Element> {
+    private class TargetMustExtendCheck extends Check<Element> {
         private final TypeElement annotation;
 
         @Override
         public void accept(Element element) {
             AnnotationMirror meta =
-                getAnnotationMirror(annotation, AnnotatedTypeMustExtend.class);
+                getAnnotationMirror(annotation, TargetMustExtend.class);
 
             if (meta != null) {
                 AnnotationValue value = getAnnotationValue(meta, "value");
@@ -319,14 +372,14 @@ public abstract class AnnotatedProcessor extends AbstractProcessor {
     }
 
     @AllArgsConstructor @ToString
-    private class AnnotatedTypeMustHaveConstructorCheck extends Check<Element> {
+    private class TargetMustHaveConstructorCheck extends Check<Element> {
         private final TypeElement annotation;
 
         @Override
         public void accept(Element element) {
             AnnotationMirror meta =
                 getAnnotationMirror(annotation,
-                                    AnnotatedTypeMustHaveConstructor.class);
+                                    TargetMustHaveConstructor.class);
 
             if (meta != null) {
                 AnnotationValue value = getAnnotationValue(meta, "value");
@@ -352,57 +405,6 @@ public abstract class AnnotatedProcessor extends AbstractProcessor {
                     print(ERROR, element,
                           "@%s: No %s matching constructor",
                           annotation.getSimpleName(), modifier);
-                }
-            }
-        }
-    }
-
-    @AllArgsConstructor @ToString
-    private class AnnotationValueMustConvertToCheck extends Check<Element> {
-        private final TypeElement annotation;
-
-        @Override
-        public void accept(Element element) {
-            AnnotationMirror meta =
-                getAnnotationMirror(annotation,
-                                    AnnotationValueMustConvertTo.class);
-
-            if (meta != null) {
-                AnnotationValue value = getAnnotationValue(meta, "value");
-                TypeElement to =
-                    (TypeElement)
-                    types.asElement((TypeMirror) value.getValue());
-                String method =
-                    (String) getAnnotationValue(meta, "method").getValue();
-                String name =
-                    (String) getAnnotationValue(meta, "name").getValue();
-                AnnotationMirror mirror =
-                    getAnnotationMirror(element, annotation);
-                AnnotationValue from = null;
-
-                try {
-                    from = getAnnotationValue(mirror, name);
-
-                    Class<?> type =
-                        Class.forName(to.getQualifiedName().toString());
-
-                    if (! method.isEmpty()) {
-                        type.getMethod(method, from.getValue().getClass())
-                            .invoke(null, from.getValue());
-                    } else {
-                        type.getConstructor(from.getValue().getClass())
-                            .newInstance(from.getValue());
-                    }
-                } catch (Exception exception) {
-                    Throwable throwable = exception;
-
-                    while (throwable instanceof InvocationTargetException) {
-                        throwable = throwable.getCause();
-                    }
-
-                    print(ERROR, element, mirror,
-                          "Cannot convert %s to %s\n%s",
-                          from, to.getQualifiedName(), throwable.getMessage());
                 }
             }
         }

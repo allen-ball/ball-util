@@ -47,7 +47,7 @@ import static javax.tools.Diagnostic.Kind.ERROR;
 @Documented
 @Retention(RUNTIME)
 @Target({ TYPE })
-@AnnotatedTypeMustExtend(AnnotatedNoAnnotationProcessor.class)
+@TargetMustExtend(AnnotatedNoAnnotationProcessor.class)
 public @interface MustImplement {
     Class<?>[] value() default { };
 

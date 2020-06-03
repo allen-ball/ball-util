@@ -46,7 +46,7 @@ import static javax.lang.model.element.Modifier.PUBLIC;
 @Documented
 @Retention(RUNTIME)
 @Target(ANNOTATION_TYPE)
-public @interface AnnotatedTypeMustHaveConstructor {
+public @interface TargetMustHaveConstructor {
     Modifier value() default PUBLIC;
     Class<?>[] parameters() default { };
 
@@ -54,7 +54,7 @@ public @interface AnnotatedTypeMustHaveConstructor {
      * {@link Processor} implementation.
      */
     @ServiceProviderFor({ Processor.class })
-    @For({ AnnotatedTypeMustHaveConstructor.class })
+    @For({ TargetMustHaveConstructor.class })
     @NoArgsConstructor @ToString
     public static class ProcessorImpl extends AnnotatedProcessor {
     }

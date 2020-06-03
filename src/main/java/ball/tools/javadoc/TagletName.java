@@ -22,8 +22,8 @@ package ball.tools.javadoc;
  */
 import ball.annotation.ServiceProviderFor;
 import ball.annotation.processing.AnnotatedProcessor;
-import ball.annotation.processing.AnnotatedTypeMustExtend;
 import ball.annotation.processing.For;
+import ball.annotation.processing.TargetMustExtend;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
@@ -53,7 +53,7 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
 @Documented
 @Retention(RUNTIME)
 @Target({ TYPE })
-@AnnotatedTypeMustExtend(AnnotatedTaglet.class)
+@TargetMustExtend(AnnotatedTaglet.class)
 public @interface TagletName {
     String value();
 

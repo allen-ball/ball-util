@@ -54,7 +54,7 @@ import static javax.tools.Diagnostic.Kind.WARNING;
 @Documented
 @Retention(RUNTIME)
 @Target({ TYPE })
-@AnnotatedTypeMustExtend(AnnotatedNoAnnotationProcessor.class)
+@TargetMustExtend(AnnotatedNoAnnotationProcessor.class)
 public @interface ForSubclassesOf {
     Class<?> value();
 

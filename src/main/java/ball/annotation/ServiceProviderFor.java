@@ -20,8 +20,8 @@ package ball.annotation;
  * limitations under the License.
  * ##########################################################################
  */
-import ball.annotation.processing.AnnotatedElementMustBe;
-import ball.annotation.processing.AnnotatedTypeMustHaveConstructor;
+import ball.annotation.processing.TargetMustBe;
+import ball.annotation.processing.TargetMustHaveConstructor;
 import ball.annotation.processing.TargetMustNotHaveModifiers;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
@@ -44,9 +44,9 @@ import static javax.lang.model.element.Modifier.PUBLIC;
 @Documented
 @Retention(RUNTIME)
 @Target({ TYPE })
-@AnnotatedElementMustBe(CLASS)
+@TargetMustBe(CLASS)
 @TargetMustNotHaveModifiers({ ABSTRACT })
-@AnnotatedTypeMustHaveConstructor(PUBLIC)
+@TargetMustHaveConstructor(PUBLIC)
 public @interface ServiceProviderFor {
     Class<?>[] value() default { };
 }

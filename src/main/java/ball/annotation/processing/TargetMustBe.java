@@ -25,15 +25,17 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 import javax.annotation.processing.Processor;
+import javax.lang.model.element.ElementKind;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import static javax.lang.model.element.Modifier.PUBLIC;
 
 /**
- * {@link java.lang.annotation.Annotation} to specify required
- * super-{@link Class} criteria an annotated {@link Class} must extend.
+ * {@link java.lang.annotation.Annotation} to test an Annotated element is a
+ * specific {@link ElementKind kind}.
  *
  * @see AnnotatedProcessor
  *
@@ -43,14 +45,14 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 @Retention(RUNTIME)
 @Target(ANNOTATION_TYPE)
-public @interface AnnotatedTypeMustExtend {
-    Class<?> value();
+public @interface TargetMustBe {
+    ElementKind value();
 
     /**
      * {@link Processor} implementation.
      */
     @ServiceProviderFor({ Processor.class })
-    @For({ AnnotatedTypeMustExtend.class })
+    @For({ TargetMustBe.class })
     @NoArgsConstructor @ToString
     public static class ProcessorImpl extends AnnotatedProcessor {
     }
