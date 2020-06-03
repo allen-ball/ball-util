@@ -55,10 +55,10 @@
       <src path="${src.dir}/main/java"/>
     </javac>
     <taskdef classpathref="build.classpath"
-             name="process-classes"
-             classname="ball.util.ant.taskdefs.ProcessClassesTask"/>
-    <process-classes classpathref="build.classpath"
-                     basedir="${target.classes.dir}"/>
+             name="process-class-files"
+             classname="ball.util.ant.taskdefs.ProcessClassFilesTask"/>
+    <process-class-files classpathref="build.classpath"
+                         basedir="${target.classes.dir}"/>
   </target>
 
   <target name="bean-info-for"

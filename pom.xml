@@ -88,7 +88,7 @@
         <artifactId>maven-antrun-plugin</artifactId>
         <executions>
           <execution>
-            <id>class-file-processors</id>
+            <id>process-class-files</id>
             <phase>process-classes</phase>
             <goals>
               <goal>run</goal>
@@ -96,10 +96,10 @@
             <configuration>
               <target>
                 <taskdef classpathref="maven.compile.classpath"
-                         name="process-classes"
-                         classname="ball.util.ant.taskdefs.ProcessClassesTask"/>
-                <process-classes classpathref="maven.compile.classpath"
-                                 basedir="${project.build.outputDirectory}"/>
+                         name="process-class-files"
+                         classname="ball.util.ant.taskdefs.ProcessClassFilesTask"/>
+                <process-class-files classpathref="maven.compile.classpath"
+                                     basedir="${project.build.outputDirectory}"/>
               </target>
             </configuration>
           </execution>

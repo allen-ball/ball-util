@@ -58,9 +58,9 @@ import static javax.tools.StandardLocation.SOURCE_PATH;
  * @version $Revision$
  */
 @NoArgsConstructor @ToString
-public class ProcessClassesTask extends Task
-                                implements AnnotatedAntTask,
-                                           ClasspathDelegateAntTask {
+public class ProcessClassFilesTask extends Task
+                                   implements AnnotatedAntTask,
+                                              ClasspathDelegateAntTask {
     @Getter @Setter @Accessors(chain = true, fluent = true)
     private ClasspathUtils.Delegate delegate = null;
     @Getter @Setter
