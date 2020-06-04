@@ -114,6 +114,8 @@ public class AntLibProcessor extends AnnotatedProcessor
 
     @NoArgsConstructor
     private static class AntLibXML extends TreeMap<String,Class<?>> {
+        private static final long serialVersionUID = -8903476717502118017L;
+
         public FluentDocument asDocument() throws Exception {
             FluentDocument d =
                 FluentDocumentBuilderFactory.newInstance()
