@@ -26,6 +26,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.net.URI;
 import java.util.Set;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
@@ -46,6 +47,7 @@ import static ball.annotation.Manifest.JavaBean;
 import static ball.annotation.Manifest.MainClass;
 import static ball.annotation.Manifest.Section;
 import static javax.tools.Diagnostic.Kind.ERROR;
+import static javax.tools.JavaFileObject.Kind.CLASS;
 import static javax.tools.StandardLocation.CLASS_OUTPUT;
 import static javax.tools.StandardLocation.CLASS_PATH;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
@@ -67,7 +69,6 @@ import static org.apache.commons.lang3.StringUtils.EMPTY;
 public class ManifestProcessor extends AnnotatedProcessor
                                implements ClassFileProcessor {
     private static final String PATH = "META-INF/MANIFEST.MF";
-    private static final String _CLASS = ".class";
 
     private static abstract class PROTOTYPE {
         public static void main(String[] argv) { }
@@ -131,7 +132,15 @@ public class ManifestProcessor extends AnnotatedProcessor
 
         file = fm.getFileForOutput(CLASS_OUTPUT, EMPTY, PATH, null);
 
+        URI root = file.toUri().resolve("..").normalize();
+
         for (Class<?> type : set) {
+            URI uri =
+                fm.getJavaFileForInput(CLASS_OUTPUT, type.getName(), CLASS)
+                .toUri();
+
+            uri = root.relativize(uri);
+
             Attribute attribute = type.getAnnotation(Attribute.class);
             MainClass main = type.getAnnotation(MainClass.class);
 
@@ -142,7 +151,7 @@ public class ManifestProcessor extends AnnotatedProcessor
             Section section = type.getAnnotation(Section.class);
 
             if (section != null) {
-                manifest.put(asPath(type.getPackage()), section);
+                manifest.put(uri.resolve("").toString(), section);
             }
 
             JavaBean bean = type.getAnnotation(JavaBean.class);
@@ -150,18 +159,14 @@ public class ManifestProcessor extends AnnotatedProcessor
             DesignTimeOnly design = type.getAnnotation(DesignTimeOnly.class);
 
             if (bean != null || depends != null || design != null) {
-                manifest.put(asPath(type), bean, depends, design);
+                manifest.put(uri.toString(),
+                             bean, depends, design);
             }
         }
 
         try (OutputStream out = file.openOutputStream()) {
             manifest.write(out);
          }
-    }
-
-    @Override
-    protected String asPath(Class<?> type) {
-        return super.asPath(type) + _CLASS;
     }
 
     @NoArgsConstructor @ToString
