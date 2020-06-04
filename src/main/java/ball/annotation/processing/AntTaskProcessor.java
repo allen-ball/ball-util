@@ -21,41 +21,18 @@ package ball.annotation.processing;
  * ##########################################################################
  */
 import ball.annotation.ServiceProviderFor;
-import ball.util.PropertiesImpl;
-import ball.util.ant.taskdefs.AntLib;
 import ball.util.ant.taskdefs.AntTask;
-import ball.xml.FluentDocument;
-import ball.xml.FluentDocumentBuilderFactory;
-import java.io.OutputStream;
-import java.net.URI;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
-import javax.tools.FileObject;
-import javax.tools.JavaFileManager;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.apache.tools.ant.Task;
 
-import static java.lang.reflect.Modifier.isAbstract;
-import static javax.lang.model.element.Modifier.ABSTRACT;
 import static javax.tools.Diagnostic.Kind.ERROR;
-import static javax.tools.StandardLocation.CLASS_OUTPUT;
-import static javax.xml.transform.OutputKeys.INDENT;
-import static javax.xml.transform.OutputKeys.OMIT_XML_DECLARATION;
-import static org.apache.commons.lang3.StringUtils.EMPTY;
-import static org.apache.commons.lang3.StringUtils.isNotEmpty;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 /**
  * {@link Processor} implementation to check {@link Class}es annotated with
@@ -66,185 +43,24 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
  *   <li value="3">Have a public no-argument constructor</li>
  * </ol>
  *
- * And {@link Package}s annotated with {@link AntLib}.  Generates the
- * specified resources at the end of annotation processing.
- *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
 @ServiceProviderFor({ Processor.class })
-@For({ AntLib.class, AntTask.class })
+@For({ AntTask.class })
 @NoArgsConstructor @ToString
-public class AntTaskProcessor extends AnnotatedProcessor
-                              implements ClassFileProcessor {
-    private static final String ANTLIB_XML = "antlib.xml";
-
-    private static final String NO = "no";
-    private static final String YES = "yes";
-
-    private static final String INDENT_AMOUNT =
-        "{http://xml.apache.org/xslt}indent-amount";
-
-    private static final Transformer TRANSFORMER;
-
-    static {
-        try {
-            TRANSFORMER = TransformerFactory.newInstance().newTransformer();
-            TRANSFORMER.setOutputProperty(OMIT_XML_DECLARATION, NO);
-            TRANSFORMER.setOutputProperty(INDENT, YES);
-            TRANSFORMER.setOutputProperty(INDENT_AMOUNT, String.valueOf(2));
-        } catch (Exception exception) {
-            throw new ExceptionInInitializerError(exception);
-        }
-    }
-
+public class AntTaskProcessor extends AnnotatedProcessor {
     @Override
     protected void process(RoundEnvironment roundEnv,
                            TypeElement annotation, Element element) {
         super.process(roundEnv, annotation, element);
 
-        switch (element.getKind()) {
-        case CLASS:
-            AnnotationMirror mirror = getAnnotationMirror(element, annotation);
-            AnnotationValue value = getAnnotationValue(mirror, "value");
-            AnnotationValue resource = getAnnotationValue(mirror, "resource");
+        AnnotationMirror mirror = getAnnotationMirror(element, annotation);
+        AnnotationValue value = getAnnotationValue(mirror, "value");
 
-            if (isNotEmpty((String) value.getValue())) {
-                if (isAssignableTo(Task.class).test(element)) {
-                    if (! withoutModifiers(ABSTRACT).test(element)) {
-                        print(ERROR, element,
-                              "%s is %s", element.getKind(), ABSTRACT);
-                    }
-                } else {
-                    /*
-                     * See AntTaskMixInProcessor.
-                     */
-                }
-            }
-            break;
-
-        case PACKAGE:
-            break;
-
-        default:
-            break;
-        }
-    }
-
-    @Override
-    public void process(Set<Class<?>> set,
-                        JavaFileManager fm) throws Throwable {
-        ResourceMap map = new ResourceMap();
-        LinkedHashSet<String> packages = new LinkedHashSet<>();
-
-        for (Class<?> type : set) {
-            AntTask annotation = type.getAnnotation(AntTask.class);
-
-            if (annotation != null) {
-                if (Task.class.isAssignableFrom(type)) {
-                    if (! isAbstract(type.getModifiers())) {
-                        String name = annotation.value();
-                        String resource = annotation.resource();
-                        Package pkg = type.getPackage();
-
-                        if (pkg != null) {
-                            resource =
-                                URI.create(asPath(pkg) + resource)
-                                .normalize()
-                                .toString();
-                        }
-
-                        map.put(resource, name, type);
-                    }
-                }
-            }
-
-            AntLib lib = type.getAnnotation(AntLib.class);
-
-            if (lib != null) {
-                packages.add(type.getPackage().getName());
-            }
-        }
-
-        for (Map.Entry<String,PropertiesImpl> entry : map.entrySet()) {
-            FileObject file =
-                fm.getFileForOutput(CLASS_OUTPUT, EMPTY, entry.getKey(), null);
-
-            try (OutputStream out = file.openOutputStream()) {
-                entry.getValue().store(out, entry.getKey());
-            }
-        }
-
-        for (String pkg : packages) {
-            AntLibXML antlib = new AntLibXML(pkg, map);
-            FileObject file =
-                fm.getFileForOutput(CLASS_OUTPUT, EMPTY, antlib.getPath(), null);
-
-            try (OutputStream out = file.openOutputStream()) {
-                antlib.writeTo(out);
-            }
-        }
-    }
-
-    @NoArgsConstructor
-    private class ResourceMap extends TreeMap<String,PropertiesImpl> {
-        private static final long serialVersionUID = -6734240104662740026L;
-
-        public boolean put(String resource, String name, String task) {
-            PropertiesImpl value =
-                computeIfAbsent(resource, k -> new PropertiesImpl());
-
-            return (value.put(name, task) != task);
-        }
-
-        public boolean put(String resource, String name, Class<?> task) {
-            return put(resource, name, task.getName());
-        }
-
-        public boolean put(String resource, String name, TypeElement task) {
-            return put(resource,
-                       name, elements.getBinaryName(task).toString());
-        }
-    }
-
-    private static class AntLibXML extends TreeMap<String,String> {
-        private static final long serialVersionUID = -4362352118276244430L;
-
-        /** @serial */ private final String path;
-
-        private AntLibXML(String pkg, ResourceMap map) {
-            super();
-
-            this.path = asPath(pkg) + "/" + ANTLIB_XML;
-
-            map.values()
-                .stream()
-                .flatMap(t -> t.entrySet().stream())
-                .filter(t -> t.getValue().toString().startsWith(pkg + "."))
-                .forEach(t -> put(t.getKey().toString(),
-                                  t.getValue().toString()));
-        }
-
-        public String getPath() { return path; }
-
-        public FluentDocument asDocument() throws Exception {
-            FluentDocument d =
-                FluentDocumentBuilderFactory.newInstance()
-                .newDocumentBuilder()
-                .newDocument();
-
-            d.add(d.element("antlib",
-                            entrySet().stream()
-                            .map(t -> d.element("taskdef",
-                                                d.attr("name", t.getKey()),
-                                                d.attr("classname", t.getValue())))));
-
-            return d;
-        }
-
-        public void writeTo(OutputStream out) throws Exception {
-            TRANSFORMER.transform(new DOMSource(asDocument()),
-                                  new StreamResult(out));
+        if (isEmpty((String) value.getValue())) {
+            print(ERROR, element, mirror, value,
+                  "value() must be non-empty");
         }
     }
 }

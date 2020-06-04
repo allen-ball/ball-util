@@ -1,5 +1,11 @@
 2020-06-03  Allen D. Ball  <ball@hcf.dev>
 
+	* @AntLib and @AntTask:
+	Removed support for property resource files
+	(defaults.properties).
+	Separated processor logic: @AntLib Processor generates antlib.xml
+	files while @AntTask Processor verifies annotated classes.
+
 	* Renamed @AnnotatedElementMustBe to @TargetMustBe,
 	@AnnotatedTypeMustExtend to @TargetMustExtend, and
 	@AnnotatedTypeMustHaveConstructor to @TargetMustHaveConstructor.

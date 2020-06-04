@@ -22,6 +22,7 @@ package ball.util.ant.taskdefs;
  */
 import ball.annotation.processing.TargetMustExtend;
 import ball.annotation.processing.TargetMustHaveConstructor;
+import ball.annotation.processing.TargetMustNotHaveModifiers;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
@@ -29,6 +30,7 @@ import org.apache.tools.ant.Task;
 
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import static javax.lang.model.element.Modifier.ABSTRACT;
 
 /**
  * {@link java.lang.annotation.Annotation} to mark
@@ -41,8 +43,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 @Target({ TYPE })
 @TargetMustExtend(Task.class)
+@TargetMustNotHaveModifiers({ ABSTRACT })
 @TargetMustHaveConstructor
 public @interface AntTask {
     String value();
-    String resource() default "../defaults.properties";
 }

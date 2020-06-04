@@ -65,7 +65,7 @@
           description="--> Invokes &lt;bean-info-for/&gt; task."
           depends="jar-classes">
     <taskdef classpathref="build.classpath" onerror="ignore"
-             resource="ball/util/ant/defaults.properties"/>
+             resource="ball/util/ant/antlib.xml"/>
     <bean-info-for classpathref="build.classpath" type="${type}"/>
   </target>
 
@@ -73,7 +73,7 @@
           description="--> Invokes &lt;combinations-count/&gt; task."
           depends="jar-classes">
     <taskdef classpathref="build.classpath" onerror="ignore"
-             resource="ball/util/ant/defaults.properties"/>
+             resource="ball/util/ant/antlib.xml"/>
     <combinations-count classpathref="build.classpath"
                         type="${type}" count="${count}">
       <argument type="${argument.type}">${argument.value}</argument>
@@ -84,7 +84,7 @@
           description="--> Invokes &lt;combinations-of/&gt; task."
           depends="jar-classes">
     <taskdef classpathref="build.classpath" onerror="ignore"
-             resource="ball/util/ant/defaults.properties"/>
+             resource="ball/util/ant/antlib.xml"/>
     <combinations-of classpathref="build.classpath"
                      type="${type}" count="${count}">
       <argument type="${argument.type}">${argument.value}</argument>
@@ -95,7 +95,7 @@
           description="--> Invokes &lt;download/&gt; task."
           depends="jar-classes">
     <taskdef classpathref="build.classpath" onerror="ignore"
-             resource="ball/util/ant/defaults.properties"/>
+             resource="ball/util/ant/antlib.xml"/>
     <download classpathref="build.classpath"/>
   </target>
 
@@ -103,7 +103,7 @@
           description="--> Invokes &lt;instance-of/&gt; task."
           depends="jar-classes">
     <taskdef classpathref="build.classpath" onerror="ignore"
-             resource="ball/util/ant/defaults.properties"/>
+             resource="ball/util/ant/antlib.xml"/>
     <instance-of classpathref="build.classpath" type="${type}">
       <argument type ="${argument.type}">${argument.value}</argument>
     </instance-of>
@@ -113,7 +113,7 @@
           description="--> Invokes &lt;is-assignable-from/&gt; task."
           depends="jar-classes">
     <taskdef classpathref="build.classpath" onerror="ignore"
-             resource="ball/util/ant/defaults.properties"/>
+             resource="ball/util/ant/antlib.xml"/>
     <is-assignable-from classpathref="build.classpath"
                         type="${type}" subtype="${subtype}"/>
   </target>
@@ -122,7 +122,7 @@
           description="--> Invokes &lt;members-of/&gt; task."
           depends="jar-classes">
     <taskdef classpathref="build.classpath" onerror="ignore"
-             resource="ball/util/ant/defaults.properties"/>
+             resource="ball/util/ant/antlib.xml"/>
     <members-of classpathref="build.classpath" type="${type}"/>
   </target>
 
@@ -130,7 +130,7 @@
           description="--> Invokes &lt;resource-path-to/&gt; task."
           depends="jar-classes">
     <taskdef classpathref="build.classpath" onerror="ignore"
-             resource="ball/util/ant/defaults.properties"/>
+             resource="ball/util/ant/antlib.xml"/>
     <resource-path-to classpathref="build.classpath" type="${type}"/>
   </target>
 
@@ -138,7 +138,7 @@
           description="--> Invokes &lt;permutations-count/&gt; task."
           depends="jar-classes">
     <taskdef classpathref="build.classpath" onerror="ignore"
-             resource="ball/util/ant/defaults.properties"/>
+             resource="ball/util/ant/antlib.xml"/>
     <permutations-count classpathref="build.classpath" type="${type}">
       <argument type="${argument.type}">${argument.value}</argument>
     </permutations-count>
@@ -148,7 +148,7 @@
           description="--> Invokes &lt;permutations-of/&gt; task."
           depends="jar-classes">
     <taskdef classpathref="build.classpath" onerror="ignore"
-             resource="ball/util/ant/defaults.properties"/>
+             resource="ball/util/ant/antlib.xml"/>
     <permutations-of classpathref="build.classpath" type="${type}">
       <argument type="${argument.type}">${argument.value}</argument>
     </permutations-of>
@@ -158,7 +158,7 @@
           description="--> Invokes &lt;subclasses-of/&gt; task."
           depends="jar-classes">
     <taskdef classpathref="build.classpath" onerror="ignore"
-             resource="ball/util/ant/defaults.properties"/>
+             resource="ball/util/ant/antlib.xml"/>
     <subclasses-of classpathref="build.classpath"
                    basedir="${target.classes.dir}" type="${type}">
       <src path="${src.dir}/main/java"/>
@@ -169,7 +169,7 @@
           description="--> Invokes &lt;superclasses-of/&gt; task."
           depends="jar-classes">
     <taskdef classpathref="build.classpath" onerror="ignore"
-             resource="ball/util/ant/defaults.properties"/>
+             resource="ball/util/ant/antlib.xml"/>
     <superclasses-of classpathref="build.classpath" type="${type}"/>
   </target>
 
@@ -177,7 +177,7 @@
           description="--> Invokes &lt;xpath-evaluate/&gt; task."
           depends="jar-classes">
     <taskdef classpathref="build.classpath" onerror="ignore"
-             resource="ball/util/ant/defaults.properties"/>
+             resource="ball/util/ant/antlib.xml"/>
     <xpath-evaluate/>
   </target>
 </project>
