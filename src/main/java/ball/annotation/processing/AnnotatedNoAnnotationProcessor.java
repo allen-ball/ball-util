@@ -43,6 +43,7 @@ import static ball.util.Walker.walk;
 import static java.util.Collections.disjoint;
 import static javax.lang.model.element.Modifier.ABSTRACT;
 import static javax.tools.Diagnostic.Kind.ERROR;
+import static javax.tools.Diagnostic.Kind.WARNING;
 import static lombok.AccessLevel.PROTECTED;
 
 /**
@@ -182,7 +183,11 @@ public abstract class AnnotatedNoAnnotationProcessor extends AbstractProcessor {
                 criteria.add(new MustImplementCriterion(annotation, types));
             }
         } catch (Exception exception) {
-            print(ERROR, exception);
+            criteria.clear();
+            criteria.add(t -> false);
+
+            print(WARNING, "%s disabled", this);
+            /* print(WARNING, exception); */
         }
     }
 
