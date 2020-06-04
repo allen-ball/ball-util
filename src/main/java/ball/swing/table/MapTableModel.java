@@ -22,6 +22,7 @@ package ball.swing.table;
  */
 import java.util.Map;
 import javax.swing.event.TableModelEvent;
+import lombok.ToString;
 
 /**
  * {@link Map} {@link javax.swing.table.TableModel} implementation.
@@ -29,8 +30,9 @@ import javax.swing.event.TableModelEvent;
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
+@ToString
 public class MapTableModel extends ArrayListTableModel<Object> {
-    private static final long serialVersionUID = 299182543130741505L;
+    private static final long serialVersionUID = -8225255612163673800L;
 
     /** @serial */ private final Map<?,?> map;
 

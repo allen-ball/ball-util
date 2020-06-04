@@ -29,6 +29,8 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.apache.commons.lang3.StringUtils;
 
 import static org.apache.commons.lang3.StringUtils.EMPTY;
@@ -184,13 +186,9 @@ public class TextTable extends ReaderWriterDataSource {
         return (sequence != null) ? sequence.length() : 0;
     }
 
+    @NoArgsConstructor @ToString
     private class ModelListenerImpl implements TableModelListener {
-        public ModelListenerImpl() { }
-
         @Override
         public void tableChanged(TableModelEvent event) { clear(); }
-
-        @Override
-        public String toString() { return super.toString(); }
     }
 }

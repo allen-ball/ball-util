@@ -122,8 +122,9 @@ public abstract class TypeTask extends Task
             }
         }
 
+        @ToString
         private class BeanHeaderTableModel extends SimpleTableModel {
-            private static final long serialVersionUID = -6207300503623991416L;
+            private static final long serialVersionUID = -154550807608756372L;
 
             public BeanHeaderTableModel(BeanDescriptor descriptor) {
                 super(new Object[][] { }, 2);
@@ -138,8 +139,9 @@ public abstract class TypeTask extends Task
             }
         }
 
+        @ToString
         private class TableModelImpl extends PropertyDescriptorsTableModel {
-            private static final long serialVersionUID = -5817972183666452609L;
+            private static final long serialVersionUID = 3641199494457667293L;
 
             public TableModelImpl(PropertyDescriptor[] rows) { super(rows); }
 

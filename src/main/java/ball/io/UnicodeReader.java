@@ -31,6 +31,7 @@ import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Objects;
+import lombok.ToString;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
@@ -73,6 +74,7 @@ public class UnicodeReader extends LineNumberReader {
     @Override
     public String toString() { return super.toString(); }
 
+    @ToString
     private static class CharsetDetectInputStream extends PushbackInputStream {
         private final Charset charset;
 
@@ -107,8 +109,5 @@ public class UnicodeReader extends LineNumberReader {
         }
 
         public Charset getCharset() { return charset; }
-
-        @Override
-        public String toString() { return super.toString(); }
     }
 }

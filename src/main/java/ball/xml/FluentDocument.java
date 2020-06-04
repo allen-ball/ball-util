@@ -23,6 +23,9 @@ package ball.xml;
 import java.io.IOException;
 import java.util.stream.Stream;
 import javax.xml.parsers.DocumentBuilder;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -30,8 +33,6 @@ import org.xml.sax.EntityResolver;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-
-import static java.util.Objects.requireNonNull;
 
 /**
  * Fluent {@link Document} interface.  Note: This interface is an
@@ -58,19 +59,9 @@ public interface FluentDocument extends FluentNode, Document {
     /**
      * {@link FluentDocument} {@link DocumentBuilder}.
      */
+    @RequiredArgsConstructor @ToString
     public class Builder extends DocumentBuilder {
-        private final DocumentBuilder builder;
-
-        /**
-         * Sole constructor.
-         *
-         * @param   builder         The "wrapped" {@link DocumentBuilder}.
-         */
-        protected Builder(DocumentBuilder builder) {
-            super();
-
-            this.builder = requireNonNull(builder);
-        }
+        @NonNull private final DocumentBuilder builder;
 
         @Override
         public FluentDocument newDocument() {
@@ -109,8 +100,5 @@ public interface FluentDocument extends FluentNode, Document {
         public DOMImplementation getDOMImplementation() {
             return builder.getDOMImplementation();
         }
-
-        @Override
-        public String toString() { return super.toString(); }
     }
 }

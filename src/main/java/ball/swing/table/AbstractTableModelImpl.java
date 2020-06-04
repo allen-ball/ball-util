@@ -24,6 +24,7 @@ import java.util.Arrays;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
+import lombok.ToString;
 
 /**
  * {@link AbstractTableModel} implementation.
@@ -33,6 +34,7 @@ import javax.swing.table.AbstractTableModel;
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
+@ToString
 public abstract class AbstractTableModelImpl extends AbstractTableModel
                                              implements TableModelListener {
     private static final long serialVersionUID = -4459832803497493630L;
@@ -149,7 +151,4 @@ public abstract class AbstractTableModelImpl extends AbstractTableModel
 
     @Override
     public void tableChanged(TableModelEvent event) { }
-
-    @Override
-    public String toString() { return super.toString(); }
 }

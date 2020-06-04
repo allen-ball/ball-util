@@ -23,6 +23,7 @@ package ball.swing.table;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
+import lombok.ToString;
 
 /**
  * {@link Map}s {@link javax.swing.table.TableModel} implementation.
@@ -30,8 +31,9 @@ import java.util.Map;
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
+@ToString
 public class MapsTableModel extends MapTableModel {
-    private static final long serialVersionUID = -2742452353623299139L;
+    private static final long serialVersionUID = -8967894056049317574L;
 
     /** @serial */
     private final ArrayList<Map<?,?>> list = new ArrayList<>();

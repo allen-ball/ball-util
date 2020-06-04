@@ -26,6 +26,7 @@ import java.beans.IndexedPropertyDescriptor;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import lombok.ToString;
 
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 
@@ -36,9 +37,10 @@ import static org.apache.commons.lang3.StringUtils.EMPTY;
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
+@ToString
 public class PropertyDescriptorsTableModel
              extends ArrayListTableModel<PropertyDescriptor> {
-    private static final long serialVersionUID = -3731165693820299522L;
+    private static final long serialVersionUID = -4799510974827528198L;
 
     private static final String R = "R";
     private static final String W = "W";

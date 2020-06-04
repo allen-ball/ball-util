@@ -21,6 +21,7 @@ package ball.swing.table;
  * ##########################################################################
  */
 import java.util.Arrays;
+import lombok.ToString;
 
 /**
  * Simple {@link javax.swing.table.TableModel} implementation.
@@ -28,8 +29,9 @@ import java.util.Arrays;
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
+@ToString
 public class SimpleTableModel extends ArrayListTableModel<Object[]> {
-    private static final long serialVersionUID = 8874758772454561013L;
+    private static final long serialVersionUID = 4763741378592706296L;
 
     /**
      * @see ArrayListTableModel#ArrayListTableModel(Iterable,String...)

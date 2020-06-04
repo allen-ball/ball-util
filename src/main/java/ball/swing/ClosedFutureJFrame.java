@@ -27,6 +27,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import javax.swing.JFrame;
+import lombok.ToString;
 
 /**
  * {@link JFrame} implementation that provides a {@link Future} indicating
@@ -75,16 +76,15 @@ public class ClosedFutureJFrame extends JFrame {
      */
     public Future<Boolean> closedFuture() { return future; }
 
+    @ToString
     private class WindowListenerImpl extends WindowAdapter {
         public WindowListenerImpl() { super(); }
 
         @Override
         public void windowClosing(WindowEvent event) { setVisible(false); }
-
-        @Override
-        public String toString() { return super.toString(); }
     }
 
+    @ToString
     private class FutureImpl implements Future<Boolean> {
         public FutureImpl() { }
 
@@ -143,8 +143,5 @@ public class ClosedFutureJFrame extends JFrame {
 
             return result;
         }
-
-        @Override
-        public String toString() { return super.toString(); }
     }
 }

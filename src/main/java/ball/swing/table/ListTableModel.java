@@ -22,6 +22,7 @@ package ball.swing.table;
  */
 import java.util.List;
 import javax.swing.event.TableModelEvent;
+import lombok.ToString;
 
 /**
  * {@link List} {@link javax.swing.table.TableModel} implementation.
@@ -29,8 +30,9 @@ import javax.swing.event.TableModelEvent;
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
+@ToString
 public class ListTableModel extends ArrayListTableModel<Object> {
-    private static final long serialVersionUID = -3491544585475074062L;
+    private static final long serialVersionUID = -7448852717174575332L;
 
     /** @serial */ private final List<?> list;
 
