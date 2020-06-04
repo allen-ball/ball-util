@@ -57,6 +57,7 @@ import static javax.tools.StandardLocation.SOURCE_PATH;
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
+@AntTask("process-class-files")
 @NoArgsConstructor @ToString
 public class ProcessClassFilesTask extends Task
                                    implements AnnotatedAntTask,
