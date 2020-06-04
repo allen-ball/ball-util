@@ -53,7 +53,7 @@ import static javax.xml.transform.OutputKeys.OMIT_XML_DECLARATION;
  * @version $Revision$
  */
 @ServiceProviderFor({ Processor.class })
-@For({ AntLib.class })
+@For({ AntLib.class, AntTask.class })
 @NoArgsConstructor @ToString
 public class AntLibProcessor extends AnnotatedProcessor
                              implements ClassFileProcessor {
