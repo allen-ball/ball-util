@@ -929,11 +929,6 @@
 	Added asType(Element), asType(Class<?>), and asModifierSet(int)
 	methods.
 
-2014-08-14  Allen D. Ball  <ball@sol.local>
-
-	* src/main/java/ball/annotation/processing/AbstractProcessor.java:
-	Added asPath() methods.
-
 2014-08-09  Allen D. Ball  <ball@sol.local>
 
 	* Moved TableModel implementations to ball.swing.table and removed
