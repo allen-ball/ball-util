@@ -122,8 +122,15 @@ public abstract class AbstractProcessor
         super.init(processingEnv);
 
         try {
+            filer = processingEnv.getFiler();
+            elements = processingEnv.getElementUtils();
+            types = processingEnv.getTypeUtils();
+
             javac = JavacTask.instance(processingEnv);
-            javac.addTaskListener(new WhenAnnotationProcessingFinished());
+
+            if (javac != null) {
+                javac.addTaskListener(new WhenAnnotationProcessingFinished());
+            }
 
             if (processingEnv instanceof JavacProcessingEnvironment) {
                 Context context =
@@ -135,12 +142,6 @@ public abstract class AbstractProcessor
             }
 
             trees = Trees.instance(processingEnv);
-
-            filer = processingEnv.getFiler();
-
-            elements = processingEnv.getElementUtils();
-
-            types = processingEnv.getTypeUtils();
         } catch (Exception exception) {
             print(ERROR, exception);
         }
