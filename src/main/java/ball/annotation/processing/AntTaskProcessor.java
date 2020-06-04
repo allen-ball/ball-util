@@ -38,7 +38,7 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
  * {@link Processor} implementation to check {@link Class}es annotated with
  * {@link AntTask}:
  * <ol>
- *   <li value="1">Are an instance of {@link Task},</li>
+ *   <li value="1">Are an instance of {@link org.apache.tools.ant.Task},</li>
  *   <li value="2">Concrete, and</li>
  *   <li value="3">Have a public no-argument constructor</li>
  * </ol>
