@@ -633,13 +633,17 @@ public abstract class AbstractProcessor
         return isAssignableTo(type, t -> t.asType());
     }
 
+    protected Predicate<Element> isAssignableTo(TypeMirror type) {
+        return isAssignableTo(type, t -> t.asType());
+    }
+
     protected Predicate<Element> isAssignableTo(Class<?> type,
                                                 Function<? super Element,TypeMirror> extractor) {
         return isAssignableTo(asTypeMirror(type), extractor);
     }
 
-    private Predicate<Element> isAssignableTo(TypeMirror type,
-                                              Function<? super Element,TypeMirror> extractor) {
+    protected Predicate<Element> isAssignableTo(TypeMirror type,
+                                                Function<? super Element,TypeMirror> extractor) {
         return t -> types.isAssignable(extractor.apply(t), type);
     }
 
@@ -673,11 +677,19 @@ public abstract class AbstractProcessor
     }
 
     protected Predicate<Element> withModifiers(Modifier... modifiers) {
-        return with(toEnumSet(modifiers), t -> t.getModifiers());
+        return withModifiers(toEnumSet(modifiers));
+    }
+
+    protected Predicate<Element> withModifiers(Set<Modifier> modifiers) {
+        return with(modifiers, t -> t.getModifiers());
     }
 
     protected Predicate<Element> withoutModifiers(Modifier... modifiers) {
-        return without(toEnumSet(modifiers), t -> t.getModifiers());
+        return withoutModifiers(toEnumSet(modifiers));
+    }
+
+    protected Predicate<Element> withoutModifiers(Set<Modifier> modifiers) {
+        return without(modifiers, t -> t.getModifiers());
     }
 
     protected <E> Predicate<Element> with(Set<E> set,
