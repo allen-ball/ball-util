@@ -25,6 +25,7 @@ import com.sun.source.util.TaskEvent;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -48,6 +49,7 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
+import static java.util.stream.Collectors.toCollection;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 import static javax.tools.Diagnostic.Kind.ERROR;
@@ -299,7 +301,7 @@ public abstract class AnnotatedProcessor extends AbstractProcessor {
                 getAnnotationMirror(annotation, TargetMustHaveModifiers.class);
 
             if (meta != null) {
-                Set<Modifier> modifiers =
+                EnumSet<Modifier> modifiers =
                     Stream.of(getAnnotationValue(meta, "value"))
                     .filter(Objects::nonNull)
                     .map(t -> (List<?>) t.getValue())
@@ -307,9 +309,9 @@ public abstract class AnnotatedProcessor extends AbstractProcessor {
                     .map(t -> ((AnnotationValue) t).getValue())
                     .map(Objects::toString)
                     .map(Modifier::valueOf)
-                    .collect(toSet());
+                    .collect(toCollection(() -> EnumSet.noneOf(Modifier.class)));
 
-                if (! with(modifiers, t -> t.getModifiers()).test(element)) {
+                if (! withModifiers(modifiers).test(element)) {
                     print(ERROR, element,
                           "%s must be %s", element.getKind(), modifiers);
                 }
@@ -328,7 +330,7 @@ public abstract class AnnotatedProcessor extends AbstractProcessor {
                                     TargetMustNotHaveModifiers.class);
 
             if (meta != null) {
-                Set<Modifier> modifiers =
+                EnumSet<Modifier> modifiers =
                     Stream.of(getAnnotationValue(meta, "value"))
                     .filter(Objects::nonNull)
                     .map(t -> (List<?>) t.getValue())
@@ -336,9 +338,9 @@ public abstract class AnnotatedProcessor extends AbstractProcessor {
                     .map(t -> ((AnnotationValue) t).getValue())
                     .map(Objects::toString)
                     .map(Modifier::valueOf)
-                    .collect(toSet());
+                    .collect(toCollection(() -> EnumSet.noneOf(Modifier.class)));
 
-                if (! without(modifiers, t -> t.getModifiers()).test(element)) {
+                if (! withoutModifiers(modifiers).test(element)) {
                     print(ERROR, element,
                           "%s must not be %s", element.getKind(), modifiers);
                 }
