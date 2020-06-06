@@ -607,12 +607,12 @@ public abstract class AbstractProcessor
     /*
      * Element Predicate Calculus
      */
-    private <E extends Enum<E>> Predicate<Element> is(E e, Function<? super Element,E> extractor) {
-        return t -> e.equals(extractor.apply(t));
+    protected <E extends Enum<E>> EnumSet<E> toEnumSet(E[] array) {
+        return EnumSet.copyOf(Arrays.asList(array));
     }
 
-    private <E extends Enum<E>> EnumSet<E> toEnumSet(E[] array) {
-        return EnumSet.copyOf(Arrays.asList(array));
+    private <E extends Enum<E>> Predicate<Element> is(E e, Function<? super Element,E> extractor) {
+        return t -> e.equals(extractor.apply(t));
     }
 
     protected Predicate<Element> hasSameSignatureAs(List<TypeMirror> parameters) {
