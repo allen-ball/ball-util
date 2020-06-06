@@ -35,7 +35,6 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
-import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
@@ -62,22 +61,20 @@ public abstract class AnnotatedNoAnnotationProcessor extends AbstractProcessor {
     protected final List<Predicate<Element>> criteria = new ArrayList<>();
     protected final List<Consumer<Element>> checks = new ArrayList<>();
 
-    @Override
-    public Set<String> getSupportedAnnotationTypes() {
-        return Collections.singleton("*");
-    }
-
     /**
      * See {@link ForElementKinds}.
      *
-     * @return  The array of {@link ElementKind}s specified by the
+     * @return  The {@link EnumSet} of {@link ElementKind}s specified by the
      *          annotation ({@code null} if no annotation present).
      */
-    protected ElementKind[] getForElementKinds() {
-        ElementKind[] value = null;
+    protected EnumSet<ElementKind> getForElementKinds() {
+        EnumSet<ElementKind> value = null;
 
         if (getClass().isAnnotationPresent(ForElementKinds.class)) {
-            value = getClass().getAnnotation(ForElementKinds.class).value();
+            ElementKind[] array =
+                getClass().getAnnotation(ForElementKinds.class).value();
+
+            value = toEnumSet(array);
         }
 
         return value;
@@ -86,14 +83,17 @@ public abstract class AnnotatedNoAnnotationProcessor extends AbstractProcessor {
     /**
      * See {@link WithModifiers}.
      *
-     * @return  The array of {@link Modifier}s specified by the
+     * @return  The {@link EnumSet} of {@link Modifier}s specified by the
      *          annotation ({@code null} if no annotation present).
      */
-    protected Modifier[] getWithModifiers() {
-        Modifier[] value = null;
+    protected EnumSet<Modifier> getWithModifiers() {
+        EnumSet<Modifier> value = null;
 
         if (getClass().isAnnotationPresent(WithModifiers.class)) {
-            value = getClass().getAnnotation(WithModifiers.class).value();
+            Modifier[] array =
+                getClass().getAnnotation(WithModifiers.class).value();
+
+            value = toEnumSet(array);
         }
 
         return value;
@@ -102,14 +102,17 @@ public abstract class AnnotatedNoAnnotationProcessor extends AbstractProcessor {
     /**
      * See {@link WithoutModifiers}.
      *
-     * @return  The array of {@link Modifier}s specified by the
+     * @return  The {@link EnumSet} of {@link Modifier}s specified by the
      *          annotation ({@code null} if no annotation present).
      */
-    protected Modifier[] getWithoutModifiers() {
-        Modifier[] value = null;
+    protected EnumSet<Modifier> getWithoutModifiers() {
+        EnumSet<Modifier> value = null;
 
         if (getClass().isAnnotationPresent(WithoutModifiers.class)) {
-            value = getClass().getAnnotation(WithoutModifiers.class).value();
+            Modifier[] array =
+                getClass().getAnnotation(WithoutModifiers.class).value();
+
+            value = toEnumSet(array);
         }
 
         return value;
@@ -148,6 +151,11 @@ public abstract class AnnotatedNoAnnotationProcessor extends AbstractProcessor {
     }
 
     @Override
+    public Set<String> getSupportedAnnotationTypes() {
+        return Collections.singleton("*");
+    }
+
+    @Override
     public void init(ProcessingEnvironment processingEnv) {
         super.init(processingEnv);
 
@@ -156,10 +164,8 @@ public abstract class AnnotatedNoAnnotationProcessor extends AbstractProcessor {
 
             criteria.add(t -> kinds.contains(t.getKind()));
 
-            ElementKind[] array = getForElementKinds();
-
-            if (array != null) {
-                kinds.retainAll(Arrays.asList(array));
+            if (getClass().isAnnotationPresent(ForElementKinds.class)) {
+                kinds.retainAll(getForElementKinds());
             }
 
             if (getClass().isAnnotationPresent(WithModifiers.class)) {
@@ -176,17 +182,13 @@ public abstract class AnnotatedNoAnnotationProcessor extends AbstractProcessor {
             }
 
             if (getClass().isAnnotationPresent(MustImplement.class)) {
-                MustImplement annotation =
-                    getClass().getAnnotation(MustImplement.class);
-                Class<?>[] types = getMustImplement();
-
-                criteria.add(new MustImplementCriterion(annotation, types));
+                criteria.add(new MustImplementCriterion());
             }
         } catch (Exception exception) {
             criteria.clear();
             criteria.add(t -> false);
 
-            print(WARNING, "%s disabled", this);
+            print(WARNING, "%s disabled", getClass().getName());
             /* print(WARNING, exception); */
         }
     }
@@ -219,10 +221,9 @@ public abstract class AnnotatedNoAnnotationProcessor extends AbstractProcessor {
     protected void process(RoundEnvironment roundEnv, Element element) {
     }
 
-    @AllArgsConstructor @ToString
+    @NoArgsConstructor @ToString
     private class MustImplementCriterion extends Criterion<Element> {
-        private final Annotation annotation;
-        private final Class<?>[] types;
+        private final Class<?>[] types = getMustImplement();
 
         @Override
         public boolean test(Element element) {
@@ -235,7 +236,7 @@ public abstract class AnnotatedNoAnnotationProcessor extends AbstractProcessor {
 
                         print(ERROR, element,
                               "@%s: @%s does not implement %s",
-                              annotation.annotationType().getSimpleName(),
+                              MustImplement.class.getSimpleName(),
                               element.getKind(), type.getName());
                     }
                 }
