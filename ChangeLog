@@ -1,3 +1,9 @@
+2020-06-07  Allen D. Ball  <ball@hcf.dev>
+
+	* src/main/java/ball/util/ant/taskdefs/ProcessClassFilesTask.java:
+	Throw BuildException if any of the target class files cannot be
+	loaded as its corresponding Class.
+
 2020-06-06  Allen D. Ball  <ball@hcf.dev>
 
 	* src/main/java/ball/annotation/processing/AnnotatedNoAnnotationProcessor.java:

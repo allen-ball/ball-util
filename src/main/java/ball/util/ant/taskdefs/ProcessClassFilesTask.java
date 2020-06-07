@@ -136,8 +136,6 @@ public class ProcessClassFilesTask extends Task
             fm.setLocation(CLASS_PATH, classPaths);
             fm.setLocation(CLASS_OUTPUT, asList(getDestdir()));
 
-            HashSet<Class<?>> set = new HashSet<>();
-            List<Class<? extends ClassFileProcessor>> list = new ArrayList<>();
             ClassLoader loader = fm.getClassLoader(CLASS_PATH);
 
             if (loader instanceof URLClassLoader) {
@@ -147,20 +145,32 @@ public class ProcessClassFilesTask extends Task
                                  getClass().getClassLoader());
             }
 
+            HashSet<Class<?>> types = new HashSet<>();
+            List<Class<? extends ClassFileProcessor>> processors = new ArrayList<>();
+            HashSet<String> names = new HashSet<>();
+
             for (String name : ClassFileProcessor.list(fm)) {
-                Class<?> type = Class.forName(name, true, loader);
+                try {
+                    Class<?> type = Class.forName(name, true, loader);
 
-                set.add(type);
+                    types.add(type);
 
-                if (! isAbstract(type.getModifiers())) {
-                    if (ClassFileProcessor.class.isAssignableFrom(type)) {
-                        list.add(type.asSubclass(ClassFileProcessor.class));
+                    if (! isAbstract(type.getModifiers())) {
+                        if (ClassFileProcessor.class.isAssignableFrom(type)) {
+                            processors.add(type.asSubclass(ClassFileProcessor.class));
+                        }
                     }
+                } catch (Throwable throwable) {
+                    names.add(name);
                 }
             }
 
-            for (Class<? extends ClassFileProcessor> processor : list) {
-                processor.newInstance().process(set, fm);
+            if (names.isEmpty()) {
+                for (Class<? extends ClassFileProcessor> processor : processors) {
+                    processor.newInstance().process(types, fm);
+                }
+            } else {
+                throw new BuildException("Failed to load " + names);
             }
         } catch (BuildException exception) {
             throw exception;
