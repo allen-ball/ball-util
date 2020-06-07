@@ -66,21 +66,31 @@ public class Walker<T> extends AbstractSpliterator<T> {
     }
 
     @Override
+    public Spliterator<T> trySplit() {
+        if (iterator == null) {
+            iterator = stream.iterator();
+        }
+
+        return iterator.hasNext() ? iterator.next().get() : null;
+    }
+
+    @Override
     public boolean tryAdvance(Consumer<? super T> consumer) {
         boolean accepted = false;
 
-        if (spliterator != null) {
-            accepted = spliterator.tryAdvance(consumer);
-        }
-
-        if (! accepted) {
-            if (iterator == null) {
-                iterator = stream.iterator();
+        while (! accepted) {
+            if (spliterator == null) {
+                spliterator = trySplit();
             }
 
-            if (iterator.hasNext()) {
-                spliterator = iterator.next().get();
-                accepted = tryAdvance(consumer);
+            if (spliterator != null) {
+                accepted = spliterator.tryAdvance(consumer);
+
+                if (! accepted) {
+                    spliterator = null;
+                }
+            } else {
+                break;
             }
         }
 

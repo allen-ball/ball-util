@@ -58,7 +58,7 @@ public abstract class DispatchSpliterator<T> extends AbstractSpliterator<T> {
 
     /**
      * Method to provide the {@link Spliterator} {@link Supplier}s.  This
-     * method is not called until the first call of
+     * method is called sometime after the first call to
      * {@link #tryAdvance(Consumer)}.
      *
      * @return  The {@link Iterator} of {@link Spliterator}
@@ -67,17 +67,31 @@ public abstract class DispatchSpliterator<T> extends AbstractSpliterator<T> {
     protected abstract Spliterator<Supplier<Spliterator<T>>> spliterators();
 
     @Override
-    public boolean tryAdvance(Consumer<? super T> consumer) {
-        boolean accepted = spliterator.tryAdvance(consumer);
+    public Spliterator<T> trySplit() {
+        if (spliterators == null) {
+            spliterators = Spliterators.iterator(spliterators());
+        }
 
-        if (! accepted) {
-            if (spliterators == null) {
-                spliterators = Spliterators.iterator(spliterators());
+        return spliterators.hasNext() ? spliterators.next().get() : null;
+    }
+
+    @Override
+    public boolean tryAdvance(Consumer<? super T> consumer) {
+        boolean accepted = false;
+
+        while (! accepted) {
+            if (spliterator == null) {
+                spliterator = trySplit();
             }
 
-            if (spliterators.hasNext()) {
-                spliterator = spliterators.next().get();
-                accepted = tryAdvance(consumer);
+            if (spliterator != null) {
+                accepted = spliterator.tryAdvance(consumer);
+
+                if (! accepted) {
+                    spliterator = null;
+                }
+            } else {
+                break;
             }
         }
 
