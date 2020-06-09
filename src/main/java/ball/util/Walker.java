@@ -22,7 +22,6 @@ package ball.util;
  */
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.Spliterator;
@@ -45,8 +44,8 @@ import lombok.ToString;
  */
 @ToString
 public class Walker<T> extends AbstractSpliterator<T> {
-    private final Stream<Supplier<Walker<T>>> stream;
-    private Iterator<Supplier<Walker<T>>> iterator = null;
+    private final Stream<Supplier<Spliterator<T>>> stream;
+    private Iterator<Supplier<Spliterator<T>>> iterator = null;
     private Spliterator<? extends T> spliterator = null;
 
     private Walker(Collection<? extends T> nodes,
@@ -55,14 +54,21 @@ public class Walker<T> extends AbstractSpliterator<T> {
 
         stream =
             nodes.stream()
+            .map(t -> (() -> new Walker<T>(t, childrenOf)));
+    }
+
+    private Walker(T node,
+                   Function<? super T,Collection<? extends T>> childrenOf) {
+        super(Long.MAX_VALUE, IMMUTABLE | NONNULL);
+
+        stream =
+            Stream.of(node)
             .filter(Objects::nonNull)
             .map(childrenOf)
             .filter(Objects::nonNull)
+            .flatMap(Collection::stream)
             .map(t -> (() -> new Walker<T>(t, childrenOf)));
-        spliterator =
-            nodes.stream()
-            .filter(Objects::nonNull)
-            .spliterator();
+        spliterator = Stream.of(node).spliterator();
     }
 
     @Override
@@ -111,7 +117,7 @@ public class Walker<T> extends AbstractSpliterator<T> {
      */
     public static <T> Stream<T> walk(T root,
                                      Function<? super T,Collection<? extends T>> childrenOf) {
-        return walk(Collections.singleton(root), childrenOf);
+        return StreamSupport.stream(new Walker<>(root, childrenOf), false);
     }
 
     /**
@@ -128,8 +134,6 @@ public class Walker<T> extends AbstractSpliterator<T> {
      */
     public static <T> Stream<T> walk(Collection<? extends T> roots,
                                      Function<? super T,Collection<? extends T>> childrenOf) {
-        Walker<T> walker = new Walker<>(roots, childrenOf);
-
-        return StreamSupport.stream(walker, false);
+        return StreamSupport.stream(new Walker<>(roots, childrenOf), false);
     }
 }

@@ -38,7 +38,7 @@ import java.util.stream.LongStream;
  */
 public abstract class DispatchSpliterator<T> extends AbstractSpliterator<T> {
     private Iterator<Supplier<Spliterator<T>>> spliterators = null;
-    private Spliterator<T> spliterator = Spliterators.emptySpliterator();
+    private Spliterator<T> spliterator = null;
 
     /**
      * See {@link AbstractSpliterator} constructor.

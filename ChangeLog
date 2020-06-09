@@ -1,9 +1,12 @@
-2020-06-07  Allen D. Ball  <ball@hcf.dev>
+2020-06-09  Allen D. Ball  <ball@hcf.dev>
 
 	* src/main/java/ball/util/DispatchSpliterator.java,
 	src/main/java/ball/util/Walker.java:
 	Implement trySplit() and make tryAdvance(Consumer) implementation
-	non-recursive.
+	non-recursive.  Support Stream.sorted() by implementing
+	depth-first search.
+
+2020-06-07  Allen D. Ball  <ball@hcf.dev>
 
 	* src/main/java/ball/util/ant/taskdefs/ProcessClassFilesTask.java:
 	Throw BuildException if any of the target class files cannot be
