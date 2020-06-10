@@ -167,7 +167,9 @@ public class ProcessClassFilesTask extends Task
 
             if (names.isEmpty()) {
                 for (Class<? extends ClassFileProcessor> processor : processors) {
-                    processor.newInstance().process(types, fm);
+                    processor
+                        .getDeclaredConstructor().newInstance()
+                        .process(types, fm);
                 }
             } else {
                 throw new BuildException("Failed to load " + names);

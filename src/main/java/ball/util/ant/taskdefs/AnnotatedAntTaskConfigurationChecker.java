@@ -103,7 +103,8 @@ public class AnnotatedAntTaskConfigurationChecker
                 throw new IllegalStateException(String.valueOf(element));
             }
 
-            constraint.value().newInstance()
+            constraint.value()
+                .getDeclaredConstructor().newInstance()
                 .check(task, this, name, value);
         } catch (Exception exception) {
             fail(exception.toString());
