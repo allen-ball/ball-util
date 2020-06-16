@@ -1,5 +1,8 @@
 2020-06-16  Allen D. Ball  <ball@hcf.dev>
 
+	* src/main/java/ball/util/ant/taskdefs/XPathEvaluateTask.java:
+	Implement "qname" and "tab" Ant Task attributes.
+
 	* src/main/java/ball/xml/XMLConstants.java,
 	src/main/java/ball/xml/XalanConstants.java:
 	Initial writing.
