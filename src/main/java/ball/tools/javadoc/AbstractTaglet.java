@@ -23,6 +23,7 @@ package ball.tools.javadoc;
 import ball.xml.FluentDocument;
 import ball.xml.FluentDocumentBuilderFactory;
 import ball.xml.FluentNode;
+import ball.xml.XalanConstants;
 import com.sun.javadoc.ClassDoc;
 import com.sun.javadoc.ConstructorDoc;
 import com.sun.javadoc.Doc;
@@ -75,12 +76,8 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
  * @version $Revision$
  */
 public abstract class AbstractTaglet implements AnnotatedTaglet,
-                                                JavadocHTMLTemplates {
-    private static final String NO = "no";
-    private static final String YES = "yes";
-
-    private static final String INDENT_AMOUNT =
-        "{http://xml.apache.org/xslt}indent-amount";
+                                                JavadocHTMLTemplates,
+                                                XalanConstants {
 
     /**
      * Implementation method for
@@ -246,7 +243,7 @@ public abstract class AbstractTaglet implements AnnotatedTaglet,
             transformer
                 .setOutputProperty(INDENT, (indent > 0) ? YES : NO);
             transformer
-                .setOutputProperty(INDENT_AMOUNT,
+                .setOutputProperty(XALAN_INDENT_AMOUNT.toString(),
                                    String.valueOf(indent > 0 ? indent : 0));
             transformer
                 .transform(new DOMSource(node),
