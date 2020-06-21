@@ -28,7 +28,7 @@
   <description></description>
   <groupId>ball</groupId>
   <artifactId>ball-util</artifactId>
-  <version>5.0.0</version>
+  <version>5.0.1</version>
   <packaging>jar</packaging>
   <parent>
     <groupId>ball</groupId>
