@@ -25,6 +25,7 @@ import ball.util.ant.taskdefs.AntLib;
 import ball.util.ant.taskdefs.AntTask;
 import ball.xml.FluentDocument;
 import ball.xml.FluentDocumentBuilderFactory;
+import ball.xml.XalanConstants;
 import java.io.OutputStream;
 import java.util.Set;
 import java.util.TreeMap;
@@ -56,14 +57,8 @@ import static javax.xml.transform.OutputKeys.OMIT_XML_DECLARATION;
 @For({ AntLib.class, AntTask.class })
 @NoArgsConstructor @ToString
 public class AntLibProcessor extends AnnotatedProcessor
-                             implements ClassFileProcessor {
+                             implements ClassFileProcessor, XalanConstants {
     private static final String ANTLIB_XML = "antlib.xml";
-
-    private static final String NO = "no";
-    private static final String YES = "yes";
-
-    private static final String INDENT_AMOUNT =
-        "{http://xml.apache.org/xslt}indent-amount";
 
     private static final Transformer TRANSFORMER;
 
@@ -72,7 +67,8 @@ public class AntLibProcessor extends AnnotatedProcessor
             TRANSFORMER = TransformerFactory.newInstance().newTransformer();
             TRANSFORMER.setOutputProperty(OMIT_XML_DECLARATION, NO);
             TRANSFORMER.setOutputProperty(INDENT, YES);
-            TRANSFORMER.setOutputProperty(INDENT_AMOUNT, String.valueOf(2));
+            TRANSFORMER.setOutputProperty(XALAN_INDENT_AMOUNT.toString(),
+                                          String.valueOf(2));
         } catch (Exception exception) {
             throw new ExceptionInInitializerError(exception);
         }

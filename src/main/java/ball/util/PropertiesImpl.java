@@ -113,8 +113,12 @@ public class PropertiesImpl extends Properties {
      * @param   object          The {@link Object} to configure.
      *
      * @return  The argument {@link Object}.
+     *
+     * @throws  Exception       If any problem is encountered.
      */
-    public Object configure(Object object) { return configure(this, object); }
+    public Object configure(Object object) throws Exception {
+        return configure(this, object);
+    }
 
     @Override
     public void load(InputStream in) throws IOException { load(this, in); }
@@ -146,8 +150,11 @@ public class PropertiesImpl extends Properties {
      * @param   object          The {@link Object} to configure.
      *
      * @return  The argument {@link Object}.
+     *
+     * @throws  Exception       If any problem is encountered.
      */
-    public static Object configure(Properties properties, Object object) {
+    public static Object configure(Properties properties,
+                                   Object object) throws Exception {
         for (String key : properties.stringPropertyNames()) {
             Object value = properties.get(key);
             Method method =
@@ -156,11 +163,7 @@ public class PropertiesImpl extends Properties {
 
             if (method != null) {
                 value = convertTo(value, method.getParameterTypes()[0]);
-
-                try {
-                    method.invoke(object, value);
-                } catch (Exception exception) {
-                }
+                method.invoke(object, value);
             }
         }
 
