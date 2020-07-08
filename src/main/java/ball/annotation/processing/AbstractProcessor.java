@@ -45,7 +45,6 @@ import java.util.TreeSet;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.regex.Pattern;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import javax.annotation.processing.Filer;
