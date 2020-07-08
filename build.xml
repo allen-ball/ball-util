@@ -126,12 +126,12 @@
     <members-of classpathref="build.classpath" type="${type}"/>
   </target>
 
-  <target name="resource-path-to"
-          description="--> Invokes &lt;resource-path-to/&gt; task."
+  <target name="pattern-matches"
+          description="--> Invokes &lt;pattern-matches/&gt; task."
           depends="jar-classes">
     <taskdef classpathref="build.classpath" onerror="ignore"
              resource="ball/util/ant/antlib.xml"/>
-    <resource-path-to classpathref="build.classpath" type="${type}"/>
+    <pattern-matches classpathref="build.classpath"/>
   </target>
 
   <target name="permutations-count"
@@ -152,6 +152,14 @@
     <permutations-of classpathref="build.classpath" type="${type}">
       <argument type="${argument.type}">${argument.value}</argument>
     </permutations-of>
+  </target>
+
+  <target name="resource-path-to"
+          description="--> Invokes &lt;resource-path-to/&gt; task."
+          depends="jar-classes">
+    <taskdef classpathref="build.classpath" onerror="ignore"
+             resource="ball/util/ant/antlib.xml"/>
+    <resource-path-to classpathref="build.classpath" type="${type}"/>
   </target>
 
   <target name="subclasses-of"
