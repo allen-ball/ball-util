@@ -20,18 +20,24 @@ package ball.util.ant.taskdefs;
  * limitations under the License.
  * ##########################################################################
  */
+import ball.swing.table.SimpleTableModel;
+import java.util.Collections;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
 import org.apache.tools.ant.util.ClasspathUtils;
 
 import static lombok.AccessLevel.PROTECTED;
+import static org.apache.commons.lang3.StringUtils.EMPTY;
+import static org.apache.commons.lang3.StringUtils.SPACE;
 
 /**
  * {@link.uri http://ant.apache.org/ Ant} {@link Task} to test regular
@@ -80,24 +86,29 @@ public abstract class PatternTask extends Task
             super.execute();
 
             try {
-                Pattern pattern = Pattern.compile(getPattern());
+                SimpleTableModel table =
+                    new SimpleTableModel(new Object[][] { }, 2);
+                Pattern pattern = compile(getPattern());
 
-                log(String.valueOf(pattern));
+                table.row(EMPTY, String.valueOf(pattern));
 
                 String input = getInput();
 
-                log(input);
+                table.row(EMPTY, String.valueOf(input));
 
-                Matcher matcher = pattern.matcher(getInput());
+                Matcher matcher = pattern.matcher(input);
                 boolean matches = matcher.matches();
 
-                log(String.valueOf(matches));
+                table.row(EMPTY, String.valueOf(matches));
 
                 if (matches) {
                     for (int i = 0, n = matcher.groupCount(); i <= n; i += 1) {
-                        log(i + ": " + matcher.group(i));
+                        table.row(String.valueOf(i),
+                                  tab(matcher.start(i)) + matcher.group(i));
                     }
                 }
+
+                log(table);
             } catch (BuildException exception) {
                 throw exception;
             } catch (RuntimeException exception) {
@@ -105,6 +116,23 @@ public abstract class PatternTask extends Task
             } catch (Exception exception) {
                 throw new BuildException(exception);
             }
+        }
+
+        private Pattern compile(String string) throws BuildException {
+            Pattern pattern = null;
+
+            try {
+                pattern = Pattern.compile(string);
+            } catch (PatternSyntaxException exception) {
+                log(exception.getMessage(), Project.MSG_ERR);
+                throw new BuildException();
+            }
+
+            return pattern;
+        }
+
+        private String tab(int count) {
+            return String.join(EMPTY, Collections.nCopies(count, SPACE));
         }
     }
 }
