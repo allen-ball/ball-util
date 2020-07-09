@@ -40,8 +40,8 @@ import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.apache.commons.lang3.StringUtils.SPACE;
 
 /**
- * {@link.uri http://ant.apache.org/ Ant} {@link Task} to test regular
- * ({@link Pattern}) expressions.
+ * Abstract {@link.uri http://ant.apache.org/ Ant} {@link Task} base class
+ * for {@link Pattern}-specific tasks.
  *
  * {@ant.task}
  *
