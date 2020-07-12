@@ -171,15 +171,14 @@ public abstract class MavenTaglet extends AbstractInlineTaglet
                 break;
 
             case JAR:
-                try (JarFile jar = protocol.getJarFile(url)) {
-                    ZipEntry entry = jar.getEntry(PLUGIN_XML);
+                JarFile jar = protocol.getJarFile(url);
+                ZipEntry entry = jar.getEntry(PLUGIN_XML);
 
-                    try (InputStream in = jar.getInputStream(entry)) {
-                        document =
-                            DocumentBuilderFactory.newInstance()
-                            .newDocumentBuilder()
-                            .parse(in);
-                    }
+                try (InputStream in = jar.getInputStream(entry)) {
+                    document =
+                        DocumentBuilderFactory.newInstance()
+                        .newDocumentBuilder()
+                        .parse(in);
                 }
                 break;
             }
