@@ -40,8 +40,8 @@
   <target name="jar-classes"
           description="--> Compile Java source."
           depends="jar-resources">
-    <javac source="${pom.properties.jre.version}"
-           target="${pom.properties.jre.version}"
+    <javac source="${pom.properties.jse.release}"
+           target="${pom.properties.jse.release}"
            destdir="${target.classes.dir}">
       <compilerarg compiler="modern" value="-Xlint:all,-path"/>
       <compilerarg compiler="modern" value="-Xdoclint"/>
