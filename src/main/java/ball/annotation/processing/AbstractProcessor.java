@@ -27,8 +27,6 @@ import ball.tools.javac.AbstractTaskListener;
 import com.sun.source.util.JavacTask;
 import com.sun.source.util.TaskEvent;
 import com.sun.source.util.Trees;
-import com.sun.tools.javac.processing.JavacProcessingEnvironment;
-import com.sun.tools.javac.util.Context;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.net.URLClassLoader;
@@ -131,13 +129,22 @@ public abstract class AbstractProcessor
                 javac.addTaskListener(new WhenAnnotationProcessingFinished());
             }
 
-            if (processingEnv instanceof JavacProcessingEnvironment) {
-                Context context =
-                    ((JavacProcessingEnvironment) processingEnv).getContext();
+            try {
+                /*
+                 * com.sun.tools.javac.processing.JavacProcessingEnvironment
+                 * .getContext() -> com.sun.tools.javac.util.Context
+                 */
+                Object context =
+                    processingEnv.getClass()
+                    .getMethod("getContext")
+                    .invoke(processingEnv);
 
-                if (context != null) {
-                    fm = context.get(JavaFileManager.class);
-                }
+                fm =
+                    (JavaFileManager)
+                    context.getClass()
+                    .getMethod("get", Class.class)
+                    .invoke(context, JavaFileManager.class);
+            } catch (Exception exception) {
             }
 
             trees = Trees.instance(processingEnv);
