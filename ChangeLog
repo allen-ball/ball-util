@@ -2,7 +2,7 @@
 
 	* Added <pattern-matches/> Ant Task and target.
 
-	* pom.xml: Started development of 5.0.2.
+	* pom.xml: Started development of 6.0-SNAPSHOT.
 
 2020-06-22  Allen D. Ball  <ball@hcf.dev>
 
