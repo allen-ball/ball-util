@@ -40,15 +40,12 @@ import static lombok.AccessLevel.PROTECTED;
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
-public interface SunToolsInternalToolkitTaglet extends Taglet,
-                                                       JavadocHTMLTemplates {
+public interface SunToolsInternalToolkitTaglet extends Taglet {
     void set(Configuration configuration);
 
     @Override
     default Content getTagletOutput(Doc doc,
                                     TagletWriter writer) throws IllegalArgumentException {
-        set(writer.configuration());
-
         throw new IllegalArgumentException(doc.position() + ": "
                                            + "Method not supported in taglet "
                                            + getName() + ".");
