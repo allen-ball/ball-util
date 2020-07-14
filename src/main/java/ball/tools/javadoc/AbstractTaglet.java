@@ -33,6 +33,7 @@ import com.sun.javadoc.MemberDoc;
 import com.sun.javadoc.MethodDoc;
 import com.sun.javadoc.PackageDoc;
 import com.sun.javadoc.ProgramElementDoc;
+import com.sun.javadoc.RootDoc;
 import com.sun.javadoc.Tag;
 import com.sun.tools.doclets.internal.toolkit.Configuration;
 import com.sun.tools.doclets.internal.toolkit.util.DocLink;
@@ -346,6 +347,17 @@ public abstract class AbstractTaglet implements AnnotatedTaglet,
             .findFirst().orElse(holder.findClass(name));
 
         return doc;
+    }
+
+    /**
+     * Method to get the {@link RootDoc}.
+     *
+     * @return  The {@link RootDoc} for {@link.this}
+     *          {@link com.sun.tools.doclets.Taglet} if it is specified;
+     *          {@code null} otherwise.
+     */
+    protected RootDoc getRootDoc() {
+        return (configuration != null) ? configuration.root : null;
     }
 
     /**
