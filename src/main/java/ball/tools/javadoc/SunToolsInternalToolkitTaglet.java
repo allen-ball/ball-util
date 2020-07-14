@@ -22,12 +22,17 @@ package ball.tools.javadoc;
  */
 import com.sun.javadoc.Doc;
 import com.sun.javadoc.Tag;
-import com.sun.tools.doclets.formats.html.markup.RawHtml;
 import com.sun.tools.doclets.internal.toolkit.Configuration;
 import com.sun.tools.doclets.internal.toolkit.Content;
 import com.sun.tools.doclets.internal.toolkit.taglets.Taglet;
 import com.sun.tools.doclets.internal.toolkit.taglets.TagletWriter;
-/* import com.sun.tools.doclets.internal.toolkit.util.Extern; */
+import java.io.IOException;
+import java.io.Writer;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.ToString;
+
+import static lombok.AccessLevel.PROTECTED;
 
 /**
  * Default methods for legacy {@link Taglet} implementations.
@@ -55,9 +60,40 @@ public interface SunToolsInternalToolkitTaglet extends Taglet,
         set(writer.configuration());
 
         Content content = writer.getOutputInstance();
+        String string = ((AbstractTaglet) this).toString(tag);
 
-        content.addContent(new RawHtml(((AbstractTaglet) this).toString(tag)));
+        content.addContent(new Raw(string));
 
         return content;
+    }
+
+    @RequiredArgsConstructor(access = PROTECTED) @ToString
+    public class Raw extends Content {
+        private static final String NL = System.getProperty("line.separator");
+
+        @NonNull private final String string;
+
+        @Override
+        public void addContent(Content content) {
+            throw new RuntimeException("not supported");
+        }
+
+        @Override
+        public void addContent(String stringContent) {
+            throw new RuntimeException("not supported");
+        }
+
+        @Override
+        public boolean write(Writer out, boolean atNL) throws IOException {
+            out.write(string);
+
+            return string.endsWith(NL);
+        }
+
+        @Override
+        public boolean isEmpty() { return string.isEmpty(); }
+
+        @Override
+        public int charCount() { return string.length(); }
     }
 }
