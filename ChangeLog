@@ -1,3 +1,7 @@
+2020-07-14  Allen D. Ball  <ball@hcf.dev>
+
+	* Moved ball.tools.javadoc to ball-javadoc-taglets-jdk8.
+
 2020-07-08  Allen D. Ball  <ball@hcf.dev>
 
 	* Added <pattern-matches/> Ant Task and target.
@@ -106,22 +110,6 @@
 	src/main/java/ball/annotation/processing/CompileTimeCheckProcessor.java:
 	Initial writing.
 
-2020-05-24  Allen D. Ball  <ball@hcf.dev>
-
-	* src/main/java/ball/tools/javadoc/MavenTaglet.java:
-	Implemented {@maven.plugin.help} (PluginHelp).
-
-	* src/main/java/ball/tools/javadoc/AbstractTaglet.java:
-	Made look-ups of ClassDoc in PackageDoc contexts more robust.
-
-	* src/main/java/ball/tools/javadoc/JavadocHTMLTemplates.java:
-	Added a(Tag,ProgramElementDoc,Node) to interface.
-
-2020-05-23  Allen D. Ball  <ball@hcf.dev>
-
-	* src/main/java/ball/tools/javadoc/MavenTaglet.java:
-	(maven.plugin.fields) Document all parameters.
-
 2020-05-18  Allen D. Ball  <ball@hcf.dev>
 
 	* src/main/java/ball/annotation/processing/AnnotatedNoAnnotationProcessor.java:
@@ -190,11 +178,6 @@
 
 	* pom.xml: Released version 4.5.0.
 
-2020-02-05  Allen D. Ball  <ball@hcf.dev>
-
-	* src/main/java/ball/tools/javadoc/MavenTaglet.java:
-	Renamed {@maven.plugin} to {@maven.plugin.fields}.
-
 2020-02-04  Allen D. Ball  <ball@hcf.dev>
 
 	* Generated license-maven-plugin:update-file-header headers.
@@ -209,15 +192,8 @@
 
 2020-01-29  Allen D. Ball  <ball@hcf.dev>
 
-	* src/main/java/ball/tools/javadoc/MavenTaglet.java:
-	Added {@maven.plugin}.
-
 	* src/main/java/ball/xml/HTMLTemplates.java:
 	Added support for <h[1-6]/>, <ol/>, <ul/>, and <li/> elements.
-
-	* src/main/java/ball/tools/javadoc/AbstractTaglet.java:
-	Added getResourcePathOf(Class<?>) and getResourceURLOf(Class<?>)
-	methods.
 
 	* Added <xpath-evaluate/> Ant Task and target.
 
@@ -229,22 +205,12 @@
 	* src/main/java/ball/xml/XMLServices.java:
 	Added asStream(NodeList) method.
 
-2020-01-27  Allen D. Ball  <ball@hcf.dev>
-
-	* src/main/java/ball/tools/javadoc/InjectedFieldsTaglet.java:
-	Do not process Annotations that do not have
-	RetentionPolicy.RUNTIME.
-
-	* src/main/java/ball/tools/javadoc/AbstractTaglet.java:
-	In toString(Tag) method, re-throw Error.
-
 2020-01-21  Allen D. Ball  <ball@hcf.dev>
 
 	* src/main/java/ball/xml/FluentDocument.java,
 	src/main/java/ball/xml/FluentNode.java,
 	src/main/java/ball/xml/HTMLTemplates.java,
-	src/main/java/ball/xml/XMLServices.java,
-	src/main/java/ball/tools/javadoc/JavadocHTMLTemplates.java:
+	src/main/java/ball/xml/XMLServices.java:
 	Removed interfaces with Iterable parameters.
 
 	* src/main/java/ball/util/ant/taskdefs/AntTaskLogMethods.java:
@@ -253,13 +219,6 @@
 	parameters.
 
 	* pom.xml: Remove Maven compilation dependencies.
-
-	* src/main/java/ball/tools/javadoc/AbstractTaglet.java:
-	Added getClassFor(PackageDoc) method.
-
-	* src/main/java/ball/tools/javadoc/MavenTaglet.java:
-	Parse pom.xml as a Document instead of attempting to create a
-	MavenProject.
 
 2020-01-20  Allen D. Ball  <ball@hcf.dev>
 
@@ -273,19 +232,7 @@
 	Released version 4.3.0.
 	Use ball:parent:20200117.0.
 
-	* src/main/java/ball/tools/javadoc/MavenTaglet.java:
-	({@pom.coordinates}) Robustly search for pom.properties.
-
-2020-01-15  Allen D. Ball  <ball@hcf.dev>
-
-	* src/main/java/ball/tools/javadoc/MavenTaglet.java:
-	Read JAR META-INF/maven/{groupId}/{artifactId}/pom.properties if
-	pom.xml is not available.
-
 2020-01-09  Allen D. Ball  <ball@hcf.dev>
-
-	* src/main/java/ball/beans/PropertyDescriptorsTableModel.java:
-	Prefer generic types from read or write methods.
 
 	* src/main/java/ball/tools/javadoc/JavadocHTMLTemplates.java:
 	In toHTML(Tag,Object), use type(Tag,Type) instead of
@@ -311,23 +258,6 @@
 
 	* src/main/java/ball/util/CoordinateMap.java:
 	Implement getType() through reflection.
-
-2019-10-30  Allen D. Ball  <ball@hcf.dev>
-
-	* Replaced AbstractTaglet.a(Tag,Annotation,Node) with
-	JavadocHTMLTemplates.annotation(Tag,Annotation).
-
-2019-10-18  Allen D. Ball  <ball@hcf.dev>
-
-	* src/main/java/ball/tools/javadoc/AbstractTaglet.java,
-	src/main/java/ball/tools/javadoc/JavadocHTMLTemplates.java:
-	Added a(Tag,Annotation,Node) and a(Tag,Annotation,String)
-	methods.
-
-2019-09-30  Allen D. Ball  <ball@hcf.dev>
-
-	* src/main/java/ball/tools/javadoc/InjectedFieldsTaglet.java:
-	Added Plexus annotations.
 
 2019-09-21  Allen D. Ball  <ball@hcf.dev>
 
@@ -390,18 +320,9 @@
 	* src/main/java/ball/util/CoordinateMap.java:
 	Added includes(Coordinate) method.
 
-2019-06-03  Allen D. Ball  <ball@sol.local>
-
-	* src/main/java/ball/tools/javadoc/AntTaskTaglet.java:
-	Search for and parse antlib.xml to find task names.
-
 2019-05-11  Allen D. Ball  <ball@sol.local>
 
 	* pom.xml: Released version 4.0.3.
-
-	* src/main/java/ball/tools/javadoc/InjectedFieldsTaglet.java,
-	src/main/java/ball/tools/javadoc/JavadocHTMLTemplates.java:
-	Render <thead/> and <tbody/> elements as required.
 
 	* src/main/java/ball/xml/HTMLTemplates.java:
 	Added support for <caption/>, <thead/>, <tbody/>, and <tfoot/>
@@ -411,20 +332,9 @@
 
 	* pom.xml: Released version 4.0.2.
 
- 	* src/main/java/ball/tools/javadoc/AbstractTaglet.java,
-	src/main/java/ball/tools/javadoc/JavadocHTMLTemplates.java:
-	Support creating hyperlinks to all ProgramElementDoc subclasses.
-
 2019-05-07  Allen D. Ball  <ball@sol.local>
 
 	* pom.xml: Released version 4.0.1.
-
-	* src/main/java/ball/tools/javadoc/AbstractTaglet.java:
-	Provide a(Tag,Member,Node) method.
-
-	* src/main/java/ball/tools/javadoc/JavadocHTMLTemplates.java:
-	Added declaration(Tag,Member), declaration(Tag,Parameter), and
-	related templates.
 
 2019-04-25  Allen D. Ball  <ball@sol.local>
 
@@ -435,9 +345,6 @@
 2019-04-19  Allen D. Ball  <ball@sol.local>
 
 	* pom.xml: Released version 3.1.1.
-
-	* src/main/java/ball/tools/javadoc/LinkURITaglet.java:
-	Avoid NPE if no <a/> text is specified.
 
 2019-03-27  Allen D. Ball  <ball@sol.local>
 
@@ -505,19 +412,8 @@
 
 2019-02-23  Allen D. Ball  <ball@sol.local>
 
-	* src/main/java/ball/tools/javadoc/AntTaskTaglet.java:
-	Initial writing.
-
-	* src/main/java/ball/tools/javadoc/JavadocHTMLTemplates.java:
-	Added table(Tag,TableModel,Node...) method.
-
 	* src/main/java/ball/beans/PropertyDescriptorsTableModel.java:
 	Initial writing (retired ball.util.BeanInfoUtil).
-
-2019-02-17  Allen D. Ball  <ball@sol.local>
-
-	* src/main/java/ball/tools/javadoc/InjectedFieldsTaglet.java:
-	Initial writing.
 
 2019-02-16  Allen D. Ball  <ball@sol.local>
 
@@ -531,16 +427,6 @@
 	src/main/java/ball/xml/HTMLTemplates.java,
 	src/main/java/ball/xml/XMLServices.java,
 	Released FluentDocument implementation.
-
-2019-02-10  Allen D. Ball  <ball@sol.local>
-
-	* src/main/java/ball/tools/javadoc/MavenBootstrapTaglet.java:
-	Throwable.printStackTrace(System.err) and throw Error if there is
-	a problem in register(Map<String,Taglet>).
-
-	* src/main/java/ball/tools/javadoc/AbstractTaglet.java:
-	Replace protected static DOCUMENT and TRANSFORMER fields with
-	document() and transformer() methods.
 
 2019-01-30  Allen D. Ball  <ball@sol.local>
 
@@ -574,12 +460,6 @@
 	Make aware of Project Lombok @NoArgsConstructor,
 	@RequiredArgsConstructor, and @AllArgsConstructor annotations.
 
-2019-01-07  Allen D. Ball  <ball@sol.local>
-
-	* src/main/java/ball/tools/javadoc/AnnotatedTaglet.java,
-	src/main/java/ball/annotation/processing/AnnotatedTagletProcessor.java:
-	Initial writing.
-
 2019-01-03  Allen D. Ball  <ball@sol.local>
 
 	* src/main/java/ball/activation/DataSourceDefaultMethods.java:
@@ -592,17 +472,8 @@
 
 2019-01-02  Allen D. Ball  <ball@sol.local>
 
-	* src/main/java/ball/tools/javadoc/SunToolsInternalToolkitTaglet.java:
-	Re-factored Taglet implementations to always implement
-	com.sun.tools.doclets.Taglet by extending AbstractTaglet and
-	implement com.sun.tools.doclets.internal.toolkit.taglets.Taglet by
-	implementing SunToolsInternalToolkitTaglet.
-
 	* src/main/java/ball/annotation/processing/AbstractNoAnnotationProcessor.java:
 	Removed support for @ForModifiers.
-
-	* src/main/java/ball/annotation/processing/TagletProcessor.java:
-	Initial writing.
 
 2019-01-01  Allen D. Ball  <ball@sol.local>
 
@@ -672,976 +543,4 @@
 2018-07-31  Allen D. Ball  <ball@sol.local>
 
 	* pom.xml: Released version 1.0.0.
-
-2018-07-03  Allen D. Ball  <ball@sol.local>
-
-	* src/main/java/ball/util/ant/taskdefs/TypeTask.java:
-	Added <resource-path-to/> Ant Task and target.
-
-2018-04-01  Allen D. Ball  <ball@sol.local>
-
-	* src/main/java/ball/util/ant/taskdefs/AnnotatedAntTask.java:
-	Fixed stack overflow bug (tickled by Apache Ant 1.10.3).
-
-2018-03-31  Allen D. Ball  <ball@sol.local>
-
-	* pom.xml:
-	Use ball-artifact-maven-plugin to attach JNI shared library.
-
-2018-03-17  Allen D. Ball  <ball@sol.local>
-
-	* pom.xml: Use new profile names defined in parent.
-
-	* src/main/java/ball/tools/javadoc/IncludeTaglet.java:
-	Support implicit containing class reference and String resources.
-
-2018-03-13  Allen D. Ball  <ball@sol.local>
-
-	* pom.xml: Avoid loading this <taglet/> artifact twice.
-
-2018-03-11  Allen D. Ball  <ball@sol.local>
-
-	* src/main/java/ball/tools/javadoc/MavenTaglet.java:
-	Leverage pom.properties if version can't be determined by parsing
-	project pom.xml.
-
-	* src/main/java/ball/activation/ReaderWriterDataSource.java:
-	Added getPrintStream() method.
-
-	* src/main/java/ball/util/PropertiesImpl.java:
-	Added PropertiesImpl(Properties,String) constructor.
-
-2018-03-10  Allen D. Ball  <ball@sol.local>
-
-	* src/main/java/ball/tools/javadoc/MavenTaglet.java:
-	Renamed POMTaglet to MavenTaglet; renamed {@pom.dependency} to
-	{@pom.coordinates}.
-
-2018-03-04  Allen D. Ball  <ball@sol.local>
-
-	* src/main/java/ball/tools/javadoc/IncludeTaglet.java:
-	Combined {@include.collection} and {@include.map} into {@include}
-	Taglet.
-
-2017-12-24  Allen D. Ball  <ball@sol.local>
-
-	* src/main/java/ball/tools/javadoc/IncludeCollectionTaglet.java:
-	Initial writing.
-
-2017-10-21  Allen D. Ball  <ball@sol>
-
-	* src/main/java/ball/tools/javadoc/AbstractTaglet.java:
-	Added getEnumDocLink(Doc,Enum<?>) method.
-
-2017-09-16  Allen D. Ball  <ball@sol>
-
-	* src/main/java/ball/tools/javadoc/AbstractTaglet.java:
-	Correctly calculate relative HREF paths for inner classes.
-
-2017-09-15  Allen D. Ball  <ball@sol>
-
-	* src/main/java/ball/tools/javadoc/IncludeMapTaglet.java:
-	Render Class values as javadoc links.
-
-2017-09-13  Allen D. Ball  <ball@sol>
-
-	* src/main/java/ball/util/EnumLookupMap.java: Initial writing.
-
-2017-08-03  Allen D. Ball  <ball@sol>
-
-	* src/main/java/ball/tools/javadoc/LinkURITaglet.java:
-	Added ability to specify <a/> attributes (e.g., target=newtab).
-
-2017-07-29  Allen D. Ball  <ball@sol>
-
-	* src/main/java/ball/annotation/processing/AbstractProcessor.java:
-	Added getTargetElementTypesFor() methods.
-
-2017-04-15  Allen D. Ball  <ball@sol.local>
-
-	* src/main/java/ball/tools/javadoc/AbstractTaglet.java:
-	Specify Transformer output index width.
-
-	* src/main/java/ball/tools/javadoc/POMTaglet.java:
-	Renamed {@pom.coordinates} to {@pom.dependency}.
-	Implement getModelFor(Tag) method.
-
-2016-12-19  Allen D. Ball  <ball@sol.local>
-
-	* src/main/java/ball/util/CoordinateMap.java:
-	Added support for getType() and getColumnClass(int) methods.
-
-2016-11-22  Allen D. Ball  <ball@sol.local>
-
-	* src/main/java/ball/util/MapView.java: Initial writing.
-
-2016-11-21  Allen D. Ball  <ball@sol.local>
-
-	* src/main/java/ball/util/Coordinate.java,
-	src/main/java/ball/util/CoordinateMap.java:
-	Initial writing.
-
-2016-11-19  Allen D. Ball  <ball@sol.local>
-
-	* src/main/java/ball/beans/PropertyMethodEnum.java:
-	Support single-character property names.
-
-2016-10-22  Allen D. Ball  <ball@sol.local>
-
-	* src/main/java/ball/util/TimeUnitEnum.java:
-	Added isOlderThan(Number,long) method.
-
-2016-09-10  Allen D. Ball  <ball@sol.local>
-
-	* src/main/java/ball/annotation/processing/AbstractProcessor.java;
-	Added getPropertyName(ExecutableElement) and
-	isGetterMethod(ExecutableElement) methods.
-
-2016-09-05  Allen D. Ball  <ball@sol.local>
-
-	* src/main/java/ball/annotation/processing/AbstractProcessor.java:
-	Removed getAnnotationValue(*) methods.
-
-2016-08-27  Allen D. Ball  <ball@sol.local>
-
-	* src/main/java/ball/util/PropertiesImpl.java:
-	Added configure(Object) and static configure(Properties,Object)
-	methods.
-
-2016-06-04  Allen D. Ball  <ball@sol.local>
-
-	* src/main/java/ball/tools/javadoc/:
-	Support JDK8 javadoc.
-
-2016-04-24  Allen D. Ball  <ball@sol.local>
-
-	* Honor @AntLib annotation to generate antlib.xml descriptors.
-
-2016-03-29  Allen D. Ball  <ball@sol.local>
-
-	* src/main/java/ball/util/MapUtil.java: Initial writing.
-
-2016-03-28  Allen D. Ball  <ball@sol.local>
-
-	* src/main/java/ball/util/ant/types/StringAttributeType.java:
-	Implement Map.Entry<String,String>.
-
-2016-03-07  Allen D. Ball  <ball@sol.local>
-
-	* src/main/java/ball/swing/table/MapsTableModel.java:
-	Initial writing.
-
-2016-02-20  Allen D. Ball  <ball@sol.local>
-
-	* src/main/java/ball/swing/table/SimpleTableModel.java:
-	Changed row(Object...) method to return the SimpleTableModel
-	instance to support chaining.
-
-2016-02-19  Allen D. Ball  <ball@sol.local>
-
-	* src/main/java/ball/util/ant/types/OptionalTextType.java,
-	src/main/java/ball/util/ant/types/StringAttributeType.java,
-	src/main/java/ball/util/ant/types/StringValueType.java,
-	src/main/java/ball/util/ant/types/TypedAttributeType.java:
-	Initial writing.
-
-2015-09-28  Allen D. Ball  <ball@sol.local>
-
-	* src/main/java/ball/tools/javadoc/AbstractTaglet.java:
-	Made transformer member protected.
-
-	* src/main/java/ball/tools/javadoc/POMTaglet.java:
-	Initial writing (interim check-in).
-
-	* src/main/java/ball/util/ant/taskdefs/JNIClassesTask.java:
-	Catch and ignore NoClassDefFoundError.
-
-2015-08-30  Allen D. Ball  <ball@sol.local>
-
-	* Use the JNILib.loadFor(Class<?>) mechanism to load JNI
-	libraries.
-
-	* src/main/java/ball/util/JNILib.java: Initial writing.
-
-2015-08-04  Allen D. Ball  <ball@sol.local>
-
-	* src/main/java/ball/util/ant/taskdefs/InstanceOfTask.java:
-	Allow <argument/> value to be set in element text.
-
-2015-08-02  Allen D. Ball  <ball@sol.local>
-
-	* src/main/java/ball/util/ant/taskdefs/InstanceOfTask.java:
-	Re-factored as a subclass of TypeTask.
-
-	* src/main/java/ball/util/ant/taskdefs/TypeTask.java:
-	Initial writing.
-
-2015-08-01  Allen D. Ball  <ball@sol.local>
-
-	* src/main/java/ball/tools/javadoc/AbstractTaglet.java:
-	Added getClassDocLink(Doc,Object,ClassDoc) method.
-
-	* src/main/java/ball/tools/javadoc/LinkThisTaglet.java:
-	Initial writing.
-
-2015-06-05  Allen D. Ball  <ball@sol.local>
-
-	* Specify <javac/> source and target as 1.6.  Revert java source
-	accordingly.
-
-2014-12-30  Allen D. Ball  <ball@neptune>
-
-	* pom.xml: Include Ant dependency source in javadoc.
-
-2014-10-07  Allen D. Ball  <ball@sol.local>
-
-	* src/main/java/ball/tools/javadoc/AbstractTaglet.java:
-	Modified getClassDoc(ClassDoc,String) to accept nil name parameter.
-
-	* src/main/java/ball/tools/javadoc/IncludeMapTaglet.java:
-	Initial writing.
-
-2014-10-04  Allen D. Ball  <ball@sol.local>
-
-	* src/main/java/ball/io/BOMCharsetMap.java,
-	src/main/java/ball/io/UnicodeReader.java:
-	Initial writing.
-
-2014-09-06  Allen D. Ball  <ball@sol.local>
-
-	* src/main/java/ball/annotation/processing/ManifestProcessor.java:
-	Preserve any Attributes already specified in the MANIFEST.MF.
-
-2014-08-29  Allen D. Ball  <ball@sol.local>
-
-	* src/main/java/ball/annotation/processing/ManifestProcessor.java:
-	Load any previously created MANIFEST.MF at the start of
-	processing.
-
-2014-08-25  Allen D. Ball  <ball@sol.local>
-
-	* src/main/java/ball/annotation/Manifest.java:
-	Replaced @ManifestSection with @Manifest.*.
-
-	* src/main/java/ball/annotation/processing/AbstractProcessor.java:
-	Added getModifierSetFor(Class<?>) and getModifierSetFor(Member)
-	methods.
-
-2014-08-20  Allen D. Ball  <ball@sol.local>
-
-	* src/main/java/ball/annotation/processing/AbstractProcessor.java:
-	Added getTypeMirrorFor(Class<?>) and
-	getTypeElementsFor(Class<?>...) methods.  Convert/Compare Classes
-	to TypeMirrors (and avoid superfluous conversions to
-	TypeElements).
-
-2014-08-17  Allen D. Ball  <ball@sol.local>
-
-	* src/main/java/ball/annotation/processing/AbstractProcessor.java:
-	Added print(Diagnostic.Kind,Element,Throwable) method.
-	Reduced variations of isAssignable() methods and "shortened the
-	distance" to the ultimate
-	Types.isAssignable(TypeMirror,TypeMirror) call.
-
-	* src/main/java/ball/activation/ThrowableDataSource.java:
-	Initial writing.
-
-	* src/main/java/ball/lang/PrimitiveTypeMap.java: Initial writing.
-
-2014-08-16  Allen D. Ball  <ball@sol.local>
-
-	* src/main/java/ball/annotation/processing/AbstractProcessor.java:
-	Added getExecutableElementFor(TypeElement,Method) method.
-	Added asType(Element), asType(Class<?>), and asModifierSet(int)
-	methods.
-
-2014-08-09  Allen D. Ball  <ball@sol.local>
-
-	* Moved TableModel implementations to ball.swing.table and removed
-	text-specific logic.
-
-	* src/main/java/ball/swing/table/AbstractTableModelImpl.java:
-	Initial writing.
-
-	* src/main/java/ball/tools/javadoc/AbstractTaglet.java:
-	Changed getClassDocLink(Doc,Class<?>) to handle array types.
-
-	* src/main/java/ball/tools/javadoc/BeanInfoTaglet.java:
-	Added "isIndexed" column and correctly link array types.
-
-2014-08-08  Allen D. Ball  <ball@sol.local>
-
-	* src/main/java/ball/text/ColumnWidthsTableModelListener.java:
-	Initial writing.
-
-2014-08-03  Allen D. Ball  <ball@sol.local>
-
-	* Added ball.swing.table package.
-
-2014-07-29  Allen D. Ball  <ball@sol.local>
-
-	* Changed all Ant Task implementations to call
-	AnnotatedAntTask.validate() in execute() and applied
-	AntTaskAttributeConstraint annotations.
-
-	* Added AntTaskAttributeConstraint framework.  Added
-	AnnotatedAntTask.validate() callback (with delegate implementation)
-	to evaluate constraints.
-
-	* src/main/java/ball/annotation/processing/AbstractProcessor.java:
-	Changed getPropertyNames(TypeElement) implementation to use
-	BeanPropertyMethodEnum to determine candidate methods match getter
-	or setter method signatures.
-	Added isAssignable() methods for comparing parameter and argument
-	type lists.
-
-	* src/main/java/ball/beans/PropertyMethodEnum.java:
-	Initial writing.
-
-2014-07-28  Allen D. Ball  <ball@sol.local>
-
-	* src/main/java/ball/annotation/processing/
-	AbstractProcessor.java, ConstructorPropertiesProcessor.java:
-	Re-factored getPropertyNames(TypeElement) to base class.
-
-2014-07-27  Allen D. Ball  <ball@sol.local>
-
-	* src/main/java/ball/annotation/processing/NoopProcessor.java:
-	Initial writing.
-
-2014-07-26  Allen D. Ball  <ball@sol.local>
-
-	* Moved @AntTask to ball.util.ant.taskdefs.
-
-	* src/main/java/ball/util/ant/taskdefs/AnnotatedAntTask.java:
-	Initial writing.
-
-2014-07-24  Allen D. Ball  <ball@sol.local>
-
-	* src/main/java/ball/swing/ClosedFutureJFrame.java:
-	Initial writing.
-
-2014-07-21  Allen D. Ball  <ball@sol.local>
-
-	* src/main/java/ball/annotation/processing/AbstractProcessor.java:
-	Added getTypeElementsFor(Class<?>...) method.
-
-2014-07-05  Allen D. Ball  <ball@sol.local>
-
-	* pom.xml: Specify JDK dependency,
-
-2014-06-29  Allen D. Ball  <ball@sol.local>
-
-	* Renamed iprotium.util to ball.util.
-
-2014-04-19  Allen D. Ball  <ball@sol.local>
-
-	* src/main/java/iprotium/tools/javadoc/BeanInfoTaglet.java:
-	Properly handle inner classes.
-
-	* src/main/java/iprotium/tools/javadoc/IncludeTaglet.java:
-	Initial writing.
-
-2013-12-29  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* Moved JAXBDataSource to iprotium.activation.  Removed unused
-	packages.
-
-2013-12-28  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/annotation/processing/AbstractAnnotationProcessor.java
-	(and subclasses):
-	Deprecated AbstractAnnotationProcessor(Class<? extends Annotation>)
-	constructor and prefer Annotation classes be specified with @For.
-	Changed abstract callback method to
-	process(RoundEnvironment,TypeElement,Element) to specify the
-	Annotation TypeElement.
-
-	* src/main/java/iprotium/annotation/processing/For.java,
-	src/main/java/iprotium/annotation/processing/ForProcessor.java:
-	Initial writing.
-
-	* Re-implemented JAXBIndexesForTask as JAXBIndexProcessor.
-
-	* src/main/java/iprotium/annotation/processing/AbstractProcessor.java:
-	Provide AbstractProcessor.CHARSET and
-	AbstractProcessor.PrintWriterImpl.
-	Added getPackageElementFor(TypeElement) method.
-	Added getAnnotationMirror(Element,TypeElement) and
-	getAnnotationValue(Element,TypeElement,String) methods.
-
-2013-12-25  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/tools/javadoc/AbstractTaglet.java:
-	Added output(TagletWriter,Iterable<?>),
-	getContainingClassDoc(Doc), getClassDoc(Doc,String),
-	getClassDoc(ClassDoc,String), and getQualifiedName(Doc,String)
-	methods.
-	Added setConfiguration(Configuration) and
-	getClassDocLink(Doc,Class<?>) methods.
-
-	* src/main/java/iprotium/tools/javadoc/BeanInfoTaglet.java:
-	Initial writing.
-
-2013-12-23  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/tools/javadoc/MavenBootstrapTaglet.java:
-	Initial writing.
-
-2013-12-22  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/annotation/processing/AbstractProcessor.java:
-	Replaced error(Element,CharSequence) and
-	warning(Element,CharSequence) methods with
-	print(Diagnostic.Kind,Element,CharSequence) method.
-
-2013-12-09  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* Implement com.sun.tools.doclets.internal.toolkit.taglets.Taglet
-	instead of the legacy com.sun.tools.doclets.Taglet.
-
-2013-12-08  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/tools/javadoc/AbstractTaglet.java:
-	Added static
-	register(Class<? extends AbstractTaglet>,Map<String,Taglet>)
-	method.
-
-2013-12-07  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/tools/javadoc/AbstractTaglet.java (and subclasses):
-	Changed getName() implementation to require @TagletName annotation.
-
-	* src/main/java/iprotium/tools/javadoc/TagletName.java,
-	src/main/java/iprotium/annotation/processing/TagletNameProcessor.java:
-	Initial writing.
-
-	* src/main/java/iprotium/tools/javadoc/LinkURITaglet.java:
-	Initial writing.
-
-2013-11-29  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/util/ant/taskdefs/JNDITask.java:
-	Combined JNDIListTask and JNDILookupTask into JNDITask.
-
-	* Moved JNDI implementation example to example.naming.
-
-2013-11-27  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* Mark bootstrap processors with BootstrapProcessorTask.Processor
-	interface.
-
-	* Annotated packages with @ManifestSection and use
-	ManifestSectionProcessor to generate JAR MANIFEST.MF.
-
-	* src/main/java/iprotium/util/ant/taskdefs/BootstrapProcessorTask.java:
-	Added ManifestSectionProcessor to bootstrap.
-
-	* src/main/java/iprotium/annotation/ManifestSection.java,
-	src/main/java/iprotium/annotation/processing/ManifestSectionProcessor.java:
-	Initial writing.
-
-2013-11-20  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/util/PropertiesImpl.java:
-	Made CHARSET member protected and added
-	PropertiesImpl(Properties,File) constructor.
-
-2013-11-09  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* Integrated iprotium.xml.
-
-	* pom.xml:
-	Added explicit dependency to JAXB API (found in modern JREs).
-
-2013-10-01  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* Added @AntTask annotation and processor to generate
-	"defaults.properties" files.
-
-2013-09-30  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* Replaced <provider-file-for/> Ant Task with
-	BootstrapProcessorTask; moved all service provider file generation
-	logic to ServiceProviderForProcessor.
-
-2013-09-29  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* Added @ServiceProviderFor annotation and processor to generate
-	META-INF/services files.
-
-	* src/main/java/iprotium/annotation/processing/AbstractProcessor.java:
-	Added getAnnotationMirror(Element,Class<? extends Annotation>) and
-	getAnnotationValue(Element,Class<? extends Annotation>,String)
-	methods.
-
-2013-09-05  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/annotation/processing/AbstractProcessor.java:
-	Added protected filer member.
-	Added isAssignable(Class<?>,Element) and
-	isAssignable(Element,Class<?>) methods.
-
-2013-08-30  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/tools/javadoc/AbstractTaglet.java:
-	Changed a(String,URI) method to create an Element.
-	Provide toString(Node) method.
-
-2013-08-29  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* pom.xml: Provide Apache Maven Core.
-
-2013-08-10  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/activation/ReaderWriterDataSource.java:
-	Added a constructor to provide content.
-
-2013-08-03  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/text/MapTableModel.java:
-	Added constructors to allow columns to be specified [and
-	practically overriding the getValueAt(Map.Entry<K,V>,int)
-	method].
-
-2013-08-01  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/activation/ByteArrayDataSource.java:
-	Simplified implementation and avoid unnecessary copies between
-	getOutputStream() and getInputStream() invocations.
-
-2013-07-14  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/activation/AbstractDataSource.java:
-	Added APPLICATION_XML member.
-
-	* src/main/java/iprotium/util/ant/taskdefs/InstanceOfTask.java:
-	Only produce XMLEncoder output if the implementation is not a
-	subclass of InstanceOfTask.
-
-2013-07-10  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/activation/ByteArrayDataSource.java:
-	Do not narrow getInputStream() and getOutputStream() return values.
-
-	* src/main/java/iprotium/activation/FilterDataSource.java,
-	src/main/java/iprotium/activation/ReaderWriterDataSource.java:
-	Provide no-argument constructor for JAXB annotated subclasses.
-
-2013-05-27  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/annotation/processing/ObjectToStringProcessor.java:
-	Initial writing.
-
-2013-05-26  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/annotation/processing/AbstractProcessor.java:
-	Analyze interfaces in isAssignable(Element,Element).
-
-2013-04-06  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/util/ant/taskdefs/ProviderFileForTask.java:
-	Added support for nested <service/> elements.
-
-2013-04-03  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/util/ant/taskdefs/LinkTask.java:
-	Track Ant 1.9.0 interface changes.
-
-2013-02-20  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/annotation/processing/AbstractProcessor.java:
-	Added isAssignable(Element,Element) method.
-	Added implementationOf(ExecutableElement,TypeElement) method.
-	Added getExecutableElementFor(Class<?>,String,Class<?>...) and
-	getExecutableElementFor(Method) methods.
-	Renamed getTypeElement(Class<?>) to getTypeElementFor(Class<?>).
-
-	* src/main/java/iprotium/annotation/processing/AbstractNoAnnotationProcessor.java:
-	Added support for ForElementKinds and ForSubclassesOf annotations.
-
-	* src/main/java/iprotium/annotation/processing/ForElementKinds.java,
-	src/main/java/iprotium/annotation/processing/ForElementKindsProcessor.java:,
-	src/main/java/iprotium/annotation/processing/ForSubclassesOf.java,
-	src/main/java/iprotium/annotation/processing/ForSubclassesOfProcessor.java:
-	Initial writing.
-
-2013-02-13  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/annotation/processing/ObjectCloneProcessor.java:
-	Initial writing.
-
-2013-01-05  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* Moved iprotium.lang.java to iprotium.lang.
-
-	* src/main/java/iprotium/annotation/processing/AbstractProcessor.java:
-	Added getTypeElement(Class<?>) and
-	overrides(ExecutableElement,ExecutableElement) methods.
-
-2013-01-02  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/annotation/processing/ConstructorProcessor.java:
-	Initial writing.
-
-2012-12-31  Allen D. Ball  <ball@10-0-1-5.lan>
-
-	* src/main/java/iprotium/annotation/processing/AbstractProcessor.java:
-	Added protected specifiedBy(ExecutableElement) and
-	overrides(ExecutableElement) methods.  Changed error() and
-	warning() methods to accept CharSequence message argument.
-
-	* src/main/java/iprotium/annotation/processing/AbstractAnnotationProcessor.java:
-	Track changes to superclass API.
-
-	* src/main/java/iprotium/annotation/processing/AbstractNoAnnotationProcessor.java:
-	Changed (Set<? extends TypeElement>,RoundEnvironment) to always
-	return false.  Changed process(Iterable<? extends Element>) to
-	return void.
-
-	* src/main/java/iprotium/annotation/processing/NoOverrideProcessor.java:
-	Use super.specifiedBy(ExecutableElement).
-
-2012-12-30  Allen D. Ball  <ball@mecury.local>
-
-	* src/main/java/iprotium/annotation/processing/
-	        AbstractProcessor.java,
-	        AbstractNoAnnotationProcessor.java,
-	        NoOverrideProcessor.java:
-	Initial writing.
-
-2012-12-28  Allen D. Ball  <ball@mecury.local>
-
-	* src/main/java/iprotium/util/Regex.java:
-	Added LOCAL_VARIABLE to @Target.
-
-	* src/main/java/iprotium/annotation/processing/
-		AbstractAnnotationProcessor.java,
-	        ConstructorPropertiesProcessor.java:
-	Initial writing.
-
-	* src/main/java/iprotium/annotation/processing/RegexProcessor.java:
-	Re-factored as subclass of AbstractAnnotationProcessor.
-	Verify constant value is a String.
-
-2012-12-25  Allen D. Ball  <ball@mecury.local>
-
-	* Re-factored Factory as a subclass of TreeMap<Class<?>[],Member>.
-
-2012-12-01  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* Silence JDK 1.7 compilation warnings.
-
-2012-11-23  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* Use link.man and link.rfc javadoc annotations.
-
-	* src/main/java/iprotium/tools/javadoc/LinkManTaglet.java,
-	src/main/java/iprotium/tools/javadoc/LinkRFCTaglet.java:
-	Initial writing.
-
-2011-07-06  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/util/ant/taskdefs/BeanInfoForTask.java:
-	Added "isHidden" column to bean property table.
-
-	* src/main/java/iprotium/util/ant/taskdefs/MembersOfTask.java:
-	Use toGenericString() methods for output.
-
-2011-07-04  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* Added javax.annotation.processing.Processor implementations in
-	iprotium.annotation.processing.
-
-2011-06-12  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* AbstractPropertyTask.java:
-	Changed getPropertyValue() to throw Throwable.  Log property value
-	if property name is not set but do not set property if the value
-	is null.
-
-2011-06-09  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/io/CharSequenceReader.java:
-	Initial writing.
-
-2011-06-03  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/util/ant/taskdefs/InstanceOfTask.java:
-	Print "null" for null values in bean attribute table.
-
-2011-05-27  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/activation/AbstractDataSource.java:
-	Added getInputStream(Class<?>...) and getOutputStream(Class<?>...)
-	methods.
-
-2011-04-24  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* Added <uuid-generate/>, <uuid-generate-random/>, and
-	<uuid-generate-time/> build targets and Ant Tasks.
-
-	* src/main/java/iprotium/util/ant/taskdefs/AbstractPropertyTask.java:
-	Initial writing.
-
-2011-04-19  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/util/Shell.java:
-	Initial (trivial) implementation.
-
-2010-12-07  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/util/PropertiesImpl.java:
-	Initial writing.
-
-	* src/main/java/iprotium/util/ant/taskdefs/LintTask.java:
-	Removed CloneableCheck.
-
-	* src/main/java/iprotium/util/ant/taskdefs/SuperclassesOfTask.java:
-	Include type variables in output.
-
-2010-11-21  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* Added <permutations-of/> and <permutations-count/> build targets
-	and Ant Tasks.
-
-	* src/main/java/iprotium/util/Combinations.java:
-	Re-factored as a subclass of Permutations.
-
-	* src/main/java/iprotium/util/Permutations.java: Initial writing.
-
-2010-11-15  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/util/Factory.java:
-	Add protected constructor which allows an actual factory (e.g.,
-	SocketFactory) to be specified.
-
-2010-11-11  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* Replaced CombinationIterable with Combinations.
-
-	* src/main/java/iprotium/util/Combinations.java: Initial writing.
-
-2010-11-08  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* Added <combinations-of/> and <combinations-count/> build targets
-	and Ant Tasks.
-
-	* src/main/java/iprotium/util/ant/taskdefs/CombinationsTask.java:
-	Initial writing.
-
-	* src/main/java/iprotium/util/ant/taskdefs/InstanceOfTask.java:
-	Made protected "instance" member available to subclasses.
-
-2010-11-07  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/util/Factory.java:
-	Made hasFactoryMemberFor(Class<?>...),
-	getFactoryMember(Class<?>...), and apply(Member,Object[]) members
-	public.
-	Reordered discovery heuristics to perfer first-found static
-	factory methods.  Added "decode" to static factory method names.
-
-	* src/main/java/iprotium/util/ant/taskdefs/InstanceOfTask.java:
-	Track changes to the Factory API.
-
-2010-10-23  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/activation/ByteArrayDataSource.java,
-	src/main/java/iprotium/activation/TempFileDataSource.java:
-	Override AbstractDataSource.length() method.
-
-	* src/main/java/iprotium/activation/FilterDataSource.java:
-	Initial writing.
-
-	* src/main/java/iprotium/activation/ReaderWriterDataSource.java:
-	Re-factored as subclass of FilterDataSource.
-
-	* src/main/java/iprotium/text/TextTable.java:
-	Initial writing (replaces iprotium.text.Table).
-
-2010-10-17  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/activation/AbstractDataSource.java:
-	Added clear() and length() methods.
-	Made setName(String) and setContentType(String) methods public.
-
-2010-09-12  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/activation/TempFileDataSource.java:
-	Initial writing.
-
-2010-09-11  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/activation/AbstractDataSource.java:
-	Added CONTENT_TYPE, TEXT_PLAIN, and TEXT_HTML members.
-
-	* src/main/java/iprotium/text/Table.java:
-	Re-factored as a subclass of ReaderWriterDataSource.
-
-2010-09-08  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/activation/ByteArrayDataSource.java:
-	Changed reset() implementation to call getOutputStream().close().
-
-	* src/main/java/iprotium/util/ant/taskdefs/InstanceOfTask.java:
-	Provide XMLEncoder output.
-
-2010-09-07  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/activation/ByteArrayDataSource.java:
-	Added size() method.
-
-2010-08-22  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/util/ant/taskdefs/LintTask.java:
-	Re-factored Check implementations to
-	iprotium.util.ant.taskdefs.lint.
-
-2010-08-21  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* Added iprotium.lang and iprotium.lang.java packages.
-
-2010-07-27  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/activation/AbstractDataSource.java:
-	Added APPLICATION_OCTET_STREAM member.
-
-	* src/main/java/iprotium/activation/ByteArrayDataSource.java:
-	Return new ByteArrayOutputStream with each invocation of
-	getOutputStream().
-
-2009-11-29  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* Added <superclasses-of/> build target and Ant Task.
-
-2009-11-26  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/text/ArrayListTableModel.java:
-	Changed constructors to Iterable parameters (instead of
-	Collection).
-
-2009-10-24  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* pom.xml: Changed <groupId/> to "iprotium".
-
-	* src/main/java/iprotium/util/ant/taskdefs/BeanInfoForTask.java:
-	Changed mode to indicate if the property is an indexed property.
-
-2009-09-20  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/util/ant/taskdefs/JNIClassesTask.java:
-	Added "separator" attribute.
-
-2009-09-07  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/util/Factory.java:
-	Added hasFactoryMemberFor(Class<?>...) method.
-
-2009-09-04  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* Improved javadoc comments.
-
-2009-06-20  Allen D. Ball  <ball@10-0-1-4.lan>
-
-	* src/main/java/iprotium/util/ant/taskdefs/ListResourcesTask.java:
-	Use a Table to format output.
-
-2009-05-26  Allen D. Ball  <ball@10-0-1-4.lan>
-
-	* Added <lint/> target and Ant Task.
-
-2009-03-30  Allen D. Ball  <ball@10-0-1-4.lan>
-
-	* src/main/java/iprotium/activation/ReaderWriterDataSource.java:
-	Implement Iterable<String>.
-
-	* src/main/java/iprotium/text/ArrayListTableModel.java:
-	Reduce number of constructors by allowing Collection method to be
-	null.
-
-2009-03-29  Allen D. Ball  <ball@10-0-1-4.lan>
-
-	* src/main/java/iprotium/activation/ReaderWriterDataSource.java:
-	Initial writing (renamed from PrintWriterDataSource).
-	Added getBufferedReader() and writeTo(PrintWriter) methods.
-
-	* src/main/java/iprotium/text/Table.java (and subclasses),
-	src/main/java/iprotium/text/TableModel.java (and subclasses):
-	Initial writing.
-
-2009-03-28  Allen D. Ball  <ball@10-0-1-4.lan>
-
-	* src/main/java/iprotium/activation/AbstractDataSource.java:
-	Added writeTo(OutputStream) method.
-
-2009-03-27  Allen D. Ball  <ball@10-0-1-4.lan>
-
-	* Added iprotium.activation package.
-
-2009-03-21  Allen D. Ball  <ball@10-0-1-4.lan>
-
-	* Added iprotium.text package.
-
-2009-01-27  Allen D. Ball  <ball@10-0-1-4.lan>
-
-	* Updated copyright notices.
-
-2008-12-11  Allen D. Ball  <ball@10-0-1-4.lan>
-
-	* src/main/java/iprotium/util/Factory.java:
-	Added "getDefaultInstance" factory method pattern.
-
-2008-12-05  Allen D. Ball  <ball@10-0-1-4.lan>
-
-	* src/main/java/iprotium/util/Factory.java:
-	Added "create" factory method pattern.
-
-2008-11-28  Allen D. Ball  <ball@10-0-1-4.lan>
-
-	* src/main/java/iprotium/util/ant/taskdefs/InstanceOfTask.java:
-	Display instance bean property names and values.
-
-2008-11-26  Allen D. Ball  <ball@10-0-1-4.lan>
-
-	* Added <instance-of/> build target and Ant Task.
-
-	* src/main/java/iprotium/util/Factory.java: Initial writing.
-
-2008-11-19  Allen D. Ball  <ball@10-0-1-4.lan>
-
-	* Added <bean-info-for/> build target and Ant Task.
-
-	* src/main/java/iprotium/util/ant/taskdefs/JNIClassesTask.java:
-	Do not call log() if the `property' attribute is set.
-
-2008-11-17  Allen D. Ball  <ball@10-0-1-245.lan>
-
-	* src/main/java/iprotium/util/ant/taskdefs/JNIClassesTask.java:
-	Do not set the specified property if none of the classes have
-	native members.
-
-2008-11-05  Allen D. Ball  <ball@photon.local>
-
-	* src/main/java/iprotium/util/TimeUnitEnum.java: Initial writing.
-
-2008-10-28  Allen D. Ball  <ball@10-0-1-4.lan>
-
-	* Added <is-assignable-from/> target and Ant Task.
-
-2008-10-26  Allen D. Ball  <ball@10-0-1-4.lan>
-
-	* Added <jni-classes/>, <members-of/>, and <superclasses-of>
-	targets and Ant Tasks.
-
-	* build.xml, pom.xml: Initial writing.
-
-2013-07-14  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* src/main/java/iprotium/xml/bind/JAXBDataSource.java:
-	Initial writing.
-
-2013-07-13  Allen D. Ball  <ball@10-0-1-2.lan>
-
-	* Added <jaxb-indexes-for/> build target and Ant Task.
 

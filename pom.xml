@@ -59,39 +59,6 @@
         </dependencies>
       </dependencyManagement>
     </profile>
-    <profile>
-      <id>jdk9-and-after</id>
-      <activation><jdk>[9,)</jdk></activation>
-      <build>
-        <pluginManagement>
-          <plugins>
-            <plugin>
-              <groupId>org.apache.maven.plugins</groupId>
-              <artifactId>maven-compiler-plugin</artifactId>
-              <configuration combine.self="override">
-                <jdkToolchain>
-                  <version>1.8</version>
-                </jdkToolchain>
-                <source>${jse.release}</source>
-                <target>${jse.release}</target>
-                <compilerArgs>
-                  <arg>-Xlint:all,-path</arg>
-                  <arg>-Xdoclint</arg>
-                  <arg>-Xdoclint:-missing</arg>
-                  <arg>-Xdoclint:-reference</arg>
-                  <arg>-Xpkginfo:always</arg>
-                </compilerArgs>
-                <debug>true</debug>
-                <debuglevel>source,lines,vars</debuglevel>
-                <parameters>true</parameters>
-                <showDeprecation>true</showDeprecation>
-                <showWarnings>true</showWarnings>
-              </configuration>
-            </plugin>
-          </plugins>
-        </pluginManagement>
-      </build>
-    </profile>
   </profiles>
   <properties>
     <jse.release>8</jse.release>
