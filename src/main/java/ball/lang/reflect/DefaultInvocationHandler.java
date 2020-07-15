@@ -20,8 +20,6 @@ package ball.lang.reflect;
  * limitations under the License.
  * ##########################################################################
  */
-import java.lang.invoke.MethodHandles;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
@@ -48,7 +46,7 @@ import static org.apache.commons.lang3.reflect.MethodUtils.invokeMethod;
  * @version $Revision$
  */
 @NoArgsConstructor @ToString
-public class DefaultInvocationHandler implements InvocationHandler {
+public class DefaultInvocationHandler implements DefaultInterfaceMethodInvocationHandler {
     private final HashMap<Class<?>,List<Class<?>>> cache = new HashMap<>();
 
     /**
@@ -113,18 +111,9 @@ public class DefaultInvocationHandler implements InvocationHandler {
         Class<?> declarer = method.getDeclaringClass();
 
         if (method.isDefault()) {
-            Constructor<MethodHandles.Lookup> constructor =
-                MethodHandles.Lookup.class
-                .getDeclaredConstructor(Class.class);
-
-            constructor.setAccessible(true);
-
             result =
-                constructor.newInstance(declarer)
-                .in(declarer)
-                .unreflectSpecial(method, declarer)
-                .bindTo(proxy)
-                .invokeWithArguments(argv);
+                DefaultInterfaceMethodInvocationHandler.super
+                .invoke(proxy, method, argv);
         } else if (declarer.equals(Object.class)) {
             result = method.invoke(this, argv);
         } else {
