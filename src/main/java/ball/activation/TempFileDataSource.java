@@ -104,17 +104,10 @@ public class TempFileDataSource extends AbstractDataSource {
         }
 
         file = File.createTempFile(prefix, suffix, parent);
+        file.deleteOnExit();
+
         out = new FileOutputStream(file);
 
         return out;
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        if (file != null) {
-            file.delete();
-        }
-
-        super.finalize();
     }
 }
