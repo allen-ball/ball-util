@@ -57,6 +57,7 @@ public class DefaultInvocationHandler implements DefaultInterfaceMethodInvocatio
      *
      * @return  The {@link Proxy}.
      */
+    @SuppressWarnings({ "deprecation" })
     public Class<?> getProxyClass(Class<?>... interfaces) throws IllegalArgumentException {
         return Proxy.getProxyClass(getClass().getClassLoader(), interfaces);
     }
