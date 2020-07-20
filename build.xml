@@ -154,6 +154,14 @@
     </permutations-of>
   </target>
 
+  <target name="preferences-export"
+          description="--> Invokes &lt;preferences-export/&gt; task."
+          depends="jar-classes">
+    <taskdef classpathref="build.classpath" onerror="ignore"
+             resource="ball/util/ant/antlib.xml"/>
+    <preferences-export classpathref="build.classpath"/>
+  </target>
+
   <target name="resource-path-to"
           description="--> Invokes &lt;resource-path-to/&gt; task."
           depends="jar-classes">
