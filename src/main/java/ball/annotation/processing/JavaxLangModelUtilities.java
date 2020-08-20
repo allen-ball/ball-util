@@ -21,7 +21,6 @@ package ball.annotation.processing;
  * ##########################################################################
  */
 import ball.beans.PropertyMethodEnum;
-import com.sun.source.util.Trees;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.net.URLClassLoader;
@@ -42,6 +41,7 @@ import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.Modifier;
+import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
@@ -75,13 +75,12 @@ public abstract class JavaxLangModelUtilities {
     protected Elements elements = null;
     /** See {@link javax.annotation.processing.ProcessingEnvironment#getTypeUtils()}. */
     protected Types types = null;
-    /** See {@link Trees#instance(ProcessingEnvironment)}. */
-    protected Trees trees = null;
     /** {@link com.sun.source.util.JavacTask} {@link JavaFileManager} instance. */
     protected JavaFileManager fm = null;
 
     /**
-     * Method to get a {@link Class} for a {@link TypeElement}.
+     * Method to get the {@link Class} corresponding to a
+     * {@link TypeElement}.
      *
      * @param   element         The {@link TypeElement}.
      *
@@ -90,6 +89,29 @@ public abstract class JavaxLangModelUtilities {
     protected Class<?> asClass(TypeElement element) {
         Class<?> type = null;
         String name = element.getQualifiedName().toString();
+
+        try {
+            type = getClassPathClassLoader(fm).loadClass(name);
+        } catch (Exception exception) {
+            throw new IllegalArgumentException("type=" + name, exception);
+        }
+
+        return type;
+    }
+
+    /**
+     * Method to get the {@code package-info.class} ({@link Class})
+     * corresponding to a {@link PackageElement}.
+     *
+     * @param   element         The {@link PackageElement}.
+     *
+     * @return  The {@link Class} for the {@link PackageElement}
+     *          {@code package-info.class}.
+     */
+    protected Class<?> asPackageInfoClass(PackageElement element) {
+        Class<?> type = null;
+        String name =
+            element.getQualifiedName().toString() + ".package-info";
 
         try {
             type = getClassPathClassLoader(fm).loadClass(name);
