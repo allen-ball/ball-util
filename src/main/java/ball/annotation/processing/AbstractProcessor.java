@@ -25,7 +25,6 @@ import ball.lang.reflect.JavaLangReflectMethods;
 import ball.tools.javac.AbstractTaskListener;
 import com.sun.source.util.JavacTask;
 import com.sun.source.util.TaskEvent;
-import com.sun.source.util.Trees;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -60,6 +59,8 @@ import static lombok.AccessLevel.PROTECTED;
  * {@link ProcessingEnvironment#getFiler()},
  * {@link ProcessingEnvironment#getElementUtils()}, and
  * {@link ProcessingEnvironment#getTypeUtils()}.
+ *
+ * {@bean.info}
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
@@ -130,8 +131,6 @@ public abstract class AbstractProcessor extends JavaxLangModelUtilities
                     .invoke(context, JavaFileManager.class);
             } catch (Exception exception) {
             }
-
-            trees = Trees.instance(processingEnv);
         } catch (Exception exception) {
             print(ERROR, exception);
         }

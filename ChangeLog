@@ -115,7 +115,7 @@
 	Initial writing.
 
 	* src/main/java/ball/annotation/processing/AbstractProcessor.java:
-	Added protected JavaFileManager and Trees fields.
+	Added protected JavaFileManager field.
 	Added whenAnnotationProcessingFinished() callback method.
 	Added getClassPathClassLoader() method.
 
