@@ -41,6 +41,7 @@ import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.Modifier;
+import javax.lang.model.element.Name;
 import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.TypeKind;
@@ -102,10 +103,14 @@ public abstract class JavaxLangModelUtilities {
      */
     protected Class<?> asClass(TypeElement element) {
         Class<?> type = null;
-        String name = element.getQualifiedName().toString();
+        Name name = elements.getBinaryName(element);
+
+        if (name == null) {
+            name = element.getQualifiedName();
+        }
 
         try {
-            type = getClassLoader().loadClass(name);
+            type = getClassLoader().loadClass(name.toString());
         } catch (Exception exception) {
             throw new IllegalArgumentException("type=" + name, exception);
         }
