@@ -77,6 +77,20 @@ public abstract class JavaxLangModelUtilities {
     protected Types types = null;
     /** {@link com.sun.source.util.JavacTask} {@link JavaFileManager} instance. */
     protected JavaFileManager fm = null;
+    private transient ClassLoader loader = null;
+
+    /**
+     * Method to get the {@link ClassLoader} for loading dependencies.
+     *
+     * @return  The {@link ClassLoader}.
+     */
+    protected ClassLoader getClassLoader() {
+        if (loader == null) {
+            loader = getClassPathClassLoader(fm, getClass().getClassLoader());
+        }
+
+        return loader;
+    }
 
     /**
      * Method to get the {@link Class} corresponding to a
@@ -91,7 +105,7 @@ public abstract class JavaxLangModelUtilities {
         String name = element.getQualifiedName().toString();
 
         try {
-            type = getClassPathClassLoader(fm).loadClass(name);
+            type = getClassLoader().loadClass(name);
         } catch (Exception exception) {
             throw new IllegalArgumentException("type=" + name, exception);
         }
@@ -114,7 +128,7 @@ public abstract class JavaxLangModelUtilities {
             element.getQualifiedName().toString() + ".package-info";
 
         try {
-            type = getClassPathClassLoader(fm).loadClass(name);
+            type = getClassLoader().loadClass(name);
         } catch (Exception exception) {
             throw new IllegalArgumentException("type=" + name, exception);
         }
@@ -684,11 +698,13 @@ public abstract class JavaxLangModelUtilities {
      * See {@link JavaFileManager#getClassLoader(javax.tools.JavaFileManager.Location) JavaFileManager.getClassLoader(CLASS_PATH)}.
      *
      * @param   fm              The {@link JavaFileManager}.
+     * @param   parent          The parent {@link ClassLoader}.
      *
      * @return  The {@link ClassLoader}.
      */
-    protected ClassLoader getClassPathClassLoader(JavaFileManager fm) {
-        ClassLoader loader = null;
+    protected ClassLoader getClassPathClassLoader(JavaFileManager fm,
+                                                  ClassLoader parent) {
+        ClassLoader loader = parent;
 
         if (fm != null) {
             loader = fm.getClassLoader(CLASS_PATH);
@@ -696,11 +712,21 @@ public abstract class JavaxLangModelUtilities {
             if (loader instanceof URLClassLoader) {
                 loader =
                     URLClassLoader
-                    .newInstance(((URLClassLoader) loader).getURLs(),
-                                 getClass().getClassLoader());
+                    .newInstance(((URLClassLoader) loader).getURLs(), parent);
             }
         }
 
         return loader;
+    }
+
+    /**
+     * See {@link JavaFileManager#getClassLoader(javax.tools.JavaFileManager.Location) JavaFileManager.getClassLoader(CLASS_PATH)}.
+     *
+     * @param   fm              The {@link JavaFileManager}.
+     *
+     * @return  The {@link ClassLoader}.
+     */
+    protected ClassLoader getClassPathClassLoader(JavaFileManager fm) {
+        return getClassPathClassLoader(fm, getClass().getClassLoader());
     }
 }

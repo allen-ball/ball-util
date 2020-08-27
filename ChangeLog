@@ -1,3 +1,8 @@
+2020-08-27  Allen D. Ball  <ball@hcf.dev>
+
+	* src/main/java/ball/annotation/processing/JavaxLangModelUtilities.java:
+	Added getClassLoader() method (with default implementation).
+
 2020-08-20  Allen D. Ball  <ball@hcf.dev>
 
 	* src/main/java/ball/annotation/processing/JavaxLangModelUtilities.java:
