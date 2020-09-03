@@ -1,3 +1,7 @@
+2020-09-03  Allen D. Ball  <ball@hcf.dev>
+
+	* pom.xml: Released version 6.0.1.
+
 2020-08-27  Allen D. Ball  <ball@hcf.dev>
 
 	* src/main/java/ball/annotation/processing/JavaxLangModelUtilities.java:
@@ -16,10 +20,6 @@
 
 	* src/main/java/ball/annotation/processing/JavaxLangModelUtilities.java:
 	Initial writing.
-
-2020-07-21  Allen D. Ball  <ball@hcf.dev>
-
-	* pom.xml: Started development 6.0.1-SNAPSHOT.
 
 2020-07-20  Allen D. Ball  <ball@hcf.dev>
 
