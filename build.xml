@@ -31,7 +31,7 @@
 
   <resolver:resolve>
     <dependencies>
-      <dependency coords="ball:parent:20200715.0:xml:compile"/>
+      <dependency coords="ball:parent:20200903.0:xml:compile"/>
     </dependencies>
     <properties/>
   </resolver:resolve>
@@ -152,6 +152,14 @@
     <permutations-of classpathref="build.classpath" type="${type}">
       <argument type="${argument.type}">${argument.value}</argument>
     </permutations-of>
+  </target>
+
+  <target name="preferences-export"
+          description="--> Invokes &lt;preferences-export/&gt; task."
+          depends="jar-classes">
+    <taskdef classpathref="build.classpath" onerror="ignore"
+             resource="ball/util/ant/antlib.xml"/>
+    <preferences-export classpathref="build.classpath"/>
   </target>
 
   <target name="resource-path-to"

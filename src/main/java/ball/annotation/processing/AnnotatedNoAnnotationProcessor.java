@@ -49,6 +49,8 @@ import static lombok.AccessLevel.PROTECTED;
  * Abstract {@link javax.annotation.processing.Processor} base class for
  * processing "no" {@link java.lang.annotation.Annotation} ({@code "*"}).
  *
+ * {@bean.info}
+ *
  * @see ForElementKinds
  * @see ForSubclassesOf
  * @see MustImplement

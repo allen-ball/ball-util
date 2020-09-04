@@ -60,6 +60,8 @@ import static lombok.AccessLevel.PROTECTED;
  * processing {@link Annotation}s specified by @{@link For}.  Provides
  * built-in support for a number of {@link Annotation} types.
  *
+ * {@bean.info}
+ *
  * @see AnnotationValueMustConvertTo
  * @see TargetMustBe
  * @see TargetMustExtend
