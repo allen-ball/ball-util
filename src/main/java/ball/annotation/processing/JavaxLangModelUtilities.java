@@ -22,6 +22,9 @@ package ball.annotation.processing;
  */
 import ball.beans.PropertyMethodEnum;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Executable;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.net.URLClassLoader;
 import java.util.Arrays;
@@ -44,6 +47,7 @@ import javax.lang.model.element.Modifier;
 import javax.lang.model.element.Name;
 import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Elements;
@@ -53,12 +57,14 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import static java.util.Collections.disjoint;
+import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 import static javax.lang.model.element.ElementKind.CONSTRUCTOR;
 import static javax.lang.model.element.ElementKind.METHOD;
 import static javax.lang.model.element.Modifier.PRIVATE;
 import static javax.lang.model.element.Modifier.STATIC;
 import static javax.lang.model.util.ElementFilter.constructorsIn;
+import static javax.lang.model.util.ElementFilter.fieldsIn;
 import static javax.lang.model.util.ElementFilter.methodsIn;
 import static javax.tools.StandardLocation.CLASS_PATH;
 import static lombok.AccessLevel.PROTECTED;
@@ -161,6 +167,57 @@ public abstract class JavaxLangModelUtilities {
     }
 
     /**
+     * Method to get a {@link ExecutableElement} for a {@link Constructor}.
+     *
+     * @param   constructor      The {@link Constructor}.
+     *
+     * @return  The {@link ExecutableElement} for the {@link Constructor}.
+     */
+    protected ExecutableElement asExecutableElement(Constructor<?> constructor) {
+        TypeElement type = asTypeElement(constructor.getDeclaringClass());
+        Element element =
+            constructorsIn(type.getEnclosedElements()).stream()
+            .filter(hasSameSignatureAs(constructor))
+            .findFirst().orElse(null);
+
+        return (ExecutableElement) element;
+    }
+
+    /**
+     * Method to get a {@link ExecutableElement} for a {@link Method}.
+     *
+     * @param   method          The {@link Method}.
+     *
+     * @return  The {@link ExecutableElement} for the {@link Method}.
+     */
+    protected ExecutableElement asExecutableElement(Method method) {
+        return getMethod(asTypeElement(method.getDeclaringClass()), method);
+    }
+
+    @Deprecated
+    protected ExecutableElement getMethod(Method method) {
+        return asExecutableElement(method);
+    }
+
+    /**
+     * Method to get a {@link VariableElement} for a {@link Field}.
+     *
+     * @param   field           The {@link Field}.
+     *
+     * @return  The {@link VariableElement} for the {@link Field}.
+     */
+    protected VariableElement asVariableElement(Field field) {
+        TypeElement type = asTypeElement(field.getDeclaringClass());
+        Element element =
+            fieldsIn(type.getEnclosedElements())
+            .stream()
+            .filter(t -> t.getSimpleName().contentEquals(field.getName()))
+            .findFirst().orElse(null);
+
+        return (VariableElement) element;
+    }
+
+    /**
      * Method to get a {@link TypeMirror} for a {@link Class}.
      *
      * @param   type            The {@link Class}.
@@ -237,7 +294,7 @@ public abstract class JavaxLangModelUtilities {
 
     /**
      * Constructor to get an {@link ExecutableElement} for a {@link Class}
-     * {@link java.lang.reflect.Constructor} by parameter list.
+     * {@link Constructor} by parameter list.
      *
      * @param   type            The {@link TypeElement}.
      * @param   parameters      The constructor parameter types.
@@ -253,18 +310,6 @@ public abstract class JavaxLangModelUtilities {
             .findFirst().orElse(null);
 
         return (ExecutableElement) element;
-    }
-
-    /**
-     * Method to get an {@link ExecutableElement} for a {@link Method}
-     * prototype.
-     *
-     * @param   method          The prototype {@link Method}.
-     *
-     * @return  The {@link ExecutableElement} for the method.
-     */
-    protected ExecutableElement getMethod(Method method) {
-        return getMethod(asTypeElement(method.getDeclaringClass()), method);
     }
 
     /**
@@ -432,6 +477,41 @@ public abstract class JavaxLangModelUtilities {
         }
 
         return specification;
+    }
+
+    /**
+     * Method to generate the application signature of an
+     * {@link Executable}.
+     *
+     * @param   executable      The {@link Executable}.
+     *
+     * @return  The signature {@link String}.
+     */
+    protected String signature(Executable executable) {
+        String signature =
+            Stream.of(executable.getParameterTypes())
+            .map(Class::getCanonicalName)
+            .collect(joining(",", "(", ")"));
+
+        return signature;
+    }
+
+    /**
+     * Method to generate the application signature of an
+     * {@link ExecutableElement}.
+     *
+     * @param   element         The {@link ExecutableElement}.
+     *
+     * @return  The signature {@link String}.
+     */
+    protected String signature(ExecutableElement element) {
+        String signature =
+            element.getParameters().stream()
+            .map(VariableElement::asType)
+            .map(Object::toString)
+            .collect(joining(",", "(", ")"));
+
+        return signature;
     }
 
     /**
@@ -616,9 +696,9 @@ public abstract class JavaxLangModelUtilities {
         return is(CONSTRUCTOR, Element::getKind).and(withParameters(parameters));
     }
 
-    protected Predicate<Element> hasSameSignatureAs(Method method) {
-        return hasSameSignatureAs(method.getName(),
-                                  method.getParameterTypes());
+    protected Predicate<Element> hasSameSignatureAs(Executable executable) {
+        return hasSameSignatureAs(executable.getName(),
+                                  executable.getParameterTypes());
     }
 
     protected Predicate<Element> hasSameSignatureAs(CharSequence name,
