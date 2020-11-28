@@ -39,16 +39,19 @@ import static org.apache.commons.lang3.reflect.MethodUtils.invokeMethod;
 public interface DefaultInterfaceMethodInvocationHandler extends InvocationHandler {
 
     /**
-     * {@inheritDoc}
-     *
      * This method assumes {@link Method#isDefault() method.isDefault()} and
      * will invoke {@link Method} directly.
+     *
+     * @param   proxy           The proxy instance.
+     * @param   method          The {@link Method}.
+     * @param   argv            The argument array.
+     *
+     * @return  The value to return from the {@link Method} invocation.
      *
      * @throws  Exception       If the {@link Method} cannot be invoked.
      */
     @Override
-    default Object invoke(Object proxy,
-                          Method method, Object[] argv) throws Throwable {
+    default Object invoke(Object proxy, Method method, Object[] argv) throws Throwable {
         Constructor<MethodHandles.Lookup> constructor =
             MethodHandles.Lookup.class
             .getDeclaredConstructor(Class.class);
