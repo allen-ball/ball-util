@@ -25,6 +25,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
+import static org.apache.commons.lang3.reflect.MethodUtils.invokeMethod;
+
 /**
  * "Intercepting" {@link java.lang.reflect.InvocationHandler}
  * implementation.
@@ -58,9 +60,9 @@ public class InterceptingInvocationHandler<T> extends DefaultInvocationHandler {
     @Override
     public Object invoke(Object proxy, Method method, Object[] argv) throws Throwable {
         try {
-            getClass()
-                .getMethod(method.getName(), method.getParameterTypes())
-                .invoke(this, argv);
+            invokeMethod(this, true,
+                         method.getName(),
+                         argv, method.getParameterTypes());
         } catch (Exception exception) {
         }
 
