@@ -162,8 +162,7 @@ public abstract class FacadeProxyInvocationHandler
     }
 
     @Override
-    public Object invoke(Object proxy,
-                         Method method, Object[] argv) throws Throwable {
+    public Object invoke(Object proxy, Method method, Object[] argv) throws Throwable {
         Object result = null;
         Class<?> declarer = method.getDeclaringClass();
         Object that = map.reverse.get(proxy);
