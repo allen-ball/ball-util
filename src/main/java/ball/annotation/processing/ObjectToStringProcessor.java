@@ -80,7 +80,7 @@ public class ObjectToStringProcessor extends AnnotatedNoAnnotationProcessor {
         super.init(processingEnv);
 
         try {
-            METHOD = getMethod(PROTOTYPE);
+            METHOD = asExecutableElement(PROTOTYPE);
         } catch (Exception exception) {
             print(ERROR, exception);
         }

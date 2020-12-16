@@ -1,3 +1,30 @@
+2020-12-15  Allen D. Ball  <ball@hcf.dev>
+
+	* pom.xml: Released version 6.0.2.
+
+2020-11-27  Allen D. Ball  <ball@hcf.dev>
+
+	* src/main/java/ball/lang/reflect/InterceptingInvocationHandler.java:
+	Initial writing.
+
+2020-11-24  Allen D. Ball  <ball@hcf.dev>
+
+	* src/main/java/ball/annotation/processing/JavaxLangModelUtilities.java:
+	Added asExecutableElement(Constructor<?>),
+	asExecutableElement(Method), asVariableElement(Field),
+	signature(Executable), and signature(ExecutableElement) methods.
+
+2020-11-13  Allen D. Ball  <ball@hcf.dev>
+
+	* pom.xml:
+	Use jakarta.annotation:jakarta.annotation-api and
+	jakarta.xml.bind:jakarta.xml.bind-api.
+
+2020-10-08  Allen D. Ball  <ball@hcf.dev>
+
+	* src/main/java/ball/annotation/processing/AbstractProcessor.java:
+	Added multi-release JAR Shims.
+
 2020-09-03  Allen D. Ball  <ball@hcf.dev>
 
 	* pom.xml: Released version 6.0.1.

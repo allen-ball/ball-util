@@ -92,8 +92,6 @@ public class DefaultInvocationHandler implements DefaultInterfaceMethodInvocatio
     }
 
     /**
-     * {@inheritDoc}
-     *
      * If the {@link Method#isDefault() method.isDefault()}, that
      * {@link Method} will be invoked directly.  If the {@link Method} is
      * declared in {@link Object}, it is applied to {@link.this}
@@ -102,12 +100,17 @@ public class DefaultInvocationHandler implements DefaultInterfaceMethodInvocatio
      * with the same name and compatible parameter types (forcing access if
      * necessary).
      *
+     * @param   proxy           The proxy instance.
+     * @param   method          The {@link Method}.
+     * @param   argv            The argument array.
+     *
+     * @return  The value to return from the {@link Method} invocation.
+     *
      * @throws  Exception       If no compatible {@link Method} is found or
      *                          the {@link Method} cannot be invoked.
      */
     @Override
-    public Object invoke(Object proxy,
-                         Method method, Object[] argv) throws Throwable {
+    public Object invoke(Object proxy, Method method, Object[] argv) throws Throwable {
         Object result = null;
         Class<?> declarer = method.getDeclaringClass();
 
@@ -137,8 +140,7 @@ public class DefaultInvocationHandler implements DefaultInterfaceMethodInvocatio
      *
      * @return  The {@link List} of interface {@link Class}es.
      */
-    protected List<Class<?>> getImplementedInterfacesOf(Class<?> type,
-                                                        Class<?>... types) {
+    protected List<Class<?>> getImplementedInterfacesOf(Class<?> type, Class<?>... types) {
         Set<Class<?>> set =
             Stream.concat(Stream.of(type), Arrays.stream(types))
             .filter(Objects::nonNull)
