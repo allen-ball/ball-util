@@ -20,27 +20,34 @@ package ball.lang.reflect;
  * limitations under the License.
  * ##########################################################################
  */
-import java.lang.invoke.MethodHandles;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 
 import static org.apache.commons.lang3.reflect.MethodUtils.invokeMethod;
 
 /**
- * Java 8 implementation of
- * {@link InvocationHandler#invoke(Object,Method,Object[])} to invoke an
- * interface default method.  Implementation detail of
- * {@link DefaultInvocationHandler}.
+ * "Intercepting" {@link java.lang.reflect.InvocationHandler}
+ * implementation.
+ *
+ * @param       <T>     The type of the "wrapped" target.
+ *
+ * {@bean.info}
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
-public interface DefaultInterfaceMethodInvocationHandler extends InvocationHandler {
+@RequiredArgsConstructor @ToString
+public class InterceptingInvocationHandler<T> extends DefaultInvocationHandler {
+    @Getter private final T target;
 
     /**
-     * This method assumes {@link Method#isDefault() method.isDefault()} and
-     * will invoke {@link Method} directly.
+     * Subclasses may declare methods with the same signature of a proxied
+     * interface method which will be invoked (as a sort of listener) before
+     * invoking the target method.  If the invoked {@link Method}'s
+     * declaring class is assignable from the target's class, the
+     * {@link Method} is invoked on the target.
      *
      * @param   proxy           The proxy instance.
      * @param   method          The {@link Method}.
@@ -51,22 +58,24 @@ public interface DefaultInterfaceMethodInvocationHandler extends InvocationHandl
      * @throws  Exception       If the {@link Method} cannot be invoked.
      */
     @Override
-    default Object invoke(Object proxy, Method method, Object[] argv) throws Throwable {
-        Constructor<MethodHandles.Lookup> constructor =
-            MethodHandles.Lookup.class
-            .getDeclaredConstructor(Class.class);
+    public Object invoke(Object proxy, Method method, Object[] argv) throws Throwable {
+        try {
+            invokeMethod(this, true,
+                         method.getName(),
+                         argv, method.getParameterTypes());
+        } catch (Exception exception) {
+        }
 
-        constructor.setAccessible(true);
+        Object result = null;
 
-        Class<?> declarer = method.getDeclaringClass();
-        Object result =
-            constructor.newInstance(declarer)
-            .in(declarer)
-            .unreflectSpecial(method, declarer)
-            .bindTo(proxy)
-            .invokeWithArguments(argv);
+        if (method.isDefault()) {
+            result = super.invoke(proxy, method, argv);
+        } else if (method.getDeclaringClass().isAssignableFrom(target.getClass())) {
+            result = method.invoke(target, argv);
+        } else {
+            result = super.invoke(proxy, method, argv);
+        }
 
         return result;
     }
 }
-

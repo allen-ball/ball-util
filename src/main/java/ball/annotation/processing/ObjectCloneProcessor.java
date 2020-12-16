@@ -81,7 +81,7 @@ public class ObjectCloneProcessor extends AnnotatedNoAnnotationProcessor {
         super.init(processingEnv);
 
         try {
-            METHOD = getMethod(PROTOTYPE);
+            METHOD = asExecutableElement(PROTOTYPE);
             CLONEABLE = asTypeElement(Cloneable.class);
 
             criteria.add(t -> overrides((ExecutableElement) t, METHOD));

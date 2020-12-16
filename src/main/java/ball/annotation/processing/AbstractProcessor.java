@@ -43,7 +43,6 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
 import javax.tools.Diagnostic;
-import javax.tools.JavaFileManager;
 import lombok.NoArgsConstructor;
 import lombok.Synchronized;
 import lombok.ToString;
@@ -114,23 +113,7 @@ public abstract class AbstractProcessor extends JavaxLangModelUtilities
                 javac.addTaskListener(new WhenAnnotationProcessingFinished());
             }
 
-            try {
-                /*
-                 * com.sun.tools.javac.processing.JavacProcessingEnvironment
-                 * .getContext() -> com.sun.tools.javac.util.Context
-                 */
-                Object context =
-                    processingEnv.getClass()
-                    .getMethod("getContext")
-                    .invoke(processingEnv);
-
-                fm =
-                    (JavaFileManager)
-                    context.getClass()
-                    .getMethod("get", Class.class)
-                    .invoke(context, JavaFileManager.class);
-            } catch (Exception exception) {
-            }
+            fm = Shims.getJavaFileManager(processingEnv);
         } catch (Exception exception) {
             print(ERROR, exception);
         }
