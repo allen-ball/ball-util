@@ -1,4 +1,4 @@
- ypackage ball.annotation.processing;
+ package ball.annotation.processing;
 /*-
  * ##########################################################################
  * Utilities
