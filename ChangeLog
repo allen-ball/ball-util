@@ -1,5 +1,8 @@
 2021-01-09  Allen D. Ball  <ball@hcf.dev>
 
+	* src/main/java/ball/annotation/processing/ObjectToStringProcessor.java:
+	Check superclasses for Lombok annotations.
+
 	* pom.xml: Started development of 6.0.4-SNAPSHOT.
 
 2021-01-03  Allen D. Ball  <ball@hcf.dev>
