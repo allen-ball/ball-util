@@ -1,3 +1,8 @@
+2021-01-15  Allen D. Ball  <ball@hcf.dev>
+
+	* src/main/java/ball/annotation/processing/JavaxLangModelUtilities.java:
+	Added static toModifiers(Set<Modifier>) method.
+
 2021-01-12  Allen D. Ball  <ball@hcf.dev>
 
 	* src/main/java/ball/beans/PropertyDescriptorsTableModel.java:
