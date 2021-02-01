@@ -134,6 +134,14 @@
     <pattern-matches classpathref="build.classpath"/>
   </target>
 
+  <target name="pattern-split"
+          description="--> Invokes &lt;pattern-split/&gt; task."
+          depends="jar-classes">
+    <taskdef classpathref="build.classpath" onerror="ignore"
+             resource="ball/util/ant/antlib.xml"/>
+    <pattern-split classpathref="build.classpath"/>
+  </target>
+
   <target name="permutations-count"
           description="--> Invokes &lt;permutations-count/&gt; task."
           depends="jar-classes">
