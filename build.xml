@@ -197,6 +197,14 @@
     <superclasses-of classpathref="build.classpath" type="${type}"/>
   </target>
 
+  <target name="tokenize-string"
+          description="--> Invokes &lt;tokenize-string/&gt; task."
+          depends="jar-classes">
+    <taskdef classpathref="build.classpath" onerror="ignore"
+             resource="ball/util/ant/antlib.xml"/>
+    <tokenize-string classpathref="build.classpath"/>
+  </target>
+
   <target name="xpath-evaluate"
           description="--> Invokes &lt;xpath-evaluate/&gt; task."
           depends="jar-classes">
