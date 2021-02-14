@@ -57,8 +57,7 @@ public class JAXBIndexProcessor extends AnnotatedProcessor
     private final Set<String> set = new TreeSet<>();
 
     @Override
-    public void process(Set<Class<?>> set,
-                        JavaFileManager fm) throws Throwable {
+    public void process(Set<Class<?>> set, JavaFileManager fm) throws Exception {
         Map<String,Set<String>> map = new TreeMap<>();
 
         for (Class<?> type : set) {

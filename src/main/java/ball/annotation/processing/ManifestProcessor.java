@@ -116,8 +116,7 @@ public class ManifestProcessor extends AnnotatedProcessor
     }
 
     @Override
-    public void process(Set<Class<?>> set,
-                        JavaFileManager fm) throws Throwable {
+    public void process(Set<Class<?>> set, JavaFileManager fm) throws Exception {
         ManifestImpl manifest = new ManifestImpl();
         FileObject file = fm.getFileForInput(CLASS_PATH, EMPTY, PATH);
 

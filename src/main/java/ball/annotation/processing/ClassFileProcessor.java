@@ -50,11 +50,10 @@ public interface ClassFileProcessor extends Processor {
      * @param   fm              The configured {@link JavaFileManager} (for
      *                          writing output files).
      *
-     * @throws  Throwable       If the implementation throws a
-     *                          {@link Throwable}.
+     * @throws  Exception       If the implementation throws a
+     *                          {@link Exception}.
      */
-    public void process(Set<Class<?>> set,
-                        JavaFileManager fm) throws Throwable;
+    public void process(Set<Class<?>> set, JavaFileManager fm) throws Exception;
 
     /**
      * Static method to get the list of {@link Class} file names that have

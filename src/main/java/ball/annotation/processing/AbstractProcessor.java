@@ -113,7 +113,9 @@ public abstract class AbstractProcessor extends JavaxLangModelUtilities
                 javac.addTaskListener(new WhenAnnotationProcessingFinished());
             }
 
-            fm = Shims.getJavaFileManager(processingEnv);
+            if (fm == null) {
+                fm = Shims.getJavaFileManager(processingEnv);
+            }
         } catch (Exception exception) {
             print(ERROR, exception);
         }

@@ -108,8 +108,7 @@ public class ServiceProviderForProcessor extends AnnotatedProcessor
     }
 
     @Override
-    public void process(Set<Class<?>> set,
-                        JavaFileManager fm) throws Throwable {
+    public void process(Set<Class<?>> set, JavaFileManager fm) throws Exception {
         Map<String,Set<String>> map = new TreeMap<>();
 
         for (Class<?> provider : set) {
