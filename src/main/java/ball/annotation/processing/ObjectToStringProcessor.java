@@ -64,6 +64,7 @@ public class ObjectToStringProcessor extends AnnotatedNoAnnotationProcessor {
     static {
         try {
             PROTOTYPE = Object.class.getDeclaredMethod("toString");
+            PROTOTYPE.setAccessible(true);
         } catch (Exception exception) {
             throw new ExceptionInInitializerError(exception);
         }
