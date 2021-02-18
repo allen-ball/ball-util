@@ -1,3 +1,7 @@
+2021-02-18  Allen D. Ball  <ball@hcf.dev>
+
+	* pom.xml: Released version 6.1.0.20210218.
+
 2021-02-13  Allen D. Ball  <ball@hcf.dev>
 
 	* src/main/java/ball/annotation/processing/AnnotatedProcessor.java:
@@ -26,8 +30,6 @@
 
 	* src/main/java/ball/annotation/processing/ObjectToStringProcessor.java:
 	Check superclasses for Lombok annotations.
-
-	* pom.xml: Started development of 6.1.0-SNAPSHOT.
 
 2021-01-03  Allen D. Ball  <ball@hcf.dev>
 
@@ -606,8 +608,6 @@
 	Use interface "default" methods instead of helper inner-class.
 
 2018-12-27  Allen D. Ball  <ball@sol.local>
-
-	* Start development of 2.0-SNAPSHOT.
 
 	* Require JRE 1.8.
 
