@@ -1,3 +1,36 @@
+2021-02-18  Allen D. Ball  <ball@hcf.dev>
+
+	* pom.xml: Released version 6.1.0.20210218.
+
+2021-02-13  Allen D. Ball  <ball@hcf.dev>
+
+	* src/main/java/ball/annotation/processing/AnnotatedProcessor.java:
+	Catch Throwables while generating the Class Set.  Take advantage
+	of TaskEvent.Kind.COMPILATION events in Java 9+.
+
+2021-02-03  Allen D. Ball  <ball@hcf.dev>
+
+	* Added <tokenize-string/> Ant Task and target.
+
+2021-02-01  Allen D. Ball  <ball@hcf.dev>
+
+	* Added <pattern-split/> Ant Task and target.
+
+2021-01-15  Allen D. Ball  <ball@hcf.dev>
+
+	* src/main/java/ball/annotation/processing/JavaxLangModelUtilities.java:
+	Added static toModifiers(Set<Modifier>) method.
+
+2021-01-12  Allen D. Ball  <ball@hcf.dev>
+
+	* src/main/java/ball/beans/PropertyDescriptorsTableModel.java:
+	Get correct Type for IndexedPropertyDescriptor rows.
+
+2021-01-09  Allen D. Ball  <ball@hcf.dev>
+
+	* src/main/java/ball/annotation/processing/ObjectToStringProcessor.java:
+	Check superclasses for Lombok annotations.
+
 2021-01-03  Allen D. Ball  <ball@hcf.dev>
 
 	* pom.xml: Released version 6.0.3.
@@ -263,9 +296,6 @@
 
 	* Added <xpath-evaluate/> Ant Task and target.
 
-	* src/main/java/ball/util/ant/taskdefs/DownloadTask.java:
-	Use try-with-resources to copy.
-
 2020-01-28  Allen D. Ball  <ball@hcf.dev>
 
 	* src/main/java/ball/xml/XMLServices.java:
@@ -494,12 +524,6 @@
 	src/main/java/ball/xml/XMLServices.java,
 	Released FluentDocument implementation.
 
-2019-01-30  Allen D. Ball  <ball@sol.local>
-
-	* Added <download/> Ant Task and target.
-
-	* src/main/java/ball/net/ResponseCacheImpl.java: Initial writing.
-
 2019-01-27  Allen D. Ball  <ball@sol.local>
 
 	* src/main/java/ball/tools/javadoc/BeanInfoTaglet.java:
@@ -584,8 +608,6 @@
 	Use interface "default" methods instead of helper inner-class.
 
 2018-12-27  Allen D. Ball  <ball@sol.local>
-
-	* Start development of 2.0-SNAPSHOT.
 
 	* Require JRE 1.8.
 

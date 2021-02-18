@@ -61,6 +61,8 @@ public class SerializableProcessor extends AnnotatedNoAnnotationProcessor {
     private static final Field PROTOTYPE =
         PROTOTYPE.class.getDeclaredFields()[0];
 
+    static { PROTOTYPE.setAccessible(true); }
+
     private final Set<String> set = new TreeSet<>();
 
     @Override

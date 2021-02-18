@@ -71,6 +71,16 @@ import static org.apache.commons.lang3.StringUtils.EMPTY;
 @NoArgsConstructor @ToString
 public class ServiceProviderForProcessor extends AnnotatedProcessor
                                          implements ClassFileProcessor {
+/*
+    private static abstract class PROTOTYPE {
+        public static Object provider() { }
+    }
+
+    private static final Method PROTOTYPE =
+        PROTOTYPE.class.getDeclaredMethods()[0];
+
+    static { PROTOTYPE.setAccessible(true); }
+*/
     private static final String PATH = "META-INF/services/%s";
 
     @Override
@@ -108,8 +118,7 @@ public class ServiceProviderForProcessor extends AnnotatedProcessor
     }
 
     @Override
-    public void process(Set<Class<?>> set,
-                        JavaFileManager fm) throws Throwable {
+    public void process(Set<Class<?>> set, JavaFileManager fm) throws Exception {
         Map<String,Set<String>> map = new TreeMap<>();
 
         for (Class<?> provider : set) {

@@ -68,6 +68,7 @@ public class ObjectCloneProcessor extends AnnotatedNoAnnotationProcessor {
     static {
         try {
             PROTOTYPE = Object.class.getDeclaredMethod("clone");
+            PROTOTYPE.setAccessible(true);
         } catch (Exception exception) {
             throw new ExceptionInInitializerError(exception);
         }

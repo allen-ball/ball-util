@@ -22,6 +22,7 @@ package ball.annotation.processing;
  */
 /* import com.sun.tools.javac.processing.JavacProcessingEnvironment; */
 /* import com.sun.tools.javac.util.Context; */
+import java.lang.reflect.Method;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.tools.JavaFileManager;
 import lombok.NoArgsConstructor;
@@ -51,28 +52,27 @@ public abstract class Shims {
     protected static JavaFileManager getJavaFileManager(ProcessingEnvironment env) {
         JavaFileManager fm = null;
         /*
-         * if (env instanceof JavacProcessingEnvironment) {
-         *     Context context =
-         *         ((JavacProcessingEnvironment) env).getContext();
-         *
-         *     fm = context.get(JavaFileManager.class);
-         * }
-         */
-        /*
          * Use reflection to avoid tickling
          * https://bugs.openjdk.java.net/browse/JDK-8209058 on JDK 9 and 10.
          */
         try {
-            Object context =
-                env.getClass()
-                .getMethod("getContext")
-                .invoke(env);
+            /*
+             * Context context =
+             *     ((JavacProcessingEnvironment) env).getContext();
+             */
+            Method getContext = env.getClass().getMethod("getContext");
 
-            fm =
-                (JavaFileManager)
-                context.getClass()
-                .getMethod("get", Class.class)
-                .invoke(context, JavaFileManager.class);
+            getContext.setAccessible(true);
+
+            Object context = getContext.invoke(env);
+            /*
+             * fm = context.get(JavaFileManager.class);
+             */
+            Method get = context.getClass().getMethod("get", Class.class);
+
+            get.setAccessible(true);
+
+            fm = (JavaFileManager) get.invoke(context, JavaFileManager.class);
         } catch (Exception exception) {
         }
 

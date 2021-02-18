@@ -26,9 +26,11 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Executable;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+/* import java.lang.reflect.Modifier; */
 import java.net.URLClassLoader;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Objects;
@@ -78,6 +80,8 @@ import static lombok.AccessLevel.PROTECTED;
  */
 @NoArgsConstructor(access = PROTECTED) @ToString
 public abstract class JavaxLangModelUtilities {
+    public static final ModifierMap MODIFIERS = new ModifierMap();
+
     /** See {@link javax.annotation.processing.ProcessingEnvironment#getElementUtils()}. */
     protected Elements elements = null;
     /** See {@link javax.annotation.processing.ProcessingEnvironment#getTypeUtils()}. */
@@ -813,5 +817,41 @@ public abstract class JavaxLangModelUtilities {
      */
     protected ClassLoader getClassPathClassLoader(JavaFileManager fm) {
         return getClassPathClassLoader(fm, getClass().getClassLoader());
+    }
+
+    /**
+     * Method to get the
+     * {@link java.lang.reflect.Modifier java.lang.reflect.Modifier} flags
+     * for a {@link Set} of {@link Modifier}s.
+     *
+     * @param   set             The {@link Modifier}s.
+     *
+     * @return  The flags.
+     */
+    public static int toModifiers(Set<Modifier> set) {
+        return MODIFIERS.toModifiers(set);
+    }
+
+    private static class ModifierMap extends EnumMap<Modifier,Integer> {
+        private static final long serialVersionUID = 1665841849117866554L;
+
+        public ModifierMap() {
+            super(Modifier.class);
+
+            for (Modifier key : Modifier.values()) {
+                try {
+                    Object value =
+                        java.lang.reflect.Modifier.class
+                        .getField(key.name()).get(null);
+
+                    put(key, (Integer) value);
+                } catch (Exception exception) {
+                }
+            }
+        }
+
+        public int toModifiers(Set<Modifier> set) {
+            return set.stream().map(this::get).mapToInt(Integer::intValue).sum();
+        }
     }
 }

@@ -31,7 +31,7 @@
 
   <resolver:resolve>
     <dependencies>
-      <dependency coords="ball:parent:20210103.0:xml:compile"/>
+      <dependency coords="ball:parent:20210218.0:xml:compile"/>
     </dependencies>
     <properties/>
   </resolver:resolve>
@@ -134,6 +134,14 @@
     <pattern-matches classpathref="build.classpath"/>
   </target>
 
+  <target name="pattern-split"
+          description="--> Invokes &lt;pattern-split/&gt; task."
+          depends="jar-classes">
+    <taskdef classpathref="build.classpath" onerror="ignore"
+             resource="ball/util/ant/antlib.xml"/>
+    <pattern-split classpathref="build.classpath"/>
+  </target>
+
   <target name="permutations-count"
           description="--> Invokes &lt;permutations-count/&gt; task."
           depends="jar-classes">
@@ -187,6 +195,14 @@
     <taskdef classpathref="build.classpath" onerror="ignore"
              resource="ball/util/ant/antlib.xml"/>
     <superclasses-of classpathref="build.classpath" type="${type}"/>
+  </target>
+
+  <target name="tokenize-string"
+          description="--> Invokes &lt;tokenize-string/&gt; task."
+          depends="jar-classes">
+    <taskdef classpathref="build.classpath" onerror="ignore"
+             resource="ball/util/ant/antlib.xml"/>
+    <tokenize-string classpathref="build.classpath"/>
   </target>
 
   <target name="xpath-evaluate"

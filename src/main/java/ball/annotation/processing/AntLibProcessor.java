@@ -75,8 +75,7 @@ public class AntLibProcessor extends AnnotatedProcessor
     }
 
     @Override
-    public void process(Set<Class<?>> set,
-                        JavaFileManager fm) throws Throwable {
+    public void process(Set<Class<?>> set, JavaFileManager fm) throws Exception {
         TreeSet<String> paths = new TreeSet<>();
         AntLibXML antlib = new AntLibXML();
 

@@ -20,8 +20,7 @@ package ball.annotation.processing;
  * limitations under the License.
  * ##########################################################################
  */
-import ball.tools.javac.AbstractTaskListener;
-import com.sun.source.util.TaskEvent;
+import com.sun.source.util.TaskListener;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
@@ -46,7 +45,6 @@ import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.TypeMirror;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
 import static java.util.stream.Collectors.toCollection;
@@ -104,7 +102,11 @@ public abstract class AnnotatedProcessor extends AbstractProcessor {
 
         try {
             if (this instanceof ClassFileProcessor) {
-                javac.addTaskListener(new Invoker((ClassFileProcessor) this));
+                TaskListener listener =
+                    new COMPILATIONFinishedTaskListener(javac, elements, processed,
+                                                        () -> onCOMPILATIONFinished());
+
+                javac.addTaskListener(listener);
             }
         } catch (Exception exception) {
             print(ERROR, exception);
@@ -173,47 +175,22 @@ public abstract class AnnotatedProcessor extends AbstractProcessor {
         return name;
     }
 
-    @RequiredArgsConstructor @ToString
-    private class Invoker extends AbstractTaskListener {
-        private final ClassFileProcessor processor;
-        private final Set<String> generated = new TreeSet<>();
+    private void onCOMPILATIONFinished() {
+        HashSet<Class<?>> set = new HashSet<>();
 
-        @Override @SuppressWarnings({ "fallthrough" })
-        public void finished(TaskEvent event) {
-            switch (event.getKind()) {
-            case GENERATE:
-                String name =
-                    elements.getBinaryName(event.getTypeElement()).toString();
-
-                generated.add(name);
-                /*
-                 * Fall-through
-                 */
-            case ANNOTATION_PROCESSING:
-                if (processed.isEmpty() || generated.containsAll(processed)) {
-                    try {
-                        process();
-
-                        javac.removeTaskListener(this);
-                    } catch (Throwable throwable) {
-                    }
-                }
-                break;
-
-            default:
-                break;
-            }
-        }
-
-        private void process() throws Throwable {
-            HashSet<Class<?>> set = new HashSet<>();
+        try {
             ClassLoader loader = getClassPathClassLoader(fm);
 
             for (String name : ClassFileProcessor.list(fm)) {
-                set.add(Class.forName(name, true, loader));
+                try {
+                    set.add(Class.forName(name, true, loader));
+                } catch (Throwable throwable) {
+                }
             }
 
-            processor.process(set, fm);
+            ((ClassFileProcessor) this).process(set, fm);
+        } catch (Exception exception) {
+            print(ERROR, exception);
         }
     }
 

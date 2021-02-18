@@ -32,13 +32,13 @@ import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.type.TypeMirror;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import static java.util.Collections.disjoint;
-import static java.util.stream.Collectors.toSet;
 import static javax.lang.model.element.ElementKind.CLASS;
 import static javax.lang.model.element.Modifier.ABSTRACT;
+import static javax.lang.model.type.TypeKind.NONE;
 import static javax.tools.Diagnostic.Kind.ERROR;
 import static javax.tools.Diagnostic.Kind.WARNING;
 
@@ -64,6 +64,7 @@ public class ObjectToStringProcessor extends AnnotatedNoAnnotationProcessor {
     static {
         try {
             PROTOTYPE = Object.class.getDeclaredMethod("toString");
+            PROTOTYPE.setAccessible(true);
         } catch (Exception exception) {
             throw new ExceptionInInitializerError(exception);
         }
@@ -89,14 +90,8 @@ public class ObjectToStringProcessor extends AnnotatedNoAnnotationProcessor {
     @Override
     protected void process(RoundEnvironment roundEnv, Element element) {
         TypeElement type = (TypeElement) element;
-        Set<String> annotations =
-            type.getAnnotationMirrors()
-            .stream()
-            .map(AnnotationMirror::getAnnotationType)
-            .map(Objects::toString)
-            .collect(toSet());
 
-        if (disjoint(ANNOTATIONS, annotations)) {
+        if (! isAnnotated(type)) {
             ExecutableElement implementation = implementationOf(METHOD, type);
 
             if (implementation == null || METHOD.equals(implementation)) {
@@ -105,5 +100,24 @@ public class ObjectToStringProcessor extends AnnotatedNoAnnotationProcessor {
                       type.getKind(), declaration(PROTOTYPE));
             }
         }
+    }
+
+    private boolean isAnnotated(TypeElement element) {
+        boolean found =
+            element.getAnnotationMirrors()
+            .stream()
+            .map(AnnotationMirror::getAnnotationType)
+            .map(Objects::toString)
+            .anyMatch(ANNOTATIONS::contains);
+
+        if (! found) {
+            TypeMirror mirror = element.getSuperclass();
+
+            if (mirror != null && (! mirror.getKind().equals(NONE))) {
+                found |= isAnnotated((TypeElement) types.asElement(mirror));
+            }
+        }
+
+        return found;
     }
 }

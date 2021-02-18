@@ -77,6 +77,8 @@ public class ManifestProcessor extends AnnotatedProcessor
     private static final Method PROTOTYPE =
         PROTOTYPE.class.getDeclaredMethods()[0];
 
+    static { PROTOTYPE.setAccessible(true); }
+
     @Override
     protected void process(RoundEnvironment roundEnv,
                            TypeElement annotation, Element element) {
@@ -116,8 +118,7 @@ public class ManifestProcessor extends AnnotatedProcessor
     }
 
     @Override
-    public void process(Set<Class<?>> set,
-                        JavaFileManager fm) throws Throwable {
+    public void process(Set<Class<?>> set, JavaFileManager fm) throws Exception {
         ManifestImpl manifest = new ManifestImpl();
         FileObject file = fm.getFileForInput(CLASS_PATH, EMPTY, PATH);
 

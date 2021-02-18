@@ -25,6 +25,7 @@ import java.beans.BeanInfo;
 import java.beans.IndexedPropertyDescriptor;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 import java.util.Arrays;
 import lombok.ToString;
 
@@ -71,13 +72,7 @@ public class PropertyDescriptorsTableModel
             break;
 
         case 2:
-            if (row.getReadMethod() != null) {
-                value = row.getReadMethod().getGenericReturnType();
-            } else if (row.getWriteMethod() != null) {
-                value = row.getWriteMethod().getGenericParameterTypes()[0];
-            } else {
-                value = row.getPropertyType();
-            }
+            value = getPropertyType(row);
             break;
 
         case 3:
@@ -116,5 +111,35 @@ public class PropertyDescriptorsTableModel
 
     private String getMode(Method read, Method write) {
         return ((read != null) ? R : EMPTY) + ((write != null) ? W : EMPTY);
+    }
+
+    private Type getPropertyType(PropertyDescriptor descriptor) {
+        Type type = null;
+
+        if (descriptor instanceof IndexedPropertyDescriptor) {
+            type = getPropertyType((IndexedPropertyDescriptor) descriptor);
+        } else if (descriptor.getReadMethod() != null) {
+            type = descriptor.getReadMethod().getGenericReturnType();
+        } else if (descriptor.getWriteMethod() != null) {
+            type = descriptor.getWriteMethod().getGenericParameterTypes()[0];
+        } else {
+            type = descriptor.getPropertyType();
+        }
+
+        return type;
+    }
+
+    private Type getPropertyType(IndexedPropertyDescriptor descriptor) {
+        Type type = null;
+
+        if (descriptor.getIndexedReadMethod() != null) {
+            type = descriptor.getIndexedReadMethod().getGenericReturnType();
+        } else if (descriptor.getIndexedWriteMethod() != null) {
+            type = descriptor.getIndexedWriteMethod().getGenericParameterTypes()[1];
+        } else {
+            type = descriptor.getIndexedPropertyType();
+        }
+
+        return type;
     }
 }

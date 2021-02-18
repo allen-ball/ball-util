@@ -88,7 +88,7 @@ public abstract class PatternTask extends Task
             try {
                 SimpleTableModel table =
                     new SimpleTableModel(new Object[][] { }, 2);
-                Pattern pattern = compile(getPattern());
+                Pattern pattern = Pattern.compile(getPattern());
 
                 table.row(EMPTY, String.valueOf(pattern));
 
@@ -109,6 +109,9 @@ public abstract class PatternTask extends Task
                 }
 
                 log(table);
+            } catch (PatternSyntaxException exception) {
+                log(exception.getMessage(), Project.MSG_ERR);
+                throw new BuildException();
             } catch (BuildException exception) {
                 throw exception;
             } catch (RuntimeException exception) {
@@ -118,21 +121,51 @@ public abstract class PatternTask extends Task
             }
         }
 
-        private Pattern compile(String string) throws BuildException {
-            Pattern pattern = null;
+        private String tab(int count) {
+            return String.join(EMPTY, Collections.nCopies(count, SPACE));
+        }
+    }
+
+    /**
+     * {@link Pattern#split(CharSequence)} {@link Task}.
+     *
+     * {@ant.task}
+     */
+    @NoArgsConstructor @ToString
+    @AntTask("pattern-split")
+    public static class Split extends PatternTask {
+        @Override
+        public void execute() throws BuildException {
+            super.execute();
 
             try {
-                pattern = Pattern.compile(string);
+                SimpleTableModel table =
+                    new SimpleTableModel(new Object[][] { }, 2);
+                Pattern pattern = Pattern.compile(getPattern());
+
+                table.row(EMPTY, String.valueOf(pattern));
+
+                String input = getInput();
+
+                table.row(EMPTY, String.valueOf(input));
+
+                String[] strings = pattern.split(input);
+
+                for (int i = 0; i < strings.length; i += 1) {
+                    table.row(String.valueOf(i), strings[i]);
+                }
+
+                log(table);
             } catch (PatternSyntaxException exception) {
                 log(exception.getMessage(), Project.MSG_ERR);
                 throw new BuildException();
+            } catch (BuildException exception) {
+                throw exception;
+            } catch (RuntimeException exception) {
+                throw exception;
+            } catch (Exception exception) {
+                throw new BuildException(exception);
             }
-
-            return pattern;
-        }
-
-        private String tab(int count) {
-            return String.join(EMPTY, Collections.nCopies(count, SPACE));
         }
     }
 }
