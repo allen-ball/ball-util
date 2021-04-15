@@ -105,7 +105,8 @@ public class ServiceProviderForProcessor extends AnnotatedProcessor
                 .collect(toList());
 
             for (TypeElement service : services) {
-                if (! types.isAssignable(element.asType(), service.asType())) {
+                if (! types.isAssignable(types.erasure(element.asType()),
+                                         types.erasure(service.asType()))) {
                     print(ERROR, element,
                           "@%s: %s does not implement %s",
                           annotation.getSimpleName(),
