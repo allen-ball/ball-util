@@ -28,12 +28,12 @@
   <description></description>
   <groupId>ball</groupId>
   <artifactId>ball-util</artifactId>
-  <version>6.1.1-SNAPSHOT</version>
+  <version>6.1.1.20210415</version>
   <packaging>jar</packaging>
   <parent>
     <groupId>ball</groupId>
     <artifactId>parent</artifactId>
-    <version>20210220-SNAPSHOT</version>
+    <version>20210415.0</version>
     <relativePath>../ball/parent/pom.xml</relativePath>
   </parent>
   <inceptionYear>2008</inceptionYear>
