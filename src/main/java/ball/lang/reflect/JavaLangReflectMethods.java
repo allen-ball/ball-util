@@ -164,9 +164,36 @@ public interface JavaLangReflectMethods {
      * @return  {@link String}
      */
     default String declaration(int modifiers, Method method) {
+        return declaration(modifiers, method.getGenericReturnType(), method);
+    }
+
+    /**
+     * Method to generate a {@link Method} declaration.
+     *
+     * @param   modifiers       The adjusted modifiers.
+     * @param   returnType      The adjusted return {@link Type}.
+     * @param   method          The target {@link Method}.
+     *
+     * @return  {@link String}
+     */
+    default String declaration(int modifiers, Type returnType, Method method) {
+        return declaration(modifiers, type(returnType), method);
+    }
+
+    /**
+     * Method to generate a {@link Method} declaration.
+     *
+     * @param   modifiers       The adjusted modifiers.
+     * @param   returnType      The adjusted return {@link Type}
+     *                          (as a {@link String}).
+     * @param   method          The target {@link Method}.
+     *
+     * @return  {@link String}
+     */
+    default String declaration(int modifiers, String returnType, Method method) {
         String string =
             modifiers(modifiers)
-            + " " + type(method.getGenericReturnType())
+            + " " + returnType
             + " " + method.getName()
             + parameters(method.getParameters())
             + " " + exceptions(method.getGenericExceptionTypes());

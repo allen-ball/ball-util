@@ -1,5 +1,9 @@
 2021-07-02  Allen D. Ball  <ball@hcf.dev>
 
+	* src/main/java/ball/lang/reflect/JavaLangReflectMethods.java:
+	Added declaration(int,Type,Method) and
+	declaration(int,String,Method) methods.
+
 	* pom.xml: Started development of 6.2.0-SNAPSHOT.
 
 2021-06-25  Allen D. Ball  <ball@hcf.dev>
