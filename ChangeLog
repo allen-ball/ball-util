@@ -1,7 +1,9 @@
-2021-07-02  Allen D. Ball  <ball@hcf.dev>
+2021-07-04  Allen D. Ball  <ball@hcf.dev>
 
-	* src/main/java/ball/annotation/processing/ServiceProviderForProcessor.java:
-	Analyze annotated Java 9+ ServiceLoader.Provider implementations.
+	* src/main/java/ball/annotation/ServiceProviderFor.java,
+	src/main/java/ball/annotation/processing/ServiceProviderForProcessor.java:
+	Analyze annotated Java 9+ module ServiceLoader.Provider
+	implementations with "public static T provider()" methods.
 
 	* src/main/java/ball/lang/reflect/JavaLangReflectMethods.java:
 	Added declaration(int,Type,Method) and

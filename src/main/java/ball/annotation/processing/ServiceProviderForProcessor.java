@@ -30,7 +30,6 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.stream.Stream;
-import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.AnnotationMirror;
@@ -46,6 +45,8 @@ import lombok.ToString;
 
 import static java.lang.reflect.Modifier.isAbstract;
 import static java.util.stream.Collectors.toList;
+import static javax.lang.model.element.Modifier.ABSTRACT;
+import static javax.lang.model.element.Modifier.PUBLIC;
 import static javax.tools.Diagnostic.Kind.ERROR;
 import static javax.tools.StandardLocation.CLASS_OUTPUT;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
@@ -58,10 +59,11 @@ import static org.apache.commons.lang3.StringUtils.EMPTY;
  *   <li value="2">Has a public no-argument constructor</li>
  *   <li value="3">
  *     Implements the {@link Class}es specified by
- *     {@link ServiceProviderFor#value()} or implements Java 9's
- *     {@code java.util.ServiceLoader.Provider}
+ *     {@link ServiceProviderFor#value()}
  *   </li>
  * </ol>
+ * or implements Java 9's {@code java.util.ServiceLoader.Provider}
+ * {@code public static T provider()} method.
  * <p>
  * Note: Google offers a similar
  * {@link.uri https://github.com/google/auto/tree/master/service target=newtab AutoService}
@@ -86,15 +88,6 @@ public class ServiceProviderForProcessor extends AnnotatedProcessor
 
     private static final String PATH = "META-INF/services/%s";
 
-    private TypeElement serviceLoaderProvider = null;
-
-    @Override
-    public void init(ProcessingEnvironment processingEnv) {
-        super.init(processingEnv);
-
-        serviceLoaderProvider = elements.getTypeElement("java.util.ServiceLoader.Provider");
-    }
-
     @Override
     protected void process(RoundEnvironment roundEnv,
                            TypeElement annotation, Element element) {
@@ -105,6 +98,35 @@ public class ServiceProviderForProcessor extends AnnotatedProcessor
         AnnotationValue value = getAnnotationValue(mirror, "value");
 
         if (! isEmptyArray(value)) {
+            ExecutableElement method = getMethod(type, PROTOTYPE);
+
+            if (method != null) {
+                if (! method.getModifiers().containsAll(getModifiers(PROTOTYPE))) {
+                    print(ERROR, method,
+                          "@%s: %s is not %s",
+                          annotation.getSimpleName(),
+                          method.getKind(), modifiers(PROTOTYPE.getModifiers()));
+                }
+            } else {
+                if (! withoutModifiers(ABSTRACT).test(element)) {
+                    print(ERROR, element,
+                          "%s: %s must not be %s",
+                          annotation.getSimpleName(),
+                          element.getKind(), ABSTRACT);
+                }
+
+                ExecutableElement constructor =
+                    getConstructor((TypeElement) element, List.of());
+                boolean found =
+                    (constructor != null && constructor.getModifiers().contains(PUBLIC));
+
+                if (! found) {
+                    print(ERROR, element,
+                          "@%s: No %s NO-ARG constructor",
+                          annotation.getSimpleName(), PUBLIC);
+                }
+            }
+
             String provider = elements.getBinaryName(type).toString();
             List<TypeElement> services =
                 Stream.of(value)
@@ -117,23 +139,19 @@ public class ServiceProviderForProcessor extends AnnotatedProcessor
                 .collect(toList());
 
             for (TypeElement service : services) {
-                if (serviceLoaderProvider != null && isAssignable(type, serviceLoaderProvider)) {
-                    ExecutableElement method = getMethod(type, PROTOTYPE);
+                if (! isAssignable(type, service)) {
+                    print(ERROR, type,
+                          "@%s: %s does not implement %s",
+                          annotation.getSimpleName(),
+                          type.getKind(), service.getQualifiedName());
+                }
 
-                    if (! (method != null
-                           && method.getModifiers().containsAll(getModifiers(PROTOTYPE))
-                           && isAssignable(method.getReturnType(), service.asType()))) {
-                        print(ERROR, type,
-                              "%s implements %s but does not implement '%s'",
-                              type.getKind(), serviceLoaderProvider,
-                              declaration(PROTOTYPE.getModifiers(), service.getSimpleName().toString(), PROTOTYPE));
-                    }
-                } else {
-                    if (! isAssignable(type, service)) {
-                        print(ERROR, type,
-                              "@%s: %s does not implement %s",
+                if (method != null) {
+                    if (! isAssignable(method.getReturnType(), service.asType())) {
+                        print(ERROR, method,
+                              "@%s: %s does not return %s",
                               annotation.getSimpleName(),
-                              type.getKind(), service.getQualifiedName());
+                              method.getKind(), service.getQualifiedName());
                     }
                 }
             }
@@ -155,16 +173,14 @@ public class ServiceProviderForProcessor extends AnnotatedProcessor
         Map<String,Set<String>> map = new TreeMap<>();
 
         for (Class<?> provider : set) {
-            if (! isAbstract(provider.getModifiers())) {
-                ServiceProviderFor annotation =
-                    provider.getAnnotation(ServiceProviderFor.class);
+            ServiceProviderFor annotation =
+                provider.getAnnotation(ServiceProviderFor.class);
 
-                if (annotation != null) {
-                    for (Class<?> service : annotation.value()) {
-                        if (service.isAssignableFrom(provider)) {
-                            map.computeIfAbsent(service.getName(), k -> new TreeSet<>())
-                                .add(provider.getName());
-                        }
+            if (annotation != null) {
+                for (Class<?> service : annotation.value()) {
+                    if (service.isAssignableFrom(provider)) {
+                        map.computeIfAbsent(service.getName(), k -> new TreeSet<>())
+                            .add(provider.getName());
                     }
                 }
             }
