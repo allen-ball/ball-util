@@ -89,15 +89,17 @@ public class ObjectToStringProcessor extends AnnotatedNoAnnotationProcessor {
 
     @Override
     protected void process(RoundEnvironment roundEnv, Element element) {
-        TypeElement type = (TypeElement) element;
+        if (! isGenerated(element)) {
+            TypeElement type = (TypeElement) element;
 
-        if (! isAnnotated(type)) {
-            ExecutableElement implementation = implementationOf(METHOD, type);
+            if (! isAnnotated(type)) {
+                ExecutableElement implementation = implementationOf(METHOD, type);
 
-            if (implementation == null || METHOD.equals(implementation)) {
-                print(WARNING, type,
-                      "%s does not override '%s'",
-                      type.getKind(), declaration(PROTOTYPE));
+                if (implementation == null || METHOD.equals(implementation)) {
+                    print(WARNING, type,
+                          "%s does not override '%s'",
+                          type.getKind(), declaration(PROTOTYPE));
+                }
             }
         }
     }

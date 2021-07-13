@@ -63,14 +63,16 @@ public class NoOverrideProcessor extends AnnotatedNoAnnotationProcessor {
     protected void process(RoundEnvironment roundEnv, Element element) {
         super.process(roundEnv, element);
 
-        ExecutableElement method = (ExecutableElement) element;
-        ExecutableElement specification = specifiedBy(method);
+        if (! isGenerated(element)) {
+            ExecutableElement method = (ExecutableElement) element;
+            ExecutableElement specification = specifiedBy(method);
 
-        if (specification != null) {
-            print(WARNING, method,
-                  "Missing @%s annotation (specified by %s)",
-                  Override.class.getSimpleName(),
-                  specification.getEnclosingElement());
+            if (specification != null) {
+                print(WARNING, method,
+                      "Missing @%s annotation (specified by %s)",
+                      Override.class.getSimpleName(),
+                      specification.getEnclosingElement());
+            }
         }
     }
 }

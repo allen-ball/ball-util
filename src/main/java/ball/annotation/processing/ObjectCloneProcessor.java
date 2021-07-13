@@ -93,33 +93,35 @@ public class ObjectCloneProcessor extends AnnotatedNoAnnotationProcessor {
 
     @Override
     protected void process(RoundEnvironment roundEnv, Element element) {
-        ExecutableElement method = (ExecutableElement) element;
-        TypeElement type = (TypeElement) method.getEnclosingElement();
+        if (isGenerated(element)) {
+            ExecutableElement method = (ExecutableElement) element;
+            TypeElement type = (TypeElement) method.getEnclosingElement();
 
-        if (! type.getInterfaces().contains(CLONEABLE.asType())) {
-            print(WARNING, type,
-                  "%s overrides '%s' but does not implement %s",
-                  type.getKind(),
-                  declaration(PROTOTYPE), CLONEABLE.getSimpleName());
+            if (! type.getInterfaces().contains(CLONEABLE.asType())) {
+                print(WARNING, type,
+                      "%s overrides '%s' but does not implement %s",
+                      type.getKind(),
+                      declaration(PROTOTYPE), CLONEABLE.getSimpleName());
+            }
+
+            if (! types.isAssignable(method.getReturnType(), type.asType())) {
+                print(WARNING, method,
+                      "%s overrides '%s' but does not return a subclass of %s",
+                      method.getKind(),
+                      declaration(PROTOTYPE), type.getSimpleName());
+            }
+
+            List<TypeMirror> throwables =
+                METHOD.getThrownTypes().stream().collect(toList());
+
+            throwables.retainAll(overrides(method).getThrownTypes());
+            throwables.removeAll(method.getThrownTypes());
+            throwables.stream()
+                .map(t -> types.asElement(t))
+                .map(t -> t.getSimpleName())
+                .forEach(t -> print(WARNING, method,
+                                    "%s overrides '%s' but does not throw %s",
+                                    method.getKind(), declaration(PROTOTYPE), t));
         }
-
-        if (! types.isAssignable(method.getReturnType(), type.asType())) {
-            print(WARNING, method,
-                  "%s overrides '%s' but does not return a subclass of %s",
-                  method.getKind(),
-                  declaration(PROTOTYPE), type.getSimpleName());
-        }
-
-        List<TypeMirror> throwables =
-            METHOD.getThrownTypes().stream().collect(toList());
-
-        throwables.retainAll(overrides(method).getThrownTypes());
-        throwables.removeAll(method.getThrownTypes());
-        throwables.stream()
-            .map(t -> types.asElement(t))
-            .map(t -> t.getSimpleName())
-            .forEach(t -> print(WARNING, method,
-                                "%s overrides '%s' but does not throw %s",
-                                method.getKind(), declaration(PROTOTYPE), t));
     }
 }

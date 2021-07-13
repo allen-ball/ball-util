@@ -72,17 +72,19 @@ public class SerializableProcessor extends AnnotatedNoAnnotationProcessor {
 
     @Override
     protected void process(RoundEnvironment roundEnv, Element element) {
-        TypeElement type = (TypeElement) element;
-        VariableElement field =
-            fieldsIn(type.getEnclosedElements())
-            .stream()
-            .filter(t -> t.getSimpleName().contentEquals(PROTOTYPE.getName()))
-            .findFirst().orElse(null);
+        if (! isGenerated(element)) {
+            TypeElement type = (TypeElement) element;
+            VariableElement field =
+                fieldsIn(type.getEnclosedElements())
+                .stream()
+                .filter(t -> t.getSimpleName().contentEquals(PROTOTYPE.getName()))
+                .findFirst().orElse(null);
 
-        if (! (field != null
-               && field.getModifiers().containsAll(getModifiers(PROTOTYPE))
-               && isAssignableTo(PROTOTYPE.getType()).test(field))) {
-            set.add(elements.getBinaryName(type).toString());
+            if (! (field != null
+                   && field.getModifiers().containsAll(getModifiers(PROTOTYPE))
+                   && isAssignableTo(PROTOTYPE.getType()).test(field))) {
+                set.add(elements.getBinaryName(type).toString());
+            }
         }
     }
 

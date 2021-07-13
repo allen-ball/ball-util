@@ -1,5 +1,11 @@
 2021-07-13  Allen D. Ball  <ball@hcf.dev>
 
+	* src/main/java/ball/annotation/processing/NoOverrideProcessor.java,
+	src/main/java/ball/annotation/processing/ObjectCloneProcessor.java,
+	src/main/java/ball/annotation/processing/ObjectToStringProcessor.java,
+	src/main/java/ball/annotation/processing/SerializableProcessor.java:
+	Skip the checks if the isGenerated(Element).
+
 	* src/main/java/ball/annotation/processing/JavaxLangModelUtilities.java:
 	Added isGenerated(Element) method to test if the argument  Element
 	or any of its enclosing elements is annotated with
