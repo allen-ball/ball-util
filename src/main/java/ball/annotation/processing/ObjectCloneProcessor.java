@@ -93,7 +93,7 @@ public class ObjectCloneProcessor extends AnnotatedNoAnnotationProcessor {
 
     @Override
     protected void process(RoundEnvironment roundEnv, Element element) {
-        if (isGenerated(element)) {
+        if (! isGenerated(element)) {
             ExecutableElement method = (ExecutableElement) element;
             TypeElement type = (TypeElement) method.getEnclosingElement();
 
