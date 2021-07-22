@@ -23,6 +23,7 @@ package ball.annotation.processing;
 import ball.annotation.ServiceProviderFor;
 import java.io.PrintWriter;
 import java.lang.reflect.Method;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -116,7 +117,7 @@ public class ServiceProviderForProcessor extends AnnotatedProcessor
                 }
 
                 ExecutableElement constructor =
-                    getConstructor((TypeElement) element, List.of());
+                    getConstructor((TypeElement) element, Collections.emptyList());
                 boolean found =
                     (constructor != null && constructor.getModifiers().contains(PUBLIC));
 
