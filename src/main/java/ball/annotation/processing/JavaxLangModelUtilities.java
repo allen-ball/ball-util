@@ -28,6 +28,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 /* import java.lang.reflect.Modifier; */
 import java.net.URLClassLoader;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumMap;
@@ -59,6 +60,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import static java.util.Collections.disjoint;
+import static java.util.Collections.unmodifiableList;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 import static javax.lang.model.element.ElementKind.CONSTRUCTOR;
@@ -80,7 +82,23 @@ import static lombok.AccessLevel.PROTECTED;
  */
 @NoArgsConstructor(access = PROTECTED) @ToString
 public abstract class JavaxLangModelUtilities {
-    public static final ModifierMap MODIFIERS = new ModifierMap();
+    private static final ModifierMap MODIFIERS = new ModifierMap();
+    private static final List<Class<? extends Annotation>> GENERATED_ANNOTATION_LIST;
+
+    static {
+        ArrayList<Class<? extends Annotation>> list = new ArrayList<>();
+
+        for (String name :
+                 Arrays.asList("javax.annotation.Generated",
+                               "javax.annotation.processing.Generated")) {
+            try {
+                list.add(Class.forName(name).asSubclass(Annotation.class));
+            } catch (Exception exception) {
+            }
+        }
+
+        GENERATED_ANNOTATION_LIST = unmodifiableList(list);
+    }
 
     /** See {@link javax.annotation.processing.ProcessingEnvironment#getElementUtils()}. */
     protected Elements elements = null;
@@ -101,6 +119,37 @@ public abstract class JavaxLangModelUtilities {
         }
 
         return loader;
+    }
+
+    /**
+     * Method to determine if an {@link Element} is "generated".  Tests the
+     * argument {@link Element} and all enclosing {@link Element} for the
+     * presence of a "generated" annotation.
+     *
+     * @param   element         The {@link Element} to test.
+     *
+     * @return  {@code true} if the argument {@link Element} or any of its
+     *          enclosing {@link Element}s have a "generated" annotation;
+     *          {@code false} otherwise.
+     */
+    protected boolean isGenerated(Element element) {
+        boolean isGenerated = false;
+
+        if (element != null) {
+            for (Class<? extends Annotation> annotation : GENERATED_ANNOTATION_LIST) {
+                isGenerated |= (element.getAnnotation(annotation) != null);
+
+                if (isGenerated) {
+                    break;
+                }
+            }
+
+            if (! isGenerated) {
+                isGenerated |= isGenerated(element.getEnclosingElement());
+            }
+        }
+
+        return isGenerated;
     }
 
     /**

@@ -29,9 +29,6 @@ import java.lang.annotation.Target;
 
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
-import static javax.lang.model.element.ElementKind.CLASS;
-import static javax.lang.model.element.Modifier.ABSTRACT;
-import static javax.lang.model.element.Modifier.PUBLIC;
 
 /**
  * {@link java.lang.annotation.Annotation} to mark service providers.
@@ -44,9 +41,6 @@ import static javax.lang.model.element.Modifier.PUBLIC;
 @Documented
 @Retention(RUNTIME)
 @Target({ TYPE })
-@TargetMustBe(CLASS)
-@TargetMustNotHaveModifiers({ ABSTRACT })
-@TargetMustHaveConstructor(PUBLIC)
 public @interface ServiceProviderFor {
     Class<?>[] value() default { };
 }

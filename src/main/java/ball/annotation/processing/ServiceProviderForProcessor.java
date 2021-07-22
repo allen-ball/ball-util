@@ -22,6 +22,8 @@ package ball.annotation.processing;
  */
 import ball.annotation.ServiceProviderFor;
 import java.io.PrintWriter;
+import java.lang.reflect.Method;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -34,6 +36,7 @@ import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.Element;
+import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.TypeMirror;
 import javax.tools.FileObject;
@@ -43,6 +46,8 @@ import lombok.ToString;
 
 import static java.lang.reflect.Modifier.isAbstract;
 import static java.util.stream.Collectors.toList;
+import static javax.lang.model.element.Modifier.ABSTRACT;
+import static javax.lang.model.element.Modifier.PUBLIC;
 import static javax.tools.Diagnostic.Kind.ERROR;
 import static javax.tools.StandardLocation.CLASS_OUTPUT;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
@@ -58,11 +63,13 @@ import static org.apache.commons.lang3.StringUtils.EMPTY;
  *     {@link ServiceProviderFor#value()}
  *   </li>
  * </ol>
- *
+ * or implements Java 9's {@code java.util.ServiceLoader.Provider}
+ * {@code public static T provider()} method.
+ * <p>
  * Note: Google offers a similar
  * {@link.uri https://github.com/google/auto/tree/master/service target=newtab AutoService}
  * library.
- *
+ * </p>
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
@@ -71,16 +78,15 @@ import static org.apache.commons.lang3.StringUtils.EMPTY;
 @NoArgsConstructor @ToString
 public class ServiceProviderForProcessor extends AnnotatedProcessor
                                          implements ClassFileProcessor {
-/*
     private static abstract class PROTOTYPE {
-        public static Object provider() { }
+        public static Object provider() { return null; }
     }
 
     private static final Method PROTOTYPE =
         PROTOTYPE.class.getDeclaredMethods()[0];
 
     static { PROTOTYPE.setAccessible(true); }
-*/
+
     private static final String PATH = "META-INF/services/%s";
 
     @Override
@@ -88,12 +94,41 @@ public class ServiceProviderForProcessor extends AnnotatedProcessor
                            TypeElement annotation, Element element) {
         super.process(roundEnv, annotation, element);
 
-        AnnotationMirror mirror = getAnnotationMirror(element, annotation);
+        TypeElement type = (TypeElement) element;
+        AnnotationMirror mirror = getAnnotationMirror(type, annotation);
         AnnotationValue value = getAnnotationValue(mirror, "value");
 
         if (! isEmptyArray(value)) {
-            String provider =
-                elements.getBinaryName((TypeElement) element).toString();
+            ExecutableElement method = getMethod(type, PROTOTYPE);
+
+            if (method != null) {
+                if (! method.getModifiers().containsAll(getModifiers(PROTOTYPE))) {
+                    print(ERROR, method,
+                          "@%s: %s is not %s",
+                          annotation.getSimpleName(),
+                          method.getKind(), modifiers(PROTOTYPE.getModifiers()));
+                }
+            } else {
+                if (! withoutModifiers(ABSTRACT).test(element)) {
+                    print(ERROR, element,
+                          "%s: %s must not be %s",
+                          annotation.getSimpleName(),
+                          element.getKind(), ABSTRACT);
+                }
+
+                ExecutableElement constructor =
+                    getConstructor((TypeElement) element, Collections.emptyList());
+                boolean found =
+                    (constructor != null && constructor.getModifiers().contains(PUBLIC));
+
+                if (! found) {
+                    print(ERROR, element,
+                          "@%s: No %s NO-ARG constructor",
+                          annotation.getSimpleName(), PUBLIC);
+                }
+            }
+
+            String provider = elements.getBinaryName(type).toString();
             List<TypeElement> services =
                 Stream.of(value)
                 .filter(Objects::nonNull)
@@ -105,17 +140,33 @@ public class ServiceProviderForProcessor extends AnnotatedProcessor
                 .collect(toList());
 
             for (TypeElement service : services) {
-                if (! types.isAssignable(types.erasure(element.asType()),
-                                         types.erasure(service.asType()))) {
-                    print(ERROR, element,
+                if (! isAssignable(type, service)) {
+                    print(ERROR, type,
                           "@%s: %s does not implement %s",
                           annotation.getSimpleName(),
-                          element.getKind(), service.getQualifiedName());
+                          type.getKind(), service.getQualifiedName());
+                }
+
+                if (method != null) {
+                    if (! isAssignable(method.getReturnType(), service.asType())) {
+                        print(ERROR, method,
+                              "@%s: %s does not return %s",
+                              annotation.getSimpleName(),
+                              method.getKind(), service.getQualifiedName());
+                    }
                 }
             }
         } else {
-            print(ERROR, element, mirror, value, "value() is empty");
+            print(ERROR, type, mirror, value, "value() is empty");
         }
+    }
+
+    private boolean isAssignable(Element from, Element to) {
+        return isAssignable(from.asType(), to.asType());
+    }
+
+    private boolean isAssignable(TypeMirror from, TypeMirror to) {
+        return types.isAssignable(types.erasure(from), types.erasure(to));
     }
 
     @Override
@@ -123,17 +174,14 @@ public class ServiceProviderForProcessor extends AnnotatedProcessor
         Map<String,Set<String>> map = new TreeMap<>();
 
         for (Class<?> provider : set) {
-            if (! isAbstract(provider.getModifiers())) {
-                ServiceProviderFor annotation =
-                    provider.getAnnotation(ServiceProviderFor.class);
+            ServiceProviderFor annotation =
+                provider.getAnnotation(ServiceProviderFor.class);
 
-                if (annotation != null) {
-                    for (Class<?> service : annotation.value()) {
-                        if (service.isAssignableFrom(provider)) {
-                            map.computeIfAbsent(service.getName(),
-                                                k -> new TreeSet<>())
-                                .add(provider.getName());
-                        }
+            if (annotation != null) {
+                for (Class<?> service : annotation.value()) {
+                    if (service.isAssignableFrom(provider)) {
+                        map.computeIfAbsent(service.getName(), k -> new TreeSet<>())
+                            .add(provider.getName());
                     }
                 }
             }

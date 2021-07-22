@@ -1,3 +1,34 @@
+2021-07-22  Allen D. Ball  <ball@hcf.dev>
+
+	* pom.xml: Released version 6.2.0.20210722.
+
+2021-07-13  Allen D. Ball  <ball@hcf.dev>
+
+	* src/main/java/ball/annotation/processing/NoOverrideProcessor.java,
+	src/main/java/ball/annotation/processing/ObjectCloneProcessor.java,
+	src/main/java/ball/annotation/processing/ObjectToStringProcessor.java,
+	src/main/java/ball/annotation/processing/SerializableProcessor.java:
+	Skip the checks if the isGenerated(Element).
+
+	* src/main/java/ball/annotation/processing/JavaxLangModelUtilities.java:
+	Added isGenerated(Element) method to test if the argument  Element
+	or any of its enclosing elements is annotated with
+	javax.annotation.Generated or
+	javax.annotation.processing.Generated.
+
+2021-07-04  Allen D. Ball  <ball@hcf.dev>
+
+	* src/main/java/ball/annotation/ServiceProviderFor.java,
+	src/main/java/ball/annotation/processing/ServiceProviderForProcessor.java:
+	Analyze annotated Java 9+ module ServiceLoader.Provider
+	implementations with "public static T provider()" methods.
+
+	* src/main/java/ball/lang/reflect/JavaLangReflectMethods.java:
+	Added declaration(int,Type,Method) and
+	declaration(int,String,Method) methods.
+
+	* pom.xml: Started development of 6.2.0-SNAPSHOT.
+
 2021-06-25  Allen D. Ball  <ball@hcf.dev>
 
 	* pom.xml: Released version 6.1.2.20210625.
