@@ -30,6 +30,7 @@ import java.util.List;
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  * @version $Revision$
  */
+@Deprecated
 public abstract class Comparators {
     private Comparators() { }
 
