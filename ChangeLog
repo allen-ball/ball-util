@@ -1,5 +1,7 @@
 2021-08-07  Allen D. Ball  <ball@hcf.dev>
 
+	* pom.xml: Started development of 6.3.0-SNAPSHOT.
+
 	* src/main/java/ball/util/Comparators.java: @Deprecated.
 
 2021-07-22  Allen D. Ball  <ball@hcf.dev>
