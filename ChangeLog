@@ -1,3 +1,8 @@
+2021-08-09  Allen D. Ball  <ball@hcf.dev>
+
+	* src/main/java/ball/util/ListOrderComparator.java:
+	Initial writing.
+
 2021-08-07  Allen D. Ball  <ball@hcf.dev>
 
 	* pom.xml: Started development of 6.3.0-SNAPSHOT.
