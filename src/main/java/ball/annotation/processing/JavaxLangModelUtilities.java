@@ -247,11 +247,6 @@ public abstract class JavaxLangModelUtilities {
         return getMethod(asTypeElement(method.getDeclaringClass()), method);
     }
 
-    @Deprecated
-    protected ExecutableElement getMethod(Method method) {
-        return asExecutableElement(method);
-    }
-
     /**
      * Method to get a {@link VariableElement} for a {@link Field}.
      *
