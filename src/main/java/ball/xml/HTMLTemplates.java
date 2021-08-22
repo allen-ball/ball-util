@@ -90,7 +90,7 @@ public interface HTMLTemplates extends XMLServices {
     default FluentNode b(String content) { return b(text(content)); }
 
     /**
-     * {@code <code>}{@link String content}{@code </code>}}
+     * {@code <code>}{@link String content}{@code </code>}
      *
      * @param   content         {@link org.w3c.dom.Text} content
      *
@@ -101,7 +101,7 @@ public interface HTMLTemplates extends XMLServices {
     }
 
     /**
-     * {@code <code>}{@link String#valueOf(boolean) String.valueOf(content)}{@code </code>}}
+     * {@code <code>}{@link String#valueOf(boolean) String.valueOf(content)}{@code </code>}
      *
      * @param   content         {@link org.w3c.dom.Text} content
      *
@@ -495,7 +495,7 @@ public interface HTMLTemplates extends XMLServices {
     default FluentNode table(Node... nodes) { return element("table", nodes); }
 
     /**
-     * {@code <caption>}{@link String content}{@code </caption>}}
+     * {@code <caption>}{@link String content}{@code </caption>}
      *
      * @param   content         {@link org.w3c.dom.Text} content
      *
