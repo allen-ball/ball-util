@@ -90,7 +90,7 @@ public interface HTMLTemplates extends XMLServices {
     default FluentNode b(String content) { return b(text(content)); }
 
     /**
-     * {@code <code>}{@link String content}{@code </code>}}
+     * {@code <code>}{@link String content}{@code </code>}
      *
      * @param   content         {@link org.w3c.dom.Text} content
      *
@@ -101,7 +101,7 @@ public interface HTMLTemplates extends XMLServices {
     }
 
     /**
-     * {@code <code>}{@link String#valueOf(boolean) String.valueOf(content)}{@code </code>}}
+     * {@code <code>}{@link String#valueOf(boolean) String.valueOf(content)}{@code </code>}
      *
      * @param   content         {@link org.w3c.dom.Text} content
      *
@@ -128,8 +128,7 @@ public interface HTMLTemplates extends XMLServices {
      * {@code <div>}{@link Node nodes...}{@code </div>}
      *
      * @param   nodes           The {@link Node}s to append to the newly
-     *                          created
-     *                          {@link org.w3c.dom.Element}.
+     *                          created {@link org.w3c.dom.Element}.
      *
      * @return  {@link org.w3c.dom.Element}
      */
@@ -152,8 +151,7 @@ public interface HTMLTemplates extends XMLServices {
      * {@code <h1>}{@link Node nodes...}{@code </h1>}
      *
      * @param   nodes           The {@link Node}s to append to the newly
-     *                          created
-     *                          {@link org.w3c.dom.Element}.
+     *                          created {@link org.w3c.dom.Element}.
      *
      * @return  {@link org.w3c.dom.Element}
      */
@@ -185,8 +183,7 @@ public interface HTMLTemplates extends XMLServices {
      * {@code <h2>}{@link Node nodes...}{@code </h2>}
      *
      * @param   nodes           The {@link Node}s to append to the newly
-     *                          created
-     *                          {@link org.w3c.dom.Element}.
+     *                          created {@link org.w3c.dom.Element}.
      *
      * @return  {@link org.w3c.dom.Element}
      */
@@ -218,8 +215,7 @@ public interface HTMLTemplates extends XMLServices {
      * {@code <h3>}{@link Node nodes...}{@code </h3>}
      *
      * @param   nodes           The {@link Node}s to append to the newly
-     *                          created
-     *                          {@link org.w3c.dom.Element}.
+     *                          created {@link org.w3c.dom.Element}.
      *
      * @return  {@link org.w3c.dom.Element}
      */
@@ -251,8 +247,7 @@ public interface HTMLTemplates extends XMLServices {
      * {@code <h4>}{@link Node nodes...}{@code </h4>}
      *
      * @param   nodes           The {@link Node}s to append to the newly
-     *                          created
-     *                          {@link org.w3c.dom.Element}.
+     *                          created {@link org.w3c.dom.Element}.
      *
      * @return  {@link org.w3c.dom.Element}
      */
@@ -284,8 +279,7 @@ public interface HTMLTemplates extends XMLServices {
      * {@code <h5>}{@link Node nodes...}{@code </h5>}
      *
      * @param   nodes           The {@link Node}s to append to the newly
-     *                          created
-     *                          {@link org.w3c.dom.Element}.
+     *                          created {@link org.w3c.dom.Element}.
      *
      * @return  {@link org.w3c.dom.Element}
      */
@@ -317,8 +311,7 @@ public interface HTMLTemplates extends XMLServices {
      * {@code <h6>}{@link Node nodes...}{@code </h6>}
      *
      * @param   nodes           The {@link Node}s to append to the newly
-     *                          created
-     *                          {@link org.w3c.dom.Element}.
+     *                          created {@link org.w3c.dom.Element}.
      *
      * @return  {@link org.w3c.dom.Element}
      */
@@ -350,8 +343,7 @@ public interface HTMLTemplates extends XMLServices {
      * {@code <ol>}{@link Node nodes...}{@code </ol>}
      *
      * @param   nodes           The {@link Node}s to append to the newly
-     *                          created
-     *                          {@link org.w3c.dom.Element}.
+     *                          created {@link org.w3c.dom.Element}.
      *
      * @return  {@link org.w3c.dom.Element}
      */
@@ -374,8 +366,7 @@ public interface HTMLTemplates extends XMLServices {
      * {@code <ul>}{@link Node nodes...}{@code </ul>}
      *
      * @param   nodes           The {@link Node}s to append to the newly
-     *                          created
-     *                          {@link org.w3c.dom.Element}.
+     *                          created {@link org.w3c.dom.Element}.
      *
      * @return  {@link org.w3c.dom.Element}
      */
@@ -398,8 +389,7 @@ public interface HTMLTemplates extends XMLServices {
      * {@code <li>}{@link Node nodes...}{@code </li>}
      *
      * @param   nodes           The {@link Node}s to append to the newly
-     *                          created
-     *                          {@link org.w3c.dom.Element}.
+     *                          created {@link org.w3c.dom.Element}.
      *
      * @return  {@link org.w3c.dom.Element}
      */
@@ -431,8 +421,7 @@ public interface HTMLTemplates extends XMLServices {
      * {@code <p>}{@link Node nodes...}{@code </p>}
      *
      * @param   nodes           The {@link Node}s to append to the newly
-     *                          created
-     *                          {@link org.w3c.dom.Element}.
+     *                          created {@link org.w3c.dom.Element}.
      *
      * @return  {@link org.w3c.dom.Element}
      */
@@ -487,15 +476,14 @@ public interface HTMLTemplates extends XMLServices {
      * {@code <table>}{@link Node nodes...}{@code </table>}
      *
      * @param   nodes           The {@link Node}s to append to the newly
-     *                          created
-     *                          {@link org.w3c.dom.Element}.
+     *                          created {@link org.w3c.dom.Element}.
      *
      * @return  {@link org.w3c.dom.Element}
      */
     default FluentNode table(Node... nodes) { return element("table", nodes); }
 
     /**
-     * {@code <caption>}{@link String content}{@code </caption>}}
+     * {@code <caption>}{@link String content}{@code </caption>}
      *
      * @param   content         {@link org.w3c.dom.Text} content
      *
@@ -522,8 +510,7 @@ public interface HTMLTemplates extends XMLServices {
      * {@code <thead>}{@link Node nodes...}{@code </thead>}
      *
      * @param   nodes           The {@link Node}s to append to the newly
-     *                          created
-     *                          {@link org.w3c.dom.Element}.
+     *                          created {@link org.w3c.dom.Element}.
      *
      * @return  {@link org.w3c.dom.Element}
      */
@@ -546,8 +533,7 @@ public interface HTMLTemplates extends XMLServices {
      * {@code <tbody>}{@link Node nodes...}{@code </tbody>}
      *
      * @param   nodes           The {@link Node}s to append to the newly
-     *                          created
-     *                          {@link org.w3c.dom.Element}.
+     *                          created {@link org.w3c.dom.Element}.
      *
      * @return  {@link org.w3c.dom.Element}
      */
@@ -570,8 +556,7 @@ public interface HTMLTemplates extends XMLServices {
      * {@code <tfoot>}{@link Node nodes...}{@code </tfoot>}
      *
      * @param   nodes           The {@link Node}s to append to the newly
-     *                          created
-     *                          {@link org.w3c.dom.Element}.
+     *                          created {@link org.w3c.dom.Element}.
      *
      * @return  {@link org.w3c.dom.Element}
      */
@@ -594,8 +579,7 @@ public interface HTMLTemplates extends XMLServices {
      * {@code <tr>}{@link Node nodes...}{@code </tr>}
      *
      * @param   nodes           The {@link Node}s to append to the newly
-     *                          created
-     *                          {@link org.w3c.dom.Element}.
+     *                          created {@link org.w3c.dom.Element}.
      *
      * @return  {@link org.w3c.dom.Element}
      */
