@@ -135,8 +135,9 @@ public class ServiceProviderForProcessor extends AnnotatedProcessor
                 .map(t -> (List<?>) t.getValue())
                 .flatMap(List::stream)
                 .map(t -> (AnnotationValue) t)
-                .map(t -> (TypeMirror) t.getValue())
-                .map(t -> (TypeElement) types.asElement(t))
+                .map(t -> t.getValue())
+                .filter(t -> t instanceof TypeMirror)
+                .map(t -> (TypeElement) types.asElement((TypeMirror) t))
                 .collect(toList());
 
             for (TypeElement service : services) {
