@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   ##########################################################################
-  $Id$
-  $HeadURL$
   %%
   Copyright (C) 2008 - 2022 Allen D. Ball
   %%
@@ -25,8 +23,6 @@
     ball-util.jar
     --------------
     Java Utilities
-
-    $Id$
   </description>
 
   <resolver:resolve>

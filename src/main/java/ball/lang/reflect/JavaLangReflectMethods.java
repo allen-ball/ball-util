@@ -2,10 +2,8 @@ package ball.lang.reflect;
 /*-
  * ##########################################################################
  * Utilities
- * $Id$
- * $HeadURL$
  * %%
- * Copyright (C) 2020, 2021 Allen D. Ball
+ * Copyright (C) 2020 - 2022 Allen D. Ball
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,7 +36,6 @@ import static java.util.stream.Collectors.joining;
  * methods.
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
- * @version $Revision$
  */
 public interface JavaLangReflectMethods {
 
@@ -54,8 +51,7 @@ public interface JavaLangReflectMethods {
     default EnumSet<Modifier> asModifierSet(int modifiers) {
         EnumSet<Modifier> set = EnumSet.noneOf(Modifier.class);
 
-        Stream.of(java.lang.reflect.Modifier.toString(modifiers)
-                  .split("[\\p{Space}]+"))
+        Stream.of(java.lang.reflect.Modifier.toString(modifiers).split("[\\p{Space}]+"))
             .filter(t -> (! t.isEmpty()))
             .map(String::toUpperCase)
             .map(Modifier::valueOf)
@@ -136,10 +132,7 @@ public interface JavaLangReflectMethods {
      * @return  {@link String}
      */
     default String declaration(Field field) {
-        String string =
-            modifiers(field.getModifiers())
-            + " " + type(field.getGenericType())
-            + " " + field.getName();
+        String string = modifiers(field.getModifiers()) + " " + type(field.getGenericType()) + " " + field.getName();
 
         return string.trim();
     }

@@ -2,10 +2,8 @@ package ball.xml;
 /*-
  * ##########################################################################
  * Utilities
- * $Id$
- * $HeadURL$
  * %%
- * Copyright (C) 2008 - 2021 Allen D. Ball
+ * Copyright (C) 2008 - 2022 Allen D. Ball
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +29,6 @@ import static java.util.Objects.requireNonNull;
  * {@link FluentDocument.Builder} {@link DocumentBuilderFactory}.
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
- * @version $Revision$
  */
 @ToString
 public class FluentDocumentBuilderFactory extends DocumentBuilderFactory {
@@ -54,10 +51,8 @@ public class FluentDocumentBuilderFactory extends DocumentBuilderFactory {
      *
      * @return  {@link FluentDocumentBuilderFactory}
      */
-    public static FluentDocumentBuilderFactory newInstance(String name,
-                                                           ClassLoader loader) throws FactoryConfigurationError {
-        DocumentBuilderFactory factory =
-            DocumentBuilderFactory.newInstance(name, loader);
+    public static FluentDocumentBuilderFactory newInstance(String name, ClassLoader loader) throws FactoryConfigurationError {
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance(name, loader);
 
         if (! (factory instanceof FluentDocumentBuilderFactory)) {
             factory = new FluentDocumentBuilderFactory(factory);
@@ -80,8 +75,7 @@ public class FluentDocumentBuilderFactory extends DocumentBuilderFactory {
     }
 
     @Override
-    public void setAttribute(String name,
-                             Object value) throws IllegalArgumentException {
+    public void setAttribute(String name, Object value) throws IllegalArgumentException {
         factory.setAttribute(name, value);
     }
 
@@ -96,8 +90,7 @@ public class FluentDocumentBuilderFactory extends DocumentBuilderFactory {
     }
 
     @Override
-    public void setFeature(String name,
-                           boolean value) throws ParserConfigurationException {
+    public void setFeature(String name, boolean value) throws ParserConfigurationException {
         factory.setFeature(name, value);
     }
 

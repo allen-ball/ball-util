@@ -2,10 +2,8 @@ package ball.util;
 /*-
  * ##########################################################################
  * Utilities
- * $Id$
- * $HeadURL$
  * %%
- * Copyright (C) 2008 - 2021 Allen D. Ball
+ * Copyright (C) 2008 - 2022 Allen D. Ball
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,7 +37,6 @@ import static ball.util.Converter.convertTo;
  * {@link MatcherGroup}.
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
- * @version $Revision$
  */
 public interface PatternMatcherBean {
 
@@ -59,49 +56,36 @@ public interface PatternMatcherBean {
 
         if (! matcher.matches()) {
             throw new IllegalArgumentException("\"" + String.valueOf(sequence)
-                                               + "\" does not match "
-                                               + matcher.pattern().pattern());
+                                               + "\" does not match " + matcher.pattern().pattern());
         }
 
         try {
-            List<Field> fields =
-                FieldUtils.getFieldsListWithAnnotation(getClass(),
-                                                       MatcherGroup.class);
+            List<Field> fields = FieldUtils.getFieldsListWithAnnotation(getClass(), MatcherGroup.class);
 
             for (Field field : fields) {
                 MatcherGroup group = field.getAnnotation(MatcherGroup.class);
                 String string = matcher.group(group.value());
-                Object value =
-                    (string != null)
-                        ? convertTo(string, field.getType())
-                        : null;
+                Object value = (string != null) ? convertTo(string, field.getType()) : null;
 
                 FieldUtils.writeField(field, this, value, true);
             }
 
             List<Method> methods =
-                MethodUtils.getMethodsListWithAnnotation(getClass(),
-                                                         MatcherGroup.class,
-                                                         true, true);
+                MethodUtils.getMethodsListWithAnnotation(getClass(), MatcherGroup.class, true, true);
 
             for (Method method : methods) {
                 MatcherGroup group = method.getAnnotation(MatcherGroup.class);
-                Object value =
-                    convertTo(matcher.group(group.value()),
-                              method.getParameterTypes()[0]);
+                Object value = convertTo(matcher.group(group.value()), method.getParameterTypes()[0]);
 
                 MethodUtils.invokeMethod(this, true,
-                                         method.getName(),
-                                         new Object[] { value },
-                                         method.getParameterTypes());
+                                         method.getName(), new Object[] { value }, method.getParameterTypes());
             }
         } catch (IllegalAccessException exception) {
             exception.printStackTrace(System.err);
         } catch (RuntimeException exception) {
             throw exception;
         } catch (Exception exception) {
-            throw new IllegalArgumentException(String.valueOf(matcher),
-                                               exception);
+            throw new IllegalArgumentException(String.valueOf(matcher), exception);
         }
     }
 

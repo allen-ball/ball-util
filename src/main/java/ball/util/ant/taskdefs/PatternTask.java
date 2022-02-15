@@ -2,10 +2,8 @@ package ball.util.ant.taskdefs;
 /*-
  * ##########################################################################
  * Utilities
- * $Id$
- * $HeadURL$
  * %%
- * Copyright (C) 2008 - 2021 Allen D. Ball
+ * Copyright (C) 2008 - 2022 Allen D. Ball
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,13 +44,10 @@ import static org.apache.commons.lang3.StringUtils.SPACE;
  * {@ant.task}
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
- * @version $Revision$
  */
 @NoArgsConstructor(access = PROTECTED)
-public abstract class PatternTask extends Task
-                                  implements AnnotatedAntTask,
-                                             ClasspathDelegateAntTask,
-                                             ConfigurableAntTask {
+public abstract class PatternTask extends Task implements AnnotatedAntTask,
+                                                          ClasspathDelegateAntTask, ConfigurableAntTask {
     @Getter @Setter @Accessors(chain = true, fluent = true)
     private ClasspathUtils.Delegate delegate = null;
     @NotNull @Getter @Setter
@@ -86,8 +81,7 @@ public abstract class PatternTask extends Task
             super.execute();
 
             try {
-                SimpleTableModel table =
-                    new SimpleTableModel(new Object[][] { }, 2);
+                SimpleTableModel table = new SimpleTableModel(new Object[][] { }, 2);
                 Pattern pattern = Pattern.compile(getPattern());
 
                 table.row(EMPTY, String.valueOf(pattern));
@@ -103,8 +97,7 @@ public abstract class PatternTask extends Task
 
                 if (matches) {
                     for (int i = 0, n = matcher.groupCount(); i <= n; i += 1) {
-                        table.row(String.valueOf(i),
-                                  tab(matcher.start(i)) + matcher.group(i));
+                        table.row(String.valueOf(i), tab(matcher.start(i)) + matcher.group(i));
                     }
                 }
 
@@ -139,8 +132,7 @@ public abstract class PatternTask extends Task
             super.execute();
 
             try {
-                SimpleTableModel table =
-                    new SimpleTableModel(new Object[][] { }, 2);
+                SimpleTableModel table = new SimpleTableModel(new Object[][] { }, 2);
                 Pattern pattern = Pattern.compile(getPattern());
 
                 table.row(EMPTY, String.valueOf(pattern));

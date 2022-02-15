@@ -2,10 +2,8 @@ package ball.activation;
 /*-
  * ##########################################################################
  * Utilities
- * $Id$
- * $HeadURL$
  * %%
- * Copyright (C) 2008 - 2021 Allen D. Ball
+ * Copyright (C) 2008 - 2022 Allen D. Ball
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,7 +32,6 @@ import javax.xml.bind.Unmarshaller;
  * services.
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
- * @version $Revision$
  */
 public class JAXBDataSource extends ReaderWriterDataSource {
 
@@ -79,8 +76,7 @@ public class JAXBDataSource extends ReaderWriterDataSource {
      * @throws  IOException     If an I/O exception occurs.
      * @throws  JAXBException   If a JAXB exception occurs.
      */
-    public void marshal(JAXBContext context,
-                        Object object) throws IOException, JAXBException {
+    public void marshal(JAXBContext context, Object object) throws IOException, JAXBException {
         try (OutputStream out = getOutputStream()) {
             Marshaller marshaller = context.createMarshaller();
 
@@ -101,8 +97,7 @@ public class JAXBDataSource extends ReaderWriterDataSource {
      * @throws  IOException     If an I/O exception occurs.
      * @throws  JAXBException   If a JAXB exception occurs.
      */
-    public <T> T unmarshal(Class<? extends T> type) throws IOException,
-                                                           JAXBException {
+    public <T> T unmarshal(Class<? extends T> type) throws IOException, JAXBException {
         return unmarshal(JAXBContext.newInstance(type), type);
     }
 
@@ -118,9 +113,7 @@ public class JAXBDataSource extends ReaderWriterDataSource {
      * @throws  IOException     If an I/O exception occurs.
      * @throws  JAXBException   If a JAXB exception occurs.
      */
-    public <T> T unmarshal(JAXBContext context,
-                           Class<? extends T> type) throws IOException,
-                                                           JAXBException {
+    public <T> T unmarshal(JAXBContext context, Class<? extends T> type) throws IOException, JAXBException {
         T object = null;
 
         try (InputStream in = getInputStream()) {

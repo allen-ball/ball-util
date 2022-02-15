@@ -2,10 +2,8 @@ package ball.util;
 /*-
  * ##########################################################################
  * Utilities
- * $Id$
- * $HeadURL$
  * %%
- * Copyright (C) 2008 - 2021 Allen D. Ball
+ * Copyright (C) 2008 - 2022 Allen D. Ball
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +26,6 @@ import java.util.List;
  * {@link Comparator}s.
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
- * @version $Revision$
  */
 @Deprecated
 public abstract class Comparators {
@@ -47,8 +44,7 @@ public abstract class Comparators {
         return new OrderedComparator<T>(list);
     }
 
-    private static class OrderedComparator<T> extends HashMap<T,Integer>
-                                              implements Comparator<T> {
+    private static class OrderedComparator<T> extends HashMap<T,Integer> implements Comparator<T> {
         private static final long serialVersionUID = 4745150194266705710L;
 
         public OrderedComparator(List<T> list) {
@@ -59,8 +55,7 @@ public abstract class Comparators {
 
         @Override
         public int compare(T left, T right) {
-            return Integer.compare(getOrDefault(left, -1),
-                                   getOrDefault(right, size()));
+            return Integer.compare(getOrDefault(left, -1), getOrDefault(right, size()));
         }
     }
 }

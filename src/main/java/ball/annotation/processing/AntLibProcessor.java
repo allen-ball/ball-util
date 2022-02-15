@@ -2,10 +2,8 @@ package ball.annotation.processing;
 /*-
  * ##########################################################################
  * Utilities
- * $Id$
- * $HeadURL$
  * %%
- * Copyright (C) 2008 - 2021 Allen D. Ball
+ * Copyright (C) 2008 - 2022 Allen D. Ball
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,13 +49,11 @@ import static javax.xml.transform.OutputKeys.OMIT_XML_DECLARATION;
  * at the end of annotation processing.
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
- * @version $Revision$
  */
 @ServiceProviderFor({ Processor.class })
 @For({ AntLib.class, AntTask.class })
 @NoArgsConstructor @ToString
-public class AntLibProcessor extends AnnotatedProcessor
-                             implements ClassFileProcessor, XalanConstants {
+public class AntLibProcessor extends AnnotatedProcessor implements ClassFileProcessor, XalanConstants {
     private static final String ANTLIB_XML = "antlib.xml";
 
     private static final Transformer TRANSFORMER;
@@ -67,8 +63,7 @@ public class AntLibProcessor extends AnnotatedProcessor
             TRANSFORMER = TransformerFactory.newInstance().newTransformer();
             TRANSFORMER.setOutputProperty(OMIT_XML_DECLARATION, NO);
             TRANSFORMER.setOutputProperty(INDENT, YES);
-            TRANSFORMER.setOutputProperty(XALAN_INDENT_AMOUNT.toString(),
-                                          String.valueOf(2));
+            TRANSFORMER.setOutputProperty(XALAN_INDENT_AMOUNT.toString(), String.valueOf(2));
         } catch (Exception exception) {
             throw new ExceptionInInitializerError(exception);
         }
@@ -98,8 +93,7 @@ public class AntLibProcessor extends AnnotatedProcessor
         }
 
         for (String path : paths) {
-            FileObject file =
-                fm.getFileForOutput(CLASS_OUTPUT, path, ANTLIB_XML, null);
+            FileObject file = fm.getFileForOutput(CLASS_OUTPUT, path, ANTLIB_XML, null);
 
             try (OutputStream out = file.openOutputStream()) {
                 antlib.writeTo(out);
@@ -121,15 +115,13 @@ public class AntLibProcessor extends AnnotatedProcessor
                             entrySet().stream()
                             .map(t -> d.element("taskdef",
                                                 d.attr("name", t.getKey()),
-                                                d.attr("classname",
-                                                       t.getValue().getName())))));
+                                                d.attr("classname", t.getValue().getName())))));
 
             return d;
         }
 
         public void writeTo(OutputStream out) throws Exception {
-            TRANSFORMER.transform(new DOMSource(asDocument()),
-                                  new StreamResult(out));
+            TRANSFORMER.transform(new DOMSource(asDocument()), new StreamResult(out));
         }
     }
 }

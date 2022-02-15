@@ -2,10 +2,8 @@ package ball.annotation.processing;
 /*-
  * ##########################################################################
  * Utilities
- * $Id$
- * $HeadURL$
  * %%
- * Copyright (C) 2008 - 2021 Allen D. Ball
+ * Copyright (C) 2008 - 2022 Allen D. Ball
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,15 +38,13 @@ import static javax.tools.Diagnostic.Kind.ERROR;
  * annotations.
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
- * @version $Revision$
  */
 @ServiceProviderFor({ Processor.class })
 @For({ MatcherGroup.class })
 @NoArgsConstructor @ToString
 public class MatcherGroupProcessor extends AnnotatedProcessor {
     @Override
-    protected void process(RoundEnvironment roundEnv,
-                           TypeElement annotation, Element element) {
+    protected void process(RoundEnvironment roundEnv, TypeElement annotation, Element element) {
         super.process(roundEnv, annotation, element);
 
         AnnotationMirror mirror = getAnnotationMirror(element, annotation);
@@ -56,8 +52,7 @@ public class MatcherGroupProcessor extends AnnotatedProcessor {
         int group = (Integer) value.getValue();
 
         if (group < 0) {
-            print(ERROR, element, mirror, value,
-                  "value() must be non-negative");
+            print(ERROR, element, mirror, value, "value() must be non-negative");
         }
 
         switch (element.getKind()) {
@@ -76,9 +71,7 @@ public class MatcherGroupProcessor extends AnnotatedProcessor {
                           annotation.getSimpleName(), element.getKind());
                 }
             } else {
-                print(ERROR, element,
-                      "@%s: %s is %s",
-                      annotation.getSimpleName(), element.getKind(), PRIVATE);
+                print(ERROR, element, "@%s: %s is %s", annotation.getSimpleName(), element.getKind(), PRIVATE);
             }
             break;
         }

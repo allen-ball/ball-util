@@ -2,10 +2,8 @@ package ball.annotation.processing;
 /*-
  * ##########################################################################
  * Utilities
- * $Id$
- * $HeadURL$
  * %%
- * Copyright (C) 2008 - 2021 Allen D. Ball
+ * Copyright (C) 2008 - 2022 Allen D. Ball
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -68,7 +66,6 @@ import static lombok.AccessLevel.PROTECTED;
  * @see TargetMustNotHaveModifiers
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
- * @version $Revision$
  */
 @NoArgsConstructor(access = PROTECTED) @ToString
 public abstract class AnnotatedProcessor extends AbstractProcessor {
@@ -88,8 +85,7 @@ public abstract class AnnotatedProcessor extends AbstractProcessor {
     @Override
     public Set<String> getSupportedAnnotationTypes() {
         Set<String> set =
-            getSupportedAnnotationTypeList()
-            .stream()
+            getSupportedAnnotationTypeList().stream()
             .map(Class::getCanonicalName)
             .collect(toSet());
 
@@ -103,8 +99,7 @@ public abstract class AnnotatedProcessor extends AbstractProcessor {
         try {
             if (this instanceof ClassFileProcessor) {
                 TaskListener listener =
-                    new COMPILATIONFinishedTaskListener(javac, elements, processed,
-                                                        () -> onCOMPILATIONFinished());
+                    new COMPILATIONFinishedTaskListener(javac, elements, processed, () -> onCOMPILATIONFinished());
 
                 javac.addTaskListener(listener);
             }
@@ -114,8 +109,7 @@ public abstract class AnnotatedProcessor extends AbstractProcessor {
     }
 
     @Override
-    public boolean process(Set<? extends TypeElement> annotations,
-                           RoundEnvironment roundEnv) {
+    public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
         annotations.stream().forEach(t -> process(roundEnv, t));
 
         return true;
@@ -123,8 +117,7 @@ public abstract class AnnotatedProcessor extends AbstractProcessor {
 
     private void process(RoundEnvironment roundEnv, TypeElement annotation) {
         try {
-            roundEnv.getElementsAnnotatedWith(annotation)
-                .stream()
+            roundEnv.getElementsAnnotatedWith(annotation).stream()
                 .peek(t -> processed.add(getEnclosingTypeBinaryName(t)))
                 .peek(new AnnotationValueMustConvertToCheck(annotation))
                 .peek(new TargetMustBeCheck(annotation))
@@ -162,9 +155,7 @@ public abstract class AnnotatedProcessor extends AbstractProcessor {
             break;
 
         case PACKAGE:
-            name =
-                ((PackageElement) element).getQualifiedName().toString()
-                + ".package-info";
+            name = ((PackageElement) element).getQualifiedName().toString() + ".package-info";
             break;
 
         default:
@@ -200,28 +191,20 @@ public abstract class AnnotatedProcessor extends AbstractProcessor {
 
         @Override
         public void accept(Element element) {
-            AnnotationMirror meta =
-                getAnnotationMirror(annotation,
-                                    AnnotationValueMustConvertTo.class);
+            AnnotationMirror meta = getAnnotationMirror(annotation, AnnotationValueMustConvertTo.class);
 
             if (meta != null) {
                 AnnotationValue value = getAnnotationValue(meta, "value");
-                TypeElement to =
-                    (TypeElement)
-                    types.asElement((TypeMirror) value.getValue());
-                String method =
-                    (String) getAnnotationValue(meta, "method").getValue();
-                String name =
-                    (String) getAnnotationValue(meta, "name").getValue();
-                AnnotationMirror mirror =
-                    getAnnotationMirror(element, annotation);
+                TypeElement to = (TypeElement) types.asElement((TypeMirror) value.getValue());
+                String method = (String) getAnnotationValue(meta, "method").getValue();
+                String name = (String) getAnnotationValue(meta, "name").getValue();
+                AnnotationMirror mirror = getAnnotationMirror(element, annotation);
                 AnnotationValue from = null;
 
                 try {
                     from = getAnnotationValue(mirror, name);
 
-                    Class<?> type =
-                        Class.forName(to.getQualifiedName().toString());
+                    Class<?> type = Class.forName(to.getQualifiedName().toString());
 
                     if (! method.isEmpty()) {
                         type.getMethod(method, from.getValue().getClass())
@@ -251,14 +234,11 @@ public abstract class AnnotatedProcessor extends AbstractProcessor {
 
         @Override
         public void accept(Element element) {
-            AnnotationMirror meta =
-                getAnnotationMirror(annotation, TargetMustBe.class);
+            AnnotationMirror meta = getAnnotationMirror(annotation, TargetMustBe.class);
 
             if (meta != null) {
                 AnnotationValue value = getAnnotationValue(meta, "value");
-                String name =
-                    ((VariableElement) value.getValue()).getSimpleName()
-                    .toString();
+                String name = ((VariableElement) value.getValue()).getSimpleName().toString();
                 ElementKind kind = ElementKind.valueOf(name);
 
                 if (! kind.equals(element.getKind())) {
@@ -276,8 +256,7 @@ public abstract class AnnotatedProcessor extends AbstractProcessor {
 
         @Override
         public void accept(Element element) {
-            AnnotationMirror meta =
-                getAnnotationMirror(annotation, TargetMustHaveModifiers.class);
+            AnnotationMirror meta = getAnnotationMirror(annotation, TargetMustHaveModifiers.class);
 
             if (meta != null) {
                 EnumSet<Modifier> modifiers =
@@ -291,8 +270,7 @@ public abstract class AnnotatedProcessor extends AbstractProcessor {
                     .collect(toCollection(() -> EnumSet.noneOf(Modifier.class)));
 
                 if (! withModifiers(modifiers).test(element)) {
-                    print(ERROR, element,
-                          "%s must be %s", element.getKind(), modifiers);
+                    print(ERROR, element, "%s must be %s", element.getKind(), modifiers);
                 }
             }
         }
@@ -304,9 +282,7 @@ public abstract class AnnotatedProcessor extends AbstractProcessor {
 
         @Override
         public void accept(Element element) {
-            AnnotationMirror meta =
-                getAnnotationMirror(annotation,
-                                    TargetMustNotHaveModifiers.class);
+            AnnotationMirror meta = getAnnotationMirror(annotation, TargetMustNotHaveModifiers.class);
 
             if (meta != null) {
                 EnumSet<Modifier> modifiers =
@@ -320,8 +296,7 @@ public abstract class AnnotatedProcessor extends AbstractProcessor {
                     .collect(toCollection(() -> EnumSet.noneOf(Modifier.class)));
 
                 if (! withoutModifiers(modifiers).test(element)) {
-                    print(ERROR, element,
-                          "%s must not be %s", element.getKind(), modifiers);
+                    print(ERROR, element, "%s must not be %s", element.getKind(), modifiers);
                 }
             }
         }
@@ -333,20 +308,16 @@ public abstract class AnnotatedProcessor extends AbstractProcessor {
 
         @Override
         public void accept(Element element) {
-            AnnotationMirror meta =
-                getAnnotationMirror(annotation, TargetMustExtend.class);
+            AnnotationMirror meta = getAnnotationMirror(annotation, TargetMustExtend.class);
 
             if (meta != null) {
                 AnnotationValue value = getAnnotationValue(meta, "value");
-                TypeElement type =
-                    (TypeElement)
-                    types.asElement((TypeMirror) value.getValue());
+                TypeElement type = (TypeElement) types.asElement((TypeMirror) value.getValue());
 
                 if (! types.isAssignable(element.asType(), type.asType())) {
                     print(ERROR, element,
                           "@%s: %s does not extend %s",
-                          annotation.getSimpleName(),
-                          element, type.getQualifiedName());
+                          annotation.getSimpleName(), element, type.getQualifiedName());
                 }
             }
         }
@@ -358,15 +329,11 @@ public abstract class AnnotatedProcessor extends AbstractProcessor {
 
         @Override
         public void accept(Element element) {
-            AnnotationMirror meta =
-                getAnnotationMirror(annotation,
-                                    TargetMustHaveConstructor.class);
+            AnnotationMirror meta = getAnnotationMirror(annotation, TargetMustHaveConstructor.class);
 
             if (meta != null) {
                 AnnotationValue value = getAnnotationValue(meta, "value");
-                String name =
-                    ((VariableElement) value.getValue()).getSimpleName()
-                    .toString();
+                String name = ((VariableElement) value.getValue()).getSimpleName().toString();
                 Modifier modifier = Modifier.valueOf(name);
                 List<TypeMirror> parameters =
                     Stream.of(getAnnotationValue(meta, "parameters"))
@@ -376,16 +343,11 @@ public abstract class AnnotatedProcessor extends AbstractProcessor {
                     .map(t -> (AnnotationValue) t)
                     .map(t -> (TypeMirror) t.getValue())
                     .collect(toList());
-                ExecutableElement constructor =
-                    getConstructor((TypeElement) element, parameters);
-                boolean found =
-                    (constructor != null
-                     && constructor.getModifiers().contains(modifier));
+                ExecutableElement constructor = getConstructor((TypeElement) element, parameters);
+                boolean found = (constructor != null && constructor.getModifiers().contains(modifier));
 
                 if (! found) {
-                    print(ERROR, element,
-                          "@%s: No %s matching constructor",
-                          annotation.getSimpleName(), modifier);
+                    print(ERROR, element, "@%s: No %s matching constructor", annotation.getSimpleName(), modifier);
                 }
             }
         }

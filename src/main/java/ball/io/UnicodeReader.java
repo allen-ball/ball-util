@@ -2,10 +2,8 @@ package ball.io;
 /*-
  * ##########################################################################
  * Utilities
- * $Id$
- * $HeadURL$
  * %%
- * Copyright (C) 2008 - 2021 Allen D. Ball
+ * Copyright (C) 2008 - 2022 Allen D. Ball
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,7 +41,6 @@ import static java.nio.charset.StandardCharsets.UTF_8;
  * @see BOMCharsetMap
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
- * @version $Revision$
  */
 public class UnicodeReader extends LineNumberReader {
     private static final Charset DEFAULT = UTF_8;
@@ -82,8 +79,7 @@ public class UnicodeReader extends LineNumberReader {
             super(in, 8);
 
             try {
-                for (Map.Entry<byte[],Charset> entry :
-                         BOMCharsetMap.INSTANCE.entrySet()) {
+                for (Map.Entry<byte[],Charset> entry : BOMCharsetMap.INSTANCE.entrySet()) {
                     byte[] bytes = new byte[entry.getKey().length];
                     int length = read(bytes);
 
@@ -91,8 +87,7 @@ public class UnicodeReader extends LineNumberReader {
                         break;
                     }
 
-                    if (bytes.length == length
-                        && Arrays.equals(bytes, entry.getKey())) {
+                    if (bytes.length == length && Arrays.equals(bytes, entry.getKey())) {
                         charset = entry.getValue();
                         break;
                     } else {

@@ -2,10 +2,8 @@ package ball.annotation.processing;
 /*-
  * ##########################################################################
  * Utilities
- * $Id$
- * $HeadURL$
  * %%
- * Copyright (C) 2008 - 2021 Allen D. Ball
+ * Copyright (C) 2008 - 2022 Allen D. Ball
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,13 +35,11 @@ import lombok.ToString;
  * {@include NoopProcessor.properties}
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
- * @version $Revision$
  */
 @ServiceProviderFor({ Processor.class })
 @NoArgsConstructor @ToString
 public class NoopProcessor extends AbstractProcessor {
-    private static final ResourceBundle BUNDLE =
-        ResourceBundle.getBundle(NoopProcessor.class.getName());
+    private static final ResourceBundle BUNDLE = ResourceBundle.getBundle(NoopProcessor.class.getName());
 
     @Override
     public Set<String> getSupportedAnnotationTypes() {
@@ -51,8 +47,7 @@ public class NoopProcessor extends AbstractProcessor {
     }
 
     @Override
-    public boolean process(Set<? extends TypeElement> annotations,
-                           RoundEnvironment roundEnv) {
+    public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
         return true;
     }
 }

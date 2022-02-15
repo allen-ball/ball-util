@@ -2,10 +2,8 @@ package ball.util.ant.taskdefs;
 /*-
  * ##########################################################################
  * Utilities
- * $Id$
- * $HeadURL$
  * %%
- * Copyright (C) 2008 - 2021 Allen D. Ball
+ * Copyright (C) 2008 - 2022 Allen D. Ball
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,7 +39,6 @@ import org.apache.tools.ant.BuildException;
  * @see Factory
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
- * @version $Revision$
  */
 @AntTask("instance-of")
 @NoArgsConstructor @ToString
@@ -72,13 +69,11 @@ public class InstanceOfTask extends TypeTask {
             List<Object> arguments = new ArrayList<>(list.size());
 
             for (TypedAttributeType argument : list) {
-                Factory<?> factory =
-                    new Factory<>(getClassForName(argument.getType()));
+                Factory<?> factory = new Factory<>(getClassForName(argument.getType()));
 
                 parameters.add(factory.getType());
 
-                String string =
-                    getProject().replaceProperties(argument.getValue());
+                String string = getProject().replaceProperties(argument.getValue());
 
                 arguments.add(factory.getInstance(string));
             }
@@ -87,22 +82,18 @@ public class InstanceOfTask extends TypeTask {
             log(String.valueOf(arguments));
 
             Factory<?> factory = new Factory<>(type);
-            Member member =
-                factory.getFactoryMethod(parameters.stream().toArray(Class<?>[]::new));
+            Member member = factory.getFactoryMethod(parameters.stream().toArray(Class<?>[]::new));
 
             log(String.valueOf(member));
 
-            instance =
-                factory.apply(member, arguments.stream().toArray(Object[]::new));
+            instance = factory.apply(member, arguments.stream().toArray(Object[]::new));
 
             log(String.valueOf(instance));
 
             if (getClass().isAssignableFrom(InstanceOfTask.class)) {
-                ReaderWriterDataSourceImpl ds =
-                    new ReaderWriterDataSourceImpl();
+                ReaderWriterDataSourceImpl ds = new ReaderWriterDataSourceImpl();
 
-                try (XMLEncoder encoder =
-                         new XMLEncoder(ds.getOutputStream())) {
+                try (XMLEncoder encoder = new XMLEncoder(ds.getOutputStream())) {
                     encoder.setExceptionListener(ds);
                     encoder.writeObject(instance);
                     encoder.flush();
@@ -121,8 +112,7 @@ public class InstanceOfTask extends TypeTask {
         }
     }
 
-    private class ReaderWriterDataSourceImpl extends ReaderWriterDataSource
-                                             implements ExceptionListener {
+    private class ReaderWriterDataSourceImpl extends ReaderWriterDataSource implements ExceptionListener {
         public ReaderWriterDataSourceImpl() { super(null, null); }
 
         @Override

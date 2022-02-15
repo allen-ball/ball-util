@@ -2,10 +2,8 @@ package ball.util.ant.taskdefs;
 /*-
  * ##########################################################################
  * Utilities
- * $Id$
- * $HeadURL$
  * %%
- * Copyright (C) 2008 - 2021 Allen D. Ball
+ * Copyright (C) 2008 - 2022 Allen D. Ball
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,7 +37,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * attribute cannot be an empty {@link java.util.Collection}.
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
- * @version $Revision$
  */
 @NotNull
 @AntTaskAttributeConstraint(NotEmpty.Checker.class)
@@ -54,10 +51,8 @@ public @interface NotEmpty {
     @NoArgsConstructor @ToString
     public static class Checker extends AntTaskAttributeConstraint.Checker {
         @Override
-        protected void check(Task task, TaskConfigurationChecker checker,
-                             String name, Object value) {
-            checker.assertConfig(! (((Collection) value).isEmpty()),
-                                 "`" + name + "' attribute must not be empty");
+        protected void check(Task task, TaskConfigurationChecker checker, String name, Object value) {
+            checker.assertConfig(! (((Collection) value).isEmpty()), "`" + name + "' attribute must not be empty");
         }
     }
 }

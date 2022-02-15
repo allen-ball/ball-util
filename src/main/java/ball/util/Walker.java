@@ -2,10 +2,8 @@ package ball.util;
 /*-
  * ##########################################################################
  * Utilities
- * $Id$
- * $HeadURL$
  * %%
- * Copyright (C) 2008 - 2021 Allen D. Ball
+ * Copyright (C) 2008 - 2022 Allen D. Ball
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,7 +38,6 @@ import lombok.ToString;
  * @param       <T>             The type of node.
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
- * @version $Revision$
  */
 @ToString
 public class Walker<T> extends AbstractSpliterator<T> {
@@ -48,8 +45,7 @@ public class Walker<T> extends AbstractSpliterator<T> {
     private Iterator<Supplier<Spliterator<T>>> iterator = null;
     private Spliterator<? extends T> spliterator = null;
 
-    private Walker(Collection<? extends T> nodes,
-                   Function<? super T,Collection<? extends T>> childrenOf) {
+    private Walker(Collection<? extends T> nodes, Function<? super T,Collection<? extends T>> childrenOf) {
         super(Long.MAX_VALUE, IMMUTABLE | NONNULL);
 
         stream =
@@ -57,8 +53,7 @@ public class Walker<T> extends AbstractSpliterator<T> {
             .map(t -> (() -> new Walker<T>(t, childrenOf)));
     }
 
-    private Walker(T node,
-                   Function<? super T,Collection<? extends T>> childrenOf) {
+    private Walker(T node, Function<? super T,Collection<? extends T>> childrenOf) {
         super(Long.MAX_VALUE, IMMUTABLE | NONNULL);
 
         stream =
@@ -115,8 +110,7 @@ public class Walker<T> extends AbstractSpliterator<T> {
      *
      * @return  A {@link Stream}.
      */
-    public static <T> Stream<T> walk(T root,
-                                     Function<? super T,Collection<? extends T>> childrenOf) {
+    public static <T> Stream<T> walk(T root, Function<? super T,Collection<? extends T>> childrenOf) {
         return StreamSupport.stream(new Walker<>(root, childrenOf), false);
     }
 
@@ -132,8 +126,7 @@ public class Walker<T> extends AbstractSpliterator<T> {
      *
      * @return  A {@link Stream}.
      */
-    public static <T> Stream<T> walk(Collection<? extends T> roots,
-                                     Function<? super T,Collection<? extends T>> childrenOf) {
+    public static <T> Stream<T> walk(Collection<? extends T> roots, Function<? super T,Collection<? extends T>> childrenOf) {
         return StreamSupport.stream(new Walker<>(roots, childrenOf), false);
     }
 }

@@ -2,10 +2,8 @@ package ball.annotation.processing;
 /*-
  * ##########################################################################
  * Utilities
- * $Id$
- * $HeadURL$
  * %%
- * Copyright (C) 2008 - 2021 Allen D. Ball
+ * Copyright (C) 2008 - 2022 Allen D. Ball
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,7 +49,6 @@ import static javax.tools.Diagnostic.Kind.WARNING;
  * </ol>
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
- * @version $Revision$
  */
 @ServiceProviderFor({ Processor.class })
 @ForElementKinds({ CLASS })
@@ -96,9 +93,7 @@ public class ObjectToStringProcessor extends AnnotatedNoAnnotationProcessor {
                 ExecutableElement implementation = implementationOf(METHOD, type);
 
                 if (implementation == null || METHOD.equals(implementation)) {
-                    print(WARNING, type,
-                          "%s does not override '%s'",
-                          type.getKind(), declaration(PROTOTYPE));
+                    print(WARNING, type, "%s does not override '%s'", type.getKind(), declaration(PROTOTYPE));
                 }
             }
         }
@@ -106,8 +101,7 @@ public class ObjectToStringProcessor extends AnnotatedNoAnnotationProcessor {
 
     private boolean isAnnotated(TypeElement element) {
         boolean found =
-            element.getAnnotationMirrors()
-            .stream()
+            element.getAnnotationMirrors().stream()
             .map(AnnotationMirror::getAnnotationType)
             .map(Objects::toString)
             .anyMatch(ANNOTATIONS::contains);

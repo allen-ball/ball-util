@@ -2,10 +2,8 @@ package ball.annotation.processing;
 /*-
  * ##########################################################################
  * Utilities
- * $Id$
- * $HeadURL$
  * %%
- * Copyright (C) 2008 - 2021 Allen D. Ball
+ * Copyright (C) 2008 - 2022 Allen D. Ball
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,23 +40,19 @@ import static javax.tools.Diagnostic.Kind.ERROR;
  * specified type.
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
- * @version $Revision$
  */
 @ServiceProviderFor({ Processor.class })
 @For({ ConstantValueMustConvertTo.class })
 @NoArgsConstructor @ToString
 public class ConstantValueMustConvertToProcessor extends AnnotatedProcessor {
     @Override
-    public void process(RoundEnvironment roundEnv,
-                        TypeElement annotation, Element element) {
+    public void process(RoundEnvironment roundEnv, TypeElement annotation, Element element) {
         super.process(roundEnv, annotation, element);
 
         AnnotationMirror mirror = getAnnotationMirror(element, annotation);
         AnnotationValue value = getAnnotationValue(mirror, "value");
-        TypeElement to =
-            (TypeElement) types.asElement((TypeMirror) value.getValue());
-        String method =
-            (String) getAnnotationValue(mirror, "method").getValue();
+        TypeElement to = (TypeElement) types.asElement((TypeMirror) value.getValue());
+        String method = (String) getAnnotationValue(mirror, "method").getValue();
         Object from = null;
 
         try {
@@ -82,8 +76,7 @@ public class ConstantValueMustConvertToProcessor extends AnnotatedProcessor {
 
             print(ERROR, element,
                   "Cannot convert %s to %s\n%s: %s",
-                  elements.getConstantExpression(from),
-                  to.getQualifiedName(),
+                  elements.getConstantExpression(from), to.getQualifiedName(),
                   throwable.getClass().getName(), throwable.getMessage());
         }
     }

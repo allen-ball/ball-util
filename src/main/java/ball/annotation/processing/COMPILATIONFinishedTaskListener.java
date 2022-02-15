@@ -2,10 +2,8 @@ package ball.annotation.processing;
 /*-
  * ##########################################################################
  * Utilities
- * $Id$
- * $HeadURL$
  * %%
- * Copyright (C) 2021 Allen D. Ball
+ * Copyright (C) 2021, 2022 Allen D. Ball
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +34,6 @@ import lombok.ToString;
  * processed.  When the {@link Set}s are equal, compilation is complete.
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
- * @version $Revision$
  */
 @RequiredArgsConstructor @ToString
 /* package */ class COMPILATIONFinishedTaskListener extends AbstractTaskListener {

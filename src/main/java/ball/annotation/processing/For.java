@@ -2,10 +2,8 @@ package ball.annotation.processing;
 /*-
  * ##########################################################################
  * Utilities
- * $Id$
- * $HeadURL$
  * %%
- * Copyright (C) 2008 - 2021 Allen D. Ball
+ * Copyright (C) 2008 - 2022 Allen D. Ball
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,7 +41,6 @@ import static javax.tools.Diagnostic.Kind.ERROR;
  * {@link Annotation}s.
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
- * @version $Revision$
  */
 @Documented
 @Retention(RUNTIME)
@@ -60,8 +57,7 @@ public @interface For {
     @NoArgsConstructor @ToString
     public static class ProcessorImpl extends AnnotatedProcessor {
         @Override
-        public void process(RoundEnvironment roundEnv,
-                            TypeElement annotation, Element element) {
+        public void process(RoundEnvironment roundEnv, TypeElement annotation, Element element) {
             super.process(roundEnv, annotation, element);
 
             AnnotationMirror mirror = getAnnotationMirror(element, annotation);

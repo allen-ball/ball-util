@@ -2,10 +2,8 @@ package ball.xml;
 /*-
  * ##########################################################################
  * Utilities
- * $Id$
- * $HeadURL$
  * %%
- * Copyright (C) 2008 - 2021 Allen D. Ball
+ * Copyright (C) 2008 - 2022 Allen D. Ball
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,7 +38,6 @@ import org.xml.sax.SAXException;
  * extended directly.
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
- * @version $Revision$
  */
 public interface FluentDocument extends FluentNode, Document {
     @Override
@@ -71,8 +68,7 @@ public interface FluentDocument extends FluentNode, Document {
         }
 
         @Override
-        public Document parse(InputSource in) throws SAXException,
-                                                     IOException {
+        public Document parse(InputSource in) throws SAXException, IOException {
             Document document = builder.parse(in);
 
             return (FluentDocument) new InvocationHandler().enhance(document);

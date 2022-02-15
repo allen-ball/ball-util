@@ -2,10 +2,8 @@ package ball.util.ant.taskdefs;
 /*-
  * ##########################################################################
  * Utilities
- * $Id$
- * $HeadURL$
  * %%
- * Copyright (C) 2008 - 2021 Allen D. Ball
+ * Copyright (C) 2008 - 2022 Allen D. Ball
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,7 +32,6 @@ import static org.apache.commons.lang3.StringUtils.EMPTY;
  * {@link org.apache.tools.ant.Task}s.
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
- * @version $Revision$
  */
 public interface AntTaskLogMethods extends AntTaskMixIn {
     void log(String message);
@@ -56,8 +53,7 @@ public interface AntTaskLogMethods extends AntTaskMixIn {
      * @param   msgLevel        The log message level.
      */
     default void log(TableModel model, int msgLevel) {
-        try (BufferedReader reader =
-                 new TextTable(model).getBufferedReader()) {
+        try (BufferedReader reader = new TextTable(model).getBufferedReader()) {
             log(reader.lines(), Project.MSG_INFO);
         } catch (Throwable throwable) {
             throw new IllegalStateException(throwable);
@@ -93,8 +89,7 @@ public interface AntTaskLogMethods extends AntTaskMixIn {
      * @param   message         The message ({@link String}).
      */
     default void log(File file, int lineno, String message) {
-        log(String.valueOf(file) + ":" + String.valueOf(lineno)
-            + ": " + message);
+        log(String.valueOf(file) + ":" + String.valueOf(lineno) + ": " + message);
     }
 
     /**

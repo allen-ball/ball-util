@@ -2,10 +2,8 @@ package ball.swing.table;
 /*-
  * ##########################################################################
  * Utilities
- * $Id$
- * $HeadURL$
  * %%
- * Copyright (C) 2008 - 2021 Allen D. Ball
+ * Copyright (C) 2008 - 2022 Allen D. Ball
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +28,6 @@ import java.util.Collection;
  * @param       <R>     The type of table row.
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
- * @version $Revision$
  */
 public abstract class ArrayListTableModel<R> extends AbstractTableModelImpl {
     private static final long serialVersionUID = -7927458440773401575L;
@@ -43,8 +40,7 @@ public abstract class ArrayListTableModel<R> extends AbstractTableModelImpl {
      * @param   iterable        The {@link Iterable} of row values.
      * @param   names           The column names.
      */
-    protected ArrayListTableModel(Iterable<? extends R> iterable,
-                                  String... names) {
+    protected ArrayListTableModel(Iterable<? extends R> iterable, String... names) {
         super(names);
 
         if (iterable != null) {
@@ -60,8 +56,7 @@ public abstract class ArrayListTableModel<R> extends AbstractTableModelImpl {
      * @param   iterable        The {@link Iterable} of row values.
      * @param   columns         The number of columns.
      */
-    protected ArrayListTableModel(Iterable<? extends R> iterable,
-                                  int columns) {
+    protected ArrayListTableModel(Iterable<? extends R> iterable, int columns) {
         this(iterable, new String[columns]);
     }
 

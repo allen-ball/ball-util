@@ -2,10 +2,8 @@ package ball.annotation.processing;
 /*-
  * ##########################################################################
  * Utilities
- * $Id$
- * $HeadURL$
  * %%
- * Copyright (C) 2008 - 2021 Allen D. Ball
+ * Copyright (C) 2008 - 2022 Allen D. Ball
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -57,7 +55,6 @@ import static javax.tools.Diagnostic.Kind.WARNING;
  * </ol>
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
- * @version $Revision$
  */
 @ServiceProviderFor({ Processor.class })
 @ForElementKinds({ METHOD })
@@ -100,19 +97,16 @@ public class ObjectCloneProcessor extends AnnotatedNoAnnotationProcessor {
             if (! type.getInterfaces().contains(CLONEABLE.asType())) {
                 print(WARNING, type,
                       "%s overrides '%s' but does not implement %s",
-                      type.getKind(),
-                      declaration(PROTOTYPE), CLONEABLE.getSimpleName());
+                      type.getKind(), declaration(PROTOTYPE), CLONEABLE.getSimpleName());
             }
 
             if (! types.isAssignable(method.getReturnType(), type.asType())) {
                 print(WARNING, method,
                       "%s overrides '%s' but does not return a subclass of %s",
-                      method.getKind(),
-                      declaration(PROTOTYPE), type.getSimpleName());
+                      method.getKind(), declaration(PROTOTYPE), type.getSimpleName());
             }
 
-            List<TypeMirror> throwables =
-                METHOD.getThrownTypes().stream().collect(toList());
+            List<TypeMirror> throwables = METHOD.getThrownTypes().stream().collect(toList());
 
             throwables.retainAll(overrides(method).getThrownTypes());
             throwables.removeAll(method.getThrownTypes());

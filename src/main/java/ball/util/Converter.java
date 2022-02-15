@@ -2,10 +2,8 @@ package ball.util;
 /*-
  * ##########################################################################
  * Utilities
- * $Id$
- * $HeadURL$
  * %%
- * Copyright (C) 2008 - 2021 Allen D. Ball
+ * Copyright (C) 2008 - 2022 Allen D. Ball
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +27,6 @@ import static java.util.Comparator.comparing;
  * Conversion utility based on {@link Factory}.
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
- * @version $Revision$
  */
 public class Converter extends TreeMap<Class<?>,Factory<?>> {
     private static final long serialVersionUID = -3178874315076658917L;
@@ -41,11 +38,9 @@ public class Converter extends TreeMap<Class<?>,Factory<?>> {
 
         put(String.class, new Factory<>(String.class));
 
-        PrimitiveTypeMap.INSTANCE.values()
-            .stream()
+        PrimitiveTypeMap.INSTANCE.values().stream()
             .forEach(t -> put(t, new Factory<>(t)));
-        PrimitiveTypeMap.INSTANCE.keySet()
-            .stream()
+        PrimitiveTypeMap.INSTANCE.keySet().stream()
             .forEach(t -> put(t, get(PrimitiveTypeMap.INSTANCE.get(t))));
     }
 
@@ -66,13 +61,11 @@ public class Converter extends TreeMap<Class<?>,Factory<?>> {
                 to = from;
             } else {
                 to =
-                    INSTANCE.
-                    computeIfAbsent(type,
-                                    k -> (INSTANCE.values()
-                                          .stream()
-                                          .filter(t -> k.isAssignableFrom(t.getType()))
-                                          .findFirst()
-                                          .orElse(new Factory<>(k))))
+                    INSTANCE.computeIfAbsent(type,
+                                             k -> (INSTANCE.values().stream()
+                                                   .filter(t -> k.isAssignableFrom(t.getType()))
+                                                   .findFirst()
+                                                   .orElse(new Factory<>(k))))
                     .getInstance(from);
             }
         } catch (RuntimeException exception) {

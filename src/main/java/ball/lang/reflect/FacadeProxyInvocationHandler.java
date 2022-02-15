@@ -2,10 +2,8 @@ package ball.lang.reflect;
 /*-
  * ##########################################################################
  * Utilities
- * $Id$
- * $HeadURL$
  * %%
- * Copyright (C) 2008 - 2021 Allen D. Ball
+ * Copyright (C) 2008 - 2022 Allen D. Ball
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,11 +35,9 @@ import static lombok.AccessLevel.PROTECTED;
  * {@link #getProxyClassFor(Object)}.
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
- * @version $Revision$
  */
 @NoArgsConstructor(access = PROTECTED) @ToString
-public abstract class FacadeProxyInvocationHandler
-                      extends DefaultInvocationHandler {
+public abstract class FacadeProxyInvocationHandler extends DefaultInvocationHandler {
     private final ProxyMap map = new ProxyMap();
 
     /**
@@ -72,10 +68,7 @@ public abstract class FacadeProxyInvocationHandler
         T proxy = null;
 
         try {
-            proxy =
-                type
-                .getConstructor(InvocationHandler.class)
-                .newInstance(this);
+            proxy = type.getConstructor(InvocationHandler.class).newInstance(this);
         } catch (RuntimeException exception) {
             throw exception;
         } catch (Exception exception) {
@@ -108,9 +101,7 @@ public abstract class FacadeProxyInvocationHandler
             InvocationHandler handler = Proxy.getInvocationHandler(in);
 
             if (handler instanceof FacadeProxyInvocationHandler) {
-                out =
-                    ((FacadeProxyInvocationHandler) handler)
-                    .map.reverse().get(in);
+                out = ((FacadeProxyInvocationHandler) handler).map.reverse().get(in);
             }
         }
 
@@ -136,9 +127,7 @@ public abstract class FacadeProxyInvocationHandler
                     out = Array.newInstance(type.getComponentType(), length);
 
                     for (int i = 0; i < length; i += 1) {
-                        ((Object[]) out)[i] =
-                            reverseFor(type.getComponentType(),
-                                       ((Object[]) in)[i]);
+                        ((Object[]) out)[i] = reverseFor(type.getComponentType(), ((Object[]) in)[i]);
                     }
                 }
             }
@@ -186,8 +175,7 @@ public abstract class FacadeProxyInvocationHandler
     private class ProxyMap extends IdentityHashMap<Object,Object> {
         private static final long serialVersionUID = 6708505296087349421L;
 
-        private final IdentityHashMap<Object,Object> reverse =
-            new IdentityHashMap<>();
+        private final IdentityHashMap<Object,Object> reverse = new IdentityHashMap<>();
 
         public IdentityHashMap<Object,Object> reverse() { return reverse; }
 

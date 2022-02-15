@@ -2,10 +2,8 @@ package ball.annotation.processing;
 /*-
  * ##########################################################################
  * Utilities
- * $Id$
- * $HeadURL$
  * %%
- * Copyright (C) 2008 - 2021 Allen D. Ball
+ * Copyright (C) 2008 - 2022 Allen D. Ball
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -62,12 +60,9 @@ import static lombok.AccessLevel.PROTECTED;
  * {@bean.info}
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
- * @version $Revision$
  */
 @NoArgsConstructor(access = PROTECTED) @ToString
-public abstract class AbstractProcessor extends JavaxLangModelUtilities
-                                        implements Processor,
-                                                   JavaLangReflectMethods {
+public abstract class AbstractProcessor extends JavaxLangModelUtilities implements Processor, JavaLangReflectMethods {
     private final Set<String> options = new LinkedHashSet<>();
     private ProcessingEnvironment processingEnv = null;
     /** See {@link JavacTask#instance(ProcessingEnvironment)}. */
@@ -76,8 +71,7 @@ public abstract class AbstractProcessor extends JavaxLangModelUtilities
     protected Filer filer = null;
 
     {
-        SupportedOptions annotation =
-            getClass().getAnnotation(SupportedOptions.class);
+        SupportedOptions annotation = getClass().getAnnotation(SupportedOptions.class);
 
         if (annotation != null) {
             Collections.addAll(options, annotation.value());
@@ -122,14 +116,10 @@ public abstract class AbstractProcessor extends JavaxLangModelUtilities
     }
 
     @Override
-    public abstract boolean process(Set<? extends TypeElement> annotations,
-                                    RoundEnvironment roundEnv);
+    public abstract boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv);
 
     @Override
-    public Iterable<? extends Completion> getCompletions(Element element,
-                                                         AnnotationMirror annotation,
-                                                         ExecutableElement member,
-                                                         String text) {
+    public Iterable<? extends Completion> getCompletions(Element element, AnnotationMirror annotation, ExecutableElement member, String text) {
         return Collections.emptyList();
     }
 
@@ -166,11 +156,9 @@ public abstract class AbstractProcessor extends JavaxLangModelUtilities
      *
      * @see javax.annotation.processing.Messager#printMessage(Diagnostic.Kind,CharSequence,Element)
      */
-    protected void print(Diagnostic.Kind kind, Element element,
-                         String format, Object... argv) {
+    protected void print(Diagnostic.Kind kind, Element element, String format, Object... argv) {
         processingEnv.getMessager()
-            .printMessage(kind, String.format(format, argv),
-                          element);
+            .printMessage(kind, String.format(format, argv), element);
     }
 
     /**
@@ -185,12 +173,9 @@ public abstract class AbstractProcessor extends JavaxLangModelUtilities
      *
      * @see javax.annotation.processing.Messager#printMessage(Diagnostic.Kind,CharSequence,Element,AnnotationMirror)
      */
-    protected void print(Diagnostic.Kind kind,
-                         Element element, AnnotationMirror annotation,
-                         String format, Object... argv) {
+    protected void print(Diagnostic.Kind kind, Element element, AnnotationMirror annotation, String format, Object... argv) {
         processingEnv.getMessager()
-            .printMessage(kind, String.format(format, argv),
-                          element, annotation);
+            .printMessage(kind, String.format(format, argv), element, annotation);
     }
 
     /**
@@ -206,13 +191,9 @@ public abstract class AbstractProcessor extends JavaxLangModelUtilities
      *
      * @see javax.annotation.processing.Messager#printMessage(Diagnostic.Kind,CharSequence,Element,AnnotationMirror,AnnotationValue)
      */
-    protected void print(Diagnostic.Kind kind,
-                         Element element,
-                         AnnotationMirror annotation, AnnotationValue value,
-                         String format, Object... argv) {
+    protected void print(Diagnostic.Kind kind, Element element, AnnotationMirror annotation, AnnotationValue value, String format, Object... argv) {
         processingEnv.getMessager()
-            .printMessage(kind, String.format(format, argv),
-                          element, annotation, value);
+            .printMessage(kind, String.format(format, argv), element, annotation, value);
     }
 
     /**

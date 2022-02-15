@@ -2,10 +2,8 @@ package ball.util.ant.taskdefs;
 /*-
  * ##########################################################################
  * Utilities
- * $Id$
- * $HeadURL$
  * %%
- * Copyright (C) 2008 - 2021 Allen D. Ball
+ * Copyright (C) 2008 - 2022 Allen D. Ball
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,13 +48,10 @@ import static org.apache.commons.lang3.StringUtils.EMPTY;
  * {@ant.task}
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
- * @version $Revision$
  */
 @NoArgsConstructor(access = PROTECTED)
-public abstract class TypeTask extends Task
-                               implements AnnotatedAntTask,
-                                          ClasspathDelegateAntTask,
-                                          JavaLangReflectMethods {
+public abstract class TypeTask extends Task implements AnnotatedAntTask,
+                                                       ClasspathDelegateAntTask, JavaLangReflectMethods {
     @Getter @Setter @Accessors(chain = true, fluent = true)
     private ClasspathUtils.Delegate delegate = null;
     @NotNull @Getter
@@ -129,12 +124,10 @@ public abstract class TypeTask extends Task
             public BeanHeaderTableModel(BeanDescriptor descriptor) {
                 super(new Object[][] { }, 2);
 
-                row("Bean Class:",
-                    descriptor.getBeanClass().getName());
+                row("Bean Class:", descriptor.getBeanClass().getName());
 
                 if (descriptor.getCustomizerClass() != null) {
-                    row("Customizer Class:",
-                        descriptor.getCustomizerClass().getName());
+                    row("Customizer Class:", descriptor.getCustomizerClass().getName());
                 }
             }
         }
@@ -179,8 +172,7 @@ public abstract class TypeTask extends Task
                 Class<?> supertype = getClassForName(getType());
                 Class<?> subtype = getClassForName(getSubtype());
 
-                log(supertype.getName() + " is "
-                    + (supertype.isAssignableFrom(subtype) ? EMPTY : "not ")
+                log(supertype.getName() + " is " + (supertype.isAssignableFrom(subtype) ? EMPTY : "not ")
                     + "assignable from " + subtype.getName());
             } catch (BuildException exception) {
                 throw exception;
@@ -245,9 +237,7 @@ public abstract class TypeTask extends Task
 
                 log(String.valueOf(type));
 
-                URL url =
-                    type.getClass()
-                    .getResource(type.getSimpleName() + ".class");
+                URL url = type.getClass().getResource(type.getSimpleName() + ".class");
 
                 log(String.valueOf(url));
             } catch (BuildException exception) {

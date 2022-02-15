@@ -2,10 +2,8 @@ package ball.annotation.processing;
 /*-
  * ##########################################################################
  * Utilities
- * $Id$
- * $HeadURL$
  * %%
- * Copyright (C) 2008 - 2021 Allen D. Ball
+ * Copyright (C) 2008 - 2022 Allen D. Ball
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,14 +48,12 @@ import static javax.tools.Diagnostic.Kind.WARNING;
  * {@link CompileTimeCheck} {@link Processor}.
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
- * @version $Revision$
  */
 @ServiceProviderFor({ Processor.class })
 @For({ CompileTimeCheck.class })
 @NoArgsConstructor @ToString
 public class CompileTimeCheckProcessor extends AnnotatedProcessor {
-    private static final EnumSet<Modifier> FIELD_MODIFIERS =
-        EnumSet.of(STATIC, FINAL);
+    private static final EnumSet<Modifier> FIELD_MODIFIERS = EnumSet.of(STATIC, FINAL);
 
     private final Map<String,String> map = new TreeMap<>();
 
@@ -67,23 +63,20 @@ public class CompileTimeCheckProcessor extends AnnotatedProcessor {
     }
 
     @Override
-    protected void process(RoundEnvironment roundEnv,
-                           TypeElement annotation, Element element) {
+    protected void process(RoundEnvironment roundEnv, TypeElement annotation, Element element) {
         super.process(roundEnv, annotation, element);
 
         switch (element.getKind()) {
         case FIELD:
             TypeElement type = (TypeElement) element.getEnclosingElement();
-            String key =
-                type.getQualifiedName() + ":" + element.getSimpleName();
+            String key = type.getQualifiedName() + ":" + element.getSimpleName();
             String value = elements.getBinaryName(type).toString();
 
             if (! map.containsKey(key)) {
                 if (with(FIELD_MODIFIERS, t -> t.getModifiers()).test(element)) {
                     map.put(key, value);
                 } else {
-                    print(ERROR, element,
-                          "%s must be %s", element.getKind(), FIELD_MODIFIERS);
+                    print(ERROR, element, "%s must be %s", element.getKind(), FIELD_MODIFIERS);
                 }
             }
             break;
@@ -101,23 +94,19 @@ public class CompileTimeCheckProcessor extends AnnotatedProcessor {
             switch (event.getKind()) {
             case GENERATE:
                 ClassLoader loader = getClassPathClassLoader(fm);
-                Iterator<Map.Entry<String,String>> iterator =
-                    map.entrySet().iterator();
+                Iterator<Map.Entry<String,String>> iterator = map.entrySet().iterator();
 
                 while (iterator.hasNext()) {
                     Map.Entry<String,String> entry = iterator.next();
                     String[] names = entry.getKey().split(":", 2);
                     TypeElement type = elements.getTypeElement(names[0]);
                     VariableElement element =
-                        fieldsIn(type.getEnclosedElements())
-                        .stream()
+                        fieldsIn(type.getEnclosedElements()).stream()
                         .filter(t -> t.getSimpleName().contentEquals(names[1]))
                         .findFirst().orElse(null);
-                    AnnotationMirror annotation =
-                        getAnnotationMirror(element, CompileTimeCheck.class);
+                    AnnotationMirror annotation = getAnnotationMirror(element, CompileTimeCheck.class);
                     /*
-                     * AnnotationValue value =
-                     *     getAnnotationValue(annotation, "value");
+                     * AnnotationValue value = getAnnotationValue(annotation, "value");
                      */
                     try {
                         Class.forName(entry.getValue(), true, loader);
@@ -137,9 +126,7 @@ public class CompileTimeCheckProcessor extends AnnotatedProcessor {
 
                         print(WARNING, element /* , annotation */,
                               "Invalid %s initializer\n%s: %s",
-                              element.getKind(),
-                              throwable.getClass().getName(),
-                              throwable.getMessage());
+                              element.getKind(), throwable.getClass().getName(), throwable.getMessage());
                         iterator.remove();
                         continue;
                     }

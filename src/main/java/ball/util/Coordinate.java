@@ -2,10 +2,8 @@ package ball.util;
 /*-
  * ##########################################################################
  * Utilities
- * $Id$
- * $HeadURL$
  * %%
- * Copyright (C) 2008 - 2021 Allen D. Ball
+ * Copyright (C) 2008 - 2022 Allen D. Ball
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +34,6 @@ import java.util.TreeSet;
  * {@bean.info}
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
- * @version $Revision$
  */
 public class Coordinate implements Comparable<Coordinate>, Serializable {
     private static final long serialVersionUID = -4428900365914120909L;
@@ -100,8 +97,7 @@ public class Coordinate implements Comparable<Coordinate>, Serializable {
      * @return  {@code true} if within the area; {@code false} otherwise.
      */
     public boolean within(Coordinate min, Coordinate max) {
-        return ((min.getY() <= getY() && getY() < max.getY())
-                && (min.getX() <= getX() && getX() < max.getX()));
+        return ((min.getY() <= getY() && getY() < max.getY()) && (min.getX() <= getX() && getX() < max.getX()));
     }
 
     /**
@@ -118,9 +114,7 @@ public class Coordinate implements Comparable<Coordinate>, Serializable {
 
     @Override
     public boolean equals(Object object) {
-        return ((object instanceof Coordinate)
-                    ? (this.compareTo((Coordinate) object) == 0)
-                    : super.equals(object));
+        return ((object instanceof Coordinate) ? (this.compareTo((Coordinate) object) == 0) : super.equals(object));
     }
 
     @Override
@@ -139,10 +133,8 @@ public class Coordinate implements Comparable<Coordinate>, Serializable {
      * @return  The {@link SortedSet} of {@link Coordinate}s.
      */
     public static SortedSet<Coordinate> range(Coordinate min, Coordinate max) {
-        return range(Math.min(min.getY(), max.getY()),
-                     Math.min(min.getX(), max.getX()),
-                     Math.max(min.getY(), max.getY()),
-                     Math.max(min.getX(), max.getX()));
+        return range(Math.min(min.getY(), max.getY()), Math.min(min.getX(), max.getX()),
+                     Math.max(min.getY(), max.getY()), Math.max(min.getX(), max.getX()));
     }
 
     /**

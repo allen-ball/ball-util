@@ -2,10 +2,8 @@ package ball.util.stream;
 /*-
  * ##########################################################################
  * Utilities
- * $Id$
- * $HeadURL$
  * %%
- * Copyright (C) 2008 - 2021 Allen D. Ball
+ * Copyright (C) 2008 - 2022 Allen D. Ball
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,7 +30,6 @@ import java.util.stream.Stream;
  * @param       <T>             The {@link List} element type.
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
- * @version $Revision$
  */
 public interface Permutations<T> extends Combinations<T> {
 
@@ -62,8 +59,7 @@ public interface Permutations<T> extends Combinations<T> {
      *
      * @return  The {@link Stream} of permutations.
      */
-    public static <T> Stream<List<T>> of(Predicate<List<T>> predicate,
-                                         Collection<T> collection) {
+    public static <T> Stream<List<T>> of(Predicate<List<T>> predicate, Collection<T> collection) {
         int size = collection.size();
 
         return Combinations.of(size, size, predicate, collection);

@@ -2,10 +2,8 @@ package ball.xml;
 /*-
  * ##########################################################################
  * Utilities
- * $Id$
- * $HeadURL$
  * %%
- * Copyright (C) 2008 - 2021 Allen D. Ball
+ * Copyright (C) 2008 - 2022 Allen D. Ball
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -54,7 +52,6 @@ import static lombok.AccessLevel.PROTECTED;
  * extended directly.
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
- * @version $Revision$
  */
 public interface FluentNode extends Node {
 
@@ -362,10 +359,7 @@ public interface FluentNode extends Node {
             if (object instanceof Node && (! (object instanceof FluentNode))) {
                 Node node = (Node) object;
                 List<Class<?>> key =
-                    Arrays.asList(NODE_TYPE_MAP
-                                  .getOrDefault(node.getNodeType(),
-                                                Node.class),
-                                  node.getClass());
+                    Arrays.asList(NODE_TYPE_MAP.getOrDefault(node.getNodeType(), Node.class), node.getClass());
 
                 type = map.computeIfAbsent(key, k -> compute(k));
             }
@@ -388,8 +382,7 @@ public interface FluentNode extends Node {
 
             interfaces.addAll(implemented);
 
-            new ArrayList<>(interfaces)
-                .stream()
+            new ArrayList<>(interfaces).stream()
                 .forEach(t -> interfaces.removeAll(Arrays.asList(t.getInterfaces())));
 
             return getProxyClass(interfaces.toArray(new Class<?>[] { }));
@@ -402,9 +395,7 @@ public interface FluentNode extends Node {
                 && Node.class.getPackage().equals(type.getPackage())) {
                 try {
                     String name =
-                        String.format("%s.Fluent%s",
-                                      FluentNode.class.getPackage().getName(),
-                                      type.getSimpleName());
+                        String.format("%s.Fluent%s", FluentNode.class.getPackage().getName(), type.getSimpleName());
 
                     fluent = Class.forName(name).asSubclass(FluentNode.class);
                 } catch (Exception exception) {

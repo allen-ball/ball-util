@@ -2,10 +2,8 @@ package ball.annotation.processing;
 /*-
  * ##########################################################################
  * Utilities
- * $Id$
- * $HeadURL$
  * %%
- * Copyright (C) 2008 - 2021 Allen D. Ball
+ * Copyright (C) 2008 - 2022 Allen D. Ball
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,15 +46,13 @@ import static javax.tools.Diagnostic.Kind.WARNING;
  * {@link java.lang.reflect.Constructor}'s {@link Class}.
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
- * @version $Revision$
  */
 @ServiceProviderFor({ Processor.class })
 @For({ ConstructorProperties.class })
 @NoArgsConstructor @ToString
 public class ConstructorPropertiesProcessor extends AnnotatedProcessor {
     @Override
-    public void process(RoundEnvironment roundEnv,
-                        TypeElement annotation, Element element) {
+    public void process(RoundEnvironment roundEnv, TypeElement annotation, Element element) {
         super.process(roundEnv, annotation, element);
 
         AnnotationMirror mirror = getAnnotationMirror(element, annotation);
@@ -69,12 +65,10 @@ public class ConstructorPropertiesProcessor extends AnnotatedProcessor {
             .map(t -> (AnnotationValue) t)
             .map(t -> (String) t.getValue())
             .collect(toList());
-        List<? extends VariableElement> parameters =
-            ((ExecutableElement) element).getParameters();
+        List<? extends VariableElement> parameters = ((ExecutableElement) element).getParameters();
 
         if (names.size() != parameters.size()) {
-            print(WARNING, element, mirror, value,
-                  "value() does not match %s parameters", element.getKind());
+            print(WARNING, element, mirror, value, "value() does not match %s parameters", element.getKind());
         }
 
         TypeElement type = (TypeElement) element.getEnclosingElement();
@@ -83,7 +77,6 @@ public class ConstructorPropertiesProcessor extends AnnotatedProcessor {
         names.stream()
             .filter(StringUtils::isNotEmpty)
             .filter(t -> (! properties.contains(t)))
-            .forEach(t -> print(WARNING, element, mirror,
-                                "bean property '%s' not defined", t));
+            .forEach(t -> print(WARNING, element, mirror, "bean property '%s' not defined", t));
     }
 }

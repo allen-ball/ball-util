@@ -2,10 +2,8 @@ package ball.util.ant.taskdefs;
 /*-
  * ##########################################################################
  * Utilities
- * $Id$
- * $HeadURL$
  * %%
- * Copyright (C) 2008 - 2021 Allen D. Ball
+ * Copyright (C) 2008 - 2022 Allen D. Ball
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,7 +36,6 @@ import static lombok.AccessLevel.PROTECTED;
  * {@ant.task}
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
- * @version $Revision$
  */
 @NoArgsConstructor(access = PROTECTED)
 public abstract class CombinationsTask extends InstanceOfTask {
@@ -62,8 +59,7 @@ public abstract class CombinationsTask extends InstanceOfTask {
                 Collection<?> collection = Collection.class.cast(instance);
 
                 log();
-                log(Combinations.of(getCount(), collection).count()
-                    + " combinations of " + getCount());
+                log(Combinations.of(getCount(), collection).count() + " combinations of " + getCount());
             } catch (BuildException exception) {
                 throw exception;
             } catch (Throwable throwable) {

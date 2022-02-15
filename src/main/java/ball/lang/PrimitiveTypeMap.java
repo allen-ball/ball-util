@@ -2,10 +2,8 @@ package ball.lang;
 /*-
  * ##########################################################################
  * Utilities
- * $Id$
- * $HeadURL$
  * %%
- * Copyright (C) 2008 - 2021 Allen D. Ball
+ * Copyright (C) 2008 - 2022 Allen D. Ball
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +27,6 @@ import java.util.Map;
  * {@link Class}es.
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
- * @version $Revision$
  */
 public class PrimitiveTypeMap extends HashMap<Class<?>,Class<?>> {
     private static final long serialVersionUID = 542657344546950531L;
@@ -37,8 +34,7 @@ public class PrimitiveTypeMap extends HashMap<Class<?>,Class<?>> {
     /**
      * Unmodifiable instance of a {@link PrimitiveTypeMap}.
      */
-    public static final Map<Class<?>,Class<?>> INSTANCE =
-        Collections.unmodifiableMap(new PrimitiveTypeMap());
+    public static final Map<Class<?>,Class<?>> INSTANCE = Collections.unmodifiableMap(new PrimitiveTypeMap());
 
     /**
      * Sole constructor.

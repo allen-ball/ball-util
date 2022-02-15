@@ -2,10 +2,8 @@ package ball.lang.reflect;
 /*-
  * ##########################################################################
  * Utilities
- * $Id$
- * $HeadURL$
  * %%
- * Copyright (C) 2008 - 2021 Allen D. Ball
+ * Copyright (C) 2008 - 2022 Allen D. Ball
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,7 +41,6 @@ import static org.apache.commons.lang3.reflect.MethodUtils.invokeMethod;
  * See {@link #invoke(Object,Method,Object[])}.
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
- * @version $Revision$
  */
 @NoArgsConstructor @ToString
 public class DefaultInvocationHandler implements DefaultInterfaceMethodInvocationHandler {
@@ -115,16 +112,11 @@ public class DefaultInvocationHandler implements DefaultInterfaceMethodInvocatio
         Class<?> declarer = method.getDeclaringClass();
 
         if (method.isDefault()) {
-            result =
-                DefaultInterfaceMethodInvocationHandler.super
-                .invoke(proxy, method, argv);
+            result = DefaultInterfaceMethodInvocationHandler.super.invoke(proxy, method, argv);
         } else if (declarer.equals(Object.class)) {
             result = method.invoke(this, argv);
         } else {
-            result =
-                invokeMethod(this, true,
-                             method.getName(),
-                             argv, method.getParameterTypes());
+            result = invokeMethod(this, true, method.getName(), argv, method.getParameterTypes());
         }
 
         return result;

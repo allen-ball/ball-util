@@ -2,10 +2,8 @@ package ball.util;
 /*-
  * ##########################################################################
  * Utilities
- * $Id$
- * $HeadURL$
  * %%
- * Copyright (C) 2008 - 2021 Allen D. Ball
+ * Copyright (C) 2008 - 2022 Allen D. Ball
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,10 +40,8 @@ import javax.swing.table.TableModel;
  * @param       <V>             The value type.
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
- * @version $Revision$
  */
-public class CoordinateMap<V> extends MapView<Coordinate,V>
-                              implements SortedMap<Coordinate,V>, TableModel {
+public class CoordinateMap<V> extends MapView<Coordinate,V> implements SortedMap<Coordinate,V>, TableModel {
     private static final long serialVersionUID = -7283339807212986103L;
 
     /** @serial */ private Coordinate min = null;
@@ -80,8 +76,7 @@ public class CoordinateMap<V> extends MapView<Coordinate,V>
      */
     public CoordinateMap(Number yN, Number xN) { this(0, 0, yN, xN); }
 
-    private CoordinateMap(Map<Coordinate,V> map,
-                          Number y0, Number x0, Number yN, Number xN) {
+    private CoordinateMap(Map<Coordinate,V> map, Number y0, Number x0, Number yN, Number xN) {
         super(map);
 
         resize(y0, x0, yN, xN);
@@ -98,11 +93,7 @@ public class CoordinateMap<V> extends MapView<Coordinate,V>
      * @return  The value type {@link Class}.
      */
     protected Type getType() {
-        Type type =
-            ((ParameterizedType) getClass().getGenericSuperclass())
-            .getActualTypeArguments()[0];
-
-        return type;
+        return ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
     }
 
     /**
@@ -115,8 +106,7 @@ public class CoordinateMap<V> extends MapView<Coordinate,V>
      *
      * @return  {@link.this} {@link CoordinateMap}.
      */
-    public CoordinateMap<V> resize(Number y0, Number x0,
-                                   Number yN, Number xN) {
+    public CoordinateMap<V> resize(Number y0, Number x0, Number yN, Number xN) {
         resize(y0.intValue(), x0.intValue(), yN.intValue(), xN.intValue());
 
         return this;
@@ -237,8 +227,7 @@ public class CoordinateMap<V> extends MapView<Coordinate,V>
      *
      * @return  The sub-{@link Map} ({@link CoordinateMap}).
      */
-    public CoordinateMap<V> subMap(Number y0, Number x0,
-                                   Number yN, Number xN) {
+    public CoordinateMap<V> subMap(Number y0, Number x0, Number yN, Number xN) {
         return new Sub<>(this, y0, x0, yN, xN);
     }
 
@@ -291,17 +280,13 @@ public class CoordinateMap<V> extends MapView<Coordinate,V>
     @Override
     public V put(Coordinate key, V value) {
         if (min != null) {
-            min =
-                new Coordinate(Math.min(key.getY(), getMinY()),
-                               Math.min(key.getX(), getMinX()));
+            min = new Coordinate(Math.min(key.getY(), getMinY()), Math.min(key.getX(), getMinX()));
         } else {
             min = key;
         }
 
         if (max != null) {
-            max =
-                new Coordinate(Math.max(key.getY() + 1, getMaxY()),
-                               Math.max(key.getX() + 1, getMaxX()));
+            max = new Coordinate(Math.max(key.getY() + 1, getMaxY()), Math.max(key.getX() + 1, getMaxX()));
         } else {
             max = new Coordinate(key.getY() + 1, key.getX() + 1);
         }
@@ -320,8 +305,7 @@ public class CoordinateMap<V> extends MapView<Coordinate,V>
         if (key instanceof Coordinate) {
             Coordinate coordinate = (Coordinate) key;
 
-            fireTableCellUpdated(coordinate.getY() - getMinY(),
-                                 coordinate.getX() - getMinX());
+            fireTableCellUpdated(coordinate.getY() - getMinY(), coordinate.getX() - getMinX());
         }
 
         return old;
@@ -410,26 +394,19 @@ public class CoordinateMap<V> extends MapView<Coordinate,V>
     }
 
     protected void fireTableStructureChanged() {
-        fireTableChanged(new TableModelEvent(this,
-                                             TableModelEvent.HEADER_ROW));
+        fireTableChanged(new TableModelEvent(this, TableModelEvent.HEADER_ROW));
     }
 
     protected void fireTableRowsInserted(int start, int end) {
-        fireTableChanged(new TableModelEvent(this, start, end,
-                                             TableModelEvent.ALL_COLUMNS,
-                                             TableModelEvent.INSERT));
+        fireTableChanged(new TableModelEvent(this, start, end, TableModelEvent.ALL_COLUMNS, TableModelEvent.INSERT));
     }
 
     protected void fireTableRowsUpdated(int start, int end) {
-        fireTableChanged(new TableModelEvent(this, start, end,
-                                             TableModelEvent.ALL_COLUMNS,
-                                             TableModelEvent.UPDATE));
+        fireTableChanged(new TableModelEvent(this, start, end, TableModelEvent.ALL_COLUMNS, TableModelEvent.UPDATE));
     }
 
     protected void fireTableRowsDeleted(int start, int end) {
-        fireTableChanged(new TableModelEvent(this, start, end,
-                                             TableModelEvent.ALL_COLUMNS,
-                                             TableModelEvent.DELETE));
+        fireTableChanged(new TableModelEvent(this, start, end, TableModelEvent.ALL_COLUMNS, TableModelEvent.DELETE));
     }
 
     protected void fireTableCellUpdated(int row, int column) {
@@ -467,9 +444,7 @@ public class CoordinateMap<V> extends MapView<Coordinate,V>
         @Override
         public V put(Coordinate key, V value) {
             if (! key.within(getMin(), getMax())) {
-                throw new IllegalArgumentException(key + " is outside "
-                                                   + getMin() + " and "
-                                                   + getMax());
+                throw new IllegalArgumentException(key + " is outside " + getMin() + " and " + getMax());
             }
 
             return super.put(key, value);
@@ -502,8 +477,7 @@ public class CoordinateMap<V> extends MapView<Coordinate,V>
         public BackedList() {
             super();
 
-            list.addAll(Coordinate.range(CoordinateMap.this.getMin(),
-                                         CoordinateMap.this.getMax()));
+            list.addAll(Coordinate.range(CoordinateMap.this.getMin(), CoordinateMap.this.getMax()));
         }
 
         @Override

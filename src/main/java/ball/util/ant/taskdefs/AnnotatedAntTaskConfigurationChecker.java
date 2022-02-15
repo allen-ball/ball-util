@@ -2,10 +2,8 @@ package ball.util.ant.taskdefs;
 /*-
  * ##########################################################################
  * Utilities
- * $Id$
- * $HeadURL$
  * %%
- * Copyright (C) 2008 - 2021 Allen D. Ball
+ * Copyright (C) 2008 - 2022 Allen D. Ball
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,11 +39,9 @@ import static ball.beans.PropertyMethodEnum.getPropertyName;
  * {@link AnnotatedAntTask} annotations.
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
- * @version $Revision$
  */
 @ToString
-public class AnnotatedAntTaskConfigurationChecker
-             extends TaskConfigurationChecker {
+public class AnnotatedAntTaskConfigurationChecker extends TaskConfigurationChecker {
     private final Task task;
 
     /**
@@ -73,8 +69,7 @@ public class AnnotatedAntTaskConfigurationChecker
             for (AnnotatedElement element : list) {
                 for (Annotation annotation : element.getAnnotations()) {
                     AntTaskAttributeConstraint constraint =
-                        annotation.annotationType()
-                        .getAnnotation(AntTaskAttributeConstraint.class);
+                        annotation.annotationType().getAnnotation(AntTaskAttributeConstraint.class);
 
                     if (constraint != null) {
                         assertConfig(constraint, element);
@@ -84,8 +79,7 @@ public class AnnotatedAntTaskConfigurationChecker
         }
     }
 
-    private void assertConfig(AntTaskAttributeConstraint constraint,
-                              AnnotatedElement element) {
+    private void assertConfig(AntTaskAttributeConstraint constraint, AnnotatedElement element) {
         try {
             String name = null;
             Object value = null;
@@ -95,10 +89,7 @@ public class AnnotatedAntTaskConfigurationChecker
                 value = FieldUtils.readField((Field) element, task, true);
             } else if (element instanceof Method) {
                 name = getPropertyName((Method) element);
-                value =
-                    MethodUtils.invokeMethod(task, true,
-                                             ((Method) element).getName(),
-                                             new Object[] {  });
+                value = MethodUtils.invokeMethod(task, true, ((Method) element).getName(), new Object[] {  });
             } else {
                 throw new IllegalStateException(String.valueOf(element));
             }

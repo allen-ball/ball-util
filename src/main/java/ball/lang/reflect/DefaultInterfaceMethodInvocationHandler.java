@@ -2,10 +2,8 @@ package ball.lang.reflect;
 /*-
  * ##########################################################################
  * Utilities
- * $Id$
- * $HeadURL$
  * %%
- * Copyright (C) 2008 - 2021 Allen D. Ball
+ * Copyright (C) 2008 - 2022 Allen D. Ball
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,7 +32,6 @@ import static org.apache.commons.lang3.reflect.MethodUtils.invokeMethod;
  * {@link DefaultInvocationHandler}.
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
- * @version $Revision$
  */
 public interface DefaultInterfaceMethodInvocationHandler extends InvocationHandler {
 
@@ -52,9 +49,7 @@ public interface DefaultInterfaceMethodInvocationHandler extends InvocationHandl
      */
     @Override
     default Object invoke(Object proxy, Method method, Object[] argv) throws Throwable {
-        Constructor<MethodHandles.Lookup> constructor =
-            MethodHandles.Lookup.class
-            .getDeclaredConstructor(Class.class);
+        Constructor<MethodHandles.Lookup> constructor = MethodHandles.Lookup.class.getDeclaredConstructor(Class.class);
 
         constructor.setAccessible(true);
 

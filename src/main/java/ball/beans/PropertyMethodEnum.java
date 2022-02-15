@@ -2,10 +2,8 @@ package ball.beans;
 /*-
  * ##########################################################################
  * Utilities
- * $Id$
- * $HeadURL$
  * %%
- * Copyright (C) 2008 - 2021 Allen D. Ball
+ * Copyright (C) 2008 - 2022 Allen D. Ball
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,13 +32,11 @@ import static java.beans.Introspector.decapitalize;
  * Bean property method {@link Enum} type.
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
- * @version $Revision$
  */
 public enum PropertyMethodEnum {
     GET, IS, SET;
 
-    private static final Map<PropertyMethodEnum,Method> MAP =
-        Collections.unmodifiableMap(new MethodPrototypeMap());
+    private static final Map<PropertyMethodEnum,Method> MAP = Collections.unmodifiableMap(new MethodPrototypeMap());
 
     @ConstantValueMustConvertTo(value = Pattern.class, method = "compile")
     private static final String PROPERTY_REGEX = "([\\p{Upper}][\\p{Alnum}]*)";
@@ -61,8 +57,7 @@ public enum PropertyMethodEnum {
      *
      * @return  The parameter types array (of {@link Class}es).
      */
-    public Class<?>[] getParameterTypes() {
-        return MAP.get(this).getParameterTypes();
+    public Class<?>[] getParameterTypes() { return MAP.get(this).getParameterTypes();
     }
 
     /**
@@ -90,9 +85,7 @@ public enum PropertyMethodEnum {
 
     private Pattern pattern() {
         if (pattern == null) {
-            pattern =
-                Pattern.compile(Pattern.quote(name().toLowerCase())
-                                + PROPERTY_REGEX);
+            pattern = Pattern.compile(Pattern.quote(name().toLowerCase()) + PROPERTY_REGEX);
         }
 
         return pattern;
@@ -124,8 +117,7 @@ public enum PropertyMethodEnum {
         return name;
     }
 
-    private static class MethodPrototypeMap
-                         extends EnumMap<PropertyMethodEnum,Method> {
+    private static class MethodPrototypeMap extends EnumMap<PropertyMethodEnum,Method> {
         private static final long serialVersionUID = 6408568606272721794L;
 
         public MethodPrototypeMap() {

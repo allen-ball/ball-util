@@ -2,10 +2,8 @@ package ball.text;
 /*-
  * ##########################################################################
  * Utilities
- * $Id$
- * $HeadURL$
  * %%
- * Copyright (C) 2008 - 2021 Allen D. Ball
+ * Copyright (C) 2008 - 2022 Allen D. Ball
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,7 +42,6 @@ import static org.apache.commons.lang3.StringUtils.stripEnd;
  * Text-based {@link javax.swing.JTable} implementation.
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
- * @version $Revision$
  */
 public class TextTable extends ReaderWriterDataSource {
     private final TableModel model;
@@ -90,8 +87,7 @@ public class TextTable extends ReaderWriterDataSource {
 
             for (int y = 0, n = model.getRowCount(); y < n; y += 1) {
                 Object object = model.getValueAt(y, x);
-                String string =
-                    (object != null) ? object.toString() : null;
+                String string = (object != null) ? object.toString() : null;
 
                 widths[x] = Math.max(widths[x], length(string));
             }

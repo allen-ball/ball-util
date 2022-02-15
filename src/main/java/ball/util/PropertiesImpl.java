@@ -2,10 +2,8 @@ package ball.util;
 /*-
  * ##########################################################################
  * Utilities
- * $Id$
- * $HeadURL$
  * %%
- * Copyright (C) 2008 - 2021 Allen D. Ball
+ * Copyright (C) 2008 - 2022 Allen D. Ball
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,7 +38,6 @@ import static java.nio.charset.StandardCharsets.UTF_8;
  * methods to specify the {@link Charset} (as {@code UTF-8}).
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
- * @version $Revision$
  */
 public class PropertiesImpl extends Properties {
     private static final long serialVersionUID = -5034894719756448226L;
@@ -94,8 +91,7 @@ public class PropertiesImpl extends Properties {
      * @throws  IOException     If {@code resource} is not null and cannot be
      *                          read.
      */
-    public PropertiesImpl(Properties defaults,
-                          String resource) throws IOException {
+    public PropertiesImpl(Properties defaults, String resource) throws IOException {
         this(defaults);
 
         if (resource != null) {
@@ -128,14 +124,11 @@ public class PropertiesImpl extends Properties {
         store(this, out, comment);
     }
 
-    protected static void load(Properties properties,
-                               InputStream in) throws IOException {
+    protected static void load(Properties properties, InputStream in) throws IOException {
         properties.load(new InputStreamReader(in, CHARSET));
     }
 
-    protected static void store(Properties properties,
-                                OutputStream out,
-                                String comment) throws IOException {
+    protected static void store(Properties properties, OutputStream out, String comment) throws IOException {
         OutputStreamWriter writer = new OutputStreamWriter(out, CHARSET);
 
         properties.store(writer, comment);
@@ -157,9 +150,7 @@ public class PropertiesImpl extends Properties {
                                    Object object) throws Exception {
         for (String key : properties.stringPropertyNames()) {
             Object value = properties.get(key);
-            Method method =
-                getSetMethod(object,
-                             key, (value != null) ? value.getClass() : null);
+            Method method = getSetMethod(object, key, (value != null) ? value.getClass() : null);
 
             if (method != null) {
                 value = convertTo(value, method.getParameterTypes()[0]);
@@ -173,10 +164,7 @@ public class PropertiesImpl extends Properties {
     private static Method getSetMethod(Object object,
                                        String property, Class<?> parameter) {
         Method method = null;
-        String name =
-            "set"
-            + property.substring(0, 1).toUpperCase()
-            + property.substring(1);
+        String name = "set" + property.substring(0, 1).toUpperCase() + property.substring(1);
 
         if (method == null) {
             if (parameter != null) {
@@ -189,9 +177,7 @@ public class PropertiesImpl extends Properties {
 
         if (method == null) {
             for (Method m : object.getClass().getMethods()) {
-                if (m.getName().equals(name)
-                    && (! m.isVarArgs())
-                    && m.getParameterTypes().length == 1) {
+                if (m.getName().equals(name) && (! m.isVarArgs()) && m.getParameterTypes().length == 1) {
                     method = m;
                     break;
                 }

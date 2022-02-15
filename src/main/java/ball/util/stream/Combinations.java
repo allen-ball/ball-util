@@ -2,10 +2,8 @@ package ball.util.stream;
 /*-
  * ##########################################################################
  * Utilities
- * $Id$
- * $HeadURL$
  * %%
- * Copyright (C) 2008 - 2021 Allen D. Ball
+ * Copyright (C) 2008 - 2022 Allen D. Ball
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,7 +47,6 @@ import static lombok.AccessLevel.PRIVATE;
  * @param       <T>             The {@link List} element type.
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
- * @version $Revision$
  */
 public interface Combinations<T> extends Stream<List<T>> {
 
@@ -73,9 +70,7 @@ public interface Combinations<T> extends Stream<List<T>> {
      *
      * @return  The {@link Stream} of combinations.
      */
-    public static <T> Stream<List<T>> of(int size0, int sizeN,
-                                         Predicate<List<T>> predicate,
-                                         Collection<T> collection) {
+    public static <T> Stream<List<T>> of(int size0, int sizeN, Predicate<List<T>> predicate, Collection<T> collection) {
         SpliteratorSupplier<T> supplier =
             new SpliteratorSupplier<T>()
             .collection(collection)
@@ -103,14 +98,10 @@ public interface Combinations<T> extends Stream<List<T>> {
      * {@link Combinations} {@link Spliterator} {@link Supplier}.
      */
     @NoArgsConstructor(access = PRIVATE) @ToString
-    public static class SpliteratorSupplier<T>
-                        implements Supplier<Spliterator<List<T>>> {
+    public static class SpliteratorSupplier<T> implements Supplier<Spliterator<List<T>>> {
         @Getter @Setter @Accessors(chain = true, fluent = true)
         private int characteristics =
-            Spliterator.IMMUTABLE
-            | Spliterator.NONNULL
-            | Spliterator.SIZED
-            | Spliterator.SUBSIZED;
+            Spliterator.IMMUTABLE | Spliterator.NONNULL | Spliterator.SIZED | Spliterator.SUBSIZED;
         @Getter @Setter @Accessors(chain = true, fluent = true)
         private Collection<? extends T> collection = null;
         @Getter @Setter @Accessors(chain = true, fluent = true)
@@ -143,16 +134,14 @@ public interface Combinations<T> extends Stream<List<T>> {
 
         private class Start extends DispatchSpliterator<List<T>> {
             public Start() {
-                super(binomial(collection().size(), size0(), sizeN()),
-                      SpliteratorSupplier.this.characteristics());
+                super(binomial(collection().size(), size0(), sizeN()), SpliteratorSupplier.this.characteristics());
             }
 
             @Override
             protected Spliterator<Supplier<Spliterator<List<T>>>> spliterators() {
                 List<Supplier<Spliterator<List<T>>>> list = new LinkedList<>();
 
-                IntStream.rangeClosed(Math.min(size0(), sizeN()),
-                                      Math.max(size0(), sizeN()))
+                IntStream.rangeClosed(Math.min(size0(), sizeN()), Math.max(size0(), sizeN()))
                     .filter(t -> ! (collection.size() < t))
                     .forEach(t -> list.add(() -> new ForSize(t)));
 
@@ -178,8 +167,7 @@ public interface Combinations<T> extends Stream<List<T>> {
             private final int size;
 
             public ForSize(int size) {
-                super(binomial(collection().size(), size),
-                      SpliteratorSupplier.this.characteristics());
+                super(binomial(collection().size(), size), SpliteratorSupplier.this.characteristics());
 
                 this.size = size;
             }
@@ -187,9 +175,7 @@ public interface Combinations<T> extends Stream<List<T>> {
             @Override
             protected Spliterator<Supplier<Spliterator<List<T>>>> spliterators() {
                 Supplier<Spliterator<List<T>>> supplier =
-                    () -> new ForPrefix(size,
-                                        new LinkedList<>(),
-                                        new LinkedList<>(collection()));
+                    () -> new ForPrefix(size, new LinkedList<>(), new LinkedList<>(collection()));
 
                 return Stream.of(supplier).spliterator();
             }
@@ -211,8 +197,7 @@ public interface Combinations<T> extends Stream<List<T>> {
             private final List<T> remaining;
 
             public ForPrefix(int size, List<T> prefix, List<T> remaining) {
-                super(binomial(remaining.size(), size),
-                      SpliteratorSupplier.this.characteristics());
+                super(binomial(remaining.size(), size), SpliteratorSupplier.this.characteristics());
 
                 this.size = size;
                 this.prefix = requireNonNull(prefix);
@@ -243,11 +228,9 @@ public interface Combinations<T> extends Stream<List<T>> {
 
             @Override
             public boolean tryAdvance(Consumer<? super List<T>> consumer) {
-                Predicate<List<T>> predicate =
-                    SpliteratorSupplier.this.predicate();
+                Predicate<List<T>> predicate = SpliteratorSupplier.this.predicate();
 
-                return ((prefix.isEmpty()
-                         || (predicate == null || predicate.test(prefix)))
+                return ((prefix.isEmpty() || (predicate == null || predicate.test(prefix)))
                         && super.tryAdvance(consumer));
             }
 
@@ -273,19 +256,16 @@ public interface Combinations<T> extends Stream<List<T>> {
 
             @Override
             protected Spliterator<Supplier<Spliterator<List<T>>>> spliterators() {
-                Supplier<Spliterator<List<T>>> supplier =
-                    () -> Stream.of(combination).spliterator();
+                Supplier<Spliterator<List<T>>> supplier = () -> Stream.of(combination).spliterator();
 
                 return Stream.of(supplier).spliterator();
             }
 
             @Override
             public boolean tryAdvance(Consumer<? super List<T>> consumer) {
-                Predicate<List<T>> predicate =
-                    SpliteratorSupplier.this.predicate();
+                Predicate<List<T>> predicate = SpliteratorSupplier.this.predicate();
 
-                return ((combination.isEmpty()
-                         || (predicate == null || predicate.test(combination)))
+                return ((combination.isEmpty() || (predicate == null || predicate.test(combination)))
                         && super.tryAdvance(consumer));
             }
 

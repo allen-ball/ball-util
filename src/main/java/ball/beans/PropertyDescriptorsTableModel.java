@@ -2,10 +2,8 @@ package ball.beans;
 /*-
  * ##########################################################################
  * Utilities
- * $Id$
- * $HeadURL$
  * %%
- * Copyright (C) 2008 - 2021 Allen D. Ball
+ * Copyright (C) 2008 - 2022 Allen D. Ball
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,11 +34,9 @@ import static org.apache.commons.lang3.StringUtils.EMPTY;
  * {@link javax.swing.table.TableModel} implementation.
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
- * @version $Revision$
  */
 @ToString
-public class PropertyDescriptorsTableModel
-             extends ArrayListTableModel<PropertyDescriptor> {
+public class PropertyDescriptorsTableModel extends ArrayListTableModel<PropertyDescriptor> {
     private static final long serialVersionUID = -4799510974827528198L;
 
     private static final String R = "R";
@@ -53,8 +49,7 @@ public class PropertyDescriptorsTableModel
      */
     public PropertyDescriptorsTableModel(PropertyDescriptor[] rows) {
         super(Arrays.asList(rows),
-              "Name", "Mode", "Type",
-              "isHidden", "isBound", "isConstrained");
+              "Name", "Mode", "Type", "isHidden", "isBound", "isConstrained");
     }
 
     @Override
@@ -92,8 +87,7 @@ public class PropertyDescriptorsTableModel
     }
 
     private String getMode(PropertyDescriptor descriptor) {
-        String mode =
-            getMode(descriptor.getReadMethod(), descriptor.getWriteMethod());
+        String mode = getMode(descriptor.getReadMethod(), descriptor.getWriteMethod());
 
         if (descriptor instanceof IndexedPropertyDescriptor) {
             mode += "[";
@@ -105,8 +99,7 @@ public class PropertyDescriptorsTableModel
     }
 
     private String getMode(IndexedPropertyDescriptor descriptor) {
-        return getMode(descriptor.getIndexedReadMethod(),
-                       descriptor.getIndexedWriteMethod());
+        return getMode(descriptor.getIndexedReadMethod(), descriptor.getIndexedWriteMethod());
     }
 
     private String getMode(Method read, Method write) {

@@ -2,10 +2,8 @@ package ball.annotation.processing;
 /*-
  * ##########################################################################
  * Utilities
- * $Id$
- * $HeadURL$
  * %%
- * Copyright (C) 2008 - 2021 Allen D. Ball
+ * Copyright (C) 2008 - 2022 Allen D. Ball
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -78,7 +76,6 @@ import static lombok.AccessLevel.PROTECTED;
  * {@code Taglet} implementations.
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
- * @version $Revision$
  */
 @NoArgsConstructor(access = PROTECTED) @ToString
 public abstract class JavaxLangModelUtilities {
@@ -88,9 +85,7 @@ public abstract class JavaxLangModelUtilities {
     static {
         ArrayList<Class<? extends Annotation>> list = new ArrayList<>();
 
-        for (String name :
-                 Arrays.asList("javax.annotation.Generated",
-                               "javax.annotation.processing.Generated")) {
+        for (String name : Arrays.asList("javax.annotation.Generated", "javax.annotation.processing.Generated")) {
             try {
                 list.add(Class.forName(name).asSubclass(Annotation.class));
             } catch (Exception exception) {
@@ -188,8 +183,7 @@ public abstract class JavaxLangModelUtilities {
      */
     protected Class<?> asPackageInfoClass(PackageElement element) {
         Class<?> type = null;
-        String name =
-            element.getQualifiedName().toString() + ".package-info";
+        String name = element.getQualifiedName().toString() + ".package-info";
 
         try {
             type = getClassLoader().loadClass(name);
@@ -257,8 +251,7 @@ public abstract class JavaxLangModelUtilities {
     protected VariableElement asVariableElement(Field field) {
         TypeElement type = asTypeElement(field.getDeclaringClass());
         Element element =
-            fieldsIn(type.getEnclosedElements())
-            .stream()
+            fieldsIn(type.getEnclosedElements()).stream()
             .filter(t -> t.getSimpleName().contentEquals(field.getName()))
             .findFirst().orElse(null);
 
@@ -333,8 +326,7 @@ public abstract class JavaxLangModelUtilities {
      */
     protected TypeElement getTypeElementFor(Element context, String name) {
         if (! name.contains(".")) {
-            name =
-                elements.getPackageOf(context).getQualifiedName() + "." + name;
+            name = elements.getPackageOf(context).getQualifiedName() + "." + name;
         }
 
         return elements.getTypeElement(name);
@@ -352,8 +344,7 @@ public abstract class JavaxLangModelUtilities {
     protected ExecutableElement getConstructor(TypeElement type,
                                                List<TypeMirror> parameters) {
         Element element =
-            constructorsIn(type.getEnclosedElements())
-            .stream()
+            constructorsIn(type.getEnclosedElements()).stream()
             .filter(hasSameSignatureAs(parameters))
             .findFirst().orElse(null);
 
@@ -371,8 +362,7 @@ public abstract class JavaxLangModelUtilities {
      */
     protected ExecutableElement getMethod(TypeElement type, Method method) {
         Element element =
-            methodsIn(type.getEnclosedElements())
-            .stream()
+            methodsIn(type.getEnclosedElements()).stream()
             .filter(hasSameSignatureAs(method))
             .findFirst().orElse(null);
 
@@ -394,8 +384,7 @@ public abstract class JavaxLangModelUtilities {
     protected ExecutableElement overrides(ExecutableElement overrider) {
         TypeElement type = (TypeElement) overrider.getEnclosingElement();
         ExecutableElement element =
-            types.directSupertypes(type.asType())
-            .stream()
+            types.directSupertypes(type.asType()).stream()
             .map(t -> overrides(overrider, types.asElement(t)))
             .filter(Objects::nonNull)
             .findFirst().orElse(null);
@@ -403,8 +392,7 @@ public abstract class JavaxLangModelUtilities {
         return element;
     }
 
-    private ExecutableElement overrides(ExecutableElement overrider,
-                                        Element type) {
+    private ExecutableElement overrides(ExecutableElement overrider, Element type) {
         ExecutableElement overridden = null;
 
         if (type != null) {
@@ -422,18 +410,15 @@ public abstract class JavaxLangModelUtilities {
         return overridden;
     }
 
-    private ExecutableElement overridden(ExecutableElement overrider,
-                                         TypeElement type) {
+    private ExecutableElement overridden(ExecutableElement overrider, TypeElement type) {
         ExecutableElement element =
-            methodsIn(type.getEnclosedElements())
-            .stream()
+            methodsIn(type.getEnclosedElements()).stream()
             .filter(withoutModifiers(PRIVATE, STATIC))
             .filter(t -> elements.overrides(overrider, t, type))
             .findFirst().orElse(null);
 
         if (element == null) {
-            element =
-                overrides(overrider, types.asElement(type.getSuperclass()));
+            element = overrides(overrider, types.asElement(type.getSuperclass()));
         }
 
         return element;
@@ -453,8 +438,7 @@ public abstract class JavaxLangModelUtilities {
      *
      * @see Elements#overrides(ExecutableElement,ExecutableElement,TypeElement)
      */
-    protected boolean overrides(ExecutableElement overrider,
-                                ExecutableElement overridden) {
+    protected boolean overrides(ExecutableElement overrider, ExecutableElement overridden) {
         TypeElement type = (TypeElement) overridden.getEnclosingElement();
 
         return elements.overrides(overrider, overridden, type);
@@ -473,14 +457,12 @@ public abstract class JavaxLangModelUtilities {
      *
      * @see #overrides(ExecutableElement)
      */
-    protected ExecutableElement implementationOf(ExecutableElement overridden,
-                                                 TypeElement type) {
+    protected ExecutableElement implementationOf(ExecutableElement overridden, TypeElement type) {
         ExecutableElement element = null;
 
         if (type != null) {
             element =
-                methodsIn(type.getEnclosedElements())
-                .stream()
+                methodsIn(type.getEnclosedElements()).stream()
                 .filter(t -> overrides(t, overridden))
                 .findFirst().orElse(null);
 
@@ -574,8 +556,7 @@ public abstract class JavaxLangModelUtilities {
      *
      * @see Element#getAnnotationMirrors()
      */
-    protected AnnotationMirror getAnnotationMirror(Element element,
-                                                   Class<? extends Annotation> type) {
+    protected AnnotationMirror getAnnotationMirror(Element element, Class<? extends Annotation> type) {
         return getAnnotationMirror(element, type.getName());
     }
 
@@ -592,17 +573,13 @@ public abstract class JavaxLangModelUtilities {
      *
      * @see Element#getAnnotationMirrors()
      */
-    protected AnnotationMirror getAnnotationMirror(Element element,
-                                                   TypeElement type) {
-        return getAnnotationMirror(element,
-                                   type.getQualifiedName().toString());
+    protected AnnotationMirror getAnnotationMirror(Element element, TypeElement type) {
+        return getAnnotationMirror(element, type.getQualifiedName().toString());
     }
 
-    private AnnotationMirror getAnnotationMirror(Element element,
-                                                 String name) {
+    private AnnotationMirror getAnnotationMirror(Element element, String name) {
         AnnotationMirror mirror =
-            element.getAnnotationMirrors()
-            .stream()
+            element.getAnnotationMirrors().stream()
             .filter(t -> t.getAnnotationType().toString().equals(name))
             .map(t -> (AnnotationMirror) t)
             .findFirst().orElse(null);
@@ -624,8 +601,7 @@ public abstract class JavaxLangModelUtilities {
      */
     protected AnnotationValue getAnnotationValue(AnnotationMirror annotation, String name) {
         AnnotationValue value =
-            elements.getElementValuesWithDefaults(annotation).entrySet()
-            .stream()
+            elements.getElementValuesWithDefaults(annotation).entrySet().stream()
             .filter(t -> named(name).test(t.getKey()))
             .map(t -> t.getValue())
             .findFirst().orElse(null);
@@ -702,8 +678,7 @@ public abstract class JavaxLangModelUtilities {
     }
 
     private Set<String> getPropertyNames(Set<String> set, TypeElement type) {
-        for (ExecutableElement element :
-                 methodsIn(type.getEnclosedElements())) {
+        for (ExecutableElement element : methodsIn(type.getEnclosedElements())) {
             if (withoutModifiers(PRIVATE).test(element)) {
                 Stream.of(PropertyMethodEnum.values())
                     .filter(t -> t.getPropertyName(element.getSimpleName().toString()) != null)
@@ -745,12 +720,10 @@ public abstract class JavaxLangModelUtilities {
     }
 
     protected Predicate<Element> hasSameSignatureAs(Executable executable) {
-        return hasSameSignatureAs(executable.getName(),
-                                  executable.getParameterTypes());
+        return hasSameSignatureAs(executable.getName(), executable.getParameterTypes());
     }
 
-    protected Predicate<Element> hasSameSignatureAs(CharSequence name,
-                                                    Class<?>[] parameters) {
+    protected Predicate<Element> hasSameSignatureAs(CharSequence name, Class<?>[] parameters) {
         return is(METHOD, Element::getKind).and(named(name).and(withParameters(parameters)));
     }
 
@@ -762,13 +735,11 @@ public abstract class JavaxLangModelUtilities {
         return isAssignableTo(type, t -> t.asType());
     }
 
-    protected Predicate<Element> isAssignableTo(Class<?> type,
-                                                Function<? super Element,TypeMirror> extractor) {
+    protected Predicate<Element> isAssignableTo(Class<?> type, Function<? super Element,TypeMirror> extractor) {
         return isAssignableTo(asTypeMirror(type), extractor);
     }
 
-    protected Predicate<Element> isAssignableTo(TypeMirror type,
-                                                Function<? super Element,TypeMirror> extractor) {
+    protected Predicate<Element> isAssignableTo(TypeMirror type, Function<? super Element,TypeMirror> extractor) {
         return t -> types.isAssignable(extractor.apply(t), type);
     }
 
@@ -784,8 +755,7 @@ public abstract class JavaxLangModelUtilities {
         return new Predicate<Element>() {
             @Override
             public boolean test(Element element) {
-                boolean match =
-                    parameters.size() == ((ExecutableElement) element).getParameters().size();
+                boolean match = parameters.size() == ((ExecutableElement) element).getParameters().size();
 
                 if (match) {
                     match &=
@@ -817,13 +787,11 @@ public abstract class JavaxLangModelUtilities {
         return without(modifiers, t -> t.getModifiers());
     }
 
-    protected <E> Predicate<Element> with(Set<E> set,
-                                          Function<Element,Collection<E>> extractor) {
+    protected <E> Predicate<Element> with(Set<E> set, Function<Element,Collection<E>> extractor) {
         return t -> extractor.apply(t).containsAll(set);
     }
 
-    protected <E> Predicate<Element> without(Set<E> set,
-                                             Function<Element,Collection<E>> extractor) {
+    protected <E> Predicate<Element> without(Set<E> set, Function<Element,Collection<E>> extractor) {
         return t -> disjoint(set, extractor.apply(t));
     }
 
@@ -835,17 +803,14 @@ public abstract class JavaxLangModelUtilities {
      *
      * @return  The {@link ClassLoader}.
      */
-    protected ClassLoader getClassPathClassLoader(JavaFileManager fm,
-                                                  ClassLoader parent) {
+    protected ClassLoader getClassPathClassLoader(JavaFileManager fm, ClassLoader parent) {
         ClassLoader loader = parent;
 
         if (fm != null) {
             loader = fm.getClassLoader(CLASS_PATH);
 
             if (loader instanceof URLClassLoader) {
-                loader =
-                    URLClassLoader
-                    .newInstance(((URLClassLoader) loader).getURLs(), parent);
+                loader = URLClassLoader.newInstance(((URLClassLoader) loader).getURLs(), parent);
             }
         }
 
@@ -886,7 +851,8 @@ public abstract class JavaxLangModelUtilities {
                 try {
                     Object value =
                         java.lang.reflect.Modifier.class
-                        .getField(key.name()).get(null);
+                        .getField(key.name())
+                        .get(null);
 
                     put(key, (Integer) value);
                 } catch (Exception exception) {

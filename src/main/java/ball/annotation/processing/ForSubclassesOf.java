@@ -2,10 +2,8 @@ package ball.annotation.processing;
 /*-
  * ##########################################################################
  * Utilities
- * $Id$
- * $HeadURL$
  * %%
- * Copyright (C) 2008 - 2021 Allen D. Ball
+ * Copyright (C) 2008 - 2022 Allen D. Ball
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,7 +47,6 @@ import static javax.tools.Diagnostic.Kind.WARNING;
  * criteria.
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
- * @version $Revision$
  */
 @Documented
 @Retention(RUNTIME)
@@ -74,12 +71,10 @@ public @interface ForSubclassesOf {
     @NoArgsConstructor @ToString
     public static class ProcessorImpl extends AnnotatedProcessor {
         @Override
-        public void process(RoundEnvironment roundEnv,
-                            TypeElement annotation, Element element) {
+        public void process(RoundEnvironment roundEnv, TypeElement annotation, Element element) {
             super.process(roundEnv, annotation, element);
 
-            ForElementKinds kinds =
-                element.getAnnotation(ForElementKinds.class);
+            ForElementKinds kinds = element.getAnnotation(ForElementKinds.class);
 
             if (kinds != null) {
                 EnumSet<ElementKind> set = EnumSet.noneOf(ElementKind.class);
@@ -89,18 +84,14 @@ public @interface ForSubclassesOf {
                 if (! set.removeAll(ELEMENT_KINDS)) {
                     print(ERROR, element,
                           "%s annotated with @%s and @%s but does not specify one of %s",
-                          element.getKind(),
-                          annotation.getSimpleName(),
-                          ForElementKinds.class.getSimpleName(),
-                          ELEMENT_KINDS);
+                          element.getKind(), annotation.getSimpleName(),
+                          ForElementKinds.class.getSimpleName(), ELEMENT_KINDS);
                 }
 
                 if (! set.isEmpty()) {
                     print(WARNING, element,
                           "%s annotated with @%s and @%s; %s will be ignored",
-                          element.getKind(),
-                          annotation.getSimpleName(),
-                          ForElementKinds.class.getSimpleName(), set);
+                          element.getKind(), annotation.getSimpleName(), ForElementKinds.class.getSimpleName(), set);
                 }
             }
         }

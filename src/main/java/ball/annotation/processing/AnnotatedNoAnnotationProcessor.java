@@ -2,10 +2,8 @@ package ball.annotation.processing;
 /*-
  * ##########################################################################
  * Utilities
- * $Id$
- * $HeadURL$
  * %%
- * Copyright (C) 2008 - 2021 Allen D. Ball
+ * Copyright (C) 2008 - 2022 Allen D. Ball
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -56,7 +54,6 @@ import static lombok.AccessLevel.PROTECTED;
  * @see MustImplement
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
- * @version $Revision$
  */
 @NoArgsConstructor(access = PROTECTED) @ToString
 public abstract class AnnotatedNoAnnotationProcessor extends AbstractProcessor {
@@ -73,8 +70,7 @@ public abstract class AnnotatedNoAnnotationProcessor extends AbstractProcessor {
         EnumSet<ElementKind> value = null;
 
         if (getClass().isAnnotationPresent(ForElementKinds.class)) {
-            ElementKind[] array =
-                getClass().getAnnotation(ForElementKinds.class).value();
+            ElementKind[] array = getClass().getAnnotation(ForElementKinds.class).value();
 
             value = toEnumSet(array);
         }
@@ -92,8 +88,7 @@ public abstract class AnnotatedNoAnnotationProcessor extends AbstractProcessor {
         EnumSet<Modifier> value = null;
 
         if (getClass().isAnnotationPresent(WithModifiers.class)) {
-            Modifier[] array =
-                getClass().getAnnotation(WithModifiers.class).value();
+            Modifier[] array = getClass().getAnnotation(WithModifiers.class).value();
 
             value = toEnumSet(array);
         }
@@ -111,8 +106,7 @@ public abstract class AnnotatedNoAnnotationProcessor extends AbstractProcessor {
         EnumSet<Modifier> value = null;
 
         if (getClass().isAnnotationPresent(WithoutModifiers.class)) {
-            Modifier[] array =
-                getClass().getAnnotation(WithoutModifiers.class).value();
+            Modifier[] array = getClass().getAnnotation(WithoutModifiers.class).value();
 
             value = toEnumSet(array);
         }
@@ -238,8 +232,7 @@ public abstract class AnnotatedNoAnnotationProcessor extends AbstractProcessor {
 
                         print(ERROR, element,
                               "@%s: @%s does not implement %s",
-                              MustImplement.class.getSimpleName(),
-                              element.getKind(), type.getName());
+                              MustImplement.class.getSimpleName(), element.getKind(), type.getName());
                     }
                 }
             }

@@ -2,10 +2,8 @@ package ball.util.ant.taskdefs;
 /*-
  * ##########################################################################
  * Utilities
- * $Id$
- * $HeadURL$
  * %%
- * Copyright (C) 2008 - 2021 Allen D. Ball
+ * Copyright (C) 2008 - 2022 Allen D. Ball
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,13 +40,10 @@ import static lombok.AccessLevel.PROTECTED;
  * {@ant.task}
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
- * @version $Revision$
  */
 @NoArgsConstructor(access = PROTECTED)
-public abstract class StreamTokenizerTask extends Task
-                                          implements AnnotatedAntTask,
-                                                     ClasspathDelegateAntTask,
-                                                     ConfigurableAntTask {
+public abstract class StreamTokenizerTask extends Task implements AnnotatedAntTask,
+                                                                  ClasspathDelegateAntTask, ConfigurableAntTask {
     @Getter @Setter @Accessors(chain = true, fluent = true)
     private ClasspathUtils.Delegate delegate = null;
 
@@ -83,8 +78,7 @@ public abstract class StreamTokenizerTask extends Task
             try {
                 String string = getString();
                 String[] lines = string.split("\\R");
-                SimpleTableModel input =
-                    new SimpleTableModel(new Object[][] { }, 2);
+                SimpleTableModel input = new SimpleTableModel(new Object[][] { }, 2);
 
                 for (int i = 0; i < lines.length; i += 1) {
                     input.row(String.valueOf(i + 1), lines[i]);

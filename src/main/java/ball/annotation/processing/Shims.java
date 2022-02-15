@@ -2,10 +2,8 @@ package ball.annotation.processing;
 /*-
  * ##########################################################################
  * Utilities
- * $Id$
- * $HeadURL$
  * %%
- * Copyright (C) 2008 - 2021 Allen D. Ball
+ * Copyright (C) 2008 - 2022 Allen D. Ball
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,7 +32,6 @@ import static lombok.AccessLevel.PRIVATE;
  * JDK 8, 9, and 10-specific methods for {@link AbstractProcessor}.
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
- * @version $Revision$
  */
 @NoArgsConstructor(access = PRIVATE) @ToString
 public abstract class Shims {
@@ -57,8 +54,7 @@ public abstract class Shims {
          */
         try {
             /*
-             * Context context =
-             *     ((JavacProcessingEnvironment) env).getContext();
+             * Context context = ((JavacProcessingEnvironment) env).getContext();
              */
             Method getContext = env.getClass().getMethod("getContext");
 

@@ -2,10 +2,8 @@ package ball.util.ant.taskdefs;
 /*-
  * ##########################################################################
  * Utilities
- * $Id$
- * $HeadURL$
  * %%
- * Copyright (C) 2008 - 2021 Allen D. Ball
+ * Copyright (C) 2008 - 2022 Allen D. Ball
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,7 +35,6 @@ import static lombok.AccessLevel.PROTECTED;
  * JSR303-inspired Ant Task attribute constraint annotation.
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
- * @version $Revision$
  */
 @Documented
 @Retention(RUNTIME)
@@ -61,8 +58,6 @@ public @interface AntTaskAttributeConstraint {
          * @param   name        The name of the attribute.
          * @param   value       The attribute value.
          */
-        protected abstract void check(Task task,
-                                      TaskConfigurationChecker checker,
-                                      String name, Object value);
+        protected abstract void check(Task task, TaskConfigurationChecker checker, String name, Object value);
     }
 }

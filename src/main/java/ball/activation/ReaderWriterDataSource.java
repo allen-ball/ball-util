@@ -2,10 +2,8 @@ package ball.activation;
 /*-
  * ##########################################################################
  * Utilities
- * $Id$
- * $HeadURL$
  * %%
- * Copyright (C) 2008 - 2021 Allen D. Ball
+ * Copyright (C) 2008 - 2022 Allen D. Ball
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,7 +40,6 @@ import static org.apache.commons.lang3.StringUtils.EMPTY;
  * {@link javax.activation.DataSource} {@link java.io.OutputStream}.
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
- * @version $Revision$
  */
 public class ReaderWriterDataSource extends FilterDataSource {
     protected static final Charset CHARSET = UTF_8;
@@ -80,15 +77,14 @@ public class ReaderWriterDataSource extends FilterDataSource {
      * @param   content         The initial content {@link String}.
      */
     @ConstructorProperties({ "name", "contentType", "charset", EMPTY })
-    public ReaderWriterDataSource(String name, String type,
-                                  Charset charset, String content) {
+    public ReaderWriterDataSource(String name, String type, Charset charset, String content) {
         super(new ByteArrayDataSource(name, type));
 
         this.charset = (charset != null) ? charset : CHARSET;
 
         if (content != null) {
             try (Writer writer = getWriter()) {
-                 writer.write(content);
+                writer.write(content);
             } catch (IOException exception) {
                 throw new ExceptionInInitializerError(exception);
             }

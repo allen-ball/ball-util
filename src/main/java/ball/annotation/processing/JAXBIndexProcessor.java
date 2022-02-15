@@ -2,10 +2,8 @@ package ball.annotation.processing;
 /*-
  * ##########################################################################
  * Utilities
- * $Id$
- * $HeadURL$
  * %%
- * Copyright (C) 2008 - 2021 Allen D. Ball
+ * Copyright (C) 2008 - 2022 Allen D. Ball
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,13 +42,11 @@ import static javax.tools.StandardLocation.CLASS_OUTPUT;
  * from {@link Class}es annotated with JAXB annotations.
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
- * @version $Revision$
  */
 @ServiceProviderFor({ Processor.class })
 @For({ XmlRootElement.class, XmlType.class })
 @NoArgsConstructor @ToString
-public class JAXBIndexProcessor extends AnnotatedProcessor
-                                implements ClassFileProcessor {
+public class JAXBIndexProcessor extends AnnotatedProcessor implements ClassFileProcessor {
     private static final String JAXB_INDEX = "jaxb.index";
     private static final String DOT = ".";
 
@@ -62,12 +58,10 @@ public class JAXBIndexProcessor extends AnnotatedProcessor
 
         for (Class<?> type : set) {
             if (! isAbstract(type.getModifiers())) {
-                for (Class<? extends Annotation> annotation :
-                         getSupportedAnnotationTypeList()) {
+                for (Class<? extends Annotation> annotation : getSupportedAnnotationTypeList()) {
                     if (type.isAnnotationPresent(annotation)) {
                         String key = type.getPackage().getName();
-                        String value =
-                            type.getCanonicalName().substring(key.length());
+                        String value = type.getCanonicalName().substring(key.length());
 
                         if (value.startsWith(DOT)) {
                             value = value.substring(DOT.length());
@@ -82,9 +76,7 @@ public class JAXBIndexProcessor extends AnnotatedProcessor
 
         for (Map.Entry<String,Set<String>> entry : map.entrySet()) {
             String path = JAXB_INDEX;
-            FileObject file =
-                fm.getFileForOutput(CLASS_OUTPUT,
-                                    entry.getKey(), JAXB_INDEX, null);
+            FileObject file = fm.getFileForOutput(CLASS_OUTPUT, entry.getKey(), JAXB_INDEX, null);
 
             try (PrintWriter writer = new PrintWriter(file.openWriter())) {
                 writer.println("# " + JAXB_INDEX);

@@ -2,10 +2,8 @@ package ball.util;
 /*-
  * ##########################################################################
  * Utilities
- * $Id$
- * $HeadURL$
  * %%
- * Copyright (C) 2008 - 2021 Allen D. Ball
+ * Copyright (C) 2008 - 2022 Allen D. Ball
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,7 +40,6 @@ import static java.lang.reflect.Modifier.isPublic;
  *                              {@link Factory} will produce.
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
- * @version $Revision$
  */
 public class Factory<T> extends TreeMap<Class<?>[],Member> {
     private static final long serialVersionUID = -5733222257965875050L;
@@ -159,12 +156,11 @@ public class Factory<T> extends TreeMap<Class<?>[],Member> {
      *                          If the specified {@link Constructor} or
      *                          {@link Method} does not exist.
      */
-    public T getInstance(Class<?>[] parameters, Object... arguments)
-                                        throws IllegalAccessException,
-                                               IllegalArgumentException,
-                                               InstantiationException,
-                                               InvocationTargetException,
-                                               NoSuchMethodException {
+    public T getInstance(Class<?>[] parameters, Object... arguments) throws IllegalAccessException,
+                                                                            IllegalArgumentException,
+                                                                            InstantiationException,
+                                                                            InvocationTargetException,
+                                                                            NoSuchMethodException {
         return apply(getFactoryMethod(parameters), arguments);
     }
 
@@ -251,8 +247,7 @@ public class Factory<T> extends TreeMap<Class<?>[],Member> {
      *                          If the specified {@link Constructor} or
      *                          {@link Method} does not exist.
      */
-    public Member getFactoryMethod(Class<?>... parameters)
-                                        throws NoSuchMethodException {
+    public Member getFactoryMethod(Class<?>... parameters) throws NoSuchMethodException {
         if (! containsKey(parameters)) {
             put(parameters, getType().getConstructor(parameters));
         }
@@ -285,10 +280,8 @@ public class Factory<T> extends TreeMap<Class<?>[],Member> {
      *                          If the underlying {@link Constructor} or
      *                          {@link Method} fails for some reason.
      */
-    public T apply(Member member,
-                   Object... arguments) throws IllegalAccessException,
-                                               InstantiationException,
-                                               InvocationTargetException {
+    public T apply(Member member, Object... arguments) throws IllegalAccessException,
+                                                              InstantiationException, InvocationTargetException {
         Object object = null;
 
         if (member instanceof Method) {
@@ -357,8 +350,7 @@ public class Factory<T> extends TreeMap<Class<?>[],Member> {
      *          assignable from its corresponding argument; {@code false}
      *          otherwise.
      */
-    protected static boolean isApplicable(Class<?>[] parameters,
-                                          Class<?>... arguments) {
+    protected static boolean isApplicable(Class<?>[] parameters, Class<?>... arguments) {
         boolean match = (parameters.length == arguments.length);
 
         for (int i = 0; match && i < arguments.length; i += 1) {

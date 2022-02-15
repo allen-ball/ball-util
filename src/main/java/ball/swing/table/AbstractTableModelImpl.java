@@ -2,10 +2,8 @@ package ball.swing.table;
 /*-
  * ##########################################################################
  * Utilities
- * $Id$
- * $HeadURL$
  * %%
- * Copyright (C) 2008 - 2021 Allen D. Ball
+ * Copyright (C) 2008 - 2022 Allen D. Ball
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,11 +30,9 @@ import lombok.ToString;
  * {@bean.info}
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
- * @version $Revision$
  */
 @ToString
-public abstract class AbstractTableModelImpl extends AbstractTableModel
-                                             implements TableModelListener {
+public abstract class AbstractTableModelImpl extends AbstractTableModel implements TableModelListener {
     private static final long serialVersionUID = -4459832803497493630L;
 
     /** @serial */ private String[] names = new String[] { };
@@ -55,8 +51,7 @@ public abstract class AbstractTableModelImpl extends AbstractTableModel
             this.names = Arrays.copyOf(names, names.length);
             this.types = Arrays.copyOf(types, names.length);
         } else {
-            throw new IllegalArgumentException("names="
-                                               + Arrays.asList(names));
+            throw new IllegalArgumentException("names=" + Arrays.asList(names));
         }
 
         addTableModelListener(this);

@@ -2,10 +2,8 @@ package ball.util.ant.taskdefs;
 /*-
  * ##########################################################################
  * Utilities
- * $Id$
- * $HeadURL$
  * %%
- * Copyright (C) 2008 - 2021 Allen D. Ball
+ * Copyright (C) 2008 - 2022 Allen D. Ball
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -53,14 +51,11 @@ import static javax.xml.transform.OutputKeys.OMIT_XML_DECLARATION;
  * {@ant.task}
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
- * @version $Revision$
  */
 @AntTask("xpath-evaluate")
 @NoArgsConstructor @ToString
-public class XPathEvaluateTask extends Task
-                               implements AnnotatedAntTask,
-                                          ClasspathDelegateAntTask,
-                                          ConfigurableAntTask, XalanConstants {
+public class XPathEvaluateTask extends Task implements AnnotatedAntTask, ClasspathDelegateAntTask,
+                                                       ConfigurableAntTask, XalanConstants {
     @Getter @Setter @Accessors(chain = true, fluent = true)
     private ClasspathUtils.Delegate delegate = null;
     @NotNull @Getter @Setter
@@ -74,10 +69,7 @@ public class XPathEvaluateTask extends Task
 
     public void setQname(String name) throws IllegalArgumentException {
         try {
-            qname =
-                (QName)
-                XPathConstants.class.getField(name.toUpperCase())
-                .get(null);
+            qname = (QName) XPathConstants.class.getField(name.toUpperCase()).get(null);
         } catch (Exception exception) {
             qname = QName.valueOf(name);
         }
@@ -105,28 +97,23 @@ public class XPathEvaluateTask extends Task
 
             log(getExpression());
 
-            XPathExpression expression =
-                XPathFactory.newInstance().newXPath()
-                .compile(getExpression());
+            XPathExpression expression = XPathFactory.newInstance().newXPath().compile(getExpression());
             QName qname = getQname();
             Object value = expression.evaluate(document, qname);
 
             if (XPathConstants.NODESET.equals(qname)) {
-                Transformer transformer =
-                    TransformerFactory.newInstance().newTransformer();
+                Transformer transformer = TransformerFactory.newInstance().newTransformer();
 
                 transformer.setOutputProperty(OMIT_XML_DECLARATION, YES);
                 transformer.setOutputProperty(INDENT, (tab > 0) ? YES : NO);
-                transformer.setOutputProperty(XALAN_INDENT_AMOUNT.toString(),
-                                              String.valueOf(tab));
+                transformer.setOutputProperty(XALAN_INDENT_AMOUNT.toString(), String.valueOf(tab));
 
                 NodeList nodeset = (NodeList) value;
 
                 for (int i = 0; i < nodeset.getLength(); i += 1) {
                     ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-                    transformer.transform(new DOMSource(nodeset.item(i)),
-                                          new StreamResult(out));
+                    transformer.transform(new DOMSource(nodeset.item(i)), new StreamResult(out));
                     log(out.toString("UTF-8"));
                 }
             } else {

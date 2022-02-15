@@ -2,10 +2,8 @@ package ball.xml;
 /*-
  * ##########################################################################
  * Utilities
- * $Id$
- * $HeadURL$
  * %%
- * Copyright (C) 2008 - 2021 Allen D. Ball
+ * Copyright (C) 2008 - 2022 Allen D. Ball
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,13 +24,11 @@ import javax.xml.namespace.QName;
  * {@link.uri https://xml.apache.org/xalan-j/ Xalan} Constants.
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
- * @version $Revision$
  */
 public interface XalanConstants extends XMLConstants {
 
     /**
      * {@link javax.xml.transform.Transformer} output property name.
      */
-    public static final QName XALAN_INDENT_AMOUNT =
-        new QName("http://xml.apache.org/xalan", "indent-amount");
+    public static final QName XALAN_INDENT_AMOUNT = new QName("http://xml.apache.org/xalan", "indent-amount");
 }

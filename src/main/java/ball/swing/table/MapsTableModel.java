@@ -2,10 +2,8 @@ package ball.swing.table;
 /*-
  * ##########################################################################
  * Utilities
- * $Id$
- * $HeadURL$
  * %%
- * Copyright (C) 2008 - 2021 Allen D. Ball
+ * Copyright (C) 2008 - 2022 Allen D. Ball
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +27,6 @@ import lombok.ToString;
  * {@link Map}s {@link javax.swing.table.TableModel} implementation.
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
- * @version $Revision$
  */
 @ToString
 public class MapsTableModel extends MapTableModel {
@@ -45,8 +42,7 @@ public class MapsTableModel extends MapTableModel {
      *                          {@link Map}s.
      * @param   names           The column names.
      */
-    public MapsTableModel(Iterable<? extends Map<?,?>> iterable,
-                          String... names) {
+    public MapsTableModel(Iterable<? extends Map<?,?>> iterable, String... names) {
         this(iterable.iterator(), names);
     }
 
@@ -68,8 +64,7 @@ public class MapsTableModel extends MapTableModel {
      *                          {@link Map}s.
      * @param   names           The column names.
      */
-    protected MapsTableModel(Iterator<? extends Map<?,?>> iterator,
-                             String... names) {
+    protected MapsTableModel(Iterator<? extends Map<?,?>> iterator, String... names) {
         super(iterator.next(), names);
 
         list.add(super.map());

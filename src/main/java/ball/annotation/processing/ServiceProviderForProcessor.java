@@ -2,10 +2,8 @@ package ball.annotation.processing;
 /*-
  * ##########################################################################
  * Utilities
- * $Id$
- * $HeadURL$
  * %%
- * Copyright (C) 2008 - 2021 Allen D. Ball
+ * Copyright (C) 2008 - 2022 Allen D. Ball
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -71,27 +69,23 @@ import static org.apache.commons.lang3.StringUtils.EMPTY;
  * library.
  * </p>
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
- * @version $Revision$
  */
 @ServiceProviderFor({ Processor.class })
 @For({ ServiceProviderFor.class })
 @NoArgsConstructor @ToString
-public class ServiceProviderForProcessor extends AnnotatedProcessor
-                                         implements ClassFileProcessor {
+public class ServiceProviderForProcessor extends AnnotatedProcessor implements ClassFileProcessor {
     private static abstract class PROTOTYPE {
         public static Object provider() { return null; }
     }
 
-    private static final Method PROTOTYPE =
-        PROTOTYPE.class.getDeclaredMethods()[0];
+    private static final Method PROTOTYPE = PROTOTYPE.class.getDeclaredMethods()[0];
 
     static { PROTOTYPE.setAccessible(true); }
 
     private static final String PATH = "META-INF/services/%s";
 
     @Override
-    protected void process(RoundEnvironment roundEnv,
-                           TypeElement annotation, Element element) {
+    protected void process(RoundEnvironment roundEnv, TypeElement annotation, Element element) {
         super.process(roundEnv, annotation, element);
 
         TypeElement type = (TypeElement) element;
@@ -105,26 +99,20 @@ public class ServiceProviderForProcessor extends AnnotatedProcessor
                 if (! method.getModifiers().containsAll(getModifiers(PROTOTYPE))) {
                     print(ERROR, method,
                           "@%s: %s is not %s",
-                          annotation.getSimpleName(),
-                          method.getKind(), modifiers(PROTOTYPE.getModifiers()));
+                          annotation.getSimpleName(), method.getKind(), modifiers(PROTOTYPE.getModifiers()));
                 }
             } else {
                 if (! withoutModifiers(ABSTRACT).test(element)) {
                     print(ERROR, element,
                           "%s: %s must not be %s",
-                          annotation.getSimpleName(),
-                          element.getKind(), ABSTRACT);
+                          annotation.getSimpleName(), element.getKind(), ABSTRACT);
                 }
 
-                ExecutableElement constructor =
-                    getConstructor((TypeElement) element, Collections.emptyList());
-                boolean found =
-                    (constructor != null && constructor.getModifiers().contains(PUBLIC));
+                ExecutableElement constructor = getConstructor((TypeElement) element, Collections.emptyList());
+                boolean found = (constructor != null && constructor.getModifiers().contains(PUBLIC));
 
                 if (! found) {
-                    print(ERROR, element,
-                          "@%s: No %s NO-ARG constructor",
-                          annotation.getSimpleName(), PUBLIC);
+                    print(ERROR, element, "@%s: No %s NO-ARG constructor", annotation.getSimpleName(), PUBLIC);
                 }
             }
 
@@ -144,16 +132,14 @@ public class ServiceProviderForProcessor extends AnnotatedProcessor
                 if (! isAssignable(type, service)) {
                     print(ERROR, type,
                           "@%s: %s does not implement %s",
-                          annotation.getSimpleName(),
-                          type.getKind(), service.getQualifiedName());
+                          annotation.getSimpleName(), type.getKind(), service.getQualifiedName());
                 }
 
                 if (method != null) {
                     if (! isAssignable(method.getReturnType(), service.asType())) {
                         print(ERROR, method,
                               "@%s: %s does not return %s",
-                              annotation.getSimpleName(),
-                              method.getKind(), service.getQualifiedName());
+                              annotation.getSimpleName(), method.getKind(), service.getQualifiedName());
                     }
                 }
             }
@@ -175,8 +161,7 @@ public class ServiceProviderForProcessor extends AnnotatedProcessor
         Map<String,Set<String>> map = new TreeMap<>();
 
         for (Class<?> provider : set) {
-            ServiceProviderFor annotation =
-                provider.getAnnotation(ServiceProviderFor.class);
+            ServiceProviderFor annotation = provider.getAnnotation(ServiceProviderFor.class);
 
             if (annotation != null) {
                 for (Class<?> service : annotation.value()) {
@@ -190,9 +175,7 @@ public class ServiceProviderForProcessor extends AnnotatedProcessor
 
         for (Map.Entry<String,Set<String>> entry : map.entrySet()) {
             String service = entry.getKey();
-            FileObject file =
-                fm.getFileForOutput(CLASS_OUTPUT,
-                                    EMPTY, String.format(PATH, service), null);
+            FileObject file = fm.getFileForOutput(CLASS_OUTPUT, EMPTY, String.format(PATH, service), null);
 
             try (PrintWriter writer = new PrintWriter(file.openWriter())) {
                 writer.println("# " + service);

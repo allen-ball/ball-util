@@ -2,10 +2,8 @@ package ball.util.ant.taskdefs;
 /*-
  * ##########################################################################
  * Utilities
- * $Id$
- * $HeadURL$
  * %%
- * Copyright (C) 2008 - 2021 Allen D. Ball
+ * Copyright (C) 2008 - 2022 Allen D. Ball
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -55,13 +53,10 @@ import static javax.tools.StandardLocation.SOURCE_PATH;
  * {@ant.task}
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
- * @version $Revision$
  */
 @AntTask("process-class-files")
 @NoArgsConstructor @ToString
-public class ProcessClassFilesTask extends Task
-                                   implements AnnotatedAntTask,
-                                              ClasspathDelegateAntTask {
+public class ProcessClassFilesTask extends Task implements AnnotatedAntTask, ClasspathDelegateAntTask {
     @Getter @Setter @Accessors(chain = true, fluent = true)
     private ClasspathUtils.Delegate delegate = null;
     @Getter @Setter
@@ -95,9 +90,7 @@ public class ProcessClassFilesTask extends Task
         ClasspathDelegateAntTask.super.init();
 
         try {
-            fm =
-                ToolProvider.getSystemJavaCompiler()
-                .getStandardFileManager(null, null, null);
+            fm = ToolProvider.getSystemJavaCompiler().getStandardFileManager(null, null, null);
         } catch (BuildException exception) {
             throw exception;
         } catch (RuntimeException exception) {
@@ -140,9 +133,8 @@ public class ProcessClassFilesTask extends Task
 
             if (loader instanceof URLClassLoader) {
                 loader =
-                    URLClassLoader
-                    .newInstance(((URLClassLoader) loader).getURLs(),
-                                 getClass().getClassLoader());
+                    URLClassLoader.newInstance(((URLClassLoader) loader).getURLs(),
+                                               getClass().getClassLoader());
             }
 
             HashSet<Class<?>> types = new HashSet<>();

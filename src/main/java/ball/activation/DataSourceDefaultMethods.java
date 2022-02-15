@@ -2,10 +2,8 @@ package ball.activation;
 /*-
  * ##########################################################################
  * Utilities
- * $Id$
- * $HeadURL$
  * %%
- * Copyright (C) 2008 - 2021 Allen D. Ball
+ * Copyright (C) 2008 - 2022 Allen D. Ball
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +29,6 @@ import org.apache.commons.io.IOUtils;
  * {@link DataSource} default method implementations.
  *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
- * @version $Revision$
  */
 public interface DataSourceDefaultMethods extends DataSource {
 
@@ -43,8 +40,7 @@ public interface DataSourceDefaultMethods extends DataSource {
     /**
      * {@link.rfc 2045} {@value #APPLICATION_OCTET_STREAM}
      */
-    public static final String APPLICATION_OCTET_STREAM =
-        "application/octet-stream";
+    public static final String APPLICATION_OCTET_STREAM = "application/octet-stream";
 
     /**
      * {@link.rfc 3023} {@value #APPLICATION_XML}
@@ -175,8 +171,7 @@ public interface DataSourceDefaultMethods extends DataSource {
      * @throws  IOException     If any of the wrapping streams throw an
      *                          {@link IOException}.
      */
-    default InputStream wrap(InputStream in,
-                             Class<?>... types) throws IOException {
+    default InputStream wrap(InputStream in, Class<?>... types) throws IOException {
         try {
             for (Class<?> type : types) {
                 in =
@@ -218,8 +213,7 @@ public interface DataSourceDefaultMethods extends DataSource {
      * @throws  IOException     If any of the wrapping streams throw an
      *                          {@link IOException}.
      */
-    default OutputStream wrap(OutputStream out,
-                              Class<?>... types) throws IOException {
+    default OutputStream wrap(OutputStream out, Class<?>... types) throws IOException {
         try {
             for (Class<?> type : types) {
                 out =
