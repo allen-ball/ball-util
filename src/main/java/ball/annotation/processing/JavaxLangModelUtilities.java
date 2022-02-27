@@ -341,8 +341,7 @@ public abstract class JavaxLangModelUtilities {
      *
      * @return  The {@link ExecutableElement} for the constructor.
      */
-    protected ExecutableElement getConstructor(TypeElement type,
-                                               List<TypeMirror> parameters) {
+    protected ExecutableElement getConstructor(TypeElement type, List<TypeMirror> parameters) {
         Element element =
             constructorsIn(type.getEnclosedElements()).stream()
             .filter(hasSameSignatureAs(parameters))

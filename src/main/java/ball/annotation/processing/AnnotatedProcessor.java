@@ -139,8 +139,7 @@ public abstract class AnnotatedProcessor extends AbstractProcessor {
      * @param   annotation      The annotation {@link TypeElement}.
      * @param   element         The annotated {@link Element}.
      */
-    protected void process(RoundEnvironment roundEnv,
-                           TypeElement annotation, Element element) {
+    protected void process(RoundEnvironment roundEnv, TypeElement annotation, Element element) {
     }
 
     private String getEnclosingTypeBinaryName(Element element) {

@@ -210,13 +210,15 @@ public abstract class AbstractProcessor extends JavaxLangModelUtilities implemen
      * Abstract {@link Criterion} base class.
      */
     @NoArgsConstructor(access = PROTECTED) @ToString
-    protected abstract class Criterion<T extends Element> implements Predicate<T> { }
+    protected abstract class Criterion<T extends Element> implements Predicate<T> {
+    }
 
     /**
      * Abstract {@link Check} base class.
      */
     @NoArgsConstructor(access = PROTECTED) @ToString
-    protected abstract class Check<T extends Element> implements Consumer<T> { }
+    protected abstract class Check<T extends Element> implements Consumer<T> {
+    }
 
     @NoArgsConstructor @ToString
     private class WhenAnnotationProcessingFinished extends AbstractTaskListener {

@@ -193,8 +193,7 @@ public abstract class AnnotatedNoAnnotationProcessor extends AbstractProcessor {
      * @return  {@code false} always.
      */
     @Override
-    public boolean process(Set<? extends TypeElement> annotations,
-                           RoundEnvironment roundEnv) {
+    public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
         try {
             walk(roundEnv.getRootElements(), Element::getEnclosedElements)
                 .filter(criteria.stream().reduce(t -> true, Predicate::and))

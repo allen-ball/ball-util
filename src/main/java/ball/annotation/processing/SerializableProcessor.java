@@ -24,6 +24,7 @@ import com.sun.source.util.TaskEvent;
 import java.io.ObjectStreamClass;
 import java.io.Serializable;
 import java.lang.reflect.Field;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
@@ -59,7 +60,7 @@ public class SerializableProcessor extends AnnotatedNoAnnotationProcessor {
 
     static { PROTOTYPE.setAccessible(true); }
 
-    private final Set<String> set = new TreeSet<>();
+    private final Set<TypeElement> set = new TreeSet<>(Comparator.comparing(t -> t.getQualifiedName().toString()));
 
     @Override
     protected void whenAnnotationProcessingFinished() {
@@ -78,7 +79,7 @@ public class SerializableProcessor extends AnnotatedNoAnnotationProcessor {
             if (! (field != null
                    && field.getModifiers().containsAll(getModifiers(PROTOTYPE))
                    && isAssignableTo(PROTOTYPE.getType()).test(field))) {
-                set.add(elements.getBinaryName(type).toString());
+                set.add(type);
             }
         }
     }
@@ -90,15 +91,15 @@ public class SerializableProcessor extends AnnotatedNoAnnotationProcessor {
             switch (event.getKind()) {
             case GENERATE:
                 ClassLoader loader = getClassPathClassLoader(fm);
-                Iterator<String> iterator = set.iterator();
+                Iterator<TypeElement> iterator = set.iterator();
 
                 while (iterator.hasNext()) {
-                    String name = iterator.next();
+                    TypeElement type = iterator.next();
+                    String name = elements.getBinaryName(type).toString();
 
                     try {
                         Class<?> cls = Class.forName(name, true, loader);
                         long uid = ObjectStreamClass.lookup(cls).getSerialVersionUID();
-                        TypeElement type = elements.getTypeElement(cls.getCanonicalName());
 
                         print(WARNING, type,
                               "%s %s has no definition of %s\n%s = %dL;",
