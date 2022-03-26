@@ -22,16 +22,17 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
                              http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <name>Utilities</name>
-  <description></description>
   <groupId>ball</groupId>
   <artifactId>ball-util</artifactId>
-  <version>6.3.1.20220314</version>
+  <version>6.3.2.20220604</version>
   <packaging>jar</packaging>
+  <name>${project.groupId}:${project.artifactId}</name>
+  <description>Utilities</description>
+  <url>https://github.com/allen-ball/ball-util</url>
   <parent>
     <groupId>ball</groupId>
     <artifactId>parent</artifactId>
-    <version>2022.0.1</version>
+    <version>2022.1.0</version>
     <relativePath>../parent/pom.xml</relativePath>
   </parent>
   <inceptionYear>2008</inceptionYear>
@@ -47,38 +48,45 @@
   </scm>
   <profiles>
     <profile>
-      <id>jdk8-and-earlier</id>
-      <activation><jdk>[1.8,9)</jdk></activation>
-      <dependencyManagement>
-        <dependencies>
-          <dependency>
-            <groupId>javax.xml.bind</groupId>
-            <artifactId>jaxb-api</artifactId>
-            <version>2.2.8</version>
-            <scope>provided</scope>
-          </dependency>
-        </dependencies>
-      </dependencyManagement>
-    </profile>
-    <profile>
-      <id>jdk9-and-later</id>
-      <activation><jdk>[9,)</jdk></activation>
+      <id>JDK8_HOME</id>
+      <activation>
+        <property><name>env.JDK8_HOME</name></property>
+      </activation>
       <dependencies>
         <dependency>
-          <groupId>jakarta.annotation</groupId>
-          <artifactId>jakarta.annotation-api</artifactId>
-        </dependency>
-        <dependency>
-          <groupId>jakarta.xml.bind</groupId>
-          <artifactId>jakarta.xml.bind-api</artifactId>
+          <groupId>com.sun</groupId>
+          <artifactId>tools</artifactId>
+          <version>1.8</version>
+          <scope>system</scope>
+          <systemPath>${env.JDK8_HOME}/lib/tools.jar</systemPath>
         </dependency>
       </dependencies>
+      <build>
+        <pluginManagement>
+          <plugins>
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-compiler-plugin</artifactId>
+              <executions>
+                <execution>
+                  <id>default-compile</id>
+                  <configuration>
+                    <executable>${env.JDK8_HOME}/bin/javac</executable>
+                    <fork>true</fork>
+                  </configuration>
+                </execution>
+              </executions>
+            </plugin>
+          </plugins>
+        </pluginManagement>
+      </build>
     </profile>
   </profiles>
-  <properties>
-    <jse.target>8</jse.target>
-  </properties>
   <dependencies verbose="true">
+    <dependency>
+      <groupId>jakarta.xml.bind</groupId>
+      <artifactId>jakarta.xml.bind-api</artifactId>
+    </dependency>
     <dependency>
       <groupId>org.apache.ant</groupId>
       <artifactId>ant</artifactId>
@@ -94,6 +102,19 @@
   </dependencies>
   <build>
     <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>default-compile</id>
+            <configuration>
+              <source>8</source>
+              <target>8</target>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-antrun-plugin</artifactId>
