@@ -21,6 +21,8 @@ package ball.annotation.processing;
 import ball.annotation.ServiceProviderFor;
 import java.io.PrintWriter;
 import java.lang.reflect.Method;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -43,6 +45,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import static java.lang.reflect.Modifier.isAbstract;
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.stream.Collectors.toList;
 import static javax.lang.model.element.Modifier.ABSTRACT;
 import static javax.lang.model.element.Modifier.PUBLIC;
@@ -83,6 +86,8 @@ public class ServiceProviderForProcessor extends AnnotatedProcessor implements C
     static { PROTOTYPE.setAccessible(true); }
 
     private static final String PATH = "META-INF/services/%s";
+
+    private final Map<String,Set<String>> map = new TreeMap<>();
 
     @Override
     protected void process(RoundEnvironment roundEnv, TypeElement annotation, Element element) {
@@ -129,18 +134,19 @@ public class ServiceProviderForProcessor extends AnnotatedProcessor implements C
                 .collect(toList());
 
             for (TypeElement service : services) {
-                if (! isAssignable(type, service)) {
-                    print(ERROR, type,
-                          "@%s: %s does not implement %s",
-                          annotation.getSimpleName(), type.getKind(), service.getQualifiedName());
-                }
-
-                if (method != null) {
-                    if (! isAssignable(method.getReturnType(), service.asType())) {
+                if (isAssignable(type, service)) {
+                    if (method == null || isAssignable(method.getReturnType(), service.asType())) {
+                        map.computeIfAbsent(service.getQualifiedName().toString(), k -> new TreeSet<>())
+                            .add(provider);
+                    } else {
                         print(ERROR, method,
                               "@%s: %s does not return %s",
                               annotation.getSimpleName(), method.getKind(), service.getQualifiedName());
                     }
+                } else {
+                    print(ERROR, type,
+                          "@%s: %s does not implement %s",
+                          annotation.getSimpleName(), type.getKind(), service.getQualifiedName());
                 }
             }
         } else {
@@ -158,16 +164,31 @@ public class ServiceProviderForProcessor extends AnnotatedProcessor implements C
 
     @Override
     public void process(Set<Class<?>> set, JavaFileManager fm) throws Exception {
-        Map<String,Set<String>> map = new TreeMap<>();
+        if (! map.isEmpty()) {
+/*
+            for (String service : map.keySet()) {
+                FileObject file = fm.getFileForOutput(CLASS_OUTPUT, EMPTY, String.format(PATH, service), null);
 
-        for (Class<?> provider : set) {
-            ServiceProviderFor annotation = provider.getAnnotation(ServiceProviderFor.class);
+                try {
+                    Files.readAllLines(Paths.get(file.toUri()), UTF_8).stream()
+                        .map(t -> t.split("#", 2)[0])
+                        .map(t -> t.trim())
+                        .filter(t -> (! t.isEmpty()))
+                        .forEach(t -> map.get(service).add(t));
+                } catch (Exception exception) {
+                }
+            }
+*/
+        } else {
+            for (Class<?> provider : set) {
+                ServiceProviderFor annotation = provider.getAnnotation(ServiceProviderFor.class);
 
-            if (annotation != null) {
-                for (Class<?> service : annotation.value()) {
-                    if (service.isAssignableFrom(provider)) {
-                        map.computeIfAbsent(service.getName(), k -> new TreeSet<>())
-                            .add(provider.getName());
+                if (annotation != null) {
+                    for (Class<?> service : annotation.value()) {
+                        if (service.isAssignableFrom(provider)) {
+                            map.computeIfAbsent(service.getName(), k -> new TreeSet<>())
+                                .add(provider.getName());
+                        }
                     }
                 }
             }
