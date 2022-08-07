@@ -23,7 +23,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import javax.activation.DataSource;
-import org.apache.commons.io.IOUtils;
 
 /**
  * {@link DataSource} default method implementations.
@@ -138,24 +137,6 @@ public interface DataSourceDefaultMethods extends DataSource {
      */
     default OutputStream getOutputStream(Class<?>... types) throws IOException {
         return wrap(getOutputStream(), types);
-    }
-
-    /**
-     * Method to write the contents of this {@link DataSource} to an
-     * {@link OutputStream}.
-     *
-     * @see #getInputStream()
-     *
-     * @param   out             The target {@link OutputStream}.
-     *
-     * @throws  IOException     If a problem is encountered opening or
-     *                          reading the {@link InputStream} or writing
-     *                          to the {@link OutputStream}.
-     */
-    default void writeTo(OutputStream out) throws IOException {
-        try (InputStream in = getInputStream()) {
-            IOUtils.copy(in, out);
-        }
     }
 
     /**
