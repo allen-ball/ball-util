@@ -5,7 +5,8 @@ Utilities
 Description
 -----------
 
-A collection of Java utility classes.
+A collection of Java utility classes.  Javadoc is published at
+<https://allen-ball.github.io/ball-util/>.
 
 Notable features:
 
@@ -35,11 +36,11 @@ License
 This code is released under the [Apache License, Version 2.0, January 2004].
 
 
-[Annotation Processing Framework]: https://allen-ball.github.io/javadoc/ball-api/2022.0.0/ball/annotation/processing/package-summary.html
-[Ant Task Framework]: https://allen-ball.github.io/javadoc/ball-api/2022.0.0/ball/util/ant/taskdefs/package-summary.html
+[Annotation Processing Framework]: https://allen-ball.github.io/ball-util/ball/annotation/processing/package-summary.html
+[Ant Task Framework]: https://allen-ball.github.io/ball-util/ball/util/ant/taskdefs/package-summary.html
 [Proxy]: https://docs.oracle.com/javase/8/docs/api/java/lang/reflect/Proxy.html
-[Combinations]: https://allen-ball.github.io/javadoc/ball-api/2022.0.0/ball/util/stream/Combinations.html
-[Permutations]: https://allen-ball.github.io/javadoc/ball-api/2022.0.0/ball/util/stream/Permutations.html
+[Combinations]: https://allen-ball.github.io/ball-util/ball/util/stream/Combinations.html
+[Permutations]: https://allen-ball.github.io/ball-util/ball/util/stream/Permutations.html
 [Stream]: https://docs.oracle.com/javase/8/docs/api/java/util/stream/Stream.html?is-external=true
 
 [Adding Support to Java InvocationHandler Implementations for Interface Default Methods]: https://blog.hcf.dev/article/2019-01-31-java-invocationhandler-interface-default-methods
