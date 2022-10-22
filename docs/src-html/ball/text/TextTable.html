@@ -1,201 +1,202 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML>
 <html lang="en">
 <head>
 <title>Source code</title>
 <link rel="stylesheet" type="text/css" href="../../../stylesheet.css" title="Style">
 </head>
 <body>
+<main role="main">
 <div class="sourceContainer">
-<pre><span class="sourceLineNo">001</span>package ball.text;<a name="line.1"></a>
-<span class="sourceLineNo">002</span>/*-<a name="line.2"></a>
-<span class="sourceLineNo">003</span> * ##########################################################################<a name="line.3"></a>
-<span class="sourceLineNo">004</span> * Utilities<a name="line.4"></a>
-<span class="sourceLineNo">005</span> * %%<a name="line.5"></a>
-<span class="sourceLineNo">006</span> * Copyright (C) 2008 - 2022 Allen D. Ball<a name="line.6"></a>
-<span class="sourceLineNo">007</span> * %%<a name="line.7"></a>
-<span class="sourceLineNo">008</span> * Licensed under the Apache License, Version 2.0 (the "License");<a name="line.8"></a>
-<span class="sourceLineNo">009</span> * you may not use this file except in compliance with the License.<a name="line.9"></a>
-<span class="sourceLineNo">010</span> * You may obtain a copy of the License at<a name="line.10"></a>
-<span class="sourceLineNo">011</span> *<a name="line.11"></a>
-<span class="sourceLineNo">012</span> *      http://www.apache.org/licenses/LICENSE-2.0<a name="line.12"></a>
-<span class="sourceLineNo">013</span> *<a name="line.13"></a>
-<span class="sourceLineNo">014</span> * Unless required by applicable law or agreed to in writing, software<a name="line.14"></a>
-<span class="sourceLineNo">015</span> * distributed under the License is distributed on an "AS IS" BASIS,<a name="line.15"></a>
-<span class="sourceLineNo">016</span> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.<a name="line.16"></a>
-<span class="sourceLineNo">017</span> * See the License for the specific language governing permissions and<a name="line.17"></a>
-<span class="sourceLineNo">018</span> * limitations under the License.<a name="line.18"></a>
-<span class="sourceLineNo">019</span> * ##########################################################################<a name="line.19"></a>
-<span class="sourceLineNo">020</span> */<a name="line.20"></a>
-<span class="sourceLineNo">021</span>import ball.activation.ReaderWriterDataSource;<a name="line.21"></a>
-<span class="sourceLineNo">022</span>import java.io.IOException;<a name="line.22"></a>
-<span class="sourceLineNo">023</span>import java.io.InputStream;<a name="line.23"></a>
-<span class="sourceLineNo">024</span>import java.io.PrintWriter;<a name="line.24"></a>
-<span class="sourceLineNo">025</span>import java.util.Arrays;<a name="line.25"></a>
-<span class="sourceLineNo">026</span>import javax.swing.event.TableModelEvent;<a name="line.26"></a>
-<span class="sourceLineNo">027</span>import javax.swing.event.TableModelListener;<a name="line.27"></a>
-<span class="sourceLineNo">028</span>import javax.swing.table.AbstractTableModel;<a name="line.28"></a>
-<span class="sourceLineNo">029</span>import javax.swing.table.TableModel;<a name="line.29"></a>
-<span class="sourceLineNo">030</span>import lombok.NoArgsConstructor;<a name="line.30"></a>
-<span class="sourceLineNo">031</span>import lombok.ToString;<a name="line.31"></a>
-<span class="sourceLineNo">032</span>import org.apache.commons.lang3.StringUtils;<a name="line.32"></a>
-<span class="sourceLineNo">033</span><a name="line.33"></a>
-<span class="sourceLineNo">034</span>import static org.apache.commons.lang3.StringUtils.EMPTY;<a name="line.34"></a>
-<span class="sourceLineNo">035</span>import static org.apache.commons.lang3.StringUtils.SPACE;<a name="line.35"></a>
-<span class="sourceLineNo">036</span>import static org.apache.commons.lang3.StringUtils.isBlank;<a name="line.36"></a>
-<span class="sourceLineNo">037</span>import static org.apache.commons.lang3.StringUtils.repeat;<a name="line.37"></a>
-<span class="sourceLineNo">038</span>import static org.apache.commons.lang3.StringUtils.rightPad;<a name="line.38"></a>
-<span class="sourceLineNo">039</span>import static org.apache.commons.lang3.StringUtils.stripEnd;<a name="line.39"></a>
-<span class="sourceLineNo">040</span><a name="line.40"></a>
-<span class="sourceLineNo">041</span>/**<a name="line.41"></a>
-<span class="sourceLineNo">042</span> * Text-based {@link javax.swing.JTable} implementation.<a name="line.42"></a>
-<span class="sourceLineNo">043</span> *<a name="line.43"></a>
-<span class="sourceLineNo">044</span> * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}<a name="line.44"></a>
-<span class="sourceLineNo">045</span> */<a name="line.45"></a>
-<span class="sourceLineNo">046</span>public class TextTable extends ReaderWriterDataSource {<a name="line.46"></a>
-<span class="sourceLineNo">047</span>    private final TableModel model;<a name="line.47"></a>
-<span class="sourceLineNo">048</span>    private int[] tabs = new int[] { };<a name="line.48"></a>
-<span class="sourceLineNo">049</span>    private int[] widths = new int[] { };<a name="line.49"></a>
-<span class="sourceLineNo">050</span><a name="line.50"></a>
-<span class="sourceLineNo">051</span>    /**<a name="line.51"></a>
-<span class="sourceLineNo">052</span>     * Sole constructor.<a name="line.52"></a>
-<span class="sourceLineNo">053</span>     *<a name="line.53"></a>
-<span class="sourceLineNo">054</span>     * @param   model           The {@link TextTable}'s {@link TableModel}.<a name="line.54"></a>
-<span class="sourceLineNo">055</span>     * @param   tabs            The preferred tab stops.<a name="line.55"></a>
-<span class="sourceLineNo">056</span>     */<a name="line.56"></a>
-<span class="sourceLineNo">057</span>    public TextTable(TableModel model, int... tabs) {<a name="line.57"></a>
-<span class="sourceLineNo">058</span>        super(null, TEXT_PLAIN);<a name="line.58"></a>
-<span class="sourceLineNo">059</span><a name="line.59"></a>
-<span class="sourceLineNo">060</span>        this.model = model;<a name="line.60"></a>
-<span class="sourceLineNo">061</span><a name="line.61"></a>
-<span class="sourceLineNo">062</span>        getModel().addTableModelListener(new ModelListenerImpl());<a name="line.62"></a>
-<span class="sourceLineNo">063</span>    }<a name="line.63"></a>
-<span class="sourceLineNo">064</span><a name="line.64"></a>
-<span class="sourceLineNo">065</span>    /**<a name="line.65"></a>
-<span class="sourceLineNo">066</span>     * Method to get {@link.this} {@link TextTable}'s {@link TableModel}.<a name="line.66"></a>
-<span class="sourceLineNo">067</span>     *<a name="line.67"></a>
-<span class="sourceLineNo">068</span>     * @return  The {@link TableModel}.<a name="line.68"></a>
-<span class="sourceLineNo">069</span>     */<a name="line.69"></a>
-<span class="sourceLineNo">070</span>    public TableModel getModel() { return model; }<a name="line.70"></a>
-<span class="sourceLineNo">071</span><a name="line.71"></a>
-<span class="sourceLineNo">072</span>    /**<a name="line.72"></a>
-<span class="sourceLineNo">073</span>     * Method to render the {@link TextTable}.<a name="line.73"></a>
-<span class="sourceLineNo">074</span>     */<a name="line.74"></a>
-<span class="sourceLineNo">075</span>    protected void render() {<a name="line.75"></a>
-<span class="sourceLineNo">076</span>        TableModel model = getModel();<a name="line.76"></a>
-<span class="sourceLineNo">077</span><a name="line.77"></a>
-<span class="sourceLineNo">078</span>        if (model instanceof AbstractTableModel) {<a name="line.78"></a>
-<span class="sourceLineNo">079</span>            ((AbstractTableModel) model).fireTableDataChanged();<a name="line.79"></a>
-<span class="sourceLineNo">080</span>        }<a name="line.80"></a>
-<span class="sourceLineNo">081</span><a name="line.81"></a>
-<span class="sourceLineNo">082</span>        tabs = Arrays.copyOf(tabs, model.getColumnCount());<a name="line.82"></a>
-<span class="sourceLineNo">083</span>        widths = Arrays.copyOf(widths, model.getColumnCount());<a name="line.83"></a>
-<span class="sourceLineNo">084</span><a name="line.84"></a>
-<span class="sourceLineNo">085</span>        for (int x = 0; x &lt; widths.length; x += 1) {<a name="line.85"></a>
-<span class="sourceLineNo">086</span>            widths[x] = length(model.getColumnName(x));<a name="line.86"></a>
-<span class="sourceLineNo">087</span><a name="line.87"></a>
-<span class="sourceLineNo">088</span>            for (int y = 0, n = model.getRowCount(); y &lt; n; y += 1) {<a name="line.88"></a>
-<span class="sourceLineNo">089</span>                Object object = model.getValueAt(y, x);<a name="line.89"></a>
-<span class="sourceLineNo">090</span>                String string = (object != null) ? object.toString() : null;<a name="line.90"></a>
-<span class="sourceLineNo">091</span><a name="line.91"></a>
-<span class="sourceLineNo">092</span>                widths[x] = Math.max(widths[x], length(string));<a name="line.92"></a>
-<span class="sourceLineNo">093</span>            }<a name="line.93"></a>
-<span class="sourceLineNo">094</span>        }<a name="line.94"></a>
-<span class="sourceLineNo">095</span><a name="line.95"></a>
-<span class="sourceLineNo">096</span>        try (PrintWriter out = getPrintWriter()) {<a name="line.96"></a>
-<span class="sourceLineNo">097</span>            StringBuilder header = line(fill(header()));<a name="line.97"></a>
-<span class="sourceLineNo">098</span><a name="line.98"></a>
-<span class="sourceLineNo">099</span>            if (! isBlank(header)) {<a name="line.99"></a>
-<span class="sourceLineNo">100</span>                out.println(stripEnd(header.toString(), null));<a name="line.100"></a>
-<span class="sourceLineNo">101</span>                out.println(repeat('-', header.length()));<a name="line.101"></a>
-<span class="sourceLineNo">102</span>            }<a name="line.102"></a>
-<span class="sourceLineNo">103</span><a name="line.103"></a>
-<span class="sourceLineNo">104</span>            for (int y = 0, n = model.getRowCount(); y &lt; n; y += 1) {<a name="line.104"></a>
-<span class="sourceLineNo">105</span>                out.println(stripEnd(line(fill(format(row(y)))).toString(), null));<a name="line.105"></a>
-<span class="sourceLineNo">106</span>            }<a name="line.106"></a>
-<span class="sourceLineNo">107</span>        } catch (IOException exception) {<a name="line.107"></a>
-<span class="sourceLineNo">108</span>            throw new IllegalStateException(exception);<a name="line.108"></a>
-<span class="sourceLineNo">109</span>        }<a name="line.109"></a>
-<span class="sourceLineNo">110</span>    }<a name="line.110"></a>
-<span class="sourceLineNo">111</span><a name="line.111"></a>
-<span class="sourceLineNo">112</span>    private String[] header() {<a name="line.112"></a>
-<span class="sourceLineNo">113</span>        String[] header = new String[getModel().getColumnCount()];<a name="line.113"></a>
-<span class="sourceLineNo">114</span><a name="line.114"></a>
-<span class="sourceLineNo">115</span>        for (int x = 0; x &lt; header.length; x += 1) {<a name="line.115"></a>
-<span class="sourceLineNo">116</span>            String string = getModel().getColumnName(x);<a name="line.116"></a>
-<span class="sourceLineNo">117</span><a name="line.117"></a>
-<span class="sourceLineNo">118</span>            header[x] = (string != null) ? string : EMPTY;<a name="line.118"></a>
-<span class="sourceLineNo">119</span>        }<a name="line.119"></a>
-<span class="sourceLineNo">120</span><a name="line.120"></a>
-<span class="sourceLineNo">121</span>        return header;<a name="line.121"></a>
-<span class="sourceLineNo">122</span>    }<a name="line.122"></a>
-<span class="sourceLineNo">123</span><a name="line.123"></a>
-<span class="sourceLineNo">124</span>    private Object[] row(int y) {<a name="line.124"></a>
-<span class="sourceLineNo">125</span>        Object[] row = new Object[getModel().getColumnCount()];<a name="line.125"></a>
-<span class="sourceLineNo">126</span><a name="line.126"></a>
-<span class="sourceLineNo">127</span>        for (int x = 0; x &lt; row.length; x += 1) {<a name="line.127"></a>
-<span class="sourceLineNo">128</span>            row[x] = getModel().getValueAt(y, x);<a name="line.128"></a>
-<span class="sourceLineNo">129</span>        }<a name="line.129"></a>
-<span class="sourceLineNo">130</span><a name="line.130"></a>
-<span class="sourceLineNo">131</span>        return row;<a name="line.131"></a>
-<span class="sourceLineNo">132</span>    }<a name="line.132"></a>
-<span class="sourceLineNo">133</span><a name="line.133"></a>
-<span class="sourceLineNo">134</span>    private String[] format(Object... row) {<a name="line.134"></a>
-<span class="sourceLineNo">135</span>        String[] strings = new String[row.length];<a name="line.135"></a>
-<span class="sourceLineNo">136</span><a name="line.136"></a>
-<span class="sourceLineNo">137</span>        for (int x = 0; x &lt; strings.length; x += 1) {<a name="line.137"></a>
-<span class="sourceLineNo">138</span>            strings[x] = String.valueOf(row[x]);<a name="line.138"></a>
-<span class="sourceLineNo">139</span>        }<a name="line.139"></a>
-<span class="sourceLineNo">140</span><a name="line.140"></a>
-<span class="sourceLineNo">141</span>        return strings;<a name="line.141"></a>
-<span class="sourceLineNo">142</span>    }<a name="line.142"></a>
-<span class="sourceLineNo">143</span><a name="line.143"></a>
-<span class="sourceLineNo">144</span>    private String[] fill(String... row) {<a name="line.144"></a>
-<span class="sourceLineNo">145</span>        String[] strings = new String[row.length];<a name="line.145"></a>
-<span class="sourceLineNo">146</span><a name="line.146"></a>
-<span class="sourceLineNo">147</span>        for (int x = 0; x &lt; strings.length; x += 1) {<a name="line.147"></a>
-<span class="sourceLineNo">148</span>            strings[x] = rightPad(row[x], widths[x], SPACE);<a name="line.148"></a>
-<span class="sourceLineNo">149</span>        }<a name="line.149"></a>
-<span class="sourceLineNo">150</span><a name="line.150"></a>
-<span class="sourceLineNo">151</span>        return strings;<a name="line.151"></a>
-<span class="sourceLineNo">152</span>    }<a name="line.152"></a>
-<span class="sourceLineNo">153</span><a name="line.153"></a>
-<span class="sourceLineNo">154</span>    private StringBuilder line(String[] row) {<a name="line.154"></a>
-<span class="sourceLineNo">155</span>        StringBuilder line = new StringBuilder();<a name="line.155"></a>
-<span class="sourceLineNo">156</span><a name="line.156"></a>
-<span class="sourceLineNo">157</span>        for (int x = 0; x &lt; row.length; x += 1) {<a name="line.157"></a>
-<span class="sourceLineNo">158</span>            if (x &gt; 0) {<a name="line.158"></a>
-<span class="sourceLineNo">159</span>                line.append(SPACE);<a name="line.159"></a>
-<span class="sourceLineNo">160</span>            }<a name="line.160"></a>
-<span class="sourceLineNo">161</span><a name="line.161"></a>
-<span class="sourceLineNo">162</span>            while (line.length() &lt; tabs[x]) {<a name="line.162"></a>
-<span class="sourceLineNo">163</span>                line.append(SPACE);<a name="line.163"></a>
-<span class="sourceLineNo">164</span>            }<a name="line.164"></a>
-<span class="sourceLineNo">165</span><a name="line.165"></a>
-<span class="sourceLineNo">166</span>            line.append(row[x]);<a name="line.166"></a>
-<span class="sourceLineNo">167</span>        }<a name="line.167"></a>
-<span class="sourceLineNo">168</span><a name="line.168"></a>
-<span class="sourceLineNo">169</span>        return line;<a name="line.169"></a>
-<span class="sourceLineNo">170</span>    }<a name="line.170"></a>
-<span class="sourceLineNo">171</span><a name="line.171"></a>
-<span class="sourceLineNo">172</span>    @Override<a name="line.172"></a>
-<span class="sourceLineNo">173</span>    public InputStream getInputStream() throws IOException {<a name="line.173"></a>
-<span class="sourceLineNo">174</span>        if (! (length() &gt; 0)) {<a name="line.174"></a>
-<span class="sourceLineNo">175</span>            render();<a name="line.175"></a>
-<span class="sourceLineNo">176</span>        }<a name="line.176"></a>
-<span class="sourceLineNo">177</span><a name="line.177"></a>
-<span class="sourceLineNo">178</span>        return super.getInputStream();<a name="line.178"></a>
-<span class="sourceLineNo">179</span>    }<a name="line.179"></a>
-<span class="sourceLineNo">180</span><a name="line.180"></a>
-<span class="sourceLineNo">181</span>    private static int length(CharSequence sequence) {<a name="line.181"></a>
-<span class="sourceLineNo">182</span>        return (sequence != null) ? sequence.length() : 0;<a name="line.182"></a>
-<span class="sourceLineNo">183</span>    }<a name="line.183"></a>
-<span class="sourceLineNo">184</span><a name="line.184"></a>
-<span class="sourceLineNo">185</span>    @NoArgsConstructor @ToString<a name="line.185"></a>
-<span class="sourceLineNo">186</span>    private class ModelListenerImpl implements TableModelListener {<a name="line.186"></a>
-<span class="sourceLineNo">187</span>        @Override<a name="line.187"></a>
-<span class="sourceLineNo">188</span>        public void tableChanged(TableModelEvent event) { clear(); }<a name="line.188"></a>
-<span class="sourceLineNo">189</span>    }<a name="line.189"></a>
-<span class="sourceLineNo">190</span>}<a name="line.190"></a>
+<pre><span class="sourceLineNo">001</span><a id="line.1">package ball.text;</a>
+<span class="sourceLineNo">002</span><a id="line.2">/*-</a>
+<span class="sourceLineNo">003</span><a id="line.3"> * ##########################################################################</a>
+<span class="sourceLineNo">004</span><a id="line.4"> * Utilities</a>
+<span class="sourceLineNo">005</span><a id="line.5"> * %%</a>
+<span class="sourceLineNo">006</span><a id="line.6"> * Copyright (C) 2008 - 2022 Allen D. Ball</a>
+<span class="sourceLineNo">007</span><a id="line.7"> * %%</a>
+<span class="sourceLineNo">008</span><a id="line.8"> * Licensed under the Apache License, Version 2.0 (the "License");</a>
+<span class="sourceLineNo">009</span><a id="line.9"> * you may not use this file except in compliance with the License.</a>
+<span class="sourceLineNo">010</span><a id="line.10"> * You may obtain a copy of the License at</a>
+<span class="sourceLineNo">011</span><a id="line.11"> *</a>
+<span class="sourceLineNo">012</span><a id="line.12"> *      http://www.apache.org/licenses/LICENSE-2.0</a>
+<span class="sourceLineNo">013</span><a id="line.13"> *</a>
+<span class="sourceLineNo">014</span><a id="line.14"> * Unless required by applicable law or agreed to in writing, software</a>
+<span class="sourceLineNo">015</span><a id="line.15"> * distributed under the License is distributed on an "AS IS" BASIS,</a>
+<span class="sourceLineNo">016</span><a id="line.16"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</a>
+<span class="sourceLineNo">017</span><a id="line.17"> * See the License for the specific language governing permissions and</a>
+<span class="sourceLineNo">018</span><a id="line.18"> * limitations under the License.</a>
+<span class="sourceLineNo">019</span><a id="line.19"> * ##########################################################################</a>
+<span class="sourceLineNo">020</span><a id="line.20"> */</a>
+<span class="sourceLineNo">021</span><a id="line.21">import ball.activation.ReaderWriterDataSource;</a>
+<span class="sourceLineNo">022</span><a id="line.22">import java.io.IOException;</a>
+<span class="sourceLineNo">023</span><a id="line.23">import java.io.InputStream;</a>
+<span class="sourceLineNo">024</span><a id="line.24">import java.io.PrintWriter;</a>
+<span class="sourceLineNo">025</span><a id="line.25">import java.util.Arrays;</a>
+<span class="sourceLineNo">026</span><a id="line.26">import javax.swing.event.TableModelEvent;</a>
+<span class="sourceLineNo">027</span><a id="line.27">import javax.swing.event.TableModelListener;</a>
+<span class="sourceLineNo">028</span><a id="line.28">import javax.swing.table.AbstractTableModel;</a>
+<span class="sourceLineNo">029</span><a id="line.29">import javax.swing.table.TableModel;</a>
+<span class="sourceLineNo">030</span><a id="line.30">import lombok.NoArgsConstructor;</a>
+<span class="sourceLineNo">031</span><a id="line.31">import lombok.ToString;</a>
+<span class="sourceLineNo">032</span><a id="line.32">import org.apache.commons.lang3.StringUtils;</a>
+<span class="sourceLineNo">033</span><a id="line.33"></a>
+<span class="sourceLineNo">034</span><a id="line.34">import static org.apache.commons.lang3.StringUtils.EMPTY;</a>
+<span class="sourceLineNo">035</span><a id="line.35">import static org.apache.commons.lang3.StringUtils.SPACE;</a>
+<span class="sourceLineNo">036</span><a id="line.36">import static org.apache.commons.lang3.StringUtils.isBlank;</a>
+<span class="sourceLineNo">037</span><a id="line.37">import static org.apache.commons.lang3.StringUtils.repeat;</a>
+<span class="sourceLineNo">038</span><a id="line.38">import static org.apache.commons.lang3.StringUtils.rightPad;</a>
+<span class="sourceLineNo">039</span><a id="line.39">import static org.apache.commons.lang3.StringUtils.stripEnd;</a>
+<span class="sourceLineNo">040</span><a id="line.40"></a>
+<span class="sourceLineNo">041</span><a id="line.41">/**</a>
+<span class="sourceLineNo">042</span><a id="line.42"> * Text-based {@link javax.swing.JTable} implementation.</a>
+<span class="sourceLineNo">043</span><a id="line.43"> *</a>
+<span class="sourceLineNo">044</span><a id="line.44"> * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}</a>
+<span class="sourceLineNo">045</span><a id="line.45"> */</a>
+<span class="sourceLineNo">046</span><a id="line.46">public class TextTable extends ReaderWriterDataSource {</a>
+<span class="sourceLineNo">047</span><a id="line.47">    private final TableModel model;</a>
+<span class="sourceLineNo">048</span><a id="line.48">    private int[] tabs = new int[] { };</a>
+<span class="sourceLineNo">049</span><a id="line.49">    private int[] widths = new int[] { };</a>
+<span class="sourceLineNo">050</span><a id="line.50"></a>
+<span class="sourceLineNo">051</span><a id="line.51">    /**</a>
+<span class="sourceLineNo">052</span><a id="line.52">     * Sole constructor.</a>
+<span class="sourceLineNo">053</span><a id="line.53">     *</a>
+<span class="sourceLineNo">054</span><a id="line.54">     * @param   model           The {@link TextTable}'s {@link TableModel}.</a>
+<span class="sourceLineNo">055</span><a id="line.55">     * @param   tabs            The preferred tab stops.</a>
+<span class="sourceLineNo">056</span><a id="line.56">     */</a>
+<span class="sourceLineNo">057</span><a id="line.57">    public TextTable(TableModel model, int... tabs) {</a>
+<span class="sourceLineNo">058</span><a id="line.58">        super(null, TEXT_PLAIN);</a>
+<span class="sourceLineNo">059</span><a id="line.59"></a>
+<span class="sourceLineNo">060</span><a id="line.60">        this.model = model;</a>
+<span class="sourceLineNo">061</span><a id="line.61"></a>
+<span class="sourceLineNo">062</span><a id="line.62">        getModel().addTableModelListener(new ModelListenerImpl());</a>
+<span class="sourceLineNo">063</span><a id="line.63">    }</a>
+<span class="sourceLineNo">064</span><a id="line.64"></a>
+<span class="sourceLineNo">065</span><a id="line.65">    /**</a>
+<span class="sourceLineNo">066</span><a id="line.66">     * Method to get {@link.this} {@link TextTable}'s {@link TableModel}.</a>
+<span class="sourceLineNo">067</span><a id="line.67">     *</a>
+<span class="sourceLineNo">068</span><a id="line.68">     * @return  The {@link TableModel}.</a>
+<span class="sourceLineNo">069</span><a id="line.69">     */</a>
+<span class="sourceLineNo">070</span><a id="line.70">    public TableModel getModel() { return model; }</a>
+<span class="sourceLineNo">071</span><a id="line.71"></a>
+<span class="sourceLineNo">072</span><a id="line.72">    /**</a>
+<span class="sourceLineNo">073</span><a id="line.73">     * Method to render the {@link TextTable}.</a>
+<span class="sourceLineNo">074</span><a id="line.74">     */</a>
+<span class="sourceLineNo">075</span><a id="line.75">    protected void render() {</a>
+<span class="sourceLineNo">076</span><a id="line.76">        TableModel model = getModel();</a>
+<span class="sourceLineNo">077</span><a id="line.77"></a>
+<span class="sourceLineNo">078</span><a id="line.78">        if (model instanceof AbstractTableModel) {</a>
+<span class="sourceLineNo">079</span><a id="line.79">            ((AbstractTableModel) model).fireTableDataChanged();</a>
+<span class="sourceLineNo">080</span><a id="line.80">        }</a>
+<span class="sourceLineNo">081</span><a id="line.81"></a>
+<span class="sourceLineNo">082</span><a id="line.82">        tabs = Arrays.copyOf(tabs, model.getColumnCount());</a>
+<span class="sourceLineNo">083</span><a id="line.83">        widths = Arrays.copyOf(widths, model.getColumnCount());</a>
+<span class="sourceLineNo">084</span><a id="line.84"></a>
+<span class="sourceLineNo">085</span><a id="line.85">        for (int x = 0; x &lt; widths.length; x += 1) {</a>
+<span class="sourceLineNo">086</span><a id="line.86">            widths[x] = length(model.getColumnName(x));</a>
+<span class="sourceLineNo">087</span><a id="line.87"></a>
+<span class="sourceLineNo">088</span><a id="line.88">            for (int y = 0, n = model.getRowCount(); y &lt; n; y += 1) {</a>
+<span class="sourceLineNo">089</span><a id="line.89">                Object object = model.getValueAt(y, x);</a>
+<span class="sourceLineNo">090</span><a id="line.90">                String string = (object != null) ? object.toString() : null;</a>
+<span class="sourceLineNo">091</span><a id="line.91"></a>
+<span class="sourceLineNo">092</span><a id="line.92">                widths[x] = Math.max(widths[x], length(string));</a>
+<span class="sourceLineNo">093</span><a id="line.93">            }</a>
+<span class="sourceLineNo">094</span><a id="line.94">        }</a>
+<span class="sourceLineNo">095</span><a id="line.95"></a>
+<span class="sourceLineNo">096</span><a id="line.96">        try (PrintWriter out = getPrintWriter()) {</a>
+<span class="sourceLineNo">097</span><a id="line.97">            StringBuilder header = line(fill(header()));</a>
+<span class="sourceLineNo">098</span><a id="line.98"></a>
+<span class="sourceLineNo">099</span><a id="line.99">            if (! isBlank(header)) {</a>
+<span class="sourceLineNo">100</span><a id="line.100">                out.println(stripEnd(header.toString(), null));</a>
+<span class="sourceLineNo">101</span><a id="line.101">                out.println(repeat('-', header.length()));</a>
+<span class="sourceLineNo">102</span><a id="line.102">            }</a>
+<span class="sourceLineNo">103</span><a id="line.103"></a>
+<span class="sourceLineNo">104</span><a id="line.104">            for (int y = 0, n = model.getRowCount(); y &lt; n; y += 1) {</a>
+<span class="sourceLineNo">105</span><a id="line.105">                out.println(stripEnd(line(fill(format(row(y)))).toString(), null));</a>
+<span class="sourceLineNo">106</span><a id="line.106">            }</a>
+<span class="sourceLineNo">107</span><a id="line.107">        } catch (IOException exception) {</a>
+<span class="sourceLineNo">108</span><a id="line.108">            throw new IllegalStateException(exception);</a>
+<span class="sourceLineNo">109</span><a id="line.109">        }</a>
+<span class="sourceLineNo">110</span><a id="line.110">    }</a>
+<span class="sourceLineNo">111</span><a id="line.111"></a>
+<span class="sourceLineNo">112</span><a id="line.112">    private String[] header() {</a>
+<span class="sourceLineNo">113</span><a id="line.113">        String[] header = new String[getModel().getColumnCount()];</a>
+<span class="sourceLineNo">114</span><a id="line.114"></a>
+<span class="sourceLineNo">115</span><a id="line.115">        for (int x = 0; x &lt; header.length; x += 1) {</a>
+<span class="sourceLineNo">116</span><a id="line.116">            String string = getModel().getColumnName(x);</a>
+<span class="sourceLineNo">117</span><a id="line.117"></a>
+<span class="sourceLineNo">118</span><a id="line.118">            header[x] = (string != null) ? string : EMPTY;</a>
+<span class="sourceLineNo">119</span><a id="line.119">        }</a>
+<span class="sourceLineNo">120</span><a id="line.120"></a>
+<span class="sourceLineNo">121</span><a id="line.121">        return header;</a>
+<span class="sourceLineNo">122</span><a id="line.122">    }</a>
+<span class="sourceLineNo">123</span><a id="line.123"></a>
+<span class="sourceLineNo">124</span><a id="line.124">    private Object[] row(int y) {</a>
+<span class="sourceLineNo">125</span><a id="line.125">        Object[] row = new Object[getModel().getColumnCount()];</a>
+<span class="sourceLineNo">126</span><a id="line.126"></a>
+<span class="sourceLineNo">127</span><a id="line.127">        for (int x = 0; x &lt; row.length; x += 1) {</a>
+<span class="sourceLineNo">128</span><a id="line.128">            row[x] = getModel().getValueAt(y, x);</a>
+<span class="sourceLineNo">129</span><a id="line.129">        }</a>
+<span class="sourceLineNo">130</span><a id="line.130"></a>
+<span class="sourceLineNo">131</span><a id="line.131">        return row;</a>
+<span class="sourceLineNo">132</span><a id="line.132">    }</a>
+<span class="sourceLineNo">133</span><a id="line.133"></a>
+<span class="sourceLineNo">134</span><a id="line.134">    private String[] format(Object... row) {</a>
+<span class="sourceLineNo">135</span><a id="line.135">        String[] strings = new String[row.length];</a>
+<span class="sourceLineNo">136</span><a id="line.136"></a>
+<span class="sourceLineNo">137</span><a id="line.137">        for (int x = 0; x &lt; strings.length; x += 1) {</a>
+<span class="sourceLineNo">138</span><a id="line.138">            strings[x] = String.valueOf(row[x]);</a>
+<span class="sourceLineNo">139</span><a id="line.139">        }</a>
+<span class="sourceLineNo">140</span><a id="line.140"></a>
+<span class="sourceLineNo">141</span><a id="line.141">        return strings;</a>
+<span class="sourceLineNo">142</span><a id="line.142">    }</a>
+<span class="sourceLineNo">143</span><a id="line.143"></a>
+<span class="sourceLineNo">144</span><a id="line.144">    private String[] fill(String... row) {</a>
+<span class="sourceLineNo">145</span><a id="line.145">        String[] strings = new String[row.length];</a>
+<span class="sourceLineNo">146</span><a id="line.146"></a>
+<span class="sourceLineNo">147</span><a id="line.147">        for (int x = 0; x &lt; strings.length; x += 1) {</a>
+<span class="sourceLineNo">148</span><a id="line.148">            strings[x] = rightPad(row[x], widths[x], SPACE);</a>
+<span class="sourceLineNo">149</span><a id="line.149">        }</a>
+<span class="sourceLineNo">150</span><a id="line.150"></a>
+<span class="sourceLineNo">151</span><a id="line.151">        return strings;</a>
+<span class="sourceLineNo">152</span><a id="line.152">    }</a>
+<span class="sourceLineNo">153</span><a id="line.153"></a>
+<span class="sourceLineNo">154</span><a id="line.154">    private StringBuilder line(String[] row) {</a>
+<span class="sourceLineNo">155</span><a id="line.155">        StringBuilder line = new StringBuilder();</a>
+<span class="sourceLineNo">156</span><a id="line.156"></a>
+<span class="sourceLineNo">157</span><a id="line.157">        for (int x = 0; x &lt; row.length; x += 1) {</a>
+<span class="sourceLineNo">158</span><a id="line.158">            if (x &gt; 0) {</a>
+<span class="sourceLineNo">159</span><a id="line.159">                line.append(SPACE);</a>
+<span class="sourceLineNo">160</span><a id="line.160">            }</a>
+<span class="sourceLineNo">161</span><a id="line.161"></a>
+<span class="sourceLineNo">162</span><a id="line.162">            while (line.length() &lt; tabs[x]) {</a>
+<span class="sourceLineNo">163</span><a id="line.163">                line.append(SPACE);</a>
+<span class="sourceLineNo">164</span><a id="line.164">            }</a>
+<span class="sourceLineNo">165</span><a id="line.165"></a>
+<span class="sourceLineNo">166</span><a id="line.166">            line.append(row[x]);</a>
+<span class="sourceLineNo">167</span><a id="line.167">        }</a>
+<span class="sourceLineNo">168</span><a id="line.168"></a>
+<span class="sourceLineNo">169</span><a id="line.169">        return line;</a>
+<span class="sourceLineNo">170</span><a id="line.170">    }</a>
+<span class="sourceLineNo">171</span><a id="line.171"></a>
+<span class="sourceLineNo">172</span><a id="line.172">    @Override</a>
+<span class="sourceLineNo">173</span><a id="line.173">    public InputStream getInputStream() throws IOException {</a>
+<span class="sourceLineNo">174</span><a id="line.174">        if (! (length() &gt; 0)) {</a>
+<span class="sourceLineNo">175</span><a id="line.175">            render();</a>
+<span class="sourceLineNo">176</span><a id="line.176">        }</a>
+<span class="sourceLineNo">177</span><a id="line.177"></a>
+<span class="sourceLineNo">178</span><a id="line.178">        return super.getInputStream();</a>
+<span class="sourceLineNo">179</span><a id="line.179">    }</a>
+<span class="sourceLineNo">180</span><a id="line.180"></a>
+<span class="sourceLineNo">181</span><a id="line.181">    private static int length(CharSequence sequence) {</a>
+<span class="sourceLineNo">182</span><a id="line.182">        return (sequence != null) ? sequence.length() : 0;</a>
+<span class="sourceLineNo">183</span><a id="line.183">    }</a>
+<span class="sourceLineNo">184</span><a id="line.184"></a>
+<span class="sourceLineNo">185</span><a id="line.185">    @NoArgsConstructor @ToString</a>
+<span class="sourceLineNo">186</span><a id="line.186">    private class ModelListenerImpl implements TableModelListener {</a>
+<span class="sourceLineNo">187</span><a id="line.187">        @Override</a>
+<span class="sourceLineNo">188</span><a id="line.188">        public void tableChanged(TableModelEvent event) { clear(); }</a>
+<span class="sourceLineNo">189</span><a id="line.189">    }</a>
+<span class="sourceLineNo">190</span><a id="line.190">}</a>
 
 
 
@@ -258,5 +259,6 @@
 
 </pre>
 </div>
+</main>
 </body>
 </html>
