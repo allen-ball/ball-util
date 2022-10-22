@@ -1,8 +1,6 @@
 /**
  * See {@link java.util}.
  *
- * {@pom.coordinates}
- *
  * @author {@link.uri mailto:ball@hcf.dev Allen D. Ball}
  */
 @Manifest.Section
@@ -27,3 +25,7 @@ package ball.util;
  * ##########################################################################
  */
 import ball.annotation.Manifest;
+/*
+ * {@pom.coordinates} Does not work because ball-util is included in shaded
+ * ball-tools-javadoc-* JARs.
+ */
