@@ -2,7 +2,7 @@
 <!--
   ##########################################################################
   %%
-  Copyright (C) 2008 - 2025 Allen D. Ball
+  Copyright (C) 2008 - 2026 Allen D. Ball
   %%
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>dev.hcf.ball</groupId>
   <artifactId>ball-util</artifactId>
-  <version>6.4.17.20251111</version>
+  <version>6.4.18.20261115</version>
   <packaging>jar</packaging>
   <name>${project.groupId}:${project.artifactId}</name>
   <description>Utilities</description>
@@ -32,7 +32,7 @@
   <parent>
     <groupId>dev.hcf.ball</groupId>
     <artifactId>parent</artifactId>
-    <version>2025.0.2</version>
+    <version>2026.0.0</version>
     <relativePath>../parent/pom.xml</relativePath>
   </parent>
   <inceptionYear>2008</inceptionYear>
@@ -51,6 +51,8 @@
       <id>JDK8_HOME</id>
       <activation>
         <property><name>env.JDK8_HOME</name></property>
+        <!-- Only activate when building this project (not as a dependency) -->
+        <file><exists>${basedir}/src/main/java</exists></file>
       </activation>
       <dependencies>
         <dependency>
